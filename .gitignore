@@ -18,6 +18,12 @@ dist
 # Large binary assets
 docs/rulebook.pdf
 
+# SQLite database (runtime artifact, populated by ingest:cards)
+*.db
+
+# TTS card extract (source data, not part of the codebase)
+eb_rangers_cards.json
+
 # Playwright
 /test-results/
 /playwright-report/
