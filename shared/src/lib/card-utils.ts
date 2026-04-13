@@ -1,30 +1,27 @@
 import type { Card } from "../schemas/card.schema.ts";
+import type { ApproachKey, AspectKey } from "./constants.ts";
 
-export function countExperience(card: Card, quantity: number) {
-  if (card.customization_xp) return card.customization_xp;
-
-  let xp = card.xp ?? 0;
-  if (card.exceptional) xp *= 2;
-  if (card.taboo_xp) xp += card.taboo_xp;
-
-  return xp * (card.myriad ? Math.min(quantity, 1) : quantity);
+export function cardEnergyCost(card: Card): number {
+  return card.energy_cost ?? 0;
 }
 
-export function cardLevel(card: Card) {
-  return card.customization_xp
-    ? Math.round(card.customization_xp / 2)
-    : card.xp;
+export function cardAspectRequirement(
+  card: Card,
+): { aspect: AspectKey; value: number } | undefined {
+  if (card.aspect_requirement_type && card.aspect_requirement_value) {
+    return {
+      aspect: card.aspect_requirement_type,
+      value: card.aspect_requirement_value,
+    };
+  }
+  return undefined;
 }
 
-/**
- * Get the "real" card level after applying taboo.
- * For the sake of deckbuilding, cards keep their original level + an xp change.
- * However, for the sake of XP calculations and interactions such as "Adaptable",
- * cards should be considered their updated level in the spirit of the taboo.
- * This prevents weirdness such as Adaptable being able to swap in Drawing Thin for free.
- */
-export function realCardLevel(card: Card) {
-  const level = cardLevel(card);
-  if (level == null) return level;
-  return level + (card.taboo_xp ?? 0);
+export function cardApproachIcons(card: Card): Partial<Record<ApproachKey, number>> {
+  const icons: Partial<Record<ApproachKey, number>> = {};
+  if (card.approach_conflict) icons.conflict = card.approach_conflict;
+  if (card.approach_reason) icons.reason = card.approach_reason;
+  if (card.approach_exploration) icons.exploration = card.approach_exploration;
+  if (card.approach_connection) icons.connection = card.approach_connection;
+  return icons;
 }

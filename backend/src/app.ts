@@ -10,9 +10,7 @@ import { errorHandler } from "./lib/errors.ts";
 import type { HonoEnv } from "./lib/hono-env.ts";
 import { logger, requestLogger } from "./lib/logger.ts";
 import adminRouter from "./routes/admin.ts";
-import arkhamDbDecklistsRouter from "./routes/arkhamdb-decklists.ts";
 import fanMadeProjectInfoRouter from "./routes/fan-made-project-info.ts";
-import recommendationsRouter from "./routes/recommendations.ts";
 import sealedDeckRouter from "./routes/sealed-deck.ts";
 
 export function appFactory(config: Config, database: Database) {
@@ -35,9 +33,7 @@ export function appFactory(config: Config, database: Database) {
   app.route("/admin", adminRouter);
 
   const pub = new Hono<HonoEnv>();
-  pub.route("/arkhamdb-decklists", arkhamDbDecklistsRouter);
   pub.route("/fan-made-project-info", fanMadeProjectInfoRouter);
-  pub.route("/recommendations", recommendationsRouter);
   pub.route("/sealed-deck", sealedDeckRouter);
   app.route("/v2/public", pub);
 

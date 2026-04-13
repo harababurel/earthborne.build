@@ -1,17 +1,15 @@
 import { z } from "zod";
-import { AdditionalAttributes, JsonDataCardSchema } from "./card.schema.ts";
+import { CardSchema } from "./card.schema.ts";
 
-export const FanMadeCardSchema =
-  JsonDataCardSchema.extend(AdditionalAttributes);
+export const FanMadeCardSchema = CardSchema;
 
 export type FanMadeCard = z.infer<typeof FanMadeCardSchema>;
 
 const ContentTypeSchema = z.enum([
   "campaign",
-  "investigators",
+  "rangers",
   "player_cards",
-  "rework",
-  "scenario",
+  "path_cards",
 ]);
 
 const StatusSchema = z.enum(["draft", "alpha", "beta", "complete", "final"]);
@@ -28,7 +26,7 @@ export const ProjectMetaSchema = z.object({
   }),
   code: z.string().check(z.minLength(3)).register(z.globalRegistry, {
     description:
-      " Unique identifier for the project. a UUID when created by Zoop.",
+      "Unique identifier for the project.",
   }),
   date_updated: z.string().nullish().register(z.globalRegistry, {
     description:
@@ -68,16 +66,10 @@ export const ProjectMetaSchema = z.object({
   }),
 });
 
-const FanMadeEncounterSetSchema = z.object({
+const FanMadeSetSchema = z.object({
   code: z.string(),
   name: z.string(),
   icon_url: z.url().nullish(),
-});
-
-const FanMadePackSchema = z.object({
-  code: z.string(),
-  icon_url: z.url().nullish(),
-  name: z.string(),
   position: z.number().nullish(),
 });
 
@@ -85,8 +77,7 @@ export const FanMadeProjectSchema = z.object({
   meta: ProjectMetaSchema,
   data: z.object({
     cards: z.array(FanMadeCardSchema),
-    encounter_sets: z.array(FanMadeEncounterSetSchema),
-    packs: z.array(FanMadePackSchema),
+    sets: z.array(FanMadeSetSchema),
   }),
 });
 
