@@ -54,3 +54,15 @@ export const DEFAULT_LIST_SORT_ID = "list_default";
 // Stubs — Arkham-specific constants removed. Will be replaced in Phase 4.
 export const SPECIAL_CARD_CODES: Record<string, string> = {};
 export const PREVIEW_PACKS: string[] = [];
+export const RETURN_TO_CYCLES: string[] = [];
+export const CYCLES_WITH_STANDALONE_PACKS: string[] = [];
+export const SIDEWAYS_TYPE_CODES: string[] = [];
+export const ORIENTATION_CHANGED_CARDS: string[] = [];
+export const NO_SLOT_STRING = "No Slot";
+export const REGEX_USES = /Uses \((\w+)\)/;
+export const REGEX_BONDED = /Bonded \((.*?)\)/;
+export const REGEX_SKILL_BOOST = /\[(\w+)\] \+(\d+)/g;
+export const TAG_REGEX_FALLBACKS: Record<string, RegExp> = {};
+export const ACTION_TEXT_ENTRIES: [string, string][] = [];
+export const REGEX_SUCCEED_BY = /Succeed By (\d+)/;
+export const CARD_SET_ORDER: string[] = [];

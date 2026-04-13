@@ -1,16 +1,5 @@
 import type { Card } from "@arkham-build/shared";
-import {
-  filterInvestigatorAccess,
-  filterInvestigatorWeaknessAccess,
-  filterTag,
-} from "@/store/lib/filtering";
-import {
-  cardBackType,
-  displayAttribute,
-  doubleSidedBackCard,
-  isSpecialist,
-  splitMultiValue,
-} from "@/utils/card-utils";
+import { splitMultiValue } from "@/utils/card-utils";
 import { displayPackName } from "@/utils/formatting";
 import type {
   FieldDescriptor,
@@ -34,425 +23,169 @@ interface FieldDefinition {
 }
 
 const fieldDefinitions: FieldDefinition[] = [
+  // Approach icons — icons committed as effort during tests.
   {
-    aliases: ["ag", "foot"],
-    legacyAlias: "a",
-    lookup: backResolver((card) => card.skill_agility ?? 0),
-    name: "agility",
+    aliases: ["conflict", "c"],
+    lookup: backResolver((card) => card.approach_conflict ?? null),
+    name: "approach_conflict",
     type: "number",
   },
   {
-    aliases: ["bo"],
-    lookup: backResolver(
-      (card, { lookupTables }) => !!lookupTables.relations.bonded[card.code],
-    ),
-    name: "bonded",
-    type: "boolean",
-  },
-  {
-    aliases: ["ch"],
-    name: "chapter",
-    lookup: backResolver((card) => card.chapter ?? 1),
+    aliases: ["reason", "re"],
+    lookup: backResolver((card) => card.approach_reason ?? null),
+    name: "approach_reason",
     type: "number",
   },
   {
-    aliases: ["cl"],
-    lookup: backResolver((card) => card.clues ?? null),
-    name: "clues",
+    aliases: ["exploration", "ex"],
+    lookup: backResolver((card) => card.approach_exploration ?? null),
+    name: "approach_exploration",
     type: "number",
   },
   {
-    aliases: ["cb", "fist"],
-    legacyAlias: "c",
-    lookup: backResolver((card) => card.skill_combat ?? 0),
-    name: "combat",
+    aliases: ["connection", "cn"],
+    lookup: backResolver((card) => card.approach_connection ?? null),
+    name: "approach_connection",
     type: "number",
   },
-  {
-    aliases: ["co"],
-    legacyAlias: "o",
-    lookup: backResolver((card) => card.cost ?? null),
-    name: "cost",
-    type: "number",
-  },
-  {
-    aliases: ["cus"],
-    lookup: () => (card) => !!card.customization_options,
-    name: "customizable",
-    type: "boolean",
-  },
-  {
-    aliases: ["cy"],
-    legacyAlias: "y",
-    lookup:
-      () =>
-      (card, { metadata }) => {
-        const pack = metadata.packs[card.pack_code];
-        if (!pack) return null;
 
-        const cycle = metadata.cycles[pack.cycle_code];
-        if (!cycle) return null;
+  // Aspect stat values (on aspect cards only).
+  {
+    aliases: ["awa"],
+    lookup: backResolver((card) => card.aspect_awareness ?? null),
+    name: "awareness",
+    type: "number",
+  },
+  {
+    aliases: ["fit"],
+    lookup: backResolver((card) => card.aspect_fitness ?? null),
+    name: "fitness",
+    type: "number",
+  },
+  {
+    aliases: ["foc"],
+    lookup: backResolver((card) => card.aspect_focus ?? null),
+    name: "focus",
+    type: "number",
+  },
+  {
+    aliases: ["spi"],
+    lookup: backResolver((card) => card.aspect_spirit ?? null),
+    name: "spirit",
+    type: "number",
+  },
 
-        return [pack.cycle_code, displayPackName(cycle)];
-      },
-    name: "cycle",
+  // Background/specialty/category membership.
+  {
+    aliases: ["bg"],
+    lookup: backResolver((card) => card.background_type ?? null),
+    name: "background",
     type: "string",
   },
   {
-    aliases: ["dmg"],
-    lookup: backResolver((card) => card.enemy_damage ?? null),
-    name: "damage",
-    type: "number",
-  },
-  {
-    aliases: ["dl", "limit"],
-    lookup: backResolver((card) => card.deck_limit ?? null),
-    name: "deck_limit",
-    type: "number",
-  },
-  {
-    aliases: ["do"],
-    lookup: backResolver((card) => card.doom ?? null),
-    name: "doom",
-    type: "number",
-  },
-  {
-    aliases: ["en", "encounter", "set"],
-    lookup:
-      () =>
-      (card, { metadata }) => {
-        if (!card.encounter_code) return null;
-
-        const encounterSet = metadata.encounterSets[card.encounter_code];
-        if (!encounterSet) return null;
-
-        return [card.encounter_code, encounterSet.name];
-      },
-    name: "encounter_set",
-    type: "string",
-  },
-  {
-    aliases: ["ev"],
-    lookup: backResolver((card) => card.enemy_evade ?? null),
-    name: "evade",
-    type: "number",
-  },
-  {
-    aliases: ["ex"],
-    lookup: backResolver((card) => card.exceptional ?? false),
-    name: "exceptional",
-    type: "boolean",
-  },
-  {
-    aliases: ["exl"],
-    lookup: () => (card) => card.exile ?? false,
-    name: "exile",
-    type: "boolean",
-  },
-  {
-    aliases: ["cls", "class"],
-    legacyAlias: "f",
-    lookup: backResolver((card, { i18n }) => {
-      const factions: string[] = [];
-
-      [card.faction_code, card.faction2_code, card.faction3_code].forEach(
-        (faction_code) => {
-          if (faction_code) {
-            factions.push(faction_code);
-
-            if (i18n.language !== "en") {
-              factions.push(i18n.t(`common.factions.${faction_code}`));
-            }
-          }
-        },
-      );
-
-      return factions;
-    }),
-    name: "faction",
-    type: "string",
-  },
-  {
-    aliases: ["fi"],
-    lookup: backResolver((card) => card.enemy_fight ?? null),
-    name: "fight",
-    type: "number",
-  },
-  {
-    aliases: ["fl"],
-    legacyAlias: "v",
-    lookup: backResolver((card) => displayAttribute(card, "flavor")),
-    name: "flavor",
-    type: "text",
-  },
-  {
-    aliases: ["hu"],
-    lookup: backResolver((card, { deck, lookupTables, metadata }) => {
-      const otherLevels = lookupTables.relations.level[card.code];
-      if (!otherLevels) return false;
-
-      const accessFilter = deck
-        ? filterInvestigatorAccess(deck.investigatorBack.card, undefined, {
-            customizable: { properties: "all", level: "all" },
-            investigatorFront: deck.investigatorFront.card,
-            selections: deck.selections,
-          })
-        : undefined;
-
-      return Object.keys(otherLevels).some((otherCode) => {
-        const otherCard = metadata.cards[otherCode];
-        if (!otherCard || (otherCard.xp ?? 0) <= (card.xp ?? 0)) return false;
-        return !deck || accessFilter?.(otherCard);
-      });
-    }),
-    name: "has_upgrade",
-    type: "boolean",
-  },
-  {
-    aliases: ["hd"],
-    lookup: backResolver((card) => filterTag("hd", true)(card)),
-    name: "heals_damage",
-    type: "boolean",
-  },
-  {
-    aliases: ["hh"],
-    lookup: backResolver((card) => filterTag("hh", true)(card)),
-    name: "heals_horror",
-    type: "boolean",
-  },
-  {
-    aliases: ["hp"],
-    legacyAlias: "h",
-    lookup: backResolver((card) => card.health ?? null),
-    name: "health",
-    type: "number",
-  },
-  {
-    aliases: ["ho"],
-    lookup: backResolver((card) => card.enemy_horror ?? null),
-    name: "horror",
-    type: "number",
-  },
-  {
-    aliases: ["code"],
-    lookup: backResolver((card) => card.code),
-    name: "id",
-    type: "string",
-  },
-  {
-    aliases: ["il", "illu"],
-    legacyAlias: "l",
-    lookup: backResolver((card) => card.illustrator ?? null),
-    name: "illustrator",
-    type: "string",
-  },
-  {
-    aliases: ["in", "int", "book"],
-    legacyAlias: "i",
-    lookup: backResolver((card) => card.skill_intellect ?? 0),
-    name: "intellect",
-    type: "number",
-  },
-  {
-    aliases: ["ia"],
-    legacyAlias: "do",
-    lookup: () => (card, ctx, comparison) => {
-      const fieldValue = comparison?.otherValue;
-      if (!fieldValue || typeof fieldValue !== "string") return false;
-
-      const investigator = ctx.metadata.cards[fieldValue];
-      if (investigator?.type_code !== "investigator") return false;
-
-      const accessFilter = filterInvestigatorAccess(investigator, undefined, {
-        customizable: {
-          properties: "all",
-          level: "all",
-        },
-      });
-
-      if (!accessFilter) return false;
-
-      const weaknessFilter = filterInvestigatorWeaknessAccess(investigator);
-
-      if (accessFilter(card) || weaknessFilter(card)) {
-        return fieldValue;
-      }
-
-      return null;
-    },
-    name: "investigator_access",
-    type: "string",
-  },
-  {
-    lookup: () => (card, ctx) => {
-      if (!ctx.deck) return null;
-      return ctx.deck.slots[card.code] ?? null;
-    },
-    name: "in_deck",
-    type: "number",
-  },
-  {
-    aliases: ["iu"],
-    lookup: backResolver((card, { deck, lookupTables, metadata }) => {
-      const otherLevels = lookupTables.relations.level[card.code];
-      if (!otherLevels) return false;
-
-      const accessFilter = deck
-        ? filterInvestigatorAccess(deck.investigatorBack.card, undefined, {
-            customizable: { properties: "all", level: "all" },
-            investigatorFront: deck.investigatorFront.card,
-            selections: deck.selections,
-          })
-        : undefined;
-
-      return Object.keys(otherLevels).some((otherCode) => {
-        const otherCard = metadata.cards[otherCode];
-        if (!otherCard || (otherCard.xp ?? 0) >= (card.xp ?? 0)) return false;
-        return !deck || accessFilter?.(otherCard);
-      });
-    }),
-    name: "is_upgrade",
-    type: "boolean",
-  },
-
-  {
-    aliases: ["mu", "multi"],
-    lookup: backResolver(
-      (card) => !!(card.faction2_code || card.faction3_code),
-    ),
-    name: "multiclass",
-    type: "boolean",
-  },
-  {
-    aliases: ["my"],
-    lookup: () => (card) => card.myriad ?? false,
-    name: "myriad",
-    type: "boolean",
-  },
-  {
-    aliases: ["na"],
-    lookup: backResolver((card) => displayAttribute(card, "name")),
-    name: "name",
-    type: "string",
-  },
-  {
-    aliases: ["pa"],
-    legacyAlias: "e",
-    lookup:
-      () =>
-      (card, { metadata }) => {
-        const pack = metadata.packs[card.pack_code];
-        if (!pack) return null;
-
-        return [card.pack_code, displayPackName(pack)];
-      },
-    name: "pack",
-    type: "string",
-  },
-  {
-    aliases: ["pe", "perm"],
-    lookup: backResolver((card) => card.permanent ?? false),
-    name: "permanent",
-    type: "boolean",
-  },
-  {
-    aliases: ["qt", "qty"],
-    lookup: backResolver((card) => card.quantity ?? null),
-    name: "quantity",
-    type: "number",
-  },
-  {
-    aliases: ["rt"],
-    lookup: () => (card) => cardBackType(card) ?? null,
-    name: "reverse_type",
-    type: "string",
-  },
-  {
-    aliases: ["sa"],
-    legacyAlias: "s",
-    lookup: backResolver((card) => card.sanity ?? null),
-    name: "sanity",
-    type: "number",
-  },
-  {
-    aliases: ["sh"],
-    lookup: backResolver((card) => card.shroud ?? null),
-    name: "shroud",
-    type: "number",
-  },
-  {
-    aliases: ["sl"],
-    legacyAlias: "z",
-    lookup: backResolver((card, { i18n }) => {
-      const value = card.real_slot;
-      if (value == null) return null;
-
-      const slots = splitMultiValue(value);
-
-      if (i18n.language === "en") return slots;
-
-      return [
-        ...slots,
-        ...slots.map((s) => i18n.t(`common.slot.${s.toLowerCase()}`)),
-      ];
-    }),
-    name: "slot",
+    aliases: ["cat"],
+    lookup: backResolver((card) => card.category ?? null),
+    name: "category",
     type: "string",
   },
   {
     aliases: ["sp"],
-    lookup: backResolver((card) => isSpecialist(card)),
-    name: "specialist",
-    type: "boolean",
+    lookup: backResolver((card) => card.specialty_type ?? null),
+    name: "specialty",
+    type: "string",
   },
+
+  // Cost and aspect requirements.
   {
-    aliases: ["sg"],
-    name: "stage",
-    lookup: backResolver((card) => card.stage ?? null),
+    aliases: ["co"],
+    lookup: backResolver((card) => card.energy_cost ?? null),
+    name: "cost",
     type: "number",
   },
   {
-    aliases: ["sn"],
-    lookup: backResolver((card) => displayAttribute(card, "subname")),
-    name: "subname",
-    type: "string",
-  },
-  {
-    aliases: ["st"],
-    legacyAlias: "b",
+    aliases: ["ea"],
     lookup: backResolver((card, { i18n }) => {
-      if (!card.subtype_code) return null;
-      if (i18n.language === "en") return card.subtype_code;
-      return [card.subtype_code, i18n.t(`common.subtype.${card.subtype_code}`)];
+      if (!card.energy_aspect) return null;
+      if (i18n.language === "en") return card.energy_aspect;
+      return [
+        card.energy_aspect,
+        i18n.t(`common.aspects.${card.energy_aspect}`),
+      ];
     }),
-    name: "subtype",
+    name: "energy_aspect",
     type: "string",
   },
   {
-    aliases: ["ts"],
-    lookup:
-      () =>
-      (card, { metadata }) => {
-        if (card.taboo_set_id == null) return null;
-        const taboo = metadata.tabooSets[card.taboo_set_id];
-        if (!taboo) return null;
-        return taboo.name;
-      },
-    name: "taboo_set",
+    aliases: ["ar"],
+    lookup: backResolver((card, { i18n }) => {
+      if (!card.aspect_requirement_type) return null;
+      if (i18n.language === "en") return card.aspect_requirement_type;
+      return [
+        card.aspect_requirement_type,
+        i18n.t(`common.aspects.${card.aspect_requirement_type}`),
+      ];
+    }),
+    name: "aspect_requirement",
+    type: "string",
+  },
+  {
+    aliases: ["arv"],
+    lookup: backResolver((card) => card.aspect_requirement_value ?? null),
+    name: "aspect_requirement_value",
+    type: "number",
+  },
+
+  // Gear equip value.
+  {
+    aliases: ["eq"],
+    lookup: backResolver((card) => card.equip_value ?? null),
+    name: "equip",
+    type: "number",
+  },
+
+  // Path card thresholds.
+  {
+    aliases: ["pr"],
+    lookup: backResolver((card) => card.presence ?? null),
+    name: "presence",
+    type: "number",
+  },
+  {
+    aliases: ["ha"],
+    lookup: backResolver((card) => card.harm_threshold ?? null),
+    name: "harm",
+    type: "number",
+  },
+  {
+    aliases: ["pg"],
+    lookup: backResolver((card) => card.progress_threshold ?? null),
+    name: "progress",
+    type: "number",
+  },
+
+  // Card text fields.
+  {
+    aliases: ["fl"],
+    lookup: backResolver((card) => card.flavor ?? null),
+    name: "flavor",
+    type: "text",
+  },
+  {
+    aliases: ["na"],
+    lookup: backResolver((card) => card.name),
+    name: "name",
     type: "string",
   },
   {
     aliases: ["txt"],
-    legacyAlias: "x",
-    lookup: backResolver((card) => displayAttribute(card, "text")),
+    lookup: backResolver((card) => card.text ?? null),
     name: "text",
     type: "text",
   },
   {
     aliases: ["tr"],
-    legacyAlias: "k",
     lookup: backResolver((card, { i18n }) => {
-      const value = displayAttribute(card, "traits");
+      const value = card.traits;
       if (value == null) return null;
 
       const traits = splitMultiValue(value);
@@ -467,8 +200,21 @@ const fieldDefinitions: FieldDefinition[] = [
     type: "string",
   },
   {
+    aliases: ["kw"],
+    lookup: backResolver((card) => card.keywords ?? null),
+    name: "keyword",
+    type: "string",
+  },
+
+  // Type and identity.
+  {
+    aliases: ["code"],
+    lookup: backResolver((card) => card.code),
+    name: "id",
+    type: "string",
+  },
+  {
     aliases: ["ty"],
-    legacyAlias: "t",
     lookup: backResolver((card, { i18n }) => {
       if (i18n.language === "en") return card.type_code;
       return [card.type_code, i18n.t(`common.type.${card.type_code}`)];
@@ -476,67 +222,81 @@ const fieldDefinitions: FieldDefinition[] = [
     name: "type",
     type: "string",
   },
+
+  // Pack/set membership.
   {
-    aliases: ["un"],
-    legacyAlias: "u",
-    lookup: backResolver((card) => card.is_unique ?? false),
-    name: "unique",
+    aliases: ["pa"],
+    lookup: backResolver((card, { metadata }) => {
+      const pack = metadata.packs[card.set_code];
+      if (!pack) return card.set_code;
+      return [card.set_code, displayPackName(pack)];
+    }),
+    name: "pack",
+    type: "string",
+  },
+  {
+    aliases: ["sc"],
+    lookup: backResolver((card) => card.set_code),
+    name: "set",
+    type: "string",
+  },
+
+  // Meta.
+  {
+    aliases: ["dl", "limit"],
+    lookup: backResolver((card) => card.deck_limit ?? null),
+    name: "deck_limit",
+    type: "number",
+  },
+  {
+    aliases: ["il", "illu"],
+    lookup: backResolver((card) => card.illustrator ?? null),
+    name: "illustrator",
+    type: "string",
+  },
+  {
+    lookup: () => (card, ctx) => {
+      if (!ctx.deck) return null;
+      return ctx.deck.slots[card.code] ?? null;
+    },
+    name: "in_deck",
+    type: "number",
+  },
+  {
+    aliases: ["xp"],
+    lookup: backResolver((card) => card.is_expert ?? false),
+    name: "is_expert",
     type: "boolean",
   },
   {
-    aliases: ["ve"],
-    lookup: backResolver((card) => card.vengeance ?? null),
-    name: "vengeance",
-    type: "number",
+    aliases: ["un"],
+    lookup: backResolver((card) => card.is_unique ?? false),
+    name: "is_unique",
+    type: "boolean",
   },
   {
-    aliases: ["vp"],
-    legacyAlias: "j",
-    lookup: backResolver((card) => card.victory ?? null),
-    name: "victory",
+    aliases: ["qt", "qty"],
+    lookup: backResolver((card) => card.quantity ?? null),
+    name: "quantity",
     type: "number",
   },
+
+  // Token on the card.
   {
-    aliases: ["wd"],
-    legacyAlias: "d",
-    lookup: backResolver((card) => card.skill_wild ?? 0),
-    name: "wild",
-    type: "number",
-  },
-  {
-    aliases: ["wp", "will", "brain"],
-    legacyAlias: "w",
-    lookup: backResolver((card) => card.skill_willpower ?? 0),
-    name: "willpower",
-    type: "number",
-  },
-  {
-    aliases: ["level", "lvl"],
-    legacyAlias: "p",
-    lookup: backResolver((card) => card.xp ?? null),
-    name: "xp",
-    type: "number",
+    aliases: ["tok"],
+    lookup: backResolver((card) => card.token_name ?? null),
+    name: "token",
+    type: "string",
   },
 ];
 
+// ER cards don't have separate back-card representations in the data model,
+// so backResolver simply wraps the resolver transparently for both front and
+// back variants. The onlyBacks parameter is kept to satisfy the FieldDefinition
+// interface used by buildAllFields.
 function backResolver(resolver: FieldLookup) {
-  return (onlyReturnBackAttr = false) => {
-    return (card: Card, ctx: FieldLookupContext) => {
-      if (!ctx.matchBacks && !onlyReturnBackAttr) return resolver(card, ctx);
-
-      let back: Card | undefined;
-      if (card.double_sided) {
-        back = doubleSidedBackCard(card, ctx.i18n.t) as Card;
-      } else if (card.back_link_id) {
-        back = ctx.metadata.cards[card.back_link_id];
-      }
-
-      if (onlyReturnBackAttr) return resolver(back ?? ({} as Card), ctx);
-
-      return back
-        ? new BackArray([resolver(card, ctx), resolver(back, ctx)].flat())
-        : resolver(card, ctx);
-    };
+  return (_onlyBacks = false) => {
+    return (card: Card, ctx: FieldLookupContext) => resolver(card, ctx);
   };
 }
 
@@ -574,12 +334,3 @@ function buildAllFields(): Record<string, FieldDescriptor> {
 }
 
 export const fields = buildAllFields();
-
-// console.log(
-//   Object.values(fieldDefinitions).map(f => ({
-//     name: f.name,
-//     type: f.type,
-//     aliases: f.aliases,
-//     legacyAlias: f.legacyAlias,
-//   })
-// ));

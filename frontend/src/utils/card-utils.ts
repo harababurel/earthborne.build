@@ -1,14 +1,8 @@
-import { type Card, SKILL_KEYS } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
 import type { TFunction } from "i18next";
 import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import { assert } from "./assert";
-import {
-  CYCLES_WITH_STANDALONE_PACKS,
-  ORIENTATION_CHANGED_CARDS,
-  REGEX_USES,
-  SIDEWAYS_TYPE_CODES,
-} from "./constants";
 import { isEmpty } from "./is-empty";
 
 export function splitMultiValue(s: string | null | undefined) {
@@ -20,19 +14,22 @@ export function splitMultiValue(s: string | null | undefined) {
   }, []);
 }
 
-export function hasSkillIcons(card: Card) {
-  return SKILL_KEYS.some((key) => card[`skill_${key}`]);
+// Stub — ER has no skill icons.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function hasSkillIcons(_card: Card) {
+  return false;
 }
 
-export function getCardColor(card: Card, prop = "color") {
-  return card.faction2_code
-    ? `${prop}-multiclass`
-    : `${prop}-${card.faction_code}`;
+// Stub — ER has no faction color system; will be replaced with aspect colors.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getCardColor(_card: Card, _prop = "color") {
+  return "color-neutral";
 }
 
-export function sideways(card: Card) {
-  const value = SIDEWAYS_TYPE_CODES.includes(card.type_code);
-  return ORIENTATION_CHANGED_CARDS.includes(card.code) ? !value : value;
+// Stub — ER cards are not displayed sideways.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function sideways(_card: Card) {
+  return false;
 }
 
 function doubleSided(card: Card) {
@@ -170,15 +167,9 @@ export function cardLimit(card: Card, limitOverride?: number) {
   return limitOverride ?? card.deck_limit ?? 0;
 }
 
-export function cardUses(card: Card) {
-  const firstLine = card.real_text?.split("\n").at(0);
-  const match = firstLine?.match(REGEX_USES);
-
-  if (match?.length) {
-    const uses = match[1].toLowerCase();
-    return uses === "charge" ? "charges" : uses;
-  }
-
+// Stub — ER has no "uses" mechanic.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function cardUses(_card: Card) {
   return undefined;
 }
 
@@ -202,17 +193,10 @@ export function displayAttribute(
   return card?.[key] ?? card?.[`real_${key}`] ?? "";
 }
 
-export function cycleOrPack(cycle: Cycle, pack: Pack) {
-  if (
-    !official(pack) ||
-    CYCLES_WITH_STANDALONE_PACKS.includes(cycle.code) ||
-    pack.real_name.includes("Investigator Expansion") ||
-    pack.real_name.includes("Campaign Expansion")
-  ) {
-    return pack;
-  }
-
-  return cycle;
+// Stub — ER has no cycle/standalone-pack distinction; always return the pack.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function cycleOrPack(_cycle: Cycle, pack: Pack) {
+  return pack;
 }
 
 export function numericalIcon(num: string | number | null | undefined) {

@@ -8,3 +8,8 @@ export function packToApiFormat(_pack: any): any {
 export function cardToApiFormat(_card: any): any {
   return {};
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function cycleToApiFormat(_cycle: any): any {
+  return {};
+}
