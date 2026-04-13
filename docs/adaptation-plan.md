@@ -63,12 +63,58 @@ Removed all ArkhamDB-specific code:
 - Updated `backend/package.json` (removed ingest:arkhamdb-decklists script)
 - Cleaned `frontend/src/utils/constants.ts` (removed all AH card codes, regexes, slot constants, arkhamdb storage provider)
 
-### Phase 3: Card data pipeline — BLOCKED (waiting on card metadata source)
+### Phase 3: Card data pipeline — IN PROGRESS
 
-Since there's no ArkhamDB equivalent for Earthborne Rangers, build your own:
-- Define the JSON format for ER card data (card objects, ranger objects, pack/cycle metadata)
-- Write an ingestion script to load card data into the DB (or serve as static JSON)
-- Populate with real card data
+#### Data source decision (researched 2026-04-13)
+
+**Primary source: `github.com/zzorba/rangers-card-data`**
+
+This is the canonical JSON card data repository that backs RangersDB (rangersdb.com). It is open source (maintained by zzorba / Daniel Salinas). The data is structured as flat JSON files — exactly the format we need to ingest.
+
+Repository structure:
+```
+rangers-card-data/
+  packs/
+    core/core.json      # Core set: 241 cards
+    loa/                # Land of Adventure
+    sib/                # Stewards in the Black (?)
+    sos/                # Shores of Sovereignty (?)
+    sotv/               # Stewards of the Valley
+  aspects.json          # AWA, FIT, FOC, SPI
+  types.json            # 13 card types
+  sets.json             # Card sets / release groupings
+  set_types.json
+  subsets.json
+  tokens.json
+  areas.json
+  packs.json
+  taboos/               # Taboo list variants
+  i18n/                 # Translations (de, fr, es, it, ru)
+  schema.ts             # TypeScript interfaces for all JSON shapes
+```
+
+Card JSON fields (from `core.json` — 38 unique fields):
+`id`, `position`, `quantity`, `deck_limit`, `set_id`, `set_position`, `aspect_id`, `cost`, `level`, `name`, `type_id`, `traits`, `text`, `flavor`, `illustrator`, `approach_conflict`, `approach_exploration`, `approach_connection`, `approach_reason`, `equip`, `presence`, `harm`, `token_id`, `token_count`, `cost_type`, `cost_count`, `spoiler`
+
+Field mapping to our schema: near 1:1. `harm` → `harm_threshold`, `progress` → `progress_threshold`, `cost` → `energy_cost`, `equip` → `equip_value`, etc.
+
+**Secondary source: `eb_rangers_cards.json`** (TTS sprite sheet extract in repo root)
+- 788 entries, 681 with names, zero game-mechanical data
+- Useful only as a supplementary image source (sprite sheets require cropping to extract individual card images)
+- Do not use as primary data
+
+**Considered and rejected:**
+- *decksmith.app* — no public API, would require fragile scraping
+- *RangersDB GraphQL API* — data is in Hasura behind an admin secret; the static JSON data repo is the better path
+
+#### Phase 3 implementation plan
+
+1. **Clone `rangers-card-data`** into a local path (e.g. `/home/sergiu/work/rangers-card-data`) and inspect `schema.ts` to confirm field types
+2. **Define our ingestion JSON format** — decide whether to serve card data as static JSON (simpler) or load into Postgres (needed for server-side search/deck sharing)
+3. **Write an ingestion script** (`backend/src/scripts/ingest-cards.ts`) that reads the rangers-card-data JSON files and upserts into our DB via Kysely
+4. **Define DB migrations** for the card tables (mapping rangers-card-data fields to our schema)
+5. **Wire up API endpoints** (`GET /api/cards`, `GET /api/cards/:code`) that the frontend can query
+6. **Seed with real data** by running the ingestion script against the cloned rangers-card-data repo
 
 ### Phase 4: Rebuild game logic
 
