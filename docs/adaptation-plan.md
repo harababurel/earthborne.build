@@ -40,29 +40,30 @@ This document captures the full analysis of the arkham.build codebase and the pl
 
 ## Recommended order of work
 
-### Phase 1: Card schema (start here)
+### Phase 1: Card schema — DONE
 
-Everything else depends on knowing what an Earthborne Rangers card looks like as a data type. Before touching any UI or validation logic:
+ER card schema defined based on rulebook analysis. Key changes:
 
-1. Define the ER card schema in `shared/src/schemas/card.schema.ts`
-   - Ranger stats (what are the equivalent of AH's willpower/intellect/combat/agility?)
-   - Card types (aspect cards, skills, events, assets — map these to ER equivalents)
-   - Aspect/faction system (ER uses Aspects instead of AH classes)
-   - Deck configuration fields on Ranger cards
-2. Update `shared/src/schemas/` for decklists and other dependent schemas
-3. Update DTOs in `shared/src/dtos/`
+- `shared/src/lib/constants.ts` — Replaced AH factions/skills/player types with ER aspects (AWA/FIT/FOC/SPI), approaches (conflict/reason/exploration/connection), card types (moment/attachment/gear/being/feature/attribute/path/location/weather/mission/challenge/aspect/role), ranger card categories, background/specialty types, terrain types, keywords, and deck construction constants.
+- `shared/src/schemas/card.schema.ts` — Complete rewrite with ER card model: energy costs, equip values, approach icons, aspect requirements, presence, harm/progress thresholds, named tokens, challenge effects.
+- `shared/src/schemas/decklist.schema.ts` — New ER decklist schema (30 cards = 15 unique x 2 copies, aspect card, role card, background/specialty choices, rewards/maladies/displaced tracking).
+- `shared/src/lib/card-utils.ts` — Replaced AH XP/taboo/myriad functions with ER energy cost, aspect requirement, and approach icon utilities.
+- `shared/src/dtos/` — Updated all DTOs to use ER fields instead of AH (removed investigator_factions, xp, side_decks, taboo; added aspect_code, background, specialty).
+- `shared/src/index.ts` — Updated barrel exports.
+- Shared and backend packages compile clean. Frontend has ~138 files with expected type errors from the schema change.
 
-### Phase 2: Strip ArkhamDB integration
+### Phase 2: Strip ArkhamDB integration — DONE
 
-Remove the parts that actively pull from an external Arkham service:
-- Delete/gut `backend/src/routes/arkhamdb-decklists.ts`
-- Delete/gut `backend/src/scripts/ingest-arkhamdb-decklists.ts`
-- Remove ArkhamDB-specific DB tables from migrations
-- Remove `frontend/src/utils/arkhamdb.ts` and `arkhamdb-json-format.ts`
+Removed all ArkhamDB-specific code:
+- Deleted `backend/src/routes/arkhamdb-decklists.ts`, `arkhamdb-decklists.helpers.ts`, `recommendations.ts`
+- Deleted `backend/src/scripts/ingest-arkhamdb-decklists.ts`
+- Deleted `frontend/src/utils/arkhamdb.ts`, `arkhamdb-json-format.ts`
+- Deleted `shared/src/schemas/arkhamdb-decklist.schema.ts`, `shared/src/lib/card-utils.spec.ts`
+- Updated `backend/src/app.ts` (removed arkhamdb/recommendations routes)
+- Updated `backend/package.json` (removed ingest:arkhamdb-decklists script)
+- Cleaned `frontend/src/utils/constants.ts` (removed all AH card codes, regexes, slot constants, arkhamdb storage provider)
 
-This gives a clean backend to build the ER card data pipeline on top of.
-
-### Phase 3: Card data pipeline
+### Phase 3: Card data pipeline — BLOCKED (waiting on card metadata source)
 
 Since there's no ArkhamDB equivalent for Earthborne Rangers, build your own:
 - Define the JSON format for ER card data (card objects, ranger objects, pack/cycle metadata)
@@ -124,12 +125,22 @@ Work through components systematically, starting with the most game-logic-heavy:
 
 ---
 
-## Open questions (answer before starting Phase 1)
+## Open questions — ANSWERED (from rulebook analysis)
 
-- What are the Earthborne Rangers card types? (equivalent of AH's asset/event/skill/enemy/location/etc.)
-- What stats do Rangers have? (equivalent of willpower/intellect/combat/agility/health/sanity)
-- What is the Aspect system? How many aspects are there, and how do they restrict deckbuilding?
-- What are the deck size rules?
-- Are there signature cards / required cards per Ranger?
-- What are the equivalent of weaknesses?
-- What card set / pack release structure exists?
+All answered during Phase 1 via rulebook at `docs/rulebook.pdf`:
+
+- **Card types**: moment, attachment, gear, being, feature, attribute (ranger cards); path, location, weather, mission, challenge, aspect, role (game cards)
+- **Ranger stats**: 4 aspects — Awareness (AWA), Fitness (FIT), Focus (FOC), Spirit (SPI), values 1-3 from aspect card
+- **Aspect system**: 4 aspects, 12 aspect cards with different spreads. Cards have aspect requirements (min value to include in deck)
+- **Deck size**: exactly 30 cards (15 unique x 2 copies) + role card + aspect card outside deck
+- **Signature/required cards**: no signatures per se, but deck is built from personality (4 picks) + background (5 of 9) + specialty (5 of 14) + outside interest (1 from any set)
+- **Weaknesses equivalent**: maladies (e.g. Lingering Injury), added during campaign, cannot be removed normally
+- **Release structure**: ranger card sets (Artificer, Artisan, Conciliator, Explorer, Forager, Maladies, Personalities, Rewards, Shaper, Shepherd, Traveler) and path card sets (terrain-based: Grassland, Lakeshore, etc. + location-based: Branch, Spire, etc.)
+
+## Current state
+
+- **Shared package**: compiles clean with new ER schemas
+- **Backend package**: compiles clean, ArkhamDB routes removed
+- **Frontend package**: ~138 files have type errors — all expected downstream breakage from the schema change. These reference old AH `Card` type fields (`faction_code`, `skill_willpower`, `xp`, `health`, `sanity`, etc.) and will be fixed in Phases 4-6.
+- **Card data**: schema is ready but no card data exists yet. Waiting on external metadata source.
+- **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed)
