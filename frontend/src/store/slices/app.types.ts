@@ -1,9 +1,5 @@
 import type { Deck, Id } from "@/store/schemas/deck.schema";
-import type {
-  AllCardResponse,
-  DataVersionResponse,
-  MetadataResponse,
-} from "@/store/services/queries";
+import type { AllCardResponse, DataVersionResponse, MetadataResponse } from "@/store/services/queries";
 import type { StoreState } from ".";
 import type { Locale } from "./settings.types";
 

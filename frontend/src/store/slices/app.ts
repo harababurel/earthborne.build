@@ -1,11 +1,7 @@
-import type { Card } from "@arkham-build/shared";
 import type { StateCreator } from "zustand";
 import { applyDeckEdits, getChangeRecord } from "@/store/lib/deck-edits";
 import { createDeck } from "@/store/lib/deck-factory";
 import type { Deck } from "@/store/schemas/deck.schema";
-import factions from "@/store/services/data/factions.json";
-import subTypes from "@/store/services/data/subtypes.json";
-import types from "@/store/services/data/types.json";
 import { assertCanPublishDeck, incrementVersion } from "@/utils/arkhamdb";
 import { assert } from "@/utils/assert";
 import { decodeExileSlots } from "@/utils/card-utils";
@@ -14,7 +10,6 @@ import { randomId } from "@/utils/crypto";
 import { download } from "@/utils/download";
 import { time, timeEnd } from "@/utils/time";
 import { prepareBackup, restoreBackup } from "../lib/backup";
-import { inferCardChapter } from "../lib/card-chapter";
 import { applyCardChanges } from "../lib/card-edits";
 import { mapValidationToProblem } from "../lib/deck-io";
 import {
@@ -24,7 +19,7 @@ import {
 } from "../lib/deck-meta";
 import { buildCacheFromDecks } from "../lib/fan-made-content";
 import { applyLocalData } from "../lib/local-data";
-import { mappedByCode, mappedById } from "../lib/metadata-utils";
+import { mappedByCode } from "../lib/metadata-utils";
 import { resolveDeck } from "../lib/resolve-deck";
 import { decodeExtraSlots, encodeExtraSlots } from "../lib/slots";
 import { disconnectProviderIfUnauthorized, syncAdapters } from "../lib/sync";
@@ -75,12 +70,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const persistedState = await hydrate();
 
     if (!refresh && persistedState?.metadata?.dataVersion?.cards_updated_at) {
-      const metadata = {
-        ...applyLocalData(persistedState.metadata),
-        factions: mappedByCode(factions),
-        subtypes: mappedByCode(subTypes),
-        types: mappedByCode(types),
-      };
+      const metadata = applyLocalData(persistedState.metadata);
 
       set((prev) => {
         const merged = mergeInitialState(prev, persistedState, overrides);
@@ -114,91 +104,15 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     timeEnd("query_data");
 
     time("create_store_data");
-    let metadata: Metadata = {
+    const metadata: Metadata = {
       ...getInitialMetadata(),
       dataVersion: dataVersionResponse,
+      packs: mappedByCode(metadataResponse.pack),
       cards: {},
-      taboos: {},
-      cycles: mappedByCode(metadataResponse.cycle),
-      packs: {
-        ...mappedByCode(metadataResponse.pack),
-        ...mappedByCode(metadataResponse.reprint_pack),
-      },
-      encounterSets: mappedByCode(metadataResponse.card_encounter_set),
-      factions: mappedByCode(factions),
-      subtypes: mappedByCode(subTypes),
-      types: mappedByCode(types),
-      tabooSets: mappedById(metadataResponse.taboo_set),
     };
 
-    if (metadata.packs["rcore"]) {
-      metadata.packs["rcore"].reprint = {
-        type: "rcore",
-      };
-    }
-
-    for (const c of cards) {
-      if (c.taboo_set_id) {
-        metadata.taboos[c.id] = {
-          back_text: c.back_text,
-          code: c.code,
-          customization_change: c.customization_change,
-          customization_options: c.customization_options,
-          customization_text: c.customization_text,
-          deck_options: c.deck_options,
-          deck_requirements: c.deck_requirements,
-          exceptional: c.exceptional,
-          real_back_text: c.real_back_text,
-          real_customization_change: c.real_customization_change,
-          real_customization_text: c.real_customization_text,
-          real_taboo_text_change: c.real_taboo_text_change,
-          real_text: c.real_text,
-          taboo_set_id: c.taboo_set_id,
-          taboo_text_change: c.taboo_text_change,
-          taboo_xp: c.taboo_xp,
-          text: c.text,
-        };
-
-        continue;
-      }
-
-      // SAFE! Diverging fields are added below.
-      const card = c as Card;
-
-      const pack = metadata.packs[card.pack_code];
-      const cycle = metadata.cycles[pack.cycle_code];
-
-      // "tags" is sometimes empty string, see: https://github.com/Kamalisk/arkhamdb-json-data/pull/1351#issuecomment-1937852236
-      if (!card.tags) card.tags = undefined;
-      card.chapter = inferCardChapter(card.pack_code, metadata.packs);
-      card.parallel = cycle?.code === "parallel";
-
+    for (const card of cards) {
       metadata.cards[card.code] = card;
-
-      if (card.encounter_code) {
-        const encounterSet = metadata.encounterSets[card.encounter_code];
-
-        if (encounterSet) {
-          if (
-            !card.hidden &&
-            card.position < (encounterSet.position ?? Number.MAX_SAFE_INTEGER)
-          ) {
-            encounterSet.position = card.position;
-          }
-
-          if (!encounterSet.pack_code) {
-            encounterSet.pack_code = card.pack_code;
-          }
-        }
-      }
-    }
-
-    metadata = applyLocalData(metadata);
-
-    for (const code of Object.keys(metadata.encounterSets)) {
-      if (!metadata.encounterSets[code].pack_code) {
-        delete metadata.encounterSets[code];
-      }
     }
 
     set((prev) => {

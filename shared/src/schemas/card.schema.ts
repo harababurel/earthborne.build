@@ -19,8 +19,9 @@ export const CardSchema = z.object({
   // Identity
   code: z.string(),
   name: z.string(),
-  set_code: z.string(),
-  set_position: z.number(),
+  pack_code: z.string(),
+  set_code: z.string().nullish(),
+  set_position: z.number().nullish(),
   type_code: z.enum(CARD_TYPE_ORDER),
   category: z.enum(RANGER_CARD_CATEGORY).nullish(),
 

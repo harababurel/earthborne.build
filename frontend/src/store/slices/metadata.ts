@@ -6,9 +6,10 @@ export function getInitialMetadata(): Metadata {
   return {
     dataVersion: undefined,
     cards: {},
-    cycles: {},
-    encounterSets: {},
     packs: {},
+    // AH-specific fields — always empty for ER.
+    encounterSets: {},
+    cycles: {},
     factions: {},
     subtypes: {},
     types: {},

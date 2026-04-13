@@ -50,22 +50,24 @@ export const RANGER_CARD_CATEGORY = [
 
 export type RangerCardCategory = (typeof RANGER_CARD_CATEGORY)[number];
 
-// Background types (choose 1 of 4 during ranger creation).
+// Background types (choose 1 during ranger creation).
 export const BACKGROUND_TYPES = [
   "artisan",
   "forager",
   "shepherd",
+  "talespinner",
   "traveler",
 ] as const;
 
 export type BackgroundType = (typeof BACKGROUND_TYPES)[number];
 
-// Specialty types (choose 1 of 4 during ranger creation).
+// Specialty types (choose 1 during ranger creation).
 export const SPECIALTY_TYPES = [
   "artificer",
   "conciliator",
   "explorer",
   "shaper",
+  "spirit_speaker",
 ] as const;
 
 export type SpecialtyType = (typeof SPECIALTY_TYPES)[number];

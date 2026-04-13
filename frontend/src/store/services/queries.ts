@@ -1,5 +1,5 @@
 import type {
-  ApiCard,
+  Card,
   FanMadeProject,
   FanMadeProjectInfo,
   SealedDeckResponse,
@@ -10,118 +10,66 @@ import {
   type RecommendationsResponse,
   RecommendationsResponseSchema,
 } from "@arkham-build/shared";
-import encounterSets from "@/store/services/data/encounter_sets.json";
-import packs from "@/store/services/data/packs.json";
-import { packToApiFormat } from "@/utils/arkhamdb-json-format";
 import { assert } from "@/utils/assert";
-import { displayPackName } from "@/utils/formatting";
-import i18n from "@/utils/i18n";
-import type { Cycle } from "../schemas/cycle.schema";
 import type { DataVersion } from "../schemas/data-version.schema";
 import { type Deck, type Id, isDeck } from "../schemas/deck.schema";
-import type { JsonDataEncounterSet } from "../schemas/encounter-set.schema";
 import type { Pack } from "../schemas/pack.schema";
-import type { TabooSet } from "../schemas/taboo-set.schema";
 import type { History } from "../selectors/decks";
 import type { Locale } from "../slices/settings.types";
-import reprintPacks from "./data/reprint_packs.json";
 import { ApiError, apiV2Request } from "./requests/shared";
 
-export type MetadataApiResponse = {
-  data: Omit<MetadataResponse, "faction" | "reprint_pack" | "type" | "subtype">;
-};
-
+/**
+ * ER metadata response — packs only (no cycles, encounter sets, or taboo sets).
+ */
 export type MetadataResponse = {
-  cycle: Cycle[];
   pack: Pack[];
-  reprint_pack: Pack[];
-  card_encounter_set: JsonDataEncounterSet[];
-  taboo_set: TabooSet[];
-};
-
-export type DataVersionApiResponse = {
-  data: {
-    all_card_updated: DataVersion[];
-  };
 };
 
 export type DataVersionResponse = DataVersion;
 
-export type AllCardApiResponse = {
-  data: {
-    all_card: ApiCard[];
-  };
-};
-
-export type AllCardResponse = ApiCard[];
-
-type FaqResponse = {
-  code: string;
-  html: string;
-  updated: {
-    date: string;
-  };
-}[];
-
-async function request(
-  path: string,
-  options: RequestInit = {},
-): Promise<Response> {
-  const res = await fetch(
-    `${import.meta.env.VITE_API_LEGACY_URL}/v1${path}`,
-    options,
-  );
-
-  if (res.status >= 400) {
-    const err = await res.json();
-    throw new ApiError(err.message, res.status);
-  }
-
-  return res;
-}
+export type AllCardResponse = Card[];
 
 /**
- * Cache API
+ * ER API — metadata (packs)
  */
 
 export async function queryMetadata(
-  locale: Locale = "en",
+  _locale: Locale = "en",
 ): Promise<MetadataResponse> {
-  const res = await request(`/cache/metadata/${locale}`);
-  const { data }: MetadataApiResponse = await res.json();
+  const res = await apiV2Request("/v2/public/packs");
+  const { data }: { data: Array<{ id: string; name: string; short_name: string | null; position: number }> } = await res.json();
 
-  const cycles = data.cycle;
+  const packs: Pack[] = data.map((p) => ({
+    code: p.id,
+    // ER has no cycles; use pack code as cycle_code placeholder.
+    cycle_code: p.id,
+    real_name: p.name,
+    name: p.short_name ?? p.name,
+    position: p.position,
+    official: true,
+  }));
 
-  return {
-    ...data,
-    card_encounter_set: [...data.card_encounter_set, ...encounterSets],
-    pack: [...data.pack, ...packs.map(packToApiFormat)],
-    reprint_pack: reprintPacks.map((pack) => {
-      const mapped = packToApiFormat(pack);
-
-      const cycle = cycles.find((cycle) => cycle.code === pack.cycle_code);
-      if (!cycle) return mapped;
-
-      return {
-        ...mapped,
-        name: `${displayPackName(cycle)} ${i18n.t(`common.packs_new_format.${pack.reprint.type}`)}`,
-      };
-    }),
-  };
+  return { pack: packs };
 }
 
 export async function queryDataVersion(
-  locale: Locale = "en",
+  _locale: Locale = "en",
 ): Promise<DataVersion> {
-  const res = await request(`/cache/version/${locale}`);
-  const { data }: DataVersionApiResponse = await res.json();
-  return data.all_card_updated[0];
+  const res = await apiV2Request("/version");
+  const { card_count }: { card_count: number } = await res.json();
+
+  return {
+    card_count,
+    cards_updated_at: "2026-04-13T00:00:00",
+    locale: "en",
+    translation_updated_at: "2026-04-13T00:00:00",
+  };
 }
 
-export async function queryCards(locale: Locale = "en"): Promise<ApiCard[]> {
-  const res = await request(`/cache/cards/${locale}`);
-  const { data }: AllCardApiResponse = await res.json();
-  return data.all_card;
+export async function queryCards(_locale: Locale = "en"): Promise<Card[]> {
+  const res = await apiV2Request("/v2/public/cards");
+  const { data }: { data: Card[] } = await res.json();
+  return data;
 }
 
 /**

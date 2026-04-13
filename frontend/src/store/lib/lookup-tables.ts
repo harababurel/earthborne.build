@@ -1,14 +1,6 @@
 import type { Card } from "@arkham-build/shared";
-import { applyTaboo } from "@/store/lib/card-edits";
-import { cardUses, splitMultiValue } from "@/utils/card-utils";
-import {
-  ACTION_TEXT_ENTRIES,
-  REGEX_BONDED,
-  REGEX_SKILL_BOOST,
-  REGEX_SUCCEED_BY,
-} from "@/utils/constants";
+import { splitMultiValue } from "@/utils/card-utils";
 import { time, timeEnd } from "@/utils/time";
-import { selectSettingsTabooId } from "../selectors/shared";
 import type { Metadata } from "../slices/metadata.types";
 import type { SettingsState } from "../slices/settings.types";
 import type { LookupTable, LookupTables } from "./lookup-tables.types";
@@ -53,7 +45,8 @@ function getInitialLookupTables(): LookupTables {
 
 export function createLookupTables(
   metadata: Metadata,
-  settings: SettingsState,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _settings: SettingsState,
 ) {
   time("refresh_lookup_tables");
   const lookupTables = getInitialLookupTables();
@@ -61,13 +54,9 @@ export function createLookupTables(
   const cards = Object.values(metadata.cards);
 
   for (const card of cards) {
-    addCardToLookupTables(
-      lookupTables,
-      applyTaboo(card, metadata, selectSettingsTabooId(settings, metadata)),
-    );
+    addCardToLookupTables(lookupTables, card);
   }
 
-  createRelations(metadata, lookupTables);
   addPacksToLookupTables(metadata, lookupTables);
 
   timeEnd("refresh_lookup_tables");
@@ -90,441 +79,28 @@ function setInLookupTable<T extends string | number>(
 function addCardToLookupTables(tables: LookupTables, card: Card) {
   indexByCodes(tables, card);
   indexByTraits(tables, card);
-  indexByActions(tables, card);
-  indexByFast(tables, card);
-
-  // handle additional index based on whether we are dealing with a player card or not.
-  if (card.faction_code !== "mythos") {
-    indexByLevel(tables, card);
-
-    indexBySucceedsBy(tables, card);
-
-    if (card.type_code === "asset") {
-      indexBySkillBoosts(tables, card);
-      indexByUses(tables, card);
-    }
-  } else {
-    // TODO: add enemy filters.
-  }
 }
 
 function indexByCodes(tables: LookupTables, card: Card) {
   setInLookupTable(card.code, tables.typeCode, card.type_code);
-
-  if (card.subtype_code) {
-    setInLookupTable(card.code, tables.subtypeCode, card.subtype_code);
-  }
-
-  if (card.encounter_code) {
-    setInLookupTable(card.code, tables.encounterCode, card.encounter_code);
-    setInLookupTable(
-      card.encounter_code,
-      tables.encounterCodesByPack,
-      card.pack_code,
-    );
-  }
 }
 
 function indexByTraits(tables: LookupTables, card: Card) {
-  for (const trait of splitMultiValue(card.real_traits)) {
+  if (!card.traits) return;
+  for (const trait of splitMultiValue(card.traits)) {
     setInLookupTable(card.code, tables.traits, trait);
   }
-}
-
-function indexByActions(tables: LookupTables, card: Card) {
-  // add card to action tables.
-  for (const [key, value] of ACTION_TEXT_ENTRIES) {
-    if (card.real_text?.includes(`<b>${value}`)) {
-      setInLookupTable(card.code, tables.actions, key);
-    }
-  }
-}
-
-// TODO: use a regex.
-function indexByFast(tables: LookupTables, card: Card) {
-  if (
-    card?.real_text?.includes("Fast.") ||
-    card.real_text?.includes("gains fast.")
-  ) {
-    setInLookupTable(card.code, tables.properties, "fast");
-  }
-}
-
-function indexByLevel(tables: LookupTables, card: Card) {
-  if (card.xp) setInLookupTable(card.code, tables.level, card.xp);
-}
-
-// TODO: handle "+X skill value".
-function indexBySkillBoosts(tables: LookupTables, card: Card) {
-  if (card.customization_options?.find((o) => o.choice === "choose_skill")) {
-    setInLookupTable(card.code, tables.skillBoosts, "willpower");
-    setInLookupTable(card.code, tables.skillBoosts, "intellect");
-    setInLookupTable(card.code, tables.skillBoosts, "combat");
-    setInLookupTable(card.code, tables.skillBoosts, "agility");
-  }
-
-  const matches = card.real_text?.matchAll(REGEX_SKILL_BOOST);
-  if (!matches) return;
-
-  for (const match of matches) {
-    if (match.length > 0) {
-      setInLookupTable(card.code, tables.skillBoosts, match[1]);
-    }
-  }
-}
-
-function indexByUses(tables: LookupTables, card: Card) {
-  const uses = cardUses(card);
-  if (uses) {
-    setInLookupTable(card.code, tables.uses, uses);
-  }
-}
-
-function indexBySucceedsBy(tables: LookupTables, card: Card) {
-  if (card.real_text?.match(REGEX_SUCCEED_BY)) {
-    setInLookupTable(card.code, tables.properties, "succeedBy");
-  }
-}
-
-function createRelations(metadata: Metadata, tables: LookupTables) {
-  time("create_relations");
-  const cards = Object.values(metadata.cards);
-
-  const bonded: Record<string, string[]> = {};
-
-  const upgrades: Record<
-    string,
-    { code: string; subname: string | null | undefined; xp: number }[]
-  > = {};
-
-  const backs: Record<string, string> = {};
-
-  const investigatorsByName: Record<string, string[]> = {};
-  const canonicalInvestigatorCodes = new Set<string>();
-  const requiredCardCodes = new Set<string>();
-
-  // first pass: identify target cards.
-  for (const card of cards) {
-    if (card.xp && card.xp >= 0) {
-      const upgrade = {
-        code: card.code,
-        subname: card.real_subname,
-        xp: card.xp,
-      };
-
-      if (!upgrades[card.real_name]) {
-        upgrades[card.real_name] = [upgrade];
-      } else {
-        upgrades[card.real_name].push(upgrade);
-      }
-    }
-
-    const bondedMatch = card.real_text?.match(REGEX_BONDED);
-    if (bondedMatch && bondedMatch.length > 0) {
-      if (!bonded[bondedMatch[1]]) {
-        bonded[bondedMatch[1]] = [card.code];
-      } else {
-        bonded[bondedMatch[1]].push(card.code);
-      }
-    }
-
-    if (card.back_link_id) {
-      backs[card.back_link_id] = card.code;
-    }
-
-    if (
-      card.type_code === "investigator" &&
-      card.deck_limit &&
-      !card.duplicate_of_code &&
-      !card.alt_art_investigator &&
-      !card.alternate_of_code &&
-      !card.encounter_code
-    ) {
-      investigatorsByName[card.real_name] ??= [];
-      investigatorsByName[card.real_name].push(card.code);
-      canonicalInvestigatorCodes.add(card.code);
-    }
-
-    for (const code of Object.keys(card.deck_requirements?.card ?? {})) {
-      requiredCardCodes.add(code);
-    }
-
-    for (const code of Object.keys(card.side_deck_requirements?.card ?? {})) {
-      requiredCardCodes.add(code);
-    }
-  }
-
-  // second pass: construct lookup tables.
-  for (const card of cards) {
-    if (card.deck_requirements?.card) {
-      for (const code of Object.keys(card.deck_requirements.card)) {
-        setInLookupTable(code, tables.relations.requiredCards, card.code);
-      }
-    }
-
-    if (card.side_deck_requirements?.card) {
-      for (const code of Object.keys(card.side_deck_requirements.card)) {
-        setInLookupTable(
-          code,
-          tables.relations.sideDeckRequiredCards,
-          card.code,
-        );
-      }
-    }
-
-    if (card.restrictions?.investigator && !card.hidden) {
-      // Can have multiple entries (alternate arts).
-      for (const key of Object.keys(card.restrictions.investigator)) {
-        const investigator = metadata.cards[key];
-
-        if (!investigator) {
-          console.warn(`Missing investigator for ${key}`);
-          continue;
-        }
-
-        if (investigator.duplicate_of_code) {
-          continue;
-        }
-
-        setInLookupTable(key, tables.relations.restrictedTo, card.code);
-
-        if (card.real_text?.includes("Advanced.")) {
-          setInLookupTable(card.code, tables.relations.advanced, key);
-        } else if (card.real_text?.includes("Replacement.")) {
-          setInLookupTable(card.code, tables.relations.replacement, key);
-        } else {
-          if (card.parallel && !requiredCardCodes.has(card.code)) {
-            setInLookupTable(card.code, tables.relations.parallelCards, key);
-          } else if (
-            !requiredCardCodes.has(card.code) &&
-            !card.duplicate_of_code &&
-            // Kate has bonded cards restricted to her, these should not be part of the deck.
-            card.deck_limit
-          ) {
-            setInLookupTable(card.code, tables.relations.requiredCards, key);
-          }
-        }
-      }
-    }
-
-    if (
-      card.type_code === "investigator" &&
-      card.parallel &&
-      card.alt_art_investigator &&
-      card.alternate_of_code
-    ) {
-      setInLookupTable(
-        card.code,
-        tables.relations.parallel,
-        card.alternate_of_code,
-      );
-
-      setInLookupTable(
-        card.alternate_of_code,
-        tables.relations.base,
-        card.code,
-      );
-    }
-
-    if (card.duplicate_of_code) {
-      setInLookupTable(
-        card.code,
-        tables.relations.duplicates,
-        card.duplicate_of_code,
-      );
-
-      setInLookupTable(
-        card.duplicate_of_code,
-        tables.relations.duplicates,
-        card.code,
-      );
-
-      for (const key of Object.keys(
-        tables.relations.duplicates[card.duplicate_of_code] || {},
-      )) {
-        if (key !== card.code) {
-          setInLookupTable(card.code, tables.relations.duplicates, key);
-          setInLookupTable(key, tables.relations.duplicates, card.code);
-        }
-      }
-    }
-
-    if (card.reprint_of) {
-      setInLookupTable(card.code, tables.relations.reprints, card.reprint_of);
-      setInLookupTable(card.reprint_of, tables.relations.basePrints, card.code);
-    }
-
-    if (upgrades[card.real_name] && card.xp != null) {
-      for (const upgrade of upgrades[card.real_name]) {
-        if (
-          card.code !== upgrade.code &&
-          (card.xp !== upgrade.xp || upgrade.subname !== card.real_subname)
-        ) {
-          setInLookupTable(upgrade.code, tables.relations.level, card.code);
-          setInLookupTable(card.code, tables.relations.level, upgrade.code);
-        }
-      }
-    }
-
-    // Index cards by back traits.
-
-    if (card.real_back_traits) {
-      for (const trait of splitMultiValue(card.real_back_traits)) {
-        setInLookupTable(card.code, tables.traits, trait);
-      }
-    }
-
-    if (backs[card.code] && card.real_traits) {
-      for (const trait of splitMultiValue(card.real_traits)) {
-        setInLookupTable(backs[card.code], tables.traits, trait);
-      }
-    }
-
-    // TODO: there is an edge case with Dream-Gate where the front should show when accessing `06015b` via
-    // a bond, but currently does not.
-    if (!card.hidden && bonded[card.real_name]) {
-      for (const bondedCode of bonded[card.real_name]) {
-        // beware the great hank samson.
-        if (bondedCode !== card.code && !card.real_text?.startsWith("Bonded")) {
-          setInLookupTable(bondedCode, tables.relations.bound, card.code);
-          setInLookupTable(card.code, tables.relations.bonded, bondedCode);
-        }
-      }
-    }
-
-    // Index multi-class investigators.
-    if (
-      card.type_code === "investigator" &&
-      card.deck_limit &&
-      investigatorsByName[card.real_name]?.length > 1
-    ) {
-      for (const investigator of investigatorsByName[card.real_name]) {
-        if (investigator !== card.code) {
-          setInLookupTable(
-            investigator,
-            tables.relations.otherVersions,
-            card.code,
-          );
-        }
-      }
-    }
-  }
-
-  for (const [back, front] of Object.entries(backs)) {
-    setInLookupTable(front, tables.relations.fronts, back);
-  }
-
-  for (const [investigator, entry] of Object.entries(
-    tables.relations.parallel,
-  )) {
-    const parallel = Object.keys(entry)[0];
-
-    tables.relations.advanced[parallel] =
-      tables.relations.advanced[investigator];
-
-    tables.relations.replacement[parallel] =
-      tables.relations.replacement[investigator];
-
-    tables.relations.bonded[parallel] = tables.relations.bonded[investigator];
-
-    tables.relations.parallelCards[parallel] =
-      tables.relations.parallelCards[investigator];
-
-    for (const [key, value] of Object.entries(tables.relations.restrictedTo)) {
-      if (value[investigator]) {
-        setInLookupTable(parallel, tables.relations.restrictedTo, key);
-      }
-    }
-  }
-
-  for (const code of canonicalInvestigatorCodes) {
-    const duplicates = tables.relations.duplicates[code];
-    if (!duplicates) continue;
-
-    for (const duplicateCode of Object.keys(duplicates)) {
-      tables.relations.requiredCards[duplicateCode] =
-        tables.relations.requiredCards[code];
-
-      tables.relations.advanced[duplicateCode] =
-        tables.relations.advanced[code];
-
-      tables.relations.replacement[duplicateCode] =
-        tables.relations.replacement[code];
-
-      tables.relations.bonded[duplicateCode] = tables.relations.bonded[code];
-
-      tables.relations.parallelCards[duplicateCode] =
-        tables.relations.parallelCards[code];
-
-      tables.relations.parallel[duplicateCode] =
-        tables.relations.parallel[code];
-    }
-  }
-
-  for (const code of Object.keys(tables.relations.reprints)) {
-    const duplicates = tables.relations.duplicates[code];
-    if (!duplicates) continue;
-
-    for (const duplicateCode of Object.keys(duplicates)) {
-      tables.relations.reprints[duplicateCode] =
-        tables.relations.reprints[code];
-
-      for (const reprintCode of Object.keys(
-        tables.relations.reprints[code] || {},
-      )) {
-        if (reprintCode !== duplicateCode) {
-          setInLookupTable(
-            duplicateCode,
-            tables.relations.basePrints,
-            reprintCode,
-          );
-        }
-      }
-    }
-  }
-
-  timeEnd("create_relations");
 }
 
 function addPacksToLookupTables(
   metadata: Metadata,
   lookupTables: LookupTables,
 ) {
-  const reprintsByCycleCode: Record<string, string[]> = {};
-
   const packs = Object.values(metadata.packs);
 
   for (const pack of packs) {
-    if (pack.reprint && pack.reprint.type !== "rcore") {
-      reprintsByCycleCode[pack.cycle_code] ??= [];
-      reprintsByCycleCode[pack.cycle_code].push(pack.code);
-    }
-  }
-
-  for (const pack of packs) {
-    setInLookupTable(pack.code, lookupTables.packsByCycle, pack.cycle_code);
-
-    const cycleReprints = reprintsByCycleCode[pack.cycle_code];
-
-    if (cycleReprints) {
-      for (const reprintPackCode of reprintsByCycleCode[pack.cycle_code]) {
-        const reprintPack = metadata.packs[reprintPackCode];
-
-        if (!pack.reprint && reprintPackCode !== pack.code) {
-          setInLookupTable(
-            reprintPackCode,
-            lookupTables.reprintPacksByPack,
-            pack.code,
-          );
-
-          if (reprintPack.reprint?.type !== "player") {
-            lookupTables.encounterCodesByPack[reprintPackCode] = {
-              ...lookupTables.encounterCodesByPack[reprintPackCode],
-              ...lookupTables.encounterCodesByPack[pack.code],
-            };
-          }
-        }
-      }
-    }
+    // ER has no cycles; use pack code as the cycle key so packsByCycle is
+    // populated consistently (some UI code iterates it).
+    setInLookupTable(pack.code, lookupTables.packsByCycle, pack.cycle_code ?? pack.code);
   }
 }

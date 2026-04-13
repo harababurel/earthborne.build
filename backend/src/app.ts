@@ -12,6 +12,7 @@ import { logger, requestLogger } from "./lib/logger.ts";
 import adminRouter from "./routes/admin.ts";
 import cardsRouter from "./routes/cards.ts";
 import fanMadeProjectInfoRouter from "./routes/fan-made-project-info.ts";
+import packsRouter from "./routes/packs.ts";
 
 export function appFactory(config: Config, database: Database) {
   const app = new Hono<HonoEnv>();
@@ -34,6 +35,7 @@ export function appFactory(config: Config, database: Database) {
 
   const pub = new Hono<HonoEnv>();
   pub.route("/cards", cardsRouter);
+  pub.route("/packs", packsRouter);
   pub.route("/fan-made-project-info", fanMadeProjectInfoRouter);
   app.route("/v2/public", pub);
 
