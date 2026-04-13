@@ -10,8 +10,8 @@ import { errorHandler } from "./lib/errors.ts";
 import type { HonoEnv } from "./lib/hono-env.ts";
 import { logger, requestLogger } from "./lib/logger.ts";
 import adminRouter from "./routes/admin.ts";
+import cardsRouter from "./routes/cards.ts";
 import fanMadeProjectInfoRouter from "./routes/fan-made-project-info.ts";
-import sealedDeckRouter from "./routes/sealed-deck.ts";
 
 export function appFactory(config: Config, database: Database) {
   const app = new Hono<HonoEnv>();
@@ -33,8 +33,8 @@ export function appFactory(config: Config, database: Database) {
   app.route("/admin", adminRouter);
 
   const pub = new Hono<HonoEnv>();
+  pub.route("/cards", cardsRouter);
   pub.route("/fan-made-project-info", fanMadeProjectInfoRouter);
-  pub.route("/sealed-deck", sealedDeckRouter);
   app.route("/v2/public", pub);
 
   app.get("/up", (c) => c.text("ok"));

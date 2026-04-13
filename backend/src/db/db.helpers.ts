@@ -5,6 +5,7 @@ import type { Database } from "./db.ts";
 
 /**
  * Applies all SQL files in the specified folder to the database.
+ * Splits statements on semicolons for SQLite compatibility.
  * TESTING and SCRIPTS use only.
  */
 export async function applySqlFiles(db: Database, pathToFolder: string) {
@@ -17,9 +18,17 @@ export async function applySqlFiles(db: Database, pathToFolder: string) {
     let sqlText = await fs.promises.readFile(filePath, "utf-8");
 
     if (sqlText.includes("-- migrate:up")) {
-      sqlText = sqlText.split("-- migrate:down")[0] as string;
+      sqlText = sqlText.split("-- migrate:down")[0] ?? "";
+      sqlText = sqlText.replace("-- migrate:up", "");
     }
 
-    await db.executeQuery(sql.raw(sqlText).compile(db));
+    const statements = sqlText
+      .split(";")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0 && !s.startsWith("--"));
+
+    for (const statement of statements) {
+      await db.executeQuery(sql.raw(statement).compile(db));
+    }
   }
 }
