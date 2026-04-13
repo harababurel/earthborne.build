@@ -63,7 +63,7 @@ Removed all ArkhamDB-specific code:
 - Updated `backend/package.json` (removed ingest:arkhamdb-decklists script)
 - Cleaned `frontend/src/utils/constants.ts` (removed all AH card codes, regexes, slot constants, arkhamdb storage provider)
 
-### Phase 3: Card data pipeline — IN PROGRESS
+### Phase 3: Card data pipeline — DONE
 
 #### Data source decision (researched 2026-04-13)
 
@@ -107,14 +107,19 @@ Field mapping to our schema: near 1:1. `harm` → `harm_threshold`, `progress` �
 - *decksmith.app* — no public API, would require fragile scraping
 - *RangersDB GraphQL API* — data is in Hasura behind an admin secret; the static JSON data repo is the better path
 
-#### Phase 3 implementation plan
+#### Completed (2026-04-13)
 
-1. **Clone `rangers-card-data`** into a local path (e.g. `/home/sergiu/work/rangers-card-data`) and inspect `schema.ts` to confirm field types
-2. **Define our ingestion JSON format** — decide whether to serve card data as static JSON (simpler) or load into Postgres (needed for server-side search/deck sharing)
-3. **Write an ingestion script** (`backend/src/scripts/ingest-cards.ts`) that reads the rangers-card-data JSON files and upserts into our DB via Kysely
-4. **Define DB migrations** for the card tables (mapping rangers-card-data fields to our schema)
-5. **Wire up API endpoints** (`GET /api/cards`, `GET /api/cards/:code`) that the frontend can query
-6. **Seed with real data** by running the ingestion script against the cloned rangers-card-data repo
+- Switched backend from PostgreSQL to **SQLite** (`better-sqlite3` + Kysely `SqliteDialect`)
+- New SQLite migration: `backend/src/db/migrations/20260413000000_er_schema.sql`
+  - Tables: `pack`, `aspect`, `card_type`, `set_type`, `card_set`, `token`, `area`, `card`, `fan_made_project_info`
+- New schema types: `backend/src/db/schema.types.ts` (hand-written for ER schema)
+- Ingestion script: `backend/src/scripts/ingest-cards.ts`
+  - Usage: `CARD_DATA_DIR=/path/to/rangers-card-data npm run ingest:cards`
+  - Local clone at `/home/sergiu/work/rangers-card-data`
+  - Ingests **260 cards** across 5 packs (core, loa, sib, sos, sotv) in ~40ms
+- API endpoints: `GET /v2/public/cards`, `GET /v2/public/cards/:code`
+- Tests use in-memory SQLite — no Docker/Testcontainers required
+- Config simplified: `SQLITE_PATH` replaces all `POSTGRES_*` vars
 
 ### Phase 4: Rebuild game logic
 
@@ -150,15 +155,16 @@ Work through components systematically, starting with the most game-logic-heavy:
 
 | File | Purpose | Status |
 |---|---|---|
-| `shared/src/schemas/card.schema.ts` | Card data model | Needs full rewrite |
-| `frontend/src/store/lib/deck-validation.ts` | Deckbuilding rules | Needs full rewrite |
-| `frontend/src/store/lib/filtering.ts` | Card access filtering | Needs full rewrite |
-| `frontend/src/store/lib/buildql/fields.ts` | Search field definitions | Needs remapping |
-| `frontend/src/utils/constants.ts` | Game constants + special card codes | Needs cleanup |
-| `backend/src/routes/arkhamdb-decklists.ts` | ArkhamDB sync | Delete/replace |
-| `backend/src/scripts/ingest-arkhamdb-decklists.ts` | ArkhamDB data ingestion | Delete/replace |
-| `frontend/src/utils/arkhamdb.ts` | ArkhamDB URL helpers | Delete |
-| `frontend/src/utils/card-utils.ts` | Image URL construction | Minimal change (env var) |
+| `shared/src/schemas/card.schema.ts` | Card data model | Done (Phase 1) |
+| `backend/src/db/migrations/20260413000000_er_schema.sql` | SQLite DB schema | Done (Phase 3) |
+| `backend/src/db/schema.types.ts` | Kysely DB types | Done (Phase 3) |
+| `backend/src/scripts/ingest-cards.ts` | Card ingestion from rangers-card-data | Done (Phase 3) |
+| `backend/src/routes/cards.ts` | Cards API endpoints | Done (Phase 3) |
+| `frontend/src/store/lib/deck-validation.ts` | Deckbuilding rules | Needs full rewrite (Phase 4) |
+| `frontend/src/store/lib/filtering.ts` | Card access filtering | Needs full rewrite (Phase 4) |
+| `frontend/src/store/lib/buildql/fields.ts` | Search field definitions | Needs remapping (Phase 4) |
+| `frontend/src/utils/constants.ts` | Game constants + special card codes | Needs cleanup (Phase 4) |
+| `frontend/src/utils/card-utils.ts` | Image URL construction | Minimal change — env var (Phase 7) |
 
 ---
 
@@ -185,8 +191,8 @@ All answered during Phase 1 via rulebook at `docs/rulebook.pdf`:
 
 ## Current state
 
-- **Shared package**: compiles clean with new ER schemas
-- **Backend package**: compiles clean, ArkhamDB routes removed
+- **Shared package**: compiles clean with ER schemas
+- **Backend package**: compiles clean. SQLite DB with 260 cards. Cards API live at `/v2/public/cards`.
 - **Frontend package**: ~138 files have type errors — all expected downstream breakage from the schema change. These reference old AH `Card` type fields (`faction_code`, `skill_willpower`, `xp`, `health`, `sanity`, etc.) and will be fixed in Phases 4-6.
-- **Card data**: schema is ready but no card data exists yet. Waiting on external metadata source.
+- **Card data**: 260 cards ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed)
