@@ -15,6 +15,9 @@ node_modules
 coverage
 dist
 
+# Large binary assets
+docs/rulebook.pdf
+
 # Playwright
 /test-results/
 /playwright-report/

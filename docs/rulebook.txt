@@ -1,0 +1,5025 @@
+This is an invitation to explore.
+When I was young, I lived in a rural community in
+southeastern Wisconsin, and I spent most of my days
+playing in and exploring the woods that bordered our
+small neighborhood.
+I remember discovering a massive ant hill in a clearing
+and watching the ants march in orderly lines up and
+down its slope. I remember a meadow carpeted in
+vibrant green grass, and beyond that meadow there
+was a graveyard of old farm machinery. An ancient
+tractor and harvester bathed in sunlight, rusting out
+as climbing vines overtook them, and animals nested
+within.
+When I was nine, we moved to Ohio. There, we
+lived near a commercial center, and the houses were
+densely packed, but there was also undeveloped
+land nearby—fields and forests that I could explore.
+In a field of tall, golden grass there was an old barn,
+weather-beaten and decaying with a dramatically
+sagging roof and crumbling wooden walls. My brother
+and I dared to enter, and we ran for our lives when we
+were chased away by the owl that lived there.
+In the years that followed, the wild land on the
+outskirts of our neighborhood was cleared. Farmland,
+
+fields, and forest gave way to roads, foundations, and
+drainage systems, so instead of woods, I explored
+houses under construction and crawled through an
+ever-expanding maze of concrete drain pipes.
+Over the years, my family and I have gone on multiple
+trips to the Rocky Mountains. There, while hiking,
+I liked to imagine what it would be like to live in a
+world where your only method of transportation was
+your own two feet; where you spent your time walking
+between settlements nestled in picturesque locations,
+the spaces between nothing but forests, rock
+formations, and breathtaking views across verdant
+river valleys. What if, I would wonder, this walk
+through the mountains was my daily commute? How
+different would I be because of it? I imagined how
+much would have to change to make that possible.
+Earthborne Rangers is our attempt to bring the
+excitement of exploration and discovery to life in a
+card game.
+This is an invitation to explore, to be inspired, and to
+see this fictional world as if it were real, as if it truly
+exists just beyond the horizon of the present.
+We hope you enjoy the experience.
+Much love,
+
+TABLE OF CONTENTS
+The Earthborne Setting.................................................................................... 4
+Components..................................................................................................... 6
+Basic Concepts................................................................................................. 7
+Game Setup.................................................................................................... 10
+Playing the Game............................................................................................ 12
+Performing a Test............................................................................................ 16
+Clearing Cards. ............................................................................................... 18
+Fatigue............................................................................................................ 20
+Ending the Day................................................................................................ 21
+Additional Concepts. ...................................................................................... 22
+Card Anatomies. ............................................................................................. 24
+Keywords......................................................................................................... 26
+Playing a Campaign........................................................................................ 27
+Creating Your Ranger...................................................................................... 32
+Ranger Backgrounds....................................................................................... 34
+Ranger Specialties........................................................................................... 38
+Ranger Personalities........................................................................................ 46
+Index................................................................................................................ 47
+Quick Reference.............................................................................................. 48
+
+CREATED BY
+
+Andrew Navaro: Creative Direction, Game Design,
+Content Development, Graphic Design, Concept
+Artwork, Fiction
+Andrew Fischer: Game Design, Content
+Development, Rules Writing, Playtest Coordination
+Evan Simonet: Art Direction, Concept Artwork,
+Illustration, Graphic Design
+Adam and Brady Sadler: Original Game Design,
+Content Development
+Brooks Fluguar-Leavitt: Content Development
+Sam Gregor-Stewart: Fiction
+Joe Banner: Concept Artwork, Illustration
+Cory DeVore: Graphic Design
+Michael Curran-Dorsano: Fiction
+Kate Cunningham: Rulebook and Campaign Guide
+Proofreading
+Luke Eddy: Card Proofreading
+
+Special thanks to Adam H-B, Dan Hellige, Davi Paulino,
+and all of our other playtesters:
+Matthew Ansley, Damian Alonzi, Alan Ball, Kathy
+Bishop, Clinton Bolinger, Taylor Bowne, Max Brooke,
+Timothy Bunn, Eric Burtch, Mark Butt, AJ Cressman,
+Wes Divin, Richard Edwards, Bernhard Klein, Kurt
+Ericson, Michael Feldman, Seth Flagg, John Getty,
+Melle Gruber, Matt Harkrader, Stefan Hestermeyer,
+Michael Hillmann, Christoph Huber, Joe Kane, Ryan
+Kim, Brian Mazurowski, Joachim Meyer, Raymond
+Micheau, Aaron Most, Mario Niesgodda, Bryan
+O’Donnell, Liz Pech, Steven Petersen, Samantha Thi
+Porter, Syl Puglisi, Christopher Pütz, Carolina Reid, Zap
+Riecken, Glen Saward, Dan Sawade, Brett Schofield,
+Ben Schönheiter, Dominik Schönleben, Derek Schultz,
+Ian Shaffer, Kyle Stark, Veronica, Markus Volk, and Eric
+Wainright.
+Extra special thanks to all of our Kickstarter backers
+and our business partners.
+Extra, extra special thanks to our loved ones.
+
+3
+
+EXCERPT FROM NOTES ON THE HISTORY OF
+THE THIRD AND FOURTH MILLENNIA
+Composed by Lorelord of the Second Council Tishala
+Saidik. 3rd Cycle, 8433 LR
+Twenty-five hundred years ago, the world balanced
+on the brink of destruction. The Great Calamities
+threatened to leave our world a blasted wasteland, but
+in the face of certain death, people did the one thing
+nobody expected: they pulled together.
+Led by a figure known only as The Guide,* the
+disparate peoples of Earth began to heal their
+grievously wounded planet. To do so, they began the
+Great Generational Projects.
+These projects were monumental feats of engineering,
+practical biology, and chemistry (to name but a few
+disciplines), requiring decades of work from millions
+of people; in short, the greatest undertakings in
+all of human history. They filled the Messipian Sea;
+unfurled the Lagrangian Shade to cool the Earth;
+built the towering carbon stacks; and carefully bred
+the kilometers-long beasts known as terravores that
+still slowly crawl across the land, consuming centuries
+worth of refuse. They did all this and much more.
+These projects were aptly named. The simplest took
+decades to complete, while the greatest could only be
+completed over centuries of labor.
+
+4
+
+They knew it would take a thousand years or more
+for our world to heal, so our ancestors built great
+arcologies to shelter themselves from the ravages of
+
+a worsening climate. They retreated to their massive,
+enclosed cities to wait out the storm of storms, so
+that their descendants may one day walk freely upon
+the Earth.
+It worked. The Earth healed, and although the land had
+undergone great change, the planet reached a new
+equilibrium. By this time, the mechanisms that sustained
+the arcologies began to fail, and our ancestors were
+compelled to venture forth into a world untouched by
+human hands for more than a thousand years.
+The ancestors who left the arcologies at this time were
+quantifiably more introspective and aware than those
+who founded them. The countless cultures that had
+evolved in the past millennia (and would evolve in the
+millennia to come) agreed on one thing: the health
+of the Earth, the Well-Spring of All Life, could not be
+risked again. The societies that eventually resettled
+our planet are wildly diverse, but they all share a sense
+of mindfulness and a drive to live in harmony with the
+natural world instead of apart from it or above it. Some
+have eschewed all of the technological expertise of
+our ancestors while others (among whose number we
+Lorelords are counted) try to find a balance, entwining
+the triumphs of the world that came before with the
+world we live in today.
+The world we live in today is very different than
+the Earth of two millennia past. The spectacular
+ruins of the great machines of the Generational
+Projects still dot the landscape, and they stand as a
+testament to the ingenuity of our ancestors. Some
+
+*The identity and true nature of The Guide eludes us to this day. The Guide seems to appear from the aether in 6202 LR, and then simply disappears from
+recorded history as our ancestors focused on the task at hand.
+
+of those machines still function, operating to some
+unknowable purpose, best left undisturbed. Any
+mountain or ridge may hide the cavernous halls of an
+abandoned arcology within. And while our ancestors
+would recognize some of the creatures that populate
+this world, they would find others marvelously
+strange—the fruits of genetic crafting as our ancestors
+attempted to prevent mass extinctions and breed new
+species to fill abandoned roles.
+The geography of the Earth itself has changed. New
+seas fill the broad expanses of river plains, mountains
+have risen and crumbled, and climates have shifted
+across the globe.
+Our ancestors gave us a gift of incomparable
+significance when they rescued humankind from
+extinction. Now this new world is ours to embrace.
+
+PERSONAL CORRESPONDENCE
+Composed by Ren Kobo, Master of Commerce, Ninth
+Skiff of Sunray Flotilla. Spring, 4441 CR
+I write, my dear sunfish, to tell you of the Valley in
+the hopes that you may be tempted to join me in my
+pilgrimage next season.
+The Valley isn’t a valley so much as a lot of valleys, and
+fields, and forests, encircled by mountains. It stretches
+from these highland meadows in the north, all the way
+down to the edge of the southern range where the
+mouth of the Valley opens to the Verdessa. There’s a
+waterfall there so tall and beautiful it’ll take your breath
+away. The Valley’s sheltered by mountains on three
+sides and the widest and deepest jungle you’ll ever see
+on the fourth.
+
+homes are built into the canopy and around the trunks
+of the dolewood trees. You could walk through the
+forest for days and never realize there were people
+above your head. It’s something else. The shapers who
+bent the fiber of the trees there are true luminaries.
+At the far southern end of the Valley, the land drops
+off in a series of cliffs down to the Great Basin and
+the Verdessa beyond. There are people who live at
+the edge of the falls. Tumbledown, they call it. The
+people there stand watch over the Verdessa, while the
+Verdessians, I’m told, stand watch over them.
+And, of course, there’s the monastery, way up in the
+mountains to the east. I have yet to travel there, and
+I may never will. The Floating Tower is for those who
+want to follow the shaper’s path, and they prefer a
+certain amount of solitude for their studies.
+The crown jewel, though, is Lone Tree Station, where
+the Valley’s Rangers live and work—a tree that is nearly
+the size of a mountain, festooned with domiciles,
+research facilities, meditation chambers, and more. The
+Rangers keep the Valley safe, looking out for trouble
+and helping people wherever they can. They are
+wonderful human beings.
+I truly love the Valley, which is why I travel here after
+every thaw. The trading is also quite good, as you
+know. I will see you when I return to the flotilla. I can’t
+wait to show you what I’ve bartered for this season.
+					 –Yours, R.K.
+
+EXCERPT FROM THE VALLEY, A SIMPLE
+RECORD
+Composed by Elder Grell. Winter, 3874 CR
+
+The ancestors of the Valley Dwellers found their way
+here by way of the Bitter Pass. They journeyed west to
+White Sky Lake, then followed the Silverfin River down
+until they came to a mounded, green island. They
+were drawn there by the biggest spike of nanoforged
+carbon I’ve ever seen, so tall it can scrape the clouds
+on a stormy day. The people decided to settle there,
+or rather, the land invited them to settle there, so they
+did. They call the village Spire.
+
+The Valley is a secluded location in what were once
+called the Colorado Rockies, but more recently known
+as the Estian Mountains or the Terminus of the Barrier
+Mountain Range. North of the Valley, freezing streams
+pour out of the mountains in frothing cascades. The
+streams flow through the rocky, windswept prairies
+before merging into small rivers and flowing into
+White Sky Lake, which dominates the northern edge of
+the Valley.
+
+In the last hundred years they’ve spread out and
+welcomed more than a few travelers (such as myself)
+from afar. Spire’s the center of civilization in the Valley,
+but there’s also White Sky, the fishing village perched
+in the middle of the water on the southern end of the
+lake. The fresh, seared lake fish they serve there every
+waning gibbous is amazing.
+
+From White Sky Lake, the water forms into the Silverfin
+River, which flows the rest of the length of the Valley.
+More streams and smaller rivers drain into the Silverfin,
+keeping it deep and broad enough to support small
+boats and rafts along its length.
+
+Farther south, the Valley opens up into grassland and
+forest. You’ll find more settlements down there if you
+stick to the path. Meadow is a herding community,
+mostly rearing ironwool sheep and stilt horses. Branch
+is tucked into the deeper woodlands; in fact, their
+
+The Silverfin remains navigable until it reaches
+the mouth of the Valley, where treacherous rapids
+announce a towering waterfall. Here the Valley’s floor
+becomes a series of steep drops and sheer cliffs before
+opening out onto a deep basin that feeds the jungle
+far below.
+
+5
+
+COMPONENTS
+
+44 Energy
+Tokens
+
+16 Harm
+Tokens
+
+16 Progress
+Tokens
+
+12 General
+Tokens
+
+RANGER CARD SETS (278 CARDS)
+
+CARD SETS
+
+Artificer (26)
+Artisan (18)
+Conciliator (26)
+Explorer (26)
+Forager (18)
+Maladies (8)
+
+All cards in Earthborne Rangers
+are organized into sets. Which
+set a given card belongs to is
+noted along either the bottom
+edge, or the bottom left, of each
+card. Additionally, path card sets
+are denoted by an icon in the
+upper-left corner of the card.
+
+37 Location Cards
+
+Personalities (32)
+Rewards (62)
+Shaper (26)
+Shepherd (18)
+Traveler (18)
+
+PATH CARD SETS (160 CARDS)
+
+To organize your game, keep
+each set together along with its
+card divider.
+
+35 Card Dividers
+
+4 Ranger
+Tokens
+
+Branch (5)
+Fractured Wall (3)
+General (15)
+Grassland (12)
+Lakeshore (12)
+Lone Tree Station (5)
+Marsh of Rebirth (2)
+Meadow (4)
+Mountain Pass (12)
+Northern Outpost (3)
+
+Old-Growth (12)
+Ravine (12)
+River (12)
+Spire (6)
+Swamp (12)
+Tumbledown (3)
+Valley (14)
+White Sky (4)
+Woods (12)
+
+24 Challenge Cards
+
+4 Weather Cards
+
+17 Mission Cards
+
+4 Round Cards
+
+4 Common Test Cards
+
+12 Aspect Cards
+
+6
+Campaign Guide
+
+Valley Map
+
+BASIC CONCEPTS
+Earthborne Rangers is about outdoor adventure, encountering nature, exploring forests and mountains, rivers
+and swamps, ravines and prairies, and everything in between. It is also science fiction, so you can expect to
+discover ancient ruins containing strange technology, you’ll use highly advanced devices to aid in your passage
+and augment your abilities, and you’ll come across strange beings, genetically engineered by the ancestors to
+preserve life on Earth.
+Earthborne Rangers is designed to tell you a story—your story—and that story will change from one play-through
+to the next, from one player to the next. A single game begins when you set out the cards representing your
+current location on the map, and the game ends when you either run out of cards in your Ranger deck, your
+Ranger suffers too many injuries, or if something in the story causes the day to end.
+
+THE GAME
+Each game session of Earthborne Rangers
+is called a day, and the entire story, or
+campaign, is told over many days. As you
+play, you’ll track the passage of time on a
+record sheet along with the notable events,
+mission objectives, and rewards of your
+journey. During a day, you’ll imagine yourself
+walking through verdant forests teeming
+with life, along placid lakes glittering with
+sunlight, and up mountainsides, where
+breathtaking vistas await. The campaign
+guide will provide you with descriptions of
+these locations and events in the story to
+help spur your imagination.
+Each game is broken up into rounds, in
+which you and your fellow Rangers will
+take turns playing cards from your hand
+and interacting with cards on the table that
+represent the flora, fauna, natural features,
+ancient ruins, fellow travelers, and all of the
+other, stranger things you’ll encounter on
+your journey. Each round represents an hour
+or two of the day, and how you spend that
+time is up to you.
+You may spend a round preparing for the
+journey by meditating, equipping gear,
+and listening to a bird’s song for clues as
+to the whereabouts of a predator, or you
+may spend a round hiking through the
+wilderness, doing your best to outpace the
+wolhunds dogging your steps, encouraging
+you with unkindly growls to leave their
+hunting ground. You may also spend a round
+exploring a treetop village, speaking with
+the locals, and lending aid where you can.
+You do all of this by interacting with the
+cards on the table and performing tests.
+
+RANGERS
+Each player takes on the
+role of a Ranger, individuals
+tasked with the stewardship
+of the Valley as well as the
+aid and protection of the
+people who call it home.
+Each player creates their own
+custom Ranger character to
+play in the game.
+Your Ranger is represented
+by three elements:
+
+Aspects
+
+Aspects are four values that represent where your
+inherent strengths lie.
+Each aspect has an associated type of energy token
+that you receive each round based on your value in that
+aspect. You spend this energy to do things in the game.
+
+Ranger Deck
+
+A deck of thirty cards represents everything your Ranger
+is capable of: your skills, your gear, and even allies you
+can call on in times of need. During play, how many cards
+remain in your deck also represents how much stamina
+you have to keep going for the day.
+
+Role
+
+Your role represents what you specialize in and what
+function you serve in your group of Rangers. Your role
+gives you a card that starts every game in play and
+grants you a consistent, repeatable ability.
+
+7
+
+TESTS
+Tests are shown on cards as narrative equations.
+They tell you what you can attempt in the world
+of the game, how to do it, and what will happen
+if you succeed or fail. You’ll find tests on the gear
+you equip, some on beings, features, and locations
+in the environment, and four common tests found
+on your reference card that you can perform
+under almost any circumstance. Each test you
+perform adds details to your story, and whether
+you succeed or fail at those tests will determine the
+tenor of that story.
+
+THE GOLDEN RULE
+Like many card games that have come before it,
+Earthborne Rangers follows the “Golden Rule.”
+That is, this rules document contains all of the
+basic rules and procedures for the game. These
+rules, however, were designed to be bent, and
+even broken, by the text on the cards. If ever
+a rule on a card contradicts a rule found in this
+document, the rule on the card takes precedence.
+
+THE DELIGHTFUL RULE
+If you are ever unsure of how to resolve a rules
+or timing conflict, you are invited to resolve it in a
+manner that you feel is most beneficial to you and
+your fellow Rangers. If your group cannot agree on
+a resolution, the decision falls to the lead Ranger.
+
+THE CHALLENGE DECK
+When you perform a test, you will decide how
+much of your available energy and other resources
+you will commit to the test, representing how
+much effort you are expending. The more effort
+you commit, the higher your chance of success
+and the better your potential results. However,
+your energy and other resources are limited. You
+will have to choose carefully where you commit
+your effort and what risks you take.
+
+A NOTE ON STYLE
+Earthborne Rangers was designed to be
+read aloud. The challenge effects, tests,
+and campaign guide entries in particular
+were written to create a sense of a story
+being told as opposed to a game being
+played. This led to labeling the zones of
+play as “the surroundings,” “along the
+way,” and “within reach.” Reading an
+effect like “this predator moves within
+reach” is more fun and evocative than
+reading “place this card in front of you.”
+
+8
+
+Card rules text will often refer to “you.”
+In these cases, the rule applies to the
+person who drew or played that card, or
+to the person performing that test. If you
+are ever unsure as to which Ranger a rule
+applies, the group decides who it affects.
+
+The circumstances of your tests are not always entirely
+under your control. There may be a loose rock in the cliff
+face you’re attempting to scale, a sudden gust of wind that
+throws you off balance, or a surprisingly sure handhold that
+hastens your ascent. To represent unforeseen events, after
+you’ve committed effort to a test, you’ll draw a card from
+the challenge deck. This card modifies your effort up or
+down, potentially changing the outcome of the test and
+making every move a bit unpredictable.
+In addition to modifying your chances of success, challenge
+cards serve another very important function. On each of
+them, you’ll find one of three symbols. These symbols
+match those found on cards in play. After you determine
+whether or not you succeed at a given test, the world
+comes to life. That is, the cards in play with a symbol
+matching the symbol found on the challenge card activate.
+A predator may lunge at a villager, causing them to become
+frightened or injured; prey animals may forage for food,
+beating you to a clutch of medicinal berries; or the storm
+clouds overhead may open up, drenching you with rain.
+The game world will respond to each test you perform,
+creating an environment that feels alive and dynamic.
+
+THE PLAY AREA
+The play area is broken up into four distinct areas:
+The Surroundings: The surroundings set the stage
+for the game. They contain the cards representing
+the current location, the weather, and any missions
+the Rangers are trying to accomplish.
+Along the Way: When path cards are drawn, they
+are either placed along the way or within reach of
+a specific Ranger. Along the way is a common area
+accessible to all Rangers at the center of the table.
+Within Reach: There is a separate within
+reach area in front of each player. This
+area represents cards that are in the
+Ranger’s immediate vicinity. When
+an effect refers to within reach, it
+means the area in front of the player
+reading the effect.
+Player Area: Each player has
+their own area in front of them
+that contains all of the cards
+specific to their Ranger: their
+role card, aspects, equipped
+gear, Ranger deck, and
+discard. Only that Ranger
+can benefit from and use
+cards in their own area.
+
+GETTING STARTED
+Before you sit down to play for the first time, do the following:
+• Organize your cards by separating them into their individual sets. Each card set has a matching card set
+divider. Keeping your collection organized will make gameplay and setup a breeze.
+• Read this rulebook. Not everyone in your group needs to be familiar with the rules, but at least one of you
+should be. Alternatively, or in addition to reading this rulebook, you can watch the “Learn to Play” videos
+on our website (earthbornegames.com).
+You then have a choice as to how you would like to begin your campaign:
+• Experienced groups can dive right in by creating Ranger decks following the instructions on page 32 of
+this book. Then go to entry 1 on page 4 of the campaign guide to begin your campaign.
+• Groups with members new to Earthborne Rangers should begin by playing the Prologue. The Prologue
+is a guided game session that gradually introduces basic concepts of the game while it walks you through
+building you Ranger deck. To begin, go to page 2 of the campaign guide and follow the instructions there.
+Once you start playing, you may find that you have questions about specific rules or mechanics. While this
+rulebook covers the basics, there are other resources available as well. If you can’t find what you’re looking for in
+the rulebook, we recommend that you visit the rules glossary and FAQ on our website (earthbornegames.com).
+
+9
+
+GAME SETUP
+To set up the game, perform the following steps in order.
+If you are starting a brand new campaign, go to the Getting Started section on page 9 and choose one of the
+options listed there.
+
+1 SET UP PLAYER AREAS
+Place your aspect card, role card, and common test
+reference card in your player area. Shuffle your Ranger
+deck and place it in your player area. Place a number
+of energy tokens equal to their corresponding aspect
+values onto your aspect card.
+
+2 DRAW STARTING HAND
+
+4 SHUFFLE THE CHALLENGE DECK
+Shuffle the challenge deck and place it above the
+surroundings.
+
+5 SET UP THE STARTING LOCATION
+Place your current location in the surroundings. If
+continuing a campaign, check the “current location”
+line of your campaign tracker.
+
+Draw six cards from your Ranger deck.
+Mulligan: If you don’t like your starting hand, you can
+set aside any number of cards from your hand and
+draw an equivalent number of new cards. Then shuffle
+the set-aside cards back into your Ranger deck.
+
+4
+
+3 ELECT THE LEAD RANGER
+Together, choose a Ranger to be the lead Ranger. The
+lead Ranger always draws the first path card at the start
+of each round and makes decisions for the group if a
+consensus cannot be reached.
+
+2
+
+10
+
+6
+
+5
+9
+
+1
+
+6 SET UP THE WEATHER CARD
+
+8 BUILD AND SHUFFLE THE PATH DECK
+
+Find the weather card (or cards) noted below the
+current day on your campaign tracker, and place it in
+the surroundings to the left of the location with the
+side named on the campaign tracker faceup. Read any
+campaign guide entries listed above the current day.
+
+First add all path cards from the set matching the
+terrain you were traveling on at the end of the previous
+day as noted on your campaign tracker. Then, if you
+are at a pivotal location, add all path cards from the
+set matching that location. If you are not at a pivotal
+location, instead add three random cards from the
+Valley set. Finally, add any other cards added by
+missions in play. Shuffle those cards together and place
+them above the surroundings.
+
+7 SET UP MISSION CARDS
+Find the corresponding cards for each uncompleted
+mission on your campaign tracker and place them in
+the surroundings to the right of the location.
+
+8
+
+Note: See Build the Path Deck on page 15 for a more
+detailed explanation of these card and location types.
+
+9 RESOLVE ARRIVAL SETUP
+
+7
+
+Read the campaign entry marked on the back of the
+location card. Then perform all setup instructions on
+the back of the location card. If the card calls for the
+“next Ranger” to resolve an effect but each Ranger has
+already resolved one, that effect is ignored.
+
+10 FINISHING TOUCHES
+Place any tokens as dictated by the cards in play, and
+resolve any instructions on weather or missions labeled
+“Start of Day.”
+
+1
+
+2
+
+11
+
+PLAYING THE GAME
+Each session of Earthborne Rangers represents one day of your campaign and is played in rounds. There is no
+limit to the number of rounds in a day. Each round is divided into four phases:
+ Phase 1: Path Cards
+ Phase 2: Ranger Turns
+ Phase 3: Travel
+ Phase 4: Refresh
+
+PHASE 1: PATH CARDS
+
+PHASE 2: RANGER TURNS
+
+Each round, the Rangers spend more
+time exploring the area around their
+current location, discovering new
+beings and features as they do.
+
+Ranger turns are the bulk of the game. This is where you’ll be
+equipping your gear, interacting with the environment around you, and
+using your abilities to accomplish your goals for the day.
+
+Starting with the lead Ranger, each
+Ranger draws one path card. If
+the card is marked with a number
+underneath a book icon to the right
+of its name, find the
+corresponding entry
+in the campaign
+guide, and read it
+aloud. Then resolve
+any effects that resolve
+when the card “enters play.” Fully
+resolve the effects of each card before
+drawing and resolving the next.
+If you need to draw a path card but
+the deck is empty, shuffle the path
+discard to create a new path deck
+from which to draw.
+Each path card is marked with an
+arrow to the left of its name that
+indicates the area in which it should
+be placed. A card with an upwardpointing arrow is placed along
+the way. A card with a downwardpointing arrow is placed within reach
+of the Ranger who drew it.
+
+Along the way
+
+During this phase, each Ranger takes separate turns. There is no limit
+to the number of turns a Ranger can take each round. You decide as a
+group which Ranger takes the first turn, and following that, Rangers can
+take their turns in any order. Unless you are the only Ranger still taking
+turns, a different Ranger must go after you finish your turn. You can take
+a second turn in a row by exhausting your role card.
+On your turn, you can either perform a test, play a card, or rest.
+
+PERFORM A TEST
+Tests represent your Ranger’s
+interactions with their environment.
+They appear on cards as an aspect, plus
+an approach icon, followed by both a
+thematic and mechanical description
+of what your Ranger does if the test is
+successful.
+You always have access to four common
+tests which you can reference on
+the common test reference card.
+Additionally, cards in play will provide
+other tests from which you can choose.
+On your turn, you can choose one test
+The Four Common Tests
+to perform on any card in play except for
+cards in other Rangers’ player areas (such as their equipped gear). The
+detailed instructions for performing a test are described on page 16.
+Most tests require that you interact with a card in play. When you
+perform a test on a card within reach, along the way, or in the
+surroundings, you count as interacting with that card. When you
+perform a test on a card in your player area or played from your hand, if
+that test directly affects a card in play, you count as interacting with the
+affected card or cards.
+For example, the Traverse test can place progress on the location.
+When you perform that test, you count as interacting with the location.
+
+12
+
+Within reach
+
+Area indicator
+
+When you interact with a card in play, other cards between you and the
+card with which you’re interacting can cause you to suffer fatigue. This
+is described later in the Fatigue section on page 20.
+
+PLAY A CARD
+To play a card from your hand, spend an amount of energy
+matching the card’s cost: the number and type of energy
+shown in the upper left-hand corner of the card.
+
+The card then has an effect based on its card type:
+Moments: Moment cards describe the
+specific circumstances under which they can
+be played in their rules text. When you play a
+moment, resolve all instructions on the card
+and discard it.
+Attachments: Attachment cards are placed
+in play attached to a card specified in the
+attachment card’s text. Place that card
+under or to the side of the card to which it
+is attached and apply its effects. If the card
+it is attached to leaves play for any reason,
+discard the attachment card.
+Gear: Gear cards have ongoing effects or
+abilities that you can trigger during your turn
+(or at other times specified on the card). Gear
+cards are equipped by being played into your
+player area and stay there until you choose to
+discard them.
+
+RESPONSES
+Some rules begin with “Response:” These
+effects resolve at the time specified by
+their rules text. If this is on a moment, you
+can play that card at the specified time.
+This might be during your turn, during
+other Rangers’ turns, or even during other
+phases of the game.
+
+TOKENS
+Many cards make use of unique tokens
+to track the number of times they can
+be used. These cards are marked with a
+number and name for the tokens in a box
+on the right side of the card. When one
+of these cards comes into play, place a
+number of general use tokens on this card
+equal to that number.
+When the card instructs you to “use” one
+of the tokens, discard that token. If you no
+longer have tokens to discard, you cannot
+resolve effects that require you to use a
+token. If a rule affects “tokens” on a card,
+it is refering to one of these named tokens.
+Cards are not discarded when they run out
+of tokens. On your turn, however, you
+can choose to discard any number of
+equipped cards that you no longer want.
+
+Each gear has an equip value, ranging from 0 to 5,
+displayed as a series of filled-in squares at the lower right of
+its title bar. If you ever have more than five squares worth of
+cards in your player area, you must discard cards from your
+player area until five or fewer squares remain.
+Features or Beings: Features or beings are
+Ranger cards that function like a path card.
+When you play these cards, place them within
+reach of you and treat them like a path card
+for as long as they remain in play.
+Attributes: Attribute cards have no energy
+cost. They cannot be played and can only be
+used for tests (as explained on page 16).
+
+REST
+If you are finished taking turns for the round, you
+can choose to rest. You can resolve any effects
+that resolve “when you rest,” then your turn ends.
+You cannot take another turn this round.
+Once all Rangers have rested, Ranger turns are
+over, and play proceeds to the travel phase.
+
+13
+
+PHASE 3: TRAVEL
+After all Rangers have rested, you may decide as a group if you’d
+like to travel. Traveling is how you move around the Valley, visit
+new locations, discover people and places unique to certain areas.
+Each location card has a progress threshold on the right-hand side
+of the card. If the card has a number of progress tokens equal to or
+greater than that threshold, you can choose to travel.
+Note: Ready cards with the obstacle keyword prevent you from
+traveling. You must either clear these cards, exhaust them, or deal
+with them some other way before you can travel. See Obstacle on
+page 27.
+
+Progress Threshold
+
+If you decide to travel, perform the following steps:
+
+3. DECIDE TO CAMP
+
+1. CLEAR PLAY AREA
+
+After choosing your new location, as a
+group, you can decide to end the day and
+set up camp for the night before venturing
+into the new landscape. Ending the day
+in this way is safer than ending it in the
+middle of navigating through a location
+and allows you an opportunity to prepare
+yourselves for the next day.
+
+Discard all path cards in play and all Ranger cards within reach,
+along the way, or in the surroundings (but not in your player area).
+Then sort all cards from the path deck and path discard into their
+sets, and return them to your collection.
+Note: Cards with the persistent keyword are not discarded. See
+Persistent on page 27.
+Missions that instruct you to “travel away” from a location resolve
+at this time.
+
+2. TRAVEL TO A NEW LOCATION
+As a group, choose the location to which you would like to travel
+by consulting the Valley map. You must choose a nearby location;
+in other words, a location that is connected directly to your current
+location by a single path (denoted by a terrain set icon) as shown
+the
+on the map. You cannot “skip” over one location to reach another.
+
+If you end the day in this way, you are
+allowed to swap reward cards into your
+Ranger decks between sessions (see
+Customizing Decks on page 31). If you
+chose not to end the day, continue to step 4.
+
+Norther
+Outpost
+
+Atrox
+Mountain
+
+Once the group has chosen a destination, find its location card,
+and place it into the surroundings, replacing the current location.
+Note: You cannot travel along river paths until a certain game
+component allows you to do so.
+Lone Tree
+Station
+
+Golden
+Shore
+
+If your current location is Atrox
+Mountain, for example, you
+could
+choose
+White S
+ky to travel to
+Golden Shore by way of a
+lakeshore path.
+Boulder
+Field
+
+Ancestor’s
+Grove
+
+The Philosopher’s
+Garden
+
+14
+Kobo’s
+Market
+
+Spire
+
+4. BUILD THE PATH DECK
+To build the path deck for your new location,
+combine several sets of path cards:
+
+Woods
+
+Terrain Set: The locations in the Valley can
+be vast areas, and the path you take can
+dramatically change your experience of them.
+The terrain you travel across determines
+what kinds of features and wildlife you will
+encounter. Each path on the Valley map has an
+associated type of terrain based on its color
+and an icon that appears along the line.
+
+Lakeshore
+
+To form the base of the
+path deck, find all path
+cards from the set matching
+the type of terrain of the
+path you took to the new
+location.
+
+Mountain Pass
+Old-Growth
+Grassland
+Swamp
+Ravine
+River
+
+Location Set: Certain locations have notable people and places
+to seek out or discover on your journey. These locations are
+pivotal. This is listed on their card and is marked on the Valley
+map with a gold and brown eight-pointed star. These locations
+have sets of path cards unique to them. Add each of these
+cards to the path deck.
+
+Pivotal
+Location
+
+If your new location is not pivotal, you are never quite sure
+who or what you’ll encounter. You might find one of the Valley’s
+other wanderers, other features of the Valley, or an exceptionally
+dangerous predator. Shuffle all the path cards in The Valley set,
+and add three random cards from this set to the path deck.
+
+Valley Set
+
+Other Path Cards: Other game effects may add additional
+cards to the path deck.
+Check the weather, location, and missions for any instructions labeled “Path
+Deck Assembly.” When you finish building the path deck, shuffle it.
+
+5. ARRIVAL SETUP
+
+PHASE 4: REFRESH
+
+Read the campaign guide entry noted on the
+back of the location card.
+
+At the end of the round, the Rangers refresh themselves
+and prepare for the next round. Each Ranger performs the
+following steps in order:
+
+Missions to “arrive at” a location resolve
+now. These may override reading the normal
+campaign guide entry.
+To finish setting up your destination, resolve
+each instruction under the “Arrival Setup”
+header. Most cards instruct the lead Ranger
+to resolve an effect then have some number
+of “next Rangers” resolve effects. If an effect
+calls for the “next Ranger,” but each Ranger
+has already resolved an effect, ignore those
+additional effects.
+
+• Suffer fatigue from injuries: Suffer one fatigue for
+each injury you have.
+• Draw one Ranger card: Draw one card from your
+Ranger deck. There is no limit to the number of cards
+you can have in your hand. If you cannot draw a card,
+you are too tired to continue and your group must end
+the day (see Ending the Day on page 21).
+• Refill energy pools: Add energy tokens to your energy
+pool until you have a number of each energy type equal
+to the corresponding aspect value. If you have energy
+in excess of one of your aspect values, you must discard
+tokens until you are down to that value.
+• Ready all cards in play: Ready all exhausted cards in all
+areas. Then a new round begins!
+
+15
+
+PERFORMING A TEST
+Tests are the heart of Earthborne Rangers. They are how you interact with your surroundings and make the world
+come alive. Rangers perform tests on their turn as described on page 12.
+Tests appear on cards as an aspect, plus an approach icon,
+followed by both a thematic and mechanical description of the
+test your Ranger will perform. To perform a test, you do the
+following steps in order:
+
+A test on a path card
+
+1. CHOOSE TEST
+
+2. COMMIT EFFORT
+
+Choose the test you are going to
+perform from a card in play that is
+not in another Ranger’s player area.
+Then choose any other cards the test
+will be interacting with. (Most tests
+interact with the card they are printed
+on but some, such as the common
+tests, interact with other cards, see
+page 12).
+
+Tests can succeed or fail. The more effort you commit to a test, the
+more likely it is to succeed. Effort can be committed from several
+sources (listed below). It can be helpful to place all of your committed
+tokens and cards in the play area next to the test you are performing to
+more easily track your total committed effort, then discard them after
+the test is resolved.
+
+Then each ready card between
+you and the card with which you
+are interacting fatigues you. This
+is explained in more detail in the
+Fatigue section on page 20.
+
+COMMIT ENERGY
+To initiate a test, you must first commit one or more energy tokens of
+the specified aspect by removing them from your energy pool. Each
+energy committed adds one effort. If you don’t have at least one energy
+of the appropriate aspect to commit, you cannot perform that test.
+
+COMMIT APPROACH ICONS
+The approach icon listed in the test represents the way in which you are
+approaching the situation and the methods you are employing. There
+are four approaches:
+
+ Conflict
+ Reason
+ Exploration
+ Connection
+You may discard any number of cards from your hand with an approach
+icon matching the specified type on the left-hand side of the card to
+add effort equal to the number of that icon on the card.
+When you discard a card for its approach icons, you ignore all
+information on the card that doesn’t explicitly refer to committing that
+card. There is no limit to the number of approach icons you can discard
+to commit to a test.
+
+COMMIT EFFORT FROM OTHER SOURCES
+Other game effects such as gear, helpful beings, or other Rangers’
+Ranger tokens may commit effort when you perform a test. You add
+this effort to your committed energy and approach icons during this
+step to determine your total committed effort.
+
+16
+
+A player commits two AWA energy
+and two exploration icons to a test
+for a total of four effort.
+
+3. APPLY MODIFIERS
+Once you determine your
+Ranger’s total committed effort,
+draw and reveal the top card of
+the challenge deck. The face of a
+challenge card shows each of the
+four aspects along with a 0, +1, –1,
+or –2. Look for the aspect specified
+by the test and combine the value
+shown with your committed effort.
+Then apply any other modifiers from
+card effects in play that affect effort to
+find your resulting effort.
+
+4. SUCCESS OR FAILURE
+Each test has a difficulty—the number
+in brackets following the bold thematic
+descriptor. If there is no number listed, the
+difficulty is one. If your resulting effort
+equals or exceeds the test difficulty,
+you succeed. If your resulting effort is
+lower than the test difficulty, you fail.
+
+5. RESOLVE CHALLENGE EFFECTS
+On the revealed challenge card, you’ll find one of
+three unique challenge icons on a band of color
+across the bottom: the Crest, the Mountain, or
+the Sun. These icons match with challenge
+effects on cards in play.
+After you resolve the effects of success or
+failure, you must resolve the instructions of
+each challenge effect matching the challenge
+icon drawn for the test that is shown on an
+active card. Active cards are any ready cards
+in the surroundings, along the way, within reach
+of you, or in your player
+area. Ignore challenge
+effects on exhausted cards or within reach of
+other players. However, if you’re interacting
+with a card within reach of another Ranger, all
+cards within reach of that Ranger also count
+as active for this turn.
+Note: Challenge effects on cards that were
+cleared or exhausted by the results of a test
+do not trigger, as they are either removed
+from play or rendered inactive before this
+step (see Clearing Cards on page 18).
+
+Challenge Effect
+
+Note: Some tests show a difficulty of X.
+In these cases, the difficulty is dependent
+on circumstances unique to that test and
+will be explained elsewhere on that card.
+
+CHALLENGE EFFECT ORDER
+
+If you succeed, resolve any effects noted
+in the text following the descriptor. If the
+effect scales off of your effort on the test,
+it scales off of your resulting effort.
+
+When resolving challenge effects, resolve cards in the following order.
+When there are multiple challenge effects in one area, you can choose
+the order in which you resolve
+them.
+
+If you fail, do not resolve the effects
+immediately following the descriptor.
+Often the only consequence for failing
+a test is failure itself, but if there are any
+effects for failing a test, they are explicitly
+mentioned in the text following the
+effects of success.
+For example, if you fail a Traverse test,
+you do not place any . Instead, you
+suffer 1 injury.
+Some tests will also include effects that
+occur “whether you succeed or fail,”
+which are always resolved regardless of
+the outcome.
+
+1. Weather cards
+2. Location card
+3. Mission cards
+4. Cards along the way
+5. Cards within reach
+6. Cards in your player area
+
+ RESHUFFLE ICON
+
+After resolving a test, if any
+challenge cards that show
+the reshuffle icon () were
+put into the discard, shuffle
+the challenge discard back
+into the challenge deck.
+
+Each challenge effect only
+resolves once per test. If for whatever reason, a card is in a position
+to resolve its challenge effect a second time during the same test, it
+does not do so.
+
+CONDITIONAL CHALLENGE EFFECTS
+Many challenge effects have additional conditions that determine
+whether or not they trigger. If a challenge effect contains a doublearrow icon () dividing the text, you only resolve the text following
+that icon if you successfully executed all instructions preceding the
+icon or if the condition preceding the icon was true.
+
+17
+
+CLEARING CARDS
+You’ll often be instructed to place two different kinds of
+tokens on cards: progress () and harm (). Both are
+abstractions—stand-ins for the narrative outcomes of
+the tests you perform and the cards you play from your
+hand.
+Progress () is a measure of
+time spent. For example, progress
+placed on a feature or a location
+may represent time spent walking across it, exploring
+it, or simply contemplating its beauty. Similarly,
+progress placed on beings may represent time spent
+conversing with that being, studying its behavior, or
+convincing it to let you pass unharmed. Clearing a card
+with progress simply means that you’ve spent sufficient
+time with it to enjoy any benefits it might provide or to
+safely proceed beyond its presence.
+What harm () represents
+varies considerably from card
+to card. On beings it may
+represent physical harm, but it
+can also represent distress. On features it may represent
+how much damage a physical object can suffer before
+it breaks, or the process of hacking a path through the
+brush. It can also be a measure of how much material
+can be harvested from a plant before nothing of use
+remains.
+Your instinct may be to think of a card’s harm threshold
+as its “hit points,” that is, the amount of damage it can
+sustain before it is killed or destroyed, but that it not
+necessarily the case. When you clear a being with harm,
+you’ve simply done enough damage or caused enough
+distress to cause it to flee. When you clear a feature
+from harm, you’ve overcome it through force or have
+depleted it of its resources.
+
+Most cards have thresholds matching one or both of
+these token types on the upper-right of their text box.
+
+18
+
+When a card has tokens on it equal to or exceeding
+the corresponding threshold, it clears. When you clear
+a card, you perform any instructions in its text labeled
+with “Clear.” If there is a campaign guide entry noted
+next to “Clear,” turn to the matching entry in the
+campaign guide and read it aloud. After resolving the
+card effects, if it still has sufficient tokens to be cleared,
+discard the card.
+
+RANGER TOKENS
+Each Ranger has a single
+Ranger token unique to them
+that can be moved to cards
+in play, representing that
+card requiring your Ranger’s
+undivided attention or physical presence. When
+your Ranger token is on a card in play, each other
+Ranger commits one additional effort to any tests
+they perform interacting with that card. This is
+cumulative for each Ranger token present.
+Some cards, instead of having a progress
+threshold, are marked with the Ranger symbol.
+These cards are cleared when every Rangers’
+token is on the card.
+When your Ranger token would be discarded or
+is not on a card, move it to your role card.
+
+When an effect causes a card to gain enough tokens to
+clear, finish resolving the current rules step, then clear
+any cards that have reached their thresholds.
+For example, if a successful test places progress that
+clears a card, finish resolving the success effects of the
+test, then resolve the clear effect. Or, if a challenge
+effect places harm that clears a card, finish resolving
+the current challenge effect, then resolve the clear
+effect.
+If a card would clear from both token types, you can
+choose which type to use to clear it.
+
+CARDS WITHOUT THRESHOLDS
+Some path cards don’t have harm or progress
+thresholds. These cards can still receive those
+tokens, but they will never clear because of them.
+
+CLEARING AND LOCATIONS
+Locations are an exception to the clearing rule. Every
+location has a progress threshold that represents your
+group’s progress toward traveling to the next location.
+If you reach this progress threshold, however, the
+location does not clear. Instead, when you reach the
+travel step of a round, if the location has progress
+equal to or exceeding its threshold, the group can
+choose to travel (see Travel on page 14).
+
+TEST EXAMPLE
+1 Sam is playing as a solo Ranger
+
+hiking through the woods. She has a
+Prowling Wolhund and a Sitka Doe
+within reach and an Overgrown Thicket
+along the way. She decides to attempt a
+Traverse test on the Overgrown Thicket.
+
+2 When Sam interacts
+
+with a card along the way,
+each card within reach
+fatigues her. So she suffers
+three fatigue (two from the
+Prowling Wolhund and one
+from the Sitka Doe).
+
+3 Sam commits two Fitness
+
+energy tokens to the test, as
+well as a card from her hand with
+one exploration approach icon,
+totaling three committed effort.
+
+4 Next, Sam draws a challenge
+
+card and applies the modifier for
+Fitness, the aspect used for her
+test. The modifier is a –1, giving
+her a resulting effort of two. The
+difficulty of the Traverse is equal
+to the Overgrown Thicket’s
+presence of one, so Sam’s two
+succeeds at the test!
+
+5 Since the test succeeded,
+Sam resolves its instructions,
+adding progress equal
+to her effort (two) to the
+Overgrown Thicket.
+
+6 The two progress on the
+
+Overgrown Thicket is equal
+to its progress threshold,
+so the card is cleared. Sam
+discards it.
+
+7 Finally, Sam resolves each challenge
+
+effect matching the mountain () on the
+challenge card she drew.
+The Overgrown Thicket was already
+cleared, so the only card with a mountain
+challenge effect is the Sitka Doe.
+The Prowling Wolhund
+has the predator trait,
+and since it is in the
+“ready” position, it is
+considered “active.” Sam
+exhausts it and adds a
+number of harm
+tokens equal to its presence (two)
+to the Sitka Doe, causing it to be
+cleared and discarded as well.
+
+19
+
+FATIGUE
+Your Ranger can only accomplish so much in one day
+before they become too tired to go on. Your deck
+represents your Ranger’s stamina, and if it runs out,
+the day ends (see Ending the Day on page 21).
+Navigating the Valley can be taxing, and no matter
+how in tune a Ranger becomes with nature, there are
+still challenges that can put strain on them. This is
+represented by fatigue.
+When your Ranger suffers fatigue, remove cards equal
+to the amount of fatigue suffered from the top of your
+Ranger deck and—without looking at them—place
+those cards facedown near your Ranger discard,
+creating the fatigue stack.
+
+FATIGUE FROM INTERACTING
+When you interact with the environment, things
+between you and the thing with which you’re
+interacting may cause you to suffer fatigue. This
+might be a feisty Lutrinal harrying you as you try to
+accomplish your task, or some difficult terrain slowing
+you down.
+Before you perform a test, each ready card between
+you and the farthest card with which you are interacting
+fatigues you. Which ready cards are between you and
+that card depends on the area in which it sits:
+• Card is within reach: nothing is between you.
+• Card is within reach of another Ranger: all
+cards within reach of you are between you.
+• Card is along the way: all cards within reach of
+you are between you.
+• Card is in the surroundings: all cards within
+reach of you and along the way are between you.
+
+Ranger
+Deck
+
+Ranger
+Discard
+
+Fatigue
+Stack
+
+If you are ever instructed to suffer fatigue, but you do
+not have enough cards remaining in your Ranger deck
+to suffer that fatigue, you must end the day.
+
+“FATIGUES YOU”
+
+Some Ranger cards and game effects will act upon a
+card and manipulate it in some way without performing
+a test. These effects are not considered interactions, so
+cards between you and the affected card do not fatigue
+you.
+If a test on a card in your player area or played from
+your hand interacts with multiple cards, only resolve
+this step once for the card with which you’re interacting
+that is furthest from you.
+
+Each card in the path deck has a presence value in the
+upper right-hand corner. Some game effects will cause
+cards to fatigue you. When this happens, if the card is
+ready, you suffer fatigue equal to the presence of that
+card. If it is exhausted, the card does not fatigue you.
+
+SOOTHING FATIGUE
+Some game effects will allow you to soothe fatigue.
+When this happens, draw that many cards from the top
+of your fatigue stack and place them in your hand.
+
+20
+
+To interact with the location, this Ranger will
+suffer a total of three fatigue (two from the
+Prowling Wolhund within reach and one from the
+Ranger Cache along the way).
+
+ENDING THE DAY
+The day can end in several ways:
+• Choose to Camp: When you successfully travel,
+the group can decide to camp for the night.
+• Ranger too Fatigued: If a Ranger needs to draw
+a card or suffer fatigue but cannot, the day ends
+immediately.
+• Ranger too Injured: If a Ranger suffers their third
+injury, the day ends at the end of the current turn.
+That Ranger must add one “Lingering Injury” card
+to their deck (see Injury on page 23).
+• Ally in Peril: It is your duty to protect the people
+of the Valley. For most human beings, if they are
+ever cleared due to harm, the campaign guide will
+instruct you to end the day.
+• Mission Complete: Sometimes, when the final
+stage of a mission is complete, you will reach a
+stopping point important enough to end the day.
+The campaign guide will instruct you to do so.
+When the day ends, your current play session is over,
+and one day of campaign time passes. Check off the
+next day on the campaign tracker. Save your current
+location by either storing it with your Ranger deck or
+writing it down on the campaign tracker along with
+the terrain type you were traveling on. The rest of the
+game materials can be packed up and returned to their
+normal storage locations.
+
+BRINGING IT ALL TOGETHER
+These rules walk you through how you will
+be playing the game, but they don’t get
+into the specifics of what you will be trying
+to accomplish. Because of the nature of
+Earthborne Rangers’ open world, your goal
+for a given day can change from session to
+session based on your current mission or
+some other objective or idea you have based
+on a hint you were given or your general
+desire to explore.
+One session, you might be attempting to
+journey to a far off location, so your goal will
+be to use the Traverse action to add progress
+to the location and ultimately travel as many
+times as possible before one of you runs out
+of cards in your deck. To do this, you will need
+to get the cards between you and the location
+out of the way. You might Connect with a
+friendly creature, Avoid a more dangerous
+one to exhaust it, Traverse other features in
+the way, or use custom actions specific to the
+cards that come into play.
+The next session, instead you might be trying
+to find a specific character. To do this, you will
+stay at a specific location, using cards with
+the scout ability to dig for cards and trying to
+keep the board clear of threats while waiting
+to find them.
+The following session, you might be
+attempting to complete a mission card with a
+custom objective—one that has you interacting
+with cards in a way you didn’t expect.
+Ultimately, Earthborne Rangers isn’t like a lot
+of other card games where you are trying to
+accomplish a single, similar goal every session.
+Instead, it is much more like a roleplaying
+game—a collection of systems to simulate a
+wide range of activities in an open world. It’s
+up to you to discover all the different ways to
+use them!
+
+21
+
+ADDITIONAL CONCEPTS
+ACTIVE
+
+DISCARD
+
+Active cards are any ready card in the surroundings, along
+the way, within reach, or in your player area. Cards within
+reach of other Rangers are not active. If you’re interacting
+with a card within reach of another Ranger, however, ready
+cards within reach of them also count as active for that turn.
+
+Place discarded cards in their corresponding discard
+pile and discarded tokens in the supply. Effects that
+trigger when a card clears do not trigger when a card is
+discarded.
+
+ATTACH
+
+DODGE
+Some game effects allow you to dodge cards when you
+are performing a test. When you dodge cards, those
+cards do not count as being between you and the card
+with which you are interacting. Cards dodged in this
+way do not fatigue you, and if they have the obstacle
+keyword, they do not prevent you from interacting with
+cards beyond them. These cards are still considered to
+be active, so their challenge effects still trigger.
+
+Some cards instruct you
+to attach them to other
+cards. Place the attached
+card underneath the card
+to which it is attached
+with a bit poking out to
+remind you that it’s there.
+Faceup attached cards
+Universal Power
+are considered to be “in
+Cells
+attached to a
+play,” while facedown
+Camoweave Cloak
+attached cards are not.
+When a card is attached
+facedown, discard any tokens from it. When a card
+leaves play, any cards attached to it are discarded.
+Some cards may attach to your role. You can still
+interact with these cards. Resolve their challenge
+effects as if they were within reach. When interacting
+with other cards in play, cards attached to your role
+always count as being between you and that card.
+
+EXHAUST/READY
+To exhaust a card, turn it ninety degrees. To ready a
+card, turn it upright.
+• Exhausted cards do not fatigue you.
+• Exhausted cards are not active, so you do not
+resolve challenge effects on them.
+• You can interact with exhausted cards.
+• If a text effect is prefaced by “exhaust [this
+card],” you must be able to exhaust the card to
+trigger the effect.
+• You cannot exhaust a card that is already
+exhausted.
+
+CAMPAIGN GUIDE
+If a campaign guide entry appears
+in a card’s title bar, read the entry
+marked with the associated number
+when that card enters play.
+When an entry icon appears in card
+text followed by a number, read the
+entry matching that number when
+that text is triggered. If the entry icon
+is not followed by a number, read the
+entry corresponding to the number
+shown at the top of the card.
+
+Campaign
+Guide Entry
+
+For more information, see the campaign guide section
+on page 28.
+
+22
+
+Ready
+
+Exhausted
+
+Note: Abilities that begin with “Exhaust:” can only be
+used at specific times (see Triggered Effect Timing on
+page 23).
+
+INJURY
+
+SEARCH
+
+Injuries represent a significant danger to your Ranger.
+If your Ranger accumulates too many injuries during a
+day, they will be forced to camp for the night.
+
+When you are instructed to “search” for a card, pick
+up the indicated decks or piles of cards, find every
+card matching the criteria specified, and choose one
+of them (for example, “search for a gear card”). If you
+searched for a path card, put the card into play. If you
+searched for a Ranger card, place the card into your
+hand. Then return all unchosen cards to where you got
+them and shuffle any affected decks.
+
+If a game effect injures your Ranger, place a harm
+token on your role card and discard all the cards in
+your fatigue stack.
+For each injury you’ve suffered, you suffer one fatigue
+during the refresh phase.
+When you are instructed to heal an injury, remove one
+harm from your role.
+After your Ranger suffers their third injury, you must
+end the day at the end of your current turn, and you
+add one “Lingering Injury” card to your deck from your
+collection (if there is one available to add).
+
+IN PLAY
+Any card or token that is in the surroundings, along the
+way, within reach, in a player area, or on a component
+in one of these areas is in play. Cards in discard piles, in
+players’ hands, or in decks are not in play.
+
+MOVE
+The card is moved to a different area than the one in
+which it currently sits. If an area isn’t specified, you can
+choose to move it either along the way or within reach
+of a Ranger of your choice.
+
+ (PER RANGER)
+The symbol  represents the number of Rangers
+(players) currently playing the game. When it is next to
+another value, multiply the number of Rangers by that
+value (for example, in a two-player game “3 ” would
+equal six).
+
+SCOUT
+When you are instructed to “scout” a deck, you look
+at the number of cards specified from the top of that
+deck (for example, “scout 3 path cards”), then place
+any number of those cards on the top and/or bottom
+of that deck in the order of your choice.
+
+Some search effects may instruct you to search for the
+“next” card matching a certain criteria. In those cases,
+go through the deck card-by-card, starting at the top,
+and pick the first card that matches the criteria. If, in
+these cases, it specifies to search two locations (for
+example “search the path deck and discard”), search
+the locations in the order they are written. If you fail to
+find a card in a location, move on to the next.
+If instructed to search a set of cards, find that set in the
+collection, and search it as described above. If the set
+is currently in use, go through the deck and discard in
+which it is currently being used.
+
+TIMING
+Many card effects resolve at a specific time (for
+example, “when you perform a test”). Any effects that
+don’t specify a timing are either ongoing effects that
+are always in effect, or effects that you can choose to
+use during any Ranger’s turn.
+Effects that specify a timing will do so relative to a step
+in the rules (or sometimes another game effect) using
+one of the following words:
+• Before: The effect resolves immediately before
+you begin the specified step.
+• When: The effect resolves during the specified
+step. This usually modifies the entire step in
+some way or triggers at a specific time within
+the step itself. Read that step’s rules for more
+clarification.
+• After: The effect resolves immediately after all
+effects of the specified step have been resolved.
+If multiple effects would resolve during the same
+timing window, you can choose the order in which they
+resolve.
+
+TRIGGERED EFFECT TIMING
+Effects that can be triggered by you (such as exhaust
+abilities on your Ranger cards) that do not have a
+timing specified can only be used at the beginning or
+end of your or another Ranger’s turn. Thus, they cannot
+be used while a test is being performed or while
+another card’s effect is in the process of resolving.
+
+23
+
+CARD ANATOMY
+
+1
+
+1. Set Reminder: An icon showing which set the
+card belongs to to help with quickly identifying
+the set while in storage.
+
+2
+
+3
+
+5
+6
+
+4
+
+2. Title: The name of the card.
+
+7
+
+3. Card Type and Traits: Flavorful attributes that
+may be referenced by card abilities.
+
+8
+
+4. Area Indicator: Indicates whether the card comes
+into play within reach or along the way.
+
+9
+
+5. Campaign Guide Entry: Indicates an entry in the
+campaign guide that should be read aloud when
+the card enters play.
+
+10
+12
+
+6. Presence: The card’s prominence in the
+environment. This value determines the amount
+of fatigue it may cause and scales other effects.
+7. Tokens: Shows the name of a special token type
+used for this card and the number of those tokens
+placed on it when it comes into play. Use general
+tokens to track these.
+8. Harm Threshold: A measure of the card’s
+well-being. When a card has an equal or greater
+number of harm tokens, it clears.
+9. Progress Threshold: A measure of the Rangers’
+time spent with the being, feature, or location
+that the card represents. When the value shown
+a being or feature is reached, it clears. When the
+value shown a location is reached, the Rangers
+can choose to travel.
+10. Abilities and Tests: The main abilities of that
+card. This can include tests the Rangers can
+perform, special rules for the card, or effects that
+resolve when the card clears.
+
+13
+
+2
+3
+9
+10
+
+6
+
+13
+
+2
+
+11. Mission Objective: The condition that must be
+met to progress further in the mission.
+12. Challenge Effects: Effects that resolve at the end
+of tests based on which of the three challenge
+icons is shown on the challenge card.
+13. Set Information: The name of the card’s set and
+the card’s number in that set.
+
+10
+11
+12
+13
+
+24
+
+3
+
+RANGER CARD ANATOMY
+1. Energy Cost: The number of energy tokens that
+need to be spent to play the card.
+
+1
+
+2
+
+3
+4
+
+2. Title: The name of the card.
+3. Card Type and Traits: Flavorful attributes that
+may be referenced by card abilities.
+4. Equip Value: The amount of space the card takes
+up when equipped. If you have more than five total
+filled-in equip value boxes in your play area, you
+must discard cards until you have five or fewer.
+5. Presence: The card’s prominence in the
+environment. Only on being or feature Ranger
+cards.
+6. Tokens: Shows the name of a special token type
+used for this card and the number of those tokens
+placed on it when it comes into play. Use general
+tokens to track these.
+7. Harm Threshold: A measure of the card’s
+well-being. When this card has an equal or
+greater number of harm tokens, it clears.
+
+8
+
+10
+
+6
+
+9
+
+11
+
+2
+3
+
+8. Approach Icons: Icons that can be commited to
+tests by discarding the card. The card adds one
+effort for each approach icon matching the one
+shown on the test.
+9. Abilities and Tests: The main abilities of that
+card. This can include tests the Rangers can
+perform, special rules for the card, or effects that
+resolve when the card clears.
+10. Aspect Requirement: You must have this value or
+higher in the shown aspect to include this card in
+your deck.
+
+11
+
+9
+
+11. Set Information: The name of the card’s set and
+the card’s number in that set.
+
+5
+
+7
+
+25
+
+KEYWORDS
+Keywords stand in for longer rules statements that would otherwise commonly appear on cards.
+
+AMBUSH
+
+FATIGUING
+
+When a card with the ambush keyword enters play
+within reach or moves within reach of a Ranger, it
+fatigues that Ranger.
+
+When you rest, if this card is ready and is in your player
+area, within reach, or along the way, you suffer fatigue
+equal to its presence. If this keyword is followed by a
+number, suffer that much fatigue instead.
+
+Note: Only ready cards can fatigue you. If the card is
+exhausted, you do not suffer fatigue from ambush.
+
+CONDUIT
+When you have a card with the conduit keyword
+equipped, you can play manifestation cards by using
+(discarding) a token from that conduit.
+
+DISCONNECTED
+You cannot add progress to this card using the
+Connect common test.
+
+26
+
+FRIENDLY
+When a card with the friendly keyword is between you
+and the card with which you’re interacting, it does not
+fatigue you.
+You cannot affect a card that has the friendly keyword
+with a card that has the weapon trait.
+
+MANIFESTATION
+To play a card with the manifestation keyword, you
+must use (discard) a token from one of your equipped
+cards with the conduit keyword.
+
+OBSTACLE
+
+SETUP
+
+You cannot interact with a card if a ready card with the
+obstacle keyword is between you and that card.
+
+At the start of the day after step 1 of setup, you can
+search your deck for one card with the setup keyword
+and put it into play.
+
+For example, an obstacle within reach prevents you
+from interacting with cards along the way or in the
+surroundings. An obstacle along the way prevents you
+from interacting with cards in the surroundings.
+You cannot travel if there are any ready cards with the
+obstacle keyword in play.
+
+UNIQUE
+A Ranger cannot have two unique cards with the same
+name from their deck in play at the same time. If you
+play a second copy of the same unique card, the first
+one is immediately discarded.
+
+PERSISTENT
+Persistent cards (ready or exhausted) and all cards
+attached to them remain in play when you travel.
+
+27
+
+PLAYING A CAMPAIGN
+The story of Earthborne Rangers unfolds over a campaign across multiple play sessions, with each session
+representing one day. What you do each day is up to you. You can complete missions to progress the story, or
+you can head out and explore to uncover emergent moments and objectives hidden throughout the world. As
+you accomplish different tasks, you will be granted new cards that permanently change your deck, and your
+choices may have long-lasting effects on the Valley.
+
+They reproduce,
+
+those, interestingly enough, is the spirit of the Verdessa. It shares a
+
+connection with the spirit of the Valley—like a mother to her
+To startdeep
+a new
+campaign, read the Getting Started section on page 9. Then each time you return to play a new day,
+child—and for some reason, I cannot reach it. It's very distressing.
+mbering around
+set
+up
+that
+day
+following the Game Setup instructions on page 10. The game scales to the number of Rangers in it,
+verything else?”
+"I've received word that a wandering botanist has recently returned
+Nal thinks that
+from
+an
+excursion
+Verdessa,
+that group
+she's brought
+some
+so you do not have totothehave
+the and
+same
+every
+time you play. Rangers can drop in and out or miss a day if needed.
+
+is a part of the
+en eating its way
+stop it. What do
+
+rare plant specimens along with her. She is currently staying at the
+merchant's quarters in Kobo's Market. If I had one of these specimens,
+I may be able to use it to reconnect with the spirit of the Verdessa.
+Perhaps you could accompany me to the market? I would be very
+grateful."
+
+CAMPAIGN GUIDE
+
+cloth. You catch
+d lethal-looking
+
+THE LIVING VALLEY
+
+The campaign guide contains numerically ordered
+RANGERS CHOOSE:
+entries that you read as you play the game. These
+A) Accompany Nal to Kobo’s Market. Remove all , and attach
+contain the
+storyHELPING
+text that
+beto Spirit
+readSpeaker
+out to
+HANDcan
+mission
+Nal. the group,
+fy yourself to
+asit well B)
+asSome other
+mechanical
+instructions
+on
+time. Discard
+Spirit Speaker
+Nal.how
+Each the
+Rangerevents
+mulcher, like the
+soothes 2 fatigue.
+change
+the
+game.
+the ecosystem. I
+
+45.8
+When a
+ icon appears in card text followed by a
+number,
+thefalls
+entry
+that
+when
+Nal read
+slumps and
+to the matching
+ground. You move
+to number
+help her, clearing
+prove it. Coating
+a space on the ground and making her comfortable. You determine
+that text
+is resolved. Some entries have different
+t you or spit you
+that you’ll need to stay here for the rest of the day to treat her injuries.
+variants
+based
+on the conditions under which you read
+End the day.
+living plants, or
+them. Go to the entry matching the condition that
+the through the
+46.you
+THE
+GROWER’S
+ASSEMBLAGE
+caused
+to read
+the entry (for
+example, “Enters
+Play” As
+foryou
+when
+the path
+play).
+approach
+Meadow'scard
+villageenters
+center, you
+hear the cheery
+
+tions. Have you,
+have corrected it
+”
+
+sounds of commerce. Local foragers and ranchers have set up their
+
+daily market,
+the people
+Meadow
+gathered both
+to trade have
+The entry
+may and
+check
+to of
+see
+if have
+different
+conditions
+and to socialize. Stalls of pine and forged carbon bustle with life,
+been their
+met.awnings
+Read
+down
+these
+“if”
+statements
+order.
+woven
+from long
+grasses
+dyed in a
+multitude of in
+vibrant
+d. Gain the
+Most are stocked with foodstuffs, from freshly baked bread to
+Followcolors.
+the
+instructions
+of
+the
+first
+one
+you
+meet.
+moss-cherry preserves to smoked mutton. You can see, however, that
+
+n the
+
+a few of the locals are trading gear and equipment as well.
+
+of the sun. She
+t the time, I can
+still accompany
+
+47. HY PIMPOT, CHEF
+ENTERS PLAY
+
+GO TO 47.1
+
+CLEAR 
+
+IF HELPING HAND IS ATTACHED, GO TO 47.2
+OTHERWISE, GO TO 47.3
+
+rit Speaker Nal.
+
+CLEAR 
+
+Ranger soothes
+
+47.1
+
+child—and for some reason, I cannot reach it. It's very distressing.
+
+You can help Hy Pimpot by gathering ingredients for the stew,
+The options
+andhimtheir
+consequences
+are the
+indented.
+to ask him
+how tohas
+make
+as
+or"I've
+you received
+can clearword
+with
+that a
+wandering
+botanist
+recentlystew
+returned
+good
+as
+possible.
+After from an
+resolving
+your
+chosen
+option,
+make
+suresome
+to check
+excursion
+to the
+Verdessa, and
+that she's
+brought
+rare plant specimens along with her. She is currently staying at the
+if the merchant's
+entry instructs
+you
+to
+“
+Continue
+reading”
+as
+quarters in Kobo's Market. If I had one of these specimens,
+47.2
+I
+may
+be
+able
+to
+use
+it
+to
+reconnect
+with
+the
+spirit
+of
+the
+Verdessa.
+there might be more.
+
+oth. You
+catch
+ring
+before
+her
+lethal-looking
+
+Perhaps
+you
+couldwaves
+accompany
+to the
+market?
+I would
+be very
+“Ah!” Hy
+Pimpot
+at you.me
+“What
+else
+have you
+brought
+me?
+grateful."
+Surely not just more ricegrass and chikorish leaves? I can get those
+here! You’ve got to get away from Lone Tree to forage, or this soup
+RANGERS
+CHOOSE:
+will be left simply … bland!
+You still willing
+to help, or should I head
+home?”
+A) Accompany Nal to Kobo’s Market. Remove all , and attach
+the HELPING HAND mission to Spirit Speaker Nal.
+
+o communicate
+so effectively, I
+his land. One of
+y yourself to it
+ulcher, like the
+he ecosystem. I
+ons. Have you,
+ave corrected it
+
+45.8
+
+ove it. Coating
+you or spit you
+
+Nal slumps and falls to the ground. You move to help her, clearing
+a space on the ground and making her comfortable. You determine
+that you’ll need to stay here for the rest of the day to treat her injuries.
+
+28
+
+B) Some other time. Discard Spirit Speaker Nal. Each Ranger
+soothes 2 fatigue.
+
+STORING YOUR COLLECTION
+All of your cards that aren’t currently being used
+in the game or in Ranger decks are referred to as
+your collection. The game box contains a number
+of dividers that allow you to keep your collection
+organized by card set to make it easy to build new path
+decks when traveling or fetch individual cards when a
+game effect calls for it. We recommend storing cards
+with their left edge facing up, allowing you to quickly
+look for the gray set labels on Ranger cards or the set
+icon on path cards.
+
+STORING RANGER DECKS
+
+GO TO 47.6
+
+You hear a
+Hy’s shrill
+whistling
+before
+him. It’sin
+said
+Sometimes,
+choice
+will long
+have
+toyou
+beseemade
+anthatentry.
+every Ranger in the Valley has tried to teach Hy Pimpot a new song to
+The group
+should
+make
+these
+choices together, but
+whistle, but
+none of them
+have
+succeeded.
+e to accompany
+if
+there
+is
+an
+impasse,
+the
+lead
+Ranger
+decides.
+We
+Eventually
+you spot
+the stout
+little
+gnome of a
+man intently
+chopping
+self has recently
+and mixing vinegary-smelling herbs and vegetables into a large bowl.
+s back from recommend
+his
+making
+the he says
+choice
+only
+based
+the
+“Good, good,
+you’re here,”
+without
+looking
+at you.on
+“Try this
+stew. I need
+to know
+ifeach
+I’ve hit red
+the right
+balance between
+‘pleasant
+information
+listed
+in
+header,
+and
+only
+reading
+heat’ and
+‘tongue searing.
+it need?
+hey reproduce,
+those,
+interestingly
+enough,What
+is thedoes
+spirit
+of the Kelpweed?
+Verdessa. ItMourning
+shares a
+Root?”
+the deep
+consequences
+after
+you
+decide.
+connection with
+the spirit
+of the
+Valley—like a mother to her
+
+l , and attach
+mbering around
+Nal.
+erything else?”
+Nal
+ach thinks
+Rangerthat
+a part of the
+n eating its way
+op it. What do
+
+The Living Valley is a curated online resource for
+Earthborne Rangers players. In addition to the rules
+glossary and FAQ, it is home to a fully featured version
+of the Lure of the Valley campaign guide. The online
+version of the campaign guide includes hyperlinked
+entries and a search function for easy navigation.
+You can find The Living Valley on our website
+(earthbornegames.com).
+
+29
+
+As you play through the campaign, rewards, injuries,
+and other decisions will modify your Ranger deck,
+evolving and changing it as you grow as a Ranger. If
+you are playing a single campaign out of your box,
+the easiest way to keep track of all the changes to the
+Ranger decks is to store them as-is using the included
+dividers.
+However, if you are unable to keep the Ranger decks
+in one piece for storage, or if you’re playing multiple
+campaigns with one set of cards, you can download
+the Ranger deck list PDF from earthbornegames.com.
+With this, you can record all the cards in your Ranger
+decks so that they can be reassembled at a later date.
+
+CAMPAIGN TRACKER
+
+MISSIONS
+When the campaign guide gives you a new mission,
+write the name of the mission in the “Missions”
+section, and write the current day in the box to the
+left. Then place the corresponding mission card in the
+surroundings. Some missions will track your progress
+using the boxes to the right of the mission, and when
+you complete a mission, cross the mission off of
+your list (see Mission Cards on page 30 for more
+information).
+
+The last page of the campaign guide is a tracking
+sheet that can be used to keep track of your campaign
+progress. You can also find a printable PDF of this
+sheet at earthbornegames.com. This sheet tracks all
+the information you need to reference during your
+campaign:
+
+CURRENT POSITION
+At the end of each day, record your current location
+and terrain type here (ideally in pencil so it can be
+erased). Then when setting up the next day, use this
+location and terrain type.
+
+REWARDS
+When the campaign guide rewards you with a new
+card, write the name of the card in the “Rewards”
+section. Find all copies of that reward card in your
+collection and set them aside. These are now available
+for the group to use to customize their decks (see
+Customizing Your Deck on page 31). If you would ever
+gain the same reward again, ignore that effect.
+
+DAY TRACK
+The day track on the tracking sheet keeps track of how
+many days have passed during your campaign. At the
+end of each day, cross off that day on the day track.
+Each day has a “recommended weather” card listed
+underneath it to use during setup (see Weather Cards
+on page 30).
+
+NOTABLE EVENTS
+As you make decisions or accomplish story milestones,
+the campaign guide will instruct you to record the
+outcomes of notable events to potentially check
+against later. Simply write the specified phrase in the
+“Notable Events” section.
+
+Many of the outcomes of different missions change
+based on how many days you take to complete them,
+and other elements of the story may change based on
+how much time has passed.
+During step 6 of setup, read any entries listed over
+the current day. The campaign guide may instruct you
+to record entries above certain days based on your
+actions in the Valley.
+
+
+1
+
+1
+
+
+94.1
+
+
+1.04
+
+3
+
+4
+
+2
+
+A Perfect Day
+
+5
+
+6
+
+7
+
+D ow n p ou r
+
+8
+
+9
+
+A Perfect Day
+
+10
+
+11
+
+12
+
+D ow n p ou r
+
+13
+
+14
+
+Ho w l i n g Wi n ds
+
+15
+
+16
+
+17
+
+D ow n p ou r
+
+18
+
+19
+
+20
+
+H ow l i n g Wi n ds
+
+21
+
+22
+
+A Perfect Day
+
+23
+
+24
+
+25
+
+D ow n p ou r
+
+26
+
+27
+
+28
+
+H ow l i n g Wi n ds
+
+29
+
+30
+
+A Perfect Day
+
+M ISSI O NS
+Day
+
+Nam e
+
+Progress
+
+Day
+
+Name
+
+Progress
+
+Day
+
+Name
+
+Progress
+
+• C A M PA I G N TR AC K ER •
+
+R A N G ER S
+
+Cu rrent Position
+Lo cati on
+
+N OTA BLE E V ENTS
+
+RE WA RDS
+
+Path Terrai n
+
+29
+
+MISSION CARDS
+
+WEATHER CARDS
+
+Mission cards provide you with objectives you must
+complete in order to advance the story.
+
+Weather cards represent the weather or other strange
+atmospheric conditions that may affect you on your
+travels. Much like mission cards, weather cards are
+placed in the surroundings and work like path cards,
+except they typically do not have harm or progress
+thresholds. If a weather card would be cleared or
+discarded by other game effects, it is instead returned
+to the surroundings.
+
+You will gain new missions when instructed by the
+campaign guide. When this happens, record its name
+on the campaign tracker and the current day in the box
+to its left. Then find the corresponding mission card, and
+put it into play in the surroundings. On the campaign
+tracker, each line of the mission has three boxes to the
+right that some missions use to track progress.
+During setup, for each mission on your campaign tracker
+that hasn’t yet been completed, put that mission’s card
+into play in the mission area of the surroundings.
+
+Weather cards are two-sided and often flip to their
+other side. When they do, they maintain any tokens
+that were on the card.
+Missions work much the same way as path cards, except
+they typically do not have harm or progress thresholds.
+If a mission card would be cleared or discarded by other
+game effects, it is instead returned to the surroundings.
+Missions can only be removed from play by completing
+them (or other special instructions on the mission
+itself). When a mission is complete, cross it off on the
+campaign tracker and return its card to the collection.
+Each mission has an objective listed inside a green
+box. When this condition is met, read the next entry in
+the mission’s story.
+
+MISSION SUBJECTS
+Some missions have subjects listed in their name in
+parenthesis—for example, “Track (Quisi Vos).” These
+subjects are either a location card or path card, and
+are used by the mission in some way. When a mission
+is listed with a subject, find the subject’s card in your
+collection and attach it facedown to the mission. The
+mission will provide instructions on how the subject is
+utilized.
+
+30
+
+CUSTOMIZING DIFFICULTY WITH WEATHER
+When you set up a new day, the campaign tracker
+recommends which weather card to use. However,
+groups who are looking to adjust the challenge of their
+game can choose to swap in a different weather card
+during setup based on the difficulty they prefer:
+• Easy - A Perfect Day
+• Normal - Downpour
+• Hard - Howling Winds
+• Expert - Electric Fog
+Note: Electric Fog is not included in the
+“recommended weather” on the campaign tracker and
+should only be used by groups looking for an intense
+challenge.
+
+CUSTOMIZING YOUR DECK
+As you progress through the campaign, your Ranger’s
+deck will change as you unlock new cards and replace
+the cards with which you began the campaign. This
+represents your Ranger learning from experience and
+gaining access to new and better gear.
+There are three ways you can alter your deck during a
+campaign:
+
+PERMANENT ALTERATIONS
+Some effects during gameplay may make permanent
+changes to your deck. These effects usually allow you
+to trade one card from your deck for one other card
+from the starting Ranger card list. You can never go
+over two copies of the same card with these changes.
+These alterations to your deck are permanent and
+cannot be reversed except by other similar effects
+found during play.
+You cannot add cards with the Expert trait to your deck
+by any means, including permanent alterations, unless
+they are from your chosen background or speciality.
+
+SWAPPING REWARDS IN AND OUT
+If you end the day by camping (see Travel on page
+14), you can use the downtime to reorganize your
+gear and think on your experiences.
+If you ended the day by camping, before you start
+the next day, you may choose up to two copies of any
+reward card that you’ve unlocked, and for which you
+meet the aspect requirement, and add them to your
+deck. For each reward card you add, you must choose
+a non-malady card to remove from your deck.
+If the removed card is another reward, return it to
+the collection. But if the removed card is a starting
+Ranger card, set it aside. These displaced cards can
+be swapped back into your deck any time you camp
+in the same way as rewards, and are not part of the
+collection.
+
+MALADIES
+Maladies represent the lingering negative effects of the
+trials your Ranger has endured. The primary malady
+that can be added to your deck is Lingering Injury,
+which is added to your deck if you are forced to end
+the day after suffering three injuries.
+Maladies are always in addition to the thirty cards
+normally in your Ranger deck and cannot be swapped
+out for reward cards, traded away to merchants, or
+removed by any other method apart from what is
+described on the malady card itself.
+
+After ending the day by camping, a Ranger adds two copies of their newlyunlocked Touch of the Verdessa reward card. They remove one copy of Eagle Eye
+and one copy of Balanced to make room.
+
+31
+
+CREATING YOUR RANGER
+To start a campaign of Earthborne Rangers, you build your own custom Ranger character. You’ll bring all the
+cards you need together in a way that tells the story of who your Ranger is, how they spent their formative years,
+and what specialized training they’ve received before they completed the trials, rites, and ceremonies that
+welcomed them into the service of the Rangers.
+If you are starting with the Prologue (see page 9), you will create a character as part of that process, but if you
+are jumping right into the game, you can follow these steps to create your Ranger.
+
+RANGER CARDS
+Ranger cards are broken into five categories: personality, background, specialty, malady, and reward. You can
+set aside all reward and malady cards for now. Those are obtained during the campaign and not used in Ranger
+creation. Both backgrounds and specialties are broken into different sets that you will be choosing between
+during character creation. To make Ranger creation easier, we recommend placing each of these sets in their own
+pile to keep them organized.
+Once you become familiar with the deck customization process, you can build your deck in any order you like,
+but for your first time, we recommend performing the following steps in order:
+
+CHOOSE YOUR ASPECTS
+Awareness (AWA):
+Your Ranger’s skills of
+observation. Awareness
+is a measure of how
+well they process the
+world around them.
+
+Spirit (SPI): Your
+Ranger’s inner strength
+and sense of self.
+Spirit is a measure of
+how well your Ranger
+knows themself.
+
+Fitness (FIT): Your
+Ranger’s strength,
+agility, and endurance.
+Fitness is a measure of
+how well they respond
+to physical demands.
+
+Focus (FOC): Your
+Ranger’s concentration
+and ability to recall
+knowledge. Focus is a
+measure of how well
+they can stay on task.
+
+Aspects are four values that represent where your inherent strengths lie. All of
+them are listed on a single card. There are a total of twelve different aspect
+cards to choose from, each of which features a different spread of values
+across the four aspects, ranging from 3 to 1. On each aspect card, there is a
+high stat (3), and a low stat (1). Choose one of these cards for your Ranger.
+Your high and low aspect will define the types of tests that your
+Ranger is inherently good at performing. It will also determine
+which cards you are able to include in your Ranger deck.
+Each Ranger card has an aspect requirement on the left-hand side
+of the card. If your corresponding aspect is not equal to or higher
+than that requirement, you cannot include that card in your deck.
+
+32
+
+DETERMINE YOUR
+PERSONALITY
+Personality cards represent the
+type of person your Ranger is
+and how they engage with the
+world around them.
+Select four unique cards from
+the personality set: choose
+one personality card from each
+of the four different aspects
+(Awareness, Fitness, Focus,
+and Spirit), and add two copies
+of each chosen card to your
+Ranger deck.
+
+CHOOSE YOUR BACKGROUND
+Your Ranger’s background represents their experience
+from early life and young adulthood. It contains the
+skills and equipment you bring with you into the
+Rangers. Choose one of the four background sets:
+• Artisan: See page 34.
+• Forager: See page 35.
+• Shepherd: See page 36.
+• Traveler: See page 37.
+The background sets contain nine unique cards
+each. Select five of those cards from your chosen
+background, and add two copies of each of the
+selected cards to your Ranger deck.
+
+CHOOSE YOUR SPECIALTY
+Your Ranger’s specialty represents the training and
+experience of your Ranger’s adulthood and the
+specialized training they bring to the Rangers. Choose
+one of the four specialty sets:
+• Artificer: See page 38.
+• Conciliator: See page 40.
+• Explorer: See page 42.
+• Shaper: See page 44.
+The specialty sets contain fourteen unique cards each.
+Select five cards from your chosen specialty, and
+add two copies of each of the selected cards to your
+Ranger deck.
+
+CHOOSE YOUR OUTSIDE
+INTEREST
+The last step to creating your Ranger is to select your
+outside interest—a card that represents your hobbies
+and passions outside of your day-to-day life. This is a
+single card chosen from any specialty or background
+set. The chosen card cannot be a role or have the
+expert trait. Add two copies of this card to your Ranger
+deck.
+The first time you create a Ranger, this choice can be
+a daunting one, as nearly the entire card pool is at
+your disposal. If you prefer to choose from a shorter,
+curated list, please see the list of suggestions below:
+• Ferinodex - Artificer Specialty
+• Boundary Sensor - Explorer Specialty
+• Intention Translator - Conciliator Specialty
+• Ironwool Boots - Traveler Background
+• Favorite Gear - Artisan Background
+• Paratrepsis Whistle - Shepherd Background
+• Familiar Ground - Forager Background
+• Infusion Canteen - Artificer Specialty
+Once you’re done with this step, you’ll have a total
+of thirty cards in your deck (fifteen unique cards, two
+copies of each), plus your role and aspect card. Your
+Ranger is now ready to begin their adventure!
+
+Additionally, each specialty includes two role cards.
+These roles do not go in your deck, but start the
+game in play and offer you a special, repeatable
+ability you can use and rely on. Select one of those
+roles for your Ranger.
+
+ROLE
+Your role represents what you specialize in
+and what function you serve in your group of
+Rangers. Your role gives you a card that starts
+every game in play and grants you a consistent,
+repeatable ability.
+
+33
+
+BACKGROUND: ARTISAN
+In your early life, you worked on a specialized craft in
+one of the Valley’s villages. You are adept in the use
+of tools, and you know how to work with your hands.
+Artisan cards key off of and support your equipped gear
+and the gear of other Rangers.
+
+The Valley’s artisans are responsible for crafting tools
+and mastering their construction. They handcraft items
+for their communities and teach others how to do the
+same. An apprenticeship with a master artisan can
+sometimes last up to twenty years.
+
+1 FIT
+
+LIFE AS AN ARTISAN
+The Mother of Invention
+
+1
+
+AWA
+
+1 FIT
+
+1 AWA
+
+Moment / Wisdom
+
+Moment of Desperation
+
+Gear / Clothing
+
+1
+
+AWA
+
+Masterwork
+
+Attachment / Mod / Expert
+
+Reduce the equip value of your gear
+by 1 (to a minimum of 1).
+
+1
+
+FIT
+
+2
+
+FIT
+
+Attach to a Ranger’s equipped gear.
+Response: When a Ranger performs
+a test from the attached gear, commit
+1 effort.
+
+AWA +  (use 1 pocket): Open
+
+3
+
+Moment / Experience / Weapon
+
+Discard one of your equipped gear
+to add  to a being equal to the
+number of tokens on the discarded
+gear.
+
+2 FIT
+
+2 AWA
+
+Choose a ranger. That ranger may
+discard one of their equipped gear
+to search their ranger deck for a
+gear and equip it without paying its
+energy cost.
+
+Pocketed Belt Pouch
+
+0
+
+FIT
+
+Choose an attachment in a
+Ranger’s discard. That Ranger may
+immediately play that attachment as
+if it were in their hand.
+
+Artisans often go on to become artificers as they
+turn their attention toward experimenting with new
+technology, but many also go on to to pursue other
+interests, where they craft tools of their trade unequaled
+by their peers.
+
+The Right Tool
+
+Moment / Wisdom
+
+your belt pouch and reach inside to
+search your Ranger deck for a gear
+and add it to your hand.
+
+Universal Power Cells
+
+Attachment / Mod / Tech
+
+1
+
+FOC
+
+1 SPI
+
+1 FOC
+
+pockets
+
+Favorite Gear
+
+Attachment / Mod
+
+Attach to a Ranger’s equipped tech.
+
+Attach to one of your equipped gear.
+
+When you play this attachment, add
+3 tokens to the attached gear.
+
+Response: After you use a token
+from the attached gear, soothe 1
+fatigue.
+
+34
+
+Gear / Tool / Tech
+
+2
+
+FOC
+
+2 SPI
+
+2 FOC
+
+Response: When this card becomes
+unattached, discard 3 tokens from
+the attached gear.
+
+Functional Replica
+
+Energized Hiking Greaves
+
+Exhaust (use 1 charge): Choose
+a Ranger’s equipped gear. Resolve
+the chosen gear’s effect as if you
+had used a token from it and/or
+exhausted it.
+
+3
+
+charges
+
+1
+
+SPI
+
+Gear / Tech / Aid
+
+2
+
+SPI
+
+Use X buffers: When you perform a
+test, suffer X fewer fatigue from each
+card between you and the card with
+which you are interacting.
+
+3
+
+buffers
+
+BACKGROUND: FORAGER
+In your early life, you gained tremendous knowledge of
+the plants of the Valley. You know how to identify the
+flora of the wilderness—which are medicinal, which are
+edible, and which are dangerous. Forager cards key off
+of cards with the flora trait, allowing you to use them as
+a resource in ways that cards from other backgrounds
+do not.
+
+The Valley’s foragers are responsible for gathering
+food for their communities, returning with harvests of
+fruits, vegetables, mushrooms, herbs, spices, and any
+other delicious plant life they can find.
+
+1 AWA
+
+LIFE AS A FORAGER
+Green Thumb
+
+Attachment / Skill / Expert
+
+Search the path deck and discard for
+a flora and put it into play with this
+skill attached.
+Increase the attached flora’s 
+threshold by 2.
+
+Moment / Experience
+
+1
+
+FIT
+
+1 AWA
+
+1 FIT
+
+Foragers are naturally curious, so many become
+explorers, scouting and trailblazing the rarely trodden
+wilderness. Others find unexplored wilderness of a
+different kind, braving an entirely new discipline.
+
+Familiar Ground
+
+Local Fare
+
+Moment / Experience / Nature
+
+2
+
+FIT
+
+2 AWA
+
+2 FIT
+
+Gear / Tool / Weapon
+
+Puffercrawler Spores
+
+FIT + : Strike [2] out with your
+
+Response: After you add  to a
+being with the attached gear, exhaust
+that being and attach this card to it.
+
+1
+
+FOC
+
+The attached being gains the flora
+trait.
+
+1 SPI
+
+1 FOC
+
+Attachment / Nature
+
+Nature’s Abundance
+
+Moment / Experience / Nature
+
+Attach to a feature.
+
+0
+
+2
+
+FOC
+
+2 SPI
+
+2 FOC
+
+Gear / Food
+
+1
+
+SPI
+
+Each Ranger may add 1 to a flora to
+soothe 1 fatigue and gain 1 energy
+of any type. When you add  to a
+flora in this way, you may not exceed
+its  threshold.
+
+Attached feature gains the flora trait.
+
+herbs
+
+2
+
+AWA
+
+Attach to any Ranger’s equipped
+gear.
+
+gardening tool to add 1 to a being
+for every 2 effort. If you fail, suffer 1
+injury.
+
+Loose-leaf Tea Kit
+
+Attachment / Nature
+
+SPI + : Tend to the local plants to
+add or remove  from a flora equal to
+your effort.
+
+Secret Garden
+
+1
+
+AWA
+
+Response: When a Ranger performs
+a test, they may add 1 to a flora to
+dodge each being in the same area
+as that flora.
+
+Add 1 to a flora to add 3 to a trail.
+
+Carbonforged Trowel
+
+1
+
+AWA
+
+Static Sifter
+
+Gear / Tool / Food
+
+2
+
+SPI
+
+Response: After you add 1 or more
+ to a flora, you may add 1 herb to
+this gear.
+
+Response: After you add 1 or more
+ to a flora, you may add 1 vittle to
+this gear.
+
+Exhaust (use 1 herb): Choose a
+Ranger. That Ranger gains 1 energy
+of any type.
+
+Exhaust (use 1 vittle): Choose
+a Ranger. That Ranger soothes 2
+fatigue.
+
+0
+
+vittles
+
+35
+
+BACKGROUND: SHEPHERD
+In your early life, you tended a flock of ironwool sheep
+in the rolling meadows of the southwestern Valley. You
+have a natural affinity for animals both tame and wild.
+Shepherd cards typically affect beings and can help you
+interact with and pacify predators in non-violent ways.
+
+The Valley’s shepherds tend the flocks of ironwool sheep
+that roam the grassy hills near the village of Meadow.
+The shepherding tradition among the Valley Dwellers
+is long and storied. Long before they settled the Valley,
+they tended ironwool sheep.
+
+1 SPI
+
+LIFE AS A SHEPHERD
+Healing Touch
+
+Moment / Skill / Aid
+
+Choose one:
+Discard 1 from a being to add 3
+to it.
+
+Moment / Wisdom
+
+0
+
+AWA
+
+Heal 1 injury from a Ranger.
+
+1 SPI
+
+1 AWA
+
+Years spent in solitude provides one with a considerable
+amount of time to contemplate the nature of existence.
+As such, regardless of their chosen path, shepherds
+have considered all options, and thus apply themselves
+fully to their chosen discipline.
+
+One Eye Open
+
+1
+
+SPI
+
+Calming Presence
+
+Attachment / Skill
+
+Response: When you rest, exhaust
+up to one being for each AWA in
+your energy pool.
+
+1
+
+SPI
+
+Attach to a predator.
+Attached card loses the predator
+trait.
+
+Riri the Sparrow Hawk
+
+Being / Companion / Avian
+
+2
+
+AWA
+
+2 SPI
+
+2 AWA
+
+Response: Before a challenge effect
+on the attached card would resolve,
+you may discard 2 from it to cancel
+the effect.
+
+Oru the Sheep Dog
+
+Being / Companion / Mammal / Expert
+
+Friendly. Persistent. Unique.
+
+AWA + : Survey the way
+
+1 FIT
+
+ahead to scout path cards
+equal to your effort, then draw
+1 path card.
+
+A Gentle Nudge
+
+Moment / Experience
+
+Friendly. Persistent. Unique.
+Exhaust: Move a being and
+add 2 to it.
+
+1
+1
+
+1
+
+FIT
+
+FIT + : Pet your canine
+
+companion to ready this being
+and soothe 1 fatigue.
+
+1 FOC
+
+Exhaust: Add 1 to a being in
+the same area as this companion.
+
+2
+
+SPI
+
+Paratrepsis Whistle
+
+Gear / Tool / Aid
+
+2
+3
+
+1
+
+FOC
+
+Exhaust (use 1 call): When a Ranger
+would suffer an injury by a predator
+or  would be added to a being,
+cancel that effect.
+
+Each Ranger may discard 1 from a
+being within reach of them to move
+that being.
+
+3
+
+Homeward Bound
+
+Moment / Experience
+
+2
+
+FIT
+
+Move all  from a being to a feature.
+
+36
+
+2 FOC
+
+2 FIT
+
+calls
+
+A Deeper Understanding
+
+Moment / Wisdom
+
+2
+
+FOC
+
+Choose a being. Move  from the
+chosen being to each other being or
+feature in play, up to 1 per card.
+
+BACKGROUND: TRAVELER
+Your early life was spent walking the footpaths of the
+Valley from village to village, or even journeying outside
+of it. As such, you feel most at home when you’re on the
+move. Traveler cards revolve primarily around making
+the most of moment cards.
+
+The Valley’s travelers are typically responsible for
+transporting goods and materials between villages
+and for disseminating important information to those
+they encounter. Most Valley Dwellers don’t travel far
+beyond their home village, so it’s the travelers who
+help the wider community remain connected.
+
+1 FOC
+
+LIFE AS A TRAVELER
+Reverb Locket
+
+1
+
+AWA
+
+2
+
+Exhaust (use 1 echo): Play the
+attached moment as if it were in your
+hand. It remains attached to this gear
+instead of being discarded.
+
+Echoes
+
+1 FOC
+
+1 AWA
+
+Moment / Skill
+
+1
+
+FOC
+
+When you play this gear, attach a
+moment to it from your hand.
+
+Given their often social nature, some travelers are
+drawn toward the life of a conciliator. Many others
+become explorers, or even shapers, wandering new
+paths of both conspicuousness and experience.
+
+Eagle Eye
+
+Gear / Tech / Expert
+
+Perfect Recall
+
+Moment / Skill
+
+Scout 3 path cards, then draw 1 path
+card.
+
+X
+
+FOC
+
+Play a moment from your discard pile
+without paying its energy cost (X is
+equal to the chosen moment’s cost).
+
+Paths We’ve Roamed Before
+
+Moment / Experience
+
+2
+
+AWA
+
+2 FOC
+
+2 AWA
+
+This card can be played at the time
+specified on the chosen moment.
+
+Adaptable Multitool
+
+Gear / Tool / Tech
+
+2
+
+FOC
+
+Exhaust (use 1 charge): Spend 1
+energy to gain 1 energy of any type.
+
+Choose up to 4 total moments or
+attributes from any number of Ranger
+discards. Place the chosen cards
+facedown on the top of their Ranger’s
+fatigue stack.
+
+3
+
+Strider
+
+1 SPI
+
+1 FIT
+
+charges
+
+Attribute / Innate
+
+Ironwool Boots
+
+Gear / Clothing
+
+Trail Mix
+
+Gear / Food / Aid
+
+Unique.
+Response: After you play a moment,
+soothe 1 fatigue.
+
+2
+
+FIT
+
+2 SPI
+
+2 FIT
+
+You can only commit this attribute
+when interacting with a trail.
+
+Meditation Pillow
+
+Gear / Aid
+
+2
+
+2
+
+SPI
+
+FOC +  (use 1 session): Meditate
+on your journey to shuffle a number
+of cards from your fatigue stack into
+your Ranger deck equal to your
+effort.
+
+Exhaust (use 1 morsel): Choose a
+Ranger. That Ranger soothes fatigue
+equal to the number of FIT in their
+energy pool.
+
+morsels
+
+1
+
+SPI
+
+3
+
+sessions
+
+37
+
+SPECIALTY: ARTIFICER
+Part engineer, part visionary artist, artificers are master
+craftspeople dedicated to the pursuit of knowledge. You
+are a student of the technology of the past, but you are
+also an innovator, forging the path with experimental
+technologies of the current age. Appropriately, artificer
+cards are primarily gear and attachments, and are
+typically a cut above those found elsewhere.
+
+LIFE AS AN ARTIFICER
+The Valley’s artificers are responsible for inventing
+and crafting new technologies, then making them
+available to their community. They also work to improve
+infrastructure like power generators and water systems.
+To become an artificer, one must become an apprentice,
+and the Valley’s greatest artificers have all apprenticed
+with Elder Mora Orlin of Spire. From her they learn how
+to operate the Carbon Forge and conjure anything
+
+from simple tools to construction materials to complex
+devices that test the limits of the imagination.
+Although artificers spend much of their time in the
+workshop, they spend an equal amount of time in the
+wild, testing their creations. The artificer Ben Amon,
+for example, who designed and constructed the
+mechanized glider known as the Swift, spends many
+a day flying the remarkable machine from one side of
+the Valley to the other. Each flight gives him insight
+into how he might improve the Swift’s performance and
+range, and as he’s fond of saying, “it’s a lot of fun.”
+Artificers who join the Rangers gain access to the
+well-equipped workshops of Lone Tree Station. They’re
+also encouraged more than most to delve into any
+ruins they discover while on patrol. Hidden within the
+ruins, it’s not unusual to find ancient pieces of Estian
+technology, preserved for centuries.
+
+Masterful Engineer
+
+38
+
+Exceptional Tinkerer
+
+Role
+
+Role
+
+Exhaust: Ready a tech.
+
+Exhaust: Spend 1 energy to add 1
+token to a tech.
+
+Gear / Book / Tech
+
+1
+
+AWA
+
+1 FOC
+
+1 AWA
+
+Ferinodex
+
+Infusion Canteen
+
+Gear / Tool / Tech
+
+Exhaust (use 1 profile): When a
+Ranger performs an Avoid test,
+commit 1 effort.
+
+When you play this gear, choose an
+aspect (you may place a spare energy
+token here as a reminder).
+
+4
+
+3
+
+Attachment / Tool / Tech
+
+2
+
+AWA
+
+Memorill Sketchpad
+
+Gear / Book / Tech
+
+Use 1 length: When the attached
+predator would ready, it remains
+exhausted.
+
+FIT + : Lead the animal to move
+the attached predator.
+
+0
+
+Gear / Tech
+
+1
+
+AWA
+
+Memlev Trekking Poles
+
+Response: After you succeed at an
+Avoid test, add 1 charge to this gear.
+
+1
+
+FIT
+
+1 SPI
+
+1 FIT
+
+charges
+
+Attachment / Tool
+
+A Stone in the River
+
+Moment / Wisdom
+
+The attached card gains the trail trait.
+
+2
+
+FIT
+
+2 SPI
+
+2 FIT
+
+Response: When 1 or more  is
+added to the attached trail, increase
+the number of  added by 1.
+
+Gear / Clothing / Tech
+
+Camoweave Cloak
+
+Gear / Clothing / Tech
+
+3 FIT
+
+Wrist-mounted Darter
+
+FIT +  (use 1 charge): Climb the
+obstructing terrain with the agility
+of a spider to move your  to an
+obstacle.
+
+Gear / Tech / Weapon
+
+2
+
+FIT
+
+FOC +  (use 1 dart): Shoot one
+of the featherlight darts to add  to
+a being equal to your effort. Whether
+you succeed or fail, dodge all cards
+between you and that being.
+
+3
+
+darts
+
+3
+
+charges
+
+3 SPI
+
+2
+
+2
+
+SPI
+
+Use 1 charge: When you would
+suffer 1 or more fatigue from a path
+card, reduce the fatigue suffered
+to 0.
+
+During your turn, you may treat
+obstacles as if they did not have the
+obstacle keyword.
+
+charges
+
+1
+
+SPI
+
+Response: After you succeed at
+an Avoid test, exhaust 1 additional
+being.
+
+Attach to a location or feature.
+
+Spiderpad Gloves
+
+2
+
+FOC
+
+3
+
+charges
+
+Trail Markers
+
+Gear / Tool / Tech
+
+Exhaust (use 1 charge): When you
+perform a Traverse test, use FOC
+instead of FIT.
+
+Discard this gear from play to
+exhaust beings equal to the number
+of charges on this gear.
+
+1
+
+Use 1 inkrill: When a Ranger
+interacts with a feature, commit 1
+effort.
+
+inkrills
+
+3 FOC
+
+3 AWA
+
+lengths
+
+Dayhowler
+
+2
+
+FOC
+
+Response: After a path card is
+cleared, add 1 inkrill to this gear.
+
+Attach to a predator.
+
+3
+
+Exhaust (use 1 sip): Gain 1 energy
+matching the chosen aspect.
+
+sips
+
+2 FOC
+
+2 AWA
+
+profiles
+
+Carbonforged Cable
+
+1
+
+FOC
+
+Thoroughly Prepared
+
+Moment / Experience
+
+1
+
+SPI
+
+Response: When a Ranger would
+suffer 1 or more fatigue, they soothe
+that amount of fatigue instead.
+
+39
+
+SPECIALTY: CONCILIATOR
+Even before you joined the Rangers, you were
+dedicated to helping the communities of the Valley,
+aiding anyone in need in matters great and small. As
+a conciliator, you are a natural mediator and protector
+and share a deep connection with other Valley Dwellers,
+having spent many years in their company. Conciliator
+cards specialize in connecting with the villagers,
+protecting them from predators, and navigating the
+habited areas of the Valley.
+
+LIFE AS A CONCILIATOR
+Sometimes, even in a place as idyllic as the Valley, there
+are grievances, and sometimes those grievances cannot
+be solved without the help of an impartial mediator,
+known as a conciliator. The conciliators of the Valley are
+responsible for maintaining peace in their communities
+and facilitating communication between its people.
+
+Conciliators work side-by-side with the Elders, heeding
+their wisdom and applying it as need arises. Typically,
+a conciliator will meet with the Elders weekly to discuss
+any notable events within the community and to
+strategize on how to improve harmony and assist any
+villager who might be in distress.
+Conciliators also serve as protectors. If a predator is
+spotted near the village, they will go out to meet it—
+either to peacefully encourage it to seek new hunting
+grounds or to give it a solid whack with a thumper. Both
+methods have proven equally effective.
+Conciliators who join the Rangers come well-equipped,
+as they already have years of experience providing aid
+to those in need.
+
+Voice of the Elders
+
+40
+
+Guardian
+
+Role
+
+Role
+
+Exhaust: Spend 1 energy to add 1
+token to an aid card.
+
+Exhaust: Reduce a being’s presence
+to 0 until the end of the turn.
+
+Attachment / Experience / Aid
+
+1
+
+AWA
+
+1 FOC
+
+1 AWA
+
+Surveyed Land
+
+Intention Translator
+
+Gear / Tech / Aid
+
+Exhaust (use 1 charge): When a
+Ranger performs a Connect test,
+commit 1 effort.
+
+Attach to a feature.
+Reduce the attached feature’s
+presence by 1 for each marker on this
+attachment.
+
+1
+
+3
+
+charges
+
+Tranquilisnare
+
+Attachment / Aid
+
+2
+
+AWA
+
+2 FOC
+
+marker
+
+2 AWA
+
+1
+
+FOC
+
+Safeguard
+
+Moment / Experience
+
+0
+
+FOC
+
+Response: When a Ranger would
+suffer an injury or  would be added
+to a being, cancel that effect. Suffer
+1 injury.
+
+Attach to a being.
+Reduce the attached being’s
+presence by 1 for each snare on this
+attachment.
+
+1
+
+One With Nature
+
+Moment / Wisdom
+
+3
+
+AWA
+
+3 FOC
+
+3 AWA
+
+snare
+
+Nidocyte Sentinel
+
+Attachment / Tech / Aid
+
+Reduce the presence of each card
+in play to 0 until the end of the next
+turn.
+
+3
+
+FOC
+
+Attach to a being.
+Use 1 alarm: Before a challenge
+effect on the attached being would
+resolve, cancel that effect.
+
+2
+
+Follow in Footsteps
+
+Moment / Skill
+
+1
+
+FIT
+
+1 SPI
+
+1 FIT
+
+alarms
+
+Ancestral Teachings
+
+Orlin Thumper
+
+Gear / Tech / Weapon
+
+1
+
+FIT
+
+1
+
+SPI
+
+Exhaust a being. Then add  to
+that being equal to the number of
+exhausted beings within reach.
+
+2 SPI
+
+2 FIT
+
+Response: After you succeed at a
+Connect test, add  to a feature
+equal to your effort. This is in
+addition to the test’s standard effect.
+
+Moment / Wisdom
+
+Pokodo the Ferret
+
+FIT +  (use 1 pulse): Strike [2]
+with a pulse of kinetic energy to add
+1 to a being and exhaust it. If you
+fail, discard 1 from that being; if you
+cannot, it fatigues you instead.
+
+Being / Companion / Mammal
+
+2
+
+SPI
+
+Friendly. Persistent. Unique.
+Exhaust: Discard 1 from this
+being to add 1 token to an Aid
+card and 2 to another being.
+
+3
+
+1
+1
+
+Tracked
+
+Attachment / Skill / Aid
+
+3
+
+FIT
+
+Attach to a being.
+Response: After a challenge effect
+on the attached being resolves, add
+1 track.
+
+3
+
+tracks
+
+Use 1 track: When a Ranger
+performs a test, commit 1 effort.
+
+3 SPI
+
+3 FIT
+
+pulses
+
+A Dear Friend
+
+Attachment / Experience / Expert
+
+1
+
+SPI
+
+Search the path deck and discard for
+a human and put them into play with
+this card attached.
+Response: After the attached human
+is cleared, move the  that were
+on it to any number of other beings,
+divided as you choose.
+
+41
+
+SPECIALTY: EXPLORER
+The people of the Valley are natural explorers, but you
+have an affinity and aptitude for exploration that has
+made you an expert of the wilds. The Valley cannot
+keep secrets from you for long. You’ve spent many
+years traversing the uncharted wilderness in search of
+resources both natural and otherwise for the people
+of the Valley. You are adept at charting new paths and
+overcoming any obstacle set before you. Explorer cards
+center around quickly placing progress on features and
+locations, scouting the path deck, and moving efficiently
+along the paths of the Valley map.
+
+LIFE AS AN EXPLORER
+The Valley’s explorers are responsible for taking on any
+task that requires someone to strike off into the
+wilderness. Straying too far from the village
+is not always a safe or advisable course
+
+of action for your average Valley Dweller to pursue, but
+it must be done. The Valley itself would not have been
+discovered had it not been for an explorer, and it was
+explorers who drafted the first maps of the Valley, which
+led to the settling of Branch, White Sky, Meadow, and
+Tumbledown in the years that followed.
+Explorers blazed the most heavily trafficked trails in the
+Valley, and they’re continually on the lookout for more
+efficient routes waiting to be discovered.
+Explorers who join the Rangers are encouraged to
+continue to do what they love. The more that the
+Rangers know of what exists beyond the borders of
+civilization, the better they can ensure the well-being of
+those they’ve sworn to protect.
+
+Undaunted Seeker
+
+42
+
+Peerless Pathfinder
+
+Role
+
+Role
+
+Exhaust: When you perform a test,
+dodge 1 card.
+
+Exhaust: Move your  to a feature.
+That feature fatigues you.
+
+Moment / Skill
+
+1
+
+AWA
+
+1 FOC
+
+1 AWA
+
+A Leaf in the Breeze
+
+Phonoscopic Headset
+
+Hydrolens Goggles
+
+Gear / Clothing / Tech
+
+2
+
+AWA
+
+Field Journal
+
+Gear / Book
+
+AWA +  (use 1 drop): Clarify
+your view of the environment
+around you to scout path cards equal
+to your effort, then draw 1 path card.
+
+3
+
+0
+
+Share in the Valley’s Secrets
+
+Moment / Wisdom
+
+3
+
+AWA
+
+3 FOC
+
+3 AWA
+
+Use 1 entry: When a Ranger
+interacts with a feature, commit 1
+effort.
+
+entries
+
+Hidden Trail
+
+Gear / Tech
+
+1
+
+FIT
+
+1 SPI
+
+Exhaust each obstacle. Suffer fatigue
+equal to the number of obstacles
+exhausted this way.
+
+1 FIT
+
+1
+
+FOC
+
+Response: When you rest, add
+entries equal to the number of FOC
+in your energy pool.
+
+drops
+
+Boundary Sensor
+
+1
+
+FOC
+
+Exhaust: When a Ranger scouts,
+increase the number of cards scouted
+by 1.
+
+2 FOC
+
+2 AWA
+
+Response: When you Traverse,
+dodge up to 3 cards.
+
+Gear / Clothing / Tech
+
+Walk With Me
+
+Exhaust (use 1 sensor): When a
+Ranger performs a Traverse test,
+commit 1 effort.
+
+Feature / Trail
+
+3
+
+FOC
+
+Response: When you travel,
+if this trail is attached to the
+location, travel to a location
+up to two paths away. Use the
+terrain of the second path when
+building the path deck.
+
+0
+
+Clear : Attach this trail to the
+location.
+
+3
+
+Moment / Experience
+
+1
+
+SPI
+
+Response: After you succeed at a
+Traverse test, add  to a being equal
+to your effort. This is in addition to
+the test’s standard effect.
+
+4
+
+Orlin Hiking Stave
+
+Gear / Tool / Tech / Weapon
+
+2
+
+FIT
+
+2 SPI
+
+2 FIT
+
+sensors
+
+Breathe Into It
+
+Exhaust (use 1 stride): Add 1 to
+a trail.
+
+3
+
+Moment / Skill
+
+2
+
+SPI
+
+Response: When you perform a
+test, discard any number of cards
+from your fatigue stack to commit 1
+effort to that test for every 2 cards
+discarded this way.
+
+FIT + : Strike [2] out with your
+walking implement to add 1 to a
+being for every 2 effort. If you fail,
+suffer 1 injury.
+
+Afforded by Nature
+
+Moment / Experience / Weapon
+
+3
+
+FIT
+
+Discard any number of  from a trail
+to add an equal number of  to a
+being.
+
+3 SPI
+
+3 FIT
+
+strides
+
+Cradled by the Earth
+
+Moment / Wisdom
+
+3
+
+SPI
+
+Choose a trail. Soothe fatigue equal
+to the number of  on that trail.
+This fatigue may be divided as you
+choose between all Rangers.
+
+43
+
+SPECIALTY: SHAPER
+Many years ago, you walked the perilous stair to the
+monastery at the top of Blind Peak where, through
+decades of study and practice in the Floating Tower,
+you learned to focus your intent and alter reality
+through the use of a conduit, a wonder of modern
+technology, inoperable by any but the most disciplined
+and self-aware. Shaper cards require you to include
+a special piece of gear called a conduit in your deck.
+With it, they make use of powerful abilities that can
+manipulate parts of the game system that are usually
+inaccessible to others.
+
+LIFE AS A SHAPER
+Shapers hold a unique place in the community. All
+shapers have studied at the monastery atop Blind
+Peak, but very few leave. Those who do often become
+hermits, living in relative solitude in remote and
+
+sometimes inhospitable locations, pondering the
+greater mysteries of the universe and mindfully shaping
+the circumstances of their lives.
+The few who rejoin their communities are held in high
+esteem, for a shaper must display tremendous discipline
+and wisdom to be entrusted with the power to alter the
+very fabric of reality, so they often serve as councilors to
+conciliators and Elders alike, providing unique insight.
+On occasion, groups of shapers will descend from the
+monastery to perform amazing feats that take years to
+complete—like shaping dolewood trees into the village
+of Branch or teasing stone from the Earth to create
+Stoneweaver Bridge.
+It is rare for a shaper to join the Rangers, but those who
+do are some of the most individually capable humans in
+the Valley.
+
+Prodigy of the Floating Tower
+Role
+
+44
+
+Exhaust: Choose a manifestation in
+your discard, and add it to your hand.
+
+Adherent of the First Ideal
+Role
+
+Exhaust: Scout 1 challenge card.
+
+Attachment / Manifestation / Nature
+
+1
+
+AWA
+
+1 SPI
+
+1 AWA
+
+Root Snare
+
+Harmonize
+
+Manifestation.
+
+Manifestation.
+
+Attach to a feature, and add 2 to it.
+
+Attach to a being within reach of
+any Ranger.
+
+Moment / Manifestation / Weapon
+
+0
+
+AWA
+
+Seen Through Cycles
+
+Manifestation. (To play a manifestation, discard 1 token from a
+conduit.)
+
+1
+
+3
+
+AWA
+
+Scepter of Harmony
+
+Conduit. Setup.
+Response: After you perform a test
+in which no challenge effects were
+resolved, add 1 song to this conduit.
+
+Exhaust (use X glints): Scout X path
+cards.
+
+1
+
+Moment / Manifestation
+
+1
+
+FIT
+
+Throng of Life
+
+Moment / Manifestation
+
+2
+
+FIT
+
+Response: When a Ranger reveals a
+challenge card during a test, choose
+which modifier to use from that card.
+Then choose an additional challenge
+icon to resolve for this test.
+
+2 FOC
+
+2 FIT
+
+Moment / Manifestation
+
+Novice Lens
+
+Gear / Tech
+
+Response: When you rest, if you
+have 1 or more FOC in your energy
+pool, scout 1 challenge card.
+
+1
+
+3
+
+FIT
+
+3 FOC
+
+3 FIT
+
+Add 1 to each feature and location.
+Then you may redistribute any
+number of  between them.
+
+strides
+
+2
+
+FOC
+
+Response: After you perform a test
+in which you committed 1 or more
+manifestations, gain 1 FOC.
+
+Manifestation. (To play a manifestation, discard 1 token from a
+conduit.)
+
+Gear / Conduit / Expert
+
+1
+
+FOC
+
+Manifestation (To play a manifestation, discard 1 token from a
+conduit.)
+
+Response: When drawing challenge
+cards during a test, draw and discard
+challenge cards until you draw one
+with a +1 in the used aspect. Use
+that challenge card for this test, and
+suffer fatigue equal the number of
+cards discarded this way.
+
+Staff of the Wanderer
+
+Exhaust (use X songs): Add X to
+a being.
+
+songs
+
+Manifestation.
+
+Shape the Earth
+
+3
+
+SPI
+
+Response: After the challenge
+deck is shuffled, add 1 glint to this
+conduit.
+
+1 FOC
+
+1 FIT
+
+Gear / Conduit / Expert
+
+Conduit. Setup.
+
+glints
+
+What Should Never Be
+
+SPI
+
+Choose a being in play, and shuffle it
+into the path deck. Then search the
+path deck and discard for a being
+and put it into play.
+
+3 SPI
+
+3 AWA
+
+Gear / Conduit / Expert
+
+2
+
+Moment / Manifestation
+
+Manifestation. (To play a manifestation, discard 1 token from a
+conduit.)
+
+AWA + : Strike with a whirling
+coil of wind and water to add  to
+a being equal to your effort. Then
+exhaust that being.
+
+Stave of the Sun
+
+SPI
+
+Response: After a challenge effect
+on the attached being resolves, the
+Ranger that played this card gains 1
+energy of any type.
+
+2 SPI
+
+2 AWA
+
+Response: When a Ranger performs
+a test, they may discard 1 or more 
+from the attached feature to dodge
+an equal number of cards in the
+same area.
+
+Sky Whip
+
+1
+
+Attachment / Manifestation
+
+Rod of the Clouds
+
+Gear / Conduit / Expert
+
+3
+
+FOC
+
+Conduit. Setup.
+
+Conduit. Setup.
+
+Response: After you succeed at a
+Traverse test, add 1 stride to this
+conduit.
+
+Response: Before you draw a
+challenge card, name a challenge
+icon; if that icon is on the drawn card,
+add 1 vision to this conduit.
+
+Exhaust (use X strides): Add X to
+a trail.
+
+1
+
+visions
+
+Exhaust (use X visions): Scout X
+Ranger cards.
+
+45
+
+PERSONALITY
+A Ranger’s personality helps determine the way in which
+they interact with the world around them. As you play,
+you might ask yourself, “What would my Ranger do
+in this situation?” This may be different than what you
+might do if you were in that situation. Making decisions
+based on your Ranger’s personality can be a lot of fun if
+you enjoy roleplaying.
+Each card in the personality set is an attribute, which
+means they can only be discarded for their approach
+
+46
+
+icons during tests. You can use personality cards to help
+balance out the mix of approach icons in your deck, but
+you can just as easily use them to make your Ranger
+even better at the things they’re already good at.
+If you’d like to lean into the roleplaying opportunities of
+the game, you can choose your personality cards based
+purely on theme. Choosing a card simply because you
+like the title, or because you like the accompanying
+narrative text, is a totally valid approach.
+
+INDEX
+A
+active........................................17, 22
+after................................................23
+along the way.............................9, 12
+Ambush..........................................26
+approach icon. ...............................16
+arrival setup....................................15
+Artificer.....................................33, 38
+Artisan......................................33, 34
+aspect.............................................32
+attach. ............................................22
+attachment.....................................13
+attribute. ........................................13
+Awareness......................................32
+
+B
+background....................................33
+before.............................................23
+being........................................12, 13
+
+C
+camp. .............................................14
+ending the day............................21
+Campaign.......................................28
+campaign guide entry..12, 15, 22, 28
+challenge deck...............................17
+challenge effect..............................17
+clear. ..............................................18
+collection........................................28
+commit...........................................16
+common test..................................12
+Conciliator................................33, 40
+Conduit. .........................................26
+
+D
+day. ............................................7, 29
+ending the day............................21
+discard............................................22
+Disconnected.................................26
+displaced........................................31
+dodge. ...........................................22
+
+E
+effort...............................................16
+energy............................................13
+entry.............................12, 15, 22, 28
+equip value. ...................................13
+exhaust...........................................22
+Explorer....................................33, 42
+
+F
+facedown........................................22
+faceup. ...........................................22
+fail. .................................................17
+
+fatigue............................................20
+ending the day............................21
+fatigues you....................................20
+Fatiguing........................................26
+feature......................................12, 13
+Fitness............................................32
+Focus..............................................32
+Forager.....................................33, 35
+Friendly. .........................................26
+
+G
+gear................................................13
+Grassland. ......................................15
+
+H
+harm...............................................18
+
+I
+injury. .............................................23
+ending the day............................21
+in play.............................................23
+interact...........................................12
+
+K
+keyword..........................................26
+
+L
+Lakeshore.......................................15
+lead Ranger....................................10
+
+M
+malady............................................31
+Manifestation. ................................26
+map................................................14
+mission......................................24, 30
+moment..........................................13
+Mountain Pass................................15
+move. .............................................23
+mulligan. ........................................10
+
+N
+notable event.................................29
+
+O
+objective. .......................................30
+Obstacle.........................................27
+Old-Growth....................................15
+outside interest...............................33
+
+P
+path................................................14
+path card..................................12, 24
+path deck. ......................................15
+Persistent........................................27
+personality................................32, 46
+pivotal location...............................15
+
+play. ...............................................13
+player area........................................9
+progress. ........................................18
+progress threshold
+on locations. ...............................14
+
+R
+Ranger card anatomy.....................25
+Ranger card....................................32
+Ranger token..................................18
+Ravine.............................................15
+ready...............................................22
+refresh. ...........................................15
+reshuffle. ........................................17
+response.........................................13
+rest. ................................................13
+reward. ...........................................31
+River. ..............................................15
+role.................................................33
+round..............................................12
+
+S
+scout...............................................23
+search.............................................23
+setup...............................................10
+Setup..............................................27
+Shaper......................................33, 44
+Shepherd..................................33, 36
+soothe. ...........................................20
+specialty. ........................................33
+Spirit...............................................32
+succeed..........................................17
+surroundings. ...................................9
+Swamp. ..........................................15
+
+T
+terrain.............................................15
+test. ................................................16
+threshold........................................18
+timing.............................................23
+token..............................................13
+tracking sheet.................................29
+travel. .............................................14
+Traveler.....................................33, 37
+turn.................................................12
+
+U
+Unique............................................27
+use..................................................13
+
+W
+weather. .........................................30
+when...............................................23
+within reach................................9, 12
+Woods............................................15
+
+47
+
+QUICK REFERENCE
+ICONS
+
+ROUND STRUCTURE
+page 12
+
+ASPECTS
+
+APPROACHES
+
+1. PATH CARDS
+
+AWA Awareness
+FOC Focus
+FIT Fitness
+SPI Spirit
+
+ Connection
+ Conflict
+ Exploration
+ Reason
+
+Each Ranger draws a path card.
+
+RULES
+
+CHALLENGE EFFECTS
+
+page 32
+
+page 16
+
+page 17
+
+ Reshuffle
+page 17
+
+ Per Ranger
+page 23
+
+ Guide Entry
+
+ Sun
+ Mountain
+ Crest
+
+page 28
+
+ Conditional
+page 17
+
+2. RANGER TURNS
+Rangers take turns until they have all rested. On a
+turn, each Ranger does one of the following:
+• Play a card
+• Perform a test
+• Rest
+
+3. TRAVEL
+If the location has progress equal to or exceeding its
+threshold, you may travel. If you do, clear the play
+area, choose a new location, and assemble the path
+deck for the new location.
+
+4. REFRESH
+
+TOKENS
+page 18
+
+ Progress
+ Harm
+ Ranger Token
+
+REMINDERS
+• When a card refers to “within reach,” it is referring
+to within reach of the Ranger resolving the effect
+unless otherwise specified.
+• When you suffer an injury, discard all cards in your
+fatigue stack.
+• During the refresh phase, suffer one fatigue for
+each injury you have.
+• If there is more than one Ranger who hasn’t
+rested this round, you must exhaust your role if
+you want to take a second turn in a row.
+• Each other Ranger token (apart from your own)
+on a card you are interacting with commits one
+additional effort to your test.
+• Exhausted cards cannot fatigue you.
+• When part of an ability cannot be resolved,
+resolve as much of the ability as you can (unless it
+follows a  icon).
+
+Suffer 1 fatigue for each injury. Draw 1 Ranger card
+and regain all energy. Ready all cards.
+
+TESTS
+page 16
+
+1. CHOOSE TEST
+Select the test to perform, and each card between
+you and your target fatigues you.
+
+2. COMMIT EFFORT
+Commit energy, approach icons, and effort from
+other effects to the test.
+
+3. APPLY MODIFIERS
+Draw a challenge card. Apply its modifier and any
+other modifiers to your effort.
+
+4. DETERMINE SUCCESS
+If your effort is equal to or greater than the test’s
+difficulty, you succeed. Resolve the effects of the test.
+
+5. RESOLVE CHALLENGE EFFECTS
+Resolve each challenge effect matching the icon on
+the drawn challenge card.
+
+48
+©2024 Earthborne Games LLC. P.O. Box 9092, St. Paul, MN, 55109. Earthborne Games and Earthborne Rangers, including logos and characters, are property of Earthborne Games.
+The Earthborne logo is a registered trademark of Earthborne Games. All rights reserved.
+
+
