@@ -50,3 +50,7 @@ export type StorageProvider = "local" | "shared";
 export const STORAGE_PROVIDERS = ["local", "shared"] as const;
 
 export const DEFAULT_LIST_SORT_ID = "list_default";
+
+// Stubs — Arkham-specific constants removed. Will be replaced in Phase 4.
+export const SPECIAL_CARD_CODES: Record<string, string> = {};
+export const PREVIEW_PACKS: string[] = [];
