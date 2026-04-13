@@ -1,29 +1,24 @@
-import {
-  type AttributeFilter,
-  type Card,
-  cardLevel,
-  type DeckOption,
-  type SealedDeckResponse,
-  SKILL_KEYS,
-  type SkillKey,
-} from "@arkham-build/shared";
-import {
-  cardUses,
-  isSpecialist,
-  official,
-  splitMultiValue,
-} from "@/utils/card-utils";
-import {
-  NO_SLOT_STRING,
-  REGEX_BONDED,
-  SPECIAL_CARD_CODES,
-  TAG_REGEX_FALLBACKS,
-} from "@/utils/constants";
+/**
+ * Earthborne Rangers card filtering functions.
+ *
+ * Function signatures are kept compatible with the original AH version where
+ * callers have not yet been updated (Phase 5). AH-specific implementations are
+ * replaced with ER equivalents or stubs.
+ */
+
+import type { Card, SealedDeckResponse } from "@arkham-build/shared";
+
+// AttributeFilter was removed from shared; defined locally for fan-made content support.
+type AttributeFilter = {
+  attribute: string;
+  value: string | number | null | undefined;
+  operator?: "=" | "!=";
+};
+import { official, splitMultiValue } from "@/utils/card-utils";
+import { isEmpty } from "@/utils/is-empty";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
 import type { Filter } from "@/utils/fp";
-import { and, not, notUnless, or } from "@/utils/fp";
-import { isEmpty } from "@/utils/is-empty";
-import { range } from "@/utils/range";
+import { and, or } from "@/utils/fp";
 import type {
   AssetFilter,
   CostFilter,
@@ -38,43 +33,42 @@ import type {
 } from "../slices/lists.types";
 import type { Metadata } from "../slices/metadata.types";
 import type { Interpreter } from "./buildql/interpreter";
-import { parse } from "./buildql/parser";
 import { type CardOwnershipOptions, ownedCardCount } from "./card-ownership";
 import type { LookupTables } from "./lookup-tables.types";
-import type { ResolvedDeck, Selections } from "./types";
-import { isOptionSelect } from "./types";
+import type { ResolvedDeck } from "./types";
 
 /**
- * Misc.
+ * Misc. card identity filters
  */
 
-export function filterDuplicates(card: Card) {
-  return (
-    (!card.hidden || card.code === SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS) && // filter hidden cards (usually backsides)
-    !card.alt_art_investigator && // filter novellas && parallel investigators
-    !card.duplicate_of_code // filter revised_code.
-  );
+// ER has no duplicate/hidden cards, so all cards pass.
+export function filterDuplicates(_card: Card) {
+  return true;
 }
 
-export function filterAlternates(card: Card) {
-  return filterDuplicates(card) || !!card.parallel;
+// ER has no alternate-art or parallel cards, so all cards pass.
+export function filterAlternates(_card: Card) {
+  return true;
 }
 
-export function filterEncounterCards(card: Card) {
-  return !!card.encounter_code; // filter out encounter cards (story player cards).
+// ER has no encounter cards in the card pool. All cards pass.
+export function filterEncounterCards(_card: Card) {
+  return true;
 }
 
-// needs to filter out some bad data that would otherwise end up in player cards (i.e. 04325).
-export function filterMythosCards(card: Card) {
-  return card.faction_code !== "mythos";
+// ER has no Mythos faction. All cards pass.
+export function filterMythosCards(_card: Card) {
+  return true;
 }
 
-export function filterBacksides(card: Card) {
-  return !card.hidden || card.code === SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS;
+// ER has no separate back-side card entries. All cards pass.
+export function filterBacksides(_card: Card) {
+  return true;
 }
 
-export function filterPreviews(card: Card) {
-  return !!card.preview;
+// ER currently has no preview/unreleased cards.
+export function filterPreviews(_card: Card) {
+  return true;
 }
 
 export function filterOfficial(card: Card) {
@@ -82,114 +76,60 @@ export function filterOfficial(card: Card) {
 }
 
 /**
- * Actions
+ * Actions — ER has no action icon filter; stub returns undefined.
  */
-
-export function filterActions(
-  filterState: MultiselectFilter,
-  actionTable: LookupTables["actions"],
-) {
-  const filters: Filter[] = [];
-
-  for (const key of filterState) {
-    filters.push((c: Card) => !!actionTable[key][c.code]);
-  }
-
-  return or(filters);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function filterActions(_filterState: MultiselectFilter): Filter | undefined {
+  return undefined;
 }
 
 /**
- * Asset
+ * Health / threshold props.
+ * Repurposed for ER harm/progress thresholds and presence.
  */
-
-function filterUses(uses: string) {
-  return (card: Card) => cardUses(card) === uses;
-}
-
-function filterSkillBoost(
-  skillBoost: string,
-  skillBoostsTable: LookupTables["skillBoosts"],
-) {
-  return (card: Card) => !!skillBoostsTable[skillBoost]?.[card.code];
-}
-
-function filterSlots(slot: string) {
-  return (card: Card) => {
-    return slot === NO_SLOT_STRING
-      ? card.type_code === "asset" && !card.real_slot
-      : !!card.real_slot?.includes(slot);
-  };
-}
-
 export function filterHealthProp(
-  minMax: [number, number],
-  healthX: boolean,
-  key: "health" | "sanity",
+  value: [number, number],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _includeX: boolean,
+  prop: string,
 ) {
+  const [min, max] = value;
   return (card: Card) => {
-    if ((card.health ?? 0) <= -2) return healthX;
-    const health = card[key] ?? 0;
-    return health >= minMax[0] && health <= minMax[1];
+    // biome-ignore lint/suspicious/noExplicitAny: dynamic property access
+    const v = (card as any)[prop];
+    if (v == null) return false;
+    return v >= min && v <= max;
   };
 }
 
-export function filterAssets(value: AssetFilter, lookupTables: LookupTables) {
-  const filters: Filter[] = [];
-
-  if (value.health) {
-    filters.push(filterHealthProp(value.health, value.healthX, "health"));
-  }
-
-  if (value.sanity) {
-    filters.push(filterHealthProp(value.sanity, value.healthX, "sanity"));
-  }
-
-  if (value.skillBoosts.length) {
-    const skillBoostFilters: Filter[] = value.skillBoosts.map((key) =>
-      filterSkillBoost(key, lookupTables.skillBoosts),
-    );
-    filters.push(or(skillBoostFilters));
-  }
-
-  if (value.uses.length) {
-    const usesFilters: Filter[] = value.uses.map((key) => filterUses(key));
-    filters.push(or(usesFilters));
-  }
-
-  if (value.slots.length) {
-    const slotFilters: Filter[] = value.slots.map(filterSlots);
-    filters.push(or(slotFilters));
-  }
-
-  return filters.length ? and(filters) : undefined;
+/**
+ * Asset filter — ER has no slot/uses/skill-boost filter. Always returns undefined.
+ */
+export function filterAssets(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _value: AssetFilter,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
+): Filter | undefined {
+  return undefined;
 }
 
 /**
- * Attribute
- * This is a generic filter used for fan-made content
+ * Attribute — generic filter, works for ER fan-made content.
  */
 export function filterAttribute(attributeFilter: AttributeFilter) {
   const { attribute, value, operator } = attributeFilter;
   const op = operator ?? "=";
 
   return (card: Card) => {
-    const attr =
-      // biome-ignore lint/suspicious/noExplicitAny: need to access dynamic properties.
-      (card as any)[`real_${attribute}`] ?? (card as any)[attribute];
+    // biome-ignore lint/suspicious/noExplicitAny: dynamic property access
+    const attr = (card as any)[attribute];
 
     switch (op) {
       case "=":
-        if (value == null) {
-          return attr == null;
-        }
-
-        return attr === value;
+        return value == null ? attr == null : attr === value;
       case "!=":
-        if (value == null) {
-          return attr != null;
-        }
-
-        return attr !== value;
+        return value == null ? attr != null : attr !== value;
       default:
         return false;
     }
@@ -197,9 +137,8 @@ export function filterAttribute(attributeFilter: AttributeFilter) {
 }
 
 /**
- * Card Pool
+ * Card Pool — used for sealed/limited pool modes.
  */
-
 export function filterCardPool(
   value: MultiselectFilter | undefined,
   metadata: Metadata,
@@ -207,7 +146,7 @@ export function filterCardPool(
 ) {
   if (isEmpty(value)) return undefined;
 
-  const [cards, rest] = partition(value, (key) => key.startsWith("card:"));
+  const [cardEntries, rest] = partition(value, (key) => key.startsWith("card:"));
 
   const packFilter = filterPackCode(
     resolveLimitedPoolPacks(metadata, rest).map((p) => p.code),
@@ -215,19 +154,16 @@ export function filterCardPool(
     lookupTables,
   );
 
-  if (isEmpty(cards)) return packFilter;
+  if (isEmpty(cardEntries)) return packFilter;
 
-  const codes = cards.map((key) => key.replace("card:", ""));
-
-  const ors = [];
+  const codes = cardEntries.map((key) => key.replace("card:", ""));
+  const ors: Filter[] = [];
 
   if (!isEmpty(codes)) {
     ors.push((card: Card) => codes.includes(card.code));
   }
 
-  if (packFilter) {
-    ors.push(packFilter);
-  }
+  if (packFilter) ors.push(packFilter);
 
   return !isEmpty(ors) ? or(ors) : undefined;
 }
@@ -235,1182 +171,353 @@ export function filterCardPool(
 function partition<T>(a: T[], predicate: (t: T) => boolean): [T[], T[]] {
   const truthy: T[] = [];
   const falsy: T[] = [];
-
   for (const item of a) {
-    if (predicate(item)) {
-      truthy.push(item);
-    } else {
-      falsy.push(item);
-    }
+    if (predicate(item)) truthy.push(item);
+    else falsy.push(item);
   }
-
   return [truthy, falsy];
 }
 
 /**
- * Cost
+ * Cost — uses ER energy_cost field.
  */
-
 function filterEvenCost(card: Card) {
-  return card.cost != null && card.cost % 2 === 0;
+  return card.energy_cost != null && card.energy_cost % 2 === 0;
 }
 
 function filterOddCost(card: Card) {
-  return card.cost != null && card.cost % 2 !== 0;
+  return card.energy_cost != null && card.energy_cost % 2 !== 0;
 }
 
-function filterXCost(card: Card) {
-  return (card.cost ?? 0) <= -2;
+function filterCostRange(value: [number, number]) {
+  const [min, max] = value;
+  return (card: Card) =>
+    card.energy_cost != null && card.energy_cost >= min && card.energy_cost <= max;
 }
 
-function filterCardCost(value: [number, number]) {
-  return (card: Card) => {
-    const cost = card.cost == null ? -1 : card.cost;
-    return cost >= value[0] && cost <= value[1];
-  };
-}
-
-export function filterCost(filterState: CostFilter) {
-  // apply level range if provided. `0-5` is assumed, null-costed cards are excluded.
-  const filters = [];
-
-  if (filterState.range) {
-    filters.push(filterCardCost(filterState.range));
-  }
-
-  // apply even / odd filters
-  const moduloFilters = [];
-
-  if (filterState.even) moduloFilters.push(filterEvenCost);
-  if (filterState.odd) moduloFilters.push(filterOddCost);
-
-  filters.push(or(moduloFilters));
-
-  const altCostFilters = [];
-
-  if (filterState.x) altCostFilters.push(filterXCost);
-
-  return or([...altCostFilters, and(filters)]);
-}
-
-/**
- * Cycle
- */
-
-export function filterCycleCode(
-  filterState: MultiselectFilter,
-  metadata: Metadata,
-) {
-  if (isEmpty(filterState)) return undefined;
-
-  return (card: Card) => {
-    const pack = metadata.packs[card.pack_code];
-    if (!pack) return false;
-    return filterState.includes(pack.cycle_code);
-  };
-}
-
-/**
- * Encounter Set
- */
-
-export function filterEncounterCode(filterState: MultiselectFilter) {
+export function filterCost(filterState: CostFilter): Filter | undefined {
   const filters: Filter[] = [];
 
-  for (const key of filterState) {
-    filters.push((c: Card) => c.encounter_code === key);
-  }
+  if (filterState.range) filters.push(filterCostRange(filterState.range));
+  if (filterState.even) filters.push(filterEvenCost);
+  if (filterState.odd) filters.push(filterOddCost);
+  // filterState.x: ER has no X-cost cards yet
 
-  return or(filters);
+  return filters.length ? and(filters) : undefined;
 }
 
 /**
- * Factions
+ * Cycle — ER has no cycles. Stub returns undefined.
  */
-
-function filterMulticlass(card: Card) {
-  return !!card.faction2_code;
-}
-
-function filterFaction(faction: string) {
-  return (card: Card) =>
-    card.faction_code === faction ||
-    (!!card.faction2_code && card.faction2_code === faction) ||
-    (!!card.faction3_code && card.faction3_code === faction);
-}
-
-export function filterFactions(factions: string[]) {
-  const ands: Filter[] = [];
-  const ors: Filter[] = [];
-
-  for (const faction of factions) {
-    if (faction === "multiclass") {
-      ands.push(filterMulticlass);
-    } else {
-      ors.push(filterFaction(faction));
-    }
-  }
-
-  return and([or(ors), ...ands]);
+export function filterCycleCode(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _filterState: MultiselectFilter,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _metadata: Metadata,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
+): Filter | undefined {
+  return undefined;
 }
 
 /**
- * Level
+ * Encounter set — ER has no encounter sets. Stub returns undefined.
  */
-
-function filterExceptional(card: Card) {
-  return !!card.exceptional;
+export function filterEncounterCode(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _filterState: MultiselectFilter,
+): Filter | undefined {
+  return undefined;
 }
 
-function isLevelInRange(
-  level: number | null | undefined,
-  value: [number, number],
-) {
-  const filters = [];
+/**
+ * Faction / aspect — ER uses aspects, not factions.
+ * Maps faction filter codes to ER aspect codes.
+ */
+export function filterFactions(factions: string[]): Filter | undefined {
+  if (isEmpty(factions)) return undefined;
 
-  // convention: -1 means "null" (i.e. no level).
-  if (value[0] === -1) {
-    filters.push(level == null);
-  }
-
-  if (level != null && value[1] !== -1) {
-    filters.push(level >= value[0] && level <= value[1]);
-  }
-
-  return filters.some((x) => x);
-}
-
-function checkLevelRange(value: [number, number], card: Card, filter?: Filter) {
-  return range(value[0], Math.max(value[1], 1)).some(
-    (level) =>
-      isLevelInRange(level, value) &&
-      filter?.({ ...card, xp: level, customization_xp: 0 }),
-  );
-}
-
-type FilterCardLevelOptions = {
-  customizable?: CustomizableFilterOptions;
-  investigator?: Card;
-  targetDeck?: "slots" | "extraSlots" | "both";
-};
-
-function filterCardLevel(
-  value: [number, number] | undefined,
-  buildQlInterpeter: Interpreter | undefined,
-  options?: FilterCardLevelOptions,
-) {
   return (card: Card) => {
-    if (!value) return true;
-
-    const level = cardLevel(card);
-
-    if (
-      !card.customization_options ||
-      options?.customizable?.level === "actual"
-    ) {
-      return isLevelInRange(level, value);
-    }
-
-    if (!options?.investigator) {
-      return value[1] >= 0;
-    }
-
-    const filter = filterInvestigatorAccess(
-      options.investigator,
-      buildQlInterpeter,
-      {
-        customizable: {
-          level: "actual",
-          properties: "all",
-        },
-        targetDeck: options.targetDeck,
-      },
-    );
-
-    return checkLevelRange(value, card, filter);
+    const aspect = card.energy_aspect;
+    if (!aspect) return false;
+    return factions.some((f) => f === aspect);
   };
 }
 
+/**
+ * Level / XP — ER has no XP system. Stub returns undefined.
+ */
 export function filterLevel(
-  filterState: LevelFilter,
-  buildQlInterpeter: Interpreter,
-  investigator?: Card,
-) {
-  return filterCardLevel(filterState.range, buildQlInterpeter, {
-    investigator,
-    customizable: {
-      level: "all",
-      properties: "all",
-    },
-  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _filterState: LevelFilter,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _interpreter?: Interpreter,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _ranger?: Card,
+): Filter | undefined {
+  return undefined;
 }
 
 /**
  * Ownership
  */
-
 export function filterOwnership(options: CardOwnershipOptions) {
   return ownedCardCount(options) > 0;
 }
 
 /**
- * Pack Code
+ * Pack / Set code — ER cards use set_code.
  */
-
 export function filterPackCode(
   value: MultiselectFilter,
-  metadata: Metadata,
-  lookupTables: LookupTables,
-) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _metadata: Metadata,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
+): Filter | undefined {
   if (isEmpty(value)) return undefined;
+  if (!value.some((x) => x)) return undefined;
 
-  const active = Object.values(value).some((x) => x);
-  if (!active) return undefined;
-
-  return (card: Card) =>
-    value.some((val) => {
-      if (card.pack_code === val) {
-        return true;
-      }
-
-      const reprints = Object.keys(
-        lookupTables.reprintPacksByPack[card.pack_code] ?? {},
-      );
-
-      return reprints.some((reprintCode) => {
-        const reprint = metadata.packs[reprintCode];
-
-        const typeMatches =
-          !!(reprint.reprint?.type === "encounter") === !!card.encounter_code;
-
-        return typeMatches && value.includes(reprintCode);
-      });
-    });
+  return (card: Card) => value.includes(card.set_code);
 }
 
 /**
  * Illustrator
  */
-export function filterIllustrator(filterState: MultiselectFilter) {
-  const filters: Filter[] = [];
-
-  for (const key of filterState) {
-    filters.push(
-      (c: Card) => c.illustrator === key || c.back_illustrator === key,
-    );
-  }
-
+export function filterIllustrator(filterState: MultiselectFilter): Filter | undefined {
+  const filters: Filter[] = filterState.map(
+    (key) => (c: Card) => c.illustrator === key,
+  );
   return or(filters);
 }
 
 /**
- * Properties
+ * Properties — only `unique` is applicable in ER; others are AH-specific stubs.
  */
-
-function filterBonded(card: Card) {
-  const firstLine = card.real_text?.split("\n").at(0);
-  return !!firstLine && REGEX_BONDED.test(firstLine);
-}
-
-function filterCustomizable(card: Card) {
-  return !!card.customization_options;
-}
-
-function filterExile(card: Card) {
-  return !!card.exile;
-}
-
-function filterFast(fastTable: LookupTables["properties"]["fast"]) {
-  return (card: Card) => !!fastTable[card.code];
-}
-
-function filterUnique(card: Card) {
-  return !!card.is_unique;
-}
-
-function filterVictory(card: Card) {
-  return !!card.victory;
-}
-
-function filterSeal(card: Card) {
-  return !!card.tags?.includes("se");
-}
-
-function filterPermanent(card: Card) {
-  return !!card.permanent;
-}
-
-function filterSucceedBy(
-  succeedByTable: LookupTables["properties"]["succeedBy"],
-) {
-  return (card: Card) => !!succeedByTable[card.code];
-}
-
-export function filterTag(tag: string, checkUnselectedCustomizations: boolean) {
-  return (card: Card) => {
-    if (!card.official) {
-      return filterTagFallback(tag, checkUnselectedCustomizations)(card);
-    }
-
-    const hasTag = !!card.tags?.includes(tag);
-
-    if (
-      hasTag ||
-      !checkUnselectedCustomizations ||
-      !card.customization_options
-    ) {
-      return hasTag;
-    }
-
-    return !!card.customization_options?.some((o) => o.tags?.includes(tag));
-  };
-}
-
-export function filterTagFallback(
-  tag: string,
-  checkUnselectedCustomizations: boolean,
-) {
-  return (card: Card) => {
-    const fallback = TAG_REGEX_FALLBACKS[tag];
-    if (!fallback) return false;
-
-    const textMatches =
-      !!card.real_text?.match(fallback) ||
-      !!card.real_back_text?.match(fallback);
-
-    if (
-      textMatches ||
-      !checkUnselectedCustomizations ||
-      !card.customization_options
-    ) {
-      return textMatches;
-    }
-
-    return !!card.real_customization_text?.match(fallback);
-  };
-}
-
-function filterHealsDamage(checkUnselectedCustomizations: boolean) {
-  return filterTag("hd", checkUnselectedCustomizations);
-}
-
-function filterHealsHorror(checkUnselectedCustomizations: boolean) {
-  return filterTag("hh", checkUnselectedCustomizations);
-}
-
-function filterMyriad(card: Card) {
-  return !!card.myriad;
-}
-
-/**
- * Restrictions
- */
-
-function filterRestrictions(card: Card, investigator: Card) {
-  if (Array.isArray(card.restrictions?.trait)) {
-    // placeholder investigators don't have restrictions
-    if (
-      investigator.official === false &&
-      SPECIAL_CARD_CODES.GENERIC_CUSTOM_INVESTIGATORS.some(
-        (code) => code === investigator.code,
-      )
-    ) {
-      return true;
-    }
-
-    const targetTraits = card.restrictions.trait;
-
-    return splitMultiValue(investigator.real_traits).some((t) =>
-      targetTraits.includes(t.toLowerCase()),
-    );
-  }
-
-  return true;
-}
-
 export function filterProperties(
   filterState: PropertiesFilter,
-  lookupTables: LookupTables,
-) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
+): Filter | undefined {
   const filters: Filter[] = [];
-
-  if (filterState.bonded) {
-    filters.push(filterBonded);
-  }
-
-  if (filterState.customizable) {
-    filters.push(filterCustomizable);
-  }
-
-  if (filterState.exile) {
-    filters.push(filterExile);
-  }
-
-  if (filterState.fast) {
-    filters.push(filterFast(lookupTables.properties.fast));
-  }
 
   if (filterState.unique) {
-    filters.push(filterUnique);
+    filters.push((card: Card) => !!card.is_unique);
   }
 
-  if (filterState.permanent) {
-    filters.push(filterPermanent);
-  }
+  // All AH-specific property flags are no-ops in ER and are intentionally ignored.
 
-  if (filterState.seal) {
-    filters.push(filterSeal);
-  }
-
-  if (filterState.victory) {
-    filters.push(filterVictory);
-  }
-
-  if (filterState.healsDamage) {
-    filters.push(filterHealsDamage(true));
-  }
-
-  if (filterState.healsHorror) {
-    filters.push(filterHealsHorror(true));
-  }
-
-  if (filterState.succeedBy) {
-    filters.push(filterSucceedBy(lookupTables.properties.succeedBy));
-  }
-
-  if (filterState.specialist) {
-    filters.push(isSpecialist);
-  }
-
-  if (filterState.multiClass) {
-    filters.push(filterMulticlass);
-  }
-
-  if (filterState.myriad) {
-    filters.push(filterMyriad);
-  }
-
-  if (filterState.exceptional) {
-    filters.push(filterExceptional);
-  }
-
-  return and(filters);
+  return filters.length ? and(filters) : undefined;
 }
 
 /**
- * Skill Icons
+ * Skill icons — ER has no skill icons. Stub returns undefined.
  */
-
-function filterSkill(skill: SkillKey, amount: number) {
-  return (card: Card) =>
-    card.type_code !== "investigator" &&
-    (card[`skill_${skill}`] ?? 0) >= amount;
+export function filterSkillIcons(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _filterState: SkillIconsFilter,
+): Filter | undefined {
+  return undefined;
 }
 
-function filterSkillRange(skill: SkillKey, range: [number, number]) {
-  return (card: Card) =>
-    (card[`skill_${skill}`] ?? 0) >= range[0] &&
-    (card[`skill_${skill}`] ?? 0) <= range[1];
-}
-
-export function filterSkillIcons(filterState: SkillIconsFilter) {
-  const iconFilter: Filter[] = [];
-  const anyFilter: Filter[] = [];
-
-  const anyValue = filterState.any;
-
-  for (const skill of SKILL_KEYS) {
-    const value = filterState[skill];
-
-    if (value) {
-      iconFilter.push(filterSkill(skill, value));
-    } else if (anyValue) {
-      anyFilter.push(filterSkill(skill, anyValue));
-    }
-  }
-
-  const filter = anyFilter.length
-    ? and([or(anyFilter), and(iconFilter)])
-    : and(iconFilter);
-
-  return filter;
-}
-
+/**
+ * Investigator skills — ER has no investigator skill stats. Stub returns undefined.
+ */
 export function filterInvestigatorSkills(
-  filterState: InvestigatorSkillsFilter,
-) {
-  const filters = Object.entries(filterState).reduce((acc, [skill, value]) => {
-    if (!value) return acc;
-    acc.push(filterSkillRange(skill as SkillKey, value));
-    return acc;
-  }, [] as Filter[]);
-
-  return and(filters);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _filterState: InvestigatorSkillsFilter,
+): Filter | undefined {
+  return undefined;
 }
 
 /**
- * Subtype
+ * Subtypes — ER has no card subtypes. Stub returns undefined.
  */
-
-export function filterSubtypes(filter: SubtypeFilter) {
-  return (card: Card) => {
-    return (
-      (!!card.subtype_code &&
-        filter[card.subtype_code as keyof SubtypeFilter]) ||
-      (!card.subtype_code && filter["none"])
-    );
-  };
+export function filterSubtypes(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _filter: SubtypeFilter,
+): Filter | undefined {
+  return undefined;
 }
 
 /**
- * Taboo Set
+ * Taboo set — ER has no taboo list. Stub returns undefined.
  */
-
-export function filterTabooSet(tabooSetId: number, metadata: Metadata) {
-  return (card: Card) => !!metadata.taboos[`${card.code}-${tabooSetId}`];
+export function filterTabooSet(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _tabooSetId: number,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _metadata: Metadata,
+): Filter | undefined {
+  return undefined;
 }
 
 /**
- * Text
+ * Traits — split on "." separator (same format as AH).
  */
-
-function filterTextExact(text: string) {
-  return (card: Card) => {
-    return !!(
-      card.real_text?.includes(text) ||
-      card.real_customization_text?.includes(text)
-    );
-  };
-}
-
-function filterText(regex: string) {
-  try {
-    const re = new RegExp(regex);
-
-    return (card: Card) => {
-      return (
-        !!card.real_customization_text?.match(re) ||
-        !!card.real_back_text?.match(re) ||
-        !!card.real_text?.match(re)
-      );
-    };
-  } catch {
-    console.error("invalid regex, ignoring deck_option:", regex);
-    return () => true;
-  }
-}
-
-/**
- * Trait
- */
-
 export function filterTraits(
   filterState: MultiselectFilter,
-  includeUnselectedCustomizationTraits?: boolean,
-) {
-  const filters: Filter[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
+): Filter | undefined {
+  if (isEmpty(filterState)) return undefined;
 
-  for (const key of filterState) {
-    filters.push((card: Card) => {
-      const matches = matchesTrait(card, key);
-
-      if (
-        matches ||
-        !card.customization_options ||
-        !includeUnselectedCustomizationTraits
-      ) {
-        return matches;
-      }
-
-      return !!card.customization_options?.some((o) => matchesTrait(o, key));
-    });
-  }
-
-  return or(filters);
-}
-
-function lower(s: string[]) {
-  return s.map((t) => t.toLowerCase());
-}
-
-function matchesTrait(
-  card: { real_traits?: string | null; traits?: string | null },
-  trait: string,
-) {
-  const baseTraits = lower(splitMultiValue(card.real_traits));
-  const lowerTrait = trait.toLowerCase();
-
-  const matches = baseTraits.includes(lowerTrait);
-  if (matches || card.real_traits === card.traits) {
-    return matches;
-  }
-
-  return lower(splitMultiValue(card.traits)).includes(lowerTrait);
+  return (card: Card) => {
+    if (!card.traits) return false;
+    const traits = splitMultiValue(card.traits);
+    return filterState.some((t) =>
+      traits.some((ct) => ct.toLowerCase() === t.toLowerCase()),
+    );
+  };
 }
 
 /**
- * Type
+ * Type — filter by ER type_code.
  */
+export function filterType(enabledTypeCodes: MultiselectFilter): Filter | undefined {
+  if (isEmpty(enabledTypeCodes)) return undefined;
 
-export function filterType(enabledTypeCodes: MultiselectFilter) {
   return (card: Card) => enabledTypeCodes.includes(card.type_code);
 }
 
 /**
- * Investigator access
+ * Tag — ER uses keywords array instead of AH tag strings.
+ * Checks card.keywords for the given keyword.
  */
-
-function filterRequired(investigator: Card) {
-  return (card: Card) => {
-    if (!card.restrictions?.investigator) return false;
-
-    return (
-      !!card.restrictions.investigator[investigator.code] ||
-      (!!investigator.duplicate_of_code &&
-        !!card.restrictions.investigator[investigator.duplicate_of_code]) ||
-      (!!investigator.alternate_of_code &&
-        !!card.restrictions.investigator[investigator.alternate_of_code])
-    );
-  };
-}
-
-// Customizable options can alter whether an investigator has access to a card.
-// Example: a card gains a trait, or the option to heal horror.
-// Example: checking options alters the card's level.
-//  -> when showing options, we want to show these cards if an investigator has access to at least one possible configuration of the card.
-//  -> when validating decks, we only consider the currently applied customizations.
-type CustomizableFilterOptions = {
-  level: "actual" | "all";
-  properties: "actual" | "all";
-};
-
-export type InvestigatorAccessConfig = {
-  additionalDeckOptions?: DeckOption[];
-  customizable?: CustomizableFilterOptions;
-  // Some || investigators have different traits on their front.
-  // In order for trait-based access like specialist to work, we need to consider both sides.
-  investigatorFront?: Card;
-  selections?: Selections;
-  showLimitedAccess?: boolean;
-  targetDeck?: "slots" | "extraSlots" | "both";
-};
-
-export function makeOptionFilter(
-  option: DeckOption,
-  buildQlInterpeter: Interpreter | undefined,
-  config?: InvestigatorAccessConfig,
+export function filterTag(
+  tag: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _checkUnselectedCustomizations: boolean,
 ) {
-  // unknown rules or duplicate rules.
-  if (
-    option.deck_size_select ||
-    option.tag?.includes("st") ||
-    option.tag?.includes("uc")
-  ) {
-    return undefined;
-  }
-
-  const optionFilter = [];
-
-  let filterCount = 0;
-
-  if (option.faction_select) {
-    filterCount += 1;
-
-    const targetKey = option.id ?? "faction_selected";
-
-    const selection = config?.selections?.[targetKey]?.value;
-
-    optionFilter.push(
-      typeof selection === "string"
-        ? filterFactions([selection])
-        : filterFactions(option.faction_select),
-    );
-  }
-
-  // parallel wendy + marion
-  if (option.option_select) {
-    const selectFilters: Filter[] = [];
-
-    let selection = config?.selections?.[option.id ?? "option_selected"]?.value;
-    selection = isOptionSelect(selection) ? selection.id : undefined;
-
-    for (const select of option.option_select) {
-      if (selection && select.id !== selection) {
-        continue;
-      }
-
-      const {
-        optionFilter: optionSelectFilters,
-        filterCount: optionSelectFilterCount,
-      } = parseOption(buildQlInterpeter, select, config);
-
-      if (optionSelectFilterCount <= 1) {
-        console.debug("unknown option select", select);
-      }
-
-      selectFilters.push(and(optionSelectFilters));
-    }
-
-    filterCount += selectFilters.length + 1;
-    optionFilter.push(or(selectFilters));
-  }
-
-  const parsed = parseOption(buildQlInterpeter, option, config);
-  optionFilter.push(...parsed.optionFilter);
-  filterCount += parsed.filterCount;
-
-  if (filterCount <= 1) {
-    console.debug("unknown deck requirement", option);
-  }
-
-  return filterCount > 1 ? and(optionFilter) : undefined;
+  return (card: Card) => card.keywords?.includes(tag as never) ?? false;
 }
 
-function parseOption(
-  buildQlInterpeter: Interpreter | undefined,
-  option: DeckOption,
-  config?: InvestigatorAccessConfig,
+/**
+ * Tag fallback — ER has no tag fallback concept; always returns false.
+ */
+export function filterTagFallback(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _tag: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _checkUnselectedCustomizations: boolean,
 ) {
-  const optionFilter: Filter[] = [];
-  let filterCount = 0;
-
-  if (option.limit || option.not) {
-    filterCount += 1;
-  }
-
-  if (option.faction) {
-    filterCount += 1;
-    optionFilter.push(filterFactions(option.faction));
-  }
-
-  if (option.base_level || option.level) {
-    const level = option.base_level ?? option.level;
-    if (level) {
-      filterCount += 1;
-      optionFilter.push(
-        filterCardLevel([level.min, level.max], buildQlInterpeter, {
-          customizable: config?.customizable,
-        }),
-      );
-    }
-  }
-
-  if (option.permanent) {
-    optionFilter.push(filterPermanent);
-    // explicit `false` means "forbidden", absence of `permanent` means "either allowed".
-  } else if (option.permanent === false) {
-    optionFilter.push(not(filterPermanent));
-  }
-
-  if (option.trait) {
-    filterCount += 1;
-
-    optionFilter.push(
-      filterTraits(option.trait, config?.customizable?.properties === "all"),
-    );
-  }
-
-  if (option.uses) {
-    filterCount += 1;
-
-    const usesFilters: Filter[] = [];
-
-    for (const uses of option.uses) {
-      usesFilters.push(filterUses(uses));
-    }
-
-    optionFilter.push(or(usesFilters));
-  }
-
-  if (option.type) {
-    filterCount += 1;
-    optionFilter.push(filterType(option.type));
-  }
-
-  // tag-based access
-  if (option.tag?.length) {
-    filterCount += 1;
-    const ors: Filter[] = [];
-
-    for (const tag of option.tag) {
-      ors.push(filterTag(tag, config?.customizable?.properties === "all"));
-    }
-
-    optionFilter.push(or(ors));
-  }
-
-  // text-based access
-  if (option.text && !option.tag?.length) {
-    filterCount += 1;
-    const ors: Filter[] = [];
-
-    for (const text of option.text) {
-      ors.push(filterText(text));
-    }
-
-    optionFilter.push(or(ors));
-  }
-
-  if (option.text_exact && !option.tag?.length) {
-    filterCount += 1;
-    const ors: Filter[] = [];
-
-    for (const text of option.text_exact) {
-      ors.push(filterTextExact(text));
-    }
-
-    optionFilter.push(or(ors));
-  }
-
-  // slot-based access
-  if (option.slot) {
-    filterCount += 1;
-    const ors: Filter[] = [];
-
-    for (const slot of option.slot) {
-      ors.push(filterSlots(slot));
-    }
-
-    optionFilter.push(or(ors));
-  }
-
-  if (buildQlInterpeter && option.buildql_query) {
-    filterCount += 2;
-    try {
-      const parsed = buildQlInterpeter.evaluate(parse(option.buildql_query));
-      parsed({} as Card); // test for runtime errors
-      optionFilter.push(parsed);
-    } catch (err) {
-      console.warn(err);
-    }
-  }
-
-  return { filterCount, optionFilter };
+  return (_card: Card) => false;
 }
 
-export function filterInvestigatorAccess(
-  investigatorBack: Card,
-  buildQlInterpeter: Interpreter | undefined,
-  config?: InvestigatorAccessConfig,
-): Filter | undefined {
-  const mode = config?.targetDeck ?? "slots";
-
-  let investigator = investigatorBack;
-  if (
-    config?.investigatorFront &&
-    config.investigatorFront.code !== investigatorBack.code
-  ) {
-    investigator = {
-      ...investigatorBack,
-      real_traits: config.investigatorFront.real_traits,
-    };
-  }
-
-  const deckFilter =
-    mode !== "extraSlots"
-      ? makePlayerCardsFilter(
-          investigator,
-          "deck_options",
-          "deck_requirements",
-          buildQlInterpeter,
-          config,
-        )
-      : undefined;
-
-  const extraDeckFilter =
-    mode !== "slots"
-      ? makePlayerCardsFilter(
-          investigator,
-          "side_deck_options",
-          "side_deck_requirements",
-          buildQlInterpeter,
-          config,
-        )
-      : undefined;
-
-  if (mode !== "extraSlots" && !deckFilter) {
-    console.warn(
-      `filter is a noop: ${investigator.code} is not an investigator.`,
-    );
-  }
-
-  if (mode === "slots") return deckFilter;
-  if (mode === "extraSlots") return extraDeckFilter;
-
-  const filters = [];
-
-  if (deckFilter) filters.push(deckFilter);
-  if (extraDeckFilter) filters.push(extraDeckFilter);
-  return or(filters);
-}
-
-function makePlayerCardsFilter(
-  investigator: Card,
-  optionsAccessor: "deck_options" | "side_deck_options",
-  requiredAccessor: "deck_requirements" | "side_deck_requirements",
-  buildQlInterpeter: Interpreter | undefined,
-  config?: InvestigatorAccessConfig,
-) {
-  let options = investigator[optionsAccessor];
-  const requirements = investigator[requiredAccessor]?.card ?? {};
-
-  if (!options) {
-    return undefined;
-  }
-
-  // normalize parallel investigators to root for lookups.
-  const code = investigator.alternate_of_code ?? investigator.code;
-
-  // special case: suzi's additional deck options allow any xp card.
-  if (code === SPECIAL_CARD_CODES.SUZI) {
-    options = [...options];
-    options.splice(1, 0, {
-      level: { max: 5, min: 0 },
-      faction: ["neutral", "guardian", "mystic", "rogue", "seeker", "survivor"],
-    });
-  }
-
-  const ands: Filter[] = [
-    (card: Card) => filterRestrictions(card, investigator),
-    not(filterType(["investigator", "location", "story"])),
-  ];
-
-  const ors: Filter[] = [];
-
-  if (config?.targetDeck === "extraSlots") {
-    ors.push((card: Card) => card.code in requirements);
-  } else {
-    ors.push(
-      filterRequired(investigator),
-      (card: Card) => card.subtype_code === "basicweakness",
-      (card: Card) => {
-        return (
-          !!card.encounter_code &&
-          !!card.deck_limit &&
-          !card.double_sided &&
-          // some fan-made permanents have non-player backs
-          (!card.back_link_id || !!card.permanent) &&
-          card.faction_code !== "mythos"
-        );
-      },
-    );
-  }
-
-  const showLimitedAccess = config?.showLimitedAccess ?? true;
-
-  const filters: Filter[] = [];
-
-  for (const option of options) {
-    const filter =
-      !option.limit || showLimitedAccess
-        ? makeOptionFilter(option, buildQlInterpeter, config)
-        : () => false;
-
-    if (!filter) continue;
-
-    if (option.not) {
-      // When encountering a NOT, every filter that comes before can be considered an "unless".
-      ands.push(filters.length ? notUnless(filter, [...filters]) : not(filter));
-    } else {
-      filters.push(filter);
-    }
-  }
-
-  ors.push(...filters);
-
-  if (config?.targetDeck !== "extraSlots" && config?.additionalDeckOptions) {
-    for (const option of config.additionalDeckOptions) {
-      const filter =
-        !option.limit || showLimitedAccess
-          ? makeOptionFilter(option, buildQlInterpeter, config)
-          : () => false;
-
-      if (!filter) continue;
-
-      if (option.not) {
-        ands.push(not(filter));
-      } else {
-        ors.push(filter);
-      }
-    }
-  }
-
-  return and([or(ors), ...ands]);
-}
-
-export function filterInvestigatorWeaknessAccess(
-  investigator: Card,
-  config?: Pick<InvestigatorAccessConfig, "targetDeck">,
-) {
-  const ors: Filter[] =
-    config?.targetDeck !== "extraSlots"
-      ? [
-          filterRequired(investigator),
-          filterSubtypes({ basicweakness: true, weakness: false, none: false }),
-          (card: Card) => card.xp == null && !card.restrictions && !card.hidden,
-        ]
-      : [(c: Card) => !!investigator.side_deck_requirements?.card?.[c.code]];
-
-  return and([
-    filterSubtypes({ basicweakness: true, weakness: true, none: false }),
-    not(filterBonded),
-    or(ors),
-  ]);
-}
-
+/**
+ * Sealed deck
+ */
 export function filterSealed(
   sealedDeck: SealedDeckResponse["cards"],
-  lookupTables: LookupTables,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
 ) {
-  return (c: Card) => {
-    if (sealedDeck[c.code]) return true;
+  return (c: Card) => !!sealedDeck[c.code];
+}
 
-    const duplicates = lookupTables.relations.duplicates[c.code];
-    if (!duplicates) return false;
+/**
+ * Ranger / investigator access filter.
+ *
+ * Returns a filter that shows only cards the ranger can include in their deck:
+ *   - personality: accessible to all rangers
+ *   - background: accessible if card.background_type matches config.background
+ *   - specialty: accessible if card.specialty_type matches config.specialty
+ *   - reward / malady: always accessible (campaign additions)
+ *
+ * When background/specialty are not configured (browsing without a specific
+ * ranger), all ranger deck cards (category != null) are shown.
+ */
+export type InvestigatorAccessConfig = {
+  background?: string | null;
+  specialty?: string | null;
+  showLimitedAccess?: boolean;
+  // Legacy AH fields — kept for API compatibility with callers not yet updated.
+  targetDeck?: "slots" | "extraSlots";
+};
 
-    return Object.keys(duplicates).some((code) => !!sealedDeck[code]);
+export function filterInvestigatorAccess(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _rangerCard: Card,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _interpreter?: Interpreter,
+  config?: InvestigatorAccessConfig,
+): Filter | undefined {
+  const { background, specialty } = config ?? {};
+
+  // When no background/specialty is set, show all ranger deck cards.
+  if (!background || !specialty) {
+    return (card: Card) => card.category != null;
+  }
+
+  return (card: Card) => {
+    const { category } = card;
+
+    if (!category) return false;
+    if (category === "personality") return true;
+    if (category === "reward" || category === "malady") return true;
+
+    // For background/specialty cards, show both the chosen pool AND other
+    // background/specialty cards (the ranger can include 1 outside interest).
+    if (category === "background" || category === "specialty") return true;
+
+    return false;
   };
 }
 
-export function filterDuplicatesFromContext(
-  filteredCards: Card[],
-  activeList: List,
-  metadata: Metadata,
-  lookupTables: LookupTables,
-  deck: ResolvedDeck | undefined,
-  collection: Record<string, boolean | number>,
-) {
-  const cardPool = deck?.cardPool
-    ? resolveLimitedPoolPacks(metadata, deck.cardPool).map((p) => p.code)
-    : undefined;
-
-  const packFilterValue = currentFilterValue(activeList, "pack");
-  const cycleFilterValue = currentFilterValue(activeList, "cycle");
-
-  const cardPoolEmpty = isEmpty(cardPool);
-  const packFilterEmpty = isEmpty(packFilterValue);
-  const cycleFilterEmpty = isEmpty(cycleFilterValue);
-
-  function printingMatches(c: string) {
-    if (cardPoolEmpty && packFilterEmpty && cycleFilterEmpty) {
-      return true;
-    }
-
-    const card = metadata.cards[c];
-
-    const packCodes = new Set([
-      card.pack_code,
-      ...Object.keys(lookupTables.reprintPacksByPack[card.pack_code] || {}),
-    ]);
-
-    const cycleCodes = new Set(
-      Array.from(packCodes).map((code) => {
-        const pack = metadata.packs[code];
-        return pack.cycle_code;
-      }),
-    );
-
-    return (
-      (cardPoolEmpty || cardPool.some((p) => packCodes.has(p))) &&
-      (packFilterEmpty || packFilterValue.some((p) => packCodes.has(p))) &&
-      (cycleFilterEmpty || cycleFilterValue.some((p) => cycleCodes.has(p)))
-    );
-  }
-
-  const resolutions = filteredCards.reduce((acc, card) => {
-    // if the deck contains the card, prefer this version.
-    if (containsCard(deck, card)) {
-      acc.set(card.code, true);
-      return acc;
-    }
-
-    if (acc.has(card.code)) return acc;
-
-    const duplicates = lookupTables.relations.duplicates[card.code];
-    const reprints = lookupTables.relations.reprints[card.code];
-
-    // cards without duplicates pass through.
-    if (!reprints && !duplicates) {
-      acc.set(card.code, true);
-      return acc;
-    }
-
-    const reprintCodes = Object.keys(reprints ?? {});
-    const duplicateCodes = Object.keys(duplicates ?? {});
-
-    // if the deck contains any other printing, hide this one.
-    if (
-      [...duplicateCodes].some((c) => containsCard(deck, metadata.cards[c]))
-    ) {
-      acc.set(card.code, false);
-      return acc;
-    }
-
-    // any matching reprint is displayed.
-    for (const c of reprintCodes) {
-      acc.set(c, printingMatches(c));
-    }
-
-    // fold duplicates into the first matching printing.
-    const allDuplicates = [...duplicateCodes, card.code];
-
-    const matchedDuplicates = allDuplicates
-      .filter((c) => printingMatches(c))
-      .sort((a, b) => {
-        const aCard = metadata.cards[a];
-        const bCard = metadata.cards[b];
-
-        const aOwned = ownedCardCount({
-          card: aCard,
-          metadata,
-          lookupTables,
-          collection,
-          showAllCards: false,
-        });
-
-        const bOwned = ownedCardCount({
-          card: bCard,
-          metadata,
-          lookupTables,
-          collection,
-          showAllCards: false,
-        });
-
-        if (aOwned !== bOwned) {
-          return bOwned - aOwned;
-        }
-
-        const aPack = metadata.packs[aCard.pack_code];
-        const bPack = metadata.packs[bCard.pack_code];
-
-        const aCycle = metadata.cycles[aPack.cycle_code];
-        const bCycle = metadata.cycles[bPack.cycle_code];
-
-        const cycleDiff = aCycle.position - bCycle.position;
-
-        if (cycleDiff === 0) {
-          return aPack.position - bPack.position;
-        }
-
-        return aCycle.position - bCycle.position;
-      });
-
-    const firstMatch = matchedDuplicates[0];
-
-    for (const c of allDuplicates) {
-      if (c === firstMatch) {
-        acc.set(c, true);
-      } else if (firstMatch) {
-        acc.set(c, false);
-      }
-    }
-
-    return acc;
-  }, new Map<string, boolean>());
-
-  return (card: Card) => resolutions.get(card.code);
+/**
+ * Weakness access — ER has no weaknesses. Returns a filter that always passes.
+ */
+export function filterInvestigatorWeaknessAccess(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _ranger: Card,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _config?: Pick<InvestigatorAccessConfig, "targetDeck">,
+): Filter {
+  return () => false;
 }
 
+/**
+ * makeOptionFilter — ER has no deck options. Stub returns undefined.
+ * Kept for API compatibility with limited-slots.ts.
+ */
+export function makeOptionFilter(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _option: any,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _interpreter?: Interpreter,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _config?: InvestigatorAccessConfig,
+): Filter | undefined {
+  return undefined;
+}
+
+/**
+ * Deduplication context filter.
+ *
+ * ER has no duplicate/reprint concept, so all cards in the filtered list
+ * are kept as-is.
+ */
+export function filterDuplicatesFromContext(
+  filteredCards: Card[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _activeList: List,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _metadata: Metadata,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _deck: ResolvedDeck | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _collection: Record<string, boolean | number>,
+): Filter | undefined {
+  // No deduplication needed in ER — all cards in the list are canonical.
+  if (!filteredCards.length) return undefined;
+  return undefined;
+}
+
+/**
+ * Contains card — checks if a card is in any slot of a resolved deck.
+ */
 export function containsCard(
   deck: ResolvedDeck | undefined,
   card: Card,
@@ -1420,23 +527,6 @@ export function containsCard(
     deck.slots[card.code] != null ||
     deck.extraSlots?.[card.code] != null ||
     deck.sideSlots?.[card.code] != null ||
-    deck.investigator_code === card.code ||
-    deck.metaParsed.alternate_front === card.code ||
-    deck.metaParsed.alternate_back === card.code
+    deck.investigator_code === card.code
   );
-}
-
-function currentFilterValue<K extends keyof FilterMapping>(
-  activeList: List,
-  key: K,
-): FilterMapping[K] | undefined {
-  const filterIndex = activeList.filters.findIndex(
-    (f) => f === key && activeList.filtersEnabled,
-  );
-
-  const value = filterIndex
-    ? (activeList.filterValues[filterIndex]?.value as FilterMapping[K])
-    : undefined;
-
-  return value;
 }

@@ -149,6 +149,11 @@ export type DeckCharts = {
 export type Annotations = Record<string, string | null>;
 
 export type ResolvedDeck = Omit<Deck, "sideSlots"> & {
+  // ER fields threaded through from Deck (already on Deck via spread, typed here for clarity)
+  background: string | null | undefined;
+  specialty: string | null | undefined;
+  aspect_code: string | null | undefined;
+  role_code: string | null | undefined;
   annotations: Annotations;
   attachments: AttachmentQuantities | undefined;
   availableAttachments: Attachments[];

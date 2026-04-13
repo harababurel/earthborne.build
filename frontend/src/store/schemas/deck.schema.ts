@@ -45,6 +45,12 @@ export const DeckSchema = z.object({
   xp_adjustment: z.number().nullish(),
   xp_spent: z.number().nullish(),
   xp: z.number().nullish(),
+
+  // ER-specific fields — set during deck creation and persisted with the deck.
+  aspect_code: z.string().nullish(),
+  role_code: z.string().nullish(),
+  background: z.string().nullish(),
+  specialty: z.string().nullish(),
 });
 
 export type Deck = z.infer<typeof DeckSchema>;
