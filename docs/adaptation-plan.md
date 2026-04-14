@@ -163,11 +163,26 @@ Eliminated all 327 TypeScript errors across 126 frontend files. Key changes:
 
 Frontend: `npm run build` clean, `tsc --noEmit` = 0 errors.
 
-### Phase 7: Terminology and i18n
+### Phase 7: Terminology and i18n — **Done (2026-04-14)**
 
-- Global rename in UI: investigator → ranger, faction → aspect, etc.
-- Update all `locales/` translation files
-- Update page titles, meta tags, OG preview templates
+#### Completed
+
+- **`frontend/src/locales/en.json`** — Full rewrite for ER terminology:
+  - `common.factions`: replaced AH faction keys (guardian/mystic/…) with ER aspect codes (awa/fit/foc/spi)
+  - `common.skill`: replaced AH skill names (agility/combat/intellect/willpower) with ER approach names (conflict/reason/exploration/connection)
+  - `common.type`: replaced AH card types with ER types (gear/attachment/moment/role/aspect/attribute/being/feature/stat/malady/mission/location/challenge); kept `investigator`/`investigator_one`/`investigator_other` keys pointing to "Ranger" for backward compat with code
+  - `common.traits`: replaced ~300 AH traits with 48 ER traits from `rangers-card-data`
+  - `common.uses`: replaced AH uses tokens (charges/ammo/secrets/…) with 60 ER named tokens (alarm/herb/charge/vision/…)
+  - Deleted all AH-only sections: taboo, XP, ArkhamDB, deck options/constraints, AH faction names, AH slot names, AH symbols, exile, bonded/extra/side slots, parallel, doom, sanity, XP upgrade modal, suzi_standalone_setup, sealed deck, campaign environments, shroud, skill boost, skill icons filter, etc.
+  - Updated terminology throughout: investigator → ranger, faction → aspect, "player cards" → "ranger cards", "ArkhamDB-flavoured markdown" → "markdown"
+  - `about.description`: rewritten for earthborne.build / Earthborne Rangers
+  - `deck_create.default_name`: ER aspect-based names (awa/fit/foc/spi)
+- **`frontend/index.html`** — Updated `<meta description>`, `application-name`, `apple-mobile-web-app-title`, OG url/title/description/image, opensearch link → all reference earthborne.build / Earthborne Rangers
+- **`frontend/public/site.webmanifest`** — Updated description, id, name, short_name → earthborne.build
+- **`frontend/src/app.tsx`** — Removed AH blog page routes (`/blog/core-2026-reveal`, `/blog/investigator-2026-reveal`) and their lazy imports
+- **`frontend/src/store/hooks/use-sync.ts`** — Removed hardcoded `"ArkhamDB"` provider display name
+- **`frontend/src/store/lib/errors.ts`** — Removed hardcoded `"ArkhamDB"` from `UnsupportedPublishError`
+- Non-English locales left untouched (will be updated when proper translations are contributed)
 
 ### Phase 8: Branding and deployment
 
@@ -220,6 +235,6 @@ All answered during Phase 1 via rulebook at `docs/rulebook.pdf`:
 
 - **Shared package**: compiles clean.
 - **Backend package**: compiles clean. SQLite DB with 260 cards. APIs: `GET /v2/public/cards`, `GET /v2/public/packs`, `GET /version`.
-- **Frontend package**: Vite build clean. `tsc --noEmit` = 0 errors (Phase 6 complete as of 2026-04-14). Phase 7 (i18n/terminology) and Phase 8 (branding/deployment) remain.
+- **Frontend package**: Vite build clean. `tsc --noEmit` = 0 errors. Phase 8 (branding/deployment) remains.
 - **Card data**: 260 cards ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed).

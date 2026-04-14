@@ -14,7 +14,7 @@ export class UnsupportedPublishError extends Error {
     super(
       i18n.t("errors.preview_publish", {
         names,
-        provider: "ArkhamDB",
+        provider: "deck provider",
       }),
     );
   }

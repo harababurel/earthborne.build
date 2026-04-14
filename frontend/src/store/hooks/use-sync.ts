@@ -14,7 +14,7 @@ export function useSync() {
 
   const syncHandler = useCallback(
     async (create?: SyncInit) => {
-      const provider = "ArkhamDB";
+      const provider = create?.provider ?? "sync";
 
       const toastId = toast.show({
         children: t("settings.connections.provider_syncing", { provider }),

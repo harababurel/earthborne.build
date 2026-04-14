@@ -2,7 +2,7 @@
   "background_color": "#2e3440",
   "display": "standalone",
   "categories": ["games", "utilities"],
-  "description": "Deck builder for Arkham Horror: The Card Game™",
+  "description": "Deck builder for Earthborne Rangers",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -15,14 +15,14 @@
       "type": "image/png"
     }
   ],
-  "id": "https://arkham.build",
+  "id": "https://earthborne.build",
   "launch_handler": {
     "client_mode": "navigate-existing"
   },
-  "name": "arkham.build",
+  "name": "earthborne.build",
   "orientation": "natural",
   "scope": "/",
-  "short_name": "arkham.build",
+  "short_name": "earthborne.build",
   "shortcuts": [
     {
       "name": "Browse cards",
