@@ -1,0 +1,102 @@
+/**
+ * Downloads card images from static.rangersdb.com and saves them locally.
+ *
+ * Usage:
+ *   IMAGE_DIR=/path/to/earthborne.images/cards npm run download:images
+ *
+ * Images are fetched sequentially to avoid blasting the rangersdb CDN.
+ * Already-downloaded images are skipped (safe to re-run as new cards are released).
+ *
+ * Not all card types have images on rangersdb — path cards, weather, missions,
+ * locations, etc. are expected to be missing. 404s are logged and skipped.
+ */
+
+import fs from "node:fs/promises";
+import path from "node:path";
+import { getDatabase } from "../db/db.ts";
+import { log } from "../lib/logger.ts";
+
+const IMAGE_DIR = process.env["IMAGE_DIR"];
+if (!IMAGE_DIR) {
+  log("error", "IMAGE_DIR env var is required");
+  process.exit(1);
+}
+
+const SQLITE_PATH = process.env["SQLITE_PATH"] ?? "./earthborne.db";
+const RANGERSDB_IMAGE_BASE = "https://static.rangersdb.com/img/card";
+
+const db = getDatabase(SQLITE_PATH);
+
+try {
+  await run();
+  await db.destroy();
+} catch (err) {
+  log("error", "Download failed", { error: (err as Error).message });
+  process.exit(1);
+}
+
+async function run() {
+  const cards = await db
+    .selectFrom("card")
+    .select(["code", "pack_id"])
+    .orderBy("code asc")
+    .execute();
+
+  log("info", `Found ${cards.length} cards`);
+
+  let downloaded = 0;
+  let skipped = 0;
+  let missing = 0;
+  let failed = 0;
+
+  for (const card of cards) {
+    const destDir = path.join(IMAGE_DIR as string, card.pack_id);
+    const destFile = path.join(destDir, `${card.code}.jpg`);
+
+    // Skip if already downloaded
+    if (await fileExists(destFile)) {
+      skipped++;
+      continue;
+    }
+
+    const url = `${RANGERSDB_IMAGE_BASE}/${card.pack_id}/${card.code}.jpg`;
+
+    let res: Response;
+    try {
+      res = await fetch(url);
+    } catch (err) {
+      log("warn", `Network error for ${card.code}`, { url, error: (err as Error).message });
+      failed++;
+      continue;
+    }
+
+    if (res.status === 404) {
+      log("warn", `Image not found (expected for non-player cards): ${card.code}`, { url });
+      missing++;
+      continue;
+    }
+
+    if (!res.ok) {
+      log("warn", `Unexpected HTTP ${res.status} for ${card.code}`, { url });
+      failed++;
+      continue;
+    }
+
+    const buffer = Buffer.from(await res.arrayBuffer());
+    await fs.mkdir(destDir, { recursive: true });
+    await fs.writeFile(destFile, buffer);
+    downloaded++;
+    log("info", `Downloaded ${card.code} (${buffer.length} bytes)`);
+  }
+
+  log("info", "Done", { downloaded, skipped, missing, failed });
+}
+
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}

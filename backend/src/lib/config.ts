@@ -4,6 +4,7 @@ export const configSchema = z.object({
   ADMIN_API_KEY: z.string(),
   CORS_ORIGINS: z.string(),
   HOSTNAME: z.string().default("localhost"),
+  IMAGE_DIR: z.string().optional(),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),

@@ -49,11 +49,11 @@ export function reversed(_card: Card) {
 }
 
 export function imageUrl(code: string) {
-  return `${import.meta.env.VITE_CARD_IMAGE_URL}/optimized/${code}.avif`;
+  return `${import.meta.env.VITE_CARD_IMAGE_URL}/${code}`;
 }
 
 export function thumbnailUrl(code: string) {
-  return `${import.meta.env.VITE_CARD_IMAGE_URL}/thumbnails/${code}.avif`;
+  return `${import.meta.env.VITE_CARD_IMAGE_URL}/${code}`;
 }
 
 export function parseCardTextHtml(
