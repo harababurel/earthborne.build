@@ -118,9 +118,7 @@ function DeckCreateInvestigator() {
       <CardContainer size="full">
         <CardFace
           onPrintingSelect={(card) => {
-            if (!card.parallel) {
-              setInvestigatorCode(card.code);
-            }
+            setInvestigatorCode(card.code);
           }}
           resolvedCard={front}
           size="full"

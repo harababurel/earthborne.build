@@ -1,4 +1,3 @@
-import type { Attachments } from "@arkham-build/shared";
 import { type Card, countExperience } from "@arkham-build/shared";
 import { decodeExileSlots, isSpecialCard } from "@/utils/card-utils";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
@@ -20,6 +19,7 @@ import type { LookupTables } from "./lookup-tables.types";
 import { resolveCardWithRelations } from "./resolve-card";
 import { decodeExtraSlots, decodeSlots } from "./slots";
 import type {
+  Attachments,
   CardWithRelations,
   DeckMeta,
   DeckSummary,
@@ -79,12 +79,10 @@ export function resolveDeck(
     )
   ) {
     investigatorBack = structuredClone(investigatorBack);
-    investigatorBack.card.deck_options = [
-      { buildql_query: deckMeta.buildql_deck_options_override },
-    ];
+    // ER has no deck_options override mechanism.
   }
 
-  const hasExtraDeck = !!investigatorBack.card.side_deck_options;
+  const hasExtraDeck = false;
   const hasParallel = !!investigator.relations?.parallel;
   const hasReplacements = !isEmpty(investigator.relations?.replacement);
 
@@ -210,7 +208,7 @@ export function getDeckLimitOverride(
   const sealed = deck?.sealedDeck?.cards;
   if (!sealed) return undefined;
 
-  if (card.xp == null && code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS) {
+  if (code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS) {
     return deckLimit;
   }
 
@@ -338,14 +336,7 @@ function computeDeckStats(
 
     deckSizeTotal += quantity;
 
-    xpRequired +=
-      card.myriad && myriadCounted[card.real_name]
-        ? 0
-        : countExperience(card, quantity);
-
-    if (card.myriad && !myriadCounted[card.real_name]) {
-      myriadCounted[card.real_name] = true;
-    }
+    xpRequired += countExperience(card, quantity);
 
     if (!isSpecialCard(card)) {
       deckSize += Math.max(

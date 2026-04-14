@@ -30,9 +30,7 @@ export function ArkhamDBDecklistResult({ result, showDetails }: Props) {
 
   const resolved = useMemo(() => {
     const deps = { lookupTables, metadata, sharing };
-    return resolveDeck(deps, collator, {
-      ...result,
-    });
+    return resolveDeck(deps, collator, result as unknown as Parameters<typeof resolveDeck>[2]);
   }, [result, lookupTables, metadata, sharing, collator]);
 
   return (
@@ -49,7 +47,6 @@ export function ArkhamDBDecklistResult({ result, showDetails }: Props) {
         like_count={result.like_count}
         user_id={result.user_id as number}
         user_name={result.user_name}
-        user_reputation={result.user_reputation}
       />
       {showDetails && (
         <>

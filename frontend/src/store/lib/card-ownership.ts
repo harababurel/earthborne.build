@@ -19,10 +19,11 @@ export function ownedCardCount(options: CardOwnershipOptions) {
     return card.quantity;
   }
 
-  // Treat fan-made content as owned when not checking the pack filter.
-  if (!card.official && !strict) return card.quantity;
+  // In ER, fan-made cards have pack_code starting with "fan_".
+  const isFanMade = card.pack_code?.startsWith("fan_");
+  if (isFanMade && !strict) return card.quantity;
 
-  if (card.official && showAllCards) return card.quantity;
+  if (!isFanMade && showAllCards) return card.quantity;
 
   let quantityOwned = 0;
 
@@ -36,25 +37,7 @@ export function ownedCardCount(options: CardOwnershipOptions) {
 
   const pack = metadata.packs[card.pack_code];
 
-  // ownership of the format.
-  const reprintId = `${pack.cycle_code}${card.encounter_code ? "c" : "p"}`;
-
-  if (card.pack_code !== reprintId && collection[reprintId]) {
-    quantityOwned += card.quantity;
-  }
-
   const duplicates = lookupTables.relations.duplicates[card.code];
-
-  // HACK: ownership of the revised core encounters.
-  if (
-    !duplicates &&
-    pack.cycle_code === "core" &&
-    collection["rcore"] &&
-    card.encounter_code
-  ) {
-    quantityOwned += card.quantity;
-  }
-
   if (!duplicates) return quantityOwned;
 
   for (const code of Object.keys(duplicates ?? {})) {

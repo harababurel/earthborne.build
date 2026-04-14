@@ -23,7 +23,7 @@ describe("getGroupedCards", () => {
       { subtype_code: "basicweakness", code: "3", real_name: "3" },
       { subtype_code: "basicweakness", code: "4", real_name: "4" },
       { subtype_code: "weakness", code: "5", real_name: "5" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -103,7 +103,7 @@ describe("getGroupedCards", () => {
       { faction_code: "mystic", code: "2", real_name: "2" },
       { faction_code: "guardian", code: "3", real_name: "3" },
       { faction_code: "mystic", code: "4", real_name: "4" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -177,7 +177,7 @@ describe("getGroupedCards", () => {
       { pack_code: "core", code: "2", real_name: "2" },
       { pack_code: "tmm", code: "3", real_name: "3" },
       { pack_code: "tmm", code: "4", real_name: "4" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -253,7 +253,7 @@ describe("getGroupedCards", () => {
       { cost: 1, code: "4", real_name: "4" },
       { cost: 2, code: "5", real_name: "4" },
       { cost: 0, code: "6", real_name: "6" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -350,7 +350,7 @@ describe("getGroupedCards", () => {
       { type_code: "event", code: "3", real_name: "3" },
       { type_code: "event", code: "4", real_name: "4" },
       { type_code: "skill", code: "5", real_name: "5" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -445,7 +445,7 @@ describe("getGroupedCards", () => {
       { xp: 0, code: "6", real_name: "6" },
       { xp: null, code: "7", real_name: "7" },
       { xp: null, code: "8", real_name: "8" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -567,7 +567,7 @@ describe("getGroupedCards", () => {
       { xp: 0, code: "6", real_name: "6" },
       { xp: null, code: "7", real_name: "7" },
       { xp: null, code: "8", real_name: "8" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -661,7 +661,7 @@ describe("getGroupedCards", () => {
       { encounter_code: "core", code: "2", real_name: "2" },
       { encounter_code: "beast_thralls", code: "3", real_name: "3" },
       { encounter_code: "beast_thralls", code: "4", real_name: "4" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -738,7 +738,7 @@ describe("getGroupedCards", () => {
       { real_slot: "Hand", code: "5", real_name: "5" },
       { permanent: true, code: "6", real_name: "6" },
       { real_slot: null, code: "7", real_name: "7" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;
@@ -868,7 +868,7 @@ describe("getGroupedCards", () => {
         real_name: "5",
       },
       { faction_code: "mystic", type_code: "skill", code: "6", real_name: "6" },
-    ] as Card[];
+    ] as unknown as Card[];
 
     const state = store.getState();
     const { metadata } = state;

@@ -1,7 +1,6 @@
 import type { Card } from "@arkham-build/shared";
 import {
   displayPackName,
-  formatSlots,
   shortenPackName,
 } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
@@ -9,27 +8,20 @@ import type { GroupingType } from "../slices/lists.types";
 import type { Metadata } from "../slices/metadata.types";
 import {
   type SortFunction,
+  sortByAspectOrder,
   sortByEncounterSet,
-  sortByFactionOrder,
-  sortBySlots,
   sortNumerical,
   sortTypesByOrder,
 } from "./sorting";
 
 export const NONE = "none";
 
-const LEVEL_0 = "level0";
-const UPGRADE = "upgrade";
-
 export const PLAYER_GROUPING_TYPES: GroupingType[] = [
-  "base_upgrades",
+  "aspect",
+  "category",
   "cost",
   "cycle",
-  "faction",
-  "level",
   "pack",
-  "slot",
-  "subtype",
   "type",
 ];
 
@@ -37,7 +29,6 @@ export const ENCOUNTER_GROUPING_TYPES: GroupingType[] = [
   "cycle",
   "encounter_set",
   "pack",
-  "subtype",
   "type",
 ];
 
@@ -113,97 +104,56 @@ function groupByTypeCode(cards: Card[]) {
   return toGroupingResult(result);
 }
 
-function groupBySlots(cards: Card[], collator: Intl.Collator) {
-  const result = cards.reduce<Grouping>(
+function groupByAspect(cards: Card[]) {
+  const results = cards.reduce<Grouping>(
     (acc, card) => {
-      const slot = card.permanent ? "permanent" : (card.real_slot ?? NONE);
+      const aspect = card.energy_aspect ?? NONE;
 
-      if (!acc.data[slot]) {
-        acc.data[slot] = [card];
-        acc.groupings.push(slot);
+      if (!acc.data[aspect]) {
+        acc.data[aspect] = [card];
+        acc.groupings.push(aspect);
       } else {
-        acc.data[slot].push(card);
+        acc.data[aspect].push(card);
       }
 
       return acc;
     },
-    { data: {}, groupings: [], type: "slot" },
-  );
-
-  omitEmptyGroupings(result);
-  result.groupings.sort(sortBySlots(collator));
-
-  return toGroupingResult(result);
-}
-
-function groupByLevel(cards: Card[]) {
-  const results = cards.reduce<Grouping<number | string>>(
-    (acc, card) => {
-      const level = card.xp ?? NONE;
-
-      if (!acc.data[level]) {
-        acc.data[level] = [card];
-        acc.groupings.push(level);
-      } else {
-        acc.data[level].push(card);
-      }
-
-      return acc;
-    },
-    { data: {}, groupings: [], type: "level" },
+    { data: {}, groupings: [], type: "aspect" },
   );
 
   omitEmptyGroupings(results);
-
-  results.groupings.sort((a, b) =>
-    a === NONE ? 1 : b === NONE ? -1 : sortNumerical(a as number, b as number),
-  );
+  results.groupings.sort(sortByAspectOrder);
 
   return toGroupingResult(results);
 }
 
-function groupByLevel0VsUpgrade(cards: Card[]) {
+function groupByCategory(cards: Card[]) {
+  const CATEGORY_ORDER = ["personality", "background", "specialty", "reward", "malady"];
   const results = cards.reduce<Grouping>(
     (acc, card) => {
-      if (!card.xp) {
-        acc.data[LEVEL_0].push(card);
+      const category = card.category ?? NONE;
+
+      if (!acc.data[category]) {
+        acc.data[category] = [card];
+        acc.groupings.push(category);
       } else {
-        acc.data[UPGRADE].push(card);
+        acc.data[category].push(card);
       }
 
       return acc;
     },
-    {
-      data: { [LEVEL_0]: [], [UPGRADE]: [] },
-      groupings: [LEVEL_0, UPGRADE],
-      type: "base_upgrades",
-    },
+    { data: {}, groupings: [], type: "category" },
   );
 
   omitEmptyGroupings(results);
-
-  return toGroupingResult(results);
-}
-
-function groupByFaction(cards: Card[]) {
-  const results = cards.reduce<Grouping>(
-    (acc, card) => {
-      const faction = card.faction2_code ? "multiclass" : card.faction_code;
-
-      if (!acc.data[faction]) {
-        acc.data[faction] = [card];
-        acc.groupings.push(faction);
-      } else {
-        acc.data[faction].push(card);
-      }
-
-      return acc;
-    },
-    { data: {}, groupings: [], type: "faction" },
-  );
-
-  omitEmptyGroupings(results);
-  results.groupings.sort(sortByFactionOrder);
+  results.groupings.sort((a, b) => {
+    const ai = CATEGORY_ORDER.indexOf(a);
+    const bi = CATEGORY_ORDER.indexOf(b);
+    if (ai === -1 && bi === -1) return 0;
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
 
   return toGroupingResult(results);
 }
@@ -213,9 +163,10 @@ function groupByEncounterSet(
   metadata: Metadata,
   collator: Intl.Collator,
 ) {
+  // ER has no encounter sets; group all together under NONE.
   const results = cards.reduce<Grouping>(
     (acc, card) => {
-      const code = card.encounter_code ?? NONE;
+      const code = NONE;
 
       if (!acc.data[code]) {
         acc.data[code] = [card];
@@ -238,7 +189,7 @@ function groupByEncounterSet(
 function groupByCost(cards: Card[]) {
   const results = cards.reduce<Grouping<number | string>>(
     (acc, card) => {
-      const cost = card.cost ?? NONE;
+      const cost = card.energy_cost ?? NONE;
 
       if (!acc.data[cost]) {
         acc.data[cost] = [card];
@@ -267,12 +218,12 @@ function groupByCycle(cards: Card[], metadata: Metadata) {
   const results = cards.reduce<Grouping>(
     (acc, card) => {
       const pack = metadata.packs[card.pack_code];
-      const cycle = metadata.cycles[pack.cycle_code].code;
+      const cycle = metadata.cycles[pack?.cycle_code]?.code ?? NONE;
 
       if (!acc.data[cycle]) {
         acc.data[cycle] = [card];
         acc.groupings.push(cycle);
-        chapterCycles[cycle] = pack.chapter ?? undefined;
+        chapterCycles[cycle] = pack?.chapter ?? undefined;
       } else {
         acc.data[cycle].push(card);
       }
@@ -287,6 +238,8 @@ function groupByCycle(cards: Card[], metadata: Metadata) {
   results.groupings.sort((a, b) => {
     const aCycle = metadata.cycles[a];
     const bCycle = metadata.cycles[b];
+
+    if (!aCycle || !bCycle) return 0;
 
     const aChapter = chapterCycles[a] ?? 1;
     const bChapter = chapterCycles[b] ?? 1;
@@ -304,22 +257,14 @@ function groupByCycle(cards: Card[], metadata: Metadata) {
 function groupByPack(cards: Card[], metadata: Metadata) {
   const results = cards.reduce<Grouping>(
     (acc, card) => {
-      const cardType = card.encounter_code ? "encounter" : "player";
+      const pack = metadata.packs[card.pack_code];
+      const packCode = pack?.code ?? card.pack_code;
 
-      let pack = metadata.packs[card.pack_code];
-
-      const reprintPackCode = `${pack.cycle_code}${cardType === "encounter" ? "c" : "p"}`;
-      const reprintPack = metadata.packs[reprintPackCode];
-
-      if (reprintPack?.reprint) {
-        pack = reprintPack;
-      }
-
-      if (!acc.data[pack.code]) {
-        acc.data[pack.code] = [card];
-        acc.groupings.push(pack.code);
+      if (!acc.data[packCode]) {
+        acc.data[packCode] = [card];
+        acc.groupings.push(packCode);
       } else {
-        acc.data[pack.code].push(card);
+        acc.data[packCode].push(card);
       }
 
       return acc;
@@ -330,45 +275,27 @@ function groupByPack(cards: Card[], metadata: Metadata) {
   omitEmptyGroupings(results);
 
   results.groupings.sort((a, b) => {
-    const aCycle = metadata.cycles[metadata.packs[a].cycle_code];
-    const bCycle = metadata.cycles[metadata.packs[b].cycle_code];
+    const packA = metadata.packs[a];
+    const packB = metadata.packs[b];
 
-    const aChapter = metadata.packs[a].chapter ?? 1;
-    const bChapter = metadata.packs[b].chapter ?? 1;
+    if (!packA || !packB) return 0;
+
+    const aCycle = metadata.cycles[packA.cycle_code];
+    const bCycle = metadata.cycles[packB.cycle_code];
+
+    const aChapter = packA.chapter ?? 1;
+    const bChapter = packB.chapter ?? 1;
 
     if (aChapter !== bChapter) {
       return aChapter - bChapter;
     }
 
-    if (aCycle.position !== bCycle.position) {
+    if (aCycle && bCycle && aCycle.position !== bCycle.position) {
       return aCycle.position - bCycle.position;
     }
 
-    return metadata.packs[a].position - metadata.packs[b].position;
+    return packA.position - packB.position;
   });
-
-  return toGroupingResult(results);
-}
-
-function groupBySubtypeCode(cards: Card[]) {
-  const results = cards.reduce<Grouping>(
-    (acc, card) => {
-      const subtype = card.subtype_code ?? NONE;
-
-      if (acc.data[subtype]) {
-        acc.data[subtype].push(card);
-      }
-
-      return acc;
-    },
-    {
-      data: { [NONE]: [], weakness: [], basicweakness: [] },
-      groupings: [NONE, "weakness", "basicweakness"],
-      type: "subtype",
-    },
-  );
-
-  omitEmptyGroupings(results);
 
   return toGroupingResult(results);
 }
@@ -390,17 +317,22 @@ function applyGrouping(
       ];
     }
     case "subtype":
-      return groupBySubtypeCode(cards);
+      // ER has no subtypes; fall through to "none".
+      return [{ cards, key: "all", type: "none" }];
     case "type":
       return groupByTypeCode(cards);
     case "slot":
-      return groupBySlots(cards, collator);
+      // ER has no slots; fall through to "none".
+      return [{ cards, key: "all", type: "none" }];
     case "level":
-      return groupByLevel(cards);
     case "base_upgrades":
-      return groupByLevel0VsUpgrade(cards);
+      // ER has no XP levels; fall through to "none".
+      return [{ cards, key: "all", type: "none" }];
     case "faction":
-      return groupByFaction(cards);
+    case "aspect":
+      return groupByAspect(cards);
+    case "category":
+      return groupByCategory(cards);
     case "encounter_set":
       return groupByEncounterSet(cards, metadata, collator);
     case "cost":
@@ -516,8 +448,7 @@ export function getGroupingKeyLabel(
 
     case "slot": {
       if (segment === NONE) return i18n.t("common.slot.none");
-      if (segment === "permanent") return i18n.t("common.permanent");
-      return formatSlots(segment);
+      return segment;
     }
 
     case "level": {
@@ -535,13 +466,18 @@ export function getGroupingKeyLabel(
       return i18n.t("common.cost.value", { cost: segment });
     }
 
+    case "aspect":
     case "faction": {
-      return i18n.t(`common.factions.${segment}`);
+      if (segment === NONE) return i18n.t("common.aspect.none");
+      return i18n.t(`common.aspects.${segment}`);
+    }
+
+    case "category": {
+      if (segment === NONE) return "";
+      return i18n.t(`common.category.${segment}`);
     }
 
     case "base_upgrades": {
-      if (segment === LEVEL_0) return i18n.t("common.level.base");
-      if (segment === UPGRADE) return i18n.t("common.level.upgrades");
       return "";
     }
 

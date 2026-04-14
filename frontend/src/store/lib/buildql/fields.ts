@@ -227,8 +227,9 @@ const fieldDefinitions: FieldDefinition[] = [
   {
     aliases: ["pa"],
     lookup: backResolver((card, { metadata }) => {
-      const pack = metadata.packs[card.set_code];
-      if (!pack) return card.set_code;
+      const setCode = card.set_code ?? "";
+      const pack = setCode ? metadata.packs[setCode] : undefined;
+      if (!pack) return setCode || null;
       return [card.set_code, displayPackName(pack)];
     }),
     name: "pack",

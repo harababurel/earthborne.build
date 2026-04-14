@@ -1,10 +1,9 @@
 import type { Card } from "@arkham-build/shared";
 import {
   ASSET_SLOT_ORDER,
+  ASPECT_ORDER,
   FACTION_ORDER,
-  type FactionName,
   SKILL_KEYS,
-  type SkillKey,
 } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import {
@@ -71,7 +70,7 @@ import {
   sortByEncounterSet,
   sortByName,
 } from "../lib/sorting";
-import { isResolvedDeck, type ResolvedDeck } from "../lib/types";
+import { isResolvedDeck, type CardWithRelations, type ResolvedDeck } from "../lib/types";
 import type { Cycle } from "../schemas/cycle.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { StoreState } from "../slices";
@@ -140,7 +139,8 @@ function makeUserFilter(
       case "action": {
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
-          filters.push(filterActions(value, lookupTables.actions));
+          const filter = filterActions(value);
+          if (filter) filters.push(filter);
         }
         break;
       }
@@ -154,14 +154,17 @@ function makeUserFilter(
 
       case "cost": {
         const value = filterValue.value as CostFilter;
-        if (value.range) filters.push(filterCost(value));
+        if (value.range) {
+          const filter = filterCost(value);
+          if (filter) filters.push(filter);
+        }
         break;
       }
 
       case "cycle": {
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
-          const filter = filterCycleCode(value, metadata);
+          const filter = filterCycleCode(value, metadata, lookupTables);
           if (filter) filters.push(filter);
         }
         break;
@@ -169,13 +172,19 @@ function makeUserFilter(
 
       case "encounter_set": {
         const value = filterValue.value as MultiselectFilter;
-        if (value.length) filters.push(filterEncounterCode(value));
+        if (value.length) {
+          const filter = filterEncounterCode(value);
+          if (filter) filters.push(filter);
+        }
         break;
       }
 
       case "faction": {
         const value = filterValue.value as MultiselectFilter;
-        if (value.length) filters.push(filterFactions(value));
+        if (value.length) {
+          const filter = filterFactions(value);
+          if (filter) filters.push(filter);
+        }
         break;
       }
 
@@ -188,16 +197,13 @@ function makeUserFilter(
             metadata.cards[value],
             buildQlInterpreter,
             {
-              customizable: {
-                properties: "all",
-                level: "all",
-              },
-              targetDeck,
+              targetDeck:
+                targetDeck === "both" ? undefined : targetDeck,
             },
           );
           const weaknessFilter = filterInvestigatorWeaknessAccess(
             metadata.cards[value],
-            { targetDeck },
+            { targetDeck: targetDeck === "both" ? undefined : targetDeck },
           );
 
           if (accessFilter) filter.push(accessFilter);
@@ -214,13 +220,12 @@ function makeUserFilter(
 
         if (value.range) {
           if (resolvedDeck) {
-            filters.push(
-              filterLevel(
-                value,
-                buildQlInterpreter,
-                resolvedDeck?.investigatorBack?.card,
-              ),
+            const filter = filterLevel(
+              value,
+              buildQlInterpreter,
+              resolvedDeck?.investigatorBack?.card,
             );
+            if (filter) filters.push(filter);
           } else {
             const filterIndex = list.filters.indexOf("investigator");
             const filterValue = filterIndex
@@ -229,7 +234,12 @@ function makeUserFilter(
             const investigator = filterValue
               ? metadata.cards[filterValue as string]
               : undefined;
-            filters.push(filterLevel(value, buildQlInterpreter, investigator));
+            const filter = filterLevel(
+              value,
+              buildQlInterpreter,
+              investigator,
+            );
+            if (filter) filters.push(filter);
           }
         }
 
@@ -247,31 +257,42 @@ function makeUserFilter(
 
       case "properties": {
         const value = filterValue.value as PropertiesFilter;
-        filters.push(filterProperties(value, lookupTables));
+        const filter = filterProperties(value, lookupTables);
+        if (filter) filters.push(filter);
         break;
       }
 
       case "skill_icons": {
         const value = filterValue.value as SkillIconsFilter;
-        filters.push(filterSkillIcons(value));
+        const filter = filterSkillIcons(value);
+        if (filter) filters.push(filter);
         break;
       }
 
       case "taboo_set": {
         const value = filterValue.value as number | undefined;
-        if (value != null) filters.push(filterTabooSet(value, metadata));
+        if (value != null) {
+          const filter = filterTabooSet(value, metadata);
+          if (filter) filters.push(filter);
+        }
         break;
       }
 
       case "trait": {
         const value = filterValue.value as MultiselectFilter;
-        if (value.length) filters.push(filterTraits(value));
+        if (value.length) {
+          const filter = filterTraits(value, lookupTables);
+          if (filter) filters.push(filter);
+        }
         break;
       }
 
       case "type": {
         const value = filterValue.value as MultiselectFilter;
-        if (value.length) filters.push(filterType(value));
+        if (value.length) {
+          const filter = filterType(value);
+          if (filter) filters.push(filter);
+        }
         break;
       }
 
@@ -286,7 +307,8 @@ function makeUserFilter(
 
       case "investigator_skills": {
         const value = filterValue.value as InvestigatorSkillsFilter;
-        filters.push(filterInvestigatorSkills(value));
+        const filter = filterInvestigatorSkills(value);
+        if (filter) filters.push(filter);
         break;
       }
 
@@ -294,18 +316,15 @@ function makeUserFilter(
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
           const filter = (card: Card) => {
-            if (card.type_code !== "investigator") return false;
+            if (card.type_code !== "role") return false;
 
-            const filter = filterInvestigatorAccess(card, buildQlInterpreter, {
-              customizable: {
-                properties: "all",
-                level: "all",
-              },
-              targetDeck: "both",
-            });
+            const innerFilter = filterInvestigatorAccess(
+              card,
+              buildQlInterpreter,
+            );
 
-            if (!filter) return false;
-            return value.every((code) => filter(metadata.cards[code]));
+            if (!innerFilter) return false;
+            return value.every((code) => innerFilter(metadata.cards[code]));
           };
 
           filters.push(filter);
@@ -316,7 +335,8 @@ function makeUserFilter(
       case "illustrator": {
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
-          filters.push(filterIllustrator(value));
+          const filter = filterIllustrator(value);
+          if (filter) filters.push(filter);
         }
 
         break;
@@ -325,7 +345,8 @@ function makeUserFilter(
       case "subtype": {
         const value = filterValue.value as SubtypeFilter;
         if (value) {
-          filters.push(filterSubtypes(value));
+          const filter = filterSubtypes(value);
+          if (filter) filters.push(filter);
         }
         break;
       }
@@ -454,14 +475,11 @@ const selectDeckInvestigatorFilter = createSelector(
     if (!investigatorBack) return undefined;
 
     if (showUnusableCards) {
+      const typeFilter = filterType(["role", "path", "location"]);
       return and([
-        not(filterType(["investigator", "story", "location"])),
+        typeFilter ? not(typeFilter) : () => true,
         filterMythosCards,
-        (card: Card) =>
-          !lookupTables.relations.bonded[card.code] &&
-          (card?.xp != null ||
-            !card.restrictions ||
-            card.restrictions?.investigator?.[card.code]),
+        (card: Card) => !lookupTables.relations.bonded[card.code],
       ]);
     }
 
@@ -471,20 +489,13 @@ const selectDeckInvestigatorFilter = createSelector(
       investigatorBack,
       buildQlInterpreter,
       {
-        additionalDeckOptions: getAdditionalDeckOptions(resolvedDeck),
-        customizable: {
-          properties: "all",
-          level: "all",
-        },
-        investigatorFront: resolvedDeck.investigatorFront.card,
-        selections: resolvedDeck.selections,
-        targetDeck,
+        targetDeck: targetDeck === "both" ? undefined : targetDeck,
         showLimitedAccess,
       },
     );
 
     const weaknessFilter = filterInvestigatorWeaknessAccess(investigatorBack, {
-      targetDeck,
+      targetDeck: targetDeck === "both" ? undefined : targetDeck,
     });
 
     if (investigatorFilter) ors.push(investigatorFilter);
@@ -503,22 +514,9 @@ const selectDeckInvestigatorFilter = createSelector(
 
     const cardInDeckFilter = (card: Card) => containsCard(resolvedDeck, card);
 
-    const xpNullPoolFilter = (card: Card) => {
-      if (card.subtype_code === "basicweakness") {
-        // allow rbw only if useLimitedPoolForWeaknessDraw is set to false
-        return (
-          card.code === SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS ||
-          !settings.useLimitedPoolForWeaknessDraw
-        );
-      }
-
-      // allow signatures or campaign cards
-      return (
-        !card.duplicate_of_code &&
-        card.xp == null &&
-        (!!card.restrictions || !!card.encounter_code)
-      );
-    };
+    // ER has no XP/restrictions/encounter_code concept — cards in the pool
+    // are either accessible or not; no bypass needed.
+    const xpNullPoolFilter = (_card: Card) => false;
 
     if (cardPool?.length) {
       const cardPoolFilter = filterCardPool(cardPool, metadata, lookupTables);
@@ -638,8 +636,9 @@ const selectBaseListCards = createSelector(
     if (systemFilter) filters.push(systemFilter);
 
     // Filter fan made data that is not owned and does not belong to this specific deck.
+    // In ER, non-official cards have a pack_code starting with "fan_".
     filters.push((card: Card) => {
-      if (card.official) return true;
+      if (!card.pack_code?.startsWith("fan_")) return true;
 
       const pack = metadata.packs[card.pack_code];
       if (!pack?.cycle_code) return false;
@@ -760,18 +759,19 @@ export const selectListCards = createSelector(
     const currentTotal = filteredCards.length;
 
     if (!showUnusableCards) {
-      filteredCards = filteredCards.filter(
-        filterDuplicatesFromContext(
-          filteredCards,
-          activeList,
-          metadata,
-          lookupTables,
-          deck,
-          collection,
-        ),
+      const deduplicateFilter = filterDuplicatesFromContext(
+        filteredCards,
+        activeList,
+        metadata,
+        lookupTables,
+        deck,
+        collection,
       );
 
-      totalCardCount -= currentTotal - filteredCards.length;
+      if (deduplicateFilter) {
+        filteredCards = filteredCards.filter(deduplicateFilter);
+        totalCardCount -= currentTotal - filteredCards.length;
+      }
     }
 
     // apply search after initial filtering to cut down on search operations.
@@ -800,14 +800,7 @@ export const selectListCards = createSelector(
     );
 
     if (userFilter) {
-      filteredCards = filteredCards.filter(
-        (card) =>
-          userFilter(card) ||
-          // surface cards where the backside matches the filter
-          (!!card.back_link_id &&
-            metadata.cards[card.back_link_id] &&
-            userFilter(metadata.cards[card.back_link_id])),
-      );
+      filteredCards = filteredCards.filter((card) => userFilter(card));
     }
 
     const cards: Card[] = [];
@@ -879,10 +872,10 @@ export const selectListFilterProperties = createSelector(
 
     const skills = SKILL_KEYS.reduce(
       (acc, key) => {
-        acc[key as SkillKey] = { min: Number.MAX_SAFE_INTEGER, max: 0 };
+        acc[key] = { min: Number.MAX_SAFE_INTEGER, max: 0 };
         return acc;
       },
-      {} as Record<SkillKey, { min: number; max: number }>,
+      {} as Record<string, { min: number; max: number }>,
     );
 
     const actions = new Set<string>();
@@ -898,86 +891,37 @@ export const selectListFilterProperties = createSelector(
 
     if (baseFilterResult?.filteredCards) {
       for (const card of baseFilterResult.filteredCards) {
-        if (card.type_code === "investigator") {
+        if (card.type_code === "role") {
           investigators.add(card.code);
         }
 
-        if (card.encounter_code) {
-          cardTypes.add("encounter");
-        } else {
-          cardTypes.add("player");
-        }
+        // ER has no encounter cards, all cards are player cards.
+        cardTypes.add("player");
 
-        levels.add(card.xp ?? null);
+        levels.add(null);
         types.add(card.type_code);
 
         packs.add(card.pack_code);
-        const pack = metadata.packs[card.pack_code];
 
-        if (official(pack) && !pack?.reprint) {
-          const cycle = metadata.cycles[pack?.cycle_code];
-          const reprintPackId = `${cycle?.code}${card.encounter_code ? "c" : "p"}`;
-          const reprintPack = metadata.packs[reprintPackId];
-          if (reprintPack?.reprint) packs.add(reprintPack.code);
-        }
-
-        if (card.encounter_code) {
-          encounterSets.add(card.encounter_code);
-        }
-
-        factions.add(card.faction_code);
-
-        if (card.faction2_code) {
-          factions.add(card.faction2_code);
-        }
-
-        if (card.faction3_code) {
-          factions.add(card.faction3_code);
+        if (card.energy_aspect) {
+          factions.add(card.energy_aspect);
         }
 
         if (card.illustrator) {
           illustrators.add(card.illustrator);
         }
 
-        if (card.back_illustrator) {
-          illustrators.add(card.back_illustrator);
+        if (card.energy_cost != null) {
+          cost.min = Math.min(cost.min, Math.max(card.energy_cost, 0));
+          cost.max = Math.max(cost.max, Math.max(card.energy_cost, 0));
         }
 
-        if (card.cost != null) {
-          cost.min = Math.min(cost.min, Math.max(card.cost, 0));
-          cost.max = Math.max(cost.max, Math.max(card.cost, 0));
+        if (card.harm_threshold) {
+          health.min = Math.min(health.min, Math.max(card.harm_threshold, 0));
+          health.max = Math.max(health.max, card.harm_threshold);
         }
 
-        // filter out enemies.
-        if (card.type_code === "asset" || card.type_code === "investigator") {
-          health.min = Math.min(health.min, Math.max(card.health ?? 0, 0));
-          sanity.min = Math.min(sanity.min, Math.max(card.sanity ?? 0, 0));
-        }
-
-        if (card.health) {
-          health.max = Math.max(health.max, card.health);
-        }
-
-        if (card.sanity) {
-          sanity.max = Math.max(sanity.max, card.sanity);
-        }
-
-        for (const _skill of Object.keys(skills)) {
-          const skill = _skill as SkillKey;
-
-          const value = card[`skill_${skill}`];
-
-          if (skills[skill] && value != null && value >= 0) {
-            skills[skill].min = Math.min(skills[skill].min, value);
-            skills[skill].max = Math.max(skills[skill].max, value);
-          }
-        }
-
-        for (const trait of splitMultiValue(card.real_traits)) {
-          traits.add(trait);
-        }
-
-        for (const trait of splitMultiValue(card.real_back_traits)) {
+        for (const trait of splitMultiValue(card.traits)) {
           traits.add(trait);
         }
       }
@@ -1156,8 +1100,8 @@ export const selectFactionOptions = createSelector(
       .filter((f) => factions.has(f.code))
       .sort(
         (a, b) =>
-          FACTION_ORDER.indexOf(a.code as FactionName) -
-          FACTION_ORDER.indexOf(b.code as FactionName),
+          ASPECT_ORDER.indexOf(a.code as (typeof ASPECT_ORDER)[number]) -
+          ASPECT_ORDER.indexOf(b.code as (typeof ASPECT_ORDER)[number]),
       );
   },
 );
@@ -1199,7 +1143,7 @@ export const selectInvestigatorOptions = createSelector(
     >((acc, code) => {
       const card = metadata.cards[code];
 
-      if (card && !card.duplicate_of_code && !card.encounter_code) {
+      if (card) {
         acc.push(card);
       }
 
@@ -1236,8 +1180,7 @@ export const selectCardOptions = createSelector(
           filterMythosCards(card) &&
           filterDuplicates(card) &&
           filterBacksides(card) &&
-          card.type_code !== "investigator" &&
-          !card.subtype_code
+          card.type_code !== "role"
         );
       })
       .sort(sortFn);
@@ -1635,84 +1578,26 @@ export type AvailableUpgrades = {
   shrewdAnalysisPresent: boolean;
 };
 
+// ER has no XP upgrade system — always returns empty.
 export const selectAvailableUpgrades = createSelector(
   selectDeckInvestigatorFilter,
   selectMetadata,
   selectLookupTables,
   (_: StoreState, deck: ResolvedDeck) => deck,
   (_: StoreState, __: ResolvedDeck, target: "slots" | "extraSlots") => target,
-  (accessFilter, metadata, lookupTables, deck, target) => {
-    const availableUpgrades: AvailableUpgrades = {
-      upgrades: {},
-      shrewdAnalysisPresent: false,
-    };
-
-    if (!deck.previous_deck) return availableUpgrades;
-
-    const cards = Object.values(deck.cards[target] ?? {});
-    if (isEmpty(cards)) return availableUpgrades;
-
-    for (const { card } of cards) {
-      if (card.code === SPECIAL_CARD_CODES.SHREWD_ANALYSIS) {
-        availableUpgrades.shrewdAnalysisPresent = true;
-        continue;
-      }
-
-      const versions = lookupTables.relations.level[card.code];
-      if (!versions) continue;
-
-      const upgrades = Object.keys(versions).reduce((acc, code) => {
-        const version = metadata.cards[code];
-
-        const isUpgrade = version?.xp && version.xp > (card.xp ?? 0);
-        if (!isUpgrade) return acc;
-
-        const hasAccess = accessFilter?.(version);
-        if (!hasAccess) return acc;
-
-        acc.push(version);
-        return acc;
-      }, [] as Card[]);
-
-      upgrades.sort((a, b) => {
-        const aIsDuplicate = Boolean(a.duplicate_of_code);
-        const bIsDuplicate = Boolean(b.duplicate_of_code);
-        if (aIsDuplicate !== bIsDuplicate) {
-          return aIsDuplicate ? 1 : -1;
-        }
-
-        return (a.xp ?? 0) - (b.xp ?? 0);
-      });
-
-      for (const upgrade of upgrades) {
-        const isNotDuplicated =
-          !availableUpgrades.upgrades[card.code] ||
-          availableUpgrades.upgrades[card.code].every(
-            (c) =>
-              c.xp !== upgrade.xp ||
-              displayAttribute(c, "subname") !==
-                displayAttribute(upgrade, "subname"),
-          );
-        if (!isNotDuplicated) continue;
-
-        availableUpgrades.upgrades[card.code] ??= [];
-        availableUpgrades.upgrades[card.code].push(upgrade);
-      }
-    }
-
-    return availableUpgrades;
+  (_accessFilter, _metadata, _lookupTables, _deck, _target): AvailableUpgrades => {
+    return { upgrades: {}, shrewdAnalysisPresent: false };
   },
 );
 
+// ER has no XP upgrade system — always returns empty.
 export function selectResolvedUpgrades(
-  state: StoreState,
+  _state: StoreState,
   availableUpgrades: AvailableUpgrades,
-  deck: ResolvedDeck,
+  _deck: ResolvedDeck,
   card: Card,
 ) {
-  return availableUpgrades.upgrades[card.code]
-    .sort((a, b) => (a?.xp ?? 0) - (b?.xp ?? 0))
-    .map((upgrade) => selectResolvedCardById(state, upgrade.code, deck));
+  return (availableUpgrades.upgrades[card.code] ?? []).map((_) => undefined as CardWithRelations | undefined);
 }
 
 /**
@@ -1830,7 +1715,7 @@ const selectInvestigatorChanges = createSelector(
     if (!value) return "";
     const card = metadata.cards[value];
     return card
-      ? `${card.parallel ? "|| " : ""}${displayAttribute(card, "name")}`
+      ? displayAttribute(card, "name")
       : value.toString();
   },
 );

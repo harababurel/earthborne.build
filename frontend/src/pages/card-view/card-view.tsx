@@ -34,6 +34,7 @@ import {
   CYCLES_WITH_STANDALONE_PACKS,
   FLOATING_PORTAL_ID,
 } from "@/utils/constants";
+import { official } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { ErrorStatus } from "../errors/404";
 import css from "./card-view.module.css";
@@ -52,12 +53,11 @@ function CardView() {
     return <ErrorStatus statusCode={404} />;
   }
 
-  const isInvestigator = cardWithRelations.card.type_code === "investigator";
+  const isInvestigator = cardWithRelations.card.type_code === "role";
   const isBuildableInvestigator =
     isInvestigator && !isStaticInvestigator(cardWithRelations.card);
 
-  const deckbuildable =
-    !cardWithRelations.card.encounter_code && !isInvestigator;
+  const deckbuildable = !isInvestigator;
 
   const parallel = (cardWithRelations as CardWithRelations).relations?.parallel
     ?.card;
@@ -96,7 +96,7 @@ function CardView() {
               )}
             </SidebarSection>
 
-            {cardWithRelations.card.official && (
+            {official(cardWithRelations.card) && (
               <SidebarSection title={t("card_view.section_faq")}>
                 <Faq card={cardWithRelations.card} />
               </SidebarSection>

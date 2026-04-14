@@ -49,8 +49,7 @@ export function CardFace(props: Props) {
   const { card } = resolvedCard;
   const [isSideways, setSideways] = useState(sideways(card));
 
-  const showImage =
-    !omitImage && (size === "full" || card.type_code !== "story");
+  const showImage = !omitImage;
 
   const onFlip = useCallback((_: boolean, sideways: boolean) => {
     setSideways(sideways);
@@ -81,23 +80,12 @@ export function CardFace(props: Props) {
 
       <div className={css["content"]}>
         <CardText
-          errataDate={card.errata_date}
           flavor={displayAttribute(card, "flavor")}
           size={size}
           text={displayAttribute(card, "text")}
           typeCode={card.type_code}
-          victory={card.victory}
         />
-        <CardTabooText card={card} showOriginalText={size !== "tooltip"}>
-          {!!card.taboo_set_id && !!setIgnoreTaboo && (
-            <Button onClick={() => setIgnoreTaboo((p) => !p)} size="xs">
-              <ImageIcon />
-              {ignoreTaboo
-                ? t("card_view.actions.show_taboo_image")
-                : t("card_view.actions.show_original_image")}
-            </Button>
-          )}
-        </CardTabooText>
+        <CardTabooText card={card} />
         <CardMeta
           linked={size !== "tooltip"}
           onPrintingSelect={onPrintingSelect}

@@ -67,9 +67,9 @@ function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
 
   async function queryFn() {
     const decks = await queryDeck(clientId, type, idInt);
-    cacheFanMadeContent(decks);
+    cacheFanMadeContent(decks as Parameters<typeof cacheFanMadeContent>[0]);
     const adapter = new syncAdapters.arkhamdb(useStore.getState);
-    return decks.map((deck) => adapter.in(deck));
+    return (decks as unknown[]).map((deck: unknown) => adapter.in(deck as Parameters<typeof adapter.in>[0]));
   }
 
   const [
@@ -109,7 +109,7 @@ function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
     return <ErrorStatus statusCode={statusCode} />;
   }
 
-  const decks = data.map((deck) =>
+  const decks = (data ?? []).map((deck: unknown) =>
     resolveDeck(
       {
         metadata,
@@ -117,7 +117,7 @@ function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
         sharing,
       },
       collator,
-      deck,
+      deck as Parameters<typeof resolveDeck>[2],
     ),
   );
 

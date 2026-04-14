@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { createSelector } from "reselect";
 import { CardsCombobox } from "@/components/cards-combobox";
 import { Field } from "@/components/ui/field";
-import { Select } from "@/components/ui/select";
 import { useStore } from "@/store";
 import { filterDuplicates, filterType } from "@/store/lib/filtering";
 import { resolveCardWithRelations } from "@/store/lib/resolve-card";
@@ -15,23 +14,19 @@ import {
 } from "@/store/selectors/shared";
 import { official } from "@/utils/card-utils";
 import { and } from "@/utils/fp";
-import css from "../browser-decklists.module.css";
 import type { DecklistFilterProps } from "./shared";
 
-const selectInvestigatorCards = createSelector(
+const selectRoleCards = createSelector(
   selectMetadata,
   selectLocaleSortingCollator,
   (metadata, collator) => {
-    const investigatorFilter = and([
-      filterType(["investigator"]),
-      (c) => !!c.deck_options,
+    const roleFilter = and([
+      filterType(["role"]) ?? (() => true),
       (c) => official(c),
-      (c) => filterDuplicates(c) || !!c.parallel,
+      filterDuplicates,
     ]);
 
-    const investigators = Object.values(metadata.cards).filter(
-      investigatorFilter,
-    );
+    const roles = Object.values(metadata.cards).filter(roleFilter);
 
     const sortFn = makeSortFunction(
       ["name", "level", "position"],
@@ -39,7 +34,7 @@ const selectInvestigatorCards = createSelector(
       collator,
     );
 
-    return investigators.sort(sortFn);
+    return roles.sort(sortFn);
   },
 );
 
@@ -49,19 +44,19 @@ export function CanonicalInvestigator({
   setFormState,
 }: DecklistFilterProps) {
   const { t } = useTranslation();
-  const investigators = useStore(selectInvestigatorCards);
+  const roles = useStore(selectRoleCards);
   const metadata = useStore(selectMetadata);
   const lookupTables = useStore(selectLookupTables);
   const collator = useStore(selectLocaleSortingCollator);
   const locale = useStore((state) => state.settings.locale);
 
-  const choices = formState.canonical_investigator_code?.split("-");
-  const selectedCard = choices ? metadata.cards[choices[1]] : undefined;
+  // ER uses required[] to filter by role card code
+  const selectedCode = formState.required?.[0];
+  const selectedCard = selectedCode ? metadata.cards[selectedCode] : undefined;
 
-  const resolvedCanonicalCard = useMemo(() => {
+  const resolvedCard = useMemo(() => {
     if (!selectedCard) return undefined;
-
-    const resolved = resolveCardWithRelations(
+    return resolveCardWithRelations(
       { metadata, lookupTables },
       collator,
       selectedCard.code,
@@ -69,93 +64,27 @@ export function CanonicalInvestigator({
       undefined,
       true,
     );
-    // Normalize parallel investigators to base
-    if (resolved?.relations?.base) {
-      return resolveCardWithRelations(
-        { metadata, lookupTables },
-        collator,
-        resolved.relations.base.card.code,
-        undefined,
-        undefined,
-        true,
-      );
-    }
-    return resolved;
   }, [metadata, lookupTables, collator, selectedCard]);
-
-  const parallelOptions = useMemo(() => {
-    if (!resolvedCanonicalCard?.relations?.parallel) return undefined;
-    return [
-      resolvedCanonicalCard.card.code,
-      resolvedCanonicalCard.relations.parallel.card.code,
-    ];
-  }, [resolvedCanonicalCard]);
 
   return (
     <Field full>
       <CardsCombobox
         disabled={disabled}
-        id="investigator-select"
-        items={investigators}
-        label={t("common.type.investigator")}
+        id="role-select"
+        items={roles}
+        label={t("common.type.role")}
         limit={1}
         locale={locale}
         onValueChange={(cards) => {
           const card = cards[0];
           setFormState((prev) => ({
             ...prev,
-            canonical_investigator_code: card
-              ? `${card.code}-${card.code}`
-              : undefined,
+            required: card ? [card.code] : undefined,
           }));
         }}
-        selectedItems={
-          resolvedCanonicalCard ? [resolvedCanonicalCard.card] : []
-        }
+        selectedItems={resolvedCard ? [resolvedCard.card] : []}
         showLabel
       />
-      {!!choices && !!parallelOptions && (
-        <div className={css["investigator-version-options"]}>
-          <Select
-            disabled={disabled}
-            onChange={(evt) => {
-              const code = evt.target.value;
-              setFormState((prev) => ({
-                ...prev,
-                canonicalInvestigatorCode: `${code}-${choices[1]}`,
-              }));
-            }}
-            options={parallelOptions.map((code, i) => ({
-              value: code,
-              label:
-                i === 0
-                  ? t("deck_edit.config.sides.original_front")
-                  : t("deck_edit.config.sides.parallel_front"),
-            }))}
-            required
-            value={formState.canonical_investigator_code?.split("-")[0] ?? ""}
-          />
-          <Select
-            disabled={disabled}
-            options={parallelOptions.map((code, i) => ({
-              value: code,
-              label:
-                i === 0
-                  ? t("deck_edit.config.sides.original_back")
-                  : t("deck_edit.config.sides.parallel_back"),
-            }))}
-            onChange={(evt) => {
-              const code = evt.target.value;
-              setFormState((prev) => ({
-                ...prev,
-                canonicalInvestigatorCode: `${choices[0]}-${code}`,
-              }));
-            }}
-            required
-            value={formState.canonical_investigator_code?.split("-")[1] ?? ""}
-          />
-        </div>
-      )}
     </Field>
   );
 }

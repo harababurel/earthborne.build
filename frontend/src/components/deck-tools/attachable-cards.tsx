@@ -1,4 +1,5 @@
-import type { Attachments, Card } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
+import type { Attachments } from "@/store/lib/types";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
@@ -58,7 +59,7 @@ export function AttachableCards(props: Props) {
   const total = Object.values({
     ...resolvedDeck.attachments?.[definition.code],
     ...definition.requiredCards,
-  }).reduce((sum, count) => sum + count, 0);
+  }).reduce((sum: number, count) => sum + (count as number), 0);
 
   const cards = useMemo(
     () =>
@@ -92,7 +93,7 @@ export function AttachableCards(props: Props) {
     <LimitedCardGroup
       className={colorCls}
       count={{
-        limit: definition.targetSize,
+        limit: definition.targetSize ?? 0,
         total,
       }}
       entries={cards}
@@ -113,7 +114,7 @@ export function AttachableCards(props: Props) {
       )}
       title={
         <>
-          <ExternalLucideIcon url={definition.icon} />
+          {definition.icon && <ExternalLucideIcon url={definition.icon} />}
           {getAttachmentName(definition, i18n, t)}
         </>
       }

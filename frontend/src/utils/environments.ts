@@ -91,19 +91,7 @@ export function resolveLimitedPoolPacks(
           .filter((p) => p.cycle_code === cycle.code)
           .sort((a, b) => a.position - b.position);
 
-        if (cycle.code === "core") {
-          selectedPacks.push(...cyclePacks);
-        } else {
-          const reprints = cyclePacks.filter((p) => p.reprint);
-
-          if (reprints.length) {
-            selectedPacks.push(
-              ...reprints.filter((p) => p.reprint?.type !== "encounter"),
-            );
-          } else {
-            selectedPacks.push(...cyclePacks);
-          }
-        }
+        selectedPacks.push(...cyclePacks);
       }
     } else if (!code.startsWith("card:")) {
       const pack = metadata.packs[code];

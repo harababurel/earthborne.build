@@ -94,9 +94,7 @@ function ChooseInvestigatorLink(props: { card: Card }) {
     <Link
       asChild
       to={
-        props.card.parallel
-          ? `/deck/create/${props.card.alternate_of_code}?initial_investigator=${props.card.code}`
-          : `/deck/create/${props.card.code}`
+        `/deck/create/${props.card.code}`
       }
     >
       <Button

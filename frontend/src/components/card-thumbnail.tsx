@@ -25,14 +25,11 @@ export const CardThumbnail = memo(
       `${card.code}${suffix ?? ""}`,
     );
 
-    const url = suffix === "b" ? card.back_thumbnail_url : card.thumbnail_url;
-
     return (
       <div
         className={cx(
           css["thumbnail"],
           css[card.type_code],
-          card.subtype_code && css[card.subtype_code],
           colorCls,
           className,
         )}
@@ -42,7 +39,7 @@ export const CardThumbnail = memo(
       >
         <img
           alt={t("card_view.thumbnail", { code: card.code })}
-          src={url ? url : thumbnailUrl(imageCode)}
+          src={thumbnailUrl(imageCode)}
         />
       </div>
     );

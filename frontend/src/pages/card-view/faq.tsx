@@ -6,7 +6,10 @@ import { Details } from "@/components/ui/details";
 import { useStore } from "@/store";
 import type { ResolvedCard } from "@/store/lib/types";
 import { selectClientId } from "@/store/selectors/shared";
-import { queryFaq } from "@/store/services/queries";
+// ER has no FAQ system — stub out queryFaq.
+async function queryFaq(_clientId: string | undefined, _code: string): Promise<Array<{ html: string }>> {
+  return [];
+}
 import { redirectArkhamDBLinks } from "@/utils/arkhamdb";
 import { isEmpty } from "@/utils/is-empty";
 
@@ -48,7 +51,7 @@ export function Faq(props: Props) {
         {response.data?.length === 0 && t("card_view.faq.empty")}
 
         {!isEmpty(response.data) &&
-          response.data.map((faq, i) => (
+          response.data.map((faq: { html: string }, i: number) => (
             <p
               // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML is sanitized.
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(faq.html) }}

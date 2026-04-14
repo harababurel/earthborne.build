@@ -1,10 +1,6 @@
 import type {
-  Attachments,
   Card,
-  FactionName,
-  OptionSelect,
   SealedDeckResponse,
-  SkillIcon,
 } from "@arkham-build/shared";
 import type { Cycle } from "../schemas/cycle.schema";
 import type { Deck, Slots } from "../schemas/deck.schema";
@@ -14,6 +10,29 @@ import type { Pack } from "../schemas/pack.schema";
 import type { TabooSet } from "../schemas/taboo-set.schema";
 import type { AttachmentQuantities } from "../slices/deck-edits.types";
 
+// Stub type — ER has no attachment mechanic; kept for call-site compatibility.
+export type Attachments = {
+  code: string;
+  cards: Record<string, { quantity: number }>;
+  limit?: number;
+  traits?: string[];
+  filters?: Array<{ attribute: string; value: string | number | null | undefined; operator?: "=" | "!=" } & Record<string, unknown>>;
+  requiredCards?: Record<string, number>;
+  name?: string;
+  icon?: string;
+  targetSize?: number;
+};
+
+// Stub type — ER has no OptionSelect mechanic; kept for call-site compatibility.
+export type OptionSelect = {
+  id: string;
+  name: string;
+};
+
+export function isOptionSelect(x: unknown): x is OptionSelect {
+  return typeof x === "object" && x != null && "id" in x;
+}
+
 export type Coded = {
   code: string;
 };
@@ -22,10 +41,10 @@ export type ResolvedCard = {
   card: Card;
   back?: ResolvedCard;
   encounterSet?: EncounterSet;
-  cycle: Cycle;
-  pack: Pack;
+  cycle: Cycle | undefined;
+  pack: Pack | undefined;
   subtype?: SubType;
-  type: Type;
+  type: Type | undefined;
 };
 
 export type CardWithRelations = ResolvedCard & {
@@ -71,13 +90,6 @@ export type DeckFanMadeContent = {
   packs: Record<string, Pack>;
 };
 
-export type DeckFanMadeContentSlots = {
-  slots: Slots;
-  sideSlots: Slots | null;
-  ignoreDeckLimitSlots: Slots | null;
-  investigator_code: string;
-};
-
 export type DeckMeta = {
   alternate_back?: string | null;
   alternate_front?: string | null;
@@ -86,7 +98,7 @@ export type DeckMeta = {
   deck_size_selected?: string | null;
   extra_deck?: string | null;
   fan_made_content?: DeckFanMadeContent;
-  hidden_slots?: DeckFanMadeContentSlots;
+  hidden_slots?: unknown;
   faction_1?: string | null;
   faction_2?: string | null;
   faction_selected?: string | null;
@@ -130,10 +142,6 @@ type OptionSelection = {
   accessor: string;
 };
 
-export function isOptionSelect(x: unknown): x is OptionSelect {
-  return typeof x === "object" && x != null && "id" in x;
-}
-
 export type Selection = OptionSelection | FactionSelection | DeckSizeSelection;
 
 // selections, keyed by their `id`, or if not present their `name`.
@@ -141,8 +149,8 @@ export type Selections = Record<string, Selection>;
 
 export type DeckCharts = {
   costCurve: Map<number, number>;
-  skillIcons: Map<SkillIcon, number>;
-  factions: Map<FactionName, number>;
+  skillIcons: Map<string, number>;
+  factions: Map<string, number>;
   traits: Map<string, number>;
 };
 
@@ -164,9 +172,9 @@ export type ResolvedDeck = Omit<Deck, "sideSlots"> & {
   cards: {
     bondedSlots: Record<string, ResolvedCard>;
     exileSlots: Record<string, ResolvedCard>;
-    extraSlots: Record<string, ResolvedCard>; // used by parallel jim.
+    extraSlots: Record<string, ResolvedCard>;
     ignoreDeckLimitSlots: Record<string, ResolvedCard>;
-    investigator: CardWithRelations; // tracks relations.
+    investigator: CardWithRelations;
     sideSlots: Record<string, ResolvedCard>;
     slots: Record<string, ResolvedCard>;
   };

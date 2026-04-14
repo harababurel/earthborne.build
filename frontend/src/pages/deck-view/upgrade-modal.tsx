@@ -45,12 +45,10 @@ function toExilable(
       const card = deck.cards[slotKey][code].card;
       if (
         burnAfterReading &&
-        !card.permanent &&
-        card.xp != null &&
         !deck.ignoreDeckLimitSlots?.[code]
       ) {
         acc.push({ card, limit });
-      } else if (card.exile) {
+      } else if ((card as unknown as { exile?: boolean }).exile) {
         acc.push({ card, limit });
       }
 

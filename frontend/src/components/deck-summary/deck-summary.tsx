@@ -65,12 +65,7 @@ export function DeckSummary(props: DeckSummaryProps) {
   const backgroundCls = getCardColor(deck.investigatorBack.card, "background");
   const borderCls = getCardColor(deck.investigatorBack.card, "border");
 
-  const card = {
-    ...deck.investigatorFront.card,
-    parallel:
-      deck.investigatorFront.card.parallel ||
-      deck.investigatorBack.card.parallel,
-  };
+  const card = deck.investigatorFront.card;
 
   return (
     <article
@@ -105,11 +100,6 @@ export function DeckSummary(props: DeckSummaryProps) {
               </h3>
               <div className={cx(css["header-row"], css["wrap"])}>
                 <div className={css["header-row"]}>
-                  {card.parallel && (
-                    <DefaultTooltip tooltip={t("deck.stats.uses_parallel")}>
-                      <i className="icon-parallel" />
-                    </DefaultTooltip>
-                  )}
                   <h4
                     className={css["sub"]}
                     data-testid="deck-summary-investigator"

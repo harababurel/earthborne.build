@@ -27,7 +27,7 @@ export const selectPlayerCardsFilter = createSelector(
   (lookupTables) => {
     const playerCardFilter = and([
       not(filterEncounterCards),
-      not(filterType(["investigator"])),
+      not(filterType(["role"]) ?? (() => true)),
       filterDuplicates,
       (c) => lookupTables.relations.bonded[c.code] == null,
       (c) => official(c),

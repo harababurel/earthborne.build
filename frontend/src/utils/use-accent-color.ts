@@ -11,15 +11,7 @@ export function useAccentColor(card?: Card) {
 }
 
 export function getAccentColorsForFaction(card: Card): React.CSSProperties {
-  let accent: string;
-
-  if (card.faction2_code) {
-    accent = "multiclass";
-  } else if (card.faction_code === "neutral") {
-    accent = "neutral";
-  } else {
-    accent = card.faction_code;
-  }
+  const accent = card.energy_aspect ?? "neutral";
 
   return {
     "--accent-color": `var(--color-${accent})`,

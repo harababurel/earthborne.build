@@ -2,6 +2,7 @@ import type { Card } from "@arkham-build/shared";
 import { MessagesSquareIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { localizeArkhamDBBaseUrl } from "@/utils/arkhamdb";
+import { official } from "@/utils/card-utils";
 import { Button, type Props as ButtonProps } from "../ui/button";
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
 export function CardArkhamDBLink(props: Props) {
   const { card, children, hash, ...rest } = props;
 
-  if (!card.official) return null;
+  if (!official(card)) return null;
 
   return (
     <Button

@@ -11,7 +11,7 @@ type Props = {
   like_count: number;
   user_id: number;
   user_name: string;
-  user_reputation: number;
+  user_reputation?: number;
 };
 
 export function ArkhamdbDecklistMeta(props: Props) {

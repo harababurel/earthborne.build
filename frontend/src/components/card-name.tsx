@@ -76,7 +76,7 @@ function CardPackDetail(props: { card: Card; invert?: boolean }) {
         code={displayPack.code}
         invert={invert}
       />{" "}
-      <span className={css["pack-detail-position"]}>{card.position}</span>
+      <span className={css["pack-detail-position"]}>{card.set_position}</span>
     </span>
   );
 }

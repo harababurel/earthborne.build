@@ -197,10 +197,7 @@ function selectCardOptions(
     cards.push(...Object.values(metadata.cards).filter(filterFn));
   } else if (origin === "campaign") {
     const filterRelevantEncounterCards = (card: Card) =>
-      !!card.subtype_code || // weaknesses
-      !!card.deck_limit || // story assets
-      card.faction_code === "neutral" ||
-      ["asset", "enemy", "treachery"].includes(card.type_code);
+      !!card.deck_limit;
 
     const filterFn = and([filterEncounterCards, filterRelevantEncounterCards]);
 

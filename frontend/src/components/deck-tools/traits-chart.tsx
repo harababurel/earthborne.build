@@ -69,7 +69,7 @@ function TraitsChartRow({
 
   const cards = Object.values(deck.cards.slots)
     .reduce((acc, { card }) => {
-      if (splitMultiValue(card.real_traits).includes(trait.x)) acc.push(card);
+      if (splitMultiValue(card.traits).includes(trait.x)) acc.push(card);
       return acc;
     }, [] as Card[])
     .sort(makeSortFunction(["name", "level", "position"], metadata, collator));

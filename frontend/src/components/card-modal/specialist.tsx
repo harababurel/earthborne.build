@@ -42,12 +42,7 @@ const selectSpecialistAccess = createSelector(
     const investigatorFilter = filterInvestigatorAccess(
       investigatorBack,
       buildQlInterpreter,
-      {
-        customizable: {
-          properties: "all",
-          level: "all",
-        },
-      },
+      {},
     );
 
     return Object.values(metadata.cards)

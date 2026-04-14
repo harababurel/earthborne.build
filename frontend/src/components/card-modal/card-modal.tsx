@@ -105,7 +105,7 @@ export function CardModal(props: Props) {
   if (!cardWithRelations) return null;
 
   const showQuantities =
-    !!ctx.resolvedDeck && cardWithRelations?.card.type_code !== "investigator";
+    !!ctx.resolvedDeck && cardWithRelations?.card.type_code !== "role";
   const showExtraQuantities = ctx.resolvedDeck?.hasExtraDeck;
   const related = getRelatedCards(
     cardWithRelations,
@@ -167,17 +167,7 @@ export function CardModal(props: Props) {
             resolvedDeck={ctx.resolvedDeck}
           />
         )}
-        {cardWithRelations.card.customization_options ? (
-          ctx.resolvedDeck ? (
-            <CustomizationsEditor
-              canEdit={canEdit}
-              card={cardWithRelations.card}
-              deck={ctx.resolvedDeck}
-            />
-          ) : (
-            <Customizations card={cardWithRelations.card} />
-          )
-        ) : undefined}
+        {/* ER has no customization system */}
       </Card>
       {!isEmpty(related) && (
         <div className={css["related"]}>
@@ -197,7 +187,7 @@ export function CardModal(props: Props) {
               />
             );
           })}
-          {cardWithRelations.card.type_code === "investigator" && (
+          {cardWithRelations.card.type_code === "role" && (
             <SpecialistAccess card={cardWithRelations.card} />
           )}
         </div>
@@ -207,10 +197,9 @@ export function CardModal(props: Props) {
           <SpecialistInvestigators card={cardWithRelations.card} />
         </div>
       )}
-      {!cardWithRelations.card.preview &&
-        !ctx.resolvedDeck &&
+      {!ctx.resolvedDeck &&
         settings.showCardModalPopularDecks &&
-        cardWithRelations.card.official && (
+        !cardWithRelations.card.pack_code?.startsWith("fan_") && (
           <div className={css["related"]}>
             <PopularDecks scope={cardWithRelations.card} />
           </div>
@@ -218,7 +207,7 @@ export function CardModal(props: Props) {
     </>
   );
 
-  const traits = cardWithRelations.card.real_traits;
+  const traits = cardWithRelations.card.traits;
   const deckQuantity =
     ctx.resolvedDeck?.slots[cardWithRelations.card.code] ?? 0;
 
@@ -227,7 +216,7 @@ export function CardModal(props: Props) {
       <ModalBackdrop />
       <ModalInner size="60rem">
         <ModalActions>
-          {cardWithRelations.card.type_code === "investigator" &&
+          {cardWithRelations.card.type_code === "role" &&
             !isStaticInvestigator(cardWithRelations.card) && (
               <Link
                 asChild

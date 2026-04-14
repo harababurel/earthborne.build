@@ -104,7 +104,7 @@ function Investigator2026Reveal() {
               <img
                 src={`/assets/blog/${fileName}.avif`}
                 loading={i === 0 ? "eager" : "lazy"}
-                alt={card.card.real_name}
+                alt={card.card.name}
               />
             </div>
             <figcaption>

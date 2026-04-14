@@ -42,7 +42,6 @@ export function CardLink({
         ref={refs.setReference}
         style={accentColor}
       >
-        {card.parallel && <i className="icon-parallel" />}
         {children}
       </Link>
       {isMounted && (

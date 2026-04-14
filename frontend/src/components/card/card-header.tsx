@@ -17,8 +17,7 @@ export function CardHeader(props: Props) {
   const { card, className, slotHeaderActions, titleLinks } = props;
   const colorCls = getCardColor(card, "background");
 
-  const showClassIcons =
-    card.type_code !== "investigator" && !card.subtype_code;
+  const showClassIcons = card.type_code !== "role";
 
   return (
     <header className={cx(css["header"], colorCls, className)}>

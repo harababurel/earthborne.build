@@ -24,16 +24,12 @@ export function PopularDecks(props: Props) {
   const { scope } = props;
   const { t } = useTranslation();
 
-  const enabled = !scope.encounter_code;
+  const enabled = true;
 
   const scopeParams = {
     filters: {
-      canonical_investigator_code:
-        scope.type_code === "investigator"
-          ? `${scope.code}-${scope.code}`
-          : undefined,
       required:
-        scope.type_code !== "investigator" ? [getCanonicalCardCode(scope)] : [],
+        scope.type_code !== "role" ? [getCanonicalCardCode(scope)] : [],
     },
   };
 
@@ -49,7 +45,7 @@ export function PopularDecks(props: Props) {
     <Trans
       t={t}
       i18nKey={
-        scope.type_code === "investigator"
+        scope.type_code === "role"
           ? "popular_decks.title_investigator"
           : "popular_decks.title_card"
       }

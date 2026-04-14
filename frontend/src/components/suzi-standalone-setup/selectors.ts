@@ -65,7 +65,7 @@ export const selectAvailableUpgrades = createSelector(
       filterLevel({ range: [1, 5] }, buildQlInterpreter, suzi),
       cardAccessFilter,
       (c: Card) =>
-        !c.real_text?.includes("Researched") && !c.customization_options,
+        !c.text?.includes("Researched"),
     ];
 
     if (checkOwnership) {
@@ -85,7 +85,7 @@ export const selectAvailableUpgrades = createSelector(
     }
 
     if (ultimatumOfExile) {
-      filters.push((c: Card) => !c.real_text?.includes("Exile"));
+      filters.push((c: Card) => !c.text?.includes("Exile"));
     }
 
     if (deck.cardPool) {
@@ -102,6 +102,6 @@ export const selectAvailableUpgrades = createSelector(
 
     return Object.values(metadata.cards)
       .map((c) => applyCardChanges(c, metadata, deck.taboo_id, undefined))
-      .filter(and(filters));
+      .filter(and(filters.filter(Boolean) as NonNullable<(typeof filters)[number]>[]));
   },
 );

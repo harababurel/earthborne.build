@@ -161,11 +161,8 @@ export const selectBackCard = createSelector(
     const card = metadata.cards[code];
     if (!card) return undefined;
 
-    if (card.back_link_id) {
-      return metadata.cards[card.back_link_id];
-    }
-
-    if (card.hidden) {
+    // ER uses double_sided instead of back_link_id/hidden.
+    if (card.double_sided) {
       const backCode = Object.keys(
         lookupTables.relations.fronts[code] ?? {},
       ).at(0);
@@ -292,25 +289,11 @@ export const selectPrintingsForCard = createSelector(
     ).reduce((acc, code) => {
       const card = metadata.cards[code];
 
-      const canShow =
-        (showFanMadeRelations || official(card)) &&
-        (showPreviews || !card.preview);
+      const canShow = showFanMadeRelations || official(card);
 
       if (!canShow) return acc;
 
       acc.set(card.pack_code, card);
-      const reprintPacks = lookupTables.reprintPacksByPack[card.pack_code];
-
-      if (card) {
-        if (reprintPacks) {
-          Object.keys(reprintPacks).forEach((reprintCode) => {
-            const targetType = card.encounter_code ? "encounter" : "player";
-            const reprintPack = metadata.packs[reprintCode];
-            const reprintType = reprintPack.reprint?.type;
-            if (reprintType === targetType) acc.set(reprintCode, card);
-          });
-        }
-      }
       return acc;
     }, new Map<string, Card>());
 

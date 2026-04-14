@@ -291,8 +291,9 @@ function CampaignPlayalongTab(props: TabProps) {
     const packs = environments.cpa(cycle);
 
     if (campaignPlayalongProject) {
-      const packCodes = campaignPlayalongProject.data.packs.map(
-        (pack) => pack.code,
+      const projectData = campaignPlayalongProject.data as unknown as { packs?: Array<{ code: string }> };
+      const packCodes = (projectData.packs ?? []).map(
+        (pack: { code: string }) => pack.code,
       );
 
       packs.push(...packCodes);

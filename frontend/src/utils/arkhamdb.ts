@@ -8,7 +8,7 @@ export function incrementVersion(_version: string): string {
   return "1.0";
 }
 
-export function localizeArkhamDBBaseUrl(_locale: string): string {
+export function localizeArkhamDBBaseUrl(_locale?: string): string {
   return "";
 }
 

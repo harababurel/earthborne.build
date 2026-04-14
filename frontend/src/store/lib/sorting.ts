@@ -1,10 +1,8 @@
 import {
-  ASSET_SLOT_ORDER,
+  ASPECT_ORDER,
+  CARD_TYPE_ORDER,
   type Card,
-  FACTION_ORDER,
-  type FactionName,
-  PLAYER_TYPE_ORDER,
-  type PlayerType,
+  type CardType,
 } from "@arkham-build/shared";
 import { displayAttribute, splitMultiValue } from "@/utils/card-utils";
 import type { SortingType } from "../slices/lists.types";
@@ -17,11 +15,9 @@ import type { Metadata } from "../slices/metadata.types";
 export const SORTING_TYPES: SortingType[] = [
   "cost",
   "cycle",
-  "faction",
-  "level",
+  "aspect",
   "name",
   "position",
-  "slot",
   "type",
 ];
 
@@ -36,22 +32,15 @@ export function sortByName(collator: Intl.Collator) {
     collator.compare(displayAttribute(a, "name"), displayAttribute(b, "name"));
 }
 
-function sortByLevel(a: Card, b: Card) {
-  if (a.xp === b.xp) {
-    return +(a.parallel ?? false) - +(b.parallel ?? false);
-  }
-
-  return (a.xp ?? 100) - (b.xp ?? 100);
+function sortByAspect(a: Card, b: Card) {
+  return (
+    ASPECT_ORDER.indexOf(a.energy_aspect as (typeof ASPECT_ORDER)[number]) -
+    ASPECT_ORDER.indexOf(b.energy_aspect as (typeof ASPECT_ORDER)[number])
+  );
 }
 
 export function sortByPosition(a: Card, b: Card) {
-  const positionDiff = (a.position ?? 0) - (b.position ?? 0);
-
-  if (positionDiff === 0) {
-    return (a.encounter_position ?? 0) - (b.encounter_position ?? 0);
-  }
-
-  return (a.position ?? 0) - (b.position ?? 0);
+  return (a.set_position ?? 0) - (b.set_position ?? 0);
 }
 
 function sortByCycle(metadata: Metadata) {
@@ -78,23 +67,16 @@ function sortByCycle(metadata: Metadata) {
   };
 }
 
-function sortByFaction(a: Card, b: Card) {
-  return (
-    FACTION_ORDER.indexOf(a.faction_code as FactionName) -
-    FACTION_ORDER.indexOf(b.faction_code as FactionName)
-  );
-}
-
 function sortByCost(a: Card, b: Card) {
-  const aCost = a.type_code === "investigator" ? -3 : (a.cost ?? -1);
-  const bCost = b.type_code === "investigator" ? -3 : (b.cost ?? -1);
+  const aCost = a.energy_cost ?? -1;
+  const bCost = b.energy_cost ?? -1;
   return aCost - bCost;
 }
 
 function sortByType(a: Card, b: Card) {
   return (
-    PLAYER_TYPE_ORDER.indexOf(a.type_code as PlayerType) -
-    PLAYER_TYPE_ORDER.indexOf(b.type_code as PlayerType)
+    CARD_TYPE_ORDER.indexOf(a.type_code as CardType) -
+    CARD_TYPE_ORDER.indexOf(b.type_code as CardType)
   );
 }
 
@@ -109,16 +91,12 @@ export function makeSortFunction(
         return sortByName(collator);
       }
 
-      case "level": {
-        return sortByLevel;
-      }
-
       case "cycle": {
         return sortByCycle(metadata);
       }
 
-      case "faction": {
-        return sortByFaction;
+      case "aspect": {
+        return sortByAspect;
       }
 
       case "type": {
@@ -129,12 +107,8 @@ export function makeSortFunction(
         return sortByCost;
       }
 
-      case "slot": {
-        return sortBySlot(collator);
-      }
-
-      case "subtype": {
-        return sortBySubtype;
+      case "category": {
+        return sortByCategory;
       }
 
       default: {
@@ -154,7 +128,7 @@ export function makeSortFunction(
 }
 
 /**
- * Encounter Sets
+ * Encounter Sets — kept for metadata compatibility but ER has no encounter sets.
  */
 
 export function sortByEncounterSet(
@@ -184,44 +158,11 @@ export function sortByEncounterSet(
 }
 
 /**
- * Slots
+ * Slots — stub: ER has no slot system.
  */
 
 export function sortBySlots(collator: Intl.Collator) {
-  return (a: string, b: string) => {
-    const slotA = getSlotIndex(a);
-    const slotB = getSlotIndex(b);
-
-    if (slotA === -1 && slotB === -1) {
-      return collator.compare(a, b);
-    }
-
-    if (slotA === -1) return 1;
-    if (slotB === -1) return -1;
-
-    return slotA - slotB;
-  };
-}
-
-function getSlotIndex(slot: string) {
-  if (!slot || slot === "permanent") return -1;
-
-  const index = ASSET_SLOT_ORDER.indexOf(slot);
-  if (index !== -1) return index;
-
-  const split = splitMultiValue(slot)[0];
-  const splitIndex = ASSET_SLOT_ORDER.indexOf(split);
-
-  return splitIndex === -1 ? -1 : splitIndex + 0.5;
-}
-
-function sortBySlot(collator: Intl.Collator) {
-  const sortBySlotsFn = sortBySlots(collator);
-  return (a: Card, b: Card) => {
-    const aSlot = a.permanent ? "permanent" : (a.real_slot ?? "");
-    const bSlot = b.permanent ? "permanent" : (b.real_slot ?? "");
-    return sortBySlotsFn(aSlot, bSlot);
-  };
+  return (a: string, b: string) => collator.compare(a, b);
 }
 
 /**
@@ -230,8 +171,8 @@ function sortBySlot(collator: Intl.Collator) {
 
 export function sortTypesByOrder(a: string, b: string) {
   return (
-    PLAYER_TYPE_ORDER.indexOf(a as PlayerType) -
-    PLAYER_TYPE_ORDER.indexOf(b as PlayerType)
+    CARD_TYPE_ORDER.indexOf(a as CardType) -
+    CARD_TYPE_ORDER.indexOf(b as CardType)
   );
 }
 
@@ -239,14 +180,22 @@ export function sortNumerical(a: number, b: number) {
   return a - b;
 }
 
-export function sortByFactionOrder(a: string, b: string) {
+export function sortByAspectOrder(a: string, b: string) {
   return (
-    FACTION_ORDER.indexOf(a as FactionName) -
-    FACTION_ORDER.indexOf(b as FactionName)
+    ASPECT_ORDER.indexOf(a as (typeof ASPECT_ORDER)[number]) -
+    ASPECT_ORDER.indexOf(b as (typeof ASPECT_ORDER)[number])
   );
 }
 
-function sortBySubtype(a: Card, b: Card) {
-  const RANKING: (string | null | undefined)[] = ["basicweakness", "weakness"];
-  return RANKING.indexOf(a.subtype_code) - RANKING.indexOf(b.subtype_code);
+// Keep legacy name as alias for callers that used the old AH name.
+export const sortByFactionOrder = sortByAspectOrder;
+
+function sortByCategory(a: Card, b: Card) {
+  const RANKING = ["personality", "background", "specialty", "reward", "malady", null, undefined];
+  return RANKING.indexOf(a.category as string) - RANKING.indexOf(b.category as string);
 }
+
+/**
+ * Helpers for multi-value string fields (traits, etc.)
+ */
+export { splitMultiValue };

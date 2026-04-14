@@ -75,7 +75,7 @@ export function CardExtras(props: Props) {
     canEdit && !isEmpty(availableUpgrades.upgrades[card.code]);
 
   const canShowMoveButton =
-    !!quantity && (currentTab !== "slots" || card.xp != null);
+    !!quantity && currentTab !== "slots";
 
   if (!hasAttachable && !hasUpgrades && !canShowMoveButton) {
     return null;

@@ -160,7 +160,7 @@ export function ListCardInner(props: Props) {
         isCardNotInLimitedPool && css["card-not-in-limited-pool"],
         isActive && css["active"],
         showCardText && css["card-text"],
-        css[card.faction_code],
+        card.energy_aspect && css[card.energy_aspect],
         !!renderCardAfter && css["has-after"],
       )}
       data-testid={`listcard-${card.code}`}
@@ -200,7 +200,7 @@ export function ListCardInner(props: Props) {
               </ListCardLink>
             )}
 
-            {!omitIcon && size !== "xs" && card.faction_code !== "mythos" && (
+            {!omitIcon && size !== "xs" && (
               <div className={cx(css["icon"], colorCls)}>
                 <CardIcon card={card} />
               </div>
@@ -222,9 +222,7 @@ export function ListCardInner(props: Props) {
                           ? "dots"
                           : (cardLevelDisplay ?? "icon-only")
                       }
-                      cardShowCollectionNumber={
-                        cardShowCollectionNumber || !!card.reprint_of
-                      }
+                      cardShowCollectionNumber={cardShowCollectionNumber}
                       cardShowUniqueIcon={cardShowUniqueIcon}
                     />
                   </ListCardLink>
@@ -267,21 +265,11 @@ export function ListCardInner(props: Props) {
 
               {!omitDetails && size !== "xs" && (
                 <div className={css["meta"]}>
-                  {card.type_code !== "investigator" && !card.subtype_code && (
+                  {card.type_code !== "role" && (
                     <MulticlassIcons
                       card={card}
                       className={css["multiclass"]}
                     />
-                  )}
-
-                  {card.parallel &&
-                  card.type_code === "investigator" &&
-                  size === "investigator" ? (
-                    <DefaultTooltip tooltip={t("deck.stats.uses_parallel")}>
-                      <i className="icon-parallel" />
-                    </DefaultTooltip>
-                  ) : (
-                    card.parallel && <i className="icon-parallel" />
                   )}
 
                   {hasSkillIcons(card) && (
@@ -303,27 +291,15 @@ export function ListCardInner(props: Props) {
 
                   {!!annotation && <AnnotationIndicator />}
 
-                  {!showInvestigatorIcons && card.real_subname && (
-                    <h5
-                      className={css["subname"]}
-                      title={displayAttribute(card, "subname")}
-                      // biome-ignore lint/security/noDangerouslySetInnerHtml: safe and necessary.
-                      dangerouslySetInnerHTML={{
-                        __html: parseCardTextHtml(
-                          displayAttribute(card, "subname"),
-                          { bullets: false },
-                        ),
-                      }}
-                    />
-                  )}
+                  {/* ER has no subname field */}
 
                   {showInvestigatorIcons &&
-                    card.type_code === "investigator" && (
+                    card.type_code === "role" && (
                       <>
                         <CardHealth
                           className={css["investigator-health"]}
-                          health={card.health}
-                          sanity={card.sanity}
+                          health={card.harm_threshold}
+                          sanity={undefined}
                         />
                         <SkillIconsInvestigator
                           card={card}
@@ -348,7 +324,7 @@ export function ListCardInner(props: Props) {
       {showCardText && (
         <div className={css["listcard-text"]}>
           <CardDetails card={card} omitSlotIcon />
-          {(card.type_code === "investigator" || isEnemyLike(card)) && (
+          {(card.type_code === "role" || isEnemyLike(card)) && (
             <CardIcons card={card} />
           )}
           <CardText
@@ -356,13 +332,6 @@ export function ListCardInner(props: Props) {
             size="tooltip"
             typeCode={card.type_code}
           />
-          {card.real_back_text && (
-            <CardText
-              text={displayAttribute(card, "back_text")}
-              size="tooltip"
-              typeCode={card.type_code}
-            />
-          )}
         </div>
       )}
     </Element>

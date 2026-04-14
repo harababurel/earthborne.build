@@ -1,9 +1,5 @@
-import {
-  type Card,
-  FACTION_ORDER,
-  type FactionName,
-  SKILL_KEYS,
-} from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
+import { ASPECT_ORDER } from "@arkham-build/shared";
 import { splitMultiValue } from "@/utils/card-utils";
 import type { DeckCharts } from "./types";
 
@@ -15,8 +11,8 @@ export type ChartableData<T extends string | number = number> = {
 export function emptyDeckCharts(): DeckCharts {
   return {
     costCurve: new Map(),
-    skillIcons: new Map(SKILL_KEYS.map((skill) => [`skill_${skill}`, 0])),
-    factions: new Map(FACTION_ORDER.map((faction) => [faction, 0] as const)),
+    skillIcons: new Map(),
+    factions: new Map(ASPECT_ORDER.map((aspect) => [aspect, 0] as const)),
     traits: new Map(),
   };
 }
@@ -26,41 +22,21 @@ export function addCardToDeckCharts(
   quantity: number,
   accumulator: DeckCharts,
 ) {
-  // Cost curve
-  if (typeof card.cost === "number" && card.cost >= 0) {
-    // Group very high cost cards together
-    const normalizedCost = card.cost >= 7 ? 7 : card.cost;
+  // Cost curve — use energy_cost
+  if (typeof card.energy_cost === "number" && card.energy_cost >= 0) {
+    const normalizedCost = card.energy_cost >= 7 ? 7 : card.energy_cost;
     const entry = accumulator.costCurve.get(normalizedCost) ?? 0;
     accumulator.costCurve.set(normalizedCost, entry + quantity);
   }
 
-  // Skill icons
-  for (const skill of SKILL_KEYS) {
-    const skillKey = `skill_${skill}` as const;
-    const skillValue = card[skillKey];
-
-    if (skillValue) {
-      const entry = accumulator.skillIcons.get(skillKey) ?? 0;
-      accumulator.skillIcons.set(skillKey, entry + skillValue * quantity);
-    }
-  }
-
-  // Factions
-  const cardFactions = [
-    card.faction_code,
-    card.faction2_code,
-    card.faction3_code,
-  ];
-
-  for (const faction of cardFactions) {
-    if (faction) {
-      const entry = accumulator.factions.get(faction as FactionName) ?? 0;
-      accumulator.factions.set(faction as FactionName, entry + quantity);
-    }
+  // Aspects
+  if (card.energy_aspect) {
+    const entry = accumulator.factions.get(card.energy_aspect) ?? 0;
+    accumulator.factions.set(card.energy_aspect, entry + quantity);
   }
 
   // Traits
-  for (const trait of splitMultiValue(card.real_traits)) {
+  for (const trait of splitMultiValue(card.traits)) {
     const entry = accumulator.traits.get(trait) ?? 0;
     accumulator.traits.set(trait, entry + quantity);
   }

@@ -235,7 +235,7 @@ function CardRecommenderInner(
   const sortedCards: Card[] = [];
 
   for (const card of listState.cards) {
-    if (card.xp == null) continue;
+    if ((card as unknown as { xp?: number }).xp == null) continue;
 
     const match = [
       card.code,

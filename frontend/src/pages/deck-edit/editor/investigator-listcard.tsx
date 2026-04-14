@@ -18,12 +18,7 @@ export function InvestigatorListcard(props: Props) {
 }
 
 function InvestigatorListcardInner({ deck }: Props) {
-  const card = {
-    ...deck.investigatorFront.card,
-    parallel:
-      deck.investigatorFront.card.parallel ||
-      deck.investigatorBack.card.parallel,
-  };
+  const card = deck.investigatorFront.card;
 
   return (
     <div

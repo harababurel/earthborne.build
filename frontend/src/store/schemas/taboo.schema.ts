@@ -1,24 +1,9 @@
-import { ApiCardSchema } from "@arkham-build/shared";
-import type z from "zod";
+// Stub — ER has no taboo system. Type kept for call-site compatibility.
+import { z } from "zod";
 
-const TabooSchema = ApiCardSchema.pick({
-  back_text: true,
-  code: true,
-  customization_change: true,
-  customization_options: true,
-  customization_text: true,
-  deck_options: true,
-  deck_requirements: true,
-  exceptional: true,
-  real_back_text: true,
-  real_customization_change: true,
-  real_customization_text: true,
-  real_taboo_text_change: true,
-  real_text: true,
-  taboo_set_id: true,
-  taboo_text_change: true,
-  taboo_xp: true,
-  text: true,
+const TabooSchema = z.object({
+  code: z.string(),
+  text: z.string().optional(),
 });
 
 export type Taboo = z.infer<typeof TabooSchema>;

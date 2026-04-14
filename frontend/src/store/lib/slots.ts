@@ -38,7 +38,7 @@ export function decodeSlots(
   let fanMadeData: ResolvedDeck["fanMadeData"];
 
   function addToFanMadeData({ card, cycle, pack, encounterSet }: ResolvedCard) {
-    if (!card.official) {
+    if (card.pack_code?.startsWith("fan_")) {
       fanMadeData ??= {
         cards: {},
         cycles: {},
@@ -46,11 +46,11 @@ export function decodeSlots(
         packs: {},
       };
 
-      if (!fanMadeData.cycles[cycle.code]) {
+      if (cycle && !fanMadeData.cycles[cycle.code]) {
         fanMadeData.cycles[cycle.code] = cycle;
       }
 
-      if (!fanMadeData.packs[pack.code]) {
+      if (pack && !fanMadeData.packs[pack.code]) {
         fanMadeData.packs[pack.code] = pack;
       }
 
@@ -101,14 +101,7 @@ export function decodeSlots(
       deckSizeTotal += quantity;
       cards.slots[code] = card;
 
-      xpRequired +=
-        card.card.myriad && myriadCounted[card.card.real_name]
-          ? 0
-          : countExperience(card.card, quantity);
-
-      if (card.card.myriad && !myriadCounted[card.card.real_name]) {
-        myriadCounted[card.card.real_name] = true;
-      }
+      xpRequired += countExperience(card.card, quantity);
 
       if (deck.ignoreDeckLimitSlots?.[code]) {
         cards.ignoreDeckLimitSlots[code] = card;

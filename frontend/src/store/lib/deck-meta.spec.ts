@@ -242,9 +242,9 @@ describe("encodeCustomizations()", () => {
     const encoded = encodeCustomizations(decoded as Customizations);
 
     for (const [key, value] of Object.entries(encoded)) {
-      const a = value.split(",").sort();
-      const b = sampleCustomizations[key].split(",").sort();
-      expect(a.every((v, i) => v === b[i])).toBeTruthy();
+      const a = (value as string).split(",").sort();
+      const b = (sampleCustomizations[key] as string).split(",").sort();
+      expect(a.every((v: string, i: number) => v === b[i])).toBeTruthy();
     }
   });
 });

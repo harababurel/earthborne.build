@@ -179,29 +179,7 @@ describe("filter: investigator access", () => {
       expect(applyFilter(state, "10015", "07153")).toBeTruthy();
     });
 
-    it("returns true if a customizable option adds access via a trait", () => {
-      const state = store.getState();
-      expect(
-        applyFilter(state, "04002", "09022", {
-          customizable: {
-            properties: "all",
-            level: "actual",
-          },
-        }),
-      ).toBeTruthy();
-    });
-
-    it("returns false if customizable access is ignored", () => {
-      const state = store.getState();
-      expect(
-        applyFilter(state, "04002", "09022", {
-          customizable: {
-            properties: "actual",
-            level: "actual",
-          },
-        }),
-      ).toBeFalsy();
-    });
+    // ER has no customizable system; these tests are removed.
   });
 
   describe("type filters", () => {
@@ -317,55 +295,14 @@ describe("filter: investigator access", () => {
       expect(applyFilter(state, "90081", "10114")).toBeFalsy();
     });
 
-    it("returns true if customizable option adds access", () => {
-      const state = store.getState();
-      state.metadata.cards["09040"].faction_code = "rogue";
-      state.metadata.cards["09040"].xp = 4;
-      expect(
-        applyFilter(state, "05001", "09040", {
-          customizable: {
-            properties: "all",
-            level: "actual",
-          },
-        }),
-      ).toBeTruthy();
-
-      expect(
-        applyFilter(state, "09004", "09040", {
-          customizable: {
-            properties: "all",
-            level: "actual",
-          },
-        }),
-      ).toBeTruthy();
-    });
+    // ER has no customizable system; this test is removed.
 
     it("returns false if tag does not match card access rules", () => {
       const state = store.getState();
       expect(applyFilter(state, "05001", "02032")).toBeFalsy();
     });
 
-    it("returns false if customizable option adds access, but is ignored", () => {
-      const state = store.getState();
-      state.metadata.cards["09040"].faction_code = "rogue";
-      state.metadata.cards["09040"].xp = 4;
-      expect(
-        applyFilter(state, "05001", "09040", {
-          customizable: {
-            properties: "actual",
-            level: "actual",
-          },
-        }),
-      ).toBeFalsy();
-      expect(
-        applyFilter(state, "09004", "09040", {
-          customizable: {
-            properties: "actual",
-            level: "actual",
-          },
-        }),
-      ).toBeFalsy();
-    });
+    // ER has no customizable system; this test is removed.
   });
 
   describe("parallel wendy: option_select", () => {
@@ -461,58 +398,7 @@ describe("filter: investigator access", () => {
     });
   });
 
-  describe("additional deck options", () => {
-    it("handles an extra deck option", () => {
-      const state = store.getState();
-      expect(applyFilter(state, "01001", "01047")).toBeFalsy();
-      expect(
-        applyFilter(state, "01001", "01021", {
-          additionalDeckOptions: [
-            {
-              level: { min: 0, max: 0 },
-              limit: 1,
-              error: "Too many off-class cards for Versatile.",
-            },
-          ],
-        }),
-      ).toBeTruthy();
-    });
-
-    it("handles a 'not' additional deck option", () => {
-      const state = store.getState();
-      expect(applyFilter(state, "01001", "01021")).toBeTruthy();
-      expect(
-        applyFilter(state, "01001", "01021", {
-          additionalDeckOptions: [
-            {
-              not: true,
-              slot: ["Ally"],
-              level: { min: 0, max: 5 },
-              error: "You cannot have assets that take up an ally slot.",
-              virtual: true,
-            },
-          ],
-        }),
-      ).toBeFalsy();
-    });
-
-    it("handles an `atleast` deck option", () => {
-      const state = store.getState();
-      expect(applyFilter(state, "10004", "05038")).toBeFalsy();
-      expect(
-        applyFilter(state, "10004", "05038", {
-          additionalDeckOptions: [
-            {
-              atleast: { min: 10, types: 1 },
-              type: ["skill"],
-              virtual: true,
-              error: "Deck must have at least 10 skill cards.",
-            },
-          ],
-        }),
-      ).toBeFalsy();
-    });
-  });
+  // ER has no additionalDeckOptions system; these tests are removed.
 
   describe("parallel jenny: non-`permanent` talents", () => {
     it("handles non-permanent talents", () => {
@@ -530,30 +416,7 @@ describe("filter: investigator access", () => {
     });
   });
 
-  describe("trait changes from parallel fronts", () => {
-    it("uses parallel front traits for checking trait-based access", () => {
-      const state = store.getState();
-      const buildQlInterpreter = selectStaticBuildQlInterpreter(state);
-
-      const wendyAdams = state.metadata.cards["01005"];
-      const parallelWendyAdams = state.metadata.cards["90037"];
-      const forbiddenSutra = state.metadata.cards["11103"];
-
-      expect(
-        filterInvestigatorAccess(
-          wendyAdams,
-          buildQlInterpreter,
-        )?.(forbiddenSutra),
-      ).toEqual(false);
-
-      const filter = filterInvestigatorAccess(wendyAdams, buildQlInterpreter, {
-        investigatorFront: parallelWendyAdams,
-      });
-
-      expect(filter?.(forbiddenSutra)).toBeTruthy();
-      expect(filter?.(state.metadata.cards["10034"])).toEqual(false);
-    });
-  });
+  // ER has no parallel investigator fronts; this test is removed.
 });
 
 describe("filter: level", () => {
@@ -574,7 +437,7 @@ describe("filter: level", () => {
       config,
       buildQlInterpreter,
       investigator,
-    )(state.metadata.cards[code]);
+    )?.(state.metadata.cards[code]);
   }
 
   it("handles case: no range", () => {
@@ -658,21 +521,7 @@ describe("filter: level", () => {
     ).toBeFalsy();
   });
 
-  it("handles case: customizable exceeds level", () => {
-    const state = store.getState();
-    const buildQlInterpreter = selectStaticBuildQlInterpreter(state);
-
-    expect(
-      filterLevel(
-        { range: [0, 5] } as any,
-        buildQlInterpreter,
-      )({
-        ...state.metadata.cards["09022"],
-        xp: 0,
-        customization_xp: 12,
-      }),
-    ).toBeTruthy();
-  });
+  // ER has no XP/customization system; this test is removed.
 });
 
 describe("filter: cost", () => {
@@ -683,7 +532,7 @@ describe("filter: cost", () => {
   });
 
   function applyFilter(state: StoreState, code: string, config: CostFilter) {
-    return filterCost(config)(state.metadata.cards[code]);
+    return filterCost(config)?.(state.metadata.cards[code]);
   }
 
   it("handles case: no range", () => {
@@ -864,7 +713,7 @@ describe("filter: factions", () => {
   });
 
   function applyFilter(state: StoreState, code: string, config: string[]) {
-    return filterFactions(config)(state.metadata.cards[code]);
+    return filterFactions(config)?.(state.metadata.cards[code]);
   }
   it("handles case: multiclass", () => {
     const state = store.getState();
@@ -883,10 +732,8 @@ describe("filter: actions", () => {
   });
 
   function applyFilter(state: StoreState, code: string, config: string[]) {
-    return filterActions(
-      config,
-      selectLookupTables(state).actions,
-    )(state.metadata.cards[code]);
+    const filter = filterActions(config);
+    return filter?.(state.metadata.cards[code]);
   }
 
   it("handles case: no restrictions", () => {
@@ -924,7 +771,7 @@ describe("filter: skills", () => {
     code: string,
     config: SkillIconsFilter,
   ) {
-    return filterSkillIcons(config)(state.metadata.cards[code]);
+    return filterSkillIcons(config)?.(state.metadata.cards[code]);
   }
 
   const defaultConfig: SkillIconsFilter = {

@@ -20,7 +20,7 @@ function UsableCards() {
 
   const card = useStore((state) => selectMetadata(state).cards[params.code]);
 
-  if (!card || card.type_code !== "investigator") {
+  if (!card || card.type_code !== "role") {
     return <ErrorStatus statusCode={404} />;
   }
 
@@ -57,7 +57,7 @@ function UsableCardsList(props: { card: Card }) {
   if (!activeList) return null;
 
   const titleInterpolationValues = {
-    prefix: card.parallel ? `${t("common.parallel")} ` : "",
+    prefix: "",
     name: displayAttribute(card, "name"),
   };
 

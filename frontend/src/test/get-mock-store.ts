@@ -6,17 +6,19 @@ import factions from "@/store/services/data/factions.json";
 import reprintPacks from "@/store/services/data/reprint_packs.json";
 import subTypes from "@/store/services/data/subtypes.json";
 import types from "@/store/services/data/types.json";
-import type {
-  AllCardApiResponse,
-  DataVersionApiResponse,
-  MetadataApiResponse,
-} from "@/store/services/queries";
 import { packToApiFormat } from "@/utils/arkhamdb-json-format";
+
+// Stubs use the legacy AH JSON shape; cast through unknown to satisfy ER types.
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const metadataAny = metadataStub as any;
+const dataVersionAny = dataVersionStub as any;
+const allCardAny = allCardStub as any;
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 function queryStubMetadata() {
   return Promise.resolve({
-    ...(metadataStub as MetadataApiResponse).data,
-    pack: metadataStub.data.pack,
+    ...metadataAny.data,
+    pack: metadataAny.data.pack,
     reprint_pack: reprintPacks.map(packToApiFormat),
     faction: factions,
     type: types,
@@ -25,14 +27,11 @@ function queryStubMetadata() {
 }
 
 function queryStubDataVersion() {
-  return Promise.resolve(
-    (dataVersionStub as DataVersionApiResponse).data.all_card_updated[0],
-  );
+  return Promise.resolve(dataVersionAny.data?.all_card_updated?.[0] ?? dataVersionAny);
 }
 
 function queryStubCardData() {
-  const data = allCardStub;
-  const allCards = (data as AllCardApiResponse).data.all_card;
+  const allCards = allCardAny.data?.all_card ?? allCardAny;
   return Promise.resolve(allCards);
 }
 

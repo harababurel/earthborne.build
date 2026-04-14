@@ -1,4 +1,5 @@
-import type { Attachments, Card } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
+import type { Attachments } from "@/store/lib/types";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import type { ResolvedDeck } from "@/store/lib/types";
@@ -63,7 +64,7 @@ function AttachmentQuantity(
   return (
     <article className={css["quantity"]} key={definition.code}>
       <h3 className={css["quantity-title"]}>
-        <ExternalLucideIcon url={definition.icon} />{" "}
+        {definition.icon && <ExternalLucideIcon url={definition.icon} />}{" "}
         {getAttachmentName(definition, i18n, t)}
       </h3>
       <QuantityInput

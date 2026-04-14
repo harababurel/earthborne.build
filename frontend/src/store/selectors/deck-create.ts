@@ -61,11 +61,9 @@ export const selectDeckCreateCardSets = createSelector(
     const { back, investigator } = investigators;
     const { relations } = back;
 
-    const deckSizeRequirement = investigator.card.deck_requirements?.size ?? 30;
+    const deckSizeRequirement = 30;
 
-    const hasDeckSizeOption = investigator.card.deck_options?.find((o) =>
-      Array.isArray(o.deck_size_select),
-    );
+    const hasDeckSizeOption = false;
 
     if (relations?.advanced?.length) {
       groupings.push({
@@ -209,8 +207,7 @@ export const selectDeckCreateCardSets = createSelector(
         ) as ResolvedCard,
       ],
       quantities: {
-        [SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS]:
-          back.card.deck_requirements?.random?.length ?? 1,
+        [SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS]: 1,
       },
     });
 

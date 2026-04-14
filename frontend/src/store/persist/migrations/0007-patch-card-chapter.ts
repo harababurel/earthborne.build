@@ -13,7 +13,7 @@ function migrate(_state: unknown, version: number) {
     }
 
     for (const card of Object.values(cards)) {
-      card.chapter = inferCardChapter(card.pack_code, packs);
+      (card as unknown as Record<string, unknown>).chapter = inferCardChapter(card.pack_code, packs);
     }
   }
 

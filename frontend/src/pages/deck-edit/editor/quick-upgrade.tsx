@@ -310,8 +310,6 @@ function isShrewdAnalysisUpgrade(
   return (
     availableUpgrades.shrewdAnalysisPresent &&
     deck.slots[card.code] > 1 &&
-    ["Unidentified", "Untranslated"].some((trait) =>
-      card.real_subname?.includes(trait),
-    )
+    false
   );
 }

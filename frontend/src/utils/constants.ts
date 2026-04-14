@@ -45,7 +45,7 @@ export const MQ_WIDE_PREVIEW = "(min-width: 85rem)";
 
 export const ARCHIVE_FOLDER_ID = "archive";
 
-export type StorageProvider = "local" | "shared";
+export type StorageProvider = "local" | "shared" | "arkhamdb";
 
 export const STORAGE_PROVIDERS = ["local", "shared"] as const;
 
@@ -54,7 +54,7 @@ export const DEFAULT_LIST_SORT_ID = "list_default";
 // Stubs — Arkham-specific constants removed. Will be replaced in Phase 4.
 export const SPECIAL_CARD_CODES: Record<string, string> = {};
 export const PREVIEW_PACKS: string[] = [];
-export const RETURN_TO_CYCLES: string[] = [];
+export const RETURN_TO_CYCLES: Record<string, string> = {};
 export const CYCLES_WITH_STANDALONE_PACKS: string[] = [];
 export const SIDEWAYS_TYPE_CODES: string[] = [];
 export const ORIENTATION_CHANGED_CARDS: string[] = [];

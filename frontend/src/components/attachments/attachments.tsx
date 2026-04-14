@@ -1,4 +1,5 @@
-import type { Card, Attachments as IAttachments } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
+import type { Attachments as IAttachments } from "@/store/lib/types";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { ResolvedDeck } from "@/store/lib/types";
@@ -60,7 +61,7 @@ function Attachment(
 
   const contentNode = (
     <span className={css["attachment-content"]}>
-      <ExternalLucideIcon url={definition.icon} />
+      {definition.icon && <ExternalLucideIcon url={definition.icon} />}
       {!!attached && (
         <span className={css["attachment-quantity"]}>×{attached}</span>
       )}

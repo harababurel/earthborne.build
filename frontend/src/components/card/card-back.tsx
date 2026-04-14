@@ -35,11 +35,10 @@ export function CardBack(props: Props) {
   );
 
   const [isSideways, setSideways] = useState(sideways(card));
-  const hasHeader = card.parallel || card.type_code !== "investigator";
+  const hasHeader = card.type_code !== "role";
 
   const showImage =
-    size === "full" ||
-    (backCard.type_code !== "investigator" && backCard.type_code !== "story");
+    size === "full" || card.type_code !== "role";
 
   const showMeta =
     size === "full" &&
@@ -66,7 +65,7 @@ export function CardBack(props: Props) {
     >
       {hasHeader && <CardHeader card={backCard} />}
 
-      {card.type_code !== "investigator" && (
+      {card.type_code !== "role" && (
         <div className={css["pre"]}>
           <CardDetails card={backCard} face="simple-back" />
         </div>
@@ -74,9 +73,9 @@ export function CardBack(props: Props) {
 
       <div className={css["content"]}>
         <CardText
-          flavor={displayAttribute(card, "back_flavor")}
+          flavor={displayAttribute(card, "flavor")}
           size={size}
-          text={displayAttribute(card, "back_text")}
+          text={displayAttribute(card, "text")}
           typeCode={card.type_code}
         />
         {showMeta && <CardMetaBack illustrator={backCard.illustrator} />}

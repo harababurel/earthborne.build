@@ -43,7 +43,7 @@ export function DeckCardsFilter({ containerClass }: Props) {
   const playerCards = useMemo(() => {
     const playerCardFilter = and([
       filterMythosCards,
-      not(filterType(["investigator"])),
+      not(filterType(["role"]) ?? (() => true)),
       filterDuplicates,
     ]);
 

@@ -175,24 +175,9 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       undefined,
     );
 
-    const deckSizeOption = [
-      ...(back.deck_options ?? []),
-      ...(back.side_deck_options ?? []),
-    ]?.find((o) => !!o.deck_size_select);
-
     for (const [key, value] of Object.entries(state.deckCreate.selections)) {
-      // EDGE CASE: mandy's taboo removes the deck size select,
-      // omit any selection made from deck meta.
-      if (key === "deck_size_selected" && !deckSizeOption) {
-        continue;
-      }
-
       meta[key as keyof Omit<DeckMeta, "fan_made_content" | "hidden_slots">] =
         value;
-    }
-
-    if (deckSizeOption && !meta.deck_size_selected) {
-      meta.deck_size_selected = "30";
     }
 
     const cardSets = selectDeckCreateCardSets(state);
@@ -232,7 +217,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     let deck = createDeck({
       investigator_code: state.deckCreate.investigatorCode,
-      investigator_name: back.real_name,
+      investigator_name: back.name,
       name: state.deckCreate.title,
       slots,
       meta: JSON.stringify(meta),
@@ -598,15 +583,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       delete newDeck.slots[SPECIAL_CARD_CODES.THE_GREAT_WORK];
       meta.transform_into = SPECIAL_CARD_CODES.LOST_HOMUNCULUS;
 
-      for (const [code, quantity] of Object.entries(newDeck.slots)) {
-        const card = metadata.cards[code];
-
-        if (quantity && card.restrictions?.investigator) {
-          delete newDeck.slots[code];
-          newDeck.slots[SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS] ??= 0;
-          newDeck.slots[SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS] += quantity;
-        }
-      }
+      // ER has no investigator restrictions to handle.
     }
 
     if (exileString) {

@@ -1,4 +1,3 @@
-import type { FactionName } from "@arkham-build/shared";
 import type { TFunction } from "i18next";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +9,7 @@ import { ChartTooltip } from "./chart-tooltip";
 import css from "./deck-tools.module.css";
 
 type Props = {
-  data: ChartableData<FactionName>;
+  data: ChartableData<string>;
 };
 
 export function FactionsChart({ data }: Props) {
@@ -47,7 +46,7 @@ export function FactionsChart({ data }: Props) {
 }
 
 function renderFactionSector(props: PieSectorShapeProps) {
-  const faction = props.payload?.x as FactionName | undefined;
+  const faction = props.payload?.x as string | undefined;
   const fill = faction
     ? `var(--${faction === "neutral" ? "text" : "color"}-${faction})`
     : "var(--text)";
@@ -59,7 +58,7 @@ function renderFactionLabel(props: {
   cy?: number;
   midAngle?: number;
   outerRadius?: number;
-  payload?: { x: FactionName };
+  payload?: { x: string };
 }) {
   const { cx = 0, cy = 0, midAngle = 0, outerRadius = 0, payload } = props;
   if (!payload) return null;

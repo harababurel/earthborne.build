@@ -8,19 +8,18 @@ import { Interpreter } from "./interpreter";
 import type { InterpreterContext } from "./interpreter.types";
 import { parse } from "./parser";
 
-function createMockCard(overrides: Partial<Card> = {}): Card {
+function createMockCard(overrides: Record<string, unknown> = {}): Card {
   return {
     code: "01001",
     name: "Test Card",
-    faction_code: "guardian",
-    type_code: "asset",
+    energy_aspect: "AWA",
+    type_code: "gear",
     pack_code: "core",
     position: 1,
     quantity: 2,
     id: "01001",
-    real_name: "Test Card",
     ...overrides,
-  } as Card;
+  } as unknown as Card;
 }
 
 function compile(expr: ReturnType<typeof parse>, ctx: InterpreterContext) {

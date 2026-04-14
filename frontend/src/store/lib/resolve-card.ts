@@ -26,197 +26,56 @@ export function resolveCardWithRelations<T extends boolean>(
 
   const pack = deps.metadata.packs[card.pack_code];
   const type = deps.metadata.types[card.type_code];
-  const cycle = deps.metadata.cycles[pack.cycle_code];
-
-  const subtype = card.subtype_code
-    ? deps.metadata.subtypes[card.subtype_code]
-    : undefined;
-
-  const encounterSet = card.encounter_code
-    ? deps.metadata.encounterSets[card.encounter_code]
-    : undefined;
-
-  const back = card.back_link_id
-    ? resolveCardWithRelations(
-        deps,
-        collator,
-        card.back_link_id,
-        tabooSetId,
-        customizations,
-      )
-    : undefined;
+  const cycle = pack ? deps.metadata.cycles[pack.cycle_code] : undefined;
 
   const cardWithRelations: CardWithRelations = {
-    back,
+    back: undefined,
     card,
     cycle,
-    encounterSet,
+    encounterSet: undefined,
     pack,
-    subtype,
+    subtype: undefined,
     type,
   };
 
   if (withRelations) {
-    if (card.type_code === "investigator") {
-      cardWithRelations.relations = {
-        advanced: resolveRelationArray(
-          deps,
-          collator,
-          "advanced",
-          card.code,
-          tabooSetId,
-        ),
-        base: resolveRelation(deps, collator, "base", card.code, tabooSetId),
-        parallel: resolveRelation(
-          deps,
-          collator,
-          "parallel",
-          card.code,
-          tabooSetId,
-        ),
-        replacement: resolveRelationArray(
-          deps,
-          collator,
-          "replacement",
-          card.code,
-          tabooSetId,
-        ),
-        requiredCards: resolveRelationArray(
-          deps,
-          collator,
-          "requiredCards",
-          card.code,
-          tabooSetId,
-        ),
-        sideDeckRequiredCards: resolveRelationArray(
-          deps,
-          collator,
-          "sideDeckRequiredCards",
-          card.code,
-          tabooSetId,
-        ),
-        parallelCards: resolveRelationArray(
-          deps,
-          collator,
-          "parallelCards",
-          card.code,
-          tabooSetId,
-        ),
-        otherVersions: resolveRelationArray(
-          deps,
-          collator,
-          "otherVersions",
-          card.code,
-          tabooSetId,
-        ),
-      };
-    } else {
-      cardWithRelations.relations = {
-        restrictedTo: resolveRelationArray(
-          deps,
-          collator,
-          "restrictedTo",
-          card.code,
-          tabooSetId,
-        ),
-        level: resolveRelationArray(
-          deps,
-          collator,
-          "level",
-          card.code,
-          tabooSetId,
-        ),
-      };
-
-      if (card.restrictions?.investigator) {
-        const investigator = resolveCardWithRelations(
-          deps,
-          collator,
-          Object.keys(card.restrictions.investigator)[0],
-          tabooSetId,
-          customizations,
-          true,
-        );
-
-        const related = [
-          ...(investigator?.relations?.advanced ?? []),
-          ...(investigator?.relations?.requiredCards ?? []),
-          ...(investigator?.relations?.replacement ?? []),
-        ];
-
-        const sortFn = sortByName(collator);
-
-        const matches = related
-          .filter(
-            (relatedCard) =>
-              relatedCard.card.code !== card.code &&
-              relatedCard.card.subtype_code === card.subtype_code,
-          )
-          .sort((a, b) => sortFn(a.card, b.card));
-
-        if (matches.length) {
-          cardWithRelations.relations.otherSignatures = matches;
-        }
-      }
-    }
-
-    cardWithRelations.relations.duplicates = resolveRelationArray(
-      deps,
-      collator,
-      "duplicates",
-      card.code,
-      tabooSetId,
-      customizations,
-      false,
-    );
-
-    cardWithRelations.relations.reprints = resolveRelationArray(
-      deps,
-      collator,
-      "reprints",
-      card.code,
-      tabooSetId,
-      customizations,
-      false,
-    );
-
-    cardWithRelations.relations.bound = resolveRelationArray(
-      deps,
-      collator,
-      "bound",
-      card.code,
-      tabooSetId,
-    );
-
-    cardWithRelations.relations.bonded = resolveRelationArray(
-      deps,
-      collator,
-      "bonded",
-      card.code,
-      tabooSetId,
-    );
+    cardWithRelations.relations = {
+      duplicates: resolveRelationArray(
+        deps,
+        collator,
+        "duplicates",
+        card.code,
+        tabooSetId,
+        customizations,
+        false,
+      ),
+      reprints: resolveRelationArray(
+        deps,
+        collator,
+        "reprints",
+        card.code,
+        tabooSetId,
+        customizations,
+        false,
+      ),
+      bound: resolveRelationArray(
+        deps,
+        collator,
+        "bound",
+        card.code,
+        tabooSetId,
+      ),
+      bonded: resolveRelationArray(
+        deps,
+        collator,
+        "bonded",
+        card.code,
+        tabooSetId,
+      ),
+    };
   }
 
   return cardWithRelations;
-}
-
-function resolveRelation(
-  deps: Pick<StoreState, "metadata"> & { lookupTables: LookupTables },
-  collator: Intl.Collator,
-  key: keyof LookupTables["relations"],
-  code: string,
-  tabooSetId: number | null | undefined,
-  customizations?: Customizations,
-): ResolvedCard | undefined {
-  const relations = resolveRelationArray(
-    deps,
-    collator,
-    key,
-    code,
-    tabooSetId,
-    customizations,
-  );
-  return relations.length ? relations[0] : undefined;
 }
 
 function resolveRelationArray(
@@ -243,7 +102,7 @@ function resolveRelationArray(
           false,
         );
 
-        if (card && (!ignoreDuplicates || !card.card.duplicate_of_code)) {
+        if (card) {
           acc.push(card);
         }
 
@@ -252,7 +111,7 @@ function resolveRelationArray(
     : [];
 
   const sortFn = makeSortFunction(
-    ["subtype", "type", "name", "level", "cycle"],
+    ["type", "name"],
     metadata,
     collator,
   );
@@ -278,7 +137,7 @@ export function getRelatedCards(
         const values = (Array.isArray(value) ? value : [value]).filter((v) => {
           if (!v) return false;
           return (
-            (showPreviews || !v.card.preview) &&
+            (showPreviews || !v.card.is_unique) &&
             (showFanMadeRelations || official(v.card))
           );
         });
@@ -299,8 +158,7 @@ export function getRelatedCardQuantity(
   set: ResolvedCard | ResolvedCard[],
 ) {
   const cards = Array.isArray(set) ? set : [set];
-  const canShowQuantity =
-    key !== "parallel" && key !== "level" && key !== "restrictedTo";
+  const canShowQuantity = key !== "level" && key !== "restrictedTo";
 
   return canShowQuantity
     ? cards.reduce<Record<string, number>>((acc, { card }) => {

@@ -21,7 +21,7 @@ export function LimitedSlots(props: { deck: ResolvedDeck }) {
         <LimitedCardGroup
           key={entry.index}
           count={{
-            limit: entry.option.limit ?? 0,
+            limit: (entry.option.limit as number | undefined) ?? 0,
             total: entry.entries.reduce(
               (acc, { quantity }) => acc + quantity,
               0,
@@ -36,13 +36,14 @@ export function LimitedSlots(props: { deck: ResolvedDeck }) {
               quantity={quantity}
             />
           )}
-          title={
-            entry.option.name
-              ? i18n.exists(`deck.limited_decks.${entry.option.name}`)
-                ? t(`deck.limited_decks.${entry.option.name}`)
-                : entry.option.name
-              : t("deck.limited_slots")
-          }
+          title={(() => {
+            const optName = entry.option.name as string | undefined;
+            return optName
+              ? i18n.exists(`deck.limited_decks.${optName}`)
+                ? t(`deck.limited_decks.${optName}`)
+                : optName
+              : t("deck.limited_slots");
+          })()}
         />
       ))}
     </>

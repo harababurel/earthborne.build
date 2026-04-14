@@ -163,7 +163,7 @@ export function DeckCreateEditor() {
   return (
     <div className={css["editor"]} style={cssVariables}>
       <PageTitle>
-        {t("deck_create.title", { name: investigator.card.real_name })}
+        {t("deck_create.title", { name: investigator.card.name })}
       </PageTitle>
       <Field full padded>
         <FieldLabel htmlFor="provider">

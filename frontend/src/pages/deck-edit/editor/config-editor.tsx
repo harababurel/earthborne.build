@@ -1,8 +1,10 @@
 import type {
   Card,
-  DeckOptionSelectType,
   SealedDeckResponse,
 } from "@arkham-build/shared";
+
+// ER has no option-select system — stub type for call-site compatibility.
+type DeckOptionSelectType = string;
 import type { TFunction } from "i18next";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";

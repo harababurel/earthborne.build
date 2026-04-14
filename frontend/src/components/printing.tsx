@@ -50,7 +50,7 @@ export function Printing({
           <span>{packName}</span>
         )
       }
-      position={card.position}
+      position={card.set_position ?? ""}
       quantity={card.quantity}
       showCopyId={showCopyId}
     />

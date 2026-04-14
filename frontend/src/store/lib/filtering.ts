@@ -278,7 +278,7 @@ export function filterPackCode(
   if (isEmpty(value)) return undefined;
   if (!value.some((x) => x)) return undefined;
 
-  return (card: Card) => value.includes(card.set_code);
+  return (card: Card) => card.set_code != null && value.includes(card.set_code);
 }
 
 /**

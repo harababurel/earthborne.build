@@ -1,4 +1,3 @@
-import type { SkillKey } from "@arkham-build/shared";
 import type { Filter } from "@/utils/fp";
 import type { ResolvedDeck } from "../lib/types";
 import type { DecklistConfig } from "./settings.types";
@@ -19,6 +18,7 @@ export type CostFilter = {
   x: boolean;
 };
 
+// Stub — ER has no XP levels.
 export type LevelFilter = {
   range: undefined | [number, number];
 };
@@ -47,6 +47,7 @@ export type PropertiesFilter = {
   victory: boolean;
 };
 
+// Stub — ER has no subtype/weakness system; kept for API compatibility.
 export type SubtypeFilter = {
   none: boolean;
   weakness: boolean;
@@ -57,6 +58,7 @@ export type SelectFilter = string | number | undefined;
 
 export type CardTypeFilter = "" | "player" | "encounter";
 
+// Stub — ER has no skill icons; kept for API compatibility.
 export type SkillIconsFilter = {
   agility: number | undefined;
   combat: number | undefined;
@@ -70,8 +72,9 @@ export type HealthFilter = [number, number] | undefined;
 
 export type SanityFilter = [number, number] | undefined;
 
+// Stub — ER has no investigator skill stats; kept for API compatibility.
 export type InvestigatorSkillsFilter = Record<
-  Exclude<SkillKey, "wild">,
+  "agility" | "combat" | "intellect" | "willpower",
   [number, number] | undefined
 >;
 
@@ -124,7 +127,9 @@ export type Search = {
 };
 
 export type GroupingType =
+  | "aspect"
   | "base_upgrades"
+  | "category"
   | "cost"
   | "cycle"
   | "encounter_set"
@@ -137,6 +142,8 @@ export type GroupingType =
   | "type";
 
 export type SortingType =
+  | "aspect"
+  | "category"
   | "cost"
   | "cycle"
   | "faction"

@@ -103,7 +103,7 @@ function FanMadeContentPreviewInner({ project }: { project: FanMadeProject }) {
     return null;
   }
 
-  const iconUrl = project.data.packs[0]?.icon_url;
+  const iconUrl = (project.data as unknown as { packs?: Array<{ icon_url?: string }> }).packs?.[0]?.icon_url;
 
   return (
     <CardModalProvider>

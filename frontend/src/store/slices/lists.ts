@@ -48,13 +48,7 @@ import type { DecklistConfig, SettingsState } from "./settings.types";
 
 const SYSTEM_FILTERS: Filter[] = [
   filterBacksides,
-  (card: Card) =>
-    !card.hidden || card.code === SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS,
-  // Bonded investigators
-  (card: Card) =>
-    card.type_code !== "investigator" ||
-    !!card.deck_limit ||
-    !!card.encounter_code,
+  // ER has no hidden cards or encounter cards.
 ];
 
 function getInitialList() {
@@ -1000,7 +994,7 @@ export function makeLists(
       },
       systemFilter: and([
         systemFilter,
-        filterType(["investigator"]),
+        filterType(["role"]) ?? (() => true),
         not(filterEncounterCards),
       ]),
       initialValues,

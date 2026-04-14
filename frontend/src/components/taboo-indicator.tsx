@@ -1,7 +1,5 @@
+// Stub — ER has no taboo list.
 import type { Card } from "@arkham-build/shared";
-import { cx } from "@/utils/cx";
-import { ExperienceDots } from "./experience-dots";
-import css from "./taboo-indicator.module.css";
 
 type Props = {
   card: Card;
@@ -9,25 +7,7 @@ type Props = {
   cardLevelDisplay?: "text" | "dots" | "icon-only";
 };
 
-export function TabooIndicator(props: Props) {
-  const { card, cardLevelDisplay, className } = props;
-
-  if (!card.taboo_set_id) return null;
-
-  return (
-    <span className={cx(className, css["indicator"], "color-taboo")}>
-      <i className="icon-tablet icon-layout color-taboo" />
-      {cardLevelDisplay &&
-        card.taboo_xp &&
-        (cardLevelDisplay === "text" ? (
-          <strong>{signedInteger(card.taboo_xp)} XP</strong>
-        ) : (
-          <ExperienceDots xp={card.taboo_xp} />
-        ))}
-    </span>
-  );
-}
-
-function signedInteger(num: number) {
-  return num > 0 ? `+${num}` : num.toString();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function TabooIndicator(_props: Props) {
+  return null;
 }

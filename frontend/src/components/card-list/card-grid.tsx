@@ -69,11 +69,7 @@ export function CardGrid(props: CardListImplementationProps) {
   const defaultOrientation = useMemo(() => {
     return data.cards.reduce(
       (acc, curr) => {
-        if (
-          curr.type_code === "act" ||
-          curr.type_code === "agenda" ||
-          curr.type_code === "investigator"
-        ) {
+        if (curr.type_code === "role") {
           acc.horizontal += 1;
         } else {
           acc.vertical += 1;
@@ -171,7 +167,7 @@ export function CardGrid(props: CardListImplementationProps) {
                 <CardGridItem
                   {...rest}
                   card={card}
-                  key={card.id}
+                  key={card.code}
                   highlighted={
                     highlighted !== null &&
                     data.cards.indexOf(card) === highlighted

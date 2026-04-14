@@ -70,33 +70,12 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
     let targetPack = currentPack;
 
     if (!oldFormat) {
-      const reprintPackCodes =
-        lookupTables.reprintPacksByPack[currentCardPackCode];
-
-      if (reprintPackCodes) {
-        const targetType = currentCard.card.encounter_code
-          ? "encounter"
-          : "player";
-
-        const reprint = Object.keys(reprintPackCodes).reduce(
-          (acc, curr) => {
-            const pack = metadata.packs[curr];
-            return pack.reprint?.type === targetType ? pack : acc;
-          },
-          undefined as Pack | undefined,
-        );
-
-        if (reprint) {
-          targetPack = reprint;
-        }
-      }
+      // ER has no reprint packs.
     }
 
     return targetPack;
   }, [
-    currentCard.card.encounter_code,
     currentCard.card.pack_code,
-    lookupTables.reprintPacksByPack,
     metadata.packs,
     oldFormat,
   ]);
@@ -107,26 +86,11 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
         .filter(
           and([
             filterBacksides,
-            (card) => {
-              if (targetPack.reprint && targetPack.reprint?.type !== "rcore") {
-                const cardPack = metadata.packs[card.pack_code];
-
-                const cycleMatches =
-                  cardPack.cycle_code === targetPack.cycle_code;
-
-                const reprintTypeMatches =
-                  !!card.encounter_code === !!currentCard.card.encounter_code;
-
-                return cycleMatches && reprintTypeMatches;
-              }
-
-              return card.pack_code === targetPack.code;
-            },
+            (card) => card.pack_code === targetPack.code,
           ]),
         )
         .sort(sortByPosition),
     [
-      currentCard.card.encounter_code,
       metadata.cards,
       metadata.packs,
       targetPack,
@@ -217,13 +181,11 @@ export function CardViewCards({
       <CardSetNav currentCard={cardWithRelations} />
       <div data-testid="main">
         <Card resolvedCard={cardWithRelations}>
-          {cardWithRelations.card.customization_options ? (
-            <CustomizationsEditor card={cardWithRelations.card} />
-          ) : undefined}
+          {/* ER has no customizations */}
         </Card>
       </div>
 
-      {official(cardWithRelations.card) && !cardWithRelations.card.preview && (
+      {official(cardWithRelations.card) && (
         <PopularDecks scope={cardWithRelations.card} />
       )}
 
@@ -251,7 +213,7 @@ export function CardViewCards({
           );
         })}
 
-      {cardWithRelations.card.type_code === "investigator" && (
+      {cardWithRelations.card.type_code === "role" && (
         <CardViewSection title={formatRelationTitle("specialist")}>
           <SpecialistAccess card={cardWithRelations.card} />
         </CardViewSection>

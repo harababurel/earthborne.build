@@ -1,4 +1,4 @@
-import type { Attachments } from "@arkham-build/shared";
+import type { Attachments } from "@/store/lib/types";
 import type { Deck } from "@/store/schemas/deck.schema";
 import type { AttachmentQuantities } from "../slices/deck-edits.types";
 import type { Metadata } from "../slices/metadata.types";
@@ -14,8 +14,9 @@ export function getAttachableCards(deck: Deck, metadata: Metadata) {
   for (const [code, quantity] of Object.entries(slots)) {
     if (quantity > 0) {
       const card = metadata.cards[code];
-      if (card?.attachments) {
-        attachableCards[code] = card.attachments;
+      const cardAny = card as unknown as { attachments?: Attachments };
+      if (cardAny?.attachments) {
+        attachableCards[code] = cardAny.attachments;
       }
     }
   }

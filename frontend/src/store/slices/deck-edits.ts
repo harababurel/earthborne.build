@@ -393,8 +393,7 @@ export const createDeckEditsSlice: StateCreator<
       const sourceCard = metadata.cards[code];
 
       if (nextState?.deckEdits?.[deckId]) {
-        nextState.deckEdits[deckId].xpAdjustment =
-          (upgrades[0].xp ?? 0) - (sourceCard.xp ?? 0);
+        nextState.deckEdits[deckId].xpAdjustment = 0; // ER has no XP system.
       }
 
       return nextState;
@@ -402,11 +401,11 @@ export const createDeckEditsSlice: StateCreator<
   },
   completeTask(deckId, card) {
     assert(
-      card.real_traits?.includes("Task"),
+      card.traits?.includes("Task"),
       `${displayAttribute(card, "name")} is not a Task.`,
     );
 
-    const completeId = card.back_link_id ?? `${card.code.slice(0, -1)}b`;
+    const completeId = `${card.code.slice(0, -1)}b`;
 
     set((state) => {
       let nextState = getCardQuantityUpdate(

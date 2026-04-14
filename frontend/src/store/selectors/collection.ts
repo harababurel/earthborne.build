@@ -30,7 +30,7 @@ export const selectTotalOwned = createSelector(
     let ownedPlayerCards = 0;
     let ownedEncounterCards = 0;
 
-    const filter = and([(c) => !c.hidden, filterBacksides, filterDuplicates]);
+    const filter = and([(c) => !(c as unknown as { hidden?: boolean }).hidden, filterBacksides, filterDuplicates]);
 
     for (const card of cards) {
       if (!filter(card)) continue;

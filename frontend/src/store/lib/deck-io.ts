@@ -1,8 +1,4 @@
-import type {
-  Card,
-  CustomizationOption,
-  OptionSelect,
-} from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
 import {
   type DeckValidationResult,
   validateDeck,
@@ -158,7 +154,7 @@ export function formatDeckAsText(state: StoreState, deck: ResolvedDeck) {
         if (selection.type === "faction") {
           str = t(`common.factions.${value}`);
         } else if (selection.type === "option") {
-          str = formatDeckOptionString((value as OptionSelect).name);
+          str = formatDeckOptionString((value as { name: string }).name);
         } else {
           str = value as string;
         }
@@ -266,106 +262,11 @@ function formatCardAsText(
 ) {
   const name = displayAttribute(card, "name");
 
-  const customizable = !!card.customization_options;
   const quantity = quantities[card.code] ?? 0;
-
-  const cardStr = `- ${name}${card.taboo_set_id ? "†" : ""}${card.xp ? ` (${card.xp})` : ""}${customizable ? " (C)" : ""}${quantity > 1 ? ` x${quantity}` : ""}`;
-
-  const customizationText = displayAttribute(card, "customization_text");
-
-  if (customizable && customizations && customizationText) {
-    const optionNames = customizationText
-      .replaceAll("□", "")
-      .replaceAll("<b>", "")
-      .replaceAll("</b>", "")
-      .replaceAll("[[", "")
-      .replaceAll("]]", "")
-      .replaceAll("_____", "")
-      .split("\n")
-      .map((n) => {
-        const val = n.split(".")[0].trim();
-        return val.endsWith(":") ? `${val}` : `${val}.`;
-      });
-
-    const options = card.customization_options as CustomizationOption[];
-
-    const customizationStr = options
-      .reduce<string[]>((acc, option, i) => {
-        const name = optionNames[i].trim();
-        const choice = customizations[card.code]?.[i];
-
-        if (choice && choice.xp_spent >= option.xp) {
-          const selection = formatCustomizableSelection(
-            state,
-            card,
-            option,
-            choice.selections ?? "",
-          );
-
-          const text = `  - ${name}`;
-
-          if (option.choice) {
-            if (text.endsWith(".")) {
-              acc.push(`${text} => ${selection ?? ""}`);
-            } else {
-              acc.push(`${text} ${selection ?? ""}`);
-            }
-          } else {
-            acc.push(text);
-          }
-        }
-
-        return acc;
-      }, [])
-      .join("\n");
-
-    if (customizationStr) {
-      return `${cardStr}\n${customizationStr}`;
-    }
-  }
-
-  return cardStr;
+  const energyCost = card.energy_cost != null ? ` [${card.energy_cost}]` : "";
+  return `- ${name}${energyCost}${quantity > 1 ? ` x${quantity}` : ""}`;
 }
 
-function formatCustomizableSelection(
-  state: StoreState,
-  card: Card,
-  option: CustomizationOption,
-  selection: string | undefined,
-) {
-  if (selection == null) return undefined;
-
-  const selections = selection.split("^");
-
-  const metadata = selectMetadata(state);
-
-  if (option.choice === "choose_card") {
-    return selections
-      .map((code) => displayAttribute(metadata.cards[code], "name"))
-      .join(", ");
-  }
-
-  if (option.choice === "remove_slot") {
-    return selections
-      .map((s) => {
-        const slot = splitMultiValue(card.original?.real_slot);
-        const slotStr = slot[Number.parseInt(s, 10)];
-        return i18n.t(`common.slot.${slotStr.toLowerCase()}`);
-      })
-      .join(", ");
-  }
-
-  if (option.choice === "choose_skill") {
-    return selections.map((s) => i18n.t(`common.skill.${s}`)).join(", ");
-  }
-
-  return selections
-    .map((t) => {
-      const key = `common.traits.${t}`;
-      return i18n.exists(key) ? i18n.t(key) : t;
-    })
-    .join(", ");
-}
 
 function isApiDeckKey(key: string): key is keyof Deck {
   return [

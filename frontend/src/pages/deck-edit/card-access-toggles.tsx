@@ -75,15 +75,20 @@ export function CardAccessToggles(props: Props) {
               <>
                 {t("lists.actions.show_limited_access")}
                 &nbsp;(
-                {limitedSlots.map(({ option, entries }, idx) => (
-                  <span key={option.id ?? option.name ?? idx}>
-                    {idx > 0 && ", "}
-                    <span>
-                      {entries.reduce((acc, curr) => acc + curr.quantity, 0)}/
-                      {option.limit}
+                {limitedSlots.map(({ option, entries }, idx) => {
+                  const optId = option.id as string | undefined;
+                  const optName = option.name as string | undefined;
+                  const optLimit = option.limit as number | undefined;
+                  return (
+                    <span key={optId ?? optName ?? idx}>
+                      {idx > 0 && ", "}
+                      <span>
+                        {entries.reduce((acc, curr) => acc + curr.quantity, 0)}/
+                        {optLimit}
+                      </span>
                     </span>
-                  </span>
-                ))}
+                  );
+                })}
                 )
               </>
             }

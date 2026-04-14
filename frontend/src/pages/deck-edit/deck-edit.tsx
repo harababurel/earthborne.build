@@ -168,7 +168,7 @@ function DeckEditInner() {
 
   const renderCoreCardCheckbox = useCallback(
     (card: Card, quantity?: number) => {
-      if (card.xp == null || !quantity) return null;
+      if (!quantity) return null;
       return <CoreCardCheckbox card={card} deck={deck} />;
     },
     [deck],
@@ -193,7 +193,7 @@ function DeckEditInner() {
   const getListCardProps = useCallback(
     (card: Card) => ({
       onChangeCardQuantity:
-        canEdit || card.encounter_code || card.subtype_code
+        canEdit
           ? onChangeCardQuantity
           : undefined,
       renderCardBefore:

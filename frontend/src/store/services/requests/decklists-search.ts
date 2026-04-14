@@ -9,11 +9,21 @@ import { apiV2Request } from "./shared";
 
 export type SortType = "user_reputation" | "date" | "likes" | "popularity";
 
+// Extra filter fields used by UI components — not part of ER DecklistSearchRequest
+// but kept for call-site compatibility with the inherited filter UI.
+type ExtraFilterFields = {
+  analyze_side_decks?: boolean;
+  canonical_investigator_code?: string;
+  description_length?: number;
+  investigator_factions?: string[];
+  xp?: [number, number];
+};
+
 export type DecklistsFiltersState = {
   filters: Omit<
     DecklistSearchRequest,
     "offset" | "sort_by" | "sort_dir" | "limit"
-  >;
+  > & ExtraFilterFields;
   limit: number;
   offset: number;
   sort_by: SortType;

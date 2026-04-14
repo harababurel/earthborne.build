@@ -7,7 +7,7 @@ export class UnsupportedPublishError extends Error {
     const names = cards
       .map(
         (c) =>
-          `${displayAttribute(c.card, "name")}${c.card.xp != null ? ` (${c.card.xp})` : ""}`,
+          `${displayAttribute(c.card, "name")}`,
       )
       .join(", ");
 

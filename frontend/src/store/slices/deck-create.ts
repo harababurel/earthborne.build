@@ -24,32 +24,13 @@ export const createDeckCreateSlice: StateCreator<
 
       const investigator = metadata.cards[code];
       assert(
-        investigator && investigator.type_code === "investigator",
-        "Deck configure must be initialized with an investigator card.",
+        investigator && investigator.type_code === "role",
+        "Deck configure must be initialized with a role card.",
       );
 
-      const choice = initialInvestigatorChoice
-        ? metadata.cards[initialInvestigatorChoice]
-        : undefined;
-
-      if (initialInvestigatorChoice) {
-        assert(
-          choice && choice.type_code === "investigator",
-          "Deck configure must be initialized with an investigator card.",
-        );
-
-        assert(
-          choice.real_name === investigator.real_name,
-          "Parallel investigator must have the same real name as the investigator.",
-        );
-      }
-
       const provider = settings.defaultStorageProvider;
-
-      // when arkhamdb is set as default storage, but not available, default to local.
-      const providerExists =
-        provider !== "arkhamdb" ||
-        connections.some((c) => c.provider === provider);
+      // ER only supports local and shared providers (no ArkhamDB).
+      const providerExists = provider === "local" || provider === "shared";
 
       // Apply current environment packs if default environment is set to "current"
       const cardPool =
@@ -60,16 +41,16 @@ export const createDeckCreateSlice: StateCreator<
       return {
         deckCreate: {
           extraCardQuantities: {},
-          investigatorBackCode: choice ? choice.code : investigator.code,
+          investigatorBackCode: investigator.code,
           investigatorCode: investigator.code,
-          investigatorFrontCode: choice ? choice.code : investigator.code,
+          investigatorFrontCode: investigator.code,
           provider: providerExists ? provider : "local",
           selections: {},
           sets: ["requiredCards"],
           tabooSetId: selectSettingsTabooId(settings, metadata),
           title: getDefaultDeckName(
             displayAttribute(investigator, "name"),
-            investigator.faction_code,
+            investigator.energy_aspect ?? "",
           ),
           cardPool,
         },

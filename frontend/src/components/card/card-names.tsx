@@ -31,10 +31,7 @@ export function CardNames(props: Props) {
         cardLevelDisplay={settings.cardLevelDisplay}
         cardShowCollectionNumber={settings.cardShowCollectionNumber}
       >
-        {card.parallel && (
-          <i className={cx(css["parallel"], "icon-parallel")} />
-        )}
-        {card.is_unique && (
+          {card.is_unique && (
           <span className={css["unique"]}>
             {card.is_unique && <i className="icon-unique" />}
           </span>
@@ -73,15 +70,6 @@ export function CardNames(props: Props) {
         )}
         {!titleLinks && cardName}
       </h1>
-      {card.real_subname && (
-        <h2
-          className={css["sub"]}
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: safe and necessary.
-          dangerouslySetInnerHTML={{
-            __html: parseCardTitle(displayAttribute(card, "subname")),
-          }}
-        />
-      )}
     </div>
   );
 }

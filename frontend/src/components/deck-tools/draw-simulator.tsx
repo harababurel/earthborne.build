@@ -236,12 +236,10 @@ function initialState(deck: ResolvedDeck): State {
   );
 }
 
-function shouldAutoRedrawInMulligan(card: Card): boolean {
-  return (
-    (card.subtype_code === "weakness" ||
-      card.subtype_code === "basicweakness") &&
-    !card.sticky_mulligan
-  );
+// ER has no weakness/mulligan mechanic.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function shouldAutoRedrawInMulligan(_card: Card): boolean {
+  return false;
 }
 
 function drawReducer(state: State, action: Action): State {
@@ -397,12 +395,9 @@ function prepareBag(deck: ResolvedDeck) {
   );
 
   for (const { card } of Object.values(deck.cards.slots)) {
+    // ER has no permanent/starts_in_play/starts_in_hand mechanic.
     const drawable =
-      !card.permanent &&
       !card.double_sided &&
-      !card.back_link_id &&
-      !card.starts_in_play &&
-      !card.starts_in_hand &&
       card.code !== SPECIAL_CARD_CODES.ON_THE_MEND;
 
     if (!drawable) {

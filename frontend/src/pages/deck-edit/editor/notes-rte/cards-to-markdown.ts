@@ -217,34 +217,26 @@ function factionIcon(faction: string | undefined | null): string {
 }
 
 function getCardFactionIcons(card: Card): string {
-  return [card.faction_code, card.faction2_code, card.faction3_code]
+  return [card.energy_aspect]
     .map(factionIcon)
     .filter(Boolean)
     .join("");
 }
 
 function getCardColor(card: Card): string {
-  if (card.faction2_code || card.faction3_code) {
-    return "fg-dual";
-  }
-
-  switch (card.faction_code) {
-    case "guardian":
-    case "seeker":
-    case "rogue":
-    case "mystic":
-    case "survivor":
-    case "neutral":
-      return `fg-${card.faction_code}`;
+  switch (card.energy_aspect) {
+    case "awareness":
+    case "fitness":
+    case "focus":
+    case "spirit":
+      return `fg-${card.energy_aspect}`;
     default:
       return "";
   }
 }
 
 function wrapClassColor(str: string, card: Card): string {
-  return card.faction_code === "mythos"
-    ? str
-    : wrapHtmlTag(str, "span", { class: getCardColor(card) });
+  return wrapHtmlTag(str, "span", { class: getCardColor(card) });
 }
 
 export function cardToMarkdown(
@@ -290,7 +282,7 @@ function renderSet(
   let str = displayPackName(cycleOrPack(cycle, pack));
 
   if (config.collectionNumber) {
-    str += ` #${card.position}`;
+    str += ` #${card.set_position ?? card.set_code}`;
   }
 
   if (config.parentheses) {
@@ -325,53 +317,17 @@ function renderName(
 }
 
 function renderSubname(
-  card: Card,
-  format: CardFormatDefinition,
-  metadata: Metadata,
-  lookupTables: LookupTables,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _card: Card,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _format: CardFormatDefinition,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _metadata: Metadata,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _lookupTables: LookupTables,
 ) {
-  const subname = displayAttribute(card, "subname");
-  if (!subname) return "";
-
-  const config = format.placeholderOptions.name.subname;
-  let showSubname = false;
-
-  if (config.display === "disambiguate") {
-    let needsDisambiguation = false;
-    const seenLevels = new Set<number | undefined | null>();
-
-    const versions = Object.keys(lookupTables.relations.level[card.code] ?? {});
-
-    for (const code of versions) {
-      const version = metadata.cards[code];
-      const versionLevel = cardLevel(version);
-
-      if (
-        seenLevels.has(versionLevel) &&
-        displayAttribute(card, "subname") !==
-          displayAttribute(version, "subname")
-      ) {
-        needsDisambiguation = true;
-        break;
-      }
-
-      seenLevels.add(versionLevel);
-    }
-
-    showSubname = needsDisambiguation;
-  } else {
-    showSubname = config.display;
-  }
-
-  if (!showSubname) return "";
-
-  let str = subname;
-
-  if (config.parentheses) str = wrapParentheses(str);
-  if (config.small) str = wrapHtmlTag(str, "span", { class: "small" });
-
-  str = pad(str, config.padding);
-  return str;
+  // ER cards have no subname field.
+  return "";
 }
 
 function renderLevel(

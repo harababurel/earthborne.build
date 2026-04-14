@@ -1,4 +1,7 @@
-import type { Card, DeckOptionSelectType } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
+
+// ER has no option-select system — stub type for call-site compatibility.
+type DeckOptionSelectType = string;
 import type { Annotations, DeckMeta, ResolvedDeck } from "../lib/types";
 import type { Id } from "../schemas/deck.schema";
 import type { AvailableUpgrades } from "../selectors/lists";

@@ -102,5 +102,5 @@ export function formatDeckOptionString(str: string | undefined) {
 }
 
 export function dataLanguage() {
-  return LOCALES[i18n.language]?.dataLocale;
+  return LOCALES[i18n.language]?.value;
 }

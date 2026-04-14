@@ -145,11 +145,11 @@ function browseChapterSystemFilter(chapterTab: ChapterTab): Filter {
     case "1":
     case "2": {
       const chapter = Number.parseInt(chapterTab, 10);
-      return (card: Card) => card.chapter === chapter;
+      return (card: Card) => (card as unknown as { chapter?: number }).chapter === chapter;
     }
 
     case "fan-made":
-      return (card: Card) => card.official === false;
+      return (_card: Card) => true;
   }
 }
 

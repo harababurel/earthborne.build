@@ -76,38 +76,21 @@ export async function queryCards(_locale: Locale = "en"): Promise<Card[]> {
  * Public API
  */
 
-export async function queryFaq(clientId: string, code: string) {
-  const res = await request(`/public/faq/${code}`, {
-    headers: {
-      "X-Client-Id": clientId,
-    },
-  });
-  const data: FaqResponse = await res.json();
-  return data;
-}
-
-export async function queryDeck(clientId: string, type: string, id: number) {
-  const res = await request(`/public/arkhamdb/${type}/${id}`, {
-    headers: {
-      "X-Client-Id": clientId,
-    },
-  });
-  const data: Deck[] = await res.json();
-  return data;
-}
-
 type DeckResponse = {
   data: Deck;
   type: "deck" | "decklist";
 };
 
 export async function importDeck(clientId: string, input: string) {
-  const res = await request(`/public/import?q=${encodeURIComponent(input)}`, {
-    headers: {
-      "X-Client-Id": clientId,
+  const res = await apiV2Request(
+    `/public/import?q=${encodeURIComponent(input)}`,
+    {
+      headers: {
+        "X-Client-Id": clientId,
+      },
+      method: "POST",
     },
-    method: "POST",
-  });
+  );
 
   const data: DeckResponse = await res.json();
 
@@ -124,7 +107,7 @@ type ShareRead = {
 };
 
 export async function getShare(id: string): Promise<ShareRead> {
-  const res = await request(`/public/share_history/${id}`);
+  const res = await apiV2Request(`/public/share_history/${id}`);
   const data = await res.json();
   return data;
 }
@@ -134,7 +117,7 @@ export async function createShare(
   deck: Deck,
   history: History,
 ) {
-  await request("/public/share", {
+  await apiV2Request("/public/share", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -150,7 +133,7 @@ export async function updateShare(
   deck: Deck,
   history: History,
 ) {
-  await request(`/public/share/${id}`, {
+  await apiV2Request(`/public/share/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -164,7 +147,7 @@ export async function updateShare(
 }
 
 export async function deleteShare(clientId: string, id: string) {
-  await request(`/public/share/${id}`, {
+  await apiV2Request(`/public/share/${id}`, {
     method: "DELETE",
     headers: {
       "X-Client-Id": clientId,
@@ -177,13 +160,9 @@ export async function deleteShare(clientId: string, id: string) {
  */
 
 function authenticatedRequest(path: string, options?: RequestInit) {
-  return navigator.locks.request("arkhamdb", async () => {
-    const res = await request(path, {
-      ...options,
-      credentials: "include",
-    });
-
-    return res;
+  return apiV2Request(path, {
+    ...options,
+    credentials: "include",
   });
 }
 
@@ -227,7 +206,6 @@ export async function newDeck(
       investigator: payload.investigator_code,
       name: payload.name,
       slots: payload.slots,
-      taboo: payload.taboo,
       meta: payload.meta,
     }),
     method: "POST",
@@ -295,7 +273,7 @@ export async function getRecommendations(
   const search = encodeSearch(req).toString();
 
   const res = await apiV2Request(
-    `/v2/public/recommendations/${req.canonical_investigator_code}?${search}`,
+    `/v2/public/recommendations/${req.aspect_code}?${search}`,
     {
       method: "GET",
     },
@@ -316,6 +294,18 @@ export async function queryFanMadeProjects(): Promise<FanMadeProjectInfo[]> {
   return data.sort((a, b) => {
     return a.meta.name.localeCompare(b.meta.name);
   });
+}
+
+// ER has no ArkhamDB deck import. Stub for call-site compatibility.
+export async function queryDeck(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _clientId: string | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _type: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _id: number,
+): Promise<unknown[]> {
+  return [];
 }
 
 export async function queryFanMadeProjectData(

@@ -5,12 +5,8 @@ import type { Metadata } from "@/store/slices/metadata.types";
 import { range } from "@/utils/range";
 import type {
   Annotations,
-  CardWithRelations,
-  Customization,
   Customizations,
   DeckMeta,
-  Selection,
-  Selections,
 } from "./types";
 
 export function decodeDeckMeta(deck: Deck): DeckMeta {
@@ -22,136 +18,30 @@ export function decodeDeckMeta(deck: Deck): DeckMeta {
   }
 }
 
-export function decodeSelections(
-  investigator: CardWithRelations,
-  deckMeta: DeckMeta,
-): Selections | undefined {
-  const selections = [
-    ...(investigator.card.deck_options ?? []),
-    ...(investigator.card.side_deck_options ?? []),
-  ].reduce<Selections>((acc, option) => {
-    let selection: Selection | undefined;
-    let key: string | undefined;
-
-    if (option.deck_size_select) {
-      key = option.id ?? "deck_size_selected";
-
-      selection = {
-        options: Array.isArray(option.deck_size_select)
-          ? option.deck_size_select
-          : [option.deck_size_select],
-        type: "deckSize",
-        accessor: key,
-        name: option.name ?? key,
-        value: deckMeta.deck_size_selected
-          ? Number.parseInt(deckMeta.deck_size_selected, 10)
-          : 30,
-      };
-    } else if (option.faction_select) {
-      key = option.id ?? "faction_selected";
-
-      selection = {
-        options: option.faction_select,
-        type: "faction",
-        accessor: key,
-        name: option.name ?? key,
-        value:
-          (option.id
-            ? deckMeta[
-                option.id as keyof Omit<
-                  DeckMeta,
-                  "fan_made_content" | "hidden_slots"
-                >
-              ]
-            : deckMeta.faction_selected) ?? undefined,
-      };
-    } else if (option.option_select) {
-      key = option.id ?? "option_selected";
-
-      selection = {
-        options: option.option_select,
-        type: "option",
-        accessor: key,
-        name: option.name ?? key,
-        value: option.option_select.find(
-          (x) => x.id === deckMeta[key as keyof DeckMeta],
-        ),
-      };
-    }
-
-    if (!key) return acc;
-    if (selection) acc[key] = selection;
-    return acc;
-  }, {});
-
-  return selections;
+/**
+ * ER has no investigator deck_options / side_deck_options.
+ * This is a no-op stub kept for call-site compatibility.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function decodeSelections(_investigator: unknown, _deckMeta: DeckMeta) {
+  return undefined;
 }
 
 /**
- * Decodes customizations from a parsed deck.meta JSON block.
+ * ER has no customization system.
+ * This is a no-op stub kept for call-site compatibility.
  */
-export function decodeCustomizations(deckMeta: DeckMeta, metadata: Metadata) {
-  let hasCustomizations = false;
-  const customizations: Customizations = {};
-
-  for (const [key, value] of Object.entries(deckMeta)) {
-    // customizations are tracked in format `cus_{code}: {index}|{xp}|{choice?},...`.
-    if (key.startsWith("cus_") && value) {
-      hasCustomizations = true;
-      const code = key.split("cus_")[1];
-
-      customizations[code] = (value as string)
-        .split(",")
-        .reduce<Record<number, Customization>>((acc, curr) => {
-          const entries = curr.split("|");
-          const index = Number.parseInt(entries[0], 10);
-
-          if (entries.length > 1) {
-            const xp_spent = Number.parseInt(entries[1], 10);
-            const selections = entries[2] ?? "";
-
-            const option = metadata.cards[code]?.customization_options?.[index];
-            if (!option) return acc;
-
-            acc[index] = {
-              selections,
-              index,
-              xp_spent,
-            };
-          }
-
-          return acc;
-        }, {});
-    }
-  }
-
-  return hasCustomizations ? customizations : undefined;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function decodeCustomizations(_deckMeta: DeckMeta, _metadata: Metadata): Customizations | undefined {
+  return undefined;
 }
 
-export function encodeCustomizations(customizations: Customizations) {
-  return Object.entries(customizations).reduce<Record<string, string>>(
-    (acc, [code, changes]) => {
-      const key = `cus_${code}`;
-
-      const value = Object.values(changes)
-        .sort((a, b) => a.index - b.index)
-        .map((curr) => {
-          let s = `${curr.index}`;
-
-          if (curr.selections || curr.xp_spent != null) {
-            s += `|${curr.xp_spent}`;
-          }
-
-          if (curr.selections) s += `|${curr.selections}`;
-          return s;
-        })
-        .join(",");
-
-      acc[key] = value;
-      return acc;
-    },
-    {},
-  );
+/**
+ * ER has no customization system.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function encodeCustomizations(_customizations: Customizations) {
+  return {};
 }
 
 export function decodeAttachments(deckMeta: DeckMeta) {
@@ -202,31 +92,18 @@ export function encodeAttachments(attachments: AttachmentQuantities) {
   );
 }
 
+/**
+ * ER has no card pool extension mechanic.
+ */
 export function decodeCardPoolFromSlots(
-  slots: Slots,
-  metadata: Metadata,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _slots: Slots,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _metadata: Metadata,
   deckMeta: DeckMeta,
 ) {
   const pool = deckMeta.card_pool?.split(",");
   if (!pool?.length) return undefined;
-
-  for (const code of Object.keys(slots)) {
-    const card = metadata.cards[code];
-    if (!card?.card_pool_extension) continue;
-
-    const extension = deckMeta[`card_pool_extension_${code}`];
-
-    if (extension) {
-      pool.push(...extension.split(","));
-    } else if (card.card_pool_extension.selections) {
-      pool.push(
-        ...card.card_pool_extension.selections.map(
-          (code: string) => `card:${code}`,
-        ),
-      );
-    }
-  }
-
   return pool;
 }
 

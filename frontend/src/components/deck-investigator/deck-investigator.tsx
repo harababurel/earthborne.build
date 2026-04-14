@@ -63,8 +63,7 @@ export function DeckInvestigator(props: Props) {
   ).filter(([key]) => key !== "parallel");
 
   const hasBack =
-    deck.investigatorBack.card.double_sided ||
-    deck.investigatorBack.card.back_link_id;
+    deck.investigatorBack.card.double_sided;
 
   const children = canToggleBack ? (
     <>
@@ -83,11 +82,6 @@ export function DeckInvestigator(props: Props) {
           <Button onClick={() => toggleBack((p) => !p)}>
             {backToggled ? <ChevronUpIcon /> : <ChevronDownIcon />}
             {t("card_view.actions.view_backside")}{" "}
-            {deck.investigatorBack.card.parallel && (
-              <>
-                (<span className="icon-parallel" />)
-              </>
-            )}
           </Button>
         </div>
       )}

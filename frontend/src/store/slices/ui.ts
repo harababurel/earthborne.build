@@ -73,15 +73,8 @@ export const createUISlice: StateCreator<StoreState, [], [], UISlice> = (
       ? Object.fromEntries(content.data.cards.map((card) => [card.code, card]))
       : undefined;
 
-    const packs = content.data.packs
-      ? Object.fromEntries(content.data.packs.map((pack) => [pack.code, pack]))
-      : undefined;
-
-    const encounterSets = content.data.encounter_sets
-      ? Object.fromEntries(
-          content.data.encounter_sets.map((set) => [set.code, set]),
-        )
-      : undefined;
+    const packs = undefined;
+    const encounterSets = undefined;
 
     set((state) => ({
       ui: {

@@ -1,4 +1,4 @@
-import { FACTION_ORDER, type FactionName } from "@arkham-build/shared";
+import { ASPECT_ORDER, FACTION_ORDER } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import { displayAttribute } from "@/utils/card-utils";
 import type { StorageProvider } from "@/utils/constants";
@@ -48,7 +48,7 @@ export const selectDeckFactionFilter = (state: StoreState) =>
 
 const filterDeckByFaction = (faction: string) => {
   return (deck: DeckSummary) =>
-    deck.investigatorFront.card.faction_code === faction;
+    deck.investigatorFront.card.energy_aspect === faction;
 };
 
 const makeDeckFactionFilter = (values: MultiselectFilter) => {
@@ -139,12 +139,8 @@ const makeDeckPropertiesFilter = (properties: DeckProperties) => {
     if (properties[property as DeckPropertyName]) {
       switch (property) {
         case "parallel": {
-          filters.push((deck: DeckSummary) =>
-            Boolean(
-              deck.investigatorFront.card.parallel ||
-                deck.investigatorBack.card.parallel,
-            ),
-          );
+          // ER has no parallel investigators.
+          filters.push((_deck: DeckSummary) => false);
         }
       }
     }
@@ -206,7 +202,7 @@ const makeDeckProviderFilter = (values: StorageProvider[]) => {
       values.some((val) => {
         return (
           (val === "shared" && deck.shared) ||
-          (val === "arkhamdb" && deck.source === "arkhamdb") ||
+          (val === "arkhamdb" && !deck.shared && !deck.source) ||
           (val === "local" && !deck.shared && !deck.source)
         );
       })
@@ -292,18 +288,21 @@ export const selectFactionsInLocalDecks = createSelector(
     const factionsSet = new Set<string>();
 
     for (const deck of decks) {
-      factionsSet.add(deck.investigatorFront.card.faction_code);
+      const aspect = deck.investigatorFront.card.energy_aspect;
+      if (aspect) factionsSet.add(aspect);
     }
 
     const factions = Array.from(factionsSet).map(
       (code) => metadata.factions[code],
     );
 
-    return factions.sort(
-      (a, b) =>
-        FACTION_ORDER.indexOf(a.code as FactionName) -
-        FACTION_ORDER.indexOf(b.code as FactionName),
-    );
+    return factions
+      .filter(Boolean)
+      .sort(
+        (a, b) =>
+          ASPECT_ORDER.indexOf(a.code as (typeof ASPECT_ORDER)[number]) -
+          ASPECT_ORDER.indexOf(b.code as (typeof ASPECT_ORDER)[number]),
+      );
   },
 );
 

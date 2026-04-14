@@ -13,10 +13,10 @@ type Props = {
 
 export function SkillIconsInvestigator(props: Props) {
   const { className, card, iconClassName } = props;
-  if (card.type_code !== "investigator") return null;
+  if (card.type_code !== "role") return null;
 
   const entries = SKILL_KEYS.reduce<[string, number][]>((acc, key) => {
-    const val = card[`skill_${key}`];
+    const val = (card as unknown as Record<string, unknown>)[`skill_${key}`] as number | undefined;
     if (val != null) acc.push([key, val]);
     return acc;
   }, []);

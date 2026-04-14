@@ -128,16 +128,13 @@ export function DecklistGroup(props: DecklistGroupsProps) {
                     isForbidden={
                       forbiddenCards.find(
                         (x) =>
-                          (x.code === card.code ||
-                            x.code === card.duplicate_of_code) &&
+                          x.code === card.code &&
                           x.target === grouping.id,
                       ) != null
                     }
                     isCardNotInLimitedPool={
                       cardsNotInLimitedPool.find(
-                        (x) =>
-                          x.code === card.code ||
-                          x.code === card.duplicate_of_code,
+                        (x) => x.code === card.code,
                       ) != null
                     }
                     card={card}
@@ -199,7 +196,7 @@ function Scans(props: {
               getListCardProps={getListCardProps}
             />
           </li>
-          {!!card.customization_options && card.official && (
+          {false && /* ER has no customizations */ (
             <li>
               <figure className={css["scan"]}>
                 <div className={css["scan-images"]}>

@@ -3,7 +3,6 @@ import type { TFunction } from "i18next";
 import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import { assert } from "./assert";
-import { isEmpty } from "./is-empty";
 
 export function splitMultiValue(s: string | null | undefined) {
   if (!s) return [];
@@ -32,30 +31,10 @@ export function sideways(_card: Card) {
   return false;
 }
 
-function doubleSided(card: Card) {
-  return card.double_sided || card.back_link_id;
-}
-
-type CardBackType =
-  | "player"
-  | "encounter"
-  | "card"
-  | "the_longest_night"
-  | "artifact"
-  | "cthulhu_deck";
+type CardBackType = "player" | "card";
 
 export function cardBackType(card: Card): CardBackType {
-  if (doubleSided(card)) return "card";
-
-  if (card.back_type) return card.back_type as CardBackType;
-
-  if (
-    card.faction_code === "mythos" ||
-    (card.encounter_code && !card.deck_limit)
-  ) {
-    return "encounter";
-  }
-
+  if (card.double_sided) return "card";
   return "player";
 }
 
@@ -63,13 +42,10 @@ export function cardBackTypeUrl(type: CardBackType) {
   return `${import.meta.env.VITE_CARD_IMAGE_URL}/back_${type}.jpg`;
 }
 
-export function reversed(card: Card) {
-  return (
-    card.double_sided &&
-    isLocationLike(card) &&
-    !card.back_link_id &&
-    card.encounter_code
-  );
+// In ER, double-sided cards are not "reversed" in the AH sense.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function reversed(_card: Card) {
+  return false;
 }
 
 export function imageUrl(code: string) {
@@ -112,55 +88,51 @@ export function parseCardTitle(title: string) {
   return title.replaceAll(/\[((?:\w|_)+?)\]/g, `<i class="icon-$1"></i>`);
 }
 
-export function decodeExileSlots(s: string | null | undefined) {
-  const ids = s?.split(",").filter((x) => x);
-  if (!ids?.length) return {};
-
-  return (
-    ids.reduce<Record<string, number>>((acc, curr) => {
-      acc[curr] ??= 0;
-      acc[curr] += 1;
-      return acc;
-    }, {}) ?? {}
-  );
+// Stub — ER has no exile slots.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function decodeExileSlots(_s: string | null | undefined): Record<string, number> {
+  return {};
 }
 
-export function isSpecialCard(card: Card, ignorePermanent = false) {
-  const isSpecial = card.encounter_code || card.subtype_code || card.xp == null;
-
-  return !!isSpecial || !!(card.permanent && !ignorePermanent);
+// In ER, "special" cards are non-deck-buildable: role, aspect, path cards etc.
+export function isSpecialCard(card: Card) {
+  const deckBuildableTypes = new Set([
+    "moment",
+    "attachment",
+    "gear",
+    "being",
+    "feature",
+    "attribute",
+  ]);
+  return !deckBuildableTypes.has(card.type_code);
 }
 
+// In ER, the closest analog to "enemy" is the "being" card type.
 export function isEnemyLike(card: Card) {
-  return card.type_code === "enemy" || card.type_code === "enemy_location";
+  return card.type_code === "being";
 }
 
-function isLocationLike(card: Card) {
-  return card.type_code === "location" || card.type_code === "enemy_location";
-}
-
+// In ER, cards have a single canonical code.
 export function getCanonicalCardCode(card: Card) {
-  return card.duplicate_of_code ?? card.alternate_of_code ?? card.code;
+  return card.code;
 }
 
-export function isRandomBasicWeaknessLike(card: Card) {
-  return (
-    card.subtype_code === "basicweakness" ||
-    (card.subtype_code === "weakness" &&
-      !card.encounter_code &&
-      !card.restrictions)
-  );
+// Stub — ER has no weaknesses/basic weakness mechanic.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function isRandomBasicWeaknessLike(_card: Card) {
+  return false;
 }
 
-/**
- * A static investigator is one that can not build decks. (Y'thian, Lost Homunculus)
- */
-export function isStaticInvestigator(card: Card) {
-  return card.type_code === "investigator" && !card.deck_options;
+// Stub — ER has no static investigator concept.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function isStaticInvestigator(_card: Card) {
+  return false;
 }
 
-export function isSpecialist(c: Card) {
-  return Array.isArray(c.restrictions?.trait) && !isEmpty(c.restrictions.trait);
+// Stub — ER has no specialist/restriction mechanic.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function isSpecialist(_card: Card) {
+  return false;
 }
 
 export function cardLimit(card: Card, limitOverride?: number) {
@@ -175,22 +147,9 @@ export function cardUses(_card: Card) {
 
 export function displayAttribute(
   card: Card | undefined,
-  key:
-    | "text"
-    | "name"
-    | "traits"
-    | "flavor"
-    | "subname"
-    | "back_name"
-    | "back_traits"
-    | "back_flavor"
-    | "back_subname"
-    | "back_text"
-    | "taboo_text_change"
-    | "customization_text"
-    | "customization_change",
+  key: "text" | "name" | "traits" | "flavor",
 ) {
-  return card?.[key] ?? card?.[`real_${key}`] ?? "";
+  return card?.[key] ?? "";
 }
 
 // Stub — ER has no cycle/standalone-pack distinction; always return the pack.
@@ -215,8 +174,10 @@ export function numericalStr(num: string | number | null | undefined) {
   return `${num}`;
 }
 
-export function official(card: Card | Pack | Cycle) {
-  return card.official !== false;
+// In ER, all cards from the official data source are official.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function official(_card: Card | Pack | Cycle) {
+  return true;
 }
 
 export function cardUrl(card: Card) {
@@ -228,43 +189,29 @@ export function oldFormatCardUrl(card: Card) {
   return `${baseUrl}?old_format=true`;
 }
 
-export function canShowCardPoolExtension(card: Card) {
-  return card.card_pool_extension && !card.card_pool_extension.selections;
+// Stub — ER has no card pool extension mechanic.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function canShowCardPoolExtension(_card: Card) {
+  return false;
 }
 
 export function doubleSidedBackCard(card: Card, t: TFunction) {
   if (!card.double_sided) return undefined;
-
-  const { clues: _, doom: __, shroud: ___, ...attributes } = card;
 
   const nameFallback = t("common.card_back", {
     name: displayAttribute(card, "name"),
   });
 
   return {
-    ...attributes,
-    name: displayAttribute(card, "back_name") || nameFallback,
-    real_name: card.real_back_name || nameFallback,
-    subname: displayAttribute(card, "back_subname"),
-    real_subname: card.real_back_subname,
-    flavor: displayAttribute(card, "back_flavor"),
-    real_flavor: card.real_back_flavor,
-    illustrator: card.back_illustrator,
-    text: displayAttribute(card, "back_text"),
-    real_text: card.real_back_text,
-    traits:
-      displayAttribute(card, "back_traits") || displayAttribute(card, "traits"),
-    real_traits: card.real_back_traits || card.real_traits,
+    ...card,
+    name: nameFallback,
+    flavor: card.flavor ?? "",
+    text: card.text ?? "",
+    traits: card.traits ?? "",
   };
 }
 
 export function deckCreateLink(card: Card) {
-  assert(
-    card.type_code === "investigator",
-    "only investigators can create decks",
-  );
-
-  return card.parallel
-    ? `/deck/create/${card.alternate_of_code}?initial_investigator=${card.code}`
-    : `/deck/create/${card.code}`;
+  assert(card.type_code === "role", "only role cards can create decks");
+  return `/deck/create/${card.code}`;
 }
