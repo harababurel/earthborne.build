@@ -71,6 +71,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     if (!refresh && persistedState?.metadata?.dataVersion?.cards_updated_at) {
       const metadata = applyLocalData(persistedState.metadata);
+      synthesiseCycles(metadata);
 
       set((prev) => {
         const merged = mergeInitialState(prev, persistedState, overrides);
@@ -110,6 +111,8 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       packs: mappedByCode(metadataResponse.pack),
       cards: {},
     };
+
+    synthesiseCycles(metadata);
 
     for (const card of cards) {
       metadata.cards[card.code] = card;
@@ -800,6 +803,20 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     await dehydrate(get(), "app");
   },
 });
+
+// ER has no cycles — synthesise one per pack so selectors that iterate
+// packsByCycle can look up metadata.cycles[packCode] without crashing.
+function synthesiseCycles(metadata: Metadata) {
+  for (const pack of Object.values(metadata.packs)) {
+    metadata.cycles[pack.code] = {
+      code: pack.code,
+      name: pack.name,
+      position: pack.position,
+      real_name: pack.name,
+      official: true,
+    };
+  }
+}
 
 function mergeInitialState(
   initialState: StoreState,

@@ -12,6 +12,7 @@ const app = appFactory(config, database);
 serve(
   {
     fetch: app.fetch,
+    hostname: config.HOSTNAME,
     port: config.PORT,
   },
   (info) => {
