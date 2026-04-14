@@ -1,0 +1,30 @@
+# earthborne.build backend — systemd service unit
+#
+# Install:
+#   sudo cp docs/earthborne.service /etc/systemd/system/earthborne.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now earthborne
+#
+# Adjust:
+#   User        → the unix user that owns the repo clone
+#   WorkingDirectory → absolute path to repo root
+#   EnvironmentFile  → absolute path to backend/.env
+
+[Unit]
+Description=earthborne.build backend
+After=network.target
+
+[Service]
+Type=simple
+User=sergiu
+WorkingDirectory=/srv/earthborne.build
+EnvironmentFile=/srv/earthborne.build/backend/.env
+ExecStart=/usr/bin/node --experimental-strip-types backend/src/main.ts
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=earthborne
+
+[Install]
+WantedBy=multi-user.target

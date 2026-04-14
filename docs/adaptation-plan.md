@@ -184,12 +184,20 @@ Frontend: `npm run build` clean, `tsc --noEmit` = 0 errors.
 - **`frontend/src/store/lib/errors.ts`** — Removed hardcoded `"ArkhamDB"` from `UnsupportedPublishError`
 - Non-English locales left untouched (will be updated when proper translations are contributed)
 
-### Phase 8: Branding and deployment
+### Phase 8: Branding and deployment — **Done (2026-04-14)**
 
-- Update env vars, project name, URLs
-- Update Cloudflare Pages config
-- Update Kamal deploy config
-- Point `VITE_CARD_IMAGE_URL` to ER image host
+#### Completed
+
+- **Removed** Cloudflare/Kamal deployment artefacts: `wrangler.toml`, `backend/config/deploy.yml`, `backend/config/ansible/`, `backend/config/crontab`, `functions/` (Cloudflare Pages Functions)
+- **`frontend/.env.example`** — updated for ER: removed `VITE_ARKHAMDB_BASE_URL` and `VITE_SOUVENIR_API_URL`; set `VITE_API_URL` / `VITE_API_LEGACY_URL` to `localhost:8686`; `VITE_CARD_IMAGE_URL` left as empty placeholder (TODO)
+- **`backend/.env.example`** — cleaned up comments; kept SQLite path, dbmate config, card data dir, admin key
+- **`backend/Dockerfile`** — stripped Postgres/cron/Kamal references; updated for SQLite-only ER backend
+- **`docs/nginx.conf.example`** — nginx server block: serves `frontend/dist` as SPA, proxies `/v2`, `/version`, `/admin`, `/up` to backend port 8686; includes cache headers for hashed assets
+- **`docs/earthborne.service`** — systemd unit for running the backend as a managed service
+
+#### Remaining
+
+- `VITE_CARD_IMAGE_URL` — needs an ER card image host. Set this env var and rebuild the frontend once a CDN or self-hosted image path is available.
 
 ---
 
@@ -235,6 +243,8 @@ All answered during Phase 1 via rulebook at `docs/rulebook.pdf`:
 
 - **Shared package**: compiles clean.
 - **Backend package**: compiles clean. SQLite DB with 260 cards. APIs: `GET /v2/public/cards`, `GET /v2/public/packs`, `GET /version`.
-- **Frontend package**: Vite build clean. `tsc --noEmit` = 0 errors. Phase 8 (branding/deployment) remains.
+- **Frontend package**: Vite build clean. `tsc --noEmit` = 0 errors.
+- **Deployment**: nginx + systemd, no Docker/Cloudflare/Kamal. See `docs/nginx.conf.example` and `docs/earthborne.service`.
+- **All 8 phases complete.** One open item: `VITE_CARD_IMAGE_URL` (ER card image host not yet configured).
 - **Card data**: 260 cards ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed).
