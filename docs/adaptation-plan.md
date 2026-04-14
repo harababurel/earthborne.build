@@ -195,9 +195,14 @@ Frontend: `npm run build` clean, `tsc --noEmit` = 0 errors.
 - **`docs/nginx.conf.example`** — nginx server block: serves `frontend/dist` as SPA, proxies `/v2`, `/version`, `/admin`, `/up` to backend port 8686; includes cache headers for hashed assets
 - **`docs/earthborne.service`** — systemd unit for running the backend as a managed service
 
-#### Remaining
+#### Card image serving — Done (2026-04-14)
 
-- `VITE_CARD_IMAGE_URL` — needs an ER card image host. Set this env var and rebuild the frontend once a CDN or self-hosted image path is available.
+- **`backend/src/scripts/download-images.ts`** — downloads card images from `static.rangersdb.com` sequentially into `IMAGE_DIR/{pack_id}/{code}.jpg`. 260/260 cards downloaded successfully (rangersdb has images for all card types). Re-run-safe.
+- **`backend/src/routes/images.ts`** — `GET /images/:code`: looks up `pack_id` from DB, serves file with 1-year immutable cache header.
+- **`frontend/src/utils/card-utils.ts`** — `imageUrl()`/`thumbnailUrl()` produce `${VITE_CARD_IMAGE_URL}/${code}` (plain JPG).
+- **`frontend/.env.example`** — `VITE_CARD_IMAGE_URL=http://localhost:8686/images` for local dev.
+- **`docs/nginx.conf.example`** — `/images/` proxy block added.
+- Images stored at `/home/sergiu/work/earthborne.images/cards/` (outside repo — copyright art).
 
 ---
 
@@ -245,6 +250,7 @@ All answered during Phase 1 via rulebook at `docs/rulebook.pdf`:
 - **Backend package**: compiles clean. SQLite DB with 260 cards. APIs: `GET /v2/public/cards`, `GET /v2/public/packs`, `GET /version`.
 - **Frontend package**: Vite build clean. `tsc --noEmit` = 0 errors.
 - **Deployment**: nginx + systemd, no Docker/Cloudflare/Kamal. See `docs/nginx.conf.example` and `docs/earthborne.service`.
-- **All 8 phases complete.** One open item: `VITE_CARD_IMAGE_URL` (ER card image host not yet configured).
+- **All 8 phases complete. Card images working.**
 - **Card data**: 260 cards ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
+- **Card images**: 260 JPGs at `/home/sergiu/work/earthborne.images/cards/` (outside repo). Backend serves via `GET /images/:code`.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed).
