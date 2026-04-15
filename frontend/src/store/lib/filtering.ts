@@ -51,9 +51,10 @@ export function filterAlternates(_card: Card) {
   return true;
 }
 
-// ER has no encounter cards in the card pool. All cards pass.
+// ER has no encounter cards — no card is an "encounter card", so the player
+// card filter (not(filterEncounterCards)) correctly passes all cards.
 export function filterEncounterCards(_card: Card) {
-  return true;
+  return false;
 }
 
 // ER has no Mythos faction. All cards pass.
@@ -66,9 +67,9 @@ export function filterBacksides(_card: Card) {
   return true;
 }
 
-// ER currently has no preview/unreleased cards.
+// ER has no preview/unreleased cards — no card is a preview.
 export function filterPreviews(_card: Card) {
-  return true;
+  return false;
 }
 
 export function filterOfficial(card: Card) {

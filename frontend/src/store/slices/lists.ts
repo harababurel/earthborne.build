@@ -46,10 +46,7 @@ import type {
 } from "./lists.types";
 import type { DecklistConfig, SettingsState } from "./settings.types";
 
-const SYSTEM_FILTERS: Filter[] = [
-  filterBacksides,
-  // ER has no hidden cards or encounter cards.
-];
+const SYSTEM_FILTERS: Filter[] = [];
 
 function getInitialList() {
   if (window.location.href.includes("/deck/create")) {
@@ -60,7 +57,7 @@ function getInitialList() {
     return "editor";
   }
 
-  return "browse";
+  return "index";
 }
 
 export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
@@ -914,42 +911,14 @@ function investigatorFilters({
 }
 
 function cardsFilters({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   additionalFilters = [] as FilterKey[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   showOwnershipFilter = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   showInvestigatorsFilter = false,
-}) {
-  const filters: FilterKey[] = [
-    "card_type",
-    "faction",
-    "type",
-    "level",
-    "cost",
-    "trait",
-  ];
-
-  if (showOwnershipFilter) {
-    filters.push("ownership");
-  }
-
-  filters.push("fan_made_content");
-
-  if (showInvestigatorsFilter) {
-    filters.push("investigator");
-  }
-
-  filters.push(
-    "asset",
-    "skill_icons",
-    "properties",
-    "action",
-    "subtype",
-    "pack",
-    "encounter_set",
-    "taboo_set",
-    ...additionalFilters,
-  );
-
-  return filters;
+}): FilterKey[] {
+  return [];
 }
 
 function properties() {

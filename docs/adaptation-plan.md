@@ -244,13 +244,28 @@ All answered during Phase 1 via rulebook at `docs/rulebook.pdf`:
 - **Weaknesses equivalent**: maladies (e.g. Lingering Injury), added during campaign, cannot be removed normally
 - **Release structure**: ranger card sets (Artificer, Artisan, Conciliator, Explorer, Forager, Maladies, Personalities, Rewards, Shaper, Shepherd, Traveler) and path card sets (terrain-based: Grassland, Lakeshore, etc. + location-based: Branch, Spire, etc.)
 
+### Phase 9: Filters — In progress
+
+Cards are now visible in the browse page. The filter sidebar has been stripped to a blank slate — all AH-specific filters removed, ready to be rebuilt for ER one at a time.
+
+Root cause of the previous 0-cards bug: `filterPreviews` was returning `true` (meaning "this IS a preview card") for all cards. Since the system filter applies `not(filterPreviews)` when `settings.showPreviews` is off, every card was excluded. Fixed to return `false` (no ER cards are previews).
+
+Other fixes made during debugging:
+- `getInitialList()` was returning `"browse"` but no such list key exists in `makeLists`; fixed to return `"index"`.
+- `filterEncounterCards` corrected to return `false` (no ER cards are encounter cards); previously returned `true`, which would have caused `not(filterEncounterCards)` to exclude all cards on the player card view.
+- `vite.config.ts`: added `allowedHosts: ["dev.harababurel.com"]` for remote dev access.
+
+**Next**: re-add filters one at a time as instructed. Candidate ER filters: type, aspect, energy cost, trait, pack/set, category (background/specialty/personality), approach icons.
+
+---
+
 ## Current state
 
 - **Shared package**: compiles clean.
 - **Backend package**: compiles clean. SQLite DB with 260 cards. APIs: `GET /v2/public/cards`, `GET /v2/public/packs`, `GET /version`.
 - **Frontend package**: Vite build clean. `tsc --noEmit` = 0 errors.
 - **Deployment**: nginx + systemd, no Docker/Cloudflare/Kamal. See `docs/nginx.conf.example` and `docs/earthborne.service`.
-- **All 8 phases complete. Card images working.**
 - **Card data**: 260 cards ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
 - **Card images**: 260 JPGs at `/home/sergiu/work/earthborne.images/cards/` (outside repo). Backend serves via `GET /images/:code`.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed).
+- **Browse page**: all 260 cards visible. Filter sidebar is blank — being rebuilt for ER (Phase 9 in progress).
