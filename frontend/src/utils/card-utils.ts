@@ -21,7 +21,8 @@ export function hasSkillIcons(_card: Card) {
 
 // Stub — ER has no faction color system; will be replaced with aspect colors.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getCardColor(_card: Card, _prop = "color") {
+export function getCardColor(card: Card, _prop = "color") {
+  if (card.energy_aspect) return `color-${card.energy_aspect}`;
   return "color-neutral";
 }
 

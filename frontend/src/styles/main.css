@@ -78,6 +78,18 @@
     --multiclass-dark: #997b2d;
     --mythos-dark: var(--nord-3);
 
+    /* ER aspects — light values (used in dark mode) */
+    --awa: #5dbf5d;
+    --fit: #e05a5a;
+    --foc: #5b9bd5;
+    --spi: #d4aa3a;
+
+    /* ER aspects — dark values (used in light mode) */
+    --awa-dark: #2d7d2d;
+    --fit-dark: #b83232;
+    --foc-dark: #2855a8;
+    --spi-dark: #9e7820;
+
     --rounded: 0.25rem;
     --rounded-lg: 1rem;
     --rounded-xl: 1.5rem;
@@ -107,6 +119,11 @@
     --color-seeker: var(--seeker);
     --color-survivor: var(--survivor);
     --color-multiclass: var(--multiclass);
+
+    --color-awa: var(--awa);
+    --color-fit: var(--fit);
+    --color-foc: var(--foc);
+    --color-spi: var(--spi);
 
     --text: var(--palette-4);
     --text-mythos: var(--mythos);
@@ -148,6 +165,11 @@
     --color-seeker: var(--seeker-dark);
     --color-survivor: var(--survivor-dark);
     --color-multiclass: var(--multiclass-dark);
+
+    --color-awa: var(--awa-dark);
+    --color-fit: var(--fit-dark);
+    --color-foc: var(--foc-dark);
+    --color-spi: var(--spi-dark);
 
     --text: var(--nord-1);
     --text-mythos: var(--mythos-dark);
@@ -441,6 +463,22 @@
 
   .color-neutral {
     color: var(--text-neutral);
+  }
+
+  .color-AWA {
+    color: var(--color-awa);
+  }
+
+  .color-FIT {
+    color: var(--color-fit);
+  }
+
+  .color-FOC {
+    color: var(--color-foc);
+  }
+
+  .color-SPI {
+    color: var(--color-spi);
   }
 
   .background-guardian,
