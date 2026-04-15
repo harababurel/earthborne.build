@@ -22,7 +22,7 @@ import { CardTypeFilter } from "./card-type-filter";
 import { CostFilter } from "./cost-filter";
 import { CycleFilter } from "./cycle-filter";
 import { EncounterSetFilter } from "./encounter-set-filter";
-import { FactionFilter } from "./faction-filter";
+import { ErAspectFilter } from "./er-aspect-filter";
 import { FanMadeContentFilter } from "./fan-made-content-filter";
 import css from "./filters.module.css";
 import { HealthFilter } from "./health-filter";
@@ -154,7 +154,7 @@ export function Filters(props: Props) {
                 {filter === "trait" && <TraitFilter {...params} />}
                 {filter === "taboo_set" && <TabooSetFilter {...params} />}
                 {filter === "type" && <TypeFilter {...params} />}
-                {filter === "faction" && <FactionFilter {...params} />}
+                {filter === "faction" && <ErAspectFilter {...params} />}
                 {filter === "investigator_skills" && (
                   <InvestigatorSkillsFilter {...params} />
                 )}

@@ -918,7 +918,7 @@ function cardsFilters({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   showInvestigatorsFilter = false,
 }): FilterKey[] {
-  return [];
+  return ["faction"];
 }
 
 function properties() {

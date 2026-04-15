@@ -1,0 +1,19 @@
+.toggle {
+  padding: 0.5rem;
+}
+
+.toggle .color-active-AWA[data-state="on"] {
+  --active-color: var(--color-awa);
+}
+
+.toggle .color-active-FIT[data-state="on"] {
+  --active-color: var(--color-fit);
+}
+
+.toggle .color-active-FOC[data-state="on"] {
+  --active-color: var(--color-foc);
+}
+
+.toggle .color-active-SPI[data-state="on"] {
+  --active-color: var(--color-spi);
+}
