@@ -5,7 +5,6 @@ import { Route, Switch, useParams } from "wouter";
 import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { Filters } from "@/components/filters/filters";
-import EncounterIcon from "@/components/icons/encounter-icon";
 import PackIcon from "@/components/icons/pack-icon";
 import { PageTitle } from "@/components/ui/page-title";
 import { useTabUrlState } from "@/components/ui/tabs.hooks";
@@ -13,33 +12,24 @@ import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
 import { selectIsInitialized, selectMetadata } from "@/store/selectors/shared";
-import { official } from "@/utils/card-utils";
 import { displayPackName } from "@/utils/formatting";
 import type { Filter } from "@/utils/fp";
 import { BrowseWithFilter } from "./browse-with-filter";
-import { type ChapterTab, SetTree } from "./set-tree";
+import { type CardTypeTab, SetTree } from "./set-tree";
 
 export function Browse() {
   const { t } = useTranslation();
 
-  const [chapterTab, setChapterTab] = useTabUrlState<ChapterTab>(
-    "all",
-    "chapter",
+  const [cardTypeTab, setCardTypeTab] = useTabUrlState<CardTypeTab>(
+    "ranger",
+    "type",
   );
 
   const addList = useStore((state) => state.addList);
   const setActiveList = useStore((state) => state.setActiveList);
   const removeList = useStore((state) => state.removeList);
-  const hasFanMadeCycles = useStore((state) =>
-    Object.values(selectMetadata(state).cycles).some(
-      (cycle) => !official(cycle),
-    ),
-  );
 
-  const activeChapterTab =
-    chapterTab === "fan-made" && !hasFanMadeCycles ? "all" : chapterTab;
-
-  const listKey = `browse-all-${activeChapterTab}`;
+  const listKey = `browse-${cardTypeTab}`;
 
   const activeList = useStore((state) => state.lists[listKey]);
   const hasList = useStore((state) => !!state.lists[listKey]);
@@ -55,20 +45,19 @@ export function Browse() {
           fan_made_content: "all",
         },
         {
-          systemFilter: browseChapterSystemFilter(activeChapterTab),
+          systemFilter: browseTypeSystemFilter(cardTypeTab),
         },
       );
     }
 
     setActiveList(listKey);
-  }, [activeChapterTab, addList, hasList, listKey, setActiveList]);
+  }, [cardTypeTab, addList, hasList, listKey, setActiveList]);
 
   useEffect(() => {
     return () => {
-      removeList("browse-all-all");
-      removeList("browse-all-1");
-      removeList("browse-all-2");
-      removeList("browse-all-fan-made");
+      for (const tab of ["ranger", "path", "location", "weather", "mission", "role", "aspect", "challenge"] as CardTypeTab[]) {
+        removeList(`browse-${tab}`);
+      }
       setActiveList(undefined);
     };
   }, [removeList, setActiveList]);
@@ -86,8 +75,8 @@ export function Browse() {
           filters={<Filters targetDeck={undefined} />}
           sidebar={
             <SetTree
-              chapterTab={activeChapterTab}
-              onChapterTabChange={setChapterTab}
+              cardTypeTab={cardTypeTab}
+              onCardTypeTabChange={setCardTypeTab}
             />
           }
           sidebarWidthMax="var(--sidebar-width-one-col)"
@@ -118,60 +107,28 @@ export function BrowsePack() {
   );
 }
 
-export function BrowseCycle() {
-  const { cycle_code } = useParams<{ cycle_code: string }>();
-  const cycle = useStore((state) =>
-    cycle_code ? selectMetadata(state).cycles[cycle_code] : undefined,
-  );
-
-  if (!cycle_code || !cycle) return null;
-
-  return (
-    <BrowseWithFilter
-      filterKey="cycle"
-      filterValue={[cycle_code]}
-      listKeyPrefix="browse-cycle"
-      icon={<PackIcon code={cycle_code} />}
-      title={displayPackName(cycle)}
-    />
-  );
-}
-
-function browseChapterSystemFilter(chapterTab: ChapterTab): Filter {
-  switch (chapterTab) {
-    case "all":
-      return (_card: Card) => true;
-
-    case "1":
-    case "2": {
-      const chapter = Number.parseInt(chapterTab, 10);
-      return (card: Card) => (card as unknown as { chapter?: number }).chapter === chapter;
-    }
-
-    case "fan-made":
-      return (_card: Card) => true;
+export function browseTypeSystemFilter(tab: CardTypeTab): Filter {
+  switch (tab) {
+    case "ranger":
+      return (card: Card) => card.category != null;
+    case "path":
+      return (card: Card) =>
+        card.type_code === "path" ||
+        ((card.type_code === "being" || card.type_code === "feature") &&
+          card.category == null);
+    case "location":
+      return (card: Card) => card.type_code === "location";
+    case "weather":
+      return (card: Card) => card.type_code === "weather";
+    case "mission":
+      return (card: Card) => card.type_code === "mission";
+    case "role":
+      return (card: Card) => card.type_code === "role";
+    case "aspect":
+      return (card: Card) => card.type_code === "aspect";
+    case "challenge":
+      return (card: Card) => card.type_code === "challenge";
   }
-}
-
-export function BrowseEncounterSet() {
-  const { encounter_code } = useParams<{ encounter_code: string }>();
-  const encounterSet = useStore((state) =>
-    encounter_code
-      ? selectMetadata(state).encounterSets[encounter_code]
-      : undefined,
-  );
-
-  if (!encounter_code || !encounterSet) return null;
-
-  return (
-    <BrowseWithFilter
-      filterKey="encounter_set"
-      filterValue={[encounter_code]}
-      listKeyPrefix="browse-encounter-set"
-      icon={<EncounterIcon code={encounter_code} />}
-      title={encounterSet.name}
-    />
-  );
 }
 
 export default function BrowseRoutes() {
@@ -179,11 +136,6 @@ export default function BrowseRoutes() {
     <Switch>
       <Route component={Browse} path="/browse" />
       <Route component={BrowsePack} path="/browse/pack/:pack_code" />
-      <Route component={BrowseCycle} path="/browse/cycle/:cycle_code" />
-      <Route
-        component={BrowseEncounterSet}
-        path="/browse/encounter_set/:encounter_code"
-      />
     </Switch>
   );
 }

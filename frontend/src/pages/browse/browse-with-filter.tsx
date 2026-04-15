@@ -1,23 +1,18 @@
 import { useEffect } from "react";
+import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { Filters } from "@/components/filters/filters";
 import { PageTitle } from "@/components/ui/page-title";
-import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
 import { selectIsInitialized } from "@/store/selectors/shared";
-import type { FilterKey, FilterMapping } from "@/store/slices/lists.types";
-import { type ChapterTab, SetTree } from "./set-tree";
-import { selectInitialChapterTab } from "./set-tree.lib";
+import { type CardTypeTab, SetTree } from "./set-tree";
 
 interface Props {
-  filterKey: "pack" | "encounter_set" | "cycle";
-  filterValue:
-    | FilterMapping["pack"]
-    | FilterMapping["encounter_set"]
-    | FilterMapping["cycle"];
+  filterKey: "pack";
+  filterValue: string[];
   listKeyPrefix: string;
   icon: React.ReactNode;
   title: string;
@@ -36,21 +31,14 @@ export function BrowseWithFilter(props: Props) {
 
   const activeCode = filterValue.at(0);
 
-  const initialChapterTab = useStore((state) =>
-    selectInitialChapterTab(state, activeCode, filterKey),
-  );
-
-  const [chapterTab, setChapterTab] = useTabUrlState<ChapterTab>(
-    initialChapterTab ? (String(initialChapterTab) as ChapterTab) : "all",
-    "chapter",
+  const [cardTypeTab, setCardTypeTab] = useTabUrlState<CardTypeTab>(
+    "ranger",
+    "type",
   );
 
   const listKey = `${listKeyPrefix}-${activeCode}`;
 
   useEffect(() => {
-    const additionalFilters: FilterKey[] =
-      filterKey === "cycle" ? ["illustrator", "cycle"] : ["illustrator"];
-
     addList(
       listKey,
       {
@@ -60,7 +48,7 @@ export function BrowseWithFilter(props: Props) {
         [filterKey]: filterValue,
       },
       {
-        additionalFilters,
+        additionalFilters: ["illustrator"],
         lockedFilters: new Set([filterKey]),
       },
     );
@@ -86,10 +74,9 @@ export function BrowseWithFilter(props: Props) {
           filters={<Filters targetDeck={undefined} />}
           sidebar={
             <SetTree
-              activeCode={activeCode}
-              activeType={filterKey}
-              chapterTab={chapterTab}
-              onChapterTabChange={setChapterTab}
+              activePackCode={activeCode}
+              cardTypeTab={cardTypeTab}
+              onCardTypeTabChange={setCardTypeTab}
             />
           }
           sidebarWidthMax="var(--sidebar-width-one-col)"

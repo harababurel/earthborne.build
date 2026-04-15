@@ -43,7 +43,17 @@
       "eligible": "Eligible for {{name}}"
     },
     "browse": {
-      "title": "Browse cards"
+      "title": "Browse cards",
+      "tabs": {
+        "ranger": "Ranger cards",
+        "path": "Path cards",
+        "location": "Locations",
+        "weather": "Weather",
+        "mission": "Missions",
+        "role": "Roles",
+        "aspect": "Aspects",
+        "challenge": "Challenges"
+      }
     },
     "card_modal": {
       "actions": {
