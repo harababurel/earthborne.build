@@ -344,8 +344,9 @@ export function ListCardInner(props: Props) {
                         className={css["approach-tag"]}
                         title={t(`common.skill.${approach}`)}
                       >
-                        {icons[approach]}×
-                        <ApproachIcon approach={approach as ApproachKey} size="1.1em" />
+                        {Array.from({ length: icons[approach]! }, (_, i) => (
+                          <ApproachIcon key={i} approach={approach as ApproachKey} size="1.1em" />
+                        ))}
                       </span>
                     ))}
                   </div>
