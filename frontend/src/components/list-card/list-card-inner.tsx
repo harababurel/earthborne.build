@@ -331,7 +331,7 @@ export function ListCardInner(props: Props) {
           (() => {
             const icons = cardApproachIcons(card);
             const hasApproaches = APPROACH_ORDER.some((a) => icons[a]);
-            const hasCost = card.energy_cost != null && card.energy_aspect != null;
+            const hasCost = card.aspect_requirement_value != null && card.energy_aspect != null;
             if (!hasApproaches && !hasCost) return null;
             return (
               <div className={css["card-right-info"]}>
@@ -351,7 +351,7 @@ export function ListCardInner(props: Props) {
                       backgroundColor: `var(--color-${card.energy_aspect!.toLowerCase()})`,
                     }}
                   >
-                    {card.energy_cost} {card.energy_aspect}
+                    {card.aspect_requirement_value} {card.energy_aspect}
                   </div>
                 )}
               </div>
