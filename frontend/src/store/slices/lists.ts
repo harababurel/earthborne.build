@@ -911,14 +911,11 @@ function investigatorFilters({
 }
 
 function cardsFilters({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   additionalFilters = [] as FilterKey[],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   showOwnershipFilter = false,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   showInvestigatorsFilter = false,
 }): FilterKey[] {
-  return ["faction"];
+  return ["type", "faction", ...additionalFilters];
 }
 
 function properties() {

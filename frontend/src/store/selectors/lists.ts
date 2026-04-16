@@ -1546,12 +1546,11 @@ export const selectTraitOptions = createSelector(
  */
 
 export const selectTypeMapper = createSelector(
-  selectMetadata,
   selectLocaleSortingCollator,
-  (metadata, _) => {
+  (_) => {
     return (code: string) => {
       return {
-        ...metadata.types[code],
+        code,
         name: i18n.t(`common.type.${code}`),
       };
     };
