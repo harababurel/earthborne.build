@@ -1,4 +1,10 @@
 import type { Card } from "@arkham-build/shared";
+import {
+  APPROACH_ORDER,
+  type AspectKey,
+  cardApproachIcons,
+  cardAspectRequirement,
+} from "@arkham-build/shared";
 import type { ReferenceType } from "@floating-ui/react";
 import { FileWarningIcon, StarIcon } from "lucide-react";
 import { useCallback } from "react";
@@ -19,6 +25,7 @@ import { cx } from "@/utils/cx";
 import { dataLanguage } from "@/utils/formatting";
 import { preventLeftClick } from "@/utils/prevent-links";
 import { AnnotationIndicator } from "../annotation-indicator";
+import { CardEquipLoad } from "../card-equip-load";
 import { CardDetails } from "../card/card-details";
 import { CardIcons } from "../card/card-icons";
 import { CardText } from "../card/card-text";
@@ -35,6 +42,13 @@ import { QuantityInput } from "../ui/quantity-input";
 import { QuantityOutput } from "../ui/quantity-output";
 import { DefaultTooltip } from "../ui/tooltip";
 import css from "./list-card.module.css";
+
+const ASPECT_ABBREV: Record<AspectKey, string> = {
+  awareness: "AWA",
+  fitness: "FIT",
+  focus: "FOC",
+  spirit: "SPI",
+};
 
 type RenderCallback = (card: Card, quantity?: number) => React.ReactNode;
 
@@ -264,6 +278,16 @@ export function ListCardInner(props: Props) {
               </div>
 
               {!omitDetails && size !== "xs" && (
+                <div className={css["type-traits"]}>
+                  <span>
+                    {t(`common.type.${card.type_code}`)}
+                    {card.traits ? ` / ${card.traits}` : ""}
+                  </span>
+                  <CardEquipLoad card={card} />
+                </div>
+              )}
+
+              {!omitDetails && size !== "xs" && (
                 <div className={css["meta"]}>
                   {card.type_code !== "role" && (
                     <MulticlassIcons
@@ -314,6 +338,31 @@ export function ListCardInner(props: Props) {
             </figcaption>
           </figure>
         </div>
+        {size !== "xs" &&
+          (() => {
+            const icons = cardApproachIcons(card);
+            const req = cardAspectRequirement(card);
+            const hasApproaches = APPROACH_ORDER.some((a) => icons[a]);
+            if (!hasApproaches && !req) return null;
+            return (
+              <div className={css["card-right-info"]}>
+                {hasApproaches && (
+                  <div className={css["approach-icons"]}>
+                    {APPROACH_ORDER.filter((a) => icons[a]).map((approach) => (
+                      <span key={approach} className={css["approach-tag"]}>
+                        {icons[approach]}×{t(`common.skill.${approach}`)}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {req && (
+                  <div className={css["requirement"]}>
+                    {req.value} {ASPECT_ABBREV[req.aspect]}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         {renderCardExtra?.(card, quantity)}
       </div>
       {!!renderCardAfter && (

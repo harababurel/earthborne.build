@@ -1,0 +1,21 @@
+@layer ui-components {
+  .equip-load {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+  }
+
+  .equip-square {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    opacity: 0.4;
+  }
+
+  .equip-square.filled {
+    background: currentColor;
+    opacity: 1;
+  }
+}

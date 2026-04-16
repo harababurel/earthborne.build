@@ -303,4 +303,41 @@
   .listcard-wrapper.mythos .caption {
     margin-left: 0.25rem;
   }
+
+  .type-traits {
+    display: flex;
+    align-items: center;
+    gap: 0.375em;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 0.1em;
+  }
+
+  .card-right-info {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125em;
+    font-size: var(--text-xs);
+    padding-left: var(--card-spacing-x);
+  }
+
+  .approach-icons {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.25em;
+    justify-content: flex-end;
+  }
+
+  .approach-tag {
+    white-space: nowrap;
+    color: var(--text-muted);
+  }
+
+  .requirement {
+    font-weight: 700;
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
 }
