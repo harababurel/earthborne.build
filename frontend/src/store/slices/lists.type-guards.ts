@@ -115,6 +115,12 @@ export function isTypeFilterObject(
   return !!filter && filter.type === "type";
 }
 
+export function isSetFilterObject(
+  filter?: FilterObject<FilterKey>,
+): filter is FilterObject<"set"> {
+  return !!filter && filter.type === "set";
+}
+
 export function isTraitFilterObject(
   filter?: FilterObject<FilterKey>,
 ): filter is FilterObject<"trait"> {

@@ -382,6 +382,15 @@ export function filterType(enabledTypeCodes: MultiselectFilter): Filter | undefi
 }
 
 /**
+ * Set — filter by ER set_code.
+ */
+export function filterSetCode(enabledSetCodes: MultiselectFilter): Filter | undefined {
+  if (isEmpty(enabledSetCodes)) return undefined;
+
+  return (card: Card) => card.set_code != null && enabledSetCodes.includes(card.set_code);
+}
+
+/**
  * Tag — ER uses keywords array instead of AH tag strings.
  * Checks card.keywords for the given keyword.
  */

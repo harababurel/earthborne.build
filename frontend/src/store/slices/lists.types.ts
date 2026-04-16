@@ -102,6 +102,7 @@ export type FilterMapping = {
   skill_icons: SkillIconsFilter;
   subtype: SubtypeFilter;
   taboo_set: SelectFilter;
+  set: MultiselectFilter;
   trait: MultiselectFilter;
   type: MultiselectFilter;
 };

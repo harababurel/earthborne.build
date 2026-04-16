@@ -35,6 +35,7 @@ import { OwnershipFilter } from "./ownership-filter";
 import { PackFilter } from "./pack-filter";
 import { PropertiesFilter } from "./properties-filter";
 import { SanityFilter } from "./sanity-filter";
+import { SetFilter } from "./set-filter";
 import { SkillIconsFilter } from "./skill-icons-filter";
 import { SubtypeFilter } from "./subtype-filter";
 import { TabooSetFilter } from "./taboo-set-filter";
@@ -154,6 +155,7 @@ export function Filters(props: Props) {
                 {filter === "trait" && <TraitFilter {...params} />}
                 {filter === "taboo_set" && <TabooSetFilter {...params} />}
                 {filter === "type" && <TypeFilter {...params} />}
+                {filter === "set" && <SetFilter {...params} />}
                 {filter === "faction" && <ErAspectFilter {...params} />}
                 {filter === "investigator_skills" && (
                   <InvestigatorSkillsFilter {...params} />

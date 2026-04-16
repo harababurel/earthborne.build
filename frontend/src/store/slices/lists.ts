@@ -172,6 +172,7 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
         case "action":
         case "cycle":
         case "encounter_set":
+        case "set":
         case "trait":
         case "type":
         case "pack":
@@ -735,6 +736,7 @@ function makeFilterValue(
     case "cycle":
     case "encounter_set":
     case "pack":
+    case "set":
     case "trait":
     case "type":
     case "faction": {
@@ -915,7 +917,7 @@ function cardsFilters({
   showOwnershipFilter = false,
   showInvestigatorsFilter = false,
 }): FilterKey[] {
-  return ["type", "faction", ...additionalFilters];
+  return ["type", "set", "faction", ...additionalFilters];
 }
 
 function properties() {

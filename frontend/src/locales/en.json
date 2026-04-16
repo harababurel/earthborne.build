@@ -200,6 +200,40 @@
         "Weapon": "Weapon",
         "Wisdom": "Wisdom"
       },
+      "set": {
+        "artisan": "Artisan",
+        "artificer": "Artificer",
+        "branch": "Branch",
+        "conciliator": "Conciliator",
+        "explorer": "Explorer",
+        "forager": "Forager",
+        "fractured_wall": "Fractured Wall",
+        "general": "General",
+        "grassland": "Grassland",
+        "lakeshore": "Lakeshore",
+        "lone_tree_station": "Lone Tree Station",
+        "maladies": "Maladies",
+        "marsh_of_rebirth": "Marsh of Rebirth",
+        "meadow": "Meadow",
+        "mountain_pass": "Mountain Pass",
+        "northern_outpost": "Northern Outpost",
+        "old_growth": "Old Growth",
+        "personalities": "Personalities",
+        "ravine": "Ravine",
+        "rewards": "Rewards",
+        "river": "River",
+        "shaper": "Shaper",
+        "shepherd": "Shepherd",
+        "spirit_speaker": "Spirit Speaker",
+        "spire": "Spire",
+        "swamp": "Swamp",
+        "talespinner": "Talespinner",
+        "traveler": "Traveler",
+        "tumbledown": "Tumbledown",
+        "valley": "Valley",
+        "white_sky": "White Sky",
+        "woods": "Woods"
+      },
       "type": {
         "aspect": "Aspect",
         "attachment": "Attachment",
@@ -715,6 +749,10 @@
         "title": "Slot"
       },
       "title": "Filters",
+      "set": {
+        "placeholder": "Select sets...",
+        "title": "Set"
+      },
       "trait": {
         "placeholder": "Select traits...",
         "title": "Trait"

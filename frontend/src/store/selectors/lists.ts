@@ -57,6 +57,7 @@ import {
   filterSealed,
   filterSkillIcons,
   filterSubtypes,
+  filterSetCode,
   filterTabooSet,
   filterTraits,
   filterType,
@@ -282,6 +283,15 @@ function makeUserFilter(
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
           const filter = filterTraits(value, lookupTables);
+          if (filter) filters.push(filter);
+        }
+        break;
+      }
+
+      case "set": {
+        const value = filterValue.value as MultiselectFilter;
+        if (value.length) {
+          const filter = filterSetCode(value);
           if (filter) filters.push(filter);
         }
         break;
@@ -886,6 +896,7 @@ export const selectListFilterProperties = createSelector(
     const investigators = new Set<string>();
     const levels = new Set<number | null>();
     const packs = new Set<string>();
+    const sets = new Set<string>();
     const traits = new Set<string>();
     const types = new Set<string>();
 
@@ -902,6 +913,10 @@ export const selectListFilterProperties = createSelector(
         types.add(card.type_code);
 
         packs.add(card.pack_code);
+
+        if (card.set_code) {
+          sets.add(card.set_code);
+        }
 
         if (card.energy_aspect) {
           factions.add(card.energy_aspect);
@@ -952,6 +967,7 @@ export const selectListFilterProperties = createSelector(
       investigators,
       levels,
       packs,
+      sets,
       sanity,
       skills,
       traits,
@@ -1569,6 +1585,33 @@ export const selectTypeOptions = createSelector(
 );
 
 /**
+ * Set
+ */
+
+export const selectSetMapper = createSelector(
+  selectLocaleSortingCollator,
+  (_) => {
+    return (code: string) => {
+      return {
+        code,
+        name: i18n.t(`common.set.${code}`),
+      };
+    };
+  },
+);
+
+export const selectSetOptions = createSelector(
+  selectListFilterProperties,
+  selectLocaleSortingCollator,
+  selectSetMapper,
+  ({ sets }, collator, mapper) => {
+    return Array.from(sets)
+      .map(mapper)
+      .sort((a, b) => collator.compare(a.name, b.name));
+  },
+);
+
+/**
  * Upgrades
  */
 
@@ -1828,6 +1871,13 @@ function selectTraitChanges(value: MultiselectFilter) {
     .join(` ${i18n.t("filters.or")} `);
 }
 
+function selectSetChanges(value: MultiselectFilter) {
+  if (!value.length) return "";
+  return value
+    .map((code) => i18n.t(`common.set.${code}`))
+    .join(` ${i18n.t("filters.or")} `);
+}
+
 function selectTypeChanges(value: MultiselectFilter) {
   if (!value.length) return "";
   return value
@@ -1917,6 +1967,10 @@ export function selectFilterChanges<T extends keyof FilterMapping>(
 
     case "taboo_set": {
       return selectTabooSetChanges(state, value as SelectFilter);
+    }
+
+    case "set": {
+      return selectSetChanges(value as MultiselectFilter);
     }
 
     case "trait": {
