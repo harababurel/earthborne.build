@@ -1,9 +1,5 @@
 import type { Card } from "@arkham-build/shared";
-import {
-  APPROACH_ORDER,
-  type AspectKey,
-  cardApproachIcons,
-} from "@arkham-build/shared";
+import { APPROACH_ORDER, cardApproachIcons } from "@arkham-build/shared";
 import type { ReferenceType } from "@floating-ui/react";
 import { FileWarningIcon, StarIcon } from "lucide-react";
 import { useCallback } from "react";
@@ -42,12 +38,6 @@ import { QuantityOutput } from "../ui/quantity-output";
 import { DefaultTooltip } from "../ui/tooltip";
 import css from "./list-card.module.css";
 
-const ASPECT_ABBREV: Record<AspectKey, string> = {
-  awareness: "AWA",
-  fitness: "FIT",
-  focus: "FOC",
-  spirit: "SPI",
-};
 
 type RenderCallback = (card: Card, quantity?: number) => React.ReactNode;
 
@@ -355,9 +345,13 @@ export function ListCardInner(props: Props) {
                   </div>
                 )}
                 {hasCost && (
-                  <div className={css["requirement"]}>
-                    {card.energy_cost}{" "}
-                    {ASPECT_ABBREV[card.energy_aspect as AspectKey]}
+                  <div
+                    className={css["requirement"]}
+                    style={{
+                      backgroundColor: `var(--color-${card.energy_aspect!.toLowerCase()})`,
+                    }}
+                  >
+                    {card.energy_cost} {card.energy_aspect}
                   </div>
                 )}
               </div>

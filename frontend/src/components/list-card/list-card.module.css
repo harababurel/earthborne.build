@@ -339,5 +339,8 @@
     font-weight: 700;
     font-size: var(--text-sm);
     white-space: nowrap;
+    color: white;
+    padding: 0.15em 0.45em;
+    border-radius: var(--rounded);
   }
 }
