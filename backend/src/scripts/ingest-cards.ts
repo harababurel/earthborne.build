@@ -87,7 +87,7 @@ async function ingest() {
     const packs = await readJson<{ id: string; name: string; short_name?: string; position: number }[]>("packs.json");
     await tx
       .insertInto("pack")
-      .values(packs.map((p) => ({ ...p, short_name: p.short_name ?? null })))
+      .values(packs.map((p) => ({ ...remapPackId(p), short_name: p.short_name ?? null })))
       .execute();
     log("info", `Inserted ${packs.length} packs`);
 
@@ -100,7 +100,7 @@ async function ingest() {
       const packFile = path.join(dataDir, "packs", packId, `${packId}.json`);
       const rawCards = await readFile<RawCard[]>(packFile);
 
-      const cards = rawCards.map((c) => normalizeCard(c, packId));
+      const cards = rawCards.map((c) => normalizeCard(c, remapPackId({ id: packId }).id));
       if (cards.length === 0) continue;
 
       await tx.insertInto("card").values(cards).execute();
@@ -195,6 +195,17 @@ function normalizeCard(c: RawCard, packId: string) {
     mountain_challenge: c.mountain_challenge ?? null,
     crest_challenge: c.crest_challenge ?? null,
   };
+}
+
+// The upstream card data uses "core" for the base set; we use "ebr" instead.
+const PACK_ID_REMAP: Record<string, { id: string; name?: string }> = {
+  core: { id: "ebr", name: "Earthborne Rangers" },
+};
+
+function remapPackId<T extends { id: string; name?: string }>(pack: T): T {
+  const remap = PACK_ID_REMAP[pack.id];
+  if (!remap) return pack;
+  return { ...pack, ...remap };
 }
 
 async function readJson<T>(filename: string): Promise<T> {
