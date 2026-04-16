@@ -1,0 +1,50 @@
+/** biome-ignore-all lint/a11y: icomoon icons. */
+/** biome-ignore-all lint/complexity/noImportantStyles: icomoon icons. */
+
+@font-face {
+  font-family: "core";
+  src: url("../assets/fonts/core.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="core-"],
+[class*=" core-"] {
+  font-family: "core" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.core-conflict:before { content: "\e900"; }
+.core-connection:before { content: "\e901"; }
+.core-reason:before { content: "\e902"; }
+.core-exploration:before { content: "\e903"; }
+.core-conditional:before { content: "\e904"; }
+.core-harm:before { content: "\e905"; }
+.core-progress:before { content: "\e906"; }
+.core-ranger:before { content: "\e907"; }
+.core-reshuffle:before { content: "\e908"; }
+.core-guide:before { content: "\e909"; }
+.core-per_ranger:before { content: "\e90a"; }
+.core-sun:before { content: "\e90b"; }
+.core-crest:before { content: "\e90c"; }
+.core-mountain:before { content: "\e90d"; }
+.core-spi_chakra:before { content: "\e90e"; }
+.core-foc_chakra:before { content: "\e90f"; }
+.core-fit_chakra:before { content: "\e910"; }
+.core-awa_chakra:before { content: "\e911"; }
+.core-old_growth:before { content: "\e912"; }
+.core-mountain_pass:before { content: "\e913"; }
+.core-woods:before { content: "\e914"; }
+.core-lakeshore:before { content: "\e915"; }
+.core-grassland:before { content: "\e916"; }
+.core-ravine:before { content: "\e917"; }
+.core-swamp:before { content: "\e918"; }
+.core-river:before { content: "\e919"; }

@@ -4,6 +4,15 @@ import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import { assert } from "./assert";
 
+const ER_STAT_TOKENS = new Set(["FIT", "AWA", "FOC", "SPI"]);
+
+// Tokens that map directly to a class in the "core" icon font from rangersdb.
+const ER_CORE_FONT_TOKENS = new Set([
+  "conflict", "connection", "reason", "exploration",
+  "harm", "progress", "ranger", "per_ranger", "guide",
+  "sun", "crest", "mountain",
+]);
+
 export function splitMultiValue(s: string | null | undefined) {
   if (!s) return [];
   return s.split(".").reduce<string[]>((acc, curr) => {
@@ -72,7 +81,15 @@ export function parseCardTextHtml(
 
   parsed = parsed
     .replaceAll(/\[\[(.*?)\]\]/g, "<b><em>$1</em></b>")
-    .replaceAll(/\[((?:\w|_)+?)\]/g, `<i class="icon-$1"></i>`);
+    .replaceAll(/\[((?:\w|_)+?)\]/g, (_, token: string) => {
+      if (ER_CORE_FONT_TOKENS.has(token)) {
+        return `<span class="core-${token}"></span>`;
+      }
+      if (ER_STAT_TOKENS.has(token)) {
+        return `<b class="color-${token}">${token}</b>`;
+      }
+      return `<i class="icon-${token}"></i>`;
+    });
 
   if (opts?.newLines !== "skip") {
     parsed = parsed.replaceAll("\n", "<hr class='break'>");
