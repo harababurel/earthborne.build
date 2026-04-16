@@ -3,7 +3,6 @@ import {
   APPROACH_ORDER,
   type AspectKey,
   cardApproachIcons,
-  cardAspectRequirement,
 } from "@arkham-build/shared";
 import type { ReferenceType } from "@floating-ui/react";
 import { FileWarningIcon, StarIcon } from "lucide-react";
@@ -341,9 +340,9 @@ export function ListCardInner(props: Props) {
         {size !== "xs" &&
           (() => {
             const icons = cardApproachIcons(card);
-            const req = cardAspectRequirement(card);
             const hasApproaches = APPROACH_ORDER.some((a) => icons[a]);
-            if (!hasApproaches && !req) return null;
+            const hasCost = card.energy_cost != null && card.energy_aspect != null;
+            if (!hasApproaches && !hasCost) return null;
             return (
               <div className={css["card-right-info"]}>
                 {hasApproaches && (
@@ -355,9 +354,10 @@ export function ListCardInner(props: Props) {
                     ))}
                   </div>
                 )}
-                {req && (
+                {hasCost && (
                   <div className={css["requirement"]}>
-                    {req.value} {ASPECT_ABBREV[req.aspect]}
+                    {card.energy_cost}{" "}
+                    {ASPECT_ABBREV[card.energy_aspect as AspectKey]}
                   </div>
                 )}
               </div>
