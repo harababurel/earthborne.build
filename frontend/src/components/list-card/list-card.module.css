@@ -331,6 +331,9 @@
   }
 
   .approach-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15em;
     white-space: nowrap;
     color: var(--text-muted);
   }

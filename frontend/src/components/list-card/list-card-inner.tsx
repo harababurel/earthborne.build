@@ -1,5 +1,5 @@
 import type { Card } from "@arkham-build/shared";
-import { APPROACH_ORDER, cardApproachIcons } from "@arkham-build/shared";
+import { APPROACH_ORDER, type ApproachKey, cardApproachIcons } from "@arkham-build/shared";
 import type { ReferenceType } from "@floating-ui/react";
 import { FileWarningIcon, StarIcon } from "lucide-react";
 import { useCallback } from "react";
@@ -20,6 +20,7 @@ import { cx } from "@/utils/cx";
 import { dataLanguage } from "@/utils/formatting";
 import { preventLeftClick } from "@/utils/prevent-links";
 import { AnnotationIndicator } from "../annotation-indicator";
+import { ApproachIcon } from "../icons/approach-icon";
 import { CardEquipLoad } from "../card-equip-load";
 import { CardDetails } from "../card/card-details";
 import { CardIcons } from "../card/card-icons";
@@ -338,8 +339,13 @@ export function ListCardInner(props: Props) {
                 {hasApproaches && (
                   <div className={css["approach-icons"]}>
                     {APPROACH_ORDER.filter((a) => icons[a]).map((approach) => (
-                      <span key={approach} className={css["approach-tag"]}>
-                        {icons[approach]}×{t(`common.skill.${approach}`)}
+                      <span
+                        key={approach}
+                        className={css["approach-tag"]}
+                        title={t(`common.skill.${approach}`)}
+                      >
+                        {icons[approach]}×
+                        <ApproachIcon approach={approach as ApproachKey} size="1.1em" />
                       </span>
                     ))}
                   </div>
