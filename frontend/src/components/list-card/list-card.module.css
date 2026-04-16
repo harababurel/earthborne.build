@@ -328,6 +328,7 @@
     flex-flow: row wrap;
     gap: 0.25em;
     justify-content: flex-end;
+    font-size: var(--text-sm);
   }
 
   .approach-tag {
@@ -340,7 +341,7 @@
 
   .requirement {
     font-weight: 700;
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     white-space: nowrap;
     color: white;
     padding: 0.15em 0.45em;
