@@ -44,7 +44,7 @@ export async function queryMetadata(
     // ER has no cycles; use pack code as cycle_code placeholder.
     cycle_code: p.id,
     real_name: p.name,
-    name: p.short_name ?? p.name,
+    name: p.name,
     position: p.position,
     official: true,
   }));
