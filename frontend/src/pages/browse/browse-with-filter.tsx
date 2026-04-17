@@ -1,25 +1,22 @@
 import { useEffect } from "react";
-import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
+import { DeckCollection } from "@/components/deck-collection/deck-collection";
 import { Filters } from "@/components/filters/filters";
 import { PageTitle } from "@/components/ui/page-title";
 import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
 import { selectIsInitialized } from "@/store/selectors/shared";
-import { type CardTypeTab, SetTree } from "./set-tree";
 
 interface Props {
-  filterKey: "pack";
-  filterValue: string[];
   listKeyPrefix: string;
-  icon: React.ReactNode;
+  packCode: string;
   title: string;
 }
 
 export function BrowseWithFilter(props: Props) {
-  const { filterKey, filterValue, listKeyPrefix, title } = props;
+  const { listKeyPrefix, packCode, title } = props;
 
   const activeListId = useStore((state) => state.activeList);
   const isInitalized = useStore(selectIsInitialized);
@@ -29,14 +26,7 @@ export function BrowseWithFilter(props: Props) {
   const setActiveList = useStore((state) => state.setActiveList);
   const removeList = useStore((state) => state.removeList);
 
-  const activeCode = filterValue.at(0);
-
-  const [cardTypeTab, setCardTypeTab] = useTabUrlState<CardTypeTab>(
-    "ranger",
-    "type",
-  );
-
-  const listKey = `${listKeyPrefix}-${activeCode}`;
+  const listKey = `${listKeyPrefix}-${packCode}`;
 
   useEffect(() => {
     addList(
@@ -45,11 +35,10 @@ export function BrowseWithFilter(props: Props) {
         card_type: "",
         ownership: "all",
         fan_made_content: "all",
-        [filterKey]: filterValue,
+        pack: [packCode],
       },
       {
-        additionalFilters: ["illustrator"],
-        lockedFilters: new Set([filterKey]),
+        additionalFilters: ["pack", "illustrator"],
       },
     );
 
@@ -59,7 +48,7 @@ export function BrowseWithFilter(props: Props) {
       removeList(listKey);
       setActiveList(undefined);
     };
-  }, [addList, removeList, setActiveList, filterKey, filterValue, listKey]);
+  }, [addList, removeList, setActiveList, listKey, packCode]);
 
   if (!activeList || !isInitalized || !activeListId?.startsWith(listKey)) {
     return null;
@@ -72,13 +61,7 @@ export function BrowseWithFilter(props: Props) {
         <ListLayout
           noFade
           filters={<Filters targetDeck={undefined} />}
-          sidebar={
-            <SetTree
-              activePackCode={activeCode}
-              cardTypeTab={cardTypeTab}
-              onCardTypeTabChange={setCardTypeTab}
-            />
-          }
+          sidebar={<DeckCollection />}
           sidebarWidthMax="var(--sidebar-width-one-col)"
         >
           {(props) => <CardListContainer {...props} />}

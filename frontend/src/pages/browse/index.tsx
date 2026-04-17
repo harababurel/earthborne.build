@@ -1,11 +1,9 @@
-import type { Card } from "@arkham-build/shared";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Switch, useParams } from "wouter";
 import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { Filters } from "@/components/filters/filters";
-import PackIcon from "@/components/icons/pack-icon";
 import { PageTitle } from "@/components/ui/page-title";
 import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { ListLayout } from "@/layouts/list-layout";
@@ -13,7 +11,7 @@ import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provide
 import { useStore } from "@/store";
 import { selectIsInitialized, selectMetadata } from "@/store/selectors/shared";
 import { displayPackName } from "@/utils/formatting";
-import type { Filter } from "@/utils/fp";
+import { browseTypeSystemFilter } from "./browse-type-system-filter";
 import { BrowseWithFilter } from "./browse-with-filter";
 import { type CardTypeTab, SetTree } from "./set-tree";
 
@@ -55,7 +53,16 @@ export function Browse() {
 
   useEffect(() => {
     return () => {
-      for (const tab of ["ranger", "path", "location", "weather", "mission", "role", "aspect", "challenge"] as CardTypeTab[]) {
+      for (const tab of [
+        "ranger",
+        "path",
+        "location",
+        "weather",
+        "mission",
+        "role",
+        "aspect",
+        "challenge",
+      ] as CardTypeTab[]) {
         removeList(`browse-${tab}`);
       }
       setActiveList(undefined);
@@ -98,37 +105,11 @@ export function BrowsePack() {
 
   return (
     <BrowseWithFilter
-      filterKey="pack"
-      filterValue={[pack_code]}
       listKeyPrefix="browse-pack"
-      icon={<PackIcon code={pack_code} />}
+      packCode={pack_code}
       title={displayPackName(pack)}
     />
   );
-}
-
-export function browseTypeSystemFilter(tab: CardTypeTab): Filter {
-  switch (tab) {
-    case "ranger":
-      return (card: Card) => card.category != null;
-    case "path":
-      return (card: Card) =>
-        card.type_code === "path" ||
-        ((card.type_code === "being" || card.type_code === "feature") &&
-          card.category == null);
-    case "location":
-      return (card: Card) => card.type_code === "location";
-    case "weather":
-      return (card: Card) => card.type_code === "weather";
-    case "mission":
-      return (card: Card) => card.type_code === "mission";
-    case "role":
-      return (card: Card) => card.type_code === "role";
-    case "aspect":
-      return (card: Card) => card.type_code === "aspect";
-    case "challenge":
-      return (card: Card) => card.type_code === "challenge";
-  }
 }
 
 export default function BrowseRoutes() {

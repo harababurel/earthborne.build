@@ -7,6 +7,11 @@
  */
 
 import type { Card, SealedDeckResponse } from "@arkham-build/shared";
+import { official, splitMultiValue } from "@/utils/card-utils";
+import { resolveLimitedPoolPacks } from "@/utils/environments";
+import type { Filter } from "@/utils/fp";
+import { and, or } from "@/utils/fp";
+import { isEmpty } from "@/utils/is-empty";
 
 // AttributeFilter was removed from shared; defined locally for fan-made content support.
 type AttributeFilter = {
@@ -14,15 +19,10 @@ type AttributeFilter = {
   value: string | number | null | undefined;
   operator?: "=" | "!=";
 };
-import { official, splitMultiValue } from "@/utils/card-utils";
-import { isEmpty } from "@/utils/is-empty";
-import { resolveLimitedPoolPacks } from "@/utils/environments";
-import type { Filter } from "@/utils/fp";
-import { and, or } from "@/utils/fp";
+
 import type {
   AssetFilter,
   CostFilter,
-  FilterMapping,
   InvestigatorSkillsFilter,
   LevelFilter,
   List,
@@ -80,7 +80,9 @@ export function filterOfficial(card: Card) {
  * Actions — ER has no action icon filter; stub returns undefined.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function filterActions(_filterState: MultiselectFilter): Filter | undefined {
+export function filterActions(
+  _filterState: MultiselectFilter,
+): Filter | undefined {
   return undefined;
 }
 
@@ -147,7 +149,9 @@ export function filterCardPool(
 ) {
   if (isEmpty(value)) return undefined;
 
-  const [cardEntries, rest] = partition(value, (key) => key.startsWith("card:"));
+  const [cardEntries, rest] = partition(value, (key) =>
+    key.startsWith("card:"),
+  );
 
   const packFilter = filterPackCode(
     resolveLimitedPoolPacks(metadata, rest).map((p) => p.code),
@@ -193,7 +197,9 @@ function filterOddCost(card: Card) {
 function filterCostRange(value: [number, number]) {
   const [min, max] = value;
   return (card: Card) =>
-    card.energy_cost != null && card.energy_cost >= min && card.energy_cost <= max;
+    card.energy_cost != null &&
+    card.energy_cost >= min &&
+    card.energy_cost <= max;
 }
 
 export function filterCost(filterState: CostFilter): Filter | undefined {
@@ -267,7 +273,7 @@ export function filterOwnership(options: CardOwnershipOptions) {
 }
 
 /**
- * Pack / Set code — ER cards use set_code.
+ * Pack code.
  */
 export function filterPackCode(
   value: MultiselectFilter,
@@ -279,13 +285,15 @@ export function filterPackCode(
   if (isEmpty(value)) return undefined;
   if (!value.some((x) => x)) return undefined;
 
-  return (card: Card) => card.set_code != null && value.includes(card.set_code);
+  return (card: Card) => value.includes(card.pack_code);
 }
 
 /**
  * Illustrator
  */
-export function filterIllustrator(filterState: MultiselectFilter): Filter | undefined {
+export function filterIllustrator(
+  filterState: MultiselectFilter,
+): Filter | undefined {
   const filters: Filter[] = filterState.map(
     (key) => (c: Card) => c.illustrator === key,
   );
@@ -375,7 +383,9 @@ export function filterTraits(
 /**
  * Type — filter by ER type_code.
  */
-export function filterType(enabledTypeCodes: MultiselectFilter): Filter | undefined {
+export function filterType(
+  enabledTypeCodes: MultiselectFilter,
+): Filter | undefined {
   if (isEmpty(enabledTypeCodes)) return undefined;
 
   return (card: Card) => enabledTypeCodes.includes(card.type_code);
@@ -384,10 +394,13 @@ export function filterType(enabledTypeCodes: MultiselectFilter): Filter | undefi
 /**
  * Set — filter by ER set_code.
  */
-export function filterSetCode(enabledSetCodes: MultiselectFilter): Filter | undefined {
+export function filterSetCode(
+  enabledSetCodes: MultiselectFilter,
+): Filter | undefined {
   if (isEmpty(enabledSetCodes)) return undefined;
 
-  return (card: Card) => card.set_code != null && enabledSetCodes.includes(card.set_code);
+  return (card: Card) =>
+    card.set_code != null && enabledSetCodes.includes(card.set_code);
 }
 
 /**
@@ -491,8 +504,7 @@ export function filterInvestigatorWeaknessAccess(
  * Kept for API compatibility with limited-slots.ts.
  */
 export function makeOptionFilter(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _option: any,
+  _option: unknown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _interpreter?: Interpreter,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

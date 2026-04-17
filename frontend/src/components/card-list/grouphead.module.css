@@ -31,3 +31,12 @@
 .grouphead .icon {
   font-size: var(--icon-base);
 }
+
+.filter-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}

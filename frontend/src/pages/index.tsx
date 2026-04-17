@@ -11,7 +11,7 @@ import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
 import { selectIsInitialized } from "@/store/selectors/shared";
-import { browseTypeSystemFilter } from "./browse/index";
+import { browseTypeSystemFilter } from "./browse/browse-type-system-filter";
 import type { CardTypeTab } from "./browse/set-tree";
 
 function Index() {
@@ -32,7 +32,7 @@ function Index() {
       "index",
       { card_type: "", ownership: "all", fan_made_content: "all" },
       {
-        additionalFilters: ["illustrator"],
+        additionalFilters: ["pack", "illustrator"],
         systemFilter: browseTypeSystemFilter(cardTypeTab),
       },
     );

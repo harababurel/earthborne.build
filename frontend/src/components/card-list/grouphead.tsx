@@ -1,10 +1,12 @@
+import { useCallback } from "react";
 import { Link } from "wouter";
+import { useListLayoutContext } from "@/layouts/list-layout-context";
+import { useStore } from "@/store";
 import { getGroupingKeyLabel, NONE } from "@/store/lib/grouping";
 import type { CardGroup } from "@/store/selectors/lists";
 import type { Metadata } from "@/store/slices/metadata.types";
 import { splitMultiValue } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
-import EncounterIcon from "../icons/encounter-icon";
 import { FactionIconFancy } from "../icons/faction-icon-fancy";
 import PackIcon from "../icons/pack-icon";
 import SlotIcon from "../icons/slot-icon";
@@ -55,6 +57,7 @@ type GroupLabelProps = {
 
 export function GroupLabel(props: GroupLabelProps) {
   const { className, type, segment, metadata } = props;
+  const applyPackFilter = useApplyPackFilter(segment);
   const keyLabel = getGroupingKeyLabel(type, segment, metadata);
   if (!keyLabel) return null;
 
@@ -89,10 +92,7 @@ export function GroupLabel(props: GroupLabelProps) {
     return (
       <span className={className}>
         <PackIcon className={css["icon"]} code={segment} />
-        <Link
-          className="link-current"
-          href={`/browse/pack/${segment}`}
-        >
+        <Link className="link-current" href={`/browse/pack/${segment}`}>
           {keyLabel}
         </Link>
       </span>
@@ -131,12 +131,46 @@ export function GroupLabel(props: GroupLabelProps) {
     return (
       <span className={className}>
         <PackIcon className={css["icon"]} code={segment} />
-        <Link className="link-current" href={`/browse/pack/${segment}`}>
+        <button
+          className={cx("link-current", css["filter-button"])}
+          type="button"
+          onClick={applyPackFilter}
+        >
           {keyLabel}
-        </Link>
+        </button>
       </span>
     );
   }
 
   return null;
+}
+
+function useApplyPackFilter(packCode: string) {
+  const { setFiltersOpen } = useListLayoutContext();
+  const setFiltersEnabled = useStore((state) => state.setFiltersEnabled);
+  const setFilterOpen = useStore((state) => state.setFilterOpen);
+  const setFilterValue = useStore((state) => state.setFilterValue);
+  const packFilterId = useStore((state) => {
+    const activeList = state.activeList
+      ? state.lists[state.activeList]
+      : undefined;
+
+    return activeList?.filters.indexOf("pack") ?? -1;
+  });
+
+  return useCallback(() => {
+    if (packFilterId < 0) return;
+
+    setFiltersEnabled(true);
+    setFiltersOpen(true);
+    setFilterOpen(packFilterId, true);
+    setFilterValue(packFilterId, [packCode]);
+  }, [
+    packCode,
+    packFilterId,
+    setFiltersOpen,
+    setFilterOpen,
+    setFilterValue,
+    setFiltersEnabled,
+  ]);
 }
