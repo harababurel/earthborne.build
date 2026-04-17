@@ -884,8 +884,8 @@
     },
     "rules": {
       "back_to_top": "Back to top",
-      "search_placeholder": "Search keywords...",
-      "title": "Rules reference",
+      "search_placeholder": "Search glossary...",
+      "title": "Rules glossary",
       "toc": "Table of contents"
     },
     "search": {
