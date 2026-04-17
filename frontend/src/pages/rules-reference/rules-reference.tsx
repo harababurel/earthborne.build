@@ -5,29 +5,62 @@ import { parseCardTextHtml } from "@/utils/card-utils";
 import "./rules-reference.css";
 import { ChevronLeftIcon, ChevronUpIcon, ListIcon, XIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import html from "@/assets/rules.html?raw";
+import campaignGuidesHtml from "@/assets/campaign-guides.html?raw";
+import faqHtml from "@/assets/faq.html?raw";
+import oneDayMissionsHtml from "@/assets/one-day-missions.html?raw";
+import rulesGlossaryHtml from "@/assets/rules.html?raw";
+import updatesHtml from "@/assets/updates.html?raw";
 import { Button } from "@/components/ui/button";
 import { Scroller } from "@/components/ui/scroller";
 import { SearchInput } from "@/components/ui/search-input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { cx } from "@/utils/cx";
 import { fuzzyMatch, prepareNeedle } from "@/utils/fuzzy";
 import { useGoBack } from "@/utils/use-go-back";
 import { useHotkey } from "@/utils/use-hotkey";
 
+const REFERENCE_SECTIONS = [
+  { value: "campaign-guides", html: campaignGuidesHtml },
+  { value: "rules-glossary", html: rulesGlossaryHtml },
+  { value: "one-day-missions", html: oneDayMissionsHtml },
+  { value: "updates", html: updatesHtml },
+  { value: "faq", html: faqHtml },
+] as const;
+
+type ReferenceSection = (typeof REFERENCE_SECTIONS)[number]["value"];
+
 function RulesReference() {
   const { t } = useTranslation();
 
-  const [toc, rules] = html.split("<!-- BEGIN RULES -->");
-
+  const [section, setSection] =
+    useTabUrlState<ReferenceSection>("rules-glossary");
   const [tocOpen, setTocOpen] = useState(false);
   const [search, setSearch] = useState("");
+
+  const activeSection =
+    REFERENCE_SECTIONS.find((item) => item.value === section) ??
+    REFERENCE_SECTIONS[1];
+  const activeSectionValue = activeSection.value;
+  const [toc, rules] = activeSection.html.split("<!-- BEGIN RULES -->");
 
   const tocTriggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const tocRef = useRef<HTMLDivElement>(null);
 
+  const onSectionChange = useCallback(
+    (value: string) => {
+      setSearch("");
+      setTocOpen(false);
+      setSection(value);
+    },
+    [setSection],
+  );
+
   useEffect(() => {
+    if (contentRef.current?.dataset.section !== activeSectionValue) return;
+
     const $content = contentRef.current?.querySelector("#rules");
     const needle = prepareNeedle(search);
 
@@ -66,7 +99,7 @@ function RulesReference() {
         sectionNode.style.display = currentSectionMatches ? "" : "none";
       }
     }
-  }, [search]);
+  }, [search, activeSectionValue]);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -141,6 +174,7 @@ function RulesReference() {
 
           <Scroller className="toc-inner">
             <div
+              key={section}
               dangerouslySetInnerHTML={{
                 __html: parseCardTextHtml(toc, { newLines: "skip" }),
               }}
@@ -148,12 +182,34 @@ function RulesReference() {
           </Scroller>
         </div>
         <div className="rules-container">
-          <div
-            ref={contentRef}
-            dangerouslySetInnerHTML={{
-              __html: parseCardTextHtml(rules, { newLines: "skip" }),
-            }}
-          />
+          <Tabs value={activeSection.value} onValueChange={onSectionChange}>
+            <TabsList className="rules-tabs">
+              {REFERENCE_SECTIONS.map((item) => (
+                <TabsTrigger key={item.value} value={item.value}>
+                  {t(`rules.sections.${item.value}`)}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            {REFERENCE_SECTIONS.map((item) => (
+              <TabsContent
+                className="rules-tab-content"
+                forceMount
+                key={item.value}
+                value={item.value}
+              >
+                {item.value === activeSection.value ? (
+                  <div
+                    data-section={activeSection.value}
+                    ref={contentRef}
+                    dangerouslySetInnerHTML={{
+                      __html: parseCardTextHtml(rules, { newLines: "skip" }),
+                    }}
+                  />
+                ) : null}
+              </TabsContent>
+            ))}
+          </Tabs>
         </div>
       </div>
     </AppLayout>

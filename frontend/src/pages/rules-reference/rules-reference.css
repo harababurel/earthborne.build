@@ -115,6 +115,14 @@ html[data-theme="light"] .toc a {
   margin-top: 1rem;
 }
 
+.rules-tabs {
+  margin-bottom: 1rem;
+}
+
+.rules-tab-content {
+  outline: none;
+}
+
 .rules {
   max-width: 80ch;
   margin-inline: auto;

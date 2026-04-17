@@ -42,6 +42,7 @@ Additional scripts:
 
 - `npm run analyze`: bundle analyzer
 - `npm run fmt:rules`: format `src/assets/rules.html` (after regenerating it)
+- `node ../scripts/scrape-reference-sections.mjs` (from repo root): regenerate `/rules` section assets from the official Living Valley docs
 - `node ../scripts/scrape-rules.mjs` (from repo root): regenerate `src/assets/rules.html` from the official EBR rules glossary
 - `npm run schema:fan-made-content`: emit the fan-made content JSON schema
 

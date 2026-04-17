@@ -884,8 +884,15 @@
     },
     "rules": {
       "back_to_top": "Back to top",
-      "search_placeholder": "Search glossary...",
-      "title": "Rules glossary",
+      "search_placeholder": "Search reference...",
+      "sections": {
+        "campaign-guides": "Campaign Guides",
+        "faq": "FAQ",
+        "one-day-missions": "One-Day Missions",
+        "rules-glossary": "Rules Glossary",
+        "updates": "Updates"
+      },
+      "title": "Rules & Reference",
       "toc": "Table of contents"
     },
     "search": {
