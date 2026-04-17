@@ -43,12 +43,15 @@ export function sideways(_card: Card) {
 
 type CardBackType = "player" | "card";
 
+const DEFAULT_PLAYER_CARD_BACK_URL = "/assets/ranger-card-back-art.png";
+
 export function cardBackType(card: Card): CardBackType {
   if (card.double_sided) return "card";
   return "player";
 }
 
 export function cardBackTypeUrl(type: CardBackType) {
+  if (type === "player") return DEFAULT_PLAYER_CARD_BACK_URL;
   return `${import.meta.env.VITE_CARD_IMAGE_URL}/back_${type}.jpg`;
 }
 
