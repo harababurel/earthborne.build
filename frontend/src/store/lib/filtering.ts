@@ -199,10 +199,10 @@ function filterOddCost(card: Card) {
 
 function filterCostRange(value: [number, number]) {
   const [min, max] = value;
-  return (card: Card) =>
-    card.energy_cost != null &&
-    card.energy_cost >= min &&
-    card.energy_cost <= max;
+  return (card: Card) => {
+    if (card.energy_cost == null) return min <= -1;
+    return card.energy_cost >= Math.max(min, 0) && card.energy_cost <= max;
+  };
 }
 
 export function filterCost(filterState: CostFilter): Filter | undefined {

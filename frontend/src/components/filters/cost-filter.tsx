@@ -9,8 +9,6 @@ import {
 } from "@/store/selectors/lists";
 import { isCostFilterObject } from "@/store/slices/lists.type-guards";
 import { assert } from "@/utils/assert";
-import { Checkbox } from "../ui/checkbox";
-import { CheckboxGroup } from "../ui/checkboxgroup";
 import { RangeSelect } from "../ui/range-select";
 import type { FilterProps } from "./filters.types";
 import { FilterContainer } from "./primitives/filter-container";
@@ -39,24 +37,6 @@ export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
     (val: number[]) => {
       onChange({
         range: [val[0], val[1]],
-      });
-    },
-    [onChange],
-  );
-
-  const onSetEven = useCallback(
-    (val: boolean | string) => {
-      onChange({
-        even: !!val,
-      });
-    },
-    [onChange],
-  );
-
-  const onSetOdd = useCallback(
-    (val: boolean | string) => {
-      onChange({
-        odd: !!val,
       });
     },
     [onChange],
@@ -100,24 +80,6 @@ export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
         renderLabel={costToString}
         value={rangeValue}
       />
-      <CheckboxGroup cols={2}>
-        <Checkbox
-          disabled={locked}
-          data-testid="filters-cost-even"
-          checked={filter.value.even}
-          id="cost-even"
-          label={t("filters.cost.even")}
-          onCheckedChange={onSetEven}
-        />
-        <Checkbox
-          disabled={locked}
-          data-testid="filters-cost-odd"
-          checked={filter.value.odd}
-          id="cost-odd"
-          label={t("filters.cost.odd")}
-          onCheckedChange={onSetOdd}
-        />
-      </CheckboxGroup>
     </FilterContainer>
   );
 }
