@@ -1,12 +1,11 @@
 import type { Card } from "@arkham-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
-import { DEFAULT_LIST_SORT_ID, SPECIAL_CARD_CODES } from "@/utils/constants";
+import { DEFAULT_LIST_SORT_ID } from "@/utils/constants";
 import type { Filter } from "@/utils/fp";
 import { and, not } from "@/utils/fp";
 import { parse as parseBuildQl } from "../lib/buildql/parser";
 import {
-  filterBacksides,
   filterEncounterCards,
   filterPreviews,
   filterType,
@@ -15,9 +14,11 @@ import type { ResolvedDeck } from "../lib/types";
 import { selectBuildQlInterpreter } from "../selectors/shared";
 import type { StoreState } from ".";
 import {
+  isAspectRequirementFilter,
   isAssetFilter,
   isCardTypeFilter,
   isCostFilter,
+  isEquipFilter,
   isFanMadeContentFilter,
   isInvestigatorSkillsFilter,
   isLevelFilter,
@@ -29,8 +30,10 @@ import {
   isSubtypeFilter,
 } from "./lists.type-guards";
 import type {
+  AspectRequirementFilter,
   AssetFilter,
   CostFilter,
+  EquipFilter,
   FanMadeContentFilter,
   FilterKey,
   FilterMapping,
@@ -170,6 +173,7 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
       switch (filterValues[id].type) {
         case "illustrator":
         case "action":
+        case "approach_icons":
         case "cycle":
         case "encounter_set":
         case "set":
@@ -182,6 +186,20 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
             `filter ${id} value must be an array.`,
           );
           filterValues[id] = { ...filterValues[id], value: payload };
+          break;
+        }
+
+        case "aspect_requirement": {
+          const currentValue = filterValues[id]
+            .value as AspectRequirementFilter;
+          const value = { ...currentValue, ...payload };
+
+          assert(
+            isAspectRequirementFilter(value),
+            `filter ${id} value must be an aspect requirement object.`,
+          );
+
+          filterValues[id] = { ...filterValues[id], value };
           break;
         }
 
@@ -248,6 +266,18 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
           );
 
           filterValues[id] = { ...filterValues[id], value };
+          break;
+        }
+
+        case "equip": {
+          assert(
+            isEquipFilter(payload),
+            `filter ${id} value must be an equip range.`,
+          );
+          filterValues[id] = {
+            ...filterValues[id],
+            value: payload as EquipFilter,
+          };
           break;
         }
 
@@ -691,6 +721,20 @@ function makeFilterValue(
       );
     }
 
+    case "aspect_requirement": {
+      return makeFilterObject(
+        type,
+        isAspectRequirementFilter(initialValue)
+          ? initialValue
+          : {
+              aspects: [],
+              range: undefined,
+            },
+        false,
+        locked,
+      );
+    }
+
     case "level": {
       return makeFilterObject(
         type,
@@ -704,6 +748,7 @@ function makeFilterValue(
       );
     }
 
+    case "equip":
     case "health":
     case "sanity": {
       return makeFilterObject(
@@ -733,6 +778,7 @@ function makeFilterValue(
     case "illustrator":
     case "investigator_card_access":
     case "action":
+    case "approach_icons":
     case "cycle":
     case "encounter_set":
     case "pack":
@@ -787,21 +833,17 @@ function makeFilterValue(
         isPropertiesFilter(initialValue)
           ? initialValue
           : {
-              bonded: false,
-              customizable: false,
-              exile: false,
-              exceptional: false,
-              fast: false,
-              healsDamage: false,
-              healsHorror: false,
-              multiClass: false,
-              myriad: false,
-              permanent: false,
-              seal: false,
-              specialist: false,
-              succeedBy: false,
+              ambush: false,
+              conduit: false,
+              disconnected: false,
+              expert: false,
+              fatiguing: false,
+              friendly: false,
+              manifestation: false,
+              obstacle: false,
+              persistent: false,
+              setup: false,
               unique: false,
-              victory: false,
             },
         true,
         locked,
@@ -915,27 +957,40 @@ function investigatorFilters({
 function cardsFilters({
   additionalFilters = [] as FilterKey[],
   showOwnershipFilter = false,
-  showInvestigatorsFilter = false,
+  showInvestigatorsFilter: _showInvestigatorsFilter = false,
 }): FilterKey[] {
-  return ["type", "set", "faction", ...additionalFilters];
+  const filters: FilterKey[] = [
+    "type",
+    "set",
+    "aspect_requirement",
+    "cost",
+    "equip",
+    "approach_icons",
+    "trait",
+    "properties",
+    "pack",
+    ...additionalFilters,
+  ];
+
+  if (showOwnershipFilter) filters.push("ownership");
+  filters.push("fan_made_content");
+
+  return Array.from(new Set(filters));
 }
 
 function properties() {
   return [
-    "customizable",
-    "exile",
-    "exceptional",
-    "fast",
-    "healsDamage",
-    "healsHorror",
-    "multiClass",
-    "myriad",
-    "permanent",
-    "seal",
-    "specialist",
-    "succeedBy",
+    "ambush",
+    "conduit",
+    "disconnected",
+    "expert",
+    "fatiguing",
+    "friendly",
+    "manifestation",
+    "obstacle",
+    "persistent",
+    "setup",
     "unique",
-    "victory",
   ];
 }
 

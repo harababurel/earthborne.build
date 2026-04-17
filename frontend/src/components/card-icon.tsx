@@ -1,4 +1,4 @@
-import { type Card } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
 import { getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import css from "./card-icon.module.css";
@@ -23,7 +23,7 @@ export function CardIcon(props: Props) {
           inverted && css["icon_inverted"],
         )}
       >
-        <FactionIcon code={card.energy_aspect ?? ""} />
+        <FactionIcon code={card.aspect_requirement_type ?? ""} />
       </div>
     );
   }
@@ -32,7 +32,7 @@ export function CardIcon(props: Props) {
 
   return (
     <EnergyCostIcon
-      aspect={card.energy_aspect}
+      aspect={card.aspect_requirement_type}
       className={cx(css["icon_cost"], colorCls, className)}
       cost={card.energy_cost}
     />

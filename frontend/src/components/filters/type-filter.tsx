@@ -70,19 +70,24 @@ export function TypeFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
           type="multiple"
           value={filter.value}
         >
-          {listProperties.types.has("asset") && (
-            <ToggleGroupItem value="asset">
-              {t("common.type.asset")}
+          {listProperties.types.has("moment") && (
+            <ToggleGroupItem value="moment">
+              {t("common.type.moment")}
             </ToggleGroupItem>
           )}
-          {listProperties.types.has("event") && (
-            <ToggleGroupItem value="event">
-              {t("common.type.event")}
+          {listProperties.types.has("gear") && (
+            <ToggleGroupItem value="gear">
+              {t("common.type.gear")}
             </ToggleGroupItem>
           )}
-          {listProperties.types.has("skill") && (
-            <ToggleGroupItem value="skill">
-              {t("common.type.skill")}
+          {listProperties.types.has("attachment") && (
+            <ToggleGroupItem value="attachment">
+              {t("common.type.attachment")}
+            </ToggleGroupItem>
+          )}
+          {listProperties.types.has("attribute") && (
+            <ToggleGroupItem value="attribute">
+              {t("common.type.attribute")}
             </ToggleGroupItem>
           )}
         </ToggleGroup>

@@ -105,12 +105,10 @@ const fieldDefinitions: FieldDefinition[] = [
   {
     aliases: ["ea"],
     lookup: backResolver((card, { i18n }) => {
-      if (!card.energy_aspect) return null;
-      if (i18n.language === "en") return card.energy_aspect;
-      return [
-        card.energy_aspect,
-        i18n.t(`common.aspects.${card.energy_aspect}`),
-      ];
+      const aspect = card.energy_aspect ?? card.aspect_requirement_type;
+      if (!aspect) return null;
+      if (i18n.language === "en") return aspect;
+      return [aspect, i18n.t(`common.factions.${aspect.toLowerCase()}`)];
     }),
     name: "energy_aspect",
     type: "string",
@@ -122,7 +120,7 @@ const fieldDefinitions: FieldDefinition[] = [
       if (i18n.language === "en") return card.aspect_requirement_type;
       return [
         card.aspect_requirement_type,
-        i18n.t(`common.aspects.${card.aspect_requirement_type}`),
+        i18n.t(`common.factions.${card.aspect_requirement_type.toLowerCase()}`),
       ];
     }),
     name: "aspect_requirement",

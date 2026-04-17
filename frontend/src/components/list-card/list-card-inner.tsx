@@ -1,5 +1,9 @@
 import type { Card } from "@arkham-build/shared";
-import { APPROACH_ORDER, type ApproachKey, cardApproachIcons } from "@arkham-build/shared";
+import {
+  APPROACH_ORDER,
+  type ApproachKey,
+  cardApproachIcons,
+} from "@arkham-build/shared";
 import type { ReferenceType } from "@floating-ui/react";
 import { FileWarningIcon, StarIcon } from "lucide-react";
 import { useCallback } from "react";
@@ -13,22 +17,21 @@ import {
   getCardColor,
   hasSkillIcons,
   isEnemyLike,
-  parseCardTextHtml,
 } from "@/utils/card-utils";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { cx } from "@/utils/cx";
 import { dataLanguage } from "@/utils/formatting";
 import { preventLeftClick } from "@/utils/prevent-links";
 import { AnnotationIndicator } from "../annotation-indicator";
-import { ApproachIcon } from "../icons/approach-icon";
-import { CardEquipLoad } from "../card-equip-load";
 import { CardDetails } from "../card/card-details";
 import { CardIcons } from "../card/card-icons";
 import { CardText } from "../card/card-text";
+import { CardEquipLoad } from "../card-equip-load";
 import { CardHealth } from "../card-health";
 import { CardIcon } from "../card-icon";
 import { CardName } from "../card-name";
 import { CardThumbnail } from "../card-thumbnail";
+import { ApproachIcon } from "../icons/approach-icon";
 import { MulticlassIcons } from "../icons/multiclass-icons";
 import { SkillIcons } from "../skill-icons/skill-icons";
 import { SkillIconsInvestigator } from "../skill-icons/skill-icons-investigator";
@@ -38,7 +41,6 @@ import { QuantityInput } from "../ui/quantity-input";
 import { QuantityOutput } from "../ui/quantity-output";
 import { DefaultTooltip } from "../ui/tooltip";
 import css from "./list-card.module.css";
-
 
 type RenderCallback = (card: Card, quantity?: number) => React.ReactNode;
 
@@ -164,7 +166,7 @@ export function ListCardInner(props: Props) {
         isCardNotInLimitedPool && css["card-not-in-limited-pool"],
         isActive && css["active"],
         showCardText && css["card-text"],
-        card.energy_aspect && css[card.energy_aspect],
+        card.aspect_requirement_type && css[card.aspect_requirement_type],
         !!renderCardAfter && css["has-after"],
       )}
       data-testid={`listcard-${card.code}`}
@@ -307,21 +309,20 @@ export function ListCardInner(props: Props) {
 
                   {/* ER has no subname field */}
 
-                  {showInvestigatorIcons &&
-                    card.type_code === "role" && (
-                      <>
-                        <CardHealth
-                          className={css["investigator-health"]}
-                          health={card.harm_threshold}
-                          sanity={undefined}
-                        />
-                        <SkillIconsInvestigator
-                          card={card}
-                          className={css["investigator-skills"]}
-                          iconClassName={css["investigator-skill"]}
-                        />
-                      </>
-                    )}
+                  {showInvestigatorIcons && card.type_code === "role" && (
+                    <>
+                      <CardHealth
+                        className={css["investigator-health"]}
+                        health={card.harm_threshold}
+                        sanity={undefined}
+                      />
+                      <SkillIconsInvestigator
+                        card={card}
+                        className={css["investigator-skills"]}
+                        iconClassName={css["investigator-skill"]}
+                      />
+                    </>
+                  )}
                   {renderCardMetaExtra?.(card, quantity)}
                 </div>
               )}
@@ -332,33 +333,46 @@ export function ListCardInner(props: Props) {
           (() => {
             const icons = cardApproachIcons(card);
             const hasApproaches = APPROACH_ORDER.some((a) => icons[a]);
-            const hasCost = card.aspect_requirement_value != null && card.energy_aspect != null;
+            const requirementAspect = card.aspect_requirement_type;
+            const hasCost =
+              card.aspect_requirement_value != null &&
+              requirementAspect != null;
             if (!hasApproaches && !hasCost) return null;
             return (
               <div className={css["card-right-info"]}>
                 {hasApproaches && (
                   <div className={css["approach-icons"]}>
-                    {APPROACH_ORDER.filter((a) => icons[a]).map((approach) => (
-                      <span
-                        key={approach}
-                        className={css["approach-tag"]}
-                        title={t(`common.skill.${approach}`)}
-                      >
-                        {Array.from({ length: icons[approach]! }, (_, i) => (
-                          <ApproachIcon key={i} approach={approach as ApproachKey} size="1.1em" />
-                        ))}
-                      </span>
-                    ))}
+                    {APPROACH_ORDER.filter((a) => icons[a]).map((approach) => {
+                      const count = icons[approach] ?? 0;
+                      return (
+                        <span
+                          key={approach}
+                          className={css["approach-tag"]}
+                          title={t(`common.skill.${approach}`)}
+                        >
+                          {Array.from(
+                            { length: count },
+                            (_, i) => `${approach}-${i}`,
+                          ).map((key) => (
+                            <ApproachIcon
+                              key={key}
+                              approach={approach as ApproachKey}
+                              size="1.1em"
+                            />
+                          ))}
+                        </span>
+                      );
+                    })}
                   </div>
                 )}
                 {hasCost && (
                   <div
                     className={css["requirement"]}
                     style={{
-                      backgroundColor: `var(--color-${card.energy_aspect!.toLowerCase()})`,
+                      backgroundColor: `var(--color-${requirementAspect.toLowerCase()})`,
                     }}
                   >
-                    {card.aspect_requirement_value} {card.energy_aspect}
+                    {card.aspect_requirement_value} {requirementAspect}
                   </div>
                 )}
               </div>

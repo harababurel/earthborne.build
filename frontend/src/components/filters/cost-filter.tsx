@@ -62,15 +62,6 @@ export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
     [onChange],
   );
 
-  const onSetX = useCallback(
-    (val: boolean | string) => {
-      onChange({
-        x: !!val,
-      });
-    },
-    [onChange],
-  );
-
   const onToggleOpen = useCallback(
     (val: boolean) => {
       if (val && !filter.value.range) {
@@ -117,14 +108,6 @@ export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
           id="cost-even"
           label={t("filters.cost.even")}
           onCheckedChange={onSetEven}
-        />
-        <Checkbox
-          disabled={locked}
-          data-testid="filters-cost-x"
-          checked={filter.value.x}
-          id="cost-x"
-          label={<i className="icon-x" />}
-          onCheckedChange={onSetX}
         />
         <Checkbox
           disabled={locked}

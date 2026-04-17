@@ -115,6 +115,7 @@
       "decks": {
         "slots": "Deck"
       },
+      "expert": "Expert",
       "factions": {
         "awa": "Awareness",
         "fit": "Fitness",
@@ -145,6 +146,17 @@
         "exploration": "Exploration",
         "reason": "Reason",
         "title": "Approach"
+      },
+      "keywords": {
+        "ambush": "Ambush",
+        "conduit": "Conduit",
+        "disconnected": "Disconnected",
+        "fatiguing": "Fatiguing",
+        "friendly": "Friendly",
+        "manifestation": "Manifestation",
+        "obstacle": "Obstacle",
+        "persistent": "Persistent",
+        "setup": "Setup"
       },
       "sort_asc": "Sort ascending",
       "sort_desc": "Sort descending",
@@ -693,6 +705,14 @@
       "asset": {
         "title": "Asset"
       },
+      "approach_icons": {
+        "placeholder": "Select approach icons...",
+        "title": "Approach icons"
+      },
+      "aspect_requirement": {
+        "title": "Aspect requirement",
+        "value": "Required value"
+      },
       "cost": {
         "even": "Even",
         "nocost": "No cost",
@@ -705,6 +725,9 @@
       },
       "environment": {
         "title": "Environment"
+      },
+      "equip": {
+        "title": "Equip"
       },
       "fan_made_content": {
         "all": "Show everything",

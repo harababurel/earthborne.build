@@ -217,19 +217,20 @@ function factionIcon(faction: string | undefined | null): string {
 }
 
 function getCardFactionIcons(card: Card): string {
-  return [card.energy_aspect]
+  return [card.energy_aspect ?? card.aspect_requirement_type]
     .map(factionIcon)
     .filter(Boolean)
     .join("");
 }
 
 function getCardColor(card: Card): string {
-  switch (card.energy_aspect) {
+  const aspect = card.energy_aspect ?? card.aspect_requirement_type;
+  switch (aspect) {
     case "AWA":
     case "FIT":
     case "FOC":
     case "SPI":
-      return `fg-${card.energy_aspect}`;
+      return `fg-${aspect}`;
     default:
       return "";
   }

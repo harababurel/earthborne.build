@@ -8,16 +8,25 @@ const ER_STAT_TOKENS = new Set(["FIT", "AWA", "FOC", "SPI"]);
 
 // Tokens that map directly to a class in the "core" icon font from rangersdb.
 const ER_CORE_FONT_TOKENS = new Set([
-  "conflict", "connection", "reason", "exploration",
-  "harm", "progress", "ranger", "per_ranger", "guide",
-  "sun", "crest", "mountain",
+  "conflict",
+  "connection",
+  "reason",
+  "exploration",
+  "harm",
+  "progress",
+  "ranger",
+  "per_ranger",
+  "guide",
+  "sun",
+  "crest",
+  "mountain",
 ]);
 
 export function splitMultiValue(s: string | null | undefined) {
   if (!s) return [];
-  return s.split(".").reduce<string[]>((acc, curr) => {
-    const s = curr.trim();
-    if (s) acc.push(s);
+  return s.split(/[./]/).reduce<string[]>((acc, curr) => {
+    const value = curr.trim().replace(/^¬/, "");
+    if (value) acc.push(value);
     return acc;
   }, []);
 }
@@ -31,7 +40,8 @@ export function hasSkillIcons(_card: Card) {
 // Stub — ER has no faction color system; will be replaced with aspect colors.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getCardColor(card: Card, _prop = "color") {
-  if (card.energy_aspect) return `color-${card.energy_aspect}`;
+  const aspect = card.energy_aspect ?? card.aspect_requirement_type;
+  if (aspect) return `color-${aspect}`;
   return "color-neutral";
 }
 
@@ -111,7 +121,9 @@ export function parseCardTitle(title: string) {
 
 // Stub — ER has no exile slots.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function decodeExileSlots(_s: string | null | undefined): Record<string, number> {
+export function decodeExileSlots(
+  _s: string | null | undefined,
+): Record<string, number> {
   return {};
 }
 

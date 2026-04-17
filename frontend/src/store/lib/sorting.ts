@@ -34,8 +34,12 @@ export function sortByName(collator: Intl.Collator) {
 
 function sortByAspect(a: Card, b: Card) {
   return (
-    ASPECT_ORDER.indexOf(a.energy_aspect as (typeof ASPECT_ORDER)[number]) -
-    ASPECT_ORDER.indexOf(b.energy_aspect as (typeof ASPECT_ORDER)[number])
+    ASPECT_ORDER.indexOf(
+      a.aspect_requirement_type as (typeof ASPECT_ORDER)[number],
+    ) -
+    ASPECT_ORDER.indexOf(
+      b.aspect_requirement_type as (typeof ASPECT_ORDER)[number],
+    )
   );
 }
 
@@ -191,8 +195,19 @@ export function sortByAspectOrder(a: string, b: string) {
 export const sortByFactionOrder = sortByAspectOrder;
 
 function sortByCategory(a: Card, b: Card) {
-  const RANKING = ["personality", "background", "specialty", "reward", "malady", null, undefined];
-  return RANKING.indexOf(a.category as string) - RANKING.indexOf(b.category as string);
+  const RANKING = [
+    "personality",
+    "background",
+    "specialty",
+    "reward",
+    "malady",
+    null,
+    undefined,
+  ];
+  return (
+    RANKING.indexOf(a.category as string) -
+    RANKING.indexOf(b.category as string)
+  );
 }
 
 /**

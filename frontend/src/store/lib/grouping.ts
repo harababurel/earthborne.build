@@ -1,8 +1,5 @@
 import type { Card } from "@arkham-build/shared";
-import {
-  displayPackName,
-  shortenPackName,
-} from "@/utils/formatting";
+import { displayPackName, shortenPackName } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
 import type { GroupingType } from "../slices/lists.types";
 import type { Metadata } from "../slices/metadata.types";
@@ -107,7 +104,7 @@ function groupByTypeCode(cards: Card[]) {
 function groupByAspect(cards: Card[]) {
   const results = cards.reduce<Grouping>(
     (acc, card) => {
-      const aspect = card.energy_aspect ?? NONE;
+      const aspect = card.energy_aspect ?? card.aspect_requirement_type ?? NONE;
 
       if (!acc.data[aspect]) {
         acc.data[aspect] = [card];
@@ -128,7 +125,13 @@ function groupByAspect(cards: Card[]) {
 }
 
 function groupByCategory(cards: Card[]) {
-  const CATEGORY_ORDER = ["personality", "background", "specialty", "reward", "malady"];
+  const CATEGORY_ORDER = [
+    "personality",
+    "background",
+    "specialty",
+    "reward",
+    "malady",
+  ];
   const results = cards.reduce<Grouping>(
     (acc, card) => {
       const category = card.category ?? NONE;

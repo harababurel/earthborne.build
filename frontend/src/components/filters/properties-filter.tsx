@@ -9,7 +9,6 @@ import {
 import { isPropertiesFilterObject } from "@/store/slices/lists.type-guards";
 import type { PropertiesFilter as PropertiesFilterType } from "@/store/slices/lists.types";
 import { assert } from "@/utils/assert";
-import { FactionIconFancy } from "../icons/faction-icon-fancy";
 import { Checkbox } from "../ui/checkbox";
 import { CheckboxGroup } from "../ui/checkboxgroup";
 import type { FilterProps } from "./filters.types";
@@ -45,14 +44,6 @@ export function PropertiesFilter({ id }: FilterProps) {
   const renderProperty = useCallback((key: string, label: string) => {
     if (key === "unique") {
       return <>{label} (&#10040;)</>;
-    }
-
-    if (key === "multiClass") {
-      return (
-        <>
-          {label} (<FactionIconFancy code="multiclass" />)
-        </>
-      );
     }
 
     return label;

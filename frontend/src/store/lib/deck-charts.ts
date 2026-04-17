@@ -29,10 +29,10 @@ export function addCardToDeckCharts(
     accumulator.costCurve.set(normalizedCost, entry + quantity);
   }
 
-  // Aspects
-  if (card.energy_aspect) {
-    const entry = accumulator.factions.get(card.energy_aspect) ?? 0;
-    accumulator.factions.set(card.energy_aspect, entry + quantity);
+  // Aspect requirements
+  if (card.aspect_requirement_type) {
+    const entry = accumulator.factions.get(card.aspect_requirement_type) ?? 0;
+    accumulator.factions.set(card.aspect_requirement_type, entry + quantity);
   }
 
   // Traits

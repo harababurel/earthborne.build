@@ -21,8 +21,11 @@ type AttributeFilter = {
 };
 
 import type {
+  ApproachIconsFilter,
+  AspectRequirementFilter,
   AssetFilter,
   CostFilter,
+  EquipFilter,
   InvestigatorSkillsFilter,
   LevelFilter,
   List,
@@ -214,6 +217,74 @@ export function filterCost(filterState: CostFilter): Filter | undefined {
 }
 
 /**
+ * Aspect requirement — upstream aspect_id + level.
+ */
+function filterAspectRequirementRange(value: [number, number]) {
+  const [min, max] = value;
+  return (card: Card) =>
+    card.aspect_requirement_value != null &&
+    card.aspect_requirement_value >= min &&
+    card.aspect_requirement_value <= max;
+}
+
+export function filterAspectRequirement(
+  filterState: AspectRequirementFilter,
+): Filter | undefined {
+  const filters: Filter[] = [];
+
+  if (!isEmpty(filterState.aspects)) {
+    filters.push(
+      (card: Card) =>
+        card.aspect_requirement_type != null &&
+        filterState.aspects.includes(card.aspect_requirement_type),
+    );
+  }
+
+  if (filterState.range) {
+    filters.push(filterAspectRequirementRange(filterState.range));
+  }
+
+  return filters.length ? and(filters) : undefined;
+}
+
+/**
+ * Equip — ER gear cards can have equip values.
+ */
+export function filterEquip(value: EquipFilter): Filter | undefined {
+  if (!value) return undefined;
+  const [min, max] = value;
+  return (card: Card) =>
+    card.equip_value != null &&
+    card.equip_value >= min &&
+    card.equip_value <= max;
+}
+
+/**
+ * Approach icons — match cards with at least one selected approach icon.
+ */
+export function filterApproachIcons(
+  filterState: ApproachIconsFilter,
+): Filter | undefined {
+  if (isEmpty(filterState)) return undefined;
+
+  return (card: Card) =>
+    filterState.some((approach) => {
+      switch (approach) {
+        case "conflict":
+          return !!card.approach_conflict;
+        case "reason":
+          return !!card.approach_reason;
+        case "exploration":
+          return !!card.approach_exploration;
+        case "connection":
+          return !!card.approach_connection;
+        default:
+          return false;
+      }
+    });
+}
+
+/**
  * Cycle — ER has no cycles. Stub returns undefined.
  */
 export function filterCycleCode(
@@ -245,7 +316,7 @@ export function filterFactions(factions: string[]): Filter | undefined {
   if (isEmpty(factions)) return undefined;
 
   return (card: Card) => {
-    const aspect = card.energy_aspect;
+    const aspect = card.aspect_requirement_type;
     if (!aspect) return false;
     return factions.some((f) => f === aspect);
   };
@@ -314,7 +385,25 @@ export function filterProperties(
     filters.push((card: Card) => !!card.is_unique);
   }
 
-  // All AH-specific property flags are no-ops in ER and are intentionally ignored.
+  if (filterState.expert) {
+    filters.push((card: Card) => !!card.is_expert);
+  }
+
+  for (const keyword of [
+    "ambush",
+    "conduit",
+    "disconnected",
+    "fatiguing",
+    "friendly",
+    "manifestation",
+    "obstacle",
+    "persistent",
+    "setup",
+  ] as const) {
+    if (filterState[keyword]) {
+      filters.push((card: Card) => card.keywords?.includes(keyword) ?? false);
+    }
+  }
 
   return filters.length ? and(filters) : undefined;
 }

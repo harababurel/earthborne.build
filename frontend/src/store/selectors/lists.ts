@@ -1,8 +1,8 @@
 import type { Card } from "@arkham-build/shared";
 import {
-  ASSET_SLOT_ORDER,
+  APPROACH_ORDER,
   ASPECT_ORDER,
-  FACTION_ORDER,
+  ASSET_SLOT_ORDER,
   SKILL_KEYS,
 } from "@arkham-build/shared";
 import { createSelector } from "reselect";
@@ -14,7 +14,6 @@ import {
 import {
   CYCLES_WITH_STANDALONE_PACKS,
   NO_SLOT_STRING,
-  SPECIAL_CARD_CODES,
 } from "@/utils/constants";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
 import {
@@ -33,6 +32,8 @@ import { getAdditionalDeckOptions } from "../lib/deck-validation";
 import {
   containsCard,
   filterActions,
+  filterApproachIcons,
+  filterAspectRequirement,
   filterAssets,
   filterBacksides,
   filterCardPool,
@@ -42,6 +43,7 @@ import {
   filterDuplicatesFromContext,
   filterEncounterCards,
   filterEncounterCode,
+  filterEquip,
   filterFactions,
   filterHealthProp,
   filterIllustrator,
@@ -55,9 +57,9 @@ import {
   filterPackCode,
   filterProperties,
   filterSealed,
+  filterSetCode,
   filterSkillIcons,
   filterSubtypes,
-  filterSetCode,
   filterTabooSet,
   filterTraits,
   filterType,
@@ -71,14 +73,21 @@ import {
   sortByEncounterSet,
   sortByName,
 } from "../lib/sorting";
-import { isResolvedDeck, type CardWithRelations, type ResolvedDeck } from "../lib/types";
+import {
+  type CardWithRelations,
+  isResolvedDeck,
+  type ResolvedDeck,
+} from "../lib/types";
 import type { Cycle } from "../schemas/cycle.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { StoreState } from "../slices";
 import type {
+  ApproachIconsFilter,
+  AspectRequirementFilter,
   AssetFilter,
   CardTypeFilter,
   CostFilter,
+  EquipFilter,
   FanMadeContentFilter,
   FilterMapping,
   HealthFilter,
@@ -153,9 +162,27 @@ function makeUserFilter(
         break;
       }
 
+      case "approach_icons": {
+        const value = filterValue.value as ApproachIconsFilter;
+        if (value.length) {
+          const filter = filterApproachIcons(value);
+          if (filter) filters.push(filter);
+        }
+        break;
+      }
+
+      case "aspect_requirement": {
+        const value = filterValue.value as AspectRequirementFilter;
+        if (value.aspects.length || value.range) {
+          const filter = filterAspectRequirement(value);
+          if (filter) filters.push(filter);
+        }
+        break;
+      }
+
       case "cost": {
         const value = filterValue.value as CostFilter;
-        if (value.range) {
+        if (value.range || value.even || value.odd || value.x) {
           const filter = filterCost(value);
           if (filter) filters.push(filter);
         }
@@ -180,6 +207,15 @@ function makeUserFilter(
         break;
       }
 
+      case "equip": {
+        const value = filterValue.value as EquipFilter;
+        if (value) {
+          const filter = filterEquip(value);
+          if (filter) filters.push(filter);
+        }
+        break;
+      }
+
       case "faction": {
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
@@ -198,8 +234,7 @@ function makeUserFilter(
             metadata.cards[value],
             buildQlInterpreter,
             {
-              targetDeck:
-                targetDeck === "both" ? undefined : targetDeck,
+              targetDeck: targetDeck === "both" ? undefined : targetDeck,
             },
           );
           const weaknessFilter = filterInvestigatorWeaknessAccess(
@@ -235,11 +270,7 @@ function makeUserFilter(
             const investigator = filterValue
               ? metadata.cards[filterValue as string]
               : undefined;
-            const filter = filterLevel(
-              value,
-              buildQlInterpreter,
-              investigator,
-            );
+            const filter = filterLevel(value, buildQlInterpreter, investigator);
             if (filter) filters.push(filter);
           }
         }
@@ -474,7 +505,7 @@ const selectDeckInvestigatorFilter = createSelector(
     lookupTables,
     resolvedDeck,
     buildQlInterpreter,
-    settings,
+    _settings,
     targetDeck,
     showUnusableCards,
     showLimitedAccess,
@@ -871,12 +902,14 @@ export const selectListFilterProperties = createSelector(
   selectMetadata,
   selectLookupTables,
   selectBaseListCards,
-  (metadata, lookupTables, baseFilterResult) => {
+  (_metadata, lookupTables, baseFilterResult) => {
     time("select_card_list_properties");
 
     const actionTable = lookupTables.actions;
 
+    const aspectRequirement = { min: Number.MAX_SAFE_INTEGER, max: 0 };
     const cost = { min: Number.MAX_SAFE_INTEGER, max: 0 };
+    const equip = { min: Number.MAX_SAFE_INTEGER, max: 0 };
     const health = { min: Number.MAX_SAFE_INTEGER, max: 0 };
     const sanity = { min: Number.MAX_SAFE_INTEGER, max: 0 };
 
@@ -889,6 +922,8 @@ export const selectListFilterProperties = createSelector(
     );
 
     const actions = new Set<string>();
+    const approachIcons = new Set<string>();
+    const aspectRequirements = new Set<string>();
     const cardTypes = new Set<string>();
     const encounterSets = new Set<string>();
     const factions = new Set<string>();
@@ -922,6 +957,22 @@ export const selectListFilterProperties = createSelector(
           factions.add(card.energy_aspect);
         }
 
+        if (card.aspect_requirement_type) {
+          factions.add(card.aspect_requirement_type);
+          aspectRequirements.add(card.aspect_requirement_type);
+        }
+
+        if (card.aspect_requirement_value != null) {
+          aspectRequirement.min = Math.min(
+            aspectRequirement.min,
+            Math.max(card.aspect_requirement_value, 0),
+          );
+          aspectRequirement.max = Math.max(
+            aspectRequirement.max,
+            Math.max(card.aspect_requirement_value, 0),
+          );
+        }
+
         if (card.illustrator) {
           illustrators.add(card.illustrator);
         }
@@ -930,6 +981,16 @@ export const selectListFilterProperties = createSelector(
           cost.min = Math.min(cost.min, Math.max(card.energy_cost, 0));
           cost.max = Math.max(cost.max, Math.max(card.energy_cost, 0));
         }
+
+        if (card.equip_value != null) {
+          equip.min = Math.min(equip.min, Math.max(card.equip_value, 0));
+          equip.max = Math.max(equip.max, Math.max(card.equip_value, 0));
+        }
+
+        if (card.approach_conflict) approachIcons.add("conflict");
+        if (card.approach_reason) approachIcons.add("reason");
+        if (card.approach_exploration) approachIcons.add("exploration");
+        if (card.approach_connection) approachIcons.add("connection");
 
         if (card.harm_threshold) {
           health.min = Math.min(health.min, Math.max(card.harm_threshold, 0));
@@ -958,9 +1019,16 @@ export const selectListFilterProperties = createSelector(
 
     return {
       actions,
+      approachIcons,
+      aspectRequirement:
+        aspectRequirement.min === Number.MAX_SAFE_INTEGER
+          ? { min: 0, max: 0 }
+          : aspectRequirement,
+      aspectRequirements,
       cardTypes,
       cost,
       encounterSets,
+      equip: equip.min === Number.MAX_SAFE_INTEGER ? { min: 0, max: 0 } : equip,
       factions,
       health,
       illustrators,
@@ -996,6 +1064,65 @@ export const selectActionOptions = createSelector(
       .map(mapper)
       .sort((a, b) => collator.compare(a.name, b.name));
   },
+);
+
+/**
+ * Approach Icons
+ */
+
+export const selectApproachIconMapper = createSelector(
+  selectLocaleSortingCollator,
+  (_) => {
+    return (code: string) => ({
+      code,
+      name: i18n.t(`common.skill.${code}`),
+    });
+  },
+);
+
+export const selectApproachIconOptions = createSelector(
+  selectListFilterProperties,
+  selectApproachIconMapper,
+  ({ approachIcons }, mapper) => {
+    return APPROACH_ORDER.filter((code) => approachIcons.has(code)).map(mapper);
+  },
+);
+
+/**
+ * Aspect Requirement
+ */
+
+export const selectAspectRequirementMapper = createSelector(
+  selectMetadata,
+  (metadata) => {
+    return (code: string) => {
+      return (
+        metadata.factions[code] ?? {
+          code,
+          name: i18n.t(`common.factions.${code.toLowerCase()}`),
+        }
+      );
+    };
+  },
+);
+
+export const selectAspectRequirementOptions = createSelector(
+  selectListFilterProperties,
+  selectMetadata,
+  ({ aspectRequirements }, metadata) => {
+    return Object.values(metadata.factions)
+      .filter((f) => aspectRequirements.has(f.code))
+      .sort(
+        (a, b) =>
+          ASPECT_ORDER.indexOf(a.code as (typeof ASPECT_ORDER)[number]) -
+          ASPECT_ORDER.indexOf(b.code as (typeof ASPECT_ORDER)[number]),
+      );
+  },
+);
+
+export const selectAspectRequirementMinMax = createSelector(
+  selectListFilterProperties,
+  ({ aspectRequirement }) => aspectRequirement,
 );
 
 /**
@@ -1073,6 +1200,15 @@ export function costToString(cost: number) {
 export const selectCostMinMax = createSelector(
   selectListFilterProperties,
   ({ cost }) => cost,
+);
+
+/**
+ * Equip
+ */
+
+export const selectEquipMinMax = createSelector(
+  selectListFilterProperties,
+  ({ equip }) => equip,
 );
 
 /**
@@ -1438,33 +1574,17 @@ export const selectPropertyOptions = createSelector(
     if (!list) return [];
     const t = i18n.t;
     return [
-      { key: "bonded", label: t("common.decks.bondedSlots_short") },
-      { key: "customizable", label: t("common.customizable") },
-      { key: "exile", label: t("common.exile") },
-      { key: "exceptional", label: t("common.exceptional") },
-      { key: "fast", label: t("common.fast") },
-      {
-        key: "healsDamage",
-        label: t("filters.properties.heals_damage"),
-      },
-      {
-        key: "healsHorror",
-        label: t("filters.properties.heals_horror"),
-      },
-      {
-        key: "multiClass",
-        label: t("common.factions.multiclass"),
-      },
-      { key: "myriad", label: t("common.myriad") },
-      { key: "permanent", label: t("common.permanent") },
-      { key: "seal", label: t("common.seal") },
-      { key: "specialist", label: t("common.specialist") },
-      { key: "succeedBy", label: t("filters.properties.succeed_by") },
-      {
-        key: "unique",
-        label: t("common.unique"),
-      },
-      { key: "victory", label: t("common.victory") },
+      { key: "ambush", label: t("common.keywords.ambush") },
+      { key: "conduit", label: t("common.keywords.conduit") },
+      { key: "disconnected", label: t("common.keywords.disconnected") },
+      { key: "expert", label: t("common.expert") },
+      { key: "fatiguing", label: t("common.keywords.fatiguing") },
+      { key: "friendly", label: t("common.keywords.friendly") },
+      { key: "manifestation", label: t("common.keywords.manifestation") },
+      { key: "obstacle", label: t("common.keywords.obstacle") },
+      { key: "persistent", label: t("common.keywords.persistent") },
+      { key: "setup", label: t("common.keywords.setup") },
+      { key: "unique", label: t("common.unique") },
     ].filter((p) => list.display.properties?.includes(p.key));
   },
 );
@@ -1627,7 +1747,13 @@ export const selectAvailableUpgrades = createSelector(
   selectLookupTables,
   (_: StoreState, deck: ResolvedDeck) => deck,
   (_: StoreState, __: ResolvedDeck, target: "slots" | "extraSlots") => target,
-  (_accessFilter, _metadata, _lookupTables, _deck, _target): AvailableUpgrades => {
+  (
+    _accessFilter,
+    _metadata,
+    _lookupTables,
+    _deck,
+    _target,
+  ): AvailableUpgrades => {
     return { upgrades: {}, shrewdAnalysisPresent: false };
   },
 );
@@ -1639,7 +1765,9 @@ export function selectResolvedUpgrades(
   _deck: ResolvedDeck,
   card: Card,
 ) {
-  return (availableUpgrades.upgrades[card.code] ?? []).map((_) => undefined as CardWithRelations | undefined);
+  return (availableUpgrades.upgrades[card.code] ?? []).map(
+    (_) => undefined as CardWithRelations | undefined,
+  );
 }
 
 /**
@@ -1700,6 +1828,36 @@ const selectActionChanges = (value: MultiselectFilter) => {
   return value.map((code) => i18n.t(`common.actions.${code}`)).join(", ");
 };
 
+function selectApproachIconChanges(value: ApproachIconsFilter) {
+  if (!value.length) return "";
+  return value
+    .map((code) => i18n.t(`common.skill.${code}`))
+    .join(` ${i18n.t("filters.or")} `);
+}
+
+function selectAspectRequirementChanges(value: AspectRequirementFilter) {
+  const changes: string[] = [];
+
+  if (value.aspects.length) {
+    changes.push(
+      value.aspects
+        .map((code) => i18n.t(`common.factions.${code.toLowerCase()}`))
+        .join(` ${i18n.t("filters.or")} `),
+    );
+  }
+
+  if (value.range) {
+    changes.push(
+      formatHealthChanges(
+        value.range,
+        i18n.t("filters.aspect_requirement.value"),
+      ),
+    );
+  }
+
+  return changes.join(", ");
+}
+
 function selectCostChanges(value: CostFilter) {
   if (!value.range) return "";
 
@@ -1713,6 +1871,10 @@ function selectCostChanges(value: CostFilter) {
   if (value.x) s = `${s}, X`;
 
   return s;
+}
+
+function selectEquipChanges(value: EquipFilter) {
+  return formatHealthChanges(value, i18n.t("filters.equip.title"));
 }
 
 const selectEncounterSetChanges = createSelector(
@@ -1756,9 +1918,7 @@ const selectInvestigatorChanges = createSelector(
   (value, metadata) => {
     if (!value) return "";
     const card = metadata.cards[value];
-    return card
-      ? displayAttribute(card, "name")
-      : value.toString();
+    return card ? displayAttribute(card, "name") : value.toString();
   },
 );
 
@@ -1895,6 +2055,14 @@ export function selectFilterChanges<T extends keyof FilterMapping>(
       return selectActionChanges(value as MultiselectFilter);
     }
 
+    case "approach_icons": {
+      return selectApproachIconChanges(value as ApproachIconsFilter);
+    }
+
+    case "aspect_requirement": {
+      return selectAspectRequirementChanges(value as AspectRequirementFilter);
+    }
+
     case "asset": {
       return selectAssetChanges(value as AssetFilter);
     }
@@ -1905,6 +2073,10 @@ export function selectFilterChanges<T extends keyof FilterMapping>(
 
     case "cycle": {
       return selectCycleChanges(state, value as MultiselectFilter);
+    }
+
+    case "equip": {
+      return selectEquipChanges(value as EquipFilter);
     }
 
     case "encounter_set": {

@@ -18,6 +18,15 @@ export type CostFilter = {
   x: boolean;
 };
 
+export type AspectRequirementFilter = {
+  aspects: string[];
+  range: undefined | [number, number];
+};
+
+export type ApproachIconsFilter = string[];
+
+export type EquipFilter = [number, number] | undefined;
+
 // Stub — ER has no XP levels.
 export type LevelFilter = {
   range: undefined | [number, number];
@@ -30,21 +39,17 @@ export type OwnershipFilter = "unowned" | "owned" | "all";
 export type FanMadeContentFilter = "fan-made" | "official" | "all";
 
 export type PropertiesFilter = {
-  bonded: boolean;
-  customizable: boolean;
-  exceptional: boolean;
-  exile: boolean;
-  fast: boolean;
-  healsDamage: boolean;
-  healsHorror: boolean;
-  multiClass: boolean;
-  myriad: boolean;
-  permanent: boolean;
-  seal: boolean;
-  specialist: boolean;
-  succeedBy: boolean;
+  ambush: boolean;
+  conduit: boolean;
+  disconnected: boolean;
+  expert: boolean;
+  fatiguing: boolean;
+  friendly: boolean;
+  manifestation: boolean;
+  obstacle: boolean;
+  persistent: boolean;
+  setup: boolean;
   unique: boolean;
-  victory: boolean;
 };
 
 // Stub — ER has no subtype/weakness system; kept for API compatibility.
@@ -82,11 +87,14 @@ type InvestigatorCardAccessFilter = string[] | undefined;
 
 export type FilterMapping = {
   action: MultiselectFilter;
+  approach_icons: ApproachIconsFilter;
   asset: AssetFilter;
+  aspect_requirement: AspectRequirementFilter;
   card_type: CardTypeFilter;
   cost: CostFilter;
   cycle: MultiselectFilter;
   encounter_set: MultiselectFilter;
+  equip: EquipFilter;
   faction: MultiselectFilter;
   fan_made_content: FanMadeContentFilter;
   health: HealthFilter;

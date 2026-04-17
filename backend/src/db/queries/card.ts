@@ -8,11 +8,25 @@ const AREA_MAP: Record<string, "within_reach" | "along_the_way"> = {
 };
 
 // card_set.id values that map to specific ranger deck categories.
-const SINGLETON_CATEGORY: Record<string, "personality" | "reward" | "malady"> = {
-  personality: "personality",
-  reward: "reward",
-  malady: "malady",
-};
+const SINGLETON_CATEGORY: Record<string, "personality" | "reward" | "malady"> =
+  {
+    personality: "personality",
+    reward: "reward",
+    malady: "malady",
+  };
+
+const KEYWORDS = [
+  "ambush",
+  "conduit",
+  "disconnected",
+  "fatiguing",
+  "friendly",
+  "manifestation",
+  "obstacle",
+  "persistent",
+  "setup",
+  "unique",
+] as const;
 
 type CardRow = {
   code: string;
@@ -155,12 +169,19 @@ function transformCard(row: CardRow): {
   set_code: string | null;
   set_position: number | null;
   type_code: string;
-  category: "personality" | "background" | "specialty" | "reward" | "malady" | null;
+  category:
+    | "personality"
+    | "background"
+    | "specialty"
+    | "reward"
+    | "malady"
+    | null;
   text: string | null;
   flavor: string | null;
   traits: string | null;
   energy_cost: number | null;
   energy_aspect: string | null;
+  aspect_requirement_type: string | null;
   aspect_requirement_value: number | null;
   equip_value: number | null;
   approach_conflict: number | null;
@@ -176,6 +197,9 @@ function transformCard(row: CardRow): {
   campaign_guide_entry: number | null;
   quantity: number;
   deck_limit: number | null;
+  keywords: (typeof KEYWORDS)[number][];
+  is_unique: boolean;
+  is_expert: boolean;
   background_type: string | null;
   specialty_type: string | null;
   illustrator: string | null;
@@ -184,9 +208,17 @@ function transformCard(row: CardRow): {
   challenge_crest: string | null;
 } {
   const { set_id, set_type_id, area_id } = row;
+  const keywords = parseKeywords(row.text);
+  const isExpert = hasTrait(row.traits, "Expert");
 
   // Derive ranger deck category from card set data.
-  let category: "personality" | "background" | "specialty" | "reward" | "malady" | null = null;
+  let category:
+    | "personality"
+    | "background"
+    | "specialty"
+    | "reward"
+    | "malady"
+    | null = null;
   let background_type: string | null = null;
   let specialty_type: string | null = null;
 
@@ -216,7 +248,8 @@ function transformCard(row: CardRow): {
     flavor: row.flavor,
     traits: row.traits,
     energy_cost: row.cost,
-    energy_aspect: row.aspect_id,
+    energy_aspect: null,
+    aspect_requirement_type: row.aspect_id,
     aspect_requirement_value: row.level,
     equip_value: row.equip,
     approach_conflict: row.approach_conflict,
@@ -232,6 +265,9 @@ function transformCard(row: CardRow): {
     campaign_guide_entry: row.guide_entry ? Number(row.guide_entry) : null,
     quantity: row.quantity,
     deck_limit: row.deck_limit,
+    keywords,
+    is_unique: keywords.includes("unique"),
+    is_expert: isExpert,
     background_type,
     specialty_type,
     illustrator: row.illustrator,
@@ -239,4 +275,21 @@ function transformCard(row: CardRow): {
     challenge_mountain: row.mountain_challenge,
     challenge_crest: row.crest_challenge,
   };
+}
+
+function parseKeywords(text: string | null): (typeof KEYWORDS)[number][] {
+  if (!text) return [];
+
+  const normalized = text.toLowerCase();
+  return KEYWORDS.filter((keyword) => {
+    const pattern = new RegExp(`(^|[^a-z])${keyword}([^a-z]|$)`, "i");
+    return pattern.test(normalized);
+  });
+}
+
+function hasTrait(traits: string | null, trait: string): boolean {
+  if (!traits) return false;
+  return traits
+    .split(/[./]/)
+    .some((value) => value.trim().replace(/^¬/, "") === trait);
 }

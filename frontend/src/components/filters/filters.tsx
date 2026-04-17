@@ -17,11 +17,14 @@ import { Checkbox } from "../ui/checkbox";
 import { HotkeyTooltip } from "../ui/hotkey";
 import { Scroller } from "../ui/scroller";
 import { ActionFilter } from "./action-filter";
+import { ApproachIconsFilter } from "./approach-icons-filter";
+import { AspectRequirementFilter } from "./aspect-requirement-filter";
 import { AssetFilter } from "./asset-filter";
 import { CardTypeFilter } from "./card-type-filter";
 import { CostFilter } from "./cost-filter";
 import { CycleFilter } from "./cycle-filter";
 import { EncounterSetFilter } from "./encounter-set-filter";
+import { EquipFilter } from "./equip-filter";
 import { ErAspectFilter } from "./er-aspect-filter";
 import { FanMadeContentFilter } from "./fan-made-content-filter";
 import css from "./filters.module.css";
@@ -128,6 +131,12 @@ export function Filters(props: Props) {
               // biome-ignore lint/suspicious/noArrayIndexKey: index is unique key.
               <Fragment key={id}>
                 {filter === "action" && <ActionFilter {...params} />}
+                {filter === "approach_icons" && (
+                  <ApproachIconsFilter {...params} />
+                )}
+                {filter === "aspect_requirement" && (
+                  <AspectRequirementFilter {...params} />
+                )}
                 {filter === "asset" && <AssetFilter {...params} />}
                 {filter === "card_type" && (
                   <CardTypeFilter
@@ -140,6 +149,7 @@ export function Filters(props: Props) {
                 {filter === "encounter_set" && (
                   <EncounterSetFilter {...params} />
                 )}
+                {filter === "equip" && <EquipFilter {...params} />}
                 {filter === "investigator" && (
                   <InvestigatorFilter {...params} />
                 )}

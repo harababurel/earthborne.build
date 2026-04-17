@@ -1,7 +1,9 @@
 import type {
+  AspectRequirementFilter,
   AssetFilter,
   CardTypeFilter,
   CostFilter,
+  EquipFilter,
   FanMadeContentFilter,
   FilterKey,
   FilterObject,
@@ -23,6 +25,18 @@ export function isAssetFilterObject(
   filter?: FilterObject<FilterKey>,
 ): filter is FilterObject<"asset"> {
   return !!filter && filter.type === "asset";
+}
+
+export function isApproachIconsFilterObject(
+  filter?: FilterObject<FilterKey>,
+): filter is FilterObject<"approach_icons"> {
+  return !!filter && filter.type === "approach_icons";
+}
+
+export function isAspectRequirementFilterObject(
+  filter?: FilterObject<FilterKey>,
+): filter is FilterObject<"aspect_requirement"> {
+  return !!filter && filter.type === "aspect_requirement";
 }
 
 export function isCardTypeFilterObject(
@@ -47,6 +61,12 @@ export function isEncounterSetFilterObject(
   filter?: FilterObject<FilterKey>,
 ): filter is FilterObject<"encounter_set"> {
   return !!filter && filter.type === "encounter_set";
+}
+
+export function isEquipFilterObject(
+  filter?: FilterObject<FilterKey>,
+): filter is FilterObject<"equip"> {
+  return !!filter && filter.type === "equip";
 }
 
 export function isFactionFilterObject(
@@ -182,6 +202,24 @@ export function isCostFilter(value: unknown): value is CostFilter {
   );
 }
 
+export function isAspectRequirementFilter(
+  value: unknown,
+): value is AspectRequirementFilter {
+  const candidate = value as Partial<AspectRequirementFilter>;
+  return (
+    typeof value === "object" &&
+    value != null &&
+    "aspects" in value &&
+    "range" in value &&
+    Array.isArray(candidate.aspects) &&
+    (candidate.range == null || isRangeFilter(candidate.range))
+  );
+}
+
+export function isEquipFilter(value: unknown): value is EquipFilter {
+  return value == null || isRangeFilter(value);
+}
+
 export function isLevelFilter(value: unknown): value is LevelFilter {
   return typeof value === "object" && value != null && "range" in value;
 }
@@ -212,7 +250,7 @@ export function isPropertiesFilter(value: unknown): value is PropertiesFilter {
   return (
     typeof value === "object" &&
     value != null &&
-    "fast" in value &&
+    "unique" in value &&
     Object.values(value).every((v) => typeof v === "boolean")
   );
 }
