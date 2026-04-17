@@ -1108,15 +1108,13 @@ export const selectAspectRequirementMapper = createSelector(
 
 export const selectAspectRequirementOptions = createSelector(
   selectListFilterProperties,
-  selectMetadata,
-  ({ aspectRequirements }, metadata) => {
-    return Object.values(metadata.factions)
-      .filter((f) => aspectRequirements.has(f.code))
-      .sort(
-        (a, b) =>
-          ASPECT_ORDER.indexOf(a.code as (typeof ASPECT_ORDER)[number]) -
-          ASPECT_ORDER.indexOf(b.code as (typeof ASPECT_ORDER)[number]),
-      );
+  ({ aspectRequirements }) => {
+    return ASPECT_ORDER.filter((code) => aspectRequirements.has(code)).map(
+      (code) => ({
+        code,
+        name: i18n.t(`common.factions.${code.toLowerCase()}`),
+      }),
+    );
   },
 );
 

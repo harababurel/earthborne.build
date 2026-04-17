@@ -117,11 +117,11 @@
       },
       "expert": "Expert",
       "factions": {
-        "awa": "Awareness",
-        "fit": "Fitness",
-        "foc": "Focus",
+        "awa": "AWA",
+        "fit": "FIT",
+        "foc": "FOC",
         "multiclass": "Multi-aspect",
-        "spi": "Spirit"
+        "spi": "SPI"
       },
       "more_actions": "More actions",
       "no_entries": "No entries",
