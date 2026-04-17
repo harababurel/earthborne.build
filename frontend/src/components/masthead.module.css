@@ -30,8 +30,11 @@
   color: currentColor;
 }
 
-.logo svg {
+.logo img {
   flex: 0 0 auto;
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+  object-fit: contain;
 }
 
 .logo-name {
@@ -40,11 +43,6 @@
   @media screen and (max-width: 30rem) {
     display: none;
   }
-}
-
-.logo svg {
-  font-size: var(--icon-xl);
-  fill: currentColor;
 }
 
 .right {

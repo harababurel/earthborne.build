@@ -27,8 +27,10 @@ export function Loader(props: Props) {
     <output className={cx(className, css["loader"], show && css["show"])}>
       <div className={css["loader-inner"]}>
         <div className={css["loader-icon"]}>
-          <i className="icon-auto_fail" />
-          <i className="icon-elder_sign" />
+          <img
+            alt=""
+            src="https://thelivingvalley.earthbornegames.com/img/icon.png"
+          />
         </div>
         <div className={css["loader-message"]}>
           {message && <p>{message}</p>}
