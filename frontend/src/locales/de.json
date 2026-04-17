@@ -53,14 +53,14 @@
       "actions": {
         "complete_task": "Aufgabe vollenden",
         "open_card_page": "Kartenseite",
-        "reviews": "Meinungen"
+        "reviews": "Kommentare"
       }
     },
     "card_view": {
       "actions": {
         "faq": "FAQ anzeigen",
-        "open_on_arkhamdb": "In ArkhamDB öffnen",
-        "reviews": "Meinungen",
+        "open_on_rangersdb": "In RangersDB öffnen",
+        "reviews": "Kommentare",
         "show_original_image": "Originalversion anzeigen",
         "show_taboo_image": "Tabuversion anzeigen",
         "usable_by": "{{prefix}}{{name}} Kartenpool",

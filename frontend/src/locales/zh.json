@@ -52,13 +52,13 @@
       "actions": {
         "complete_task": "完成任务",
         "open_card_page": "卡牌页面",
-        "reviews": "评价"
+        "reviews": "评论"
       }
     },
     "card_view": {
       "actions": {
         "faq": "查看FAQ",
-        "open_on_arkhamdb": "在ArkhamDB上打开",
+        "open_on_rangersdb": "在RangersDB上打开",
         "reviews": "查看评论",
         "usable_by": "卡池：{{prefix}}{{name}}",
         "usable_by_interpolated": "卡池：<tooltip>{{name}}</tooltip>",

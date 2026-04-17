@@ -52,14 +52,14 @@
       "actions": {
         "complete_task": "Complete task",
         "open_card_page": "Strona karty",
-        "reviews": "Recenzje"
+        "reviews": "Komentarze"
       }
     },
     "card_view": {
       "actions": {
         "faq": "Pokaż FAQ",
-        "open_on_arkhamdb": "Otwórz na ArkhamDB",
-        "reviews": "Otwórz recenzje",
+        "open_on_rangersdb": "Otwórz na RangersDB",
+        "reviews": "Otwórz komentarze",
         "usable_by": "Pula kart: {{prefix}}{{name}}",
         "usable_by_interpolated": "Pula kart: <tooltip>{{name}}</tooltip>",
         "view_backside": "Rewers",

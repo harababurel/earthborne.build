@@ -1,9 +1,10 @@
 import type { Card } from "@arkham-build/shared";
 import { MessagesSquareIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { localizeArkhamDBBaseUrl } from "@/utils/arkhamdb";
 import { official } from "@/utils/card-utils";
 import { Button, type Props as ButtonProps } from "../ui/button";
+
+const RANGERSDB_CARD_BASE_URL = "https://rangersdb.com/cards";
 
 type Props = {
   card: Card;
@@ -20,7 +21,7 @@ export function CardArkhamDBLink(props: Props) {
     <Button
       {...rest}
       as="a"
-      href={`${localizeArkhamDBBaseUrl()}/card/${card.code}${hash ? `#${hash}` : ""}`}
+      href={`${RANGERSDB_CARD_BASE_URL}/${card.code}${hash ? `#${hash}` : ""}`}
       rel="noreferrer"
       target="_blank"
     >
@@ -33,7 +34,7 @@ export function CardReviewsLink(props: Omit<Props, "children">) {
   const { t } = useTranslation();
 
   return (
-    <CardArkhamDBLink hash="reviews-header" {...props}>
+    <CardArkhamDBLink {...props}>
       <MessagesSquareIcon />
       {t("card_modal.actions.reviews")}
     </CardArkhamDBLink>

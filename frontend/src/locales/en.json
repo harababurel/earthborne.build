@@ -59,13 +59,14 @@
       "actions": {
         "complete_task": "Complete task",
         "open_card_page": "Card page",
-        "reviews": "Reviews"
+        "reviews": "Comments"
       }
     },
     "card_view": {
       "actions": {
         "faq": "View FAQ",
-        "reviews": "View reviews",
+        "open_on_rangersdb": "Open on RangersDB",
+        "reviews": "View comments",
         "show_original_image": "Show original card image",
         "usable_by": "Card pool: {{prefix}}{{name}}",
         "usable_by_interpolated": "Card pool: <tooltip>{{name}}</tooltip>",

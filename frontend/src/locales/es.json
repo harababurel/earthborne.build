@@ -53,14 +53,14 @@
       "actions": {
         "complete_task": "Completar tarea",
         "open_card_page": "Página de la carta",
-        "reviews": "Reseñas"
+        "reviews": "Comentarios"
       }
     },
     "card_view": {
       "actions": {
         "faq": "Ver preguntas frecuentes (FAQ)",
-        "open_on_arkhamdb": "Abrir en ArkhamDB",
-        "reviews": "Ver reseñas",
+        "open_on_rangersdb": "Abrir en RangersDB",
+        "reviews": "Ver comentarios",
         "show_original_image": "Mostrar imagen original de la carta",
         "show_taboo_image": "Mostrar imagen tabú de la carta",
         "usable_by": "Cartas permitidas de {{prefix}}{{name}}",

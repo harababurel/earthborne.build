@@ -53,14 +53,14 @@
       "actions": {
         "complete_task": "작업 완료",
         "open_card_page": "카드 페이지",
-        "reviews": "리뷰"
+        "reviews": "댓글"
       }
     },
     "card_view": {
       "actions": {
         "faq": "FAQ 보기",
-        "open_on_arkhamdb": "아컴디비 사이트에서 열기",
-        "reviews": "리뷰 보기",
+        "open_on_rangersdb": "RangersDB에서 열기",
+        "reviews": "댓글 보기",
         "show_original_image": "원본 카드 이미지 보기",
         "show_taboo_image": "금기 카드 이미지 보기",
         "usable_by": "{{prefix}}{{name}} 조사자가 접근 가능한 모든 카드 보기",

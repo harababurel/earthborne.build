@@ -28,13 +28,13 @@ import {
   deckCreateLink,
   displayAttribute,
   isStaticInvestigator,
+  official,
   oldFormatCardUrl,
 } from "@/utils/card-utils";
 import {
   CYCLES_WITH_STANDALONE_PACKS,
   FLOATING_PORTAL_ID,
 } from "@/utils/constants";
-import { official } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { ErrorStatus } from "../errors/404";
 import css from "./card-view.module.css";
@@ -80,7 +80,7 @@ function CardView() {
             </SidebarSection>
             <SidebarSection title={t("card_view.section_actions")}>
               <CardArkhamDBLink card={cardWithRelations.card} size="full">
-                <GlobeIcon /> {t("card_view.actions.open_on_arkhamdb")}
+                <GlobeIcon /> {t("card_view.actions.open_on_rangersdb")}
               </CardArkhamDBLink>
               <CardReviewsLink card={cardWithRelations.card} size="full" />
               {isBuildableInvestigator && (
