@@ -11,6 +11,7 @@ node_modules
 .vscode/*
 !.vscode/extensions.json
 
+.codex
 .wrangler
 coverage
 dist
