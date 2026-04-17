@@ -11,7 +11,7 @@ export function useAccentColor(card?: Card) {
 }
 
 export function getAccentColorsForFaction(card: Card): React.CSSProperties {
-  const accent = card.energy_aspect ?? "neutral";
+  const accent = (card.energy_aspect ?? "neutral").toLowerCase();
 
   return {
     "--accent-color": `var(--color-${accent})`,

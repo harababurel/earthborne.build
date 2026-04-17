@@ -1,13 +1,14 @@
 export const COMPARISON_OPERATOR = ["=", "!="] as const;
 
 // Aspects — the four core stats of a Ranger, each producing energy tokens.
-export type AspectKey = "awareness" | "fitness" | "focus" | "spirit";
+// IDs match the database: uppercase 3-letter abbreviations.
+export type AspectKey = "AWA" | "FIT" | "FOC" | "SPI";
 
 export const ASPECT_ORDER = [
-  "awareness",
-  "fitness",
-  "focus",
-  "spirit",
+  "AWA",
+  "FIT",
+  "FOC",
+  "SPI",
 ] as const;
 
 // Approaches — icons on cards committed as effort during tests.

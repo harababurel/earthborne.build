@@ -125,6 +125,11 @@
     --color-foc: var(--foc);
     --color-spi: var(--spi);
 
+    --color-awareness: var(--awa);
+    --color-fitness: var(--fit);
+    --color-focus: var(--foc);
+    --color-spirit: var(--spi);
+
     --text: var(--palette-4);
     --text-mythos: var(--mythos);
     --text-neutral: var(--neutral);
@@ -170,6 +175,11 @@
     --color-fit: var(--fit-dark);
     --color-foc: var(--foc-dark);
     --color-spi: var(--spi-dark);
+
+    --color-awareness: var(--awa-dark);
+    --color-fitness: var(--fit-dark);
+    --color-focus: var(--foc-dark);
+    --color-spirit: var(--spi-dark);
 
     --text: var(--nord-1);
     --text-mythos: var(--mythos-dark);

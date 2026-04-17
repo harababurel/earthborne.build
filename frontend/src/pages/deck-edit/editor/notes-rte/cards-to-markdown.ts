@@ -225,10 +225,10 @@ function getCardFactionIcons(card: Card): string {
 
 function getCardColor(card: Card): string {
   switch (card.energy_aspect) {
-    case "awareness":
-    case "fitness":
-    case "focus":
-    case "spirit":
+    case "AWA":
+    case "FIT":
+    case "FOC":
+    case "SPI":
       return `fg-${card.energy_aspect}`;
     default:
       return "";
