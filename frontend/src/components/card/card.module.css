@@ -251,11 +251,18 @@
     display: inline;
   }
 
+  .container.full .name button,
+  .container.full .name a,
+  .container.full .name span {
+    font-family: var(--font-family-content);
+    font-weight: 500;
+  }
+
   .name button,
   .name a,
   .name span {
-    font-weight: 700;
-    font-family: var(--font-family-content);
+    font-weight: 400;
+    font-family: var(--font-family-card-title);
     background: none;
     color: currentColor;
     text-decoration: none;
@@ -372,6 +379,7 @@
 
   .meta-property {
     font-size: var(--text-xs);
+    font-family: var(--font-family-card-meta);
   }
 
   .meta-property + .meta-property {
@@ -405,7 +413,7 @@
 
   .details-text {
     font-size: var(--card-text-size-sm);
-    font-family: var(--font-family-content);
+    font-family: var(--font-family-card-meta);
   }
 
   .details-text > * + * {

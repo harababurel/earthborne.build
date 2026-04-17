@@ -2,14 +2,79 @@
 /** biome-ignore-all lint/complexity/noImportantStyles: icomoon icons. */
 
 @layer base {
+  @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Book.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Book%20Oblique.woff2")
+      format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Medium%20Oblique.woff2")
+      format("woff2");
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Black.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Black%20Oblique.woff2")
+      format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Hypatia";
+    src: url("../assets/fonts/Hypatia.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
     --font-family-ui:
-      "Noto Sans Variable", ui-sans-serif, system-ui, sans-serif,
-      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Avenir LT Std", "Noto Sans Variable", ui-sans-serif, system-ui,
+      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
       "Noto Color Emoji";
     --font-family-content:
-      "Noto Serif Variable", ui-serif, Georgia, Cambria, "Times New Roman",
-      Times, serif;
+      "Avenir LT Std", "Noto Sans Variable", ui-sans-serif, system-ui,
+      sans-serif;
+    --font-family-card-title:
+      "Hypatia", "Avenir LT Std", "Noto Sans Variable", ui-sans-serif,
+      system-ui, sans-serif;
+    --font-family-card-meta:
+      "Avenir LT Std", "Noto Sans Variable", ui-sans-serif, system-ui,
+      sans-serif;
 
     --white: #f3f6f6;
     --nord-0: #2e3440;
@@ -254,7 +319,7 @@
   h5,
   h6 {
     line-height: 1.25;
-    font-weight: 700;
+    font-weight: 500;
     text-wrap: balance;
   }
 
