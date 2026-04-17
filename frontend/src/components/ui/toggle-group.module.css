@@ -25,6 +25,16 @@
     align-items: center;
     justify-content: center;
   }
+
+  &.is-wrap {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  &.is-wrap .item {
+    border-left-width: 1px;
+    border-radius: var(--rounded-xl);
+  }
 }
 
 .item {

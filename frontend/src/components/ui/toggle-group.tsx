@@ -43,6 +43,7 @@ export type ToggleGroupProps = (
 ) & {
   full?: boolean;
   icons?: boolean;
+  wrap?: boolean;
 };
 
 export function ToggleGroup({
@@ -50,6 +51,7 @@ export function ToggleGroup({
   disabled,
   full,
   icons,
+  wrap,
   onValueChange,
   type,
   value,
@@ -118,6 +120,7 @@ export function ToggleGroup({
           className,
           full && css["is-full"],
           icons && css["is-icons"],
+          wrap && css["is-wrap"],
         )}
       >
         {children}
