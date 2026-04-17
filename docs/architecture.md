@@ -1,19 +1,44 @@
 # Architecture
 
-arkham.build is a SPA app that, by default, stores data locally in an IndexedDB database. The SPA has several backend components that it uses to enrich functionality.
+`earthborne.build` is a client-heavy single-page app. Most user data lives in the browser, while the backend provides canonical card metadata and a few supporting APIs.
 
-## API(s)
+## Frontend
 
-The Node.js backend (`./backend`) currently handles recommendations and deck guide lookups.
+- React SPA served from `frontend/dist`
+- Local state persisted in IndexedDB
+- Routing handled client-side with `wouter`
+- Card data, pack metadata, and version checks fetched from the backend
 
-There is a separate, private Cloudflare Function backend that is being phased out. It currently still serves a few functions:
+The app was adapted from `arkham.build`, so some upstream sync/share/auth code paths still exist in the frontend. They are optional and depend on external legacy services, not on the local backend in this repo.
 
-1. a cache for metadata  such as cards and sets.
-2. a cached proxy for public ArkhamDB endpoints.
-3. a [token-mediating backend](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#name-token-mediating-backend) for authenticated ArkhamDB endpoints.
-4. a CRUD API for public _shares_.
-5. a generator for opengraph previews.
+## Backend
 
-## Cloudflare Pages functions
+The Node.js backend in `backend/` is responsible for:
 
-We leverage a few Cloudflare Pages functions for rewriting the HTML we serve to _some_ clients. Currently, this is used to inject OpenGraph tags for social media bots.
+- serving ingested Earthborne Rangers cards
+- serving ingested pack metadata
+- serving fan-made project info records
+- serving locally hosted card images from disk
+- reporting the ingested card count via `/version`
+
+It is a single Hono service backed by SQLite. There are no separate Cloudflare functions, Postgres services, or background cron services in this repository.
+
+## Data pipeline
+
+Card data is pulled from a local checkout of `zzorba/rangers-card-data` and ingested into SQLite with `backend/src/scripts/ingest-cards.ts`.
+
+Optional local image hosting is handled separately:
+
+1. ingest card data into SQLite
+2. run `download-images.ts` to mirror card art into `IMAGE_DIR`
+3. expose `/images/:code` through the backend and reverse proxy
+
+## Shared package
+
+`shared/` contains schemas and DTOs used across the app, including:
+
+- Earthborne Rangers card schema
+- decklist and recommendation DTOs inherited from the upstream codebase
+- fan-made project schemas
+
+Not every shared type is backed by the current local backend; some remain for compatibility with inherited frontend code.

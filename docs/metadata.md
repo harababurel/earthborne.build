@@ -1,63 +1,74 @@
 # Metadata
 
-## Data source
+This document describes the current Earthborne Rangers data sources and the normalization performed by the local backend.
 
-Metadata is sourced from [Kamalisk/arkhamdb-json-data/](https://github.com/Kamalisk/arkhamdb-json-data/).
+## Source of truth
 
-## Deck schema
+Card and pack data are ingested from a local checkout of:
 
-arkham.build extends the _arkhamdb deck schema_ with a few fields for additional functionality.
+- `https://github.com/zzorba/rangers-card-data`
 
-- `meta.extra_deck`: Parallel Jim's spirit deck. Format: comma-separated list of ids `"id1,id2,id3"`.
-- `meta.attachments_{code}`: cards that are attached to a specific setup deck, for example _Joe Diamond_ or _Stick to the Plan_. Format: comma-separated list of ids `"id1,id2,id2,id3"`.
-- `meta.card_pool`: packs that can be used for this deck. Used for limited pool deckbuilding such as #campaign-playalong. Format: `"<pack_code>,<pack_code>"`. For arkham.build, new format pack codes take precedence over old format. Cycles can be added as `cycle:<cycle_code>`.
-- `meta.card_pool_extension_{code}`: Some cards can extend the card pool with choices. This tracks their selection state. Format: `"card:<code>,card:<code>"`. 
-- `meta.fan_made_content`: Stores fan-made content (cards, packs, encounter sets) used in this deck. See [here](https://github.com/arkham-build/fan-made-content).
-- `meta.hidden_slots`: When syncing decks with fan-made content to ArkhamDB, we need to extract the slot entries and investigator. This object holds this data so we can later re-apply it.
-- `meta.sealed_deck`: card ids that are pickable for this deck. Used for sealed deckbuilding. Format: comma-separated list of `id` / `quantity` pairs in the format `"id:2,id:1,..."`.
-- `meta.sealed_deck_name`: name of the sealed deck definition used. format: string.
-- `meta.transform_into`: code of the investigator that this deck's investigator has transformed into. I.e. `04244` for _Body of a Yithian_.
-- `meta.banner_url`: URL to an image to be displayed as banner for the deck. Preferably aspect ratio `4:1`.
-- `meta.intro_md`: Short deck introduction that uses the same markdown format that `description_md` uses.
-- `meta.annotation_{code}`: Annotation for a specific card that uses the same markdown format that `description_md` uses. Annotations are not limited to cards in deck, but can also target cards in the side deck (upgrades, alternatives) or _any_ card (reasoning for exclusion).
-- `meta.buildql_deck_options_override`: A way to set BuildQL-based deckbuilding for the [placeholder investigators](arkham.build/install-fan-made-content?id=d12a4d9c-8c65-4df0-be0c-c2e14af65a21).
+The ingestion script reads:
 
-## Additional metadata keys (AMK)
+- `aspects.json`
+- `types.json`
+- `set_types.json`
+- `sets.json`
+- `tokens.json`
+- `areas.json`
+- `packs.json`
+- `packs/<pack_id>/<pack_id>.json`
 
-ArkhamDB imposes a strict limit on the amount of data that can be stored in the `meta` field of a deck. In order to work around this, we extract some of our custom metadata from `deck.meta` and store it in our own database before a deck is saved to ArkhamDB. The information is replaced with a token that can be used to retrieve it, the so called `amk`  (**a**dditional **m**etadata **k**ey). When a deck is fetched from ArkhamDB, our API consumes the entry and writes the actual metadata back to the `deck.meta`. The process is transparent to the API consumer.
+## Ingestion model
 
-The following fields are currently handled in this fashion:
+`backend/src/scripts/ingest-cards.ts` loads the upstream JSON files and writes normalized rows into SQLite tables for:
 
-- `meta.annotation_{code}`
-- `meta.fan_made_content`
-- `meta.hidden_slots`
-- `meta.intro_md`
-- `meta.sealed_deck`
-- `meta.sealed_deck_name`
+- aspects
+- card types
+- set types
+- card sets
+- tokens
+- areas
+- packs
+- cards
 
-There is a public endpoint to resolve an `amk` via `GET https://api.arkham.build/v1/public/additional_metadata/:amk`.
+The ingest is destructive by design: it clears the existing imported data and repopulates the tables from the source checkout in a single transaction.
 
-## Sealed decks
+## Normalization details
 
-The sealed deck feature expects a csv file in the format:
+Current normalization performed during ingest:
 
-```csv
-code,quantity
-01039,2
-01090,2
-06197,2
-07032,2
-```
+- upstream `core` pack id is remapped to `ebr`
+- `short_name`, `type_id`, `size`, and similar optional fields are normalized to `null` when absent
+- duplicate token ids from upstream `tokens.json` are deduplicated before insert
+- array-valued `locations` are stored in SQLite as JSON strings
+- booleans are stored as SQLite integer flags where needed
 
-In this example, the sealed deck contains two copies of _Deduction_, _Perception_, _Practice Makes Perfect_ and _Promise of Power_, so users would only be able to add these cards to their deck in the deck builder.
+## Card schema
 
-## Icons
+The shared runtime card schema lives in [shared/src/schemas/card.schema.ts](../shared/src/schemas/card.schema.ts).
 
-Arkham-related SVG icons are sourced from ArkhamCards's [icomoon project](https://github.com/zzorba/ArkhamCards/blob/master/assets/icomoon/project.json) and loaded as webfonts.
+It models Earthborne Rangers concepts such as:
 
-In order to update icon fonts, the workflow is:
-1. Load the icomoon project you want to update.
-2. Add the icons you want. Select everything and generate a font.
-3. Convert the font to `.woff2`.
-4. Replace the font, icomoon project in the assets directory.
-5. Update the CSS file from the generated icomoon css. If you are updating the `icon` icon set, beware that there are some manual overrides in the file (visible in the git diff).
+- energy cost and energy aspect
+- aspect requirements
+- approach icons
+- presence, harm, and progress thresholds
+- named tokens
+- area and campaign guide references
+- background and specialty classification
+- challenge text fields
+
+## Pack metadata
+
+The public API currently exposes pack records only. The frontend maps those records into its existing metadata shape and uses the pack code as a placeholder `cycle_code` for compatibility with inherited UI code.
+
+## Images
+
+Card image metadata is not stored separately. Image serving works by:
+
+1. looking up the card's `pack_id` in SQLite
+2. resolving `IMAGE_DIR/{pack_id}/{code}.jpg`
+3. serving the local file through `GET /images/:code`
+
+See [docs/api.md](./api.md) and [docs/deployment.md](./deployment.md) for operational details.

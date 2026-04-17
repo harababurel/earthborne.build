@@ -1,14 +1,49 @@
-# arkham.build
+# frontend
 
-## Develop
+Frontend for `earthborne.build`.
+
+## Stack
+
+- React `19`
+- Vite `8`
+- TypeScript
+- Zustand for app state
+- TanStack Query for remote data fetches
+- `react-i18next` for UI translations
+
+## Local setup
 
 ```sh
-# create .env from example
 cp .env.example .env
-
-# install dependencies
 npm install
-
-# develop
 npm run dev
 ```
+
+The frontend expects the backend to provide:
+
+- `GET /v2/public/cards`
+- `GET /v2/public/packs`
+- `GET /version`
+- optionally `GET /images/:code`
+
+## Commands
+
+```sh
+npm run dev
+npm run build
+npm run preview
+npm run check
+npm run test
+npm run test:coverage
+npm run i18n:sync
+```
+
+Additional scripts:
+
+- `npm run analyze`: bundle analyzer
+- `npm run fmt:rules`: format `src/assets/rules.html`
+- `npm run schema:fan-made-content`: emit the fan-made content JSON schema
+
+## Notes
+
+This app was adapted from `arkham.build`, and some upstream integration code still exists in the frontend for legacy sync/share/auth flows. Those flows require a compatible legacy backend and are not implemented by the local `backend/` package in this repository.

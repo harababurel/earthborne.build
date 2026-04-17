@@ -1,21 +1,32 @@
 # Translations
 
-The app and its data are fully translatable and PRs with new translations are _welcome_.
+UI translations live in `frontend/src/locales/*.json` and are loaded with `react-i18next`.
 
-Translations for the user-interface are handled with [react-i18next](https://react.i18next.com/) and live in the `./frontend/src/locales/` folder as JSON files.
+Supported locales are declared in [frontend/src/utils/constants.ts](../frontend/src/utils/constants.ts).
 
-Translations for cards and metadata are sourced from the [arkhamdb-json-data](https://github.com/Kamalisk/arkhamdb-json-data) and the [arkham-cards-data](https://github.com/zzorba/arkham-cards-data) and assembled by our API.
+## Adding a locale
 
-## Creating translations
-
-1. Create a copy of `en.json` in the `./frontend/src/locales` folder and rename it to your locale's ISO-639 code.
-2. Add your locale to the `LOCALES` array in `./frontend/src/utils/constants`.
-3. Run `npm run i18n:pull -w frontend` to pull in some translations (traits, deck options) from ArkhamCards automatically.
-4. _(if your locale has translated card data)_ Create an issue to get the card data added to the card data backend.
-5. Translate and open a PR.
+1. Copy `frontend/src/locales/en.json` to `frontend/src/locales/<locale>.json`.
+2. Add the locale to `LOCALES` in `frontend/src/utils/constants.ts`.
+3. Run `npm run i18n:sync -w frontend` to align keys with `en.json`.
+4. Translate the new locale file.
 
 ## Updating translations
 
-1. Run `npm run i18n:sync -w frontend` to sync newly added translation keys to your locale.
-2. (optional) If there are new _traits_ or _uses_ attributes that have been translated in ArkhamCards, run `npm run i18n:pull` to sync translations from ArkhamCards.
-3. Update the translation file and open a PR.
+When UI text changes:
+
+1. update `frontend/src/locales/en.json`
+2. run `npm run i18n:sync -w frontend`
+3. fill in translated values for the affected locale files
+
+## How `i18n:sync` works
+
+`frontend/scripts/i18n-sync.ts` treats `en.json` as the canonical source and:
+
+- adds missing keys to other locales
+- preserves existing translated values when the key still exists
+- removes keys that no longer exist in `en.json`
+
+## Legacy script
+
+`npm run i18n:pull -w frontend` still exists in the repo, but it is inherited from the upstream `arkham.build` project and pulls translation data from Arkham-specific sources. It is not part of the current Earthborne Rangers translation workflow.

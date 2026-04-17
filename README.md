@@ -1,47 +1,71 @@
-# arkham.build
+# earthborne.build
 
-> [arkham.build](https://arkham.build) is a web-based deckbuilder for Arkham Horror: The Card Game™.
+> `earthborne.build` is an Earthborne Rangers deckbuilding app derived from `arkham.build`.
 
 ![Screenshot](./.github/screenshot.png)
 
-## Project structure
+## Overview
 
-The project is an `npm` workspace consisting of three packages:
+This repository is an `npm` workspace with three packages:
 
-- `frontend` (`./frontend`): React frontend
-- `backend` (`./backend`): Node.js backend
-- `shared` (`./shared`): Types, schemas and utilities shared between frontend and backend
+- `frontend/`: React + Vite single-page app
+- `backend/`: Hono-based Node.js API backed by SQLite
+- `shared/`: shared schemas, DTOs, and helpers
 
-## Command overview
+The current backend serves Earthborne Rangers card and pack data, local image delivery, and fan-made project metadata. The frontend still contains some upstream `arkham.build` integration code paths; unless you provide a compatible legacy backend, features such as remote sync, share links, and provider auth are not available in a self-hosted deployment.
+
+## Requirements
+
+- Node.js `24.x`
+- `npm`
+- A local clone of `https://github.com/zzorba/rangers-card-data` for card ingestion
+
+## Common commands
 
 ```sh
-# Install
-npm i
+# install workspace dependencies
+npm install
 
-# Lint
+# lint / format
 npm run lint
-
-# Format
 npm run fmt
 
-# Test (workspace)
-npm run test -w {workspace}
+# frontend
+npm run dev -w frontend
+npm run build -w frontend
+npm run test -w frontend
+npm run check -w frontend
 
-# Typecheck (workspace)
-npm run check -w {workspace}
+# backend
+npm run dev -w backend
+npm run test -w backend
+npm run check -w backend
+npm run db:migrate -w backend
+npm run ingest:cards -w backend
+npm run download:images -w backend
 
-# Develop (workspace)
-npm run dev -w {workspace}
-
-# E2E test
-npm run test:e2e
-
+# shared
+npm run test -w shared
+npm run check -w shared
 ```
 
-Individual workspaces may contain additional commands in their `package.json` file.
+## Development flow
 
-## Further reading
+1. Copy `backend/.env.example` to `backend/.env`.
+2. Clone `rangers-card-data` somewhere on disk.
+3. Run `npm install`.
+4. Run `npm run db:migrate -w backend`.
+5. Run `CARD_DATA_DIR=/path/to/rangers-card-data npm run ingest:cards -w backend`.
+6. Optionally run `IMAGE_DIR=/path/to/cards SQLITE_PATH=./backend/earthborne.db npm run download:images -w backend`.
+7. Start the backend with `npm run dev -w backend`.
+8. Copy `frontend/.env.example` to `frontend/.env`.
+9. Start the frontend with `npm run dev -w frontend`.
 
-- see [docs/architecture.md](./docs/architecture.md) for a short overview of the app architecture.
-- see [docs/metadata.md](./docs/metadata.md) for details about the metadata we use and how we extend it.
-- see [docs/translations.md](./docs/translations.md) for instructions how to translate the app.
+## Documentation
+
+- [docs/architecture.md](./docs/architecture.md): current app architecture
+- [docs/api.md](./docs/api.md): backend endpoints and env vars
+- [docs/deployment.md](./docs/deployment.md): self-hosted deployment guide
+- [docs/metadata.md](./docs/metadata.md): card data sources and normalization
+- [docs/translations.md](./docs/translations.md): frontend translation workflow
+- [docs/adaptation-plan.md](./docs/adaptation-plan.md): historical notes from the `arkham.build` adaptation

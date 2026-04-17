@@ -1,39 +1,63 @@
-# api.arkham.build
+# backend
 
-Backend for [arkham.build](https://arkham.build).
+Backend for `earthborne.build`.
 
 ## Overview
 
-- This is a Node.js HTTP API written in [Typescript](https://www.typescriptlang.org/) using the [Hono](https://hono.dev/) framework.
-- Data is ingested from several upstream sources with a daily cron job, stored in a [Postgres](https://www.postgresql.org/) database and accessed via [kysely](https://kysely.dev/). Database migrations are handled with [dbmate](https://github.com/amacneil/dbmate).
-- [Kamal](https://kamal-deploy.org/) is used to deploy the app to a [Digital Ocean](https://www.digitalocean.com/) droplet previously prepared with an [Ansible](https://docs.ansible.com/) playbook.
-- Integration tests use [Vitest](https://vitest.dev/), and [Testcontainers](https://testcontainers.com/) to work against a real database.
+- Runtime: Node.js `24.x`
+- Framework: [Hono](https://hono.dev/)
+- Database: SQLite via [Kysely](https://kysely.dev/)
+- Migrations: [dbmate](https://github.com/amacneil/dbmate)
+- Tests: [Vitest](https://vitest.dev/)
 
-## Develop
+The service currently exposes Earthborne Rangers card, pack, fan-made project info, image, health, and version endpoints. It does not include the old `arkham.build` Cloudflare, auth, share, or recommendation APIs.
+
+## Commands
 
 ```sh
-# install tooling dependencies
-npm i
+# typecheck
+npm run check
 
-# start docker compose databases
-npm run db:up
+# start in watch mode
+npm run dev
 
-# run migrations
-npm run dbmate up
+# start with inspector
+npm run dev:inspect
 
-# ingest data
-npm run ingest
+# run tests
+npm run test
 
-# start service
+# apply SQLite migrations
+npm run db:migrate
+
+# ingest card data from a local rangers-card-data checkout
+CARD_DATA_DIR=/path/to/rangers-card-data npm run ingest:cards
+
+# download card images into IMAGE_DIR
+IMAGE_DIR=/path/to/earthborne.images/cards npm run download:images
+```
+
+## Local setup
+
+```sh
+cp .env.example .env
+npm install
+npm run db:migrate
+CARD_DATA_DIR=/path/to/rangers-card-data npm run ingest:cards
 npm run dev
 ```
 
-You can find a pre-configured [Yaak](https://yaak.app/) workspace in `./config/yaak`.
+Useful files:
 
-## Deploy
+- `src/app.ts`: route registration
+- `src/lib/config.ts`: env schema
+- `src/db/migrations/`: SQLite schema history
+- `config/yaak/`: API request workspace
 
-Refer to available [Kamal commands](https://kamal-deploy.org/docs/commands/view-all-commands/) and the additional `aliases` in the `deploy.yml` file.
+## Deployment
 
-## Acknowledgements
+For a simple Linux deployment with `systemd` and `nginx`, see:
 
-The original recommendation logic was contributed by [Sy Brand / TartanLlama](https://github.com/TartanLlama) in a [separate project](https://github.com/TartanLlama/arkham-rec-provider/) and has since been ported over.
+- [docs/deployment.md](../docs/deployment.md)
+- [docs/earthborne.service](../docs/earthborne.service)
+- [docs/nginx.conf.example](../docs/nginx.conf.example)
