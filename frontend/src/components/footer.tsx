@@ -20,6 +20,17 @@ export function Footer(props: Props) {
         </a>
         . This site is not produced, endorsed by or affiliated with Earthborne Games.{" "}
       </p>
+      <p>
+        Based on{" "}
+        <a href="https://arkham.build" rel="noreferrer" target="_blank" tabIndex={-1}>
+          arkham.build
+        </a>{" "}
+        by{" "}
+        <a href="https://spoettel.dev/" rel="noreferrer" target="_blank" tabIndex={-1}>
+          Felix Spöttel
+        </a>
+        .
+      </p>
     </div>
   );
 }
