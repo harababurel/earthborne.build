@@ -280,11 +280,23 @@ function transformCard(row: CardRow): {
 function parseKeywords(text: string | null): (typeof KEYWORDS)[number][] {
   if (!text) return [];
 
-  const normalized = text.toLowerCase();
-  return KEYWORDS.filter((keyword) => {
-    const pattern = new RegExp(`(^|[^a-z])${keyword}([^a-z]|$)`, "i");
-    return pattern.test(normalized);
-  });
+  // Keywords appear on the first line as "Word. Word." or "Word N" segments —
+  // single capitalized words separated by ". ", with an optional trailing
+  // period and optional numeric value (e.g. "Fatiguing 2"). Validate this
+  // structure before scanning so rules text that merely mentions a keyword
+  // word does not produce false positives.
+  const firstLine = text.split("\n")[0] ?? "";
+  const stripped = firstLine
+    .replace(/<f>.*?<\/f>/gs, "")
+    .replace(/<[^>]+>/g, "")
+    .trim();
+
+  if (!/^[A-Z][a-z]+( \d+)?(\. [A-Z][a-z]+( \d+)?)*\.?$/.test(stripped)) {
+    return [];
+  }
+
+  const normalized = stripped.toLowerCase();
+  return KEYWORDS.filter((keyword) => normalized.includes(keyword));
 }
 
 function hasTrait(traits: string | null, trait: string): boolean {
