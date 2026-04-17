@@ -9,24 +9,16 @@ export function Footer(props: Props) {
   return (
     <div className={cx(css["footer"], props.className)}>
       <p>
+        Earthborne Rangers and all related content &copy;{" "}
         <a
-          href="https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/"
+          href="https://earthbornegames.com"
           rel="noreferrer"
           target="_blank"
           tabIndex={-1}
         >
-          Arkham Horror: The Card Game™
-        </a>{" "}
-        and all related content &copy;{" "}
-        <a
-          href="https://www.fantasyflightgames.com"
-          rel="noreferrer"
-          target="_blank"
-          tabIndex={-1}
-        >
-          Fantasy Flight Games (FFG)
+          Earthborne Games
         </a>
-        . This site is not produced, endorsed by or affiliated with FFG.{" "}
+        . This site is not produced, endorsed by or affiliated with Earthborne Games.{" "}
       </p>
     </div>
   );
