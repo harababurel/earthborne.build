@@ -60,7 +60,7 @@ export const selectUsableByInvestigators = createSelector(
   (_: StoreState, card: Card) => card,
   (lookupTables, metadata, collator, buildQlInterpreter, tabooSetId, card) => {
     const investigatorCodes = Object.keys(
-      lookupTables.typeCode["investigator"],
+      lookupTables.typeCode["investigator"] ?? lookupTables.typeCode.role ?? {},
     );
 
     const cards = investigatorCodes
