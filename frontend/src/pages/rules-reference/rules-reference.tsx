@@ -4,7 +4,7 @@ import { AppLayout } from "@/layouts/app-layout";
 import { parseCardTextHtml } from "@/utils/card-utils";
 import "./rules-reference.css";
 import { ChevronLeftIcon, ChevronUpIcon, ListIcon, XIcon } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Scroller } from "@/components/ui/scroller";
 import { SearchInput } from "@/components/ui/search-input";
@@ -31,12 +31,25 @@ const REFERENCE_SECTIONS = [
 
 type ReferenceSection = (typeof REFERENCE_SECTIONS)[number]["value"];
 
+type ReferencePage = {
+  html: string;
+  id: string;
+  title: string;
+};
+
+type ReferenceContent = {
+  defaultPageId: string | null;
+  pages: Map<string, ReferencePage>;
+  toc: string;
+};
+
 function RulesReference() {
   const { t } = useTranslation();
 
   const [section, setSection] =
     useTabUrlState<ReferenceSection>("rules-glossary");
   const [html, setHtml] = useState("");
+  const [selectedPageId, setSelectedPageId] = useState(getCurrentHash);
   const [tocOpen, setTocOpen] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -44,11 +57,19 @@ function RulesReference() {
     REFERENCE_SECTIONS.find((item) => item.value === section) ??
     REFERENCE_SECTIONS[1];
   const activeSectionValue = activeSection.value;
-  const [toc, rules] = html.split("<!-- BEGIN RULES -->");
+  const reference = useMemo(() => parseReferenceContent(html), [html]);
+  const activePage =
+    reference.pages.get(selectedPageId) ??
+    (reference.defaultPageId
+      ? reference.pages.get(reference.defaultPageId)
+      : undefined);
+  const toc = useMemo(
+    () => filterToc(reference.toc, search),
+    [reference.toc, search],
+  );
 
   const tocTriggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
   const tocRef = useRef<HTMLDivElement>(null);
 
   const onSectionChange = useCallback(
@@ -74,58 +95,11 @@ function RulesReference() {
   }, [activeSection]);
 
   useEffect(() => {
-    if (!html) return;
-    if (contentRef.current?.dataset.section !== activeSectionValue) return;
-
-    const $content = contentRef.current?.querySelector("#rules");
-    const needle = prepareNeedle(search);
-
-    if (!$content) return;
-
-    const matchingSections = new Set();
-    let currentSectionStart = 0;
-    let currentSectionMatches = false;
-
-    for (let i = 0; i < $content.children.length; i++) {
-      const node = $content.children[i];
-      if (!(node instanceof HTMLElement)) continue;
-
-      const id = node.getAttribute("id");
-
-      if (id) {
-        currentSectionStart = i;
-        currentSectionMatches = false;
-      }
-
-      const cloned = node.cloneNode(true) as HTMLElement;
-      replaceIcons(cloned);
-
-      const text = cloned.innerText.toLowerCase() || "";
-
-      if (id && (!needle || search.length <= 2 || fuzzyMatch([text], needle))) {
-        matchingSections.add(id);
-        currentSectionMatches = true;
-      }
-
-      cloned.remove();
-
-      for (let j = currentSectionStart; j <= i; j++) {
-        const sectionNode = $content.children[j];
-        if (!(sectionNode instanceof HTMLElement)) continue;
-        sectionNode.style.display = currentSectionMatches ? "" : "none";
-      }
-    }
-  }, [search, activeSectionValue, html]);
-
-  useEffect(() => {
     const onHashChange = () => {
+      setSelectedPageId(getCurrentHash());
       setSearch("");
       setTocOpen(false);
-      setTimeout(() => {
-        const hash = window.location.hash.slice(1);
-        const el = document.getElementById(hash);
-        if (el) el.scrollIntoView({ behavior: "auto" });
-      });
+      window.scrollTo({ behavior: "auto", top: 0 });
     };
 
     window.addEventListener("hashchange", onHashChange);
@@ -134,6 +108,20 @@ function RulesReference() {
       window.removeEventListener("hashchange", onHashChange);
     };
   }, []);
+
+  useEffect(() => {
+    const activeLink = tocRef.current?.querySelector(
+      `.toc a[href="#${CSS.escape(activePage?.id ?? "")}"]`,
+    );
+
+    if (!activeLink) return;
+
+    let parent = activeLink.parentElement;
+    while (parent) {
+      if (parent instanceof HTMLDetailsElement) parent.open = true;
+      parent = parent.parentElement;
+    }
+  }, [activePage?.id]);
 
   useHotkey("/", () => {
     searchRef.current?.focus();
@@ -214,12 +202,14 @@ function RulesReference() {
                 key={item.value}
                 value={item.value}
               >
-                {item.value === activeSection.value && html ? (
+                {item.value === activeSection.value && html && activePage ? (
                   <div
                     data-section={activeSection.value}
-                    ref={contentRef}
+                    key={`${activeSectionValue}-${activePage.id}`}
                     dangerouslySetInnerHTML={{
-                      __html: parseCardTextHtml(rules, { newLines: "skip" }),
+                      __html: parseCardTextHtml(activePage.html, {
+                        newLines: "skip",
+                      }),
                     }}
                   />
                 ) : (
@@ -234,13 +224,89 @@ function RulesReference() {
   );
 }
 
-function replaceIcons(node: Element) {
-  for (const icon of node.querySelectorAll("i")) {
-    const iconName = icon.getAttribute("class")?.split("-").at(1);
-    if (iconName) {
-      icon.replaceWith(document.createTextNode(`[${iconName}]`));
+function parseReferenceContent(html: string): ReferenceContent {
+  const [toc = "", rules = ""] = html.split("<!-- BEGIN RULES -->");
+  const container = document.createElement("div");
+  container.innerHTML = rules;
+
+  const wrappedPages = [...container.querySelectorAll(".rules-page")];
+  const pageNodes = wrappedPages.length
+    ? wrappedPages
+    : splitLegacyPages(container);
+  const pages = new Map<string, ReferencePage>();
+
+  for (const page of pageNodes) {
+    const heading = page.querySelector("[id]");
+    const id = page.getAttribute("data-page-id") ?? heading?.id;
+
+    if (!id) continue;
+
+    pages.set(id, {
+      html: page.outerHTML,
+      id,
+      title: heading?.textContent?.trim() ?? id,
+    });
+  }
+
+  return {
+    defaultPageId: pages.keys().next().value ?? null,
+    pages,
+    toc,
+  };
+}
+
+function splitLegacyPages(container: HTMLElement) {
+  const rules = container.querySelector("#rules");
+  if (!rules) return [];
+
+  const pages: HTMLElement[] = [];
+  let currentPage: HTMLElement | null = null;
+
+  for (const child of [...rules.children]) {
+    if (!(child instanceof HTMLElement)) continue;
+
+    if (child.id) {
+      currentPage = document.createElement("article");
+      currentPage.className = "rules-page";
+      currentPage.dataset.pageId = child.id;
+      pages.push(currentPage);
+    }
+
+    currentPage?.append(child.cloneNode(true));
+  }
+
+  return pages;
+}
+
+function filterToc(toc: string, search: string) {
+  if (search.length <= 2) return toc;
+
+  const needle = prepareNeedle(search);
+  if (!needle) return toc;
+
+  const container = document.createElement("div");
+  container.innerHTML = toc;
+
+  for (const listItem of [...container.querySelectorAll("li")].reverse()) {
+    const childMatches = Boolean(listItem.querySelector("li"));
+    const text = listItem.textContent?.toLowerCase() ?? "";
+    const selfMatches = fuzzyMatch([text], needle);
+
+    if (!childMatches && !selfMatches) {
+      listItem.remove();
+      continue;
+    }
+
+    if (selfMatches) {
+      listItem.querySelector("details")?.setAttribute("open", "");
     }
   }
+
+  return container.innerHTML;
+}
+
+function getCurrentHash() {
+  return window.location.hash.slice(1);
 }
 
 function useClickOutside(

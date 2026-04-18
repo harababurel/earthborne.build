@@ -115,7 +115,9 @@ async function crawlSection(section) {
 
 function extractPage(html, path) {
   const title = extractTitle(html) ?? pathTitle(path);
-  const article = extractArticle(html);
+  const article = normalizePath(path).startsWith("/docs/category/")
+    ? ""
+    : extractArticle(html);
   const body = sanitize(article, path);
 
   return {
@@ -237,10 +239,12 @@ function buildToc(section, pages, navTree) {
         .join("\n");
 
       return `    <li>
-      <a href="#${group.id}">${escapeHtml(group.title)}</a>
-      <ul>
+      <details open>
+        <summary><a href="#${group.id}">${escapeHtml(group.title)}</a></summary>
+        <ul>
 ${links}
-      </ul>
+        </ul>
+      </details>
     </li>`;
     })
     .join("\n");
@@ -274,11 +278,15 @@ function renderOfficialTocNode(node, pageIds, depth) {
     return `${indent}<li><a href="#${id}">${escapeHtml(node.title)}</a></li>`;
   }
 
+  const open = depth === 2 ? " open" : "";
+
   return `${indent}<li>
-${indent}  <a href="#${id}">${escapeHtml(node.title)}</a>
-${indent}  <ul>
+${indent}  <details${open}>
+${indent}    <summary><a href="#${id}">${escapeHtml(node.title)}</a></summary>
+${indent}    <ul>
 ${children}
-${indent}  </ul>
+${indent}    </ul>
+${indent}  </details>
 ${indent}</li>`;
 }
 
@@ -442,7 +450,10 @@ function buildRules(section, pages) {
   const content = pages
     .map((page) => {
       const body = rewriteInternalLinks(page.body, pageIds);
-      return `  <h3 id="${page.id}">${escapeHtml(page.title)}</h3>\n${body}`;
+      return `  <div class="rules-page" data-page-id="${page.id}">
+    <h3 id="${page.id}">${escapeHtml(page.title)}</h3>
+${body}
+  </div>`;
     })
     .join("\n\n");
 

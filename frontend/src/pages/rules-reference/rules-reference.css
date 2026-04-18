@@ -99,6 +99,18 @@ html[data-theme="light"] {
   padding-left: 1rem;
 }
 
+.toc details {
+  margin-top: 0;
+}
+
+.toc summary {
+  cursor: pointer;
+}
+
+.toc summary > a {
+  margin-left: 0.25rem;
+}
+
 .toc a {
   text-decoration: none;
 }
