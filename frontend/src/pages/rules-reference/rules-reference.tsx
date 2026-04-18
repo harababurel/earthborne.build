@@ -5,11 +5,6 @@ import { parseCardTextHtml } from "@/utils/card-utils";
 import "./rules-reference.css";
 import { ChevronLeftIcon, ChevronUpIcon, ListIcon, XIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import campaignGuidesHtml from "@/assets/campaign-guides.html?raw";
-import faqHtml from "@/assets/faq.html?raw";
-import oneDayMissionsHtml from "@/assets/one-day-missions.html?raw";
-import rulesGlossaryHtml from "@/assets/rules.html?raw";
-import updatesHtml from "@/assets/updates.html?raw";
 import { Button } from "@/components/ui/button";
 import { Scroller } from "@/components/ui/scroller";
 import { SearchInput } from "@/components/ui/search-input";
@@ -21,11 +16,17 @@ import { useGoBack } from "@/utils/use-go-back";
 import { useHotkey } from "@/utils/use-hotkey";
 
 const REFERENCE_SECTIONS = [
-  { value: "campaign-guides", html: campaignGuidesHtml },
-  { value: "rules-glossary", html: rulesGlossaryHtml },
-  { value: "one-day-missions", html: oneDayMissionsHtml },
-  { value: "updates", html: updatesHtml },
-  { value: "faq", html: faqHtml },
+  {
+    value: "campaign-guides",
+    load: () => import("@/assets/campaign-guides.html?raw"),
+  },
+  { value: "rules-glossary", load: () => import("@/assets/rules.html?raw") },
+  {
+    value: "one-day-missions",
+    load: () => import("@/assets/one-day-missions.html?raw"),
+  },
+  { value: "updates", load: () => import("@/assets/updates.html?raw") },
+  { value: "faq", load: () => import("@/assets/faq.html?raw") },
 ] as const;
 
 type ReferenceSection = (typeof REFERENCE_SECTIONS)[number]["value"];
@@ -35,6 +36,7 @@ function RulesReference() {
 
   const [section, setSection] =
     useTabUrlState<ReferenceSection>("rules-glossary");
+  const [html, setHtml] = useState("");
   const [tocOpen, setTocOpen] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -42,7 +44,7 @@ function RulesReference() {
     REFERENCE_SECTIONS.find((item) => item.value === section) ??
     REFERENCE_SECTIONS[1];
   const activeSectionValue = activeSection.value;
-  const [toc, rules] = activeSection.html.split("<!-- BEGIN RULES -->");
+  const [toc, rules] = html.split("<!-- BEGIN RULES -->");
 
   const tocTriggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -59,6 +61,20 @@ function RulesReference() {
   );
 
   useEffect(() => {
+    let active = true;
+    setHtml("");
+
+    activeSection.load().then((mod) => {
+      if (active) setHtml(mod.default);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (!html) return;
     if (contentRef.current?.dataset.section !== activeSectionValue) return;
 
     const $content = contentRef.current?.querySelector("#rules");
@@ -99,7 +115,7 @@ function RulesReference() {
         sectionNode.style.display = currentSectionMatches ? "" : "none";
       }
     }
-  }, [search, activeSectionValue]);
+  }, [search, activeSectionValue, html]);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -198,7 +214,7 @@ function RulesReference() {
                 key={item.value}
                 value={item.value}
               >
-                {item.value === activeSection.value ? (
+                {item.value === activeSection.value && html ? (
                   <div
                     data-section={activeSection.value}
                     ref={contentRef}
@@ -206,7 +222,9 @@ function RulesReference() {
                       __html: parseCardTextHtml(rules, { newLines: "skip" }),
                     }}
                   />
-                ) : null}
+                ) : (
+                  <p>{t("rules.loading")}</p>
+                )}
               </TabsContent>
             ))}
           </Tabs>

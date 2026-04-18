@@ -885,6 +885,7 @@
     "rules": {
       "back_to_top": "Back to top",
       "search_placeholder": "Search reference...",
+      "loading": "Loading reference...",
       "sections": {
         "campaign-guides": "Campaign Guides",
         "faq": "FAQ",
