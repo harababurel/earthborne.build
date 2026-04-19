@@ -206,6 +206,10 @@ function sanitize(article, sourcePath) {
     if (bqNode) adm.replaceWith(bqNode);
   }
 
+  for (const sec of article.querySelectorAll('section[class*="row"]')) {
+    sec.setAttribute("class", "category-list");
+  }
+
   // Strip attributes (preserve href on anchors, src/alt on images, class="admonition" on blockquotes)
   for (const el of article.querySelectorAll("*")) {
     if (el.tagName === "IMG") continue;
@@ -222,6 +226,16 @@ function sanitize(article, sourcePath) {
     if (
       el.tagName === "BLOCKQUOTE" &&
       el.getAttribute("class") === "admonition"
+    ) {
+      for (const key of Object.keys(el.attributes)) {
+        if (key !== "class") el.removeAttribute(key);
+      }
+      continue;
+    }
+
+    if (
+      el.tagName === "SECTION" &&
+      el.getAttribute("class") === "category-list"
     ) {
       for (const key of Object.keys(el.attributes)) {
         if (key !== "class") el.removeAttribute(key);
@@ -248,9 +262,6 @@ function sanitize(article, sourcePath) {
   }
 
   let content = article.innerHTML;
-
-  // Remove emoji
-  content = content.replace(/\u{1F5C3}\uFE0F|\u{1F4C4}\uFE0F/gu, "");
 
   // Replace Living Valley PUA icon characters with core font spans.
   // Codepoints identified by cross-referencing the scraped text context with
