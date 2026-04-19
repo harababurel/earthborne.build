@@ -1,10 +1,10 @@
 .rules {
   --red: var(--nord-11);
-  --blue: var(--nord-9);
+  --blue: var(--theme-accent-dark);
 }
 
 html[data-theme="light"] {
-  --blue: var(--nord-10);
+  --blue: var(--theme-accent-light);
 }
 
 .container {
@@ -306,8 +306,8 @@ html[data-theme="light"] .toc a {
 .rules-page h6[id^="read-one"],
 .rules-page h6[id^="based-on"],
 .rules-page h6[id^="if-you"] {
-  background-color: var(--nord-3);
-  color: var(--palette-0);
+  background-color: var(--palette-2);
+  color: var(--text);
   padding: 0.75rem 1rem;
   border-radius: var(--rounded);
   font-size: var(--text-base);
@@ -323,8 +323,8 @@ html[data-theme="dark"] .rules-page h6[id^="rangers-choose"],
 html[data-theme="dark"] .rules-page h6[id^="read-one"],
 html[data-theme="dark"] .rules-page h6[id^="based-on"],
 html[data-theme="dark"] .rules-page h6[id^="if-you"] {
-  background-color: var(--palette-5);
-  color: var(--nord-0);
+  background-color: var(--palette-2);
+  color: var(--text);
 }
 
 .rules-option {
