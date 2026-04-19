@@ -112,7 +112,6 @@ export function useLogoUrl() {
       return logoBotanical;
     case "clay":
       return logoClay;
-    case "nord":
     default:
       return logoNord;
   }
