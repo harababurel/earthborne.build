@@ -258,7 +258,7 @@ All answered during Phase 1 via rulebook at `docs/rulebook.pdf`:
 - **Weaknesses equivalent**: maladies (e.g. Lingering Injury), added during campaign, cannot be removed normally
 - **Release structure**: ranger card sets (Artificer, Artisan, Conciliator, Explorer, Forager, Maladies, Personalities, Rewards, Shaper, Shepherd, Traveler) and path card sets (terrain-based: Grassland, Lakeshore, etc. + location-based: Branch, Spire, etc.)
 
-### Phase 9: Filters — In progress
+### Phase 9: Filters — **Done**
 
 Cards are now visible in the browse page. The filter sidebar has been stripped to a blank slate — all AH-specific filters removed, ready to be rebuilt for ER one at a time.
 
@@ -269,7 +269,7 @@ Other fixes made during debugging:
 - `filterEncounterCards` corrected to return `false` (no ER cards are encounter cards); previously returned `true`, which would have caused `not(filterEncounterCards)` to exclude all cards on the player card view.
 - `vite.config.ts`: added `allowedHosts: ["dev.harababurel.com"]` for remote dev access.
 
-**Next**: re-add filters one at a time as instructed. Candidate ER filters: type, aspect, energy cost, trait, pack/set, category (background/specialty/personality), approach icons.
+The ER filters have been fully implemented. Added: type, aspect requirement, energy cost, trait, pack/set, category (background/specialty/personality), approach icons, equip value, and card properties.
 
 ---
 
@@ -282,4 +282,4 @@ Other fixes made during debugging:
 - **Card data**: 260 cards ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
 - **Card images**: 260 JPGs at `/home/sergiu/work/earthborne.images/cards/` (outside repo). Backend serves via `GET /images/:code`.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed).
-- **Browse page**: all 260 cards visible. Filter sidebar is blank — being rebuilt for ER (Phase 9 in progress).
+- **Browse page**: all 260 cards visible. Filter sidebar has been successfully rebuilt for Earthborne Rangers.

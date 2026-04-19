@@ -662,9 +662,17 @@ async function fetchPage(path, retries = 3) {
 }
 
 async function main() {
+  const cacheArgs = parseCacheArgs();
+  const cache = createCache({ dir: cacheArgs.dir, mode: cacheArgs.mode });
+  if (cacheArgs.clear) {
+    await cache.clear();
+    console.log(`Cleared cache at ${cache.dir}`);
+  }
+  console.log(`Cache mode: ${cache.mode}  ·  dir: ${cache.dir}\n`);
+
   for (const section of SECTIONS) {
     console.log(`Fetching ${section.title}...`);
-    const { navTree, pages } = await crawlSection(section);
+    const { navTree, pages } = await crawlSection(section, cache);
     const toc = buildToc(section, pages, navTree);
     const rules = buildRules(section, pages);
     const output = `${toc}\n<!-- BEGIN RULES -->\n${rules}\n`;
@@ -672,6 +680,9 @@ async function main() {
     writeFileSync(path, output, "utf8");
     console.log(`Wrote ${pages.length} pages to ${path}`);
   }
+
+  const s = cache.stats();
+  console.log(`\nCache: ${s.hits} hits, ${s.misses} misses, ${s.errors} errors, ${s.refreshes} refreshes, ${s.bypasses} bypasses  ·  cache dir: ${cache.dir}`);
 }
 
 main().catch((err) => {

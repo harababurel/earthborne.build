@@ -13,6 +13,7 @@ node_modules
 
 .codex
 .wrangler
+.cache/
 coverage
 dist
 

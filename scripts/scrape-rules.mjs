@@ -10,6 +10,7 @@
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { cachedFetchText, createCache, parseCacheArgs } from "./lib/scraper-cache.mjs";
 
 const BASE = "https://thelivingvalley.earthbornegames.com/docs/rules_glossary";
 const BASE_ORIGIN = "https://thelivingvalley.earthbornegames.com";
@@ -299,27 +300,16 @@ function extractContent(html, letter, slug) {
   return { title, body: content };
 }
 
-async function fetchEntry(letter, slug, retries = 3) {
+async function fetchEntry(letter, slug, cache) {
   const url = `${BASE}/${letter}/${slug}`;
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      const res = await fetch(url);
-      if (!res.ok) {
-        console.warn(`  HTTP ${res.status} for ${url}`);
-        return null;
-      }
-      const html = await res.text();
-      return extractContent(html, letter, slug);
-    } catch (err) {
-      if (attempt < retries) {
-        await new Promise((r) => setTimeout(r, 1000 * attempt));
-      } else {
-        console.warn(`  Error fetching ${url}: ${err.message}`);
-        return null;
-      }
-    }
+  try {
+    const { body, fromCache } = await cachedFetchText(url, { cache, retries: 3 });
+    const entry = extractContent(body, letter, slug);
+    return entry ? { ...entry, fromCache } : null;
+  } catch (err) {
+    console.warn(`  Error fetching ${url}: ${err.message}`);
+    return null;
   }
-  return null;
 }
 
 function buildToc(letterResults) {
@@ -373,6 +363,14 @@ function escapeHtml(str) {
 }
 
 async function main() {
+  const cacheArgs = parseCacheArgs();
+  const cache = createCache({ dir: cacheArgs.dir, mode: cacheArgs.mode });
+  if (cacheArgs.clear) {
+    await cache.clear();
+    console.log(`Cleared cache at ${cache.dir}`);
+  }
+  console.log(`Cache mode: ${cache.mode}  ·  dir: ${cache.dir}\n`);
+
   console.log("Fetching EBR rules glossary entries...\n");
 
   const letterResults = {};
@@ -384,25 +382,29 @@ async function main() {
     const results = [];
 
     for (const slug of slugs) {
-      process.stdout.write(`  Fetching ${slug}... `);
-      const entry = await fetchEntry(letter, slug);
+      const entry = await fetchEntry(letter, slug, cache);
       if (entry) {
+        const prefix = entry.fromCache ? "[H]" : cache.mode === "bypass" ? "[B]" : cache.mode === "refresh" ? "[R]" : "[M]";
         results.push({ slug, ...entry });
-        console.log(`OK: "${entry.title}"`);
+        console.log(`  ${prefix} OK: "${entry.title}" (${slug})`);
         total++;
+        if (!entry.fromCache) {
+          // Small delay to be polite to the server
+          await new Promise((r) => setTimeout(r, 150));
+        }
       } else {
         results.push(null);
-        console.log("FAILED");
+        console.log(`  [X] FAILED: ${slug}`);
         failed++;
       }
-      // Small delay to be polite to the server
-      await new Promise((r) => setTimeout(r, 150));
     }
 
     letterResults[letter] = results.filter(Boolean);
   }
 
   console.log(`\nFetched ${total} entries, ${failed} failed.`);
+  const s = cache.stats();
+  console.log(`Cache: ${s.hits} hits, ${s.misses} misses, ${s.errors} errors, ${s.refreshes} refreshes, ${s.bypasses} bypasses  ·  cache dir: ${cache.dir}`);
 
   const toc = buildToc(letterResults);
   const rules = buildRules(letterResults);

@@ -45,7 +45,15 @@ Additional scripts:
 - `node ../scripts/scrape-reference-sections.mjs` (from repo root): crawl and regenerate `/rules` section assets from the official Living Valley docs
 - `node ../scripts/scrape-rules.mjs` (from repo root): regenerate `src/assets/rules.html` from the official EBR rules glossary
 
-> **Note**: a response cache for both scrapers is planned (see [`docs/scraper-caching-plan.md`](../docs/scraper-caching-plan.md)). Once implemented, re-running a scraper after a transformation tweak will skip the network entirely.
+### Scraper Cache
+
+The scrapers cache raw upstream responses under `.cache/scraper/` so that re-running them after tweaking transformation logic does not re-hit the network. Useful flags:
+
+- `--refresh` — ignore existing cache, re-fetch everything, and overwrite.
+- `--offline` — fail if anything would require a network request (handy on a plane or for CI).
+- `--no-cache` — bypass the cache for one run (do not read from it, do not write to it).
+- `--clear-cache` — delete the cache directory before running.
+- `--cache-dir <path>` — store the cache somewhere other than `.cache/scraper`.
 - `npm run schema:fan-made-content`: emit the fan-made content JSON schema
 
 ## Notes
