@@ -247,3 +247,113 @@ html[data-theme="light"] .toc a {
   color: var(--palette-5);
   margin: 0;
 }
+
+.rules-page > h3:first-child {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.rules-page p {
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+
+.rules-page h5,
+.rules-page h6 {
+  font-size: var(--text-2xl);
+  font-weight: bold;
+  margin-block: 2rem 1rem;
+}
+
+.rules-page h5 a,
+.rules-page h6 a {
+  opacity: 0;
+  text-decoration: none;
+  margin-left: 0.5rem;
+  transition: opacity 0.2s;
+}
+
+.rules-page h5 a::after,
+.rules-page h6 a::after {
+  content: "#";
+  color: var(--blue);
+}
+
+.rules-page h5:hover a,
+.rules-page h6:hover a {
+  opacity: 1;
+}
+
+.rules-conditional {
+  background-color: var(--palette-2);
+  color: var(--nord-3);
+  padding: 0.75rem 1rem;
+  border-radius: var(--rounded);
+  font-size: var(--text-base) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-left: 4px solid var(--blue);
+}
+
+html[data-theme="dark"] .rules-conditional {
+  background-color: var(--palette-1);
+  color: var(--palette-6);
+}
+
+.rules-option {
+  color: var(--red);
+  font-weight: bold;
+}
+
+.rules-pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--palette-2);
+}
+
+.rules-pagination a {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--palette-2);
+  border-radius: var(--rounded);
+  background: var(--palette-point-five);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  max-width: 48%;
+  flex: 1;
+}
+
+.rules-pagination a:hover {
+  border-color: var(--blue);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.rules-pagination .next {
+  margin-left: auto;
+  align-items: flex-end;
+}
+
+.pagination-label {
+  font-size: var(--text-sm);
+  color: var(--palette-5);
+  margin-bottom: 0.5rem;
+}
+
+.pagination-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: var(--text-lg);
+  color: var(--blue);
+}

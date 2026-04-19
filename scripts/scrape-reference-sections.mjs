@@ -210,6 +210,18 @@ function sanitize(article, sourcePath) {
     sec.setAttribute("class", "category-list");
   }
 
+  for (const p of article.querySelectorAll("p")) {
+    if (/^[A-Z]\)\s/.test(p.textContent.trim())) {
+      p.setAttribute("class", "rules-option");
+    }
+  }
+
+  for (const h of article.querySelectorAll("h5, h6")) {
+    if (h.textContent.includes("READ THE ENTRY")) {
+      h.setAttribute("class", "rules-conditional");
+    }
+  }
+
   // Strip attributes (preserve href on anchors, src/alt on images, class="admonition" on blockquotes)
   for (const el of article.querySelectorAll("*")) {
     if (el.tagName === "IMG") continue;
@@ -236,6 +248,23 @@ function sanitize(article, sourcePath) {
     if (
       el.tagName === "SECTION" &&
       el.getAttribute("class") === "category-list"
+    ) {
+      for (const key of Object.keys(el.attributes)) {
+        if (key !== "class") el.removeAttribute(key);
+      }
+      continue;
+    }
+
+    if (el.tagName === "P" && el.getAttribute("class") === "rules-option") {
+      for (const key of Object.keys(el.attributes)) {
+        if (key !== "class") el.removeAttribute(key);
+      }
+      continue;
+    }
+
+    if (
+      (el.tagName === "H5" || el.tagName === "H6") &&
+      el.getAttribute("class") === "rules-conditional"
     ) {
       for (const key of Object.keys(el.attributes)) {
         if (key !== "class") el.removeAttribute(key);

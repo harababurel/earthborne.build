@@ -3,7 +3,13 @@ import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/layouts/app-layout";
 import { parseCardTextHtml } from "@/utils/card-utils";
 import "./rules-reference.css";
-import { ChevronLeftIcon, ChevronUpIcon, ListIcon, XIcon } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  ListIcon,
+  XIcon,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Scroller } from "@/components/ui/scroller";
@@ -67,6 +73,19 @@ function RulesReference() {
     () => filterToc(reference.toc, search),
     [reference.toc, search],
   );
+
+  const pageList = useMemo(
+    () => Array.from(reference.pages.values()),
+    [reference.pages],
+  );
+  const activePageIndex = activePage
+    ? pageList.findIndex((p) => p.id === activePage.id)
+    : -1;
+  const prevPage = activePageIndex > 0 ? pageList[activePageIndex - 1] : null;
+  const nextPage =
+    activePageIndex >= 0 && activePageIndex < pageList.length - 1
+      ? pageList[activePageIndex + 1]
+      : null;
 
   const tocTriggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -206,12 +225,39 @@ function RulesReference() {
                   <div
                     data-section={activeSection.value}
                     key={`${activeSectionValue}-${activePage.id}`}
-                    dangerouslySetInnerHTML={{
-                      __html: parseCardTextHtml(activePage.html, {
-                        newLines: "skip",
-                      }),
-                    }}
-                  />
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: parseCardTextHtml(activePage.html, {
+                          newLines: "skip",
+                        }),
+                      }}
+                    />
+                    <nav className="rules-pagination">
+                      {prevPage && (
+                        <a
+                          href={`#${prevPage.id}`}
+                          className="pagination-link prev"
+                        >
+                          <div className="pagination-label">Previous</div>
+                          <div className="pagination-title">
+                            <ChevronLeftIcon /> {prevPage.title}
+                          </div>
+                        </a>
+                      )}
+                      {nextPage && (
+                        <a
+                          href={`#${nextPage.id}`}
+                          className="pagination-link next"
+                        >
+                          <div className="pagination-label">Next</div>
+                          <div className="pagination-title">
+                            {nextPage.title} <ChevronRightIcon />
+                          </div>
+                        </a>
+                      )}
+                    </nav>
+                  </div>
                 ) : (
                   <p>{t("rules.loading")}</p>
                 )}
