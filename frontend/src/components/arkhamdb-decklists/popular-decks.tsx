@@ -64,7 +64,7 @@ export function PopularDecks(props: Props) {
     >
       <header className={css["header"]}>
         <h3 className={css["title"]}>
-          <i className="icon-elder_sign" />
+          <i className="core-ranger" />
           {title}
         </h3>
         <Link
