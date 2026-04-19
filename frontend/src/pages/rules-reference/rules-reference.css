@@ -261,12 +261,15 @@ html[data-theme="light"] .toc a {
 }
 
 .rules-page > h3:first-child {
+  font-family: var(--font-family-card-title);
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: 2rem;
 }
 
 .rules-page p {
+  font-family: var(--font-family-content);
+  font-weight: 400;
   margin-bottom: 1.25rem;
   line-height: 1.6;
 }
@@ -274,7 +277,7 @@ html[data-theme="light"] .toc a {
 .rules-page h5,
 .rules-page h6 {
   font-size: var(--text-2xl);
-  font-weight: bold;
+  font-weight: 500;
   margin-block: 2rem 1rem;
 }
 
@@ -308,9 +311,10 @@ html[data-theme="light"] .toc a {
   padding: 0.75rem 1rem;
   border-radius: var(--rounded);
   font-size: var(--text-base);
-  font-weight: bold;
+  font-weight: 900;
   text-transform: uppercase;
   border-left: 4px solid var(--blue);
+  letter-spacing: 0.02em;
 }
 
 html[data-theme="dark"] .rules-conditional,
