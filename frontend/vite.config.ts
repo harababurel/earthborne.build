@@ -37,7 +37,14 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 3000,
-    allowedHosts: ["dev.harababurel.com"],
+    allowedHosts: true,
+    proxy: {
+      "/v2": "http://localhost:8686",
+      "/admin": "http://localhost:8686",
+      "/images": "http://localhost:8686",
+      "/up": "http://localhost:8686",
+      "/version": "http://localhost:8686",
+    },
   },
   preview: {
     port: 3000,

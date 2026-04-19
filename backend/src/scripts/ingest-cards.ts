@@ -23,6 +23,11 @@ if (!CARD_DATA_DIR) {
 const config = configFromEnv();
 const db = getDatabase(config.SQLITE_PATH);
 
+// The upstream card data uses "core" for the base set; we use "ebr" instead.
+const PACK_ID_REMAP: Record<string, { id: string; name?: string }> = {
+  core: { id: "ebr", name: "Earthborne Rangers" },
+};
+
 try {
   await ingest();
   await db.destroy();
@@ -47,26 +52,43 @@ async function ingest() {
     await tx.deleteFrom("pack").execute();
 
     // Lookup tables
-    const aspects = await readJson<{ id: string; name: string; short_name: string }[]>("aspects.json");
+    const aspects =
+      await readJson<{ id: string; name: string; short_name: string }[]>(
+        "aspects.json",
+      );
     await tx.insertInto("aspect").values(aspects).execute();
     log("info", `Inserted ${aspects.length} aspects`);
 
-    const cardTypes = await readJson<{ id: string; name: string }[]>("types.json");
+    const cardTypes =
+      await readJson<{ id: string; name: string }[]>("types.json");
     await tx.insertInto("card_type").values(cardTypes).execute();
     log("info", `Inserted ${cardTypes.length} card types`);
 
-    const setTypes = await readJson<{ id: string; name: string }[]>("set_types.json");
+    const setTypes =
+      await readJson<{ id: string; name: string }[]>("set_types.json");
     await tx.insertInto("set_type").values(setTypes).execute();
     log("info", `Inserted ${setTypes.length} set types`);
 
-    const cardSets = await readJson<{ id: string; name: string; type_id?: string; size?: number }[]>("sets.json");
+    const cardSets =
+      await readJson<
+        { id: string; name: string; type_id?: string; size?: number }[]
+      >("sets.json");
     await tx
       .insertInto("card_set")
-      .values(cardSets.map((s) => ({ ...s, type_id: s.type_id ?? null, size: s.size ?? null })))
+      .values(
+        cardSets.map((s) => ({
+          ...s,
+          type_id: s.type_id ?? null,
+          size: s.size ?? null,
+        })),
+      )
       .execute();
     log("info", `Inserted ${cardSets.length} card sets`);
 
-    const tokensRaw = await readJson<{ id: string; name: string; plurals?: string }[]>("tokens.json");
+    const tokensRaw =
+      await readJson<{ id: string; name: string; plurals?: string }[]>(
+        "tokens.json",
+      );
     // Deduplicate by id (tokens.json has a duplicate 'buffer' entry)
     const seenTokens = new Set<string>();
     const tokens = tokensRaw.filter((t) => {
@@ -84,10 +106,18 @@ async function ingest() {
     await tx.insertInto("area").values(areas).execute();
     log("info", `Inserted ${areas.length} areas`);
 
-    const packs = await readJson<{ id: string; name: string; short_name?: string; position: number }[]>("packs.json");
+    const packs =
+      await readJson<
+        { id: string; name: string; short_name?: string; position: number }[]
+      >("packs.json");
     await tx
       .insertInto("pack")
-      .values(packs.map((p) => ({ ...remapPackId(p), short_name: p.short_name ?? null })))
+      .values(
+        packs.map((p) => ({
+          ...remapPackId(p),
+          short_name: p.short_name ?? null,
+        })),
+      )
       .execute();
     log("info", `Inserted ${packs.length} packs`);
 
@@ -100,7 +130,9 @@ async function ingest() {
       const packFile = path.join(dataDir, "packs", packId, `${packId}.json`);
       const rawCards = await readFile<RawCard[]>(packFile);
 
-      const cards = rawCards.map((c) => normalizeCard(c, remapPackId({ id: packId }).id));
+      const cards = rawCards.map((c) =>
+        normalizeCard(c, remapPackId({ id: packId }).id),
+      );
       if (cards.length === 0) continue;
 
       await tx.insertInto("card").values(cards).execute();
@@ -172,7 +204,8 @@ function normalizeCard(c: RawCard, packId: string) {
     presence: c.presence ?? null,
     harm: c.harm ?? null,
     progress: c.progress ?? null,
-    progress_fixed: c.progress_fixed != null ? (c.progress_fixed ? 1 : 0) : null,
+    progress_fixed:
+      c.progress_fixed != null ? (c.progress_fixed ? 1 : 0) : null,
     approach_conflict: c.approach_conflict ?? null,
     approach_reason: c.approach_reason ?? null,
     approach_exploration: c.approach_exploration ?? null,
@@ -197,18 +230,13 @@ function normalizeCard(c: RawCard, packId: string) {
   };
 }
 
-// The upstream card data uses "core" for the base set; we use "ebr" instead.
-const PACK_ID_REMAP: Record<string, { id: string; name?: string }> = {
-  core: { id: "ebr", name: "Earthborne Rangers" },
-};
-
 function remapPackId<T extends { id: string; name?: string }>(pack: T): T {
   const remap = PACK_ID_REMAP[pack.id];
   if (!remap) return pack;
   return { ...pack, ...remap };
 }
 
-async function readJson<T>(filename: string): Promise<T> {
+function readJson<T>(filename: string): Promise<T> {
   return readFile<T>(path.join(CARD_DATA_DIR as string, filename));
 }
 
