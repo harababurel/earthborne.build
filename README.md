@@ -69,3 +69,7 @@ npm run check -w shared
 - [docs/metadata.md](./docs/metadata.md): card data sources and normalization
 - [docs/translations.md](./docs/translations.md): frontend translation workflow
 - [docs/adaptation-plan.md](./docs/adaptation-plan.md): historical notes from the `arkham.build` adaptation
+- [docs/rules-reference-retrospective.md](./docs/rules-reference-retrospective.md): how the embedded `/rules` reference was built
+- [docs/card-data-issues.md](./docs/card-data-issues.md): known card data quirks
+- [docs/scraper-caching-plan.md](./docs/scraper-caching-plan.md): pending plan for scraper response caching
+- [AGENTS.md](./AGENTS.md): onboarding doc for AI agents working in this repo

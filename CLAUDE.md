@@ -8,17 +8,17 @@ The goal is a full-featured deckbuilder at **earthborne.build** — card browsin
 
 ## Project status
 
-This is an early-stage adaptation. The codebase is the original arkham.build source. The bulk of the Arkham-specific game logic, schema, and terminology still needs to be replaced with Earthborne Rangers equivalents.
+Phases 1–3 of the adaptation are complete (schema, ArkhamDB removal, card data pipeline). The Earthborne Rangers card schema, ingestion, and SQLite-backed API are in place; the frontend still contains some inherited arkham.build code paths that have not yet been migrated.
 
-See `docs/adaptation-plan.md` for the full analysis of what needs changing and the recommended order of work.
+See `docs/adaptation-plan.md` for the full analysis and per-phase status.
 
 ## Tech stack
 
 - **Frontend**: React 19 + TypeScript + Vite, Zustand (state), TanStack Query (data fetching), Wouter (routing), react-i18next (i18n)
-- **Backend**: Hono (Node.js HTTP framework) + PostgreSQL + Kysely
-- **Monorepo**: npm workspaces — `frontend/`, `backend/`, `shared/`, `functions/`
-- **Infra**: Cloudflare Pages/Functions (frontend + OG previews), Kamal + DigitalOcean (backend)
-- **Testing**: Vitest (unit), Playwright (E2E), Testcontainers (backend integration)
+- **Backend**: Hono (Node.js HTTP framework) + SQLite (better-sqlite3) + Kysely; migrations via dbmate
+- **Monorepo**: npm workspaces — `frontend/`, `backend/`, `shared/`
+- **Infra**: self-hosted Linux (systemd + nginx); see `docs/deployment.md`
+- **Testing**: Vitest (unit), Playwright (E2E)
 - **Tooling**: Biome (lint/format), Lefthook (git hooks)
 
 ## Code conventions (inherited from arkham.build, keep these)

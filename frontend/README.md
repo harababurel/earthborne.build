@@ -44,6 +44,8 @@ Additional scripts:
 - `npm run fmt:rules`: format `src/assets/rules.html` (after regenerating it)
 - `node ../scripts/scrape-reference-sections.mjs` (from repo root): crawl and regenerate `/rules` section assets from the official Living Valley docs
 - `node ../scripts/scrape-rules.mjs` (from repo root): regenerate `src/assets/rules.html` from the official EBR rules glossary
+
+> **Note**: a response cache for both scrapers is planned (see [`docs/scraper-caching-plan.md`](../docs/scraper-caching-plan.md)). Once implemented, re-running a scraper after a transformation tweak will skip the network entirely.
 - `npm run schema:fan-made-content`: emit the fan-made content JSON schema
 
 ## Notes
