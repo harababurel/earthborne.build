@@ -39,6 +39,11 @@
 
 .logo-name {
   flex: 1 1 auto;
+  font-family: var(--font-family-card-title);
+  font-weight: 700;
+  font-size: var(--text-base);
+  text-transform: none;
+  letter-spacing: 0.02em;
 
   @media screen and (max-width: 30rem) {
     display: none;
