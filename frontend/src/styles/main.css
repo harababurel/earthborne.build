@@ -198,14 +198,14 @@
 
   /* Theme: Clay & Ochre */
   html[data-color-scheme="clay"] {
-    --theme-bg-dark: #2b2724;
-    --theme-surface-dark: #35302c;
-    --theme-surface-elevated-dark: #413b37;
-    --theme-border-dark: #504944;
-    --theme-text-dark: #f1ede9;
-    --theme-text-dim-dark: #b8aea6;
-    --theme-accent-dark: #b38e5d;
-    --theme-accent-light-dark: #d4c1a5;
+    --theme-bg-dark: #36302b;
+    --theme-surface-dark: #413a34;
+    --theme-surface-elevated-dark: #4d453e;
+    --theme-border-dark: #5e544c;
+    --theme-text-dark: #f4f1ee;
+    --theme-text-dim-dark: #c5bdb6;
+    --theme-accent-dark: #c2a37a;
+    --theme-accent-light-dark: #d6c5af;
 
     --theme-bg-light: #fdfaf5;
     --theme-surface-light: #f4eee4;
