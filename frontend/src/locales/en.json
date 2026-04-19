@@ -1,29 +1,15 @@
 {
   "translation": {
     "about": {
-      "description": "<p>earthborne.build is a fan-made deck builder for <eb>Earthborne Rangers</eb> by Earthborne Games. This app is not produced, endorsed, or supported by, or affiliated with Earthborne Games.</p><p>The source code of this project is available at <github_url>Github</github_url>. Feedback and bug reports are welcome via Github issues.</p><p>All artwork and illustrations are the intellectual property of their respective creators.</p>",
-      "hall_of_fame": {
-        "card_design": "Custom card design.",
-        "code": "Significant contributions to the codebase.",
-        "metadata": "Card metadata support.",
-        "qa": "QA testing.",
-        "testing": "Patient feedback and testing during development of the initial version, design concepts.",
-        "title": "Hall of Fame",
-        "translation": {
-          "es": "Spanish",
-          "fr": "French",
-          "ko": "Korean",
-          "pl": "Polish",
-          "ru": "Russian",
-          "title": "This app is available in multiple languages thanks to the following contributors",
-          "zh": "Simplified Chinese"
-        }
-      },
+      "description": "<p>earthborne.build is a fan-made deck builder for <eb>Earthborne Rangers</eb> by Earthborne Games. It is based on <arkham_build_url>arkham.build</arkham_build_url>, created by <felix_url>Felix Spöttel</felix_url>. This app is not produced, endorsed, or supported by, or affiliated with Earthborne Games.</p><p>The source code of this project is available on <github_url>GitHub</github_url>. Feedback and bug reports are welcome via <github_issues_url>GitHub issues</github_issues_url>.</p><p>All artwork and illustrations are the intellectual property of their respective creators.</p>",
       "image_credits": {
         "404": "404 illustration (edit)",
+        "404_credit": "FFG & 5argon",
         "card_icons": "Card icons",
+        "earthborne_games": "Earthborne Games",
         "logo": "Logo design",
         "other": "Other icons",
+        "other_credit": "lucide.dev",
         "title": "Image / Icon credits"
       },
       "title": "About"
