@@ -149,19 +149,26 @@ function RulesReference() {
     window.scrollTo({ behavior: "auto", top: 0 });
   }, [selectedPageId, activePage?.id, html]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: highlight after toc re-render
   useEffect(() => {
+    tocRef.current?.querySelectorAll(".toc a.active").forEach((el) => {
+      el.classList.remove("active");
+    });
+
     const activeLink = tocRef.current?.querySelector(
       `.toc a[href="#${CSS.escape(activePage?.id ?? "")}"]`,
     );
 
     if (!activeLink) return;
 
+    activeLink.classList.add("active");
+
     let parent = activeLink.parentElement;
     while (parent) {
       if (parent instanceof HTMLDetailsElement) parent.open = true;
       parent = parent.parentElement;
     }
-  }, [activePage?.id]);
+  }, [activePage?.id, toc]);
 
   useHotkey("/", () => {
     searchRef.current?.focus();

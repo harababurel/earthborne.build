@@ -120,6 +120,12 @@ html[data-theme="light"] {
   text-decoration: none;
 }
 
+.toc a.active {
+  color: var(--blue);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 html[data-theme="light"] .toc a {
   color: var(--nord-10);
 }
