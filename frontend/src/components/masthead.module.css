@@ -32,8 +32,8 @@
 
 .logo img {
   flex: 0 0 auto;
-  width: var(--icon-xl);
-  height: var(--icon-xl);
+  width: var(--icon-2xl);
+  height: var(--icon-2xl);
   object-fit: contain;
 }
 
@@ -41,9 +41,9 @@
   flex: 1 1 auto;
   font-family: var(--font-family-card-title);
   font-weight: 700;
-  font-size: var(--text-base);
+  font-size: var(--text-xl);
   text-transform: none;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
 
   @media screen and (max-width: 30rem) {
     display: none;

@@ -77,6 +77,14 @@
     font-display: swap;
   }
 
+  @font-face {
+    font-family: "Hypatia Sans Pro";
+    src: url("../assets/fonts/HypatiaSansPro-Black.woff") format("woff");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
     --font-family-ui:
       "Avenir LT Std", "Noto Sans Variable", ui-sans-serif, system-ui,
