@@ -121,6 +121,15 @@ If generated HTML changes significantly, spot-check:
 - The Campaign Guides TOC root and first-level campaign sections
 - Category pages, to ensure they remain title-only
 
+## Styling & Pagination Update (Current Session)
+
+In a follow-up session, the Rules Reference was further refined to improve typography, styling, and navigation:
+- **Typography:** Increased font size and paragraph spacing for better readability. Numbered list headers now display a hoverable `#` icon that links to their specific anchor.
+- **Conditional & Option Styling:** The scraper was updated to detect "READ THE ENTRY" instructions and list options (e.g., `A) `). These are now targeted with `.rules-conditional` and `.rules-option` classes for distinct visual emphasis (borders, uppercase formatting, accent colors).
+- **Blockquote Formatting:** Admonitions and blockquotes received a polished callout appearance with a subtle background fill, balanced padding, and rounded corners, fixing a previous issue where they appeared top-aligned with excessive bottom spacing.
+- **Pagination:** Next/Previous navigation links were added to the bottom of each rule page. The `RulesReference` React component now dynamically calculates adjacent pages from the loaded Map of pages.
+- **Anchor Links:** The scraper's aggressive ID stripping was reverted so that all headings retain their `id` attributes. The React router was updated to map element IDs to their parent `.rules-page`, allowing URL hashes like `#1` to correctly load the parent page (e.g., Prologue) and smoothly scroll directly to the anchored paragraph.
+
 ## Known Caveats
 
 The scraper still uses regex-oriented HTML extraction and cleanup. This has worked for the current Living Valley output, but a structured HTML parser would be more robust if the official site changes markup substantially.
