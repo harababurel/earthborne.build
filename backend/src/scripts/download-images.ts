@@ -24,6 +24,9 @@ if (!IMAGE_DIR) {
 
 const SQLITE_PATH = process.env["SQLITE_PATH"] ?? "./earthborne.db";
 const RANGERSDB_IMAGE_BASE = "https://static.rangersdb.com/img/card";
+const UPSTREAM_PACK_IDS: Record<string, string> = {
+  ebr: "core",
+};
 
 const db = getDatabase(SQLITE_PATH);
 
@@ -59,7 +62,8 @@ async function run() {
       continue;
     }
 
-    const url = `${RANGERSDB_IMAGE_BASE}/${card.pack_id}/${card.code}.jpg`;
+    const upstreamPackId = getUpstreamPackId(card.pack_id);
+    const url = `${RANGERSDB_IMAGE_BASE}/${upstreamPackId}/${card.code}.jpg`;
 
     let res: Response;
     try {
@@ -99,4 +103,8 @@ async function fileExists(filePath: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+function getUpstreamPackId(packId: string) {
+  return UPSTREAM_PACK_IDS[packId] ?? packId;
 }
