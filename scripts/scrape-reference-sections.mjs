@@ -135,6 +135,9 @@ function extractPage(root, path) {
 }
 
 function extractArticleNode(root) {
+  const indexPage = root.querySelector(".generatedIndexPage_vN6x");
+  if (indexPage) return indexPage;
+
   return (
     root.querySelector("main article") ??
     root.querySelector("article") ??
