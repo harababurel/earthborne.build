@@ -10,6 +10,11 @@ import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseHtml } from "node-html-parser";
+import {
+  cachedFetchText,
+  createCache,
+  parseCacheArgs,
+} from "./lib/scraper-cache.mjs";
 
 const BASE = "https://thelivingvalley.earthbornegames.com";
 const OUTPUT_DIR = join(
@@ -63,7 +68,7 @@ const SECTIONS = [
   },
 ];
 
-async function crawlSection(section) {
+async function crawlSection(section, cache) {
   const queue = section.roots.map(normalizePath);
   const queued = new Set(queue);
   const order = new Map(queue.map((path, index) => [path, index]));
@@ -74,7 +79,7 @@ async function crawlSection(section) {
   async function worker() {
     while (queue.length) {
       const path = queue.shift();
-      const html = await fetchPage(path);
+      const { html, fromCache } = await fetchPage(path, cache);
       const root = parseHtml(html);
       const page = extractPage(root, path);
       const officialNavTree = extractOfficialNavTree(root, section.title);
@@ -84,7 +89,14 @@ async function crawlSection(section) {
       }
 
       pages.push(page);
-      console.log(`  ${pages.length}. ${page.title}`);
+      const prefix = fromCache
+        ? "[H]"
+        : cache.mode === "bypass"
+          ? "[B]"
+          : cache.mode === "refresh"
+            ? "[R]"
+            : "[M]";
+      console.log(`  ${prefix} ${pages.length}. ${page.title}`);
 
       for (const href of extractDocLinks(root)) {
         const next = normalizePath(href);
@@ -632,33 +644,16 @@ function replacePuaHtml(str) {
     .replaceAll("\u2731", '<span class="core-harm"></span>');
 }
 
-async function fetchPage(path, retries = 3) {
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-    try {
-      const res = await fetch(`${BASE}${path}`, {
-        headers: {
-          "user-agent": "Mozilla/5.0 earthborne.build reference scraper",
-        },
-        signal: controller.signal,
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status} for ${path}`);
-      }
-
-      return res.text();
-    } catch (err) {
-      if (attempt === retries) throw err;
-      await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
-    } finally {
-      clearTimeout(timeout);
-    }
-  }
-
-  throw new Error(`Failed to fetch ${path}`);
+async function fetchPage(path, cache, retries = 3) {
+  const { body, fromCache } = await cachedFetchText(`${BASE}${path}`, {
+    cache,
+    retries,
+    timeoutMs: FETCH_TIMEOUT_MS,
+    headers: {
+      "user-agent": "Mozilla/5.0 earthborne.build reference scraper",
+    },
+  });
+  return { html: body, fromCache };
 }
 
 async function main() {
@@ -682,7 +677,9 @@ async function main() {
   }
 
   const s = cache.stats();
-  console.log(`\nCache: ${s.hits} hits, ${s.misses} misses, ${s.errors} errors, ${s.refreshes} refreshes, ${s.bypasses} bypasses  ·  cache dir: ${cache.dir}`);
+  console.log(
+    `\nCache: ${s.hits} hits, ${s.misses} misses, ${s.errors} errors, ${s.refreshes} refreshes, ${s.bypasses} bypasses  ·  cache dir: ${cache.dir}`,
+  );
 }
 
 main().catch((err) => {
