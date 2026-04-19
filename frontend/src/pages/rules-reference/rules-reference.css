@@ -99,12 +99,17 @@ html[data-theme="light"] {
   padding-left: 1rem;
 }
 
+.toc li:has(> details) {
+  list-style-type: none;
+}
+
 .toc details {
   margin-top: 0;
 }
 
 .toc summary {
   cursor: pointer;
+  list-style-position: outside;
 }
 
 .toc summary > a {
@@ -181,4 +186,16 @@ html[data-theme="light"] .toc a {
   max-width: 90ch;
   margin-inline: auto;
   padding-block: 1rem;
+}
+
+.rules img {
+  max-width: 100%;
+  height: auto;
+}
+
+.rules blockquote.admonition {
+  border-left: 3px solid var(--nord-9);
+  margin-left: 0;
+  padding-left: 0.75rem;
+  color: var(--palette-6);
 }

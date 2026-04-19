@@ -9,6 +9,7 @@
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parse as parseHtml } from "node-html-parser";
 
 const BASE = "https://thelivingvalley.earthbornegames.com";
 const OUTPUT_DIR = join(
@@ -74,8 +75,9 @@ async function crawlSection(section) {
     while (queue.length) {
       const path = queue.shift();
       const html = await fetchPage(path);
-      const page = extractPage(html, path);
-      const officialNavTree = extractOfficialNavTree(html, section.title);
+      const root = parseHtml(html);
+      const page = extractPage(root, path);
+      const officialNavTree = extractOfficialNavTree(root, section.title);
 
       if (officialNavTree) {
         navTree = mergeNavTrees(navTree, officialNavTree);
@@ -84,7 +86,7 @@ async function crawlSection(section) {
       pages.push(page);
       console.log(`  ${pages.length}. ${page.title}`);
 
-      for (const href of extractDocLinks(html)) {
+      for (const href of extractDocLinks(root)) {
         const next = normalizePath(href);
         if (
           next &&
@@ -113,92 +115,197 @@ async function crawlSection(section) {
   };
 }
 
-function extractPage(html, path) {
-  const title = extractTitle(html) ?? pathTitle(path);
-  const article = normalizePath(path).startsWith("/docs/category/")
-    ? ""
-    : extractArticle(html);
-  const body = sanitize(article, path);
-
-  return {
-    body,
-    id: pathId(path),
-    path: normalizePath(path),
-    title,
-  };
+function extractPage(root, path) {
+  const title = extractTitle(root) ?? pathTitle(path);
+  const article = extractArticleNode(root);
+  const body = article ? sanitize(article, path) : "";
+  return { body, id: pathId(path), path: normalizePath(path), title };
 }
 
-function extractArticle(html) {
-  const match = html.match(/<article[^>]*>([\s\S]*?)<\/article>/);
-  if (match) return match[1];
-
-  const header = html.match(/<header[^>]*>[\s\S]*?<\/header>/)?.[0] ?? "";
-  return header;
+function extractArticleNode(root) {
+  return (
+    root.querySelector("main article") ??
+    root.querySelector("article") ??
+    root.querySelector("header") ??
+    null
+  );
 }
 
-function extractTitle(html) {
-  const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
-  const title = h1?.[1].replace(/<[^>]+>/g, "").trim();
-  return title ? decodeHtml(title) : null;
+function extractTitle(root) {
+  const text = root.querySelector("h1")?.text?.trim();
+  return text ? decodeHtml(text) : null;
 }
 
-function extractDocLinks(html) {
-  const links = [];
-  for (const match of html.matchAll(/href="([^"]+)"/g)) {
-    const path = normalizePath(match[1]);
-    if (path?.startsWith("/docs/")) links.push(path);
+function extractDocLinks(root) {
+  return root
+    .querySelectorAll("a[href]")
+    .map((a) => normalizePath(a.getAttribute("href")))
+    .filter((path) => path?.startsWith("/docs/"));
+}
+
+function sanitize(article, sourcePath) {
+  // Remove UI chrome inside the article
+  for (const el of article.querySelectorAll("footer, svg, button, h1")) {
+    el.remove();
   }
-  return links;
-}
+  for (const el of article.querySelectorAll("nav")) {
+    el.remove();
+  }
 
-function sanitize(html, sourcePath) {
-  let content = html;
+  // Absolutize image src and keep only src + alt
+  for (const img of article.querySelectorAll("img")) {
+    const src = img.getAttribute("src") ?? "";
+    const abs = toAbsoluteUrl(src, sourcePath);
+    if (!abs) {
+      img.remove();
+      continue;
+    }
+    const alt = img.getAttribute("alt") ?? "";
+    for (const key of Object.keys(img.attributes)) {
+      img.removeAttribute(key);
+    }
+    img.setAttribute("src", abs);
+    if (alt) img.setAttribute("alt", alt);
+  }
 
-  content = content.replace(/<!--\s*-->/g, " ");
-  content = content.replace(/<footer[\s\S]*$/g, "");
-  content = content.replace(
-    /<nav[^>]*class="[^"]*breadcrumbs[^"]*"[\s\S]*?<\/nav>/g,
-    "",
-  );
-  content = content.replace(
-    /<nav[^>]*aria-label="Docs pages"[\s\S]*?<\/nav>/g,
-    "",
-  );
-  content = content.replace(/<nav[\s\S]*?<\/nav>/g, "");
-  content = content.replace(/<svg[\s\S]*?<\/svg>/g, "");
-  content = content.replace(/<img[^>]*\/?>/g, "");
-  content = content.replace(/<button[^>]*>[\s\S]*?<\/button>/g, "");
-  content = content.replace(/<h1[^>]*>[\s\S]*?<\/h1>/g, "");
-  content = content.replace(/<h6/g, "<h6").replace(/<\/h6>/g, "</h6>");
-  content = content.replace(/<h5/g, "<h6").replace(/<\/h5>/g, "</h6>");
-  content = content.replace(/<h4/g, "<h6").replace(/<\/h4>/g, "</h6>");
-  content = content.replace(/<h3/g, "<h5").replace(/<\/h3>/g, "</h5>");
-  content = content.replace(/<h2/g, "<h4").replace(/<\/h2>/g, "</h4>");
-  content = content.replace(/\s+class="[^"]*"/g, "");
-  content = content.replace(/\s+id="[^"]*"/g, "");
-  content = content.replace(/\s+style="[^"]*"/g, "");
-  content = content.replace(/\s+title="[^"]*"/g, "");
-  content = content.replace(/\s+data-[a-z-]+=(?:"[^"]*"|'[^']*')/g, "");
-  content = content.replace(/\s+aria-[a-z-]+=(?:"[^"]*"|'[^']*')/g, "");
-  content = content.replace(/\s+item[a-zA-Z]+=(?:"[^"]*"|'[^']*')/g, "");
-  content = content.replace(/\s+role=(?:"[^"]*"|'[^']*')/g, "");
-  content = content.replace(/<meta[^>]*>/g, "");
-  content = content.replace(/<span[^>]*>/g, "").replace(/<\/span>/g, "");
-  content = content.replace(/<div[^>]*>/g, "").replace(/<\/div>/g, "");
+  // Absolutize links
+  for (const a of article.querySelectorAll("a[href]")) {
+    const href = a.getAttribute("href") ?? "";
+    if (
+      !href.startsWith("http") &&
+      !href.startsWith("#") &&
+      !href.startsWith("mailto:")
+    ) {
+      const abs = toAbsoluteUrl(href, sourcePath);
+      if (abs) a.setAttribute("href", abs);
+    }
+  }
+
+  // Convert Docusaurus admonitions to blockquotes before stripping classes
+  for (const adm of article.querySelectorAll('[class*="admonition"]')) {
+    if (adm.tagName === "BLOCKQUOTE") continue;
+    const contentEl = adm.querySelector('[class*="admonition-content"]') ?? adm;
+    const bqNode = parseHtml(
+      `<blockquote class="admonition">${contentEl.innerHTML}</blockquote>`,
+    ).firstChild;
+    if (bqNode) adm.replaceWith(bqNode);
+  }
+
+  // Strip attributes (preserve href on anchors, src/alt on images, class="admonition" on blockquotes)
+  for (const el of article.querySelectorAll("*")) {
+    if (el.tagName === "IMG") continue;
+
+    if (el.tagName === "A") {
+      const href = el.getAttribute("href");
+      for (const key of Object.keys(el.attributes)) {
+        el.removeAttribute(key);
+      }
+      if (href) el.setAttribute("href", href);
+      continue;
+    }
+
+    if (
+      el.tagName === "BLOCKQUOTE" &&
+      el.getAttribute("class") === "admonition"
+    ) {
+      for (const key of Object.keys(el.attributes)) {
+        if (key !== "class") el.removeAttribute(key);
+      }
+      continue;
+    }
+
+    for (const key of Object.keys(el.attributes)) {
+      el.removeAttribute(key);
+    }
+  }
+
+  // Remove empty anchors
+  for (const a of article.querySelectorAll("a")) {
+    if (!a.text.trim() && !a.querySelector("img")) a.remove();
+  }
+
+  // Unwrap spans, then divs (reverse = children before parents)
+  for (const el of [...article.querySelectorAll("span")].reverse()) {
+    el.replaceWith(...el.childNodes);
+  }
+  for (const el of [...article.querySelectorAll("div")].reverse()) {
+    el.replaceWith(...el.childNodes);
+  }
+
+  let content = article.innerHTML;
+
+  // Remove emoji
+  content = content.replace(/\u{1F5C3}\uFE0F|\u{1F4C4}\uFE0F/gu, "");
+
+  // Replace Living Valley PUA icon characters with core font spans.
+  // Codepoints identified by cross-referencing the scraped text context with
+  // the EBR game symbols and our icons-core.css definitions.
+  content = content
+    .replaceAll("\ue010", '<span class="core-reason"></span>')
+    .replaceAll("\ue011", '<span class="core-conflict"></span>')
+    .replaceAll("\ue012", '<span class="core-connection"></span>')
+    .replaceAll("\ue013", '<span class="core-exploration"></span>')
+    .replaceAll("\ue015", '<span class="core-harm"></span>')
+    .replaceAll("\ue016", '<span class="core-progress"></span>')
+    .replaceAll("\ue017", '<span class="core-crest"></span>')
+    .replaceAll("\ue018", '<span class="core-mountain"></span>')
+    .replaceAll("\ue019", '<span class="core-sun"></span>')
+    .replaceAll("\ue01a", '<span class="core-reshuffle"></span>')
+    .replaceAll("\ue01b", '<span class="core-conditional"></span>')
+    .replaceAll("\ue01c", '<span class="core-guide"></span>')
+    .replaceAll("\ue01d", '<span class="core-per_ranger"></span>');
+
+  // Color EBR stat keywords using the same classes as card text.
+  content = content
+    .replace(/\bAwareness\b/g, '<b class="color-AWA">Awareness</b>')
+    .replace(/\bFitness\b/g, '<b class="color-FIT">Fitness</b>')
+    .replace(/\bFocus\b/g, '<b class="color-FOC">Focus</b>')
+    .replace(/\bSpirit\b/g, '<b class="color-SPI">Spirit</b>');
+
+  // Heading normalization (shift down 2 levels; h1 already removed, page title uses h3)
+  content = content
+    .replace(/<h5([^>]*)>/g, "<h6$1>")
+    .replace(/<\/h5>/g, "</h6>");
+  content = content
+    .replace(/<h4([^>]*)>/g, "<h6$1>")
+    .replace(/<\/h4>/g, "</h6>");
+  content = content
+    .replace(/<h3([^>]*)>/g, "<h5$1>")
+    .replace(/<\/h3>/g, "</h5>");
+  content = content
+    .replace(/<h2([^>]*)>/g, "<h4$1>")
+    .replace(/<\/h2>/g, "</h4>");
+
+  // Fix malformed nesting (safety net for edge cases)
   content = content.replace(/<p><em><p>/g, "<p><em>");
   content = content.replace(/<\/p><\/em><\/p>/g, "</em></p>");
   content = content.replace(/<p><p><strong>/g, "<p><strong>");
   content = content.replace(/<strong><p>/g, "<p><strong>");
   content = content.replace(/<\/p><\/strong>/g, "</strong></p>");
   content = content.replace(/<\/p><\/strong><\/p>/g, "</strong></p>");
-  content = content.replace(/\u{1F5C3}\uFE0F|\u{1F4C4}\uFE0F/gu, "");
+
+  // Trim leading whitespace in headings
   content = content.replace(/<h4>\s+/g, "<h4>");
+
+  // Remove empty header elements
   content = content.replace(/<header>\s*<\/header>/g, "");
-  content = absolutizeLinks(content, sourcePath);
-  content = content.replace(/<a[^>]*>[\s\u200b​]*<\/a>/g, "");
+
+  // Collapse whitespace
   content = content.replace(/\n{3,}/g, "\n\n").trim();
 
   return content;
+}
+
+function toAbsoluteUrl(url, sourcePath) {
+  if (!url) return null;
+  if (url.startsWith("data:")) return url;
+  if (url.startsWith("http")) return url;
+  if (url.startsWith("/")) return `${BASE}${url}`;
+  try {
+    return new URL(url, `${BASE}${sourcePath}`).toString();
+  } catch {
+    return null;
+  }
 }
 
 function rewriteInternalLinks(html, pageIds) {
@@ -206,21 +313,6 @@ function rewriteInternalLinks(html, pageIds) {
     const path = normalizePath(href);
     if (path && pageIds.has(path)) return `href="#${pageIds.get(path)}"`;
     return `href="${href}"`;
-  });
-}
-
-function absolutizeLinks(html, sourcePath) {
-  return html.replace(/href="([^"]+)"/g, (_, href) => {
-    if (href.startsWith("http") || href.startsWith("#")) {
-      return `href="${href}"`;
-    }
-
-    if (href.startsWith("/")) {
-      return `href="${BASE}${href}"`;
-    }
-
-    const url = new URL(sourcePath, BASE);
-    return `href="${new URL(href, url).toString()}"`;
   });
 }
 
@@ -234,13 +326,13 @@ function buildToc(section, pages, navTree) {
       const links = group.pages
         .map(
           (page) =>
-            `        <li><a href="#${page.id}">${escapeHtml(page.title)}</a></li>`,
+            `        <li><a href="#${page.id}">${replacePuaHtml(escapeHtml(page.title))}</a></li>`,
         )
         .join("\n");
 
       return `    <li>
       <details open>
-        <summary><a href="#${group.id}">${escapeHtml(group.title)}</a></summary>
+        <summary><a href="#${group.id}">${replacePuaHtml(escapeHtml(group.title))}</a></summary>
         <ul>
 ${links}
         </ul>
@@ -275,14 +367,14 @@ function renderOfficialTocNode(node, pageIds, depth) {
     .join("\n");
 
   if (!children) {
-    return `${indent}<li><a href="#${id}">${escapeHtml(node.title)}</a></li>`;
+    return `${indent}<li><a href="#${id}">${replacePuaHtml(escapeHtml(node.title))}</a></li>`;
   }
 
   const open = depth === 2 ? " open" : "";
 
   return `${indent}<li>
 ${indent}  <details${open}>
-${indent}    <summary><a href="#${id}">${escapeHtml(node.title)}</a></summary>
+${indent}    <summary><a href="#${id}">${replacePuaHtml(escapeHtml(node.title))}</a></summary>
 ${indent}    <ul>
 ${children}
 ${indent}    </ul>
@@ -290,77 +382,35 @@ ${indent}  </details>
 ${indent}</li>`;
 }
 
-function groupTocPages(section, pages) {
-  if (section.output === "campaign-guides.html") {
-    return groupedBySegment(pages, "/docs/campaign_guides/", 3);
-  }
-
-  if (section.output === "one-day-missions.html") {
-    return groupedBySegment(pages, "/docs/one_day_missions/", 3);
-  }
-
-  if (section.output === "updates.html") {
-    return groupedBySegment(pages, "/docs/", 2);
-  }
-
-  return [
-    {
-      id: sectionId(section.output),
-      pages,
-      title: section.title,
-    },
-  ];
-}
-
-function extractOfficialNavTree(html, title) {
-  const sidebar = html.match(
-    /<nav[^>]*aria-label="Docs sidebar"[^>]*>([\s\S]*?)<\/nav>/,
-  )?.[1];
-
+function extractOfficialNavTree(root, title) {
+  const sidebar = root.querySelector('nav[aria-label="Docs sidebar"]');
   if (!sidebar) return null;
-
-  const nodes = parseSidebarNodes(sidebar);
+  const firstUl = sidebar.querySelector("ul");
+  if (!firstUl) return null;
+  const nodes = buildNavNodes(firstUl);
   return findNavNode(nodes, title);
 }
 
-function parseSidebarNodes(html) {
-  const root = [];
-  const stack = [root];
-  const tokenPattern =
-    /<ul\b[^>]*>|<\/ul>|<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g;
-
-  for (const match of html.matchAll(tokenPattern)) {
-    const token = match[0];
-
-    if (token.startsWith("<ul")) {
-      const current = stack.at(-1);
-      const parent = current.at(-1);
-      if (!parent && current.length === 0) continue;
-
-      const children = parent?.children ?? [];
-      if (parent) parent.children = children;
-      stack.push(children);
-      continue;
-    }
-
-    if (token === "</ul>") {
-      if (stack.length > 1) stack.pop();
-      continue;
-    }
-
-    const path = normalizePath(match[1]);
-    const text = stripTags(match[2]);
-
-    if (path && text) {
-      stack.at(-1).push({
-        children: [],
+function buildNavNodes(ul) {
+  const nodes = [];
+  for (const li of ul.childNodes.filter(
+    (n) => n.nodeType === 1 && n.tagName === "LI",
+  )) {
+    const a = li.querySelector("a[href]");
+    const childUl = li.childNodes.find(
+      (n) => n.nodeType === 1 && n.tagName === "UL",
+    );
+    const path = normalizePath(a?.getAttribute("href"));
+    const title = a ? stripTags(a.innerHTML) : "";
+    if (path && title) {
+      nodes.push({
+        children: childUl ? buildNavNodes(childUl) : [],
         path,
-        title: text,
+        title,
       });
     }
   }
-
-  return root;
+  return nodes;
 }
 
 function findNavNode(nodes, title) {
@@ -404,6 +454,28 @@ function cloneNavTree(node) {
     path: node.path,
     title: node.title,
   };
+}
+
+function groupTocPages(section, pages) {
+  if (section.output === "campaign-guides.html") {
+    return groupedBySegment(pages, "/docs/campaign_guides/", 3);
+  }
+
+  if (section.output === "one-day-missions.html") {
+    return groupedBySegment(pages, "/docs/one_day_missions/", 3);
+  }
+
+  if (section.output === "updates.html") {
+    return groupedBySegment(pages, "/docs/", 2);
+  }
+
+  return [
+    {
+      id: sectionId(section.output),
+      pages,
+      title: section.title,
+    },
+  ];
 }
 
 function groupedBySegment(pages, prefix, segmentIndex) {
@@ -451,7 +523,7 @@ function buildRules(section, pages) {
     .map((page) => {
       const body = rewriteInternalLinks(page.body, pageIds);
       return `  <div class="rules-page" data-page-id="${page.id}">
-    <h3 id="${page.id}">${escapeHtml(page.title)}</h3>
+    <h3 id="${page.id}">${replacePuaHtml(escapeHtml(page.title))}</h3>
 ${body}
   </div>`;
     })
@@ -535,6 +607,29 @@ function escapeHtml(str) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+// Apply PUA → core-* span substitution to an already-HTML-escaped string.
+// Called after escapeHtml() so the span tags are not double-escaped.
+// Also replaces standard Unicode approximations the Living Valley nav sidebar
+// uses in place of the custom-font PUA chars (▲ = progress, ✱ = harm).
+function replacePuaHtml(str) {
+  return str
+    .replaceAll("\ue010", '<span class="core-reason"></span>')
+    .replaceAll("\ue011", '<span class="core-conflict"></span>')
+    .replaceAll("\ue012", '<span class="core-connection"></span>')
+    .replaceAll("\ue013", '<span class="core-exploration"></span>')
+    .replaceAll("\ue015", '<span class="core-harm"></span>')
+    .replaceAll("\ue016", '<span class="core-progress"></span>')
+    .replaceAll("\ue017", '<span class="core-crest"></span>')
+    .replaceAll("\ue018", '<span class="core-mountain"></span>')
+    .replaceAll("\ue019", '<span class="core-sun"></span>')
+    .replaceAll("\ue01a", '<span class="core-reshuffle"></span>')
+    .replaceAll("\ue01b", '<span class="core-conditional"></span>')
+    .replaceAll("\ue01c", '<span class="core-guide"></span>')
+    .replaceAll("\ue01d", '<span class="core-per_ranger"></span>')
+    .replaceAll("\u25b2", '<span class="core-progress"></span>')
+    .replaceAll("\u2731", '<span class="core-harm"></span>');
 }
 
 async function fetchPage(path, retries = 3) {

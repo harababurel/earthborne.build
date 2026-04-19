@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* biome-ignore-all lint/suspicious/noConsole: scraper progress output. */
 /**
  * Fetches all EBR rules glossary entries from thelivingvalley.earthbornegames.com
  * and generates frontend/src/assets/rules.html.
@@ -7,10 +8,11 @@
  */
 
 import { writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { join, dirname } from "node:path";
 
 const BASE = "https://thelivingvalley.earthbornegames.com/docs/rules_glossary";
+const BASE_ORIGIN = "https://thelivingvalley.earthbornegames.com";
 const OUTPUT = join(
   dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -201,10 +203,7 @@ function extractContent(html, letter, slug) {
   content = content.replace(/<header[^>]*>[\s\S]*?<\/header>/g, "");
 
   // Remove pagination nav at bottom
-  content = content.replace(
-    /<nav[^>]*aria-label[^>]*>[\s\S]*?<\/nav>/g,
-    "",
-  );
+  content = content.replace(/<nav[^>]*aria-label[^>]*>[\s\S]*?<\/nav>/g, "");
   // Docusaurus pagination wrapper
   content = content.replace(
     /<div[^>]*class="[^"]*pagination[^"]*"[^>]*>[\s\S]*$/,
@@ -244,8 +243,21 @@ function extractContent(html, letter, slug) {
   // Remove SVGs (icons/images)
   content = content.replace(/<svg[\s\S]*?<\/svg>/g, "");
 
-  // Remove <img> tags
-  content = content.replace(/<img[^>]*\/?>/g, "");
+  // Absolutize image src and keep only src + alt (same pattern as scrape-reference-sections.mjs)
+  content = content.replace(/<img([^>]*)>/g, (_match, attrs) => {
+    const srcMatch = attrs.match(/\bsrc="([^"]*)"/);
+    const altMatch = attrs.match(/\balt="([^"]*)"/);
+    if (!srcMatch) return "";
+    const src = srcMatch[1];
+    const abs = src.startsWith("http")
+      ? src
+      : src.startsWith("/")
+        ? `${BASE_ORIGIN}${src}`
+        : null;
+    if (!abs) return "";
+    const alt = altMatch ? ` alt="${altMatch[1]}"` : "";
+    return `<img src="${abs}"${alt}>`;
+  });
 
   // Unwrap <div> tags (strip tags, keep content) — Docusaurus wraps content in divs
   content = content.replace(/<div[^>]*>/g, "");
@@ -260,6 +272,29 @@ function extractContent(html, letter, slug) {
 
   // Clean up excessive whitespace / blank lines
   content = content.replace(/\n{3,}/g, "\n\n").trim();
+
+  // Replace Living Valley PUA icon characters with core font spans.
+  content = content
+    .replaceAll("\ue010", '<span class="core-reason"></span>')
+    .replaceAll("\ue011", '<span class="core-conflict"></span>')
+    .replaceAll("\ue012", '<span class="core-connection"></span>')
+    .replaceAll("\ue013", '<span class="core-exploration"></span>')
+    .replaceAll("\ue015", '<span class="core-harm"></span>')
+    .replaceAll("\ue016", '<span class="core-progress"></span>')
+    .replaceAll("\ue017", '<span class="core-crest"></span>')
+    .replaceAll("\ue018", '<span class="core-mountain"></span>')
+    .replaceAll("\ue019", '<span class="core-sun"></span>')
+    .replaceAll("\ue01a", '<span class="core-reshuffle"></span>')
+    .replaceAll("\ue01b", '<span class="core-conditional"></span>')
+    .replaceAll("\ue01c", '<span class="core-guide"></span>')
+    .replaceAll("\ue01d", '<span class="core-per_ranger"></span>');
+
+  // Color EBR stat keywords using the same classes as card text.
+  content = content
+    .replace(/\bAwareness\b/g, '<b class="color-AWA">Awareness</b>')
+    .replace(/\bFitness\b/g, '<b class="color-FIT">Fitness</b>')
+    .replace(/\bFocus\b/g, '<b class="color-FOC">Focus</b>')
+    .replace(/\bSpirit\b/g, '<b class="color-SPI">Spirit</b>');
 
   return { title, body: content };
 }
