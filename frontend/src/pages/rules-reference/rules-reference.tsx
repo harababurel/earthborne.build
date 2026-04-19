@@ -47,6 +47,7 @@ type ReferenceContent = {
   defaultPageId: string | null;
   pages: Map<string, ReferencePage>;
   toc: string;
+  elements: Map<string, string>;
 };
 
 function RulesReference() {
@@ -64,11 +65,17 @@ function RulesReference() {
     REFERENCE_SECTIONS[1];
   const activeSectionValue = activeSection.value;
   const reference = useMemo(() => parseReferenceContent(html), [html]);
+
+  const pageIdForSelected = reference.pages.has(selectedPageId)
+    ? selectedPageId
+    : reference.elements.get(selectedPageId);
+
   const activePage =
-    reference.pages.get(selectedPageId) ??
+    (pageIdForSelected ? reference.pages.get(pageIdForSelected) : undefined) ??
     (reference.defaultPageId
       ? reference.pages.get(reference.defaultPageId)
       : undefined);
+
   const toc = useMemo(
     () => filterToc(reference.toc, search),
     [reference.toc, search],
@@ -118,7 +125,6 @@ function RulesReference() {
       setSelectedPageId(getCurrentHash());
       setSearch("");
       setTocOpen(false);
-      window.scrollTo({ behavior: "auto", top: 0 });
     };
 
     window.addEventListener("hashchange", onHashChange);
@@ -127,6 +133,21 @@ function RulesReference() {
       window.removeEventListener("hashchange", onHashChange);
     };
   }, []);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger scroll after dom update
+  useEffect(() => {
+    if (selectedPageId) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(selectedPageId);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ behavior: "auto", top: 0 });
+        }
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+    window.scrollTo({ behavior: "auto", top: 0 });
+  }, [selectedPageId, activePage?.id, html]);
 
   useEffect(() => {
     const activeLink = tocRef.current?.querySelector(
@@ -280,6 +301,7 @@ function parseReferenceContent(html: string): ReferenceContent {
     ? wrappedPages
     : splitLegacyPages(container);
   const pages = new Map<string, ReferencePage>();
+  const elements = new Map<string, string>();
 
   for (const page of pageNodes) {
     const heading = page.querySelector("[id]");
@@ -292,12 +314,17 @@ function parseReferenceContent(html: string): ReferenceContent {
       id,
       title: heading?.textContent?.trim() ?? id,
     });
+
+    for (const el of page.querySelectorAll("[id]")) {
+      if (el.id) elements.set(el.id, id);
+    }
   }
 
   return {
     defaultPageId: pages.keys().next().value ?? null,
     pages,
     toc,
+    elements,
   };
 }
 

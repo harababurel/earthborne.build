@@ -228,51 +228,37 @@ function sanitize(article, sourcePath) {
 
     if (el.tagName === "A") {
       const href = el.getAttribute("href");
+      const id = el.getAttribute("id");
       for (const key of Object.keys(el.attributes)) {
         el.removeAttribute(key);
       }
       if (href) el.setAttribute("href", href);
+      if (id) el.setAttribute("id", id);
       continue;
     }
 
+    let keepClass = false;
     if (
       el.tagName === "BLOCKQUOTE" &&
       el.getAttribute("class") === "admonition"
-    ) {
-      for (const key of Object.keys(el.attributes)) {
-        if (key !== "class") el.removeAttribute(key);
-      }
-      continue;
-    }
-
+    )
+      keepClass = true;
     if (
       el.tagName === "SECTION" &&
       el.getAttribute("class") === "category-list"
-    ) {
-      for (const key of Object.keys(el.attributes)) {
-        if (key !== "class") el.removeAttribute(key);
-      }
-      continue;
-    }
-
-    if (el.tagName === "P" && el.getAttribute("class") === "rules-option") {
-      for (const key of Object.keys(el.attributes)) {
-        if (key !== "class") el.removeAttribute(key);
-      }
-      continue;
-    }
-
+    )
+      keepClass = true;
+    if (el.tagName === "P" && el.getAttribute("class") === "rules-option")
+      keepClass = true;
     if (
       (el.tagName === "H5" || el.tagName === "H6") &&
       el.getAttribute("class") === "rules-conditional"
-    ) {
-      for (const key of Object.keys(el.attributes)) {
-        if (key !== "class") el.removeAttribute(key);
-      }
-      continue;
-    }
+    )
+      keepClass = true;
 
     for (const key of Object.keys(el.attributes)) {
+      if (key === "id") continue;
+      if (key === "class" && keepClass) continue;
       el.removeAttribute(key);
     }
   }
