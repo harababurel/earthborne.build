@@ -54,10 +54,16 @@ export function filterAlternates(_card: Card) {
   return true;
 }
 
-// ER has no encounter cards — no card is an "encounter card", so the player
-// card filter (not(filterEncounterCards)) correctly passes all cards.
-export function filterEncounterCards(_card: Card) {
-  return false;
+// Non-player cards in ER are mapped to the "encounter" card type filter.
+export function filterEncounterCards(card: Card) {
+  return ![
+    "gear",
+    "attachment",
+    "moment",
+    "role",
+    "aspect",
+    "attribute",
+  ].includes(card.type_code);
 }
 
 // ER has no Mythos faction. All cards pass.

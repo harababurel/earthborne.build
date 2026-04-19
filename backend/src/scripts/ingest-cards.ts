@@ -121,23 +121,33 @@ async function ingest() {
       .execute();
     log("info", `Inserted ${packs.length} packs`);
 
-    // Cards — one JSON file per pack inside packs/{pack_id}/{pack_id}.json
+    // Cards — all JSON files per pack inside packs/{pack_id}/*.json
     const dataDir = CARD_DATA_DIR as string;
     const packDirs = await fs.readdir(path.join(dataDir, "packs"));
     let totalCards = 0;
 
     for (const packId of packDirs) {
-      const packFile = path.join(dataDir, "packs", packId, `${packId}.json`);
-      const rawCards = await readFile<RawCard[]>(packFile);
+      const packDirPath = path.join(dataDir, "packs", packId);
+      const files = await fs.readdir(packDirPath);
 
-      const cards = rawCards.map((c) =>
-        normalizeCard(c, remapPackId({ id: packId }).id),
-      );
-      if (cards.length === 0) continue;
+      for (const file of files) {
+        if (!file.endsWith(".json")) continue;
 
-      await tx.insertInto("card").values(cards).execute();
-      totalCards += cards.length;
-      log("info", `Inserted ${cards.length} cards from pack '${packId}'`);
+        const packFile = path.join(packDirPath, file);
+        const rawCards = await readFile<RawCard[]>(packFile);
+
+        const cards = rawCards.map((c) =>
+          normalizeCard(c, remapPackId({ id: packId }).id),
+        );
+        if (cards.length === 0) continue;
+
+        await tx.insertInto("card").values(cards).execute();
+        totalCards += cards.length;
+        log(
+          "info",
+          `Inserted ${cards.length} cards from pack '${packId}' file '${file}'`,
+        );
+      }
     }
 
     log("info", `Inserted ${totalCards} cards total`);

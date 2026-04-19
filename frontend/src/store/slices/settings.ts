@@ -103,6 +103,7 @@ export function getInitialSettings(): SettingsState {
     cardShowDetails: true,
     cardSize: "standard",
     cardShowThumbnail: true,
+    colorScheme: "botanical",
     collection: {},
     flags: {},
     fontSize: 100,

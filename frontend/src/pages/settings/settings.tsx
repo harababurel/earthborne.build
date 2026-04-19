@@ -23,6 +23,7 @@ import { BackupRestore } from "./backup-restore";
 import { CardDataSync } from "./card-data-sync";
 import { CardDisplaySettings } from "./card-display";
 import { CardModalPopularDecksSetting } from "./card-modal-popular-decks";
+import { ColorSchemeSetting } from "./color-scheme";
 import { Connections } from "./connections";
 import { DefaultEnvironmentSetting } from "./default-environment";
 import { DevModeSetting } from "./dev-mode";
@@ -43,14 +44,15 @@ function Settings() {
   const settings = useStore((state) => state.settings);
   const applySettings = useStore((state) => state.applySettings);
 
-  const [colorTheme, updateColorTheme] = useColorThemeManager();
+  const colorThemeManager = useColorThemeManager();
 
   return (
     <SettingsInner
-      colorTheme={colorTheme}
-      key={`${settingsKey(settings)}-${colorTheme}`}
+      colorTheme={colorThemeManager.theme}
+      colorScheme={colorThemeManager.colorScheme}
+      key={`${settingsKey(settings)}-${colorThemeManager.theme}-${colorThemeManager.colorScheme}`}
       settings={settings}
-      updateColorTheme={updateColorTheme}
+      updateColorTheme={colorThemeManager.update}
       updateSettings={applySettings}
     />
   );
@@ -58,13 +60,15 @@ function Settings() {
 
 function SettingsInner({
   colorTheme: persistedColorTheme,
+  colorScheme: persistedColorScheme,
   settings: persistedSettings,
   updateColorTheme,
   updateSettings,
 }: {
   colorTheme: string;
+  colorScheme: string;
   settings: SettingsState;
-  updateColorTheme: (theme: string) => void;
+  updateColorTheme: (theme: string, scheme: string) => void;
   updateSettings: (settings: SettingsState) => Promise<void>;
 }) {
   const { t } = useTranslation();
@@ -77,6 +81,7 @@ function SettingsInner({
 
   const [settings, setSettings] = useState(structuredClone(persistedSettings));
   const [theme, setTheme] = useState<string>(persistedColorTheme);
+  const [colorScheme, setColorScheme] = useState<string>(persistedColorScheme);
 
   const onSubmit = useCallback(
     async (evt: React.FormEvent) => {
@@ -88,8 +93,8 @@ function SettingsInner({
       });
 
       try {
-        await updateSettings(settings);
-        updateColorTheme(theme);
+        await updateSettings({ ...settings, colorScheme: colorScheme as any });
+        updateColorTheme(theme, colorScheme);
         toast.dismiss(toastId);
       } catch (err) {
         toast.dismiss(toastId);
@@ -99,7 +104,7 @@ function SettingsInner({
         });
       }
     },
-    [updateSettings, settings, toast, t, theme, updateColorTheme],
+    [updateSettings, settings, toast, t, theme, colorScheme, updateColorTheme],
   );
 
   return (
@@ -170,6 +175,10 @@ function SettingsInner({
               <Section title={t("settings.display.title")}>
                 <LocaleSetting settings={settings} setSettings={setSettings} />
                 <ThemeSetting setTheme={setTheme} theme={theme} />
+                <ColorSchemeSetting
+                  colorScheme={colorScheme}
+                  setColorScheme={setColorScheme}
+                />
                 <FontSizeSetting
                   settings={settings}
                   setSettings={setSettings}

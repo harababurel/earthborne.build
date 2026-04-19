@@ -516,9 +516,7 @@ const selectDeckInvestigatorFilter = createSelector(
     if (!investigatorBack) return undefined;
 
     if (showUnusableCards) {
-      const typeFilter = filterType(["role", "path", "location"]);
       return and([
-        typeFilter ? not(typeFilter) : () => true,
         filterMythosCards,
         (card: Card) => !lookupTables.relations.bonded[card.code],
       ]);

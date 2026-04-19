@@ -21,6 +21,8 @@ export type DecklistConfig = {
 
 export type Locale = string;
 
+export type ColorScheme = "botanical" | "clay" | "nord";
+
 export type SettingsState = {
   cardLevelDisplay: "icon-only" | "dots" | "text";
   cardListsDefaultContentType: FanMadeContentFilter;
@@ -31,6 +33,7 @@ export type SettingsState = {
   cardShowThumbnail: boolean;
   cardSize: "sm" | "standard";
   cardSkillIconsDisplay: "simple" | "as_printed";
+  colorScheme: ColorScheme;
   collection: Record<string, number>; // track as "quantity" owned to accomodate the core set.
   defaultEnvironment: "current" | "legacy";
   defaultStorageProvider: StorageProvider;
