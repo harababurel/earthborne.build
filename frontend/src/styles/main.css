@@ -179,14 +179,14 @@
 
   /* Theme: Botanical (Default) */
   html[data-color-scheme="botanical"] {
-    --theme-bg-dark: #1a261e;
-    --theme-surface-dark: #243328;
-    --theme-surface-elevated-dark: #2e4033;
-    --theme-border-dark: #3d5243;
-    --theme-text-dark: #f1f8f3;
-    --theme-text-dim-dark: #b8ccbe;
-    --theme-accent-dark: #d4e157;
-    --theme-accent-light-dark: #e6ee9c;
+    --theme-bg-dark: #2c332c;
+    --theme-surface-dark: #363e36;
+    --theme-surface-elevated-dark: #414a41;
+    --theme-border-dark: #505c50;
+    --theme-text-dark: #f1f4f1;
+    --theme-text-dim-dark: #b8c2b8;
+    --theme-accent-dark: #8caf8c;
+    --theme-accent-light-dark: #b3ccb3;
 
     --theme-bg-light: #f6f8f1;
     --theme-surface-light: #ecf1e4;
@@ -198,14 +198,14 @@
 
   /* Theme: Clay & Ochre */
   html[data-color-scheme="clay"] {
-    --theme-bg-dark: #241e1a;
-    --theme-surface-dark: #2d2621;
-    --theme-surface-elevated-dark: #3d332d;
-    --theme-border-dark: #4f423a;
-    --theme-text-dark: #f0e8e0;
-    --theme-text-dim-dark: #c9bbae;
-    --theme-accent-dark: #d4aa3a;
-    --theme-accent-light-dark: #ebcb8b;
+    --theme-bg-dark: #2b2724;
+    --theme-surface-dark: #35302c;
+    --theme-surface-elevated-dark: #413b37;
+    --theme-border-dark: #504944;
+    --theme-text-dark: #f1ede9;
+    --theme-text-dim-dark: #b8aea6;
+    --theme-accent-dark: #b38e5d;
+    --theme-accent-light-dark: #d4c1a5;
 
     --theme-bg-light: #fdfaf5;
     --theme-surface-light: #f4eee4;

@@ -16,7 +16,7 @@ import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { useToast } from "@/components/ui/toast.hooks";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
-import type { SettingsState } from "@/store/slices/settings.types";
+import type { ColorScheme, SettingsState } from "@/store/slices/settings.types";
 import { useColorThemeManager } from "@/utils/use-color-theme";
 import { useGoBack } from "@/utils/use-go-back";
 import { BackupRestore } from "./backup-restore";
@@ -66,7 +66,7 @@ function SettingsInner({
   updateSettings,
 }: {
   colorTheme: string;
-  colorScheme: string;
+  colorScheme: ColorScheme;
   settings: SettingsState;
   updateColorTheme: (theme: string, scheme: string) => void;
   updateSettings: (settings: SettingsState) => Promise<void>;
@@ -78,11 +78,10 @@ function SettingsInner({
   const search = useSearch();
   const toast = useToast();
   const goBack = useGoBack(search.includes("login_state") ? "/" : undefined);
-
   const [settings, setSettings] = useState(structuredClone(persistedSettings));
   const [theme, setTheme] = useState<string>(persistedColorTheme);
-  const [colorScheme, setColorScheme] = useState<string>(persistedColorScheme);
-
+  const [colorScheme, setColorScheme] =
+    useState<ColorScheme>(persistedColorScheme);
   const onSubmit = useCallback(
     async (evt: React.FormEvent) => {
       evt.preventDefault();
@@ -93,7 +92,7 @@ function SettingsInner({
       });
 
       try {
-        await updateSettings({ ...settings, colorScheme: colorScheme as any });
+        await updateSettings({ ...settings, colorScheme: colorScheme });
         updateColorTheme(theme, colorScheme);
         toast.dismiss(toastId);
       } catch (err) {
