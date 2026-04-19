@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
+import logoBotanical from "@/assets/logo/logo-botanical.png";
+import logoClay from "@/assets/logo/logo-clay.png";
+import logoNord from "@/assets/logo/logo-nord.png";
 import i18n from "@/utils/i18n";
 import { useMedia } from "./use-media";
 
@@ -99,6 +102,20 @@ export function useResolvedColorTheme() {
   }
 
   return theme;
+}
+
+export function useLogoUrl() {
+  const { colorScheme } = useColorThemeManager();
+
+  switch (colorScheme) {
+    case "botanical":
+      return logoBotanical;
+    case "clay":
+      return logoClay;
+    case "nord":
+    default:
+      return logoNord;
+  }
 }
 
 export function useColorThemeListener() {

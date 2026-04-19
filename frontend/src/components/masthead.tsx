@@ -2,6 +2,7 @@ import { SettingsIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
 import { cx } from "@/utils/cx";
+import { useLogoUrl } from "@/utils/use-color-theme";
 import { HelpMenu } from "./help-menu";
 import { LocaleQuickSwitch } from "./locale-quick-switch";
 import css from "./masthead.module.css";
@@ -32,6 +33,7 @@ export function Masthead(props: Props) {
   const { t } = useTranslation();
 
   const [location] = useLocation();
+  const logoUrl = useLogoUrl();
 
   return (
     <header
@@ -40,10 +42,7 @@ export function Masthead(props: Props) {
     >
       <div className={css["left"]}>
         <Link className={css["logo"]} href="~/" data-testid="masthead-logo">
-          <img
-            alt=""
-            src="https://thelivingvalley.earthbornegames.com/img/icon.png"
-          />
+          <img alt="" src={logoUrl} />
           <span className={css["logo-name"]}>
             {import.meta.env.VITE_PAGE_NAME}
           </span>
