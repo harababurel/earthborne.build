@@ -1,9 +1,6 @@
 import type { Card } from "@arkham-build/shared";
-import { isEnemyLike } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
-import { range } from "@/utils/range";
 import { CardHealth } from "../card-health";
-import { HealthIcon } from "../icons/health-icons";
 import { SkillIcons } from "../skill-icons/skill-icons";
 import { SkillIconsInvestigator } from "../skill-icons/skill-icons-investigator";
 import css from "./card.module.css";
@@ -33,17 +30,10 @@ export function CardIcons(props: Props) {
         />
       )}
 
-      {!isEnemyLike(card) && card.harm_threshold && (
-        <CardHealth health={card.harm_threshold} sanity={undefined} />
-      )}
-
-      {isEnemyLike(card) && card.harm_threshold && (
-        <div className={css["icons-damage"]}>
-          {range(0, card.harm_threshold).map((i) => (
-            <HealthIcon key={i} hideCost />
-          ))}
-        </div>
-      )}
+      <CardHealth
+        health={card.harm_threshold}
+        sanity={card.progress_threshold}
+      />
     </div>
   );
 }

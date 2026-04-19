@@ -9,6 +9,8 @@ type Props = {
 };
 
 export function CardHealth(props: Props) {
+  if (props.health == null && props.sanity == null) return null;
+
   return (
     <div
       className={cx(props.className, css["health"])}

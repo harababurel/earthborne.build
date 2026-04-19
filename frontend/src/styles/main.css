@@ -640,7 +640,7 @@
   .background-survivor {
     position: relative;
     z-index: 0;
-    color: var(--nord-6);
+    color: var(--white);
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 
     & .external-svg-icon {
@@ -667,8 +667,33 @@
     }
   }
 
+  html[data-theme="light"] {
+    :where(
+        .background-guardian,
+        .background-multiclass,
+        .background-mystic,
+        .background-mythos,
+        .background-neutral,
+        .background-rogue,
+        .background-seeker,
+        .background-survivor
+      ) {
+      color: var(--palette-4);
+      text-shadow: none;
+
+      & .external-svg-icon {
+        filter: none;
+      }
+    }
+  }
+
   .background-guardian {
     background-color: var(--guardian-dark);
+
+    html[data-theme="light"] & {
+      background-color: var(--guardian);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.025);
       mask-image: url("../assets/patterns/guardian.svg");
@@ -677,6 +702,11 @@
 
   .background-mystic {
     background: var(--mystic-dark);
+
+    html[data-theme="light"] & {
+      background-color: var(--mystic);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.025);
       mask-image: url("../assets/patterns/mystic.svg");
@@ -685,6 +715,11 @@
 
   .background-rogue {
     background: var(--rogue-dark);
+
+    html[data-theme="light"] & {
+      background-color: var(--rogue);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.025);
       mask-image: url("../assets/patterns/rogue.svg");
@@ -694,6 +729,10 @@
   .background-seeker {
     background: var(--seeker-dark);
 
+    html[data-theme="light"] & {
+      background-color: var(--seeker);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.025);
       mask-image: url("../assets/patterns/seeker.svg");
@@ -702,6 +741,11 @@
 
   .background-survivor {
     background: var(--survivor-dark);
+
+    html[data-theme="light"] & {
+      background-color: var(--survivor);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.025);
       mask-image: url("../assets/patterns/survivor.svg");
@@ -710,6 +754,11 @@
 
   .background-multiclass {
     background: var(--multiclass-dark);
+
+    html[data-theme="light"] & {
+      background-color: var(--multiclass);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.025);
       mask-image: url("../assets/patterns/multiclass.svg");
@@ -718,6 +767,11 @@
 
   .background-mythos {
     background: var(--mythos-dark);
+
+    html[data-theme="light"] & {
+      background-color: var(--nord-4);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.25);
       mask-image: url("../assets/patterns/mythos.svg");
@@ -726,6 +780,11 @@
 
   .background-neutral {
     background: var(--neutral-dark);
+
+    html[data-theme="light"] & {
+      background-color: var(--nord-4);
+    }
+
     &::after {
       background: rgba(0, 0, 0, 0.025);
       mask-image: url("../assets/patterns/neutral.svg");

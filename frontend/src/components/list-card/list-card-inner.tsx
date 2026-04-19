@@ -16,7 +16,6 @@ import {
   displayAttribute,
   getCardColor,
   hasSkillIcons,
-  isEnemyLike,
 } from "@/utils/card-utils";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { cx } from "@/utils/cx";
@@ -314,7 +313,7 @@ export function ListCardInner(props: Props) {
                       <CardHealth
                         className={css["investigator-health"]}
                         health={card.harm_threshold}
-                        sanity={undefined}
+                        sanity={card.progress_threshold}
                       />
                       <SkillIconsInvestigator
                         card={card}
@@ -388,9 +387,9 @@ export function ListCardInner(props: Props) {
       {showCardText && (
         <div className={css["listcard-text"]}>
           <CardDetails card={card} omitSlotIcon />
-          {(card.type_code === "role" || isEnemyLike(card)) && (
-            <CardIcons card={card} />
-          )}
+          {(card.type_code === "role" ||
+            card.harm_threshold != null ||
+            card.progress_threshold != null) && <CardIcons card={card} />}
           <CardText
             text={displayAttribute(card, "text")}
             size="tooltip"
