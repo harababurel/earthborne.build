@@ -54,6 +54,23 @@
   }
 
   @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Black.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Avenir LT Std";
+    src: url("../assets/fonts/Avenir%20LT%20Std%20Black%20Oblique.woff2")
+      format("woff2");
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
     font-family: "Hypatia Sans Pro";
     src: url("../assets/fonts/HypatiaSansPro-Regular.woff") format("woff");
     font-weight: 400;
@@ -97,8 +114,8 @@
       "Hypatia Sans Pro", "Avenir LT Std", "Noto Sans Variable", ui-sans-serif,
       system-ui, sans-serif;
     --font-family-card-meta:
-      "Avenir LT Std", "Noto Sans Variable", ui-sans-serif, system-ui,
-      sans-serif;
+      "Hypatia Sans Pro", "Avenir LT Std", "Noto Sans Variable", ui-sans-serif,
+      system-ui, sans-serif;
 
     --white: #f3f6f6;
     --nord-0: #2e3440;
