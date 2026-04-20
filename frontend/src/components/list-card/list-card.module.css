@@ -346,8 +346,5 @@
     color: white;
     padding: 0.15em 0.45em;
     border-radius: var(--rounded);
-    text-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.9),
-      0 0 2px rgba(0, 0, 0, 0.7);
   }
 }
