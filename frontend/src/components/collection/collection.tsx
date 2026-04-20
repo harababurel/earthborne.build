@@ -30,8 +30,8 @@ const BGG_LINKS: Record<string, string> = {
   sib: "https://boardgamegeek.com/boardgame/457239/earthborne-rangers-spire-in-bloom-valley-expansion",
   sos: "https://boardgamegeek.com/boardgameexpansion/466595/earthborne-rangers-shadow-of-the-storm-expansion",
   sotv: "https://boardgamegeek.com/boardgame/400328/earthborne-rangers-stewards-of-the-valley",
-  motp: "https://boardgamegeek.com/boardgameexpansion/457244/earthborne-rangers-moments-on-the-path",
-  mitv: "https://boardgamegeek.com/boardgameexpansion/457245/earthborne-rangers-moments-in-the-valley",
+  motp: "https://boardgamegeek.com/boardgameexpansion/412737/earthborne-rangers-moments-on-the-path",
+  mitv: "https://boardgamegeek.com/boardgame/457240/earthborne-rangers-moments-in-the-valley",
 };
 
 const FALLBACK_PACK_NAMES: Record<string, string> = {
