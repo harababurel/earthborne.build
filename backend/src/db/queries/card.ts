@@ -43,8 +43,8 @@ type CardRow = {
   cost: number | null;
   equip: number | null;
   presence: number | null;
-  harm: number | null;
-  progress: number | null;
+  harm: string | number | null;
+  progress: string | number | null;
   approach_conflict: number | null;
   approach_reason: number | null;
   approach_exploration: number | null;
@@ -162,6 +162,13 @@ export async function getCardByCode(
   return transformCard(row as unknown as CardRow);
 }
 
+function normalizeThreshold(value: string | number | null) {
+  if (value == null) return null;
+  if (typeof value === "number") return value;
+  if (/^\d+(\.0+)?$/.test(value)) return Number(value);
+  return value;
+}
+
 function transformCard(row: CardRow): {
   code: string;
   name: string;
@@ -189,8 +196,8 @@ function transformCard(row: CardRow): {
   approach_exploration: number | null;
   approach_connection: number | null;
   presence: number | null;
-  harm_threshold: number | null;
-  progress_threshold: number | null;
+  harm_threshold: string | number | null;
+  progress_threshold: string | number | null;
   token_name: string | null;
   token_count: number | null;
   area: "within_reach" | "along_the_way" | null;
@@ -257,8 +264,8 @@ function transformCard(row: CardRow): {
     approach_exploration: row.approach_exploration,
     approach_connection: row.approach_connection,
     presence: row.presence,
-    harm_threshold: row.harm,
-    progress_threshold: row.progress,
+    harm_threshold: normalizeThreshold(row.harm),
+    progress_threshold: normalizeThreshold(row.progress),
     token_name: row.token_name,
     token_count: row.token_count,
     area,

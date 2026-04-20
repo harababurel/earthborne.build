@@ -6,15 +6,33 @@ export function HealthIcon({
   health,
   hideCost,
 }: {
-  health?: number | null;
+  health?: string | number | null;
   hideCost?: boolean;
 }) {
   if (health == null) return null;
+
+  const value =
+    typeof health === "string" ? health.replace(/\[per_ranger\]/g, "") : health;
+  const isPerRanger =
+    typeof health === "string" && health.includes("[per_ranger]");
+
   return (
     <div className={css["health"]} data-testid="health" data-value={health}>
       {hideCost && <i className={cx(css["icon-background"], "core-harm")} />}
       <i className={cx(css["icon-base"], "core-harm")} />
-      {!hideCost && <CostIcon className={css["icon-cost"]} cost={health} />}
+      {!hideCost && (
+        <div
+          className={cx(
+            css["icon-cost-wrapper"],
+            isPerRanger && css["icon-cost-wrapper--per-ranger"],
+          )}
+        >
+          <CostIcon className={css["icon-cost"]} cost={value} />
+          {isPerRanger && (
+            <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -23,17 +41,35 @@ export function SanityIcon({
   sanity,
   hideCost,
 }: {
-  sanity?: number | null;
+  sanity?: string | number | null;
   hideCost?: boolean;
 }) {
   if (sanity == null) return null;
+
+  const value =
+    typeof sanity === "string" ? sanity.replace(/\[per_ranger\]/g, "") : sanity;
+  const isPerRanger =
+    typeof sanity === "string" && sanity.includes("[per_ranger]");
+
   return (
     <div className={css["sanity"]} data-testid="sanity" data-value={sanity}>
       {hideCost && (
         <i className={cx(css["icon-background"], "core-progress")} />
       )}
       <i className={cx(css["icon-base"], "core-progress")} />
-      {!hideCost && <CostIcon className={css["icon-cost"]} cost={sanity} />}
+      {!hideCost && (
+        <div
+          className={cx(
+            css["icon-cost-wrapper"],
+            isPerRanger && css["icon-cost-wrapper--per-ranger"],
+          )}
+        >
+          <CostIcon className={css["icon-cost"]} cost={value} />
+          {isPerRanger && (
+            <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
+          )}
+        </div>
+      )}
     </div>
   );
 }

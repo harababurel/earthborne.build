@@ -48,8 +48,8 @@ export const CardSchema = z.object({
 
   // Thresholds (path cards, beings, features, locations)
   presence: z.number().nullish(),
-  harm_threshold: z.number().nullish(),
-  progress_threshold: z.number().nullish(),
+  harm_threshold: z.union([z.number(), z.string()]).nullish(),
+  progress_threshold: z.union([z.number(), z.string()]).nullish(),
 
   // Tokens (named tokens placed on the card)
   token_name: z.string().nullish(),

@@ -61,8 +61,8 @@ export interface Card {
   cost: number | null;
   equip: number | null;
   presence: number | null;
-  harm: number | null;
-  progress: number | null;
+  harm: string | number | null;
+  progress: string | number | null;
   progress_fixed: number | null; // 0 | 1
   approach_conflict: number | null;
   approach_reason: number | null;

@@ -1,5 +1,6 @@
-import { numericalIcon } from "@/utils/card-utils";
+import { numericalStr } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
+import css from "./cost-icon.module.css";
 
 type Props = {
   className?: string;
@@ -10,14 +11,9 @@ type Props = {
 export function CostIcon(props: Props) {
   const { className, cost, ...rest } = props;
 
-  if (cost && typeof cost === "number" && cost >= 10) {
-    return (
-      <span {...rest} className={className}>
-        <CostIcon cost={cost.toString().split("")[0]} />
-        <CostIcon cost={cost.toString().split("")[1]} />
-      </span>
-    );
-  }
-
-  return <span {...rest} className={cx(className, numericalIcon(cost))} />;
+  return (
+    <span {...rest} className={cx(className, css["cost"])}>
+      {numericalStr(cost)}
+    </span>
+  );
 }

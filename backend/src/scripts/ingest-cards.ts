@@ -170,8 +170,8 @@ interface RawCard {
   cost?: number;
   equip?: number;
   presence?: number;
-  harm?: number;
-  progress?: number;
+  harm?: string | number;
+  progress?: string | number;
   progress_fixed?: boolean;
   approach_conflict?: number;
   approach_reason?: number;
