@@ -21,7 +21,7 @@ export function getAvailableColorSchemes(): Record<string, string> {
   };
 }
 
-const DEFAULT_THEME = "dark";
+const DEFAULT_THEME = "light";
 const DEFAULT_COLOR_SCHEME = "botanical";
 
 export function getColorThemePreference() {

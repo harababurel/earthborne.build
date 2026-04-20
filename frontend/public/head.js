@@ -1,4 +1,4 @@
-const DEFAULT_THEME = "dark";
+const DEFAULT_THEME = "light";
 
 function init() {
   const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)");
