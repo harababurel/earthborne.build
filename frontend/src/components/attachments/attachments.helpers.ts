@@ -1,10 +1,9 @@
 import type { Card } from "@arkham-build/shared";
-import type { Attachments } from "@/store/lib/types";
 import type { i18n, TFunction } from "i18next";
 import { useCallback } from "react";
 import { useStore } from "@/store";
 import { filterAttribute } from "@/store/lib/filtering";
-import type { ResolvedDeck } from "@/store/lib/types";
+import type { Attachments, ResolvedDeck } from "@/store/lib/types";
 import { cardLimit } from "@/utils/card-utils";
 import { useResolvedDeckChecked } from "../resolved-deck-context";
 
@@ -13,7 +12,9 @@ export function canAttach(card: Card, definition: Attachments) {
     definition.code !== card.code &&
     definition.traits?.some((t: string) => card.traits?.includes(t)) &&
     (definition.filters?.every((attributeFilter) =>
-      filterAttribute(attributeFilter as Parameters<typeof filterAttribute>[0])(card),
+      filterAttribute(attributeFilter as Parameters<typeof filterAttribute>[0])(
+        card,
+      ),
     ) ??
       true)
   );

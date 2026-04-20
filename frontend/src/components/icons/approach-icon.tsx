@@ -1,5 +1,6 @@
 import type { ApproachKey } from "@arkham-build/shared";
 
+// biome-ignore lint/style/useComponentExportOnlyModules: constant exported alongside component
 export const APPROACH_ICON_DATA: Record<
   ApproachKey,
   { viewBox: string; path: string }

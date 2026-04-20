@@ -1,7 +1,8 @@
 // Stub — ER has no customization system.
+
+import type { Props as ListCardProps } from "@/components/list-card/list-card";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { CustomizationUpgrade } from "@/store/selectors/decks";
-import type { Props as ListCardProps } from "@/components/list-card/list-card";
 
 type Props = {
   deck?: ResolvedDeck;

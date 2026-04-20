@@ -28,9 +28,7 @@ export function validateFanMadeProject(project: FanMadeProject): void {
   for (const card of project.data.cards) {
     // Check that the card references a known set from the project.
     if (card.set_code && !setCodes.has(card.set_code)) {
-      errors.push(
-        `Card ${card.code} references unknown set: ${card.set_code}`,
-      );
+      errors.push(`Card ${card.code} references unknown set: ${card.set_code}`);
     }
 
     cards[card.code] = card;
@@ -129,7 +127,7 @@ export function buildCacheFromDecks(decks: Deck[]) {
   );
 }
 
-export function extractHiddenSlots(deck: Deck, metadata: Metadata) {
+export function extractHiddenSlots(deck: Deck, _metadata: Metadata) {
   const meta = decodeDeckMeta(deck);
 
   const hiddenSlots: Record<string, unknown> = {
@@ -180,7 +178,8 @@ export function applyHiddenSlots(deck: Deck, metadata: Metadata) {
   ) {
     deck.investigator_code = hiddenSlots.investigator_code;
     deck.investigator_name =
-      meta.fan_made_content?.cards?.[hiddenSlots.investigator_code as string]?.name ||
+      meta.fan_made_content?.cards?.[hiddenSlots.investigator_code as string]
+        ?.name ||
       metadata.cards[hiddenSlots.investigator_code as string]?.name ||
       deck.investigator_name;
   }

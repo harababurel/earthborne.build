@@ -69,7 +69,9 @@ function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
     const decks = await queryDeck(clientId, type, idInt);
     cacheFanMadeContent(decks as Parameters<typeof cacheFanMadeContent>[0]);
     const adapter = new syncAdapters.arkhamdb(useStore.getState);
-    return (decks as unknown[]).map((deck: unknown) => adapter.in(deck as Parameters<typeof adapter.in>[0]));
+    return (decks as unknown[]).map((deck: unknown) =>
+      adapter.in(deck as Parameters<typeof adapter.in>[0]),
+    );
   }
 
   const [

@@ -37,8 +37,7 @@ export function CardBack(props: Props) {
   const [isSideways, setSideways] = useState(sideways(card));
   const hasHeader = card.type_code !== "role";
 
-  const showImage =
-    size === "full" || card.type_code !== "role";
+  const showImage = size === "full" || card.type_code !== "role";
 
   const showMeta =
     size === "full" &&

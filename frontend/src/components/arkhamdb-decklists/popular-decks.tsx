@@ -28,8 +28,7 @@ export function PopularDecks(props: Props) {
 
   const scopeParams = {
     filters: {
-      required:
-        scope.type_code !== "role" ? [getCanonicalCardCode(scope)] : [],
+      required: scope.type_code !== "role" ? [getCanonicalCardCode(scope)] : [],
     },
   };
 

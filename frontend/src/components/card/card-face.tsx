@@ -1,13 +1,10 @@
 import type { Card } from "@arkham-build/shared";
-import { ImageIcon } from "lucide-react";
 import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
 import type { CardWithRelations, ResolvedCard } from "@/store/lib/types";
 import { displayAttribute, sideways } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardScan } from "../card-scan";
 import { CardThumbnail } from "../card-thumbnail";
-import { Button } from "../ui/button";
 import css from "./card.module.css";
 import { CardDetails } from "./card-details";
 import { CardHeader } from "./card-header";
@@ -43,8 +40,6 @@ export function CardFace(props: Props) {
     titleLinks,
     ...rest
   } = props;
-
-  const { t } = useTranslation();
 
   const { card } = resolvedCard;
   const [isSideways, setSideways] = useState(sideways(card));

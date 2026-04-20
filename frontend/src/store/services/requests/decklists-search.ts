@@ -23,7 +23,8 @@ export type DecklistsFiltersState = {
   filters: Omit<
     DecklistSearchRequest,
     "offset" | "sort_by" | "sort_dir" | "limit"
-  > & ExtraFilterFields;
+  > &
+    ExtraFilterFields;
   limit: number;
   offset: number;
   sort_by: SortType;

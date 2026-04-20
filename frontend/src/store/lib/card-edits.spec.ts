@@ -31,8 +31,15 @@ describe("applyCardChanges", () => {
     const state = store.getState();
     const firstCard = Object.values(state.metadata.cards)[0];
     if (!firstCard) return;
-    const customizations = { [firstCard.code]: { 0: { index: 0, xp_spent: 1 } } };
-    const result = applyCardChanges(firstCard, state.metadata, null, customizations as never);
+    const customizations = {
+      [firstCard.code]: { 0: { index: 0, xp_spent: 1 } },
+    };
+    const result = applyCardChanges(
+      firstCard,
+      state.metadata,
+      null,
+      customizations as never,
+    );
     expect(result).toEqual(firstCard);
   });
 });

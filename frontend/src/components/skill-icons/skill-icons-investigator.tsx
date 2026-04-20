@@ -16,7 +16,9 @@ export function SkillIconsInvestigator(props: Props) {
   if (card.type_code !== "role") return null;
 
   const entries = SKILL_KEYS.reduce<[string, number][]>((acc, key) => {
-    const val = (card as unknown as Record<string, unknown>)[`skill_${key}`] as number | undefined;
+    const val = (card as unknown as Record<string, unknown>)[`skill_${key}`] as
+      | number
+      | undefined;
     if (val != null) acc.push([key, val]);
     return acc;
   }, []);

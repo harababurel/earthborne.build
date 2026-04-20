@@ -27,7 +27,9 @@ function queryStubMetadata() {
 }
 
 function queryStubDataVersion() {
-  return Promise.resolve(dataVersionAny.data?.all_card_updated?.[0] ?? dataVersionAny);
+  return Promise.resolve(
+    dataVersionAny.data?.all_card_updated?.[0] ?? dataVersionAny,
+  );
 }
 
 function queryStubCardData() {

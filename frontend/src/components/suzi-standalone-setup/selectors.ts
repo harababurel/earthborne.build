@@ -64,8 +64,7 @@ export const selectAvailableUpgrades = createSelector(
       filterDuplicates,
       filterLevel({ range: [1, 5] }, buildQlInterpreter, suzi),
       cardAccessFilter,
-      (c: Card) =>
-        !c.text?.includes("Researched"),
+      (c: Card) => !c.text?.includes("Researched"),
     ];
 
     if (checkOwnership) {
@@ -102,6 +101,8 @@ export const selectAvailableUpgrades = createSelector(
 
     return Object.values(metadata.cards)
       .map((c) => applyCardChanges(c, metadata, deck.taboo_id, undefined))
-      .filter(and(filters.filter(Boolean) as NonNullable<(typeof filters)[number]>[]));
+      .filter(
+        and(filters.filter(Boolean) as NonNullable<(typeof filters)[number]>[]),
+      );
   },
 );

@@ -1,8 +1,7 @@
 import type { Card } from "@arkham-build/shared";
-import type { Attachments } from "@/store/lib/types";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import type { ResolvedDeck } from "@/store/lib/types";
+import type { Attachments, ResolvedDeck } from "@/store/lib/types";
 import {
   attachmentDefinitionLimit,
   canAttach,

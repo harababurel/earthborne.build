@@ -5,10 +5,7 @@ import type { ResolvedCard } from "./types";
 export class UnsupportedPublishError extends Error {
   constructor(cards: ResolvedCard[]) {
     const names = cards
-      .map(
-        (c) =>
-          `${displayAttribute(c.card, "name")}`,
-      )
+      .map((c) => `${displayAttribute(c.card, "name")}`)
       .join(", ");
 
     super(

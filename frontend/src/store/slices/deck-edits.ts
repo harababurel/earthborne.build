@@ -390,7 +390,7 @@ export const createDeckEditsSlice: StateCreator<
         );
       }
 
-      const sourceCard = metadata.cards[code];
+      const _sourceCard = metadata.cards[code];
 
       if (nextState?.deckEdits?.[deckId]) {
         nextState.deckEdits[deckId].xpAdjustment = 0; // ER has no XP system.

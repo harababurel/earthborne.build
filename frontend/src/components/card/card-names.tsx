@@ -2,8 +2,6 @@ import type { Card } from "@arkham-build/shared";
 import { useCallback } from "react";
 import { Link } from "wouter";
 import { useStore } from "@/store";
-import { displayAttribute, parseCardTitle } from "@/utils/card-utils";
-import { cx } from "@/utils/cx";
 import { preventLeftClick } from "@/utils/prevent-links";
 import { CardName } from "../card-name";
 import { useDialogContext } from "../ui/dialog.hooks";
@@ -31,7 +29,7 @@ export function CardNames(props: Props) {
         cardLevelDisplay={settings.cardLevelDisplay}
         cardShowCollectionNumber={settings.cardShowCollectionNumber}
       >
-          {card.is_unique && (
+        {card.is_unique && (
           <span className={css["unique"]}>
             {card.is_unique && <i className="icon-unique" />}
           </span>

@@ -127,15 +127,12 @@ export function DecklistGroup(props: DecklistGroupsProps) {
                     annotation={deck.annotations?.[card.code]}
                     isForbidden={
                       forbiddenCards.find(
-                        (x) =>
-                          x.code === card.code &&
-                          x.target === grouping.id,
+                        (x) => x.code === card.code && x.target === grouping.id,
                       ) != null
                     }
                     isCardNotInLimitedPool={
-                      cardsNotInLimitedPool.find(
-                        (x) => x.code === card.code,
-                      ) != null
+                      cardsNotInLimitedPool.find((x) => x.code === card.code) !=
+                      null
                     }
                     card={card}
                     isRemoved={grouping.quantities?.[card.code] === 0}
@@ -196,8 +193,8 @@ function Scans(props: {
               getListCardProps={getListCardProps}
             />
           </li>
-          {false && /* ER has no customizations */ (
-            <li>
+          {false && (
+            /* ER has no customizations */ <li>
               <figure className={css["scan"]}>
                 <div className={css["scan-images"]}>
                   <CustomizableSheet card={card} deck={deck} />

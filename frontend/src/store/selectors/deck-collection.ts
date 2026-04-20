@@ -1,4 +1,4 @@
-import { ASPECT_ORDER, FACTION_ORDER } from "@arkham-build/shared";
+import { ASPECT_ORDER } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import { displayAttribute } from "@/utils/card-utils";
 import type { StorageProvider } from "@/utils/constants";

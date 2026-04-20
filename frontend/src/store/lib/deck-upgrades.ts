@@ -12,7 +12,11 @@ type DeckChanges = {
 };
 
 // Stub type — ER has no XP upgrade modifiers.
-export type Modifier = "adaptable" | "arcaneResearch" | "dejaVu" | "downTheRabbitHole";
+export type Modifier =
+  | "adaptable"
+  | "arcaneResearch"
+  | "dejaVu"
+  | "downTheRabbitHole";
 
 type ModifierStats = Record<Modifier, { used: number; available: number }>;
 
@@ -40,7 +44,10 @@ function deckChanges(prev: ResolvedDeck, next: ResolvedDeck): DeckChanges {
     nextSlots: Record<string, unknown>,
   ) => {
     const diff: Record<string, number> = {};
-    const codes = new Set([...Object.keys(prevSlots), ...Object.keys(nextSlots)]);
+    const codes = new Set([
+      ...Object.keys(prevSlots),
+      ...Object.keys(nextSlots),
+    ]);
     for (const code of codes) {
       const prevQ = code in prevSlots ? 1 : 0;
       const nextQ = code in nextSlots ? 1 : 0;

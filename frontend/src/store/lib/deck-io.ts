@@ -5,7 +5,7 @@ import {
 } from "@/store/lib/deck-validation";
 import type { Deck, DeckProblem, Id } from "@/store/schemas/deck.schema";
 import type { StoreState } from "@/store/slices";
-import { displayAttribute, splitMultiValue } from "@/utils/card-utils";
+import { displayAttribute } from "@/utils/card-utils";
 import { randomId } from "@/utils/crypto";
 import { formatDeckOptionString, formatTabooSet } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
@@ -255,10 +255,10 @@ function formatGroupAsText(
 }
 
 function formatCardAsText(
-  state: StoreState,
+  _state: StoreState,
   card: Card,
   quantities: { [code: string]: number },
-  customizations: Customizations | undefined,
+  _customizations: Customizations | undefined,
 ) {
   const name = displayAttribute(card, "name");
 
@@ -266,7 +266,6 @@ function formatCardAsText(
   const energyCost = card.energy_cost != null ? ` [${card.energy_cost}]` : "";
   return `- ${name}${energyCost}${quantity > 1 ? ` x${quantity}` : ""}`;
 }
-
 
 function isApiDeckKey(key: string): key is keyof Deck {
   return [

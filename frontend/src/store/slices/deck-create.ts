@@ -16,11 +16,11 @@ export const createDeckCreateSlice: StateCreator<
 > = (set) => ({
   deckCreate: undefined,
 
-  initCreate(code: string, initialInvestigatorChoice?: string) {
+  initCreate(code: string, _initialInvestigatorChoice?: string) {
     set((state) => {
       const metadata = selectMetadata(state);
       const settings = state.settings;
-      const connections = selectConnectionsData(state);
+      const _connections = selectConnectionsData(state);
 
       const investigator = metadata.cards[code];
       assert(

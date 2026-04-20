@@ -397,8 +397,7 @@ function prepareBag(deck: ResolvedDeck) {
   for (const { card } of Object.values(deck.cards.slots)) {
     // ER has no permanent/starts_in_play/starts_in_hand mechanic.
     const drawable =
-      !card.double_sided &&
-      card.code !== SPECIAL_CARD_CODES.ON_THE_MEND;
+      !card.double_sided && card.code !== SPECIAL_CARD_CODES.ON_THE_MEND;
 
     if (!drawable) {
       continue;

@@ -44,27 +44,15 @@ export function SetTree({
         onValueChange={(value) => onCardTypeTabChange(value as CardTypeTab)}
       >
         <TabsList>
-          <TabsTrigger value="ranger">
-            {t("browse.tabs.ranger")}
-          </TabsTrigger>
-          <TabsTrigger value="path">
-            {t("browse.tabs.path")}
-          </TabsTrigger>
+          <TabsTrigger value="ranger">{t("browse.tabs.ranger")}</TabsTrigger>
+          <TabsTrigger value="path">{t("browse.tabs.path")}</TabsTrigger>
           <TabsTrigger value="location">
             {t("browse.tabs.location")}
           </TabsTrigger>
-          <TabsTrigger value="weather">
-            {t("browse.tabs.weather")}
-          </TabsTrigger>
-          <TabsTrigger value="mission">
-            {t("browse.tabs.mission")}
-          </TabsTrigger>
-          <TabsTrigger value="role">
-            {t("browse.tabs.role")}
-          </TabsTrigger>
-          <TabsTrigger value="aspect">
-            {t("browse.tabs.aspect")}
-          </TabsTrigger>
+          <TabsTrigger value="weather">{t("browse.tabs.weather")}</TabsTrigger>
+          <TabsTrigger value="mission">{t("browse.tabs.mission")}</TabsTrigger>
+          <TabsTrigger value="role">{t("browse.tabs.role")}</TabsTrigger>
+          <TabsTrigger value="aspect">{t("browse.tabs.aspect")}</TabsTrigger>
           <TabsTrigger value="challenge">
             {t("browse.tabs.challenge")}
           </TabsTrigger>
@@ -75,9 +63,7 @@ export function SetTree({
           const isActive = pack.code === activePackCode;
           return (
             <li key={pack.code}>
-              <div
-                className={cx(css["node"], isActive && css["active"])}
-              >
+              <div className={cx(css["node"], isActive && css["active"])}>
                 <Link
                   className={css["node-link"]}
                   to={`/browse/pack/${pack.code}${window.location.search}`}

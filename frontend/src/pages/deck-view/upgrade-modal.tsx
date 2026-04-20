@@ -43,10 +43,7 @@ function toExilable(
   return Object.entries(slots).reduce<{ card: Card; limit: number }[]>(
     (acc, [code, limit]) => {
       const card = deck.cards[slotKey][code].card;
-      if (
-        burnAfterReading &&
-        !deck.ignoreDeckLimitSlots?.[code]
-      ) {
+      if (burnAfterReading && !deck.ignoreDeckLimitSlots?.[code]) {
         acc.push({ card, limit });
       } else if ((card as unknown as { exile?: boolean }).exile) {
         acc.push({ card, limit });

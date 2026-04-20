@@ -91,12 +91,7 @@ function ChooseInvestigatorLink(props: { card: Card }) {
   const cssVariables = useAccentColor(props.card);
 
   return (
-    <Link
-      asChild
-      to={
-        `/deck/create/${props.card.code}`
-      }
-    >
+    <Link asChild to={`/deck/create/${props.card.code}`}>
       <Button
         as="a"
         className={css["choose-investigator-button"]}

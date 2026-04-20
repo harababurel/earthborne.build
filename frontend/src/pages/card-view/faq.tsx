@@ -6,10 +6,16 @@ import { Details } from "@/components/ui/details";
 import { useStore } from "@/store";
 import type { ResolvedCard } from "@/store/lib/types";
 import { selectClientId } from "@/store/selectors/shared";
+
 // ER has no FAQ system — stub out queryFaq.
-async function queryFaq(_clientId: string | undefined, _code: string): Promise<Array<{ html: string }>> {
+// biome-ignore lint/suspicious/useAwait: stub for call-site compatibility
+async function queryFaq(
+  _clientId: string | undefined,
+  _code: string,
+): Promise<Array<{ html: string }>> {
   return [];
 }
+
 import { redirectArkhamDBLinks } from "@/utils/arkhamdb";
 import { isEmpty } from "@/utils/is-empty";
 

@@ -1,9 +1,6 @@
-import type {
-  Card,
-  SealedDeckResponse,
-} from "@arkham-build/shared";
+import type { Card, SealedDeckResponse } from "@arkham-build/shared";
 import type { Cycle } from "../schemas/cycle.schema";
-import type { Deck, Slots } from "../schemas/deck.schema";
+import type { Deck } from "../schemas/deck.schema";
 import type { EncounterSet } from "../schemas/encounter-set.schema";
 import type { SubType, Type } from "../schemas/metadata.schema";
 import type { Pack } from "../schemas/pack.schema";
@@ -16,7 +13,13 @@ export type Attachments = {
   cards: Record<string, { quantity: number }>;
   limit?: number;
   traits?: string[];
-  filters?: Array<{ attribute: string; value: string | number | null | undefined; operator?: "=" | "!=" } & Record<string, unknown>>;
+  filters?: Array<
+    {
+      attribute: string;
+      value: string | number | null | undefined;
+      operator?: "=" | "!=";
+    } & Record<string, unknown>
+  >;
   requiredCards?: Record<string, number>;
   name?: string;
   icon?: string;

@@ -22,7 +22,9 @@ export function SkillIcons(props: Props) {
   const Icon = fancy ? SkillIconFancy : SkillIcon;
 
   const entries = SKILL_KEYS.reduce<[string, number][]>((acc, key) => {
-    const val = (card as unknown as Record<string, unknown>)[`skill_${key}`] as number | undefined;
+    const val = (card as unknown as Record<string, unknown>)[`skill_${key}`] as
+      | number
+      | undefined;
     if (val) acc.push([key, val]);
     return acc;
   }, []);

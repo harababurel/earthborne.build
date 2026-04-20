@@ -1,6 +1,7 @@
 import { SKILL_KEYS } from "@arkham-build/shared";
 
 type SkillKey = string;
+
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";

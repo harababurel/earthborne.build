@@ -1,6 +1,7 @@
 import type { AspectKey } from "@arkham-build/shared";
 import { cx } from "@/utils/cx";
 
+// biome-ignore lint/style/useComponentExportOnlyModules: constant exported alongside component
 export const ASPECT_DISPLAY_NAMES: Record<AspectKey, string> = {
   AWA: "awareness",
   FIT: "fitness",
@@ -23,8 +24,7 @@ type Props = {
 
 export function AspectIcon({ aspect, className, size = "1em" }: Props) {
   const iconClass =
-    (aspect && ASPECT_ICON_CLASS[aspect as AspectKey]) ||
-    ASPECT_ICON_CLASS.FIT;
+    (aspect && ASPECT_ICON_CLASS[aspect as AspectKey]) || ASPECT_ICON_CLASS.FIT;
 
   return (
     <i

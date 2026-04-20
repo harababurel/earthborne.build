@@ -1,10 +1,9 @@
 import type { Card } from "@arkham-build/shared";
-import type { Attachments } from "@/store/lib/types";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import { makeSortFunction } from "@/store/lib/sorting";
-import type { ResolvedDeck } from "@/store/lib/types";
+import type { Attachments, ResolvedDeck } from "@/store/lib/types";
 import {
   selectLocaleSortingCollator,
   selectMetadata,

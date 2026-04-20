@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Select } from "../ui/select";
 import type { CardTypeTab } from "@/pages/browse/set-tree";
+import { Select } from "../ui/select";
 
 type Props = {
   value: CardTypeTab;

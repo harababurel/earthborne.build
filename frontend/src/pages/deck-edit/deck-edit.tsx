@@ -192,10 +192,7 @@ function DeckEditInner() {
 
   const getListCardProps = useCallback(
     (card: Card) => ({
-      onChangeCardQuantity:
-        canEdit
-          ? onChangeCardQuantity
-          : undefined,
+      onChangeCardQuantity: canEdit ? onChangeCardQuantity : undefined,
       renderCardBefore:
         currentTool === "recommendations" ? renderCoreCardCheckbox : undefined,
       renderCardExtra,

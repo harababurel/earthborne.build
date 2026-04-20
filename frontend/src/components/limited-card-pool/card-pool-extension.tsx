@@ -44,7 +44,10 @@ export function CardPoolExtension(props: Props) {
     [updateMetaProperty, deck.id, id],
   );
 
-  if ((card as unknown as { card_pool_extension?: { type: string } }).card_pool_extension?.type !== "card") {
+  if (
+    (card as unknown as { card_pool_extension?: { type: string } })
+      .card_pool_extension?.type !== "card"
+  ) {
     return null;
   }
 

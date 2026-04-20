@@ -16,7 +16,7 @@ import { type Deck, type Id, isDeck } from "../schemas/deck.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { History } from "../selectors/decks";
 import type { Locale } from "../slices/settings.types";
-import { ApiError, apiV2Request } from "./requests/shared";
+import { apiV2Request } from "./requests/shared";
 
 /**
  * ER metadata response — packs only (no cycles, encounter sets, or taboo sets).
@@ -37,7 +37,16 @@ export async function queryMetadata(
   _locale: Locale = "en",
 ): Promise<MetadataResponse> {
   const res = await apiV2Request("/v2/public/packs");
-  const { data }: { data: Array<{ id: string; name: string; short_name: string | null; position: number }> } = await res.json();
+  const {
+    data,
+  }: {
+    data: Array<{
+      id: string;
+      name: string;
+      short_name: string | null;
+      position: number;
+    }>;
+  } = await res.json();
 
   const packs: Pack[] = data.map((p) => ({
     code: p.id,
@@ -297,6 +306,7 @@ export async function queryFanMadeProjects(): Promise<FanMadeProjectInfo[]> {
 }
 
 // ER has no ArkhamDB deck import. Stub for call-site compatibility.
+// biome-ignore lint/suspicious/useAwait: stub for call-site compatibility
 export async function queryDeck(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _clientId: string | undefined,

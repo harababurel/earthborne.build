@@ -30,7 +30,11 @@ export function ArkhamDBDecklistResult({ result, showDetails }: Props) {
 
   const resolved = useMemo(() => {
     const deps = { lookupTables, metadata, sharing };
-    return resolveDeck(deps, collator, result as unknown as Parameters<typeof resolveDeck>[2]);
+    return resolveDeck(
+      deps,
+      collator,
+      result as unknown as Parameters<typeof resolveDeck>[2],
+    );
   }, [result, lookupTables, metadata, sharing, collator]);
 
   return (

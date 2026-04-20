@@ -3,11 +3,7 @@ import type { Deck, Slots } from "@/store/schemas/deck.schema";
 import type { AttachmentQuantities } from "@/store/slices/deck-edits.types";
 import type { Metadata } from "@/store/slices/metadata.types";
 import { range } from "@/utils/range";
-import type {
-  Annotations,
-  Customizations,
-  DeckMeta,
-} from "./types";
+import type { Annotations, Customizations, DeckMeta } from "./types";
 
 export function decodeDeckMeta(deck: Deck): DeckMeta {
   try {
@@ -32,7 +28,10 @@ export function decodeSelections(_investigator: unknown, _deckMeta: DeckMeta) {
  * This is a no-op stub kept for call-site compatibility.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function decodeCustomizations(_deckMeta: DeckMeta, _metadata: Metadata): Customizations | undefined {
+export function decodeCustomizations(
+  _deckMeta: DeckMeta,
+  _metadata: Metadata,
+): Customizations | undefined {
   return undefined;
 }
 

@@ -85,7 +85,7 @@ export function decodeSlots(
   }
 
   // Myriad cards are counted only once, regardless of sub name.
-  const myriadCounted: Record<string, boolean> = {};
+  const _myriadCounted: Record<string, boolean> = {};
 
   for (const [code, quantity] of Object.entries(deck.slots)) {
     const card = resolveCardWithRelations(

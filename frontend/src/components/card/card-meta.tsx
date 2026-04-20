@@ -37,8 +37,6 @@ export function CardMeta(props: Props) {
 
   const illustrator = resolvedCard.card.illustrator;
 
-  const { card } = resolvedCard;
-
   return (
     <footer className={cx(css["meta"], css[size])}>
       {size === "full" && illustrator && (
@@ -47,12 +45,12 @@ export function CardMeta(props: Props) {
         </p>
       )}
       <PlayerEntry
-          linked={linked}
-          onPrintingSelect={onPrintingSelect}
-          resolvedCard={resolvedCard}
-          size={size}
-          showCopyId={showCopyId}
-        />
+        linked={linked}
+        onPrintingSelect={onPrintingSelect}
+        resolvedCard={resolvedCard}
+        size={size}
+        showCopyId={showCopyId}
+      />
     </footer>
   );
 }
@@ -103,4 +101,3 @@ function PlayerEntry(props: Props & { showCopyId: boolean }) {
     </>
   );
 }
-

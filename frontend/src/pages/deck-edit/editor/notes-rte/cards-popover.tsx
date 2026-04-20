@@ -196,8 +196,7 @@ function selectCardOptions(
 
     cards.push(...Object.values(metadata.cards).filter(filterFn));
   } else if (origin === "campaign") {
-    const filterRelevantEncounterCards = (card: Card) =>
-      !!card.deck_limit;
+    const filterRelevantEncounterCards = (card: Card) => !!card.deck_limit;
 
     const filterFn = and([filterEncounterCards, filterRelevantEncounterCards]);
 

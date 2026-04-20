@@ -30,7 +30,6 @@ import {
 import { FolderTag } from "../folders/folder-tag";
 import { Button } from "../ui/button";
 import { CopyToClipboard } from "../ui/copy-to-clipboard";
-import { DefaultTooltip } from "../ui/tooltip";
 import css from "./deck-summary.module.css";
 
 type DeckSummaryProps = {
@@ -59,8 +58,6 @@ export function DeckSummary(props: DeckSummaryProps) {
     validation,
     ...rest
   } = props;
-
-  const { t } = useTranslation();
 
   const backgroundCls = getCardColor(deck.investigatorBack.card, "background");
   const borderCls = getCardColor(deck.investigatorBack.card, "border");

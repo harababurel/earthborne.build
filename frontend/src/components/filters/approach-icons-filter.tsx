@@ -36,7 +36,6 @@ export function ApproachIconsFilter(props: FilterProps) {
 
   const optionCodes = new Set(options.map((o) => o.code));
 
-
   return (
     <FilterContainer
       changes={changes}

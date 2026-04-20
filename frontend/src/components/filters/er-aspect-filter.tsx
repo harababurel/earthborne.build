@@ -4,9 +4,9 @@ import { selectActiveListFilter } from "@/store/selectors/lists";
 import { isFactionFilterObject } from "@/store/slices/lists.type-guards";
 import { assert } from "@/utils/assert";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import css from "./er-aspect-filter.module.css";
 import type { FilterProps } from "./filters.types";
 import { useFilter } from "./primitives/filter-hooks";
-import css from "./er-aspect-filter.module.css";
 
 const ASPECTS = ["AWA", "FIT", "FOC", "SPI"] as const;
 

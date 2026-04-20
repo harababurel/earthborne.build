@@ -101,6 +101,10 @@ function addPacksToLookupTables(
   for (const pack of packs) {
     // ER has no cycles; use pack code as the cycle key so packsByCycle is
     // populated consistently (some UI code iterates it).
-    setInLookupTable(pack.code, lookupTables.packsByCycle, pack.cycle_code ?? pack.code);
+    setInLookupTable(
+      pack.code,
+      lookupTables.packsByCycle,
+      pack.cycle_code ?? pack.code,
+    );
   }
 }

@@ -12,7 +12,10 @@ type Props = {
 export function EnergyCostIcon({ aspect, className, cost }: Props) {
   return (
     <div className={css["container"]}>
-      <div className={cx(css["badge"], className)} data-aspect={aspect ?? undefined}>
+      <div
+        className={cx(css["badge"], className)}
+        data-aspect={aspect ?? undefined}
+      >
         <AspectIcon aspect={aspect} className={css["badge-svg"]} />
         {cost != null && (
           <span className={css["badge-number"]}>{numericalStr(cost)}</span>
