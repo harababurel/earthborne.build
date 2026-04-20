@@ -279,6 +279,7 @@ The ER filters have been fully implemented. Added: type, aspect requirement, ene
 - **MediaCard Banners:** Enhanced the UI to use high-quality, responsive 2.36:1 image banners for Core, Valley Expansions, and Path Expansions.
 - **Fallback Rendering:** Added `FALLBACK_PACK_NAMES` so expansions without ingested card data (e.g., Moments on the Path, Moments in the Valley) can still have ownership tracked.
 - **Auto-Hide Unreleased Packs:** Added `TEMPORARILY_HIDDEN_PACKS` to easily filter out unreleased or non-relevant packs (`itm`, `sas`, `rcd`) without deleting them from the core config.
+- **Removed Preview Cards:** Completely removed the "show preview cards" setting, banner, and filtering logic, as Earthborne Rangers does not use rolling preview releases.
 
 ---
 
