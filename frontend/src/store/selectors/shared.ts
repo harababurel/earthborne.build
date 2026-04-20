@@ -1,7 +1,6 @@
 import type { Card } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import { official } from "@/utils/card-utils";
-import { PREVIEW_PACKS } from "@/utils/constants";
 import i18n from "@/utils/i18n";
 import { isEmpty } from "@/utils/is-empty";
 import { time, timeEnd } from "@/utils/time";
@@ -103,18 +102,7 @@ export const selectCollection = createSelector(
       ),
     };
 
-    return settings.showPreviews
-      ? {
-          ...collection,
-          ...PREVIEW_PACKS.reduce(
-            (acc, code) => {
-              acc[code] = true;
-              return acc;
-            },
-            {} as Record<string, boolean>,
-          ),
-        }
-      : collection;
+    return collection;
   },
 );
 
@@ -261,17 +249,9 @@ export const selectPrintingsForCard = createSelector(
   selectMetadata,
   selectLookupTables,
   selectLocaleSortingCollator,
-  (state: StoreState) => state.settings.showPreviews,
   selectShowFanMadeRelations,
   (_: StoreState, code: string) => code,
-  (
-    metadata,
-    lookupTables,
-    collator,
-    showPreviews,
-    showFanMadeRelations,
-    cardCode,
-  ) => {
+  (metadata, lookupTables, collator, showFanMadeRelations, cardCode) => {
     const duplicates = Object.keys(
       lookupTables.relations.duplicates[cardCode] ?? {},
     );

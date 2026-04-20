@@ -5,11 +5,7 @@ import { DEFAULT_LIST_SORT_ID } from "@/utils/constants";
 import type { Filter } from "@/utils/fp";
 import { and, not } from "@/utils/fp";
 import { parse as parseBuildQl } from "../lib/buildql/parser";
-import {
-  filterEncounterCards,
-  filterPreviews,
-  filterType,
-} from "../lib/filtering";
+import { filterEncounterCards, filterType } from "../lib/filtering";
 import type { ResolvedDeck } from "../lib/types";
 import { selectBuildQlInterpreter } from "../selectors/shared";
 import type { StoreState } from ".";
@@ -604,7 +600,6 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
         key,
         systemFilter: and([
           ...SYSTEM_FILTERS,
-          ...(state.settings.showPreviews ? [] : [not(filterPreviews)]),
           ...(opts.systemFilter ? [opts.systemFilter] : []),
         ]),
         search: {
@@ -1001,10 +996,6 @@ export function makeLists(
   const initialValues = mergeInitialValues(_initialValues ?? {}, settings);
 
   const systemFilters = [...SYSTEM_FILTERS];
-
-  if (!settings.showPreviews) {
-    systemFilters.push(not(filterPreviews));
-  }
 
   const systemFilter = and(systemFilters);
 

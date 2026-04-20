@@ -10,7 +10,6 @@ import {
 import { selectActiveList } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import { useHotkey } from "@/utils/use-hotkey";
-import { PreviewBanner } from "../preview-banner";
 import { useResolvedDeck } from "../resolved-deck-context";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -85,8 +84,6 @@ export function Filters(props: Props) {
         !filtersEnabled && css["disabled"],
       )}
     >
-      {import.meta.env.VITE_SHOW_PREVIEW_BANNER === "true" && <PreviewBanner />}
-
       {props.children && (
         <div className={css["children"]}>{props.children}</div>
       )}

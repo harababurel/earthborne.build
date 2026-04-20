@@ -34,7 +34,6 @@ import { Section } from "./section";
 import css from "./settings.module.css";
 import { ShowAllCardsSetting } from "./show-all-cards";
 import { ShowMoveToSideDeckSetting } from "./show-move-to-side-deck";
-import { ShowPreviewsSetting } from "./show-previews";
 import { SortPunctuationSetting } from "./sort-punctuation-setting";
 import { TabooSetSetting } from "./taboo-set";
 import { ThemeSetting } from "./theme";
@@ -244,10 +243,6 @@ function SettingsInner({
             </TabsContent>
             <TabsContent value="collection">
               <Section title={t("settings.collection.title")}>
-                <ShowPreviewsSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
                 <ShowAllCardsSetting
                   settings={settings}
                   setSettings={setSettings}

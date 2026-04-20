@@ -3,7 +3,7 @@ import { CARD_SET_ORDER } from "@/utils/constants";
 import type { StoreState } from "../slices";
 import { applyCardChanges } from "./card-edits";
 import type { LookupTables } from "./lookup-tables.types";
-import { makeSortFunction, sortByName } from "./sorting";
+import { makeSortFunction } from "./sorting";
 import type { CardWithRelations, Customizations, ResolvedCard } from "./types";
 
 /**
@@ -85,7 +85,7 @@ function resolveRelationArray(
   code: string,
   tabooSetId: number | null | undefined,
   customizations?: Customizations,
-  ignoreDuplicates = true,
+  _ignoreDuplicates = true,
 ): ResolvedCard[] {
   const { metadata, lookupTables } = deps;
 
@@ -110,11 +110,7 @@ function resolveRelationArray(
       }, [])
     : [];
 
-  const sortFn = makeSortFunction(
-    ["type", "name"],
-    metadata,
-    collator,
-  );
+  const sortFn = makeSortFunction(["type", "name"], metadata, collator);
 
   relations.sort((a, b) => sortFn(a.card, b.card));
   return relations;
@@ -127,7 +123,6 @@ function sortRelations(a: string, b: string) {
 export function getRelatedCards(
   cardWithRelations: CardWithRelations,
   showFanMadeRelations: boolean,
-  showPreviews: boolean,
 ) {
   return Object.entries(cardWithRelations.relations ?? {})
     .reduce(
@@ -136,10 +131,7 @@ export function getRelatedCards(
 
         const values = (Array.isArray(value) ? value : [value]).filter((v) => {
           if (!v) return false;
-          return (
-            (showPreviews || !v.card.is_unique) &&
-            (showFanMadeRelations || official(v.card))
-          );
+          return showFanMadeRelations || official(v.card);
         });
 
         if (values.length > 0) {

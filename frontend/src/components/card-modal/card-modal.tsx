@@ -29,8 +29,6 @@ import { Annotation } from "../annotations/annotation";
 import { PopularDecks } from "../arkhamdb-decklists/popular-decks";
 import { Card } from "../card/card";
 import { CardSet } from "../cardset";
-import { Customizations } from "../customizations/customizations";
-import { CustomizationsEditor } from "../customizations/customizations-editor";
 import { AttachableCards } from "../deck-tools/attachable-cards";
 import { CardPoolExtension } from "../limited-card-pool/card-pool-extension";
 import { useResolvedDeck } from "../resolved-deck-context";
@@ -107,11 +105,7 @@ export function CardModal(props: Props) {
   const showQuantities =
     !!ctx.resolvedDeck && cardWithRelations?.card.type_code !== "role";
   const showExtraQuantities = ctx.resolvedDeck?.hasExtraDeck;
-  const related = getRelatedCards(
-    cardWithRelations,
-    showFanMadeRelations,
-    settings.showPreviews,
-  );
+  const related = getRelatedCards(cardWithRelations, showFanMadeRelations);
 
   const attachableDefinition = ctx.resolvedDeck?.availableAttachments.find(
     (config) => config.code === cardWithRelations.card.code,

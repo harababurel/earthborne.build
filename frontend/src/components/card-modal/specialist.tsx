@@ -1,10 +1,7 @@
 import type { Card } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import { useStore } from "@/store";
-import {
-  filterInvestigatorAccess,
-  filterPreviews,
-} from "@/store/lib/filtering";
+import { filterInvestigatorAccess } from "@/store/lib/filtering";
 import { makeSortFunction } from "@/store/lib/sorting";
 import type { ResolvedCard } from "@/store/lib/types";
 import { selectUsableByInvestigators } from "@/store/selectors/card-view";
@@ -33,7 +30,7 @@ const selectSpecialistAccess = createSelector(
   (_: StoreState, card: Card) => card,
   (
     metadata,
-    settings,
+    _settings,
     collator,
     showFanMadeRelations,
     buildQlInterpreter,
@@ -47,14 +44,10 @@ const selectSpecialistAccess = createSelector(
 
     return Object.values(metadata.cards)
       .filter((card) => {
-        const previewsAllowed = settings.showPreviews || !filterPreviews(card);
         const fanMadeAllowed = showFanMadeRelations || official(card);
 
         return (
-          isSpecialist(card) &&
-          investigatorFilter?.(card) &&
-          previewsAllowed &&
-          fanMadeAllowed
+          isSpecialist(card) && investigatorFilter?.(card) && fanMadeAllowed
         );
       })
       .sort(makeSortFunction(["name", "level"], metadata, collator))

@@ -8,7 +8,6 @@ import {
   SpecialistAccess,
   SpecialistInvestigators,
 } from "@/components/card-modal/specialist";
-import { CustomizationsEditor } from "@/components/customizations/customizations-editor";
 import PackIcon from "@/components/icons/pack-icon";
 import { OwnershipPartitionedCardList } from "@/components/ownership-partitioned-card-list";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ import { filterBacksides } from "@/store/lib/filtering";
 import { getRelatedCards } from "@/store/lib/resolve-card";
 import { sortByPosition } from "@/store/lib/sorting";
 import type { CardWithRelations } from "@/store/lib/types";
-import type { Pack } from "@/store/schemas/pack.schema";
 import {
   selectLookupTables,
   selectMetadata,
@@ -58,7 +56,7 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
   const { currentCard } = props;
 
   const metadata = useStore(selectMetadata);
-  const lookupTables = useStore(selectLookupTables);
+  const _lookupTables = useStore(selectLookupTables);
 
   const [search] = useSearchParams();
   const oldFormat = search.get("old_format") === "true";
@@ -67,34 +65,23 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
     const currentCardPackCode = currentCard.card.pack_code;
 
     const currentPack = metadata.packs[currentCardPackCode];
-    let targetPack = currentPack;
+    const targetPack = currentPack;
 
     if (!oldFormat) {
       // ER has no reprint packs.
     }
 
     return targetPack;
-  }, [
-    currentCard.card.pack_code,
-    metadata.packs,
-    oldFormat,
-  ]);
+  }, [currentCard.card.pack_code, metadata.packs, oldFormat]);
 
   const filteredCards = useMemo(
     () =>
       Object.values(metadata.cards)
         .filter(
-          and([
-            filterBacksides,
-            (card) => card.pack_code === targetPack.code,
-          ]),
+          and([filterBacksides, (card) => card.pack_code === targetPack.code]),
         )
         .sort(sortByPosition),
-    [
-      metadata.cards,
-      metadata.packs,
-      targetPack,
-    ],
+    [metadata.cards, targetPack],
   );
 
   const cardListIndex = filteredCards.findIndex(
@@ -169,12 +156,8 @@ export function CardViewCards({
   cardWithRelations: CardWithRelations;
 }) {
   const showFanMadeRelations = useStore(selectShowFanMadeRelations);
-  const settings = useStore((state) => state.settings);
-  const related = getRelatedCards(
-    cardWithRelations,
-    showFanMadeRelations,
-    settings.showPreviews,
-  );
+  const _settings = useStore((state) => state.settings);
+  const related = getRelatedCards(cardWithRelations, showFanMadeRelations);
 
   return (
     <>

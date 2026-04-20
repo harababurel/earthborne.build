@@ -1364,7 +1364,7 @@ export const selectCyclesAndPacks = createSelector(
   selectLookupTables,
   (state: StoreState) => state.settings,
   (state: StoreState) => state.fanMadeData.projects,
-  (metadata, lookupTables, settings, fanMadeProjects) => {
+  (metadata, lookupTables, _settings, fanMadeProjects) => {
     const cycles = Object.entries(lookupTables.packsByCycle).reduce(
       (acc, [cycleCode, packTable]) => {
         const cycle = metadata.cycles[cycleCode];
@@ -1385,12 +1385,10 @@ export const selectCyclesAndPacks = createSelector(
         reprintPacks.sort((a, b) => a.position - b.position);
         packs.sort((a, b) => a.position - b.position);
 
-        const canShowCycle =
-          settings.showPreviews ||
-          packs.some(
-            (pack) =>
-              !pack.date_release || new Date(pack.date_release) <= new Date(),
-          );
+        const canShowCycle = packs.some(
+          (pack) =>
+            !pack.date_release || new Date(pack.date_release) <= new Date(),
+        );
 
         if (canShowCycle) {
           acc.push({ ...cycle, packs, reprintPacks });

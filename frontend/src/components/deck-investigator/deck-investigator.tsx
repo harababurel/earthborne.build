@@ -54,16 +54,14 @@ export function DeckInvestigator(props: Props) {
   const { t } = useTranslation();
 
   const showFanMadeRelations = useStore(selectShowFanMadeRelations);
-  const settings = useStore((state) => state.settings);
+  const _settings = useStore((state) => state.settings);
 
   const related = getRelatedCards(
     deck.cards.investigator,
     showFanMadeRelations,
-    settings.showPreviews,
   ).filter(([key]) => key !== "parallel");
 
-  const hasBack =
-    deck.investigatorBack.card.double_sided;
+  const hasBack = deck.investigatorBack.card.double_sided;
 
   const children = canToggleBack ? (
     <>

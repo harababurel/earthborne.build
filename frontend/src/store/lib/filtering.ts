@@ -76,11 +76,6 @@ export function filterBacksides(_card: Card) {
   return true;
 }
 
-// ER has no preview/unreleased cards — no card is a preview.
-export function filterPreviews(_card: Card) {
-  return false;
-}
-
 export function filterOfficial(card: Card) {
   return official(card);
 }

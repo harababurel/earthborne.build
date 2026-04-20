@@ -117,7 +117,6 @@ export function getInitialSettings(): SettingsState {
     showAllCards: true,
     showCardModalPopularDecks: true,
     showMoveToSideDeck: false,
-    showPreviews: false,
     sortIgnorePunctuation: false,
     tabooSetId: undefined,
     useLimitedPoolForWeaknessDraw: true,

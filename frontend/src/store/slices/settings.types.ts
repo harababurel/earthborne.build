@@ -57,7 +57,6 @@ export type SettingsState = {
   showAllCards: boolean;
   showCardModalPopularDecks: boolean;
   showMoveToSideDeck: boolean;
-  showPreviews: boolean;
   sortIgnorePunctuation: boolean;
   tabooSetId: number | undefined | "latest";
   useLimitedPoolForWeaknessDraw: boolean;
