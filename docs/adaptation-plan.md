@@ -272,6 +272,14 @@ Other fixes made during debugging:
 
 The ER filters have been fully implemented. Added: type, aspect requirement, energy cost, trait, pack/set, category (background/specialty/personality), approach icons, equip value, and card properties.
 
+### Phase 10: Collection Settings — **Done**
+
+- **Refactored Collection UI:** Stripped Arkham-specific ownership concepts (like copies and partial pack ownership).
+- **Boolean Toggles:** Migrated to simple boolean toggles per expansion.
+- **MediaCard Banners:** Enhanced the UI to use high-quality, responsive 2.36:1 image banners for Core, Valley Expansions, and Path Expansions.
+- **Fallback Rendering:** Added `FALLBACK_PACK_NAMES` so expansions without ingested card data (e.g., Moments on the Path, Moments in the Valley) can still have ownership tracked.
+- **Auto-Hide Unreleased Packs:** Added `TEMPORARILY_HIDDEN_PACKS` to easily filter out unreleased or non-relevant packs (`itm`, `sas`, `rcd`) without deleting them from the core config.
+
 ---
 
 ## Current state
@@ -284,3 +292,4 @@ The ER filters have been fully implemented. Added: type, aspect requirement, ene
 - **Card images**: 260 JPGs at `/home/sergiu/work/earthborne.images/cards/` (outside repo). Backend serves via `GET /images/:code`.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed).
 - **Browse page**: all 260 cards visible. Filter sidebar has been successfully rebuilt for Earthborne Rangers.
+- **Collection settings**: Successfully transitioned to an Earthborne Rangers-specific presentation using visual banners and simplified boolean toggles.
