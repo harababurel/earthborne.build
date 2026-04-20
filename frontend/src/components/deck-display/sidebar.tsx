@@ -34,7 +34,6 @@ import {
   selectConnectionLock,
   selectConnectionLockForDeck,
 } from "@/store/selectors/shared";
-import { localizeArkhamDBBaseUrl } from "@/utils/arkhamdb";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { cx } from "@/utils/cx";
 import { isEmpty } from "@/utils/is-empty";
@@ -53,7 +52,6 @@ import {
   useDuplicateDeck,
   useExportJson,
   useExportText,
-  useUploadDeck,
 } from "./hooks";
 import css from "./sidebar.module.css";
 import type { DeckOrigin } from "./types";
@@ -80,10 +78,7 @@ export function Sidebar(props: Props) {
   const isReadOnly = !!deck.next_deck;
 
   const canUploadToArkhamDB =
-    origin === "local" &&
-    !isReadOnly &&
-    deck.source !== "arkhamdb" &&
-    !isEmpty(connectionsData);
+    origin === "local" && !isReadOnly && !isEmpty(connectionsData);
 
   const onArkhamDBUpload = canUploadToArkhamDB ? onUpload : undefined;
 
@@ -145,9 +140,8 @@ function SidebarActions(props: {
   deck: ResolvedDeck;
   history?: History;
   type: DeckDisplayType;
-  onArkhamDBUpload?: () => void;
 }) {
-  const { history, origin, deck, onArkhamDBUpload, type } = props;
+  const { history, origin, deck, type } = props;
 
   const { t } = useTranslation();
   const [, navigate] = useLocation();
@@ -160,7 +154,7 @@ function SidebarActions(props: {
     origin === "local" && search.includes("upgrade") && !deck.next_deck,
   );
 
-  const connectionLock = useStore(selectConnectionLock);
+  const _connectionLock = useStore(selectConnectionLock);
 
   const deckConnectionLock = useStore((state) =>
     selectConnectionLockForDeck(state, deck),
@@ -392,24 +386,6 @@ function SidebarActions(props: {
                   <hr />
                 </>
               )}
-              {onArkhamDBUpload && (
-                <>
-                  <DropdownButton
-                    data-testid="view-upload"
-                    disabled={!!connectionLock}
-                    size="full"
-                    tooltip={connectionLock}
-                    variant="bare"
-                    onClick={onArkhamDBUpload}
-                  >
-                    <i className="icon-elder_sign" />{" "}
-                    {t("deck_view.actions.upload", {
-                      provider: "ArkhamDB",
-                    })}
-                  </DropdownButton>
-                  <hr />
-                </>
-              )}
               <DropdownButton
                 data-testid="view-export-json"
                 onClick={onExportJson}
@@ -456,12 +432,8 @@ function SidebarActions(props: {
   );
 }
 
-function Sharing(props: {
-  onArkhamDBUpload?: () => void;
-  deck: ResolvedDeck;
-  origin: DeckOrigin;
-}) {
-  const { deck, onArkhamDBUpload, origin } = props;
+function Sharing(props: { deck: ResolvedDeck; origin: DeckOrigin }) {
+  const { deck, origin } = props;
   const toast = useToast();
   const { t } = useTranslation();
 
@@ -469,7 +441,7 @@ function Sharing(props: {
   const share = useStore((state) => state.sharing.decks[props.deck.id]);
   const devModeEnabled = useStore((state) => state.settings.devModeEnabled);
 
-  const connectionLock = useStore(selectConnectionLock);
+  const _connectionLock = useStore(selectConnectionLock);
 
   const createShare = useStore((state) => state.createShare);
   const deleteShare = useStore((state) => state.deleteShare);
@@ -565,18 +537,6 @@ function Sharing(props: {
                 <ShareIcon />
                 {t("deck_view.sharing.create")}
               </Button>
-              {onArkhamDBUpload && (
-                <Button
-                  data-testid="view-upload"
-                  disabled={!!connectionLock}
-                  onClick={onArkhamDBUpload}
-                  tooltip={connectionLock}
-                  size="sm"
-                >
-                  <i className="icon-elder_sign" />{" "}
-                  {t("deck_view.actions.upload", { provider: "ArkhamDB" })}
-                </Button>
-              )}
             </div>
           </div>
         )}
@@ -639,51 +599,5 @@ function DevModeApiLinkButton({ id }: { id: Id }) {
       <ExternalLinkIcon />
       {t("deck_view.sharing.api_link")}
     </Button>
-  );
-}
-
-function ArkhamDBDetails(props: { deck: ResolvedDeck; type: DeckDisplayType }) {
-  const { deck, type } = props;
-  const { t } = useTranslation();
-
-  const devModeEnabled = useStore((state) => state.settings.devModeEnabled);
-
-  return (
-    <>
-      <section className={css["details"]} data-testid="share">
-        <DeckDetail
-          as="div"
-          icon={<i className="icon-elder_sign" />}
-          label="ArkhamDB"
-        >
-          <p>
-            {t("deck_view.connections.description", { provider: "ArkhamDB" })}
-          </p>
-          <nav className={css["share-actions"]}>
-            <Button
-              as="a"
-              href={`${localizeArkhamDBBaseUrl()}/${type}/view/${deck.id}`}
-              size="sm"
-              rel="noreferrer"
-              target="_blank"
-            >
-              {t("deck_view.connections.view", { provider: "ArkhamDB" })}
-            </Button>
-            {devModeEnabled && type === "deck" && (
-              <DevModeApiLinkButton id={deck.id} />
-            )}
-          </nav>
-        </DeckDetail>
-      </section>
-      <section className={css["details"]} data-testid="share">
-        <DeckDetail
-          as="div"
-          icon={<ShareIcon />}
-          label={t("deck_view.sharing.title")}
-        >
-          <ShareInfo id={deck.id} path={`/${type}/view/${deck.id}`} />
-        </DeckDetail>
-      </section>
-    </>
   );
 }

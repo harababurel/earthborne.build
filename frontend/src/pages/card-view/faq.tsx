@@ -16,7 +16,6 @@ async function queryFaq(
   return [];
 }
 
-import { redirectArkhamDBLinks } from "@/utils/arkhamdb";
 import { isEmpty } from "@/utils/is-empty";
 
 type Props = {

@@ -11,7 +11,6 @@ import { useToast } from "@/components/ui/toast.hooks";
 import { useStore } from "@/store";
 import { parseFanMadeProject } from "@/store/lib/fan-made-content";
 import { selectMetadata } from "@/store/selectors/shared";
-import { cardToApiFormat } from "@/utils/arkhamdb-json-format";
 import { cx } from "@/utils/cx";
 import css from "./core-2026-reveal.module.css";
 

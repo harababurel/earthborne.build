@@ -45,7 +45,7 @@ export const MQ_WIDE_PREVIEW = "(min-width: 85rem)";
 
 export const ARCHIVE_FOLDER_ID = "archive";
 
-export type StorageProvider = "local" | "shared" | "arkhamdb";
+export type StorageProvider = "local" | "shared";
 
 export const STORAGE_PROVIDERS = ["local", "shared"] as const;
 

@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import type { StoreState } from "../slices";
 import type { ConnectionsState } from "../slices/connections.types";
 
-const AVAILABLE_CONNECTIONS = ["arkhamdb"] as const;
+const AVAILABLE_CONNECTIONS = [] as const;
 
 export function selectAvailableConnections() {
   return AVAILABLE_CONNECTIONS;

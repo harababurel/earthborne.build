@@ -115,7 +115,6 @@ export function getInitialSettings(): SettingsState {
       defaultOrigin: "player",
     },
     showAllCards: false,
-    showCardModalPopularDecks: true,
     showMoveToSideDeck: false,
     sortIgnorePunctuation: false,
     tabooSetId: undefined,

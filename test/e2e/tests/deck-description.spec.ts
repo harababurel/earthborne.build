@@ -29,34 +29,6 @@ test.describe("deck description", () => {
     ).toContainText(".32 Colt");
   });
 
-  test("redirect FAQ links to arkhamdb", async ({ page }) => {
-    await importDeckFromFile(page, "./deck_description.json", {
-      navigate: "view",
-    });
-    await page.getByTestId("tab-notes").click();
-
-    const nextPagePromise = page.waitForEvent("popup");
-    await page.getByRole("link", { name: "ruling" }).click();
-    const nextPage = await nextPagePromise;
-
-    const nextPageOrigin = new URL(nextPage.url()).origin;
-    expect(nextPageOrigin).toEqual(process.env.VITE_ARKHAMDB_BASE_URL);
-  });
-
-  test("redirect other relative links to arkhamdb", async ({ page }) => {
-    await importDeckFromFile(page, "./deck_description.json", {
-      navigate: "view",
-    });
-    await page.getByTestId("tab-notes").click();
-
-    const nextPagePromise = page.waitForEvent("popup");
-    await page.getByRole("link", { name: "decklist" }).click();
-    const nextPage = await nextPagePromise;
-
-    const nextPageOrigin = new URL(nextPage.url()).origin;
-    expect(nextPageOrigin).toEqual(process.env.VITE_ARKHAMDB_BASE_URL);
-  });
-
   test("redirect card links with nested content flow content", async ({
     page,
   }) => {

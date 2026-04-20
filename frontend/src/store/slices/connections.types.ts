@@ -1,6 +1,6 @@
 import type { Id } from "../schemas/deck.schema";
 
-export type Provider = "arkhamdb";
+export type Provider = never;
 
 type ConnectionStatus = "connected" | "disconnected";
 

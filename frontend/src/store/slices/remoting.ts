@@ -4,7 +4,6 @@ import type { RemotingSlice, RemotingState } from "./remoting.types";
 
 function getRemotingState(): RemotingState {
   return {
-    arkhamdb: false,
     sync: false,
   };
 }

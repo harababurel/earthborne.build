@@ -2,7 +2,6 @@ import { useQueries } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "wouter";
-import { ArkhamdbDecklistMeta } from "@/components/arkhamdb-decklists/arkhamdb-decklist-meta";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import {
   DeckDisplay,
@@ -13,7 +12,6 @@ import { ResolvedDeckProvider } from "@/components/resolved-deck-context-provide
 import { Loader } from "@/components/ui/loader";
 import { useStore } from "@/store";
 import { resolveDeck } from "@/store/lib/resolve-deck";
-import { syncAdapters } from "@/store/lib/sync";
 import type { Id } from "@/store/schemas/deck.schema";
 import {
   getDeckHistory,
@@ -68,7 +66,6 @@ function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
   async function queryFn() {
     const decks = await queryDeck(clientId, type, idInt);
     cacheFanMadeContent(decks as Parameters<typeof cacheFanMadeContent>[0]);
-    const adapter = new syncAdapters.arkhamdb(useStore.getState);
     return (decks as unknown[]).map((deck: unknown) =>
       adapter.in(deck as Parameters<typeof adapter.in>[0]),
     );
@@ -105,7 +102,6 @@ function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
   }
 
   if (error) {
-    // ArkhamDB loves to return 500 or otherwise borked errors, default to a 404 unless rate-limited.
     const statusCode =
       error instanceof ApiError ? (error.status === 429 ? 429 : 404) : 500;
     return <ErrorStatus statusCode={statusCode} />;
@@ -130,7 +126,6 @@ function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
 
   return (
     <DeckViewInner
-      origin="arkhamdb"
       deck={deck}
       headerSlot={meta ? <ArkhamdbDecklistMeta {...meta} /> : undefined}
       history={

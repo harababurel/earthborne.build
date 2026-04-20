@@ -11,7 +11,6 @@ import {
 } from "@floating-ui/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useStore } from "@/store";
-import { redirectArkhamDBLinks } from "@/utils/arkhamdb";
 import { FLOATING_PORTAL_ID } from "@/utils/constants";
 import { cx } from "@/utils/cx";
 import { parseMarkdown } from "@/utils/markdown";

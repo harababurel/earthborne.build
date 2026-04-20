@@ -6,7 +6,6 @@ import factions from "@/store/services/data/factions.json";
 import reprintPacks from "@/store/services/data/reprint_packs.json";
 import subTypes from "@/store/services/data/subtypes.json";
 import types from "@/store/services/data/types.json";
-import { packToApiFormat } from "@/utils/arkhamdb-json-format";
 
 // Stubs use the legacy AH JSON shape; cast through unknown to satisfy ER types.
 /* eslint-disable @typescript-eslint/no-explicit-any */

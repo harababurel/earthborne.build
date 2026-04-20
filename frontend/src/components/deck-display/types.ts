@@ -1,1 +1,1 @@
-export type DeckOrigin = "arkhamdb" | "share" | "local";
+export type DeckOrigin = "share" | "local";

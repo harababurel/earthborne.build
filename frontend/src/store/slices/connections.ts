@@ -1,5 +1,4 @@
 import type { StateCreator, StoreApi } from "zustand";
-import { assertCanPublishDeck } from "@/utils/arkhamdb";
 import { assert } from "@/utils/assert";
 import { applyHiddenSlots } from "../lib/fan-made-content";
 import { resolveDeck } from "../lib/resolve-deck";
@@ -97,7 +96,7 @@ export const createConnectionsSlice: StateCreator<
     const deck = structuredClone(state.data.decks[id]);
     assert(deck, `Deck with id ${id} was not found.`);
 
-    const resolved = resolveDeck(
+    const _resolved = resolveDeck(
       {
         lookupTables: selectLookupTables(state),
         metadata: selectMetadata(state),
@@ -106,8 +105,6 @@ export const createConnectionsSlice: StateCreator<
       selectLocaleSortingCollator(state),
       deck,
     );
-
-    assertCanPublishDeck(resolved);
 
     const connection = state.connections.data[provider];
     assert(connection, `Connection for ${provider} was not found.`);
@@ -119,7 +116,7 @@ export const createConnectionsSlice: StateCreator<
       `Deck ${deck.next_deck ? "has" : "is"} an upgrade. Please 'Duplicate' the deck in order to upload it`,
     );
 
-    state.setRemoting("arkhamdb", true);
+    state.setRemoting("sync", true);
 
     try {
       const { id } = await newDeck(state.app.clientId, adapter.out(deck));
@@ -145,10 +142,10 @@ export const createConnectionsSlice: StateCreator<
 
       return nextDeck.id;
     } catch (err) {
-      disconnectProviderIfUnauthorized("arkhamdb", err, set);
+      disconnectProviderIfUnauthorized(provider, err, set);
       throw err;
     } finally {
-      state.setRemoting("arkhamdb", false);
+      state.setRemoting("sync", false);
       dehydrate(get(), "app").catch(console.error);
     }
   },

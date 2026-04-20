@@ -90,7 +90,7 @@ export function DeckCollectionImport() {
               data-1p-ignore=""
               data-testid="import-input"
               name="deck-id"
-              placeholder="https://arkhamdb.com/deck/view/123456"
+              placeholder="https://earthborne.build/deck/view/123456"
               required
               type="text"
             />

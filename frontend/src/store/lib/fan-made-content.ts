@@ -5,12 +5,18 @@ import {
 } from "@arkham-build/shared";
 import { z } from "zod";
 import type { Deck } from "@/store/schemas/deck.schema";
-import {
-  cardToApiFormat,
-  cycleToApiFormat,
-  packToApiFormat,
-} from "@/utils/arkhamdb-json-format";
 import type { StoreState } from "../slices";
+
+function cycleToApiFormat(c: any) {
+  return c;
+}
+function packToApiFormat(p: any) {
+  return p;
+}
+function cardToApiFormat(c: any) {
+  return c;
+}
+
 import type { Metadata } from "../slices/metadata.types";
 import { decodeDeckMeta } from "./deck-meta";
 import type { DeckFanMadeContent } from "./types";

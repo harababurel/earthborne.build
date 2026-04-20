@@ -1,4 +1,3 @@
-import { DecklistsXpRangeInput } from "@/components/arkhamdb-decklists/decklists-xp-range-input";
 import { Field } from "@/components/ui/field";
 import type { DecklistFilterProps } from "./shared";
 

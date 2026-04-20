@@ -29,7 +29,6 @@ export const createDeckCreateSlice: StateCreator<
       );
 
       const provider = settings.defaultStorageProvider;
-      // ER only supports local and shared providers (no ArkhamDB).
       const providerExists = provider === "local" || provider === "shared";
 
       // Apply current environment packs if default environment is set to "current"

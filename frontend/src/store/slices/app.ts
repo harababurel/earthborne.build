@@ -2,7 +2,7 @@ import type { StateCreator } from "zustand";
 import { applyDeckEdits, getChangeRecord } from "@/store/lib/deck-edits";
 import { createDeck } from "@/store/lib/deck-factory";
 import type { Deck } from "@/store/schemas/deck.schema";
-import { assertCanPublishDeck, incrementVersion } from "@/utils/arkhamdb";
+
 import { assert } from "@/utils/assert";
 import { decodeExileSlots } from "@/utils/card-utils";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
@@ -22,27 +22,15 @@ import { applyLocalData } from "../lib/local-data";
 import { mappedByCode } from "../lib/metadata-utils";
 import { resolveDeck } from "../lib/resolve-deck";
 import { decodeExtraSlots, encodeExtraSlots } from "../lib/slots";
-import { disconnectProviderIfUnauthorized, syncAdapters } from "../lib/sync";
 import type { DeckMeta } from "../lib/types";
 import { dehydrate, hydrate } from "../persist";
 import { selectDeckCreateCardSets } from "../selectors/deck-create";
-import {
-  selectDeckHistory,
-  selectDeckValid,
-  selectLatestUpgrade,
-} from "../selectors/decks";
+import { selectDeckValid, selectLatestUpgrade } from "../selectors/decks";
 import {
   selectLocaleSortingCollator,
   selectLookupTables,
   selectMetadata,
 } from "../selectors/shared";
-import {
-  createShare,
-  deleteDeck,
-  newDeck,
-  updateDeck,
-  upgradeDeck,
-} from "../services/queries";
 import type { StoreState } from ".";
 import type { AppSlice } from "./app.types";
 import { makeLists } from "./lists";
@@ -232,7 +220,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       Object.assign(meta, encodeSealedDeck(sealedDeck));
     }
 
-    let deck = createDeck({
+    const deck = createDeck({
       investigator_code: state.deckCreate.investigatorCode,
       investigator_name: back.name,
       name: state.deckCreate.title,
@@ -256,26 +244,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       const meta = decodeDeckMeta(deck);
       meta.fan_made_content = resolved.fanMadeData;
       deck.meta = JSON.stringify(meta);
-    }
-
-    if (state.deckCreate.provider === "arkhamdb") {
-      assertCanPublishDeck(resolved);
-
-      state.setRemoting("arkhamdb", true);
-
-      try {
-        const adapter = new syncAdapters["arkhamdb"](get);
-        const { id } = await newDeck(state.app.clientId, adapter.out(deck));
-
-        deck = adapter.in(
-          await updateDeck(state.app.clientId, adapter.out({ ...deck, id })),
-        );
-      } catch (err) {
-        disconnectProviderIfUnauthorized("arkhamdb", err, set);
-        throw err;
-      } finally {
-        state.setRemoting("arkhamdb", false);
-      }
     }
 
     set((prev) => ({
@@ -307,23 +275,11 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const deck = state.data.decks[id];
     assert(deck.next_deck == null, "Cannot delete a deck that has upgrades.");
 
-    if (deck.source === "arkhamdb") {
-      state.setRemoting("arkhamdb", true);
-      try {
-        await deleteDeck(state.app.clientId, id, true);
-      } catch (err) {
-        disconnectProviderIfUnauthorized("arkhamdb", err, set);
-        // when deleting, we ignore the remote error and continue to delete
-      } finally {
-        state.setRemoting("arkhamdb", false);
-      }
-    } else {
-      await Promise.allSettled(
-        [...state.data.history[id], deck.id].map((curr) =>
-          state.deleteShare(curr as string),
-        ),
-      );
-    }
+    await Promise.allSettled(
+      [...state.data.history[id], deck.id].map((curr) =>
+        state.deleteShare(curr as string),
+      ),
+    );
 
     cb?.();
 
@@ -368,12 +324,10 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       const undoHistory = { ...state.data.undoHistory };
 
       for (const id of Object.keys(decks)) {
-        if (decks[id].source !== "arkhamdb") {
-          delete decks[id];
-          delete history[id];
-          delete edits[id];
-          delete undoHistory[id];
-        }
+        delete decks[id];
+        delete history[id];
+        delete edits[id];
+        delete undoHistory[id];
       }
 
       return {
@@ -397,7 +351,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const deck = state.data.decks[deckId];
     assert(deck, `Deck ${deckId} does not exist.`);
 
-    let nextDeck = {
+    const nextDeck = {
       ...deck,
       ...properties,
     };
@@ -405,23 +359,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     nextDeck.date_update = new Date().toISOString();
     nextDeck.version = incrementVersion(deck.version);
 
-    if (nextDeck.source === "arkhamdb") {
-      state.setRemoting("arkhamdb", true);
-
-      try {
-        const adapter = new syncAdapters.arkhamdb(get);
-        nextDeck = adapter.in(
-          await updateDeck(state.app.clientId, adapter.out(nextDeck)),
-        );
-      } catch (err) {
-        disconnectProviderIfUnauthorized("arkhamdb", err, set);
-        throw err;
-      } finally {
-        state.setRemoting("arkhamdb", false);
-      }
-    } else {
-      await state.updateShare(nextDeck);
-    }
+    await state.updateShare(nextDeck);
 
     set((prev) => {
       const nextEdits = { ...prev.deckEdits };
@@ -468,7 +406,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       ? state.data.decks[deck.previous_deck]
       : undefined;
 
-    let nextDeck = applyDeckEdits(deck, edits, metadata, true, previousDeck);
+    const nextDeck = applyDeckEdits(deck, edits, metadata, true, previousDeck);
     nextDeck.date_update = new Date().toISOString();
     nextDeck.version = incrementVersion(deck.version);
 
@@ -498,25 +436,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       nextDeck.xp_adjustment = upgrade.xpAdjustment ?? 0;
     }
 
-    if (nextDeck.source === "arkhamdb") {
-      assertCanPublishDeck(resolved);
-
-      state.setRemoting("arkhamdb", true);
-
-      try {
-        const adapter = new syncAdapters.arkhamdb(get);
-        nextDeck = adapter.in(
-          await updateDeck(state.app.clientId, adapter.out(nextDeck)),
-        );
-      } catch (err) {
-        disconnectProviderIfUnauthorized("arkhamdb", err, set);
-        throw err;
-      } finally {
-        state.setRemoting("arkhamdb", false);
-      }
-    } else {
-      await state.updateShare(nextDeck);
-    }
+    await state.updateShare(nextDeck);
 
     set((prev) => {
       const deckEdits = { ...prev.deckEdits };
@@ -580,7 +500,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     const now = new Date().toISOString();
 
-    let newDeck: Deck = {
+    const newDeck: Deck = {
       ...structuredClone(deck),
       id: randomId(),
       date_creation: now,
@@ -643,119 +563,9 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     newDeck.meta = JSON.stringify(meta);
 
-    const isShared = !!state.sharing.decks[deck.id];
+    const _isShared = !!state.sharing.decks[deck.id];
 
-    if (deck.source === "arkhamdb") {
-      state.setRemoting("arkhamdb", true);
-      try {
-        const adapter = new syncAdapters.arkhamdb(get);
-        const payload = adapter.out(newDeck);
-        const res = await upgradeDeck(state.app.clientId, deck.id, {
-          xp,
-          exiles: exileString,
-          meta: payload.meta,
-        });
-        newDeck = adapter.in(res);
-      } catch (err) {
-        disconnectProviderIfUnauthorized("arkhamdb", err, set);
-        throw err;
-      } finally {
-        state.setRemoting("arkhamdb", false);
-      }
-    } else if (isShared) {
-      await createShare(
-        state.app.clientId,
-        newDeck,
-        selectDeckHistory(
-          {
-            ...state,
-            metadata,
-            data: {
-              ...state.data,
-              history: {
-                ...state.data.history,
-                [newDeck.id]: [deck.id, ...state.data.history[deck.id]],
-              },
-            },
-          },
-          selectLookupTables(state),
-          selectLocaleSortingCollator(state),
-          newDeck,
-        ),
-      );
-    }
-
-    set((prev) => {
-      const history = { ...prev.data.history };
-      history[newDeck.id] = [deck.id, ...history[deck.id]];
-      delete history[deck.id];
-
-      const deckEdits = { ...prev.deckEdits };
-      delete deckEdits[deck.id];
-
-      const undoHistory = { ...prev.data.undoHistory };
-      delete undoHistory[deck.id];
-
-      const sharedDecks = { ...prev.sharing.decks };
-      if (isShared) {
-        sharedDecks[newDeck.id] = newDeck.date_update;
-      }
-
-      return {
-        deckEdits,
-        data: {
-          ...prev.data,
-          decks: {
-            ...prev.data.decks,
-            [deck.id]: {
-              ...deck,
-              next_deck: newDeck.id,
-            },
-            [newDeck.id]: newDeck,
-          },
-          history,
-          undoHistory,
-        },
-        sharing: {
-          ...prev.sharing,
-          decks: sharedDecks,
-        },
-      };
-    });
-
-    await dehydrate(get(), "app", "edits");
-    return newDeck;
-  },
-  async deleteUpgrade(id, cb) {
-    const state = get();
-
-    const deck = state.data.decks[id];
-
-    const previousId = deck.previous_deck;
-
-    assert(deck, `Deck ${id} does not exist.`);
-    assert(previousId, "Deck does not have a previous deck");
-    assert(state.data.decks[previousId], "Previous deck does not exist");
-
-    assert(
-      Array.isArray(state.data.history[deck.id]),
-      "Deck history does not exist",
-    );
-
-    if (deck.source === "arkhamdb") {
-      state.setRemoting("arkhamdb", true);
-
-      try {
-        await deleteDeck(state.app.clientId, deck.id, false);
-      } catch (err) {
-        disconnectProviderIfUnauthorized("arkhamdb", err, set);
-        throw err;
-      } finally {
-        state.setRemoting("arkhamdb", false);
-      }
-    } else {
-      await state.deleteShare(deck.id as string).catch(console.error);
-    }
+    await state.deleteShare(deck.id as string).catch(console.error);
 
     cb?.(previousId);
 
@@ -830,6 +640,34 @@ function synthesiseCycles(metadata: Metadata) {
       official: true,
     };
   }
+}
+
+function _mergeInitialState(
+  initialState: StoreState,
+  persistedState: Partial<StoreState> | undefined,
+  overrides: Partial<StoreState> | undefined,
+) {
+  return {
+    ...initialState,
+    ...persistedState,
+    ...overrides,
+    app: {
+      ...persistedState?.app,
+      ...overrides?.app,
+      clientId:
+        overrides?.app?.clientId || persistedState?.app?.clientId || randomId(),
+    },
+    settings: {
+      ...initialState.settings,
+      ...persistedState?.settings,
+      ...overrides?.settings,
+      lists: {
+        ...initialState.settings.lists,
+        ...persistedState?.settings?.lists,
+        ...overrides?.settings?.lists,
+      },
+    },
+  };
 }
 
 function mergeInitialState(

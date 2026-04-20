@@ -1,6 +1,5 @@
 import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
-import { CardReviewsLink } from "../card-modal/card-arkhamdb-links";
 import { CardPageLink } from "../card-modal/card-page-link";
 import { Modal, ModalActions, ModalBackdrop, ModalInner } from "../ui/modal";
 import { DeckInvestigator } from "./deck-investigator";

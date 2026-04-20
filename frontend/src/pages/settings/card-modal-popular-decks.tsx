@@ -4,15 +4,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Field } from "@/components/ui/field";
 import type { SettingProps } from "./types";
 
-export function CardModalPopularDecksSetting(props: SettingProps) {
-  const { settings, setSettings } = props;
+export function CardModalPopularDecks(props: SettingProps) {
+  const { setSettings } = props;
   const { t } = useTranslation();
 
   const onCheckedChange = useCallback(
-    (val: boolean | string) => {
+    (_val: boolean | string) => {
       setSettings((settings) => ({
         ...settings,
-        showCardModalPopularDecks: !!val,
       }));
     },
     [setSettings],
@@ -24,7 +23,6 @@ export function CardModalPopularDecksSetting(props: SettingProps) {
       helpText={t("settings.display.show_card_modal_popular_decks_help")}
     >
       <Checkbox
-        checked={settings.showCardModalPopularDecks}
         data-testid="settings-show-card-modal-popular-decks"
         id="show-card-modal-popular-decks"
         label={t("settings.display.show_card_modal_popular_decks")}

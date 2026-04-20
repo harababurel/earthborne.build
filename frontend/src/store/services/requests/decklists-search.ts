@@ -31,10 +31,8 @@ export type DecklistsFiltersState = {
   sort_dir: "asc" | "desc";
 };
 
-export async function searchDecklists(params: URLSearchParams) {
-  const res = await apiV2Request(
-    `/v2/public/arkhamdb-decklists/search?${params.toString()}`,
-  );
+export async function searchDecklists(_params: URLSearchParams) {
+  const res = await apiV2Request();
 
   return res.json() as Promise<DecklistSearchResponse>;
 }

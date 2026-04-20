@@ -1,6 +1,5 @@
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
-import { deckDateTickRange, deckTickToString } from "../lib/arkhamdb-decklists";
 import type { StoreState } from ".";
 import type { RecommenderSlice, RecommenderState } from "./recommender.types";
 
@@ -9,7 +8,7 @@ function getInitialRecommenderState(): RecommenderState {
     recommender: {
       includeSideDeck: true,
       isRelative: false,
-      deckFilter: deckDateTickRange().map(deckTickToString) as [string, string],
+      deckFilter: ["", ""],
       coreCards: {},
     },
   };

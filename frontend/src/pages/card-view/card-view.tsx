@@ -5,8 +5,8 @@ import { Link, useParams, useSearchParams } from "wouter";
 import {
   CardArkhamDBLink,
   CardReviewsLink,
-} from "@/components/card-modal/card-arkhamdb-links";
-import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
+} from "@/components/card-modal/card-modal-provider";
+
 import { CardScan } from "@/components/card-scan";
 import { Footer } from "@/components/footer";
 import { Masthead } from "@/components/masthead";

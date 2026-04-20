@@ -2,7 +2,6 @@ import type { Card as CardType } from "@arkham-build/shared";
 import { ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useSearchParams } from "wouter";
-import { PopularDecks } from "@/components/arkhamdb-decklists/popular-decks";
 import { Card } from "@/components/card/card";
 import {
   SpecialistAccess,
@@ -25,7 +24,6 @@ import {
   cardUrl,
   displayAttribute,
   isSpecialist,
-  official,
   oldFormatCardUrl,
   parseCardTitle,
 } from "@/utils/card-utils";
@@ -167,10 +165,6 @@ export function CardViewCards({
           {/* ER has no customizations */}
         </Card>
       </div>
-
-      {official(cardWithRelations.card) && (
-        <PopularDecks scope={cardWithRelations.card} />
-      )}
 
       {!isEmpty(related) &&
         related.map(([key, value]) => {

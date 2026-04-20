@@ -23,7 +23,7 @@ export function Connect() {
   const loginState = params.get("login_state")?.toString();
 
   const error = params.get("error")?.toString();
-  const provider = params.get("provider")?.toString() || "arkhamdb";
+  const provider = params.get("provider")?.toString();
   const providerName = formatProviderName(provider as StorageProvider);
 
   useEffect(() => {

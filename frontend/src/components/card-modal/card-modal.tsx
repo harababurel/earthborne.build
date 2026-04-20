@@ -26,7 +26,6 @@ import { isEmpty } from "@/utils/is-empty";
 import { useHotkey } from "@/utils/use-hotkey";
 import { useMedia } from "@/utils/use-media";
 import { Annotation } from "../annotations/annotation";
-import { PopularDecks } from "../arkhamdb-decklists/popular-decks";
 import { Card } from "../card/card";
 import { CardSet } from "../cardset";
 import { AttachableCards } from "../deck-tools/attachable-cards";
@@ -36,7 +35,6 @@ import { Button } from "../ui/button";
 import { useDialogContextChecked } from "../ui/dialog.hooks";
 import { HotkeyTooltip } from "../ui/hotkey";
 import { Modal, ModalActions, ModalBackdrop, ModalInner } from "../ui/modal";
-import { CardReviewsLink } from "./card-arkhamdb-links";
 import css from "./card-modal.module.css";
 import { AnnotationEdit } from "./card-modal-annotation-edit";
 import { CardModalAttachmentQuantities } from "./card-modal-attachment-quantities";
@@ -76,7 +74,7 @@ export function CardModal(props: Props) {
     selectCardWithRelations(state, props.code, true, ctx.resolvedDeck),
   );
 
-  const settings = useStore((state) => state.settings);
+  const _settings = useStore((state) => state.settings);
   const showFanMadeRelations = useStore(selectShowFanMadeRelations);
 
   const openCardModal = useStore((state) => state.openCardModal);
@@ -192,11 +190,8 @@ export function CardModal(props: Props) {
         </div>
       )}
       {!ctx.resolvedDeck &&
-        settings.showCardModalPopularDecks &&
         !cardWithRelations.card.pack_code?.startsWith("fan_") && (
-          <div className={css["related"]}>
-            <PopularDecks scope={cardWithRelations.card} />
-          </div>
+          <div className={css["related"]} />
         )}
     </>
   );

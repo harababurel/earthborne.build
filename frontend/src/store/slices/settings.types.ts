@@ -55,7 +55,6 @@ export type SettingsState = {
     defaultOrigin: CardOrigin;
   };
   showAllCards: boolean;
-  showCardModalPopularDecks: boolean;
   showMoveToSideDeck: boolean;
   sortIgnorePunctuation: boolean;
   tabooSetId: number | undefined | "latest";

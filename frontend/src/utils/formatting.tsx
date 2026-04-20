@@ -75,10 +75,6 @@ export function formatSlots(slots: string) {
 
 export function formatProviderName(name: StorageProvider) {
   switch (name) {
-    case "arkhamdb": {
-      return "ArkhamDB";
-    }
-
     default: {
       return capitalize(name);
     }
