@@ -34,7 +34,7 @@ export type SettingsState = {
   cardSize: "sm" | "standard";
   cardSkillIconsDisplay: "simple" | "as_printed";
   colorScheme: ColorScheme;
-  collection: Record<string, number>; // track as "quantity" owned to accomodate the core set.
+  collection: Record<string, boolean>;
   defaultEnvironment: "current" | "legacy";
   defaultStorageProvider: StorageProvider;
   devModeEnabled: boolean;

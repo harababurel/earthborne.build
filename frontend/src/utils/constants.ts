@@ -55,7 +55,6 @@ export const DEFAULT_LIST_SORT_ID = "list_default";
 export const SPECIAL_CARD_CODES: Record<string, string> = {};
 export const PREVIEW_PACKS: string[] = [];
 export const RETURN_TO_CYCLES: Record<string, string> = {};
-export const CYCLES_WITH_STANDALONE_PACKS: string[] = [];
 export const SIDEWAYS_TYPE_CODES: string[] = [];
 export const ORIENTATION_CHANGED_CARDS: string[] = [];
 export const NO_SLOT_STRING = "No Slot";

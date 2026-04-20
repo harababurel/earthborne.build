@@ -197,7 +197,7 @@ function CollectionTab({ dialogCtx, onValueChange }: TabProps) {
   const collection = settings.collection;
 
   const selected = Object.keys(collection).filter(
-    (code) => collection[code] > 0 && !ignored.has(code),
+    (code) => collection[code] && !ignored.has(code),
   );
 
   return (
@@ -291,7 +291,9 @@ function CampaignPlayalongTab(props: TabProps) {
     const packs = environments.cpa(cycle);
 
     if (campaignPlayalongProject) {
-      const projectData = campaignPlayalongProject.data as unknown as { packs?: Array<{ code: string }> };
+      const projectData = campaignPlayalongProject.data as unknown as {
+        packs?: Array<{ code: string }>;
+      };
       const packCodes = (projectData.packs ?? []).map(
         (pack: { code: string }) => pack.code,
       );

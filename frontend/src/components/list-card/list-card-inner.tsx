@@ -67,7 +67,7 @@ export type Props = {
   omitIcon?: boolean;
   omitThumbnail?: boolean;
   onChangeCardQuantity?: (card: Card, quantity: number, limit: number) => void;
-  ownedCount?: number;
+  ownedCount?: boolean;
   quantity?: number;
   referenceProps?: React.ComponentProps<"div">;
   renderCardAction?: RenderCallback;
@@ -233,15 +233,13 @@ export function ListCardInner(props: Props) {
                   </ListCardLink>
                 </h4>
 
-                {ownedCount != null &&
-                  card.code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS &&
-                  (!ownedCount ||
-                    (quantity != null && ownedCount < quantity)) && (
+                {ownedCount === false &&
+                  card.code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS && (
                     <DefaultTooltip
                       tooltip={
                         quantity &&
                         t("deck.stats.unowned", {
-                          count: quantity - ownedCount,
+                          count: quantity,
                           total: quantity,
                         })
                       }

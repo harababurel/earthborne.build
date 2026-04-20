@@ -36,7 +36,7 @@ import type {
 } from "../slices/lists.types";
 import type { Metadata } from "../slices/metadata.types";
 import type { Interpreter } from "./buildql/interpreter";
-import { type CardOwnershipOptions, ownedCardCount } from "./card-ownership";
+import { type CardOwnershipOptions, isCardOwned } from "./card-ownership";
 import type { LookupTables } from "./lookup-tables.types";
 import type { ResolvedDeck } from "./types";
 
@@ -346,7 +346,7 @@ export function filterLevel(
  * Ownership
  */
 export function filterOwnership(options: CardOwnershipOptions) {
-  return ownedCardCount(options) > 0;
+  return isCardOwned(options);
 }
 
 /**

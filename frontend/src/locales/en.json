@@ -911,9 +911,14 @@
       "collection": {
         "card_collection": "Card collection",
         "card_count": "Card count",
-        "chapter": "Chapter {{number}}",
-        "new_format": "New format",
-        "old_format": "Old format",
+        "groups": {
+          "core": "Core Game",
+          "campaign": "Campaign Expansions",
+          "valley": "Valley Expansions",
+          "player": "Player Card Expansions",
+          "path": "Path Expansions"
+        },
+        "owned": "Owned in collection",
         "show_all_cards_owned": "Show all cards as owned",
         "show_all_cards_owned_help": "When this is checked, the collection settings below are ignored when checking card ownership in card and deck lists.",
         "show_previews": "Show preview cards",

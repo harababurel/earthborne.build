@@ -7,51 +7,42 @@ export type CardOwnershipOptions = {
   card: Card;
   metadata: Metadata;
   lookupTables: LookupTables;
-  collection: Record<string, number | boolean>;
+  collection: Record<string, boolean>;
   showAllCards?: boolean;
   strict?: boolean;
 };
 
-export function ownedCardCount(options: CardOwnershipOptions) {
+export function isCardOwned(options: CardOwnershipOptions): boolean {
   const { card, metadata, lookupTables, collection, showAllCards, strict } =
     options;
   if (card.code === SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS) {
-    return card.quantity;
+    return true;
   }
 
   // In ER, fan-made cards have pack_code starting with "fan_".
   const isFanMade = card.pack_code?.startsWith("fan_");
-  if (isFanMade && !strict) return card.quantity;
+  if (isFanMade && !strict) return true;
 
-  if (!isFanMade && showAllCards) return card.quantity;
-
-  let quantityOwned = 0;
+  if (!isFanMade && showAllCards) return true;
 
   // direct pack ownership.
-  const packOwnership = collection[card.pack_code];
-
-  if (packOwnership) {
-    const packsOwned = typeof packOwnership === "number" ? packOwnership : 1;
-    quantityOwned += packsOwned * card.quantity;
+  if (collection[card.pack_code] !== false) {
+    return true;
   }
 
-  const pack = metadata.packs[card.pack_code];
-
   const duplicates = lookupTables.relations.duplicates[card.code];
-  if (!duplicates) return quantityOwned;
+  if (!duplicates) return false;
 
   for (const code of Object.keys(duplicates ?? {})) {
     const duplicate = metadata.cards[code];
 
     if (!duplicate) {
-      // biome-ignore lint: debug
-      console.log("@@@", code);
       continue;
     }
 
     const packCode = duplicate.pack_code;
-    if (packCode && collection[packCode]) quantityOwned += duplicate.quantity;
+    if (packCode && collection[packCode] !== false) return true;
   }
 
-  return quantityOwned;
+  return false;
 }

@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { and } from "@/utils/fp";
-import { ownedCardCount } from "../lib/card-ownership";
+import { isCardOwned } from "../lib/card-ownership";
 import {
   filterBacksides,
   filterDuplicates,
@@ -30,12 +30,16 @@ export const selectTotalOwned = createSelector(
     let ownedPlayerCards = 0;
     let ownedEncounterCards = 0;
 
-    const filter = and([(c) => !(c as unknown as { hidden?: boolean }).hidden, filterBacksides, filterDuplicates]);
+    const filter = and([
+      (c) => !(c as unknown as { hidden?: boolean }).hidden,
+      filterBacksides,
+      filterDuplicates,
+    ]);
 
     for (const card of cards) {
       if (!filter(card)) continue;
 
-      const owned = ownedCardCount({
+      const owned = isCardOwned({
         card,
         metadata,
         lookupTables,
@@ -43,10 +47,12 @@ export const selectTotalOwned = createSelector(
         showAllCards: false,
       });
 
-      if (filterEncounterCards(card)) {
-        ownedEncounterCards += owned;
-      } else {
-        ownedPlayerCards += owned;
+      if (owned) {
+        if (filterEncounterCards(card)) {
+          ownedEncounterCards += card.quantity || 1;
+        } else {
+          ownedPlayerCards += card.quantity || 1;
+        }
       }
     }
 

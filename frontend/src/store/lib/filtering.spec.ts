@@ -834,7 +834,7 @@ describe("filter: ownership", () => {
   function applyFilter(
     state: StoreState,
     code: string,
-    config: Record<string, number | boolean>,
+    config: Record<string, boolean>,
   ) {
     return filterOwnership({
       card: state.metadata.cards[code],

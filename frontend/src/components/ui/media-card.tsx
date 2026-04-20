@@ -4,9 +4,11 @@ import css from "./media-card.module.css";
 type Props = {
   bannerAlt?: string;
   bannerUrl?: string | null;
+  bannerMobileUrl?: string | null;
   children: React.ReactNode;
   headerSlot?: React.ReactNode;
   footerSlot?: React.ReactNode;
+  htmlFor?: string;
   classNames?: {
     container?: string;
     header?: string;
@@ -20,24 +22,41 @@ export function MediaCard(props: Props) {
   const {
     bannerAlt,
     bannerUrl,
+    bannerMobileUrl,
     children,
     classNames,
     footerSlot,
     headerSlot,
+    htmlFor,
     title,
   } = props;
+
+  const renderBanner = () => (
+    <picture className={css["backdrop"]}>
+      {bannerMobileUrl && (
+        <source media="(max-width: 768px)" srcSet={bannerMobileUrl} />
+      )}
+      <img
+        alt={bannerAlt}
+        className={css["backdrop"]}
+        loading="lazy"
+        src={bannerUrl!}
+        style={htmlFor ? { cursor: "pointer" } : undefined}
+      />
+    </picture>
+  );
 
   return (
     <article className={cx(css["card"], classNames?.container)}>
       <header className={cx(css["header"], classNames?.header)}>
-        {bannerUrl && (
-          <img
-            alt={bannerAlt}
-            className={css["backdrop"]}
-            loading="lazy"
-            src={bannerUrl}
-          />
-        )}
+        {bannerUrl &&
+          (htmlFor ? (
+            <label htmlFor={htmlFor} style={{ display: "contents" }}>
+              {renderBanner()}
+            </label>
+          ) : (
+            renderBanner()
+          ))}
         <div className={cx("blurred-background", css["title"])}>{title}</div>
         {headerSlot}
       </header>

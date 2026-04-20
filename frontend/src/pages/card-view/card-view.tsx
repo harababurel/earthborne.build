@@ -31,10 +31,7 @@ import {
   official,
   oldFormatCardUrl,
 } from "@/utils/card-utils";
-import {
-  CYCLES_WITH_STANDALONE_PACKS,
-  FLOATING_PORTAL_ID,
-} from "@/utils/constants";
+import { FLOATING_PORTAL_ID } from "@/utils/constants";
 import { cx } from "@/utils/cx";
 import { ErrorStatus } from "../errors/404";
 import css from "./card-view.module.css";
@@ -187,8 +184,7 @@ function Printings(props: { code: string }) {
             <ListPrinting
               active={
                 printing.card.code === props.code &&
-                (CYCLES_WITH_STANDALONE_PACKS.includes(printing.cycle.code) ||
-                  oldFormat === !printing.pack.reprint)
+                oldFormat === !printing.pack.reprint
               }
               printing={printing}
               oldFormat={!!reprintPackCode}

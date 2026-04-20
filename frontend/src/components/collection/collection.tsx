@@ -1,27 +1,16 @@
-import { BarChart3Icon } from "lucide-react";
-import { useCallback, useMemo } from "react";
+import { BarChart3Icon, ExternalLinkIcon } from "lucide-react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import PackIcon from "@/components/icons/pack-icon";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { useStore } from "@/store";
-import { selectCycleCardCounts } from "@/store/selectors/collection";
-import {
-  groupCyclesByChapter,
-  selectCyclesAndPacks,
-} from "@/store/selectors/lists";
 import type { SettingsState } from "@/store/slices/settings.types";
-import { official } from "@/utils/card-utils";
-import { CYCLES_WITH_STANDALONE_PACKS } from "@/utils/constants";
 import { displayPackName } from "@/utils/formatting";
-import { isEmpty } from "@/utils/is-empty";
 import { Button } from "../ui/button";
 import { MediaCard } from "../ui/media-card";
 import css from "./collection.module.css";
-import { CollectionChapterActions } from "./collection-chapter-actions";
-import { CollectionCount } from "./collection-count";
-import { CollectionCycleActions } from "./collection-cycle-actions";
-import { CollectionPack } from "./collection-pack";
 
 type Props = {
   canShowCounts?: boolean;
@@ -29,26 +18,73 @@ type Props = {
   setSettings?: (settings: React.SetStateAction<SettingsState>) => void;
 };
 
+type CollectionGroup = {
+  id: string;
+  titleKey: string;
+  packCodes: string[];
+};
+
+const BGG_LINKS: Record<string, string> = {
+  ebr: "https://boardgamegeek.com/boardgame/342900/earthborne-rangers",
+  loa: "https://boardgamegeek.com/boardgame/354291/earthborne-rangers-legacy-of-the-ancestors",
+  sib: "https://boardgamegeek.com/boardgame/457239/earthborne-rangers-spire-in-bloom-valley-expansion",
+  sos: "https://boardgamegeek.com/boardgameexpansion/466595/earthborne-rangers-shadow-of-the-storm-expansion",
+  sotv: "https://boardgamegeek.com/boardgame/400328/earthborne-rangers-stewards-of-the-valley",
+  motp: "https://boardgamegeek.com/boardgameexpansion/457244/earthborne-rangers-moments-on-the-path",
+  mitv: "https://boardgamegeek.com/boardgameexpansion/457245/earthborne-rangers-moments-in-the-valley",
+};
+
+const FALLBACK_PACK_NAMES: Record<string, string> = {
+  ebr: "Earthborne Rangers",
+  loa: "Legacy of the Ancestors",
+  sib: "Spire in Bloom",
+  sos: "Shadow of the Storm",
+  sotv: "Stewards of the Valley",
+  motp: "Moments on the Path",
+  mitv: "Moments in the Valley",
+};
+
+// Temporarily hide unreleased/repeat expansions until they are fully available
+const TEMPORARILY_HIDDEN_PACKS = new Set(["itm", "sas", "rcd"]);
+
+const COLLECTION_GROUPS: CollectionGroup[] = [
+  {
+    id: "core",
+    titleKey: "settings.collection.groups.core",
+    packCodes: ["ebr"],
+  },
+  {
+    id: "campaign",
+    titleKey: "settings.collection.groups.campaign",
+    packCodes: ["loa"],
+  },
+  {
+    id: "valley",
+    titleKey: "settings.collection.groups.valley",
+    packCodes: ["sib", "sos", "itm", "sas"],
+  },
+  {
+    id: "player",
+    titleKey: "settings.collection.groups.player",
+    packCodes: ["rcd", "sotv"],
+  },
+  {
+    id: "path",
+    titleKey: "settings.collection.groups.path",
+    packCodes: ["motp", "mitv"],
+  },
+];
+
 export function CollectionSettings(props: Props) {
   const { canShowCounts, settings, setSettings } = props;
 
   const { t } = useTranslation();
-  const cyclesWithPacks = useStore(selectCyclesAndPacks);
-
-  const collectionCycles = useMemo(() => {
-    const officialCycles = cyclesWithPacks.filter((cycle) => official(cycle));
-    return officialCycles;
-  }, [cyclesWithPacks]);
-
-  const cyclesByChapter = useMemo(
-    () => groupCyclesByChapter(collectionCycles),
-    [collectionCycles],
-  );
+  const metadata = useStore((state) => state.metadata);
 
   const canEdit = !!setSettings;
 
   const onCheckPack = useCallback(
-    (packCode: string, val: number) => {
+    (packCode: string, val: boolean) => {
       setSettings?.((prev) => ({
         ...prev,
         collection: {
@@ -58,76 +94,6 @@ export function CollectionSettings(props: Props) {
       }));
     },
     [setSettings],
-  );
-
-  const onToggleChapter = useCallback(
-    (evt: React.MouseEvent) => {
-      if (evt.currentTarget instanceof HTMLButtonElement) {
-        const chapter = evt.currentTarget.dataset.chapter;
-
-        const val = Number.parseInt(
-          evt.currentTarget.dataset.val as string,
-          10,
-        );
-
-        const cycles = cyclesByChapter.find(([c]) => c === chapter)?.[1] ?? [];
-
-        setSettings?.((prev) => ({
-          ...prev,
-          collection: {
-            ...prev.collection,
-            ...cycles.reduce<SettingsState["collection"]>((acc, cycle) => {
-              for (const pack of [...cycle.packs, ...cycle.reprintPacks]) {
-                acc[pack.code] = val;
-              }
-              return acc;
-            }, {}),
-          },
-        }));
-      }
-    },
-    [cyclesByChapter, setSettings],
-  );
-
-  const onToggleCycle = useCallback(
-    (evt: React.MouseEvent) => {
-      if (evt.currentTarget instanceof HTMLButtonElement) {
-        const code = evt.currentTarget.dataset.cycle;
-        const reprint = evt.currentTarget.dataset.reprint === "true";
-
-        const val = Number.parseInt(
-          evt.currentTarget.dataset.val as string,
-          10,
-        );
-
-        const cycle = collectionCycles.find((c) => c.code === code);
-
-        if (cycle) {
-          const packs = reprint ? cycle.reprintPacks : cycle.packs;
-
-          const update = packs.reduce<SettingsState["collection"]>(
-            (acc, curr) => {
-              acc[curr.code] = val;
-              return acc;
-            },
-            {},
-          );
-
-          setSettings?.((prev) => ({
-            ...prev,
-            collection: {
-              ...prev.collection,
-              ...update,
-            },
-          }));
-        }
-      }
-    },
-    [collectionCycles, setSettings],
-  );
-
-  const counts = useStore((state) =>
-    canShowCounts ? selectCycleCardCounts(state) : undefined,
   );
 
   return (
@@ -148,123 +114,109 @@ export function CollectionSettings(props: Props) {
         name="collection"
         id="collection"
       >
-        {cyclesByChapter.map(([chapter, cycles]) => (
-          <div className={css["chapter"]} key={chapter}>
-            <div className={css["chapter-header"]}>
-              <h3 className={css["chapter-title"]}>
-                {t("settings.collection.chapter", {
-                  number: chapter,
-                })}
-              </h3>
-              {canEdit && (
-                <CollectionChapterActions
-                  chapter={chapter}
-                  onToggleChapter={onToggleChapter}
-                />
-              )}
-            </div>
-            <div className={css["cycles"]}>
-              {cycles.map((cycle) => (
-                <MediaCard
-                  key={cycle.code}
-                  bannerAlt={`Cycle ${displayPackName(cycle)} backdrop`}
-                  bannerUrl={`/assets/cycles/${cycle.code}.avif`}
-                  title={
-                    <div className={css["cycle-header-container"]}>
-                      <div className={css["cycle-label"]}>
-                        <PackIcon code={cycle.code} />
-                        {displayPackName(cycle)}
-                      </div>
-                      {canEdit &&
-                        !cycle.reprintPacks.length &&
-                        cycle.code !== "core" && (
-                          <CollectionCycleActions
-                            cycleCode={cycle.code}
-                            onToggleCycle={onToggleCycle}
-                          />
-                        )}
-                    </div>
-                  }
-                >
-                  {!isEmpty(cycle.reprintPacks) && (
-                    <div>
-                      <div className={css["cycle-subheader"]}>
-                        {t("settings.collection.new_format")}
-                        {canEdit && cycle.code !== "core" && (
-                          <CollectionCycleActions
-                            cycleCode={cycle.code}
-                            onToggleCycle={onToggleCycle}
-                            reprint
-                          />
-                        )}
-                      </div>
-                      <ol className={css["packs"]}>
-                        {cycle.reprintPacks.map((pack) => (
-                          <CollectionPack
-                            canEdit={canEdit}
-                            canShowCounts={canShowCounts}
-                            counts={counts}
-                            cycle={cycle}
-                            hasQuantity={pack.code === "core"}
-                            key={pack.code}
-                            onChange={onCheckPack}
-                            pack={pack}
-                            value={settings.collection[pack.code] ?? 0}
-                          />
-                        ))}
-                      </ol>
-                    </div>
-                  )}
+        {COLLECTION_GROUPS.map((group) => {
+          const packs = group.packCodes
+            .filter((code) => !TEMPORARILY_HIDDEN_PACKS.has(code))
+            .map((code) => {
+              if (metadata.packs[code]) return metadata.packs[code];
 
-                  <div>
-                    {!isEmpty(cycle.reprintPacks) && (
-                      <div className={css["cycle-subheader"]}>
-                        {t("settings.collection.old_format")}
-                        {canEdit && cycle.code !== "core" && (
-                          <CollectionCycleActions
-                            cycleCode={cycle.code}
-                            onToggleCycle={onToggleCycle}
-                          />
-                        )}
-                      </div>
-                    )}
-                    <ol className={css["packs"]}>
-                      {cycle.packs.map((pack) => (
-                        <CollectionPack
-                          canEdit={canEdit}
-                          canShowCounts={canShowCounts}
-                          counts={counts}
-                          cycle={cycle}
-                          hasQuantity={pack.code === "core"}
-                          key={pack.code}
-                          onChange={onCheckPack}
-                          pack={pack}
-                          value={settings.collection[pack.code] ?? 0}
-                        />
-                      ))}
-                    </ol>
-                  </div>
+              // Provide a fallback pack so expansions display even if card data isn't ingested yet
+              return {
+                code,
+                cycle_code: code,
+                name: FALLBACK_PACK_NAMES[code] || code,
+                real_name: FALLBACK_PACK_NAMES[code] || code,
+                position: 999,
+                official: true,
+              } as any;
+            })
+            .filter(Boolean);
 
-                  {canShowCounts &&
-                    counts &&
-                    !CYCLES_WITH_STANDALONE_PACKS.includes(cycle.code) && (
-                      <article className={css["cycle-counts"]}>
-                        <header>
-                          <h4 className={css["cycle-counts-title"]}>
-                            {t("settings.collection.card_count")}
-                          </h4>
-                        </header>
-                        <CollectionCount
-                          counts={counts.cycles[cycle.code]}
-                          type="cycle"
+          if (packs.length === 0) return null;
+
+          return (
+            <div className={css["chapter"]} key={group.id}>
+              <div className={css["chapter-header"]}>
+                <h3 className={css["chapter-title"]}>{t(group.titleKey)}</h3>
+              </div>
+              <div className={css["cycles"]}>
+                {packs.map((pack) => (
+                  <MediaCard
+                    key={pack.code}
+                    bannerAlt={`${displayPackName(pack)} backdrop`}
+                    bannerUrl={`/assets/cycles/${pack.code}.avif`}
+                    bannerMobileUrl={
+                      pack.code === "sos" || pack.code === "sotv"
+                        ? `/assets/cycles/${pack.code}_mobile.avif`
+                        : undefined
+                    }
+                    htmlFor={
+                      canEdit ? `collection-pack-${pack.code}` : undefined
+                    }
+                    title={
+                      <label
+                        htmlFor={`collection-pack-${pack.code}`}
+                        className={css["cycle-header-container"]}
+                        style={{
+                          alignItems: "center",
+                          justifyContent: "flex-start",
+                          gap: "0.75rem",
+                          cursor: canEdit ? "pointer" : "default",
+                        }}
+                      >
+                        <Checkbox
+                          disabled={!canEdit}
+                          checked={settings.collection[pack.code] !== false}
+                          id={`collection-pack-${pack.code}`}
+                          name={pack.code}
+                          label={t("settings.collection.owned")}
+                          hideLabel={true}
+                          aria-label={`Toggle ownership of ${displayPackName(pack)}`}
+                          onCheckedChange={(checked) =>
+                            onCheckPack(pack.code, !!checked)
+                          }
                         />
-                      </article>
-                    )}
-                </MediaCard>
-              ))}
+                        <div
+                          className={css["cycle-label"]}
+                          style={{ width: "auto", flex: "1 1 auto" }}
+                        >
+                          <PackIcon code={pack.code} />
+                          {displayPackName(pack)}
+                        </div>
+                      </label>
+                    }
+                  >
+                    <div
+                      style={{
+                        padding: "0.5rem 1rem",
+                        borderTop: "1px solid var(--border-subtle)",
+                      }}
+                    >
+                      {BGG_LINKS[pack.code] && (
+                        <a
+                          href={BGG_LINKS[pack.code]}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            color: "var(--text-secondary)",
+                            fontSize: "var(--text-sm)",
+                            textDecoration: "none",
+                            width: "fit-content",
+                          }}
+                        >
+                          <ExternalLinkIcon size={16} /> View on BoardGameGeek
+                        </a>
+                      )}
+                    </div>
+                  </MediaCard>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </fieldset>
     </Field>
   );

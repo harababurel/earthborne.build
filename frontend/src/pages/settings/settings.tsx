@@ -49,7 +49,7 @@ function Settings() {
   return (
     <SettingsInner
       colorTheme={colorThemeManager.theme}
-      colorScheme={colorThemeManager.colorScheme}
+      colorScheme={colorThemeManager.colorScheme as ColorScheme}
       key={`${settingsKey(settings)}-${colorThemeManager.theme}-${colorThemeManager.colorScheme}`}
       settings={settings}
       updateColorTheme={colorThemeManager.update}
@@ -176,7 +176,9 @@ function SettingsInner({
                 <ThemeSetting setTheme={setTheme} theme={theme} />
                 <ColorSchemeSetting
                   colorScheme={colorScheme}
-                  setColorScheme={setColorScheme}
+                  setColorScheme={(val: string) =>
+                    setColorScheme(val as ColorScheme)
+                  }
                 />
                 <FontSizeSetting
                   settings={settings}

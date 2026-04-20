@@ -11,10 +11,7 @@ import {
   official,
   splitMultiValue,
 } from "@/utils/card-utils";
-import {
-  CYCLES_WITH_STANDALONE_PACKS,
-  NO_SLOT_STRING,
-} from "@/utils/constants";
+import { NO_SLOT_STRING } from "@/utils/constants";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
 import {
   capitalize,
@@ -990,7 +987,7 @@ export const selectListFilterProperties = createSelector(
         if (card.approach_exploration) approachIcons.add("exploration");
         if (card.approach_connection) approachIcons.add("connection");
 
-        if (card.harm_threshold) {
+        if (typeof card.harm_threshold === "number") {
           health.min = Math.min(health.min, Math.max(card.harm_threshold, 0));
           health.max = Math.max(health.max, card.harm_threshold);
         }
@@ -1410,43 +1407,9 @@ export const selectCyclesAndPacks = createSelector(
   },
 );
 
-export function groupCyclesByChapter(
-  cycles: CycleWithPacks[],
-): [string, CycleWithPacks[]][] {
-  const byChapter = cycles.reduce(
-    (acc, cycle) => {
-      const packsByChapter = cycle.packs.reduce<Record<number, Pack[]>>(
-        (chapterAcc, pack) => {
-          const chapter = pack.chapter ?? 1;
-          chapterAcc[chapter] ??= [];
-          chapterAcc[chapter].push(pack);
-          return chapterAcc;
-        },
-        {},
-      );
-
-      for (const [chapterStr, packs] of Object.entries(packsByChapter)) {
-        const chapter = Number.parseInt(chapterStr, 10);
-        acc[chapter] ??= [];
-        if (!isEmpty(packs)) {
-          acc[chapter].push({ ...cycle, packs });
-        }
-      }
-      return acc;
-    },
-    {} as Record<number, CycleWithPacks[]>,
-  );
-
-  return Object.entries(byChapter).sort((a, b) => +b[0] - +a[0]);
-}
-
 export const selectCampaignCycles = createSelector(
   selectCyclesAndPacks,
-  (cycles) =>
-    cycles.filter(
-      (cycle) =>
-        official(cycle) && !CYCLES_WITH_STANDALONE_PACKS.includes(cycle.code),
-    ),
+  (cycles) => cycles.filter((cycle) => official(cycle)),
 );
 
 export const selectCycleMapper = createSelector(selectMetadata, (metadata) => {

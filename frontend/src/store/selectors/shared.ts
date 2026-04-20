@@ -7,7 +7,7 @@ import { isEmpty } from "@/utils/is-empty";
 import { time, timeEnd } from "@/utils/time";
 import { fields } from "../lib/buildql/fields";
 import { Interpreter } from "../lib/buildql/interpreter";
-import { ownedCardCount } from "../lib/card-ownership";
+import { isCardOwned } from "../lib/card-ownership";
 import { addProjectToMetadata, cloneMetadata } from "../lib/fan-made-content";
 import { createLookupTables } from "../lib/lookup-tables";
 import type { ResolvedDeck } from "../lib/types";
@@ -99,7 +99,7 @@ export const selectCollection = createSelector(
       ...Object.fromEntries(
         Object.entries(metadata.packs)
           .filter(([, pack]) => !official(pack))
-          .map((pack) => [pack[0], 1]),
+          .map((pack) => [pack[0], true]),
       ),
     };
 
@@ -108,10 +108,10 @@ export const selectCollection = createSelector(
           ...collection,
           ...PREVIEW_PACKS.reduce(
             (acc, code) => {
-              acc[code] = 1;
+              acc[code] = true;
               return acc;
             },
-            {} as Record<string, number>,
+            {} as Record<string, boolean>,
           ),
         }
       : collection;
@@ -125,7 +125,7 @@ export const selectCardOwnedCount = createSelector(
   (state: StoreState) => state.settings,
   (metadata, lookupTables, collection, settings) => {
     return (card: Card) => {
-      return ownedCardCount({
+      return isCardOwned({
         card,
         metadata,
         lookupTables,

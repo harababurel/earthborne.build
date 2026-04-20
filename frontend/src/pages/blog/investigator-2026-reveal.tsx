@@ -55,10 +55,10 @@ function Investigator2026Reveal() {
 
   useLayoutEffect(() => {
     document.documentElement.style.background = "#000";
-    applyColorTheme("dark", false);
+    applyColorTheme("dark", "botanical", false);
     return () => {
       document.documentElement.style.background = "";
-      applyColorTheme(getColorThemePreference(), prefersDarkMode);
+      applyColorTheme(getColorThemePreference(), "botanical", prefersDarkMode);
     };
   }, [prefersDarkMode]);
 
