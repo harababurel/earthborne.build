@@ -17,7 +17,6 @@ import {
   getCardColor,
   hasSkillIcons,
 } from "@/utils/card-utils";
-import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { cx } from "@/utils/cx";
 import { dataLanguage } from "@/utils/formatting";
 import { preventLeftClick } from "@/utils/prevent-links";
@@ -233,25 +232,22 @@ export function ListCardInner(props: Props) {
                   </ListCardLink>
                 </h4>
 
-                {ownedCount === false &&
-                  card.code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS && (
-                    <DefaultTooltip
-                      tooltip={
-                        quantity &&
-                        t("deck.stats.unowned", {
-                          count: quantity,
-                          total: quantity,
-                        })
-                      }
-                    >
-                      <span
-                        className={css["ownership"]}
-                        data-testid="ownership"
-                      >
-                        <FileWarningIcon />
-                      </span>
-                    </DefaultTooltip>
-                  )}
+                {ownedCount === false && (
+                  <DefaultTooltip
+                    tooltip={
+                      quantity != null
+                        ? t("deck.stats.unowned", {
+                            count: quantity,
+                            total: quantity,
+                          })
+                        : t("filters.ownership.unowned")
+                    }
+                  >
+                    <span className={css["ownership"]} data-testid="ownership">
+                      <FileWarningIcon />
+                    </span>
+                  </DefaultTooltip>
+                )}
                 {ignoredCount > 0 && (
                   <DefaultTooltip
                     tooltip={t("deck.stats.ignored", { count: ignoredCount })}

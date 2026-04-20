@@ -114,7 +114,7 @@ export function getInitialSettings(): SettingsState {
       defaultFormat: "paragraph",
       defaultOrigin: "player",
     },
-    showAllCards: true,
+    showAllCards: false,
     showCardModalPopularDecks: true,
     showMoveToSideDeck: false,
     sortIgnorePunctuation: false,
@@ -143,7 +143,9 @@ export const createSettingsSlice: StateCreator<
         refresh: true,
         locale: settings.locale,
         overrides: {
-          lists: keepListState ? state.lists : makeLists(settings),
+          lists: keepListState
+            ? state.lists
+            : makeLists(settings, state.metadata),
           settings: {
             ...state.settings,
             ...settings,
@@ -151,10 +153,10 @@ export const createSettingsSlice: StateCreator<
         },
       });
     } else {
-      set({
+      set((state) => ({
         settings,
-        lists: makeLists(settings),
-      });
+        lists: makeLists(settings, state.metadata),
+      }));
 
       await dehydrate(get(), "app");
     }

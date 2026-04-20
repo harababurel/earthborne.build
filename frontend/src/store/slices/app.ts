@@ -76,10 +76,17 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       set((prev) => {
         const merged = mergeInitialState(prev, persistedState, overrides);
 
+        // Auto-populate collection with known packs from metadata
+        for (const packCode of Object.keys(metadata.packs)) {
+          if (merged.settings.collection[packCode] === undefined) {
+            merged.settings.collection[packCode] = true;
+          }
+        }
+
         return {
           ...merged,
           lists: {
-            ...makeLists(merged.settings),
+            ...makeLists(merged.settings, metadata),
             ...merged.lists,
           },
           metadata,
@@ -121,6 +128,13 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     set((prev) => {
       const merged = mergeInitialState(prev, persistedState, overrides);
 
+      // Auto-populate collection with new packs from metadata
+      for (const packCode of Object.keys(metadata.packs)) {
+        if (merged.settings.collection[packCode] === undefined) {
+          merged.settings.collection[packCode] = true;
+        }
+      }
+
       return {
         ...merged,
         metadata,
@@ -131,7 +145,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
           ),
         },
         lists: {
-          ...makeLists(merged.settings),
+          ...makeLists(merged.settings, metadata),
           ...merged.lists,
         },
       };

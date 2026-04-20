@@ -30,7 +30,7 @@ function Index() {
   useEffect(() => {
     addList(
       "index",
-      { card_type: "", ownership: "all", fan_made_content: "all" },
+      { card_type: "" },
       {
         additionalFilters: ["pack", "illustrator"],
         systemFilter: browseTypeSystemFilter(cardTypeTab),

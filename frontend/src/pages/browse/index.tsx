@@ -39,8 +39,6 @@ export function Browse() {
         listKey,
         {
           card_type: "",
-          ownership: "all",
-          fan_made_content: "all",
         },
         {
           systemFilter: browseTypeSystemFilter(cardTypeTab),

@@ -351,7 +351,7 @@
         "deck_size": "Deck size",
         "ignored_one": "{{count}} copy does not count towards deck size.",
         "ignored_other": "{{count}} copies do not count towards deck size.",
-        "unowned": "Unavailable: {{count}} of {{total}} cards"
+        "unowned": "Not owned: {{count}} of {{total}} cards"
       },
       "tags": {
         "limited_pool": "Limited pool",
@@ -743,7 +743,7 @@
       "ownership": {
         "owned": "Owned",
         "title": "Ownership",
-        "unowned": "Unavailable"
+        "unowned": "Not owned"
       },
       "pack": {
         "placeholder": "Select packs...",
@@ -916,7 +916,8 @@
           "campaign": "Campaign Expansions",
           "valley": "Valley Expansions",
           "player": "Player Card Expansions",
-          "path": "Path Expansions"
+          "path": "Path Expansions",
+          "other": "Other Expansions"
         },
         "owned": "Owned in collection",
         "show_all_cards_owned": "Show all cards as owned",

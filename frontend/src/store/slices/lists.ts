@@ -77,6 +77,7 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
       const initialValues = mergeInitialValues(
         list.initialState.filterValues,
         state.settings,
+        state.metadata,
       );
 
       return {
@@ -581,7 +582,11 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
     set((state) => {
       const lists = { ...state.lists };
 
-      const values = mergeInitialValues(initialValues ?? {}, state.settings);
+      const values = mergeInitialValues(
+        initialValues ?? {},
+        state.settings,
+        state.metadata,
+      );
 
       const display = {
         ...getDisplaySettings(values, state.settings),
@@ -991,9 +996,14 @@ function properties() {
 
 export function makeLists(
   settings: SettingsState,
+  metadata: Metadata,
   _initialValues?: Partial<Record<FilterKey, unknown>>,
 ) {
-  const initialValues = mergeInitialValues(_initialValues ?? {}, settings);
+  const initialValues = mergeInitialValues(
+    _initialValues ?? {},
+    settings,
+    metadata,
+  );
 
   const systemFilters = [...SYSTEM_FILTERS];
 
@@ -1044,6 +1054,7 @@ export function makeLists(
 function mergeInitialValues(
   initialValues: Partial<Record<FilterKey, unknown>>,
   settings: SettingsState,
+  metadata: Metadata,
 ) {
   return {
     ...initialValues,
@@ -1052,7 +1063,19 @@ function mergeInitialValues(
       initialValues.fan_made_content ??
       getInitialFanMadeContentFilter(settings),
     ownership: initialValues.ownership ?? getInitialOwnershipFilter(settings),
+    pack: initialValues.pack ?? getInitialPackFilter(settings, metadata),
   };
+}
+
+function getInitialPackFilter(
+  settings: SettingsState,
+  metadata: Metadata,
+): string[] {
+  if (settings.showAllCards) return [];
+
+  return Object.keys(metadata.packs).filter(
+    (code) => settings.collection[code],
+  );
 }
 
 function getInitialFanMadeContentFilter(
@@ -1061,8 +1084,8 @@ function getInitialFanMadeContentFilter(
   return settings.cardListsDefaultContentType ?? "all";
 }
 
-function getInitialOwnershipFilter(settings: SettingsState): OwnershipFilter {
-  return settings.showAllCards ? "all" : "owned";
+function getInitialOwnershipFilter(_settings: SettingsState): OwnershipFilter {
+  return "all";
 }
 
 function getDisplaySettings(

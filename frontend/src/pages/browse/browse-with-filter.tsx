@@ -33,8 +33,6 @@ export function BrowseWithFilter(props: Props) {
       listKey,
       {
         card_type: "",
-        ownership: "all",
-        fan_made_content: "all",
         pack: [packCode],
       },
       {

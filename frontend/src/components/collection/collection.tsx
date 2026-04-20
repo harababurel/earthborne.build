@@ -96,6 +96,33 @@ export function CollectionSettings(props: Props) {
     [setSettings],
   );
 
+  const assignedPackCodes = new Set(
+    COLLECTION_GROUPS.flatMap((g) => g.packCodes),
+  );
+  const otherPacks = Object.values(metadata.packs).filter(
+    (p) =>
+      !assignedPackCodes.has(p.code) && !TEMPORARILY_HIDDEN_PACKS.has(p.code),
+  );
+
+  const groupsToRender = [...COLLECTION_GROUPS];
+  if (otherPacks.length > 0) {
+    groupsToRender.push({
+      id: "other",
+      titleKey: "settings.collection.groups.other",
+      packCodes: otherPacks.map((p) => p.code),
+    });
+  }
+
+  const packsWithBanners = new Set([
+    "ebr",
+    "loa",
+    "sib",
+    "sos",
+    "sotv",
+    "motp",
+    "mitv",
+  ]);
+
   return (
     <Field bordered>
       <FieldLabel className={css["collection-label"]} htmlFor="collection">
@@ -114,7 +141,7 @@ export function CollectionSettings(props: Props) {
         name="collection"
         id="collection"
       >
-        {COLLECTION_GROUPS.map((group) => {
+        {groupsToRender.map((group) => {
           const packs = group.packCodes
             .filter((code) => !TEMPORARILY_HIDDEN_PACKS.has(code))
             .map((code) => {
@@ -128,7 +155,7 @@ export function CollectionSettings(props: Props) {
                 real_name: FALLBACK_PACK_NAMES[code] || code,
                 position: 999,
                 official: true,
-              } as any;
+              } as Pack;
             })
             .filter(Boolean);
 
@@ -144,7 +171,11 @@ export function CollectionSettings(props: Props) {
                   <MediaCard
                     key={pack.code}
                     bannerAlt={`${displayPackName(pack)} backdrop`}
-                    bannerUrl={`/assets/cycles/${pack.code}.avif`}
+                    bannerUrl={
+                      packsWithBanners.has(pack.code)
+                        ? `/assets/cycles/${pack.code}.avif`
+                        : undefined
+                    }
                     bannerMobileUrl={
                       pack.code === "sos" || pack.code === "sotv"
                         ? `/assets/cycles/${pack.code}_mobile.avif`
@@ -166,7 +197,7 @@ export function CollectionSettings(props: Props) {
                       >
                         <Checkbox
                           disabled={!canEdit}
-                          checked={settings.collection[pack.code] !== false}
+                          checked={!!settings.collection[pack.code]}
                           id={`collection-pack-${pack.code}`}
                           name={pack.code}
                           label={t("settings.collection.owned")}

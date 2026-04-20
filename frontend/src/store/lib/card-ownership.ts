@@ -1,5 +1,4 @@
 import type { Card } from "@arkham-build/shared";
-import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import type { Metadata } from "../slices/metadata.types";
 import type { LookupTables } from "./lookup-tables.types";
 
@@ -15,9 +14,6 @@ export type CardOwnershipOptions = {
 export function isCardOwned(options: CardOwnershipOptions): boolean {
   const { card, metadata, lookupTables, collection, showAllCards, strict } =
     options;
-  if (card.code === SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS) {
-    return true;
-  }
 
   // In ER, fan-made cards have pack_code starting with "fan_".
   const isFanMade = card.pack_code?.startsWith("fan_");
@@ -26,7 +22,7 @@ export function isCardOwned(options: CardOwnershipOptions): boolean {
   if (!isFanMade && showAllCards) return true;
 
   // direct pack ownership.
-  if (collection[card.pack_code] !== false) {
+  if (collection[card.pack_code]) {
     return true;
   }
 
@@ -41,7 +37,7 @@ export function isCardOwned(options: CardOwnershipOptions): boolean {
     }
 
     const packCode = duplicate.pack_code;
-    if (packCode && collection[packCode] !== false) return true;
+    if (packCode && collection[packCode]) return true;
   }
 
   return false;

@@ -72,7 +72,6 @@ function FanMadeContentPreviewInner({ project }: { project: FanMadeProject }) {
       listKey,
       {
         card_type: "",
-        ownership: "all",
         fan_made_content: "fan-made",
         cycle: [project.meta.code],
       },
