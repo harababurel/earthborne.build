@@ -116,7 +116,6 @@ export function getInitialSettings(): SettingsState {
     showAllCards: false,
     showMoveToSideDeck: false,
     sortIgnorePunctuation: false,
-    tabooSetId: undefined,
     useLimitedPoolForWeaknessDraw: true,
   };
 }

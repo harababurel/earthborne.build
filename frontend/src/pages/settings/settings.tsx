@@ -32,7 +32,6 @@ import css from "./settings.module.css";
 import { ShowAllCardsSetting } from "./show-all-cards";
 import { ShowMoveToSideDeckSetting } from "./show-move-to-side-deck";
 import { SortPunctuationSetting } from "./sort-punctuation-setting";
-import { TabooSetSetting } from "./taboo-set";
 import { ThemeSetting } from "./theme";
 import { WeaknessPoolSetting } from "./weakness-pool";
 
@@ -151,10 +150,6 @@ function SettingsInner({
             </TabsList>
             <TabsContent value="general">
               <Section title={t("settings.general.title")}>
-                <TabooSetSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
                 <WeaknessPoolSetting
                   settings={settings}
                   setSettings={setSettings}

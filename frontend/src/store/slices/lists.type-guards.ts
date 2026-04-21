@@ -123,12 +123,6 @@ export function isSubtypeFilterObject(
   return !!filter && filter.type === "subtype";
 }
 
-export function isTabooSetFilterObject(
-  filter?: FilterObject<FilterKey>,
-): filter is FilterObject<"taboo_set"> {
-  return !!filter && filter.type === "taboo_set";
-}
-
 export function isTypeFilterObject(
   filter?: FilterObject<FilterKey>,
 ): filter is FilterObject<"type"> {

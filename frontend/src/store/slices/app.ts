@@ -176,7 +176,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const back = applyCardChanges(
       metadata.cards[investigatorBackCode],
       metadata,
-      state.deckCreate.tabooSetId,
+      undefined,
       undefined,
     );
 
@@ -226,7 +226,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       name: state.deckCreate.title,
       slots,
       meta: JSON.stringify(meta),
-      taboo_id: state.deckCreate.tabooSetId ?? null,
+      taboo_id: null,
       problem: "too_few_cards",
     });
 

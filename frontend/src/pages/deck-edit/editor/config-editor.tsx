@@ -10,7 +10,6 @@ import { createSelector } from "reselect";
 import { CardPoolExtensionFields } from "@/components/limited-card-pool/card-pool-extension";
 import { LimitedCardPoolField } from "@/components/limited-card-pool/limited-card-pool-field";
 import { SealedDeckField } from "@/components/limited-card-pool/sealed-deck-field";
-import { TabooSelect } from "@/components/taboo-select";
 import { Field, FieldLabel } from "@/components/ui/field";
 import type { SelectOption } from "@/components/ui/select";
 import { Select } from "@/components/ui/select";
@@ -57,8 +56,6 @@ const selectUpdateTags = createSelector(
   (updateTags) => debounce(updateTags, 100),
 );
 
-const selectUpdateTabooId = (state: StoreState) => state.updateTabooId;
-
 const selectUpdateMetaProperty = (state: StoreState) =>
   state.updateMetaProperty;
 
@@ -86,21 +83,10 @@ export function MetaEditor(props: Props) {
 
   const updateName = useStore(selectUpdateName);
   const updateTags = useStore(selectUpdateTags);
-  const updateTabooId = useStore(selectUpdateTabooId);
   const updateMetaProperty = useStore(selectUpdateMetaProperty);
   const updateInvestigatorSide = useStore(selectUpdateInvestigatorSide);
   const updateMetaPropertyDebounced = useStore(
     selectUpdateMetaPropertyDebounced,
-  );
-
-  const onTabooChange = useCallback(
-    (evt: React.ChangeEvent<HTMLSelectElement>) => {
-      if (evt.target instanceof HTMLSelectElement) {
-        const value = Number.parseInt(evt.target.value, 10);
-        updateTabooId(deck.id, Number.isNaN(value) ? null : value);
-      }
-    },
-    [updateTabooId, deck.id],
   );
 
   const onNameChange = useCallback(
@@ -261,16 +247,6 @@ export function MetaEditor(props: Props) {
           selections={deck.selections}
         />
       )}
-      <Field full padded>
-        <FieldLabel htmlFor="meta-taboo-set">
-          {t("deck_edit.config.taboo")}
-        </FieldLabel>
-        <TabooSelect
-          id="meta-taboo-set"
-          onChange={onTabooChange}
-          value={deck.taboo_id}
-        />
-      </Field>
 
       <Field data-testid="meta-limited-card-pool" full padded bordered>
         <FieldLabel as="div">

@@ -7,7 +7,6 @@ import { useLocation } from "wouter";
 import { LimitedCardPoolField } from "@/components/limited-card-pool/limited-card-pool-field";
 import { SealedDeckField } from "@/components/limited-card-pool/sealed-deck-field";
 import { ListCard } from "@/components/list-card/list-card";
-import { TabooSelect } from "@/components/taboo-select";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { PageTitle } from "@/components/ui/page-title";
@@ -39,7 +38,6 @@ export function DeckCreateEditor() {
 
   const createDeck = useStore((state) => state.createDeck);
   const setTitle = useStore((state) => state.deckCreateSetTitle);
-  const setTabooSet = useStore((state) => state.deckCreateSetTabooSet);
   const setSelection = useStore((state) => state.deckCreateSetSelection);
   const setProvider = useStore((state) => state.deckCreateSetProvider);
 
@@ -78,16 +76,6 @@ export function DeckCreateEditor() {
       }
     },
     [setTitle],
-  );
-
-  const onTabooSetChange = useCallback(
-    (evt: React.ChangeEvent<HTMLSelectElement>) => {
-      if (evt.target instanceof HTMLSelectElement) {
-        const value = evt.target.value;
-        setTabooSet(value ? Number.parseInt(value, 10) : undefined);
-      }
-    },
-    [setTabooSet],
   );
 
   const onInvestigatorChange = useCallback(
@@ -190,17 +178,6 @@ export function DeckCreateEditor() {
           onChange={onInputChange}
           type="text"
           value={deckCreate.title}
-        />
-      </Field>
-
-      <Field full padded>
-        <FieldLabel htmlFor="create-taboo">
-          {t("deck_edit.config.taboo")}
-        </FieldLabel>
-        <TabooSelect
-          id="create-taboo"
-          onChange={onTabooSetChange}
-          value={deckCreate.tabooSetId}
         />
       </Field>
 

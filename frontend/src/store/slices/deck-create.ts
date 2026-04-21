@@ -2,7 +2,7 @@ import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { displayAttribute } from "@/utils/card-utils";
 import { getDefaultDeckName } from "../lib/deck-factory";
-import { selectMetadata, selectSettingsTabooId } from "../selectors/shared";
+import { selectMetadata } from "../selectors/shared";
 import type { StoreState } from ".";
 import type { CardSet, DeckCreateSlice } from "./deck-create.types";
 
@@ -39,7 +39,6 @@ export const createDeckCreateSlice: StateCreator<
           provider: providerExists ? provider : "local",
           selections: {},
           sets: ["requiredCards"],
-          tabooSetId: selectSettingsTabooId(settings, metadata),
           title: getDefaultDeckName(
             displayAttribute(investigator, "name"),
             investigator.energy_aspect ?? "",
@@ -64,19 +63,6 @@ export const createDeckCreateSlice: StateCreator<
         deckCreate: {
           ...state.deckCreate,
           title: value,
-        },
-      };
-    });
-  },
-
-  deckCreateSetTabooSet(value: number | undefined) {
-    set((state) => {
-      assert(state.deckCreate, "DeckCreate slice must be initialized.");
-
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          tabooSetId: value,
         },
       };
     });

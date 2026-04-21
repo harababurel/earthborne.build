@@ -156,20 +156,8 @@ export const selectLocaleSortingCollator = createSelector(
   },
 );
 
-export function selectSettingsTabooId(
-  settings: StoreState["settings"],
-  metadata: Metadata,
-) {
-  const tabooSetId = settings.tabooSetId;
-
-  if (tabooSetId === "latest") {
-    const id = Object.keys(metadata.tabooSets)
-      .sort((a, b) => +a - +b) // INVARIANT: taboo set ids are integers
-      .pop();
-    return id ? +id : undefined;
-  }
-
-  return tabooSetId;
+export function selectSettingsTabooId(_settings: unknown, _metadata: unknown) {
+  return undefined;
 }
 
 export const selectCardMapper = createSelector(selectMetadata, (metadata) => {

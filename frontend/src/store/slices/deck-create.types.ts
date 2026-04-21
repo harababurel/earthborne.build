@@ -4,7 +4,6 @@ export type CardSet = "requiredCards" | "advanced" | "replacement";
 
 type DeckCreateState = {
   title: string;
-  tabooSetId: number | undefined;
   investigatorCode: string;
   investigatorFrontCode: string;
   investigatorBackCode: string;
@@ -28,7 +27,6 @@ export type DeckCreateSlice = {
 
   deckCreateSetProvider(provider: string): void;
   deckCreateSetSelection(key: string, value: string): void;
-  deckCreateSetTabooSet: (value: number | undefined) => void;
   deckCreateSetTitle: (value: string) => void;
   deckCreateToggleCardSet: (value: string) => void;
   deckCreateSetInvestigatorCode: (

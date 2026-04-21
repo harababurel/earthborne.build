@@ -107,7 +107,6 @@ import {
   selectLocaleSortingCollator,
   selectLookupTables,
   selectMetadata,
-  selectSettingsTabooId,
   selectTraitMapper,
 } from "./shared";
 
@@ -419,21 +418,10 @@ export const selectActiveListFilter = createSelector(
 );
 
 export function selectCanonicalTabooSetId(
-  state: StoreState,
-  resolvedDeck: ResolvedDeck | undefined,
+  _state: StoreState,
+  _resolvedDeck: unknown,
 ) {
-  if (resolvedDeck) return resolvedDeck.taboo_id;
-
-  const filters = selectActiveListFilters(state);
-  const filterId = filters.indexOf("taboo_set");
-
-  const filterValue = filterId
-    ? selectActiveListFilter(state, filterId)
-    : undefined;
-
-  if (typeof filterValue?.value === "number") return filterValue.value;
-
-  return selectSettingsTabooId(state.settings, selectMetadata(state));
+  return undefined;
 }
 
 // Custom equality check for deck's card access.
@@ -634,7 +622,6 @@ const selectBaseListCards = createSelector(
   (state: StoreState) => selectActiveList(state)?.filterValues,
   (state: StoreState) => selectActiveList(state)?.fanMadeCycleCodes,
   selectDeckInvestigatorFilter,
-  selectCanonicalTabooSetId,
   selectDeckCustomizations,
   selectDeckFanMadeData,
   selectCollection,
@@ -646,7 +633,6 @@ const selectBaseListCards = createSelector(
     filterValues,
     fanMadeCycleCodes,
     deckInvestigatorFilter,
-    tabooSetId,
     customizations,
     fanMadeData,
     collection,
@@ -661,9 +647,9 @@ const selectBaseListCards = createSelector(
     let filteredCards = Object.values(metadata.cards);
 
     // filters can be impacted by card changes, apply them now.
-    if (tabooSetId || customizations) {
+    if (customizations) {
       filteredCards = filteredCards.map((c) =>
-        applyCardChanges(c, metadata, tabooSetId, customizations),
+        applyCardChanges(c, metadata, undefined, customizations),
       );
     }
 
@@ -1609,15 +1595,7 @@ export function selectSubtypeOptions() {
  * Taboo Set
  */
 
-export const selectTabooSetOptions = createSelector(
-  selectMetadata,
-  selectLocaleSortingCollator,
-  (metadata, collator) => {
-    const sets = Object.values(metadata.tabooSets);
-    sets.sort((a, b) => collator.compare(b.date, a.date));
-    return sets;
-  },
-);
+export const selectTabooSetOptions = (_state: unknown) => [] as unknown[];
 
 /**
  * Trait

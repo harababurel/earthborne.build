@@ -34,7 +34,7 @@ export const selectDeckCreateInvestigators = createSelector(
           { metadata, lookupTables },
           collator,
           code,
-          deckCreate.tabooSetId,
+          undefined,
           undefined,
           true,
         );

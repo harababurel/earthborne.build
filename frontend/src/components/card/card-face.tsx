@@ -10,7 +10,6 @@ import { CardDetails } from "./card-details";
 import { CardHeader } from "./card-header";
 import { CardIcons } from "./card-icons";
 import { CardMeta } from "./card-meta";
-import { CardTabooText } from "./card-taboo-text";
 import { CardText } from "./card-text";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -80,7 +79,6 @@ export function CardFace(props: Props) {
           text={displayAttribute(card, "text")}
           typeCode={card.type_code}
         />
-        <CardTabooText card={card} />
         <CardMeta
           linked={size !== "tooltip"}
           onPrintingSelect={onPrintingSelect}
