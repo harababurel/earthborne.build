@@ -31,7 +31,7 @@ export function MediaCard(props: Props) {
     title,
   } = props;
 
-  const renderBanner = () => (
+  const renderBanner = (src: string) => (
     <picture className={css["backdrop"]}>
       {bannerMobileUrl && (
         <source media="(max-width: 768px)" srcSet={bannerMobileUrl} />
@@ -40,7 +40,7 @@ export function MediaCard(props: Props) {
         alt={bannerAlt}
         className={css["backdrop"]}
         loading="lazy"
-        src={bannerUrl!}
+        src={src}
         style={htmlFor ? { cursor: "pointer" } : undefined}
       />
     </picture>
@@ -52,10 +52,10 @@ export function MediaCard(props: Props) {
         {bannerUrl &&
           (htmlFor ? (
             <label htmlFor={htmlFor} style={{ display: "contents" }}>
-              {renderBanner()}
+              {renderBanner(bannerUrl)}
             </label>
           ) : (
-            renderBanner()
+            renderBanner(bannerUrl)
           ))}
         <div className={cx("blurred-background", css["title"])}>{title}</div>
         {headerSlot}

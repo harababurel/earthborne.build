@@ -6,6 +6,7 @@ import { Details } from "@/components/ui/details";
 import { useStore } from "@/store";
 import type { ResolvedCard } from "@/store/lib/types";
 import { selectClientId } from "@/store/selectors/shared";
+import { isEmpty } from "@/utils/is-empty";
 
 // ER has no FAQ system — stub out queryFaq.
 // biome-ignore lint/suspicious/useAwait: stub for call-site compatibility
@@ -15,8 +16,6 @@ async function queryFaq(
 ): Promise<Array<{ html: string }>> {
   return [];
 }
-
-import { isEmpty } from "@/utils/is-empty";
 
 type Props = {
   card: ResolvedCard["card"];
@@ -47,7 +46,6 @@ export function Faq(props: Props) {
       title={t("card_view.actions.faq")}
       scrollHeight="20rem"
     >
-      {/* biome-ignore lint/a11y: not relevant. */}
       <div>
         {response.isPending && t("card_view.faq.loading")}
 

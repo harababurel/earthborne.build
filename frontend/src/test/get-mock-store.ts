@@ -2,37 +2,38 @@ import allCardStub from "@test/fixtures/stubs/all_card.json";
 import dataVersionStub from "@test/fixtures/stubs/data_version.json";
 import metadataStub from "@test/fixtures/stubs/metadata.json";
 import { useStore } from "@/store";
-import factions from "@/store/services/data/factions.json";
-import subTypes from "@/store/services/data/subtypes.json";
-import types from "@/store/services/data/types.json";
+import type {
+  AllCardResponse,
+  DataVersionResponse,
+  MetadataResponse,
+} from "@/store/services/queries";
 
 // Stubs use the legacy AH JSON shape; cast through unknown to satisfy ER types.
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const metadataAny = metadataStub as any;
-const dataVersionAny = dataVersionStub as any;
-const allCardAny = allCardStub as any;
-/* eslint-enable @typescript-eslint/no-explicit-any */
+const metadataAny = metadataStub as unknown as {
+  data: { pack: MetadataResponse["pack"] };
+};
+const dataVersionAny = dataVersionStub as unknown as {
+  data?: { all_card_updated?: DataVersionResponse[] };
+};
+const allCardAny = allCardStub as unknown as {
+  data?: { all_card?: AllCardResponse };
+};
 
-function queryStubMetadata() {
+function queryStubMetadata(): Promise<MetadataResponse> {
   return Promise.resolve({
-    ...metadataAny.data,
     pack: metadataAny.data.pack,
-    reprint_pack: [],
-    faction: factions,
-    type: types,
-    subtype: subTypes,
   });
 }
 
-function queryStubDataVersion() {
-  return Promise.resolve(
-    dataVersionAny.data?.all_card_updated?.[0] ?? dataVersionAny,
-  );
+function queryStubDataVersion(): Promise<DataVersionResponse> {
+  const dataVersion =
+    dataVersionAny.data?.all_card_updated?.[0] ?? dataVersionAny;
+  return Promise.resolve(dataVersion as DataVersionResponse);
 }
 
-function queryStubCardData() {
+function queryStubCardData(): Promise<AllCardResponse> {
   const allCards = allCardAny.data?.all_card ?? allCardAny;
-  return Promise.resolve(allCards);
+  return Promise.resolve(allCards as AllCardResponse);
 }
 
 export async function getMockStore() {

@@ -1,22 +1,14 @@
 import {
+  type Card,
   type FanMadeCard,
   type FanMadeProject,
   FanMadeProjectSchema,
 } from "@arkham-build/shared";
 import { z } from "zod";
 import type { Deck } from "@/store/schemas/deck.schema";
+import type { Cycle } from "../schemas/cycle.schema";
+import type { Pack } from "../schemas/pack.schema";
 import type { StoreState } from "../slices";
-
-function cycleToApiFormat(c: any) {
-  return c;
-}
-function packToApiFormat(p: any) {
-  return p;
-}
-function cardToApiFormat(c: any) {
-  return c;
-}
-
 import type { Metadata } from "../slices/metadata.types";
 import { decodeDeckMeta } from "./deck-meta";
 import type { DeckFanMadeContent } from "./types";
@@ -59,32 +51,34 @@ export function cloneMetadata(metadata: StoreState["metadata"]) {
 export function addProjectToMetadata(meta: Metadata, project: FanMadeProject) {
   // Create a synthetic cycle entry for the fan-made project.
   if (!meta.cycles[project.meta.code]) {
-    meta.cycles[project.meta.code] = cycleToApiFormat({
+    meta.cycles[project.meta.code] = {
       code: project.meta.code,
       name: project.meta.name,
       position: 999,
       official: false,
-    });
+      real_name: project.meta.name,
+    } satisfies Cycle;
   }
 
   // Create a synthetic pack entry for the fan-made project.
   const packCode = `fan_${project.meta.code}`;
   if (!meta.packs[packCode]) {
-    meta.packs[packCode] = packToApiFormat({
+    meta.packs[packCode] = {
       code: packCode,
       name: project.meta.name,
       cycle_code: project.meta.code,
       official: false,
       position: 1,
-    });
+      real_name: project.meta.name,
+    } satisfies Pack;
   }
 
   for (const card of project.data.cards) {
     if (!meta.cards[card.code]) {
-      meta.cards[card.code] = cardToApiFormat({
+      meta.cards[card.code] = {
         ...card,
         pack_code: packCode,
-      });
+      } satisfies Card;
     }
   }
 }

@@ -10,15 +10,16 @@ type Props = {
 
 export function CardEquipLoad({ card }: Props) {
   if (card.type_code !== "gear" || card.equip_value == null) return null;
+  const equipValue = card.equip_value;
   const colorCls = getCardColor(card);
   return (
     <div className={css["equip-load"]}>
       {Array.from({ length: MAX_EQUIP_VALUE }, (_, i) => (
         <span
-          key={i}
+          key={`equip-${i + 1}`}
           className={cx(
             css["equip-square"],
-            i < card.equip_value! && cx(css["filled"], colorCls),
+            i < equipValue && cx(css["filled"], colorCls),
           )}
         />
       ))}

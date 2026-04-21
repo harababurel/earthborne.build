@@ -9,7 +9,6 @@ import { filterEncounterCards, filterType } from "../lib/filtering";
 import type { ResolvedDeck } from "../lib/types";
 import { selectBuildQlInterpreter } from "../selectors/shared";
 import type { StoreState } from ".";
-import type { Metadata } from "./metadata.types";
 import {
   isAspectRequirementFilter,
   isAssetFilter,
@@ -44,6 +43,7 @@ import type {
   SkillIconsFilter,
   SubtypeFilter,
 } from "./lists.types";
+import type { Metadata } from "./metadata.types";
 import type { DecklistConfig, SettingsState } from "./settings.types";
 
 const SYSTEM_FILTERS: Filter[] = [];
