@@ -13,11 +13,7 @@ import {
 } from "@/utils/card-utils";
 import { NO_SLOT_STRING } from "@/utils/constants";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
-import {
-  capitalize,
-  displayPackName,
-  formatTabooSet,
-} from "@/utils/formatting";
+import { capitalize, displayPackName } from "@/utils/formatting";
 import type { Filter } from "@/utils/fp";
 import { and, not, or } from "@/utils/fp";
 import i18n from "@/utils/i18n";
@@ -57,7 +53,6 @@ import {
   filterSetCode,
   filterSkillIcons,
   filterSubtypes,
-  filterTabooSet,
   filterTraits,
   filterType,
 } from "../lib/filtering";
@@ -297,15 +292,6 @@ function makeUserFilter(
         break;
       }
 
-      case "taboo_set": {
-        const value = filterValue.value as number | undefined;
-        if (value != null) {
-          const filter = filterTabooSet(value, metadata);
-          if (filter) filters.push(filter);
-        }
-        break;
-      }
-
       case "trait": {
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
@@ -420,7 +406,6 @@ export const selectActiveListFilter = createSelector(
 // Custom equality check for deck's card access.
 // Deck access is only affected by a few subset of deck changes:
 // 1. The deck changes.
-// 2. The taboo that the deck uses changes.
 // 3. An investigator side changes.
 // 4. Cards that change deckbuilding rules (i.e. On Your Own, Versatile...) are added or removed.
 // 5. Customizations change, some options change card properties.
@@ -436,7 +421,6 @@ const deckAccessEqual = (
   if (isResolvedDeck(a) && isResolvedDeck(b)) {
     return (
       a.id === b.id && // 1
-      a.taboo_id === b.taboo_id && // 2
       a.investigatorFront.card.code === b.investigatorFront.card.code && // 3
       a.investigatorBack.card.code === b.investigatorBack.card.code && // 3
       JSON.stringify(getAdditionalDeckOptions(a)) ===
@@ -1928,16 +1912,6 @@ function selectSubtypeChanges(value: SubtypeFilter) {
   return enabled.map(([key]) => labels[key]).join(` ${i18n.t("filters.or")} `);
 }
 
-const selectTabooSetChanges = createSelector(
-  (_: StoreState, value: SelectFilter) => value,
-  selectMetadata,
-  (value, metadata) => {
-    if (!value) return "";
-    const set = metadata.tabooSets[value];
-    return set ? formatTabooSet(set) : value.toString();
-  },
-);
-
 function selectTraitChanges(value: MultiselectFilter) {
   if (!value.length) return "";
 
@@ -2053,10 +2027,6 @@ export function selectFilterChanges<T extends keyof FilterMapping>(
 
     case "subtype": {
       return selectSubtypeChanges(value as SubtypeFilter);
-    }
-
-    case "taboo_set": {
-      return selectTabooSetChanges(state, value as SelectFilter);
     }
 
     case "set": {

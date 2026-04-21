@@ -8,12 +8,12 @@
   "investigator_code": "01002",
   "investigator_name": "Daisy Walker",
   "slots": {
+    "60219": 2,
     "01000": 1,
     "01008": 1,
     "01009": 1,
     "01039": 2,
-    "01539": 2,
-    "60219": 2
+    "01539": 2
   },
   "sideSlots": [],
   "ignoreDeckLimitSlots": null,
@@ -22,7 +22,6 @@
   "xp_spent": null,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": null,
   "meta": "{}",
   "tags": "seeker",
   "previous_deck": null,

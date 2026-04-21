@@ -8,6 +8,10 @@
   "investigator_code": "03003",
   "investigator_name": "Sefina Rousseau",
   "slots": {
+    "50006": 1,
+    "60408": 1,
+    "60412": 1,
+    "60416": 1,
     "01000": 1,
     "01064": 1,
     "01065": 1,
@@ -35,11 +39,7 @@
     "08046": 1,
     "08047": 1,
     "08055": 1,
-    "08057": 1,
-    "50006": 1,
-    "60408": 1,
-    "60412": 1,
-    "60416": 1
+    "08057": 1
   },
   "sideSlots": [],
   "ignoreDeckLimitSlots": null,
@@ -48,7 +48,6 @@
   "xp_spent": null,
   "xp_adjustment": null,
   "exile_string": null,
-  "taboo_id": 4,
   "meta": "{}",
   "tags": "",
   "previous_deck": null,

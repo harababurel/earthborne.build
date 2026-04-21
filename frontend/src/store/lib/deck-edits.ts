@@ -58,11 +58,6 @@ export function applyDeckEdits(
     deck.tags = edits.tags;
   }
 
-  // adjust taboo id based on deck edits.
-  if (edits.tabooId !== undefined) {
-    deck.taboo_id = edits.tabooId;
-  }
-
   // adjust xp based on deck edits.
   if (edits.xpAdjustment != null) {
     deck.xp_adjustment = edits.xpAdjustment;
@@ -320,7 +315,6 @@ export type ChangeRecord = {
   exileSlots?: Record<string, number>;
   id: Id;
   stats: ChangeStats;
-  tabooSetId: number | undefined | null;
 };
 
 export function getChangeRecord(
@@ -332,7 +326,6 @@ export function getChangeRecord(
     id: next.id,
     customizations: next.customizations,
     stats: getChangeStats(prev, next, omitUpgradeStats),
-    tabooSetId: next.taboo_id,
     exileSlots: omitUpgradeStats
       ? undefined
       : decodeExileSlots(next.exile_string),

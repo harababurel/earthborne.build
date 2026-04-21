@@ -8,6 +8,11 @@
   "investigator_code": "10015",
   "investigator_name": "Hank Samson",
   "slots": {
+    "10017": 1,
+    "10018": 1,
+    "60118": 2,
+    "60527": 2,
+    "60528": 2,
     "01000": 1,
     "01072": 2,
     "01077": 2,
@@ -23,21 +28,18 @@
     "03270": 2,
     "06111": 2,
     "06330": 1,
-    "09099": 2,
-    "10017": 1,
-    "10018": 1,
-    "60118": 2,
-    "60527": 2,
-    "60528": 2
+    "09099": 2
   },
-  "sideSlots": { "02194": 2, "50009": 2 },
+  "sideSlots": {
+    "50009": 2,
+    "02194": 2
+  },
   "ignoreDeckLimitSlots": null,
   "version": "0.1",
   "xp": null,
   "xp_spent": null,
   "xp_adjustment": null,
   "exile_string": null,
-  "taboo_id": 6,
   "meta": "{\"cus_09099\":\"0|1,1|1,6|4\"}",
   "tags": "",
   "previous_deck": null,

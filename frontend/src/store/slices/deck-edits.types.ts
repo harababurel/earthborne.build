@@ -57,7 +57,6 @@ export type EditState = {
   };
   attachments?: AttachmentQuantities;
   annotations?: Annotations;
-  tabooId?: number | null;
   tags?: string | null;
   xpAdjustment?: number | null;
   /** The type of an edit determines whether a notification is shown on load. */
@@ -89,8 +88,6 @@ export type DeckEditsSlice = {
     slot?: Slot,
     mode?: "increment" | "set",
   ): void;
-
-  updateTabooId(deckId: Id, value: number | null): void;
 
   updateInvestigatorSide(deckId: Id, side: string, code: string): void;
 

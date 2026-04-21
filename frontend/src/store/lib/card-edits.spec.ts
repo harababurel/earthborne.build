@@ -19,14 +19,6 @@ describe("applyCardChanges", () => {
     expect(result).toEqual(firstCard);
   });
 
-  it("ignores tabooSetId and returns card unchanged", () => {
-    const state = store.getState();
-    const firstCard = Object.values(state.metadata.cards)[0];
-    if (!firstCard) return;
-    const result = applyCardChanges(firstCard, state.metadata, undefined);
-    expect(result).toEqual(firstCard);
-  });
-
   it("ignores customizations and returns card unchanged", () => {
     const state = store.getState();
     const firstCard = Object.values(state.metadata.cards)[0];

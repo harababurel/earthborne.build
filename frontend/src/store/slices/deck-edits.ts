@@ -72,20 +72,6 @@ export const createDeckEditsSlice: StateCreator<
     );
     dehydrate(get(), "edits").catch(console.error);
   },
-  updateTabooId(deckId, value) {
-    set((state) => ({
-      deckEdits: {
-        ...state.deckEdits,
-        [deckId]: {
-          ...currentEdits(state, deckId),
-          tabooId: value,
-          type: "user" as const,
-        },
-      },
-    }));
-
-    dehydrate(get(), "edits").catch(console.error);
-  },
   updateDescription(deckId, value) {
     set((state) => ({
       deckEdits: {

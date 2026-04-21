@@ -8,6 +8,7 @@
   "investigator_code": "02004",
   "investigator_name": "Jim Culver",
   "slots": {
+    "90052": 1,
     "01000": 1,
     "01058": 1,
     "01061": 1,
@@ -38,8 +39,7 @@
     "09081": 1,
     "09084": 1,
     "09087": 1,
-    "09101": 1,
-    "90052": 1
+    "09101": 1
   },
   "sideSlots": [],
   "ignoreDeckLimitSlots": null,
@@ -48,7 +48,6 @@
   "xp_spent": 1,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": null,
   "meta": "{\"alternate_front\":\"02004\",\"alternate_back\":\"90049\",\"extra_deck\":\"90053,07111,03198,08083,02020,01063,05155,06162,60410,06285\"}",
   "tags": "mystic",
   "previous_deck": 3317195,

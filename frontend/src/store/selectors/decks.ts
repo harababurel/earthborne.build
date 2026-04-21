@@ -225,7 +225,6 @@ export function getDeckHistory(
       customizations: {},
       slots: {},
       extraSlots: {},
-      tabooSetId: null,
     },
     differences: {
       slots: [],

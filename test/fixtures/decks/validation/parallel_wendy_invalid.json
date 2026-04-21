@@ -8,6 +8,9 @@
   "investigator_code": "01005",
   "investigator_name": "Wendy Adams",
   "slots": {
+    "54002": 1,
+    "60527": 2,
+    "90038": 1,
     "01014": 1,
     "01015": 1,
     "01073": 2,
@@ -34,10 +37,7 @@
     "08081": 1,
     "08106": 1,
     "08107": 2,
-    "08125": 1,
-    "54002": 1,
-    "60527": 2,
-    "90038": 1
+    "08125": 1
   },
   "sideSlots": {
     "06332": 2
@@ -48,7 +48,6 @@
   "xp_spent": 8,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": 4,
   "meta": "{\"alternate_front\":\"90037\",\"alternate_back\":\"90037\",\"option_selected\":\"blessed\"}",
   "tags": "survivor",
   "previous_deck": 2077884,

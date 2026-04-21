@@ -132,42 +132,7 @@ test.describe("deck create", () => {
     );
   });
 
-  test("select deck size (non-taboo mandy)", async ({ page }) => {
-    await page.goto("/deck/create/06002");
-    await page
-      .getByTestId("create-select-deck_size_selected")
-      .selectOption("40");
 
-    await expect(locateSignatureQuantity(page, "06008")).toContainText("2");
-
-    await page.getByTestId("create-save").click();
-
-    await expect(page.getByTestId("editor-tabs-slots")).toBeVisible();
-
-    await expect(
-      locateCardInSlots(page, "06008").getByTestId("quantity-value"),
-    ).toContainText("2");
-  });
-
-  test("select deck size (taboo mandy)", async ({ page }) => {
-    await page.goto("/deck/create/06002");
-    await page
-      .getByTestId("create-select-deck_size_selected")
-      .selectOption("40");
-
-    await expect(locateSignatureQuantity(page, "06008")).toContainText("2");
-
-    await page.getByTestId("create-taboo").selectOption("7");
-    await expect(locateSignatureQuantity(page, "06008")).toContainText("3");
-
-    await page.getByTestId("create-save").click();
-
-    await expect(page.getByTestId("editor-tabs-slots")).toBeVisible();
-
-    await expect(
-      locateCardInSlots(page, "06008").getByTestId("quantity-value"),
-    ).toContainText("3");
-  });
 
   function locateScan(page: Page | Locator, code: string) {
     return page.getByAltText(`Scan of ${code}`, { exact: true });

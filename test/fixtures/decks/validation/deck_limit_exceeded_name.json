@@ -8,6 +8,9 @@
   "investigator_code": "01004",
   "investigator_name": "Agnes Baker",
   "slots": {
+    "60209": 2,
+    "60217": 2,
+    "60407": 2,
     "01000": 1,
     "01012": 1,
     "01013": 1,
@@ -22,19 +25,18 @@
     "07027": 2,
     "08108": 2,
     "09087": 2,
-    "09095": 2,
-    "60209": 2,
-    "60217": 2,
-    "60407": 2
+    "09095": 2
   },
   "sideSlots": [],
-  "ignoreDeckLimitSlots": { "02154": 2, "02306": 2 },
+  "ignoreDeckLimitSlots": {
+    "02154": 2,
+    "02306": 2
+  },
   "version": "0.2",
   "xp": null,
   "xp_spent": null,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": null,
   "meta": "{\"alternate_back\":\"90017\"}",
   "tags": "mystic",
   "previous_deck": null,

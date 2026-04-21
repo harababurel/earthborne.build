@@ -440,18 +440,6 @@ export function filterSubtypes(
 }
 
 /**
- * Taboo set — ER has no taboo list. Stub returns undefined.
- */
-export function filterTabooSet(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _tabooSetId: number,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _metadata: Metadata,
-): Filter | undefined {
-  return undefined;
-}
-
-/**
  * Traits — split on "." separator (same format as AH).
  */
 export function filterTraits(

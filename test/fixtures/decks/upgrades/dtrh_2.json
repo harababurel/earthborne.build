@@ -25,6 +25,5 @@
     "08059": 1,
     "03271": 2
   },
-  "problem": "too_few_cards",
-  "taboo_id": null
+  "problem": "too_few_cards"
 }

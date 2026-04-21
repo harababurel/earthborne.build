@@ -18,10 +18,6 @@ export type Metadata = {
   subtypes: Record<string, any>;
   // biome-ignore lint/suspicious/noExplicitAny: AH stubs
   types: Record<string, any>;
-  // biome-ignore lint/suspicious/noExplicitAny: AH stubs
-  tabooSets: Record<string, any>;
-  // biome-ignore lint/suspicious/noExplicitAny: AH stubs
-  taboos: Record<string, any>;
 };
 
 export type MetadataSlice = {

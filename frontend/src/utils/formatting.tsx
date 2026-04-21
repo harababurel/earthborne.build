@@ -2,7 +2,6 @@ import i18next from "i18next";
 import { createSelector } from "reselect";
 import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
-import type { TabooSet } from "@/store/schemas/taboo-set.schema";
 import i18n from "@/utils/i18n";
 import { LOCALES, type StorageProvider } from "./constants";
 
@@ -30,14 +29,6 @@ export const formatDateTime = createSelector(
       dateStyle: "short",
       timeStyle: "short",
     }),
-);
-
-export const formatTabooSet = createSelector(
-  (tabooSet: TabooSet) => tabooSet,
-  (tabooSet) => {
-    const formattedDate = formatDate(tabooSet.date);
-    return `${capitalize(tabooSet.name)} (${formattedDate})`;
-  },
 );
 
 export function formatRelationTitle(id: string) {

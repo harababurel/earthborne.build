@@ -109,7 +109,6 @@ export type FilterMapping = {
   sanity: SanityFilter;
   skill_icons: SkillIconsFilter;
   subtype: SubtypeFilter;
-  taboo_set: SelectFilter;
   set: MultiselectFilter;
   trait: MultiselectFilter;
   type: MultiselectFilter;

@@ -58,7 +58,6 @@ const sampleDeck = {
   xp_spent: null,
   xp_adjustment: 0,
   exile_string: null,
-  taboo_id: null,
   meta: '{"alternate_front":"90017","alternate_back":"90017"}',
   tags: "solo multiplayer",
   previous_deck: null,
@@ -86,7 +85,6 @@ const sampleEdits = {
   tags: "spells multiplayer",
   name: "Parallel Agnes - Spell Recycling Engine 2.0",
   investigatorFront: "01004",
-  tabooId: 7,
   description_md: "Another description",
 };
 
@@ -157,7 +155,6 @@ describe("deck edits", () => {
             "90018": 1,
             "90019": 1,
           },
-          "taboo_id": 7,
           "tags": "spells multiplayer",
           "user_id": 36535,
           "version": "1.0",
@@ -208,7 +205,6 @@ describe("deck edits", () => {
         xp_spent: null,
         xp_adjustment: 0,
         exile_string: null,
-        taboo_id: null,
         meta: '{"cus_09022":"0|1,1|1,2|0","cus_09101":"0|0|Illicit,3|2","cus_09079":"0|0|intellect,1|1","cus_09040":"0|1,1|1,2|1"}',
         tags: "guardian",
         previous_deck: null,

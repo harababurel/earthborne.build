@@ -86,26 +86,7 @@ test.describe("card view: display", () => {
     });
   });
 
-  test("renders taboo", async ({ page }) => {
-    await page.goto("/settings");
-    await page.getByTestId("settings-taboo-set").selectOption("7");
-    await page.getByTestId("settings-save").click();
 
-    await page.goto("/card/03006");
-    await expect(page.getByTestId("main")).toHaveScreenshot({
-      mask: defaultScreenshotMask(page),
-    });
-
-    await page.goto("/card/07197");
-    await expect(page.getByTestId("main")).toHaveScreenshot({
-      mask: defaultScreenshotMask(page),
-    });
-
-    await page.goto("/card/07268");
-    await expect(page.getByTestId("main")).toHaveScreenshot({
-      mask: defaultScreenshotMask(page),
-    });
-  });
 
   test("renders cards from standalone packs", async ({ page }) => {
     await page.goto("/card/60216");

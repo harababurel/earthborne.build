@@ -38,7 +38,6 @@ export const DeckSchema = z.object({
   sideSlots: SafeSlotsSchema,
   slots: SlotsSchema,
   source: z.string().nullish(),
-  taboo_id: z.number().nullish(),
   tags: z.string(),
   user_id: z.number().nullish(),
   version: z.string(),

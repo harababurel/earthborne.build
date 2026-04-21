@@ -153,9 +153,6 @@ export function resolveDeck(
       xpRequired: xpRequired,
       charts,
     },
-    tabooSet: deck.taboo_id
-      ? deps.metadata.tabooSets[deck.taboo_id]
-      : undefined,
   } as ResolvedDeck;
 
   return resolved as ResolvedDeck;

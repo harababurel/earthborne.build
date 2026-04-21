@@ -10,7 +10,6 @@ import deckInvestigatorParallelFront from "@test/fixtures/decks/investigator_par
 import deckInvestigatorReplacements from "@test/fixtures/decks/investigator_replacement.json";
 import deckMultiFactionSelected from "@test/fixtures/decks/multi_faction_select.json";
 import deckMyriadDifferentNames from "@test/fixtures/decks/upgrades/dtrh_penalty_myriad_2.json";
-import deckXpRequired from "@test/fixtures/decks/xp_required.json";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { StoreApi } from "zustand";
 import { getMockStore } from "@/test/get-mock-store";
@@ -626,23 +625,6 @@ describe("resolveDeck", () => {
     });
 
     describe("experience", () => {
-      it("calculates experience correctly (exceptional, taboos)", () => {
-        const state = store.getState();
-        const deck = deckXpRequired;
-        const resolved = resolveDeck(
-          {
-            metadata: state.metadata,
-            lookupTables: selectLookupTables(state),
-            sharing: state.sharing,
-          },
-          selectLocaleSortingCollator(state),
-          DeckSchema.parse(deck),
-        );
-        expect(resolved.stats).toMatchObject({
-          xpRequired: 25,
-        });
-      });
-
       it("counts customizable experience", () => {
         const state = store.getState();
         const deck = deckCustomizable;

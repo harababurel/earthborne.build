@@ -8,12 +8,6 @@
   "investigator_code": "01001",
   "investigator_name": "Roland Banks",
   "slots": {
-    "01000": 1,
-    "01006": 1,
-    "01007": 1,
-    "02040": 1,
-    "02157": 2,
-    "08125": 1,
     "54002": 1,
     "90025": 1,
     "90026": 1,
@@ -21,7 +15,13 @@
     "90030": 1,
     "90031": 1,
     "98005": 1,
-    "98006": 1
+    "98006": 1,
+    "01000": 1,
+    "01006": 1,
+    "01007": 1,
+    "02040": 1,
+    "02157": 2,
+    "08125": 1
   },
   "sideSlots": {
     "01016": 2
@@ -32,7 +32,6 @@
   "xp_spent": null,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": null,
   "meta": "{\"alternate_front\":\"90024\"}",
   "tags": "guardian",
   "previous_deck": null,

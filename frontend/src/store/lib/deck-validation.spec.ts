@@ -104,7 +104,6 @@ const tests = [
   ["invalid: more than one Covenant", "covenant_invalid"],
   // Mandy Thompson
   ["valid: Mandy Thompson with deck size selected", "mandy"],
-  ["valid: Mandy Thompson taboo forces deck size of 50", "mandy_taboo"],
   ["invalid: Mandy Thompson with too few cards", "mandy_too_few_cards"],
   ["invalid: Mandy Thompson with too many cards", "mandy_too_many_cards"],
   [

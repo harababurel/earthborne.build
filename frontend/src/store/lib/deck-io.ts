@@ -7,7 +7,7 @@ import type { Deck, DeckProblem, Id } from "@/store/schemas/deck.schema";
 import type { StoreState } from "@/store/slices";
 import { displayAttribute } from "@/utils/card-utils";
 import { randomId } from "@/utils/crypto";
-import { formatDeckOptionString, formatTabooSet } from "@/utils/formatting";
+import { formatDeckOptionString } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
 import { isEmpty } from "@/utils/is-empty";
 import {
@@ -166,10 +166,6 @@ export function formatDeckAsText(state: StoreState, deck: ResolvedDeck) {
 
   text += `\n${t("common.xp")}: ${deck.stats.xpRequired}  \n`;
 
-  if (deck.tabooSet) {
-    text += `${t("common.taboo")}†: ${formatTabooSet(deck.tabooSet)}  \n`;
-  }
-
   const groups = groupDeckCards(
     selectMetadata(state),
     selectLocaleSortingCollator(state),
@@ -283,7 +279,6 @@ function isApiDeckKey(key: string): key is keyof Deck {
     "problem",
     "sideSlots",
     "slots",
-    "taboo_id",
     "tags",
     "version",
     "xp_adjustment",

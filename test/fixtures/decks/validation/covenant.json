@@ -29,12 +29,12 @@
     "07272": 2
   },
   "sideSlots": {
+    "50006": 2,
+    "60328": 2,
     "02266": 1,
     "05320": 1,
     "07156": 2,
-    "08049": 2,
-    "50006": 2,
-    "60328": 2
+    "08049": 2
   },
   "ignoreDeckLimitSlots": null,
   "version": "0.3",
@@ -42,7 +42,6 @@
   "xp_spent": null,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": 5,
   "meta": "{}",
   "tags": "rogue",
   "previous_deck": null,

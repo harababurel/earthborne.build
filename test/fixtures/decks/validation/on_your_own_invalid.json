@@ -8,6 +8,8 @@
   "investigator_code": "02005",
   "investigator_name": "\"Ashcan\" Pete",
   "slots": {
+    "53010": 1,
+    "60512": 2,
     "01000": 1,
     "01030": 2,
     "01039": 1,
@@ -26,9 +28,7 @@
     "05036": 2,
     "05281": 2,
     "06203": 2,
-    "06284": 2,
-    "53010": 1,
-    "60512": 2
+    "06284": 2
   },
   "sideSlots": [],
   "ignoreDeckLimitSlots": null,
@@ -37,7 +37,6 @@
   "xp_spent": null,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": null,
   "meta": "{}",
   "tags": "",
   "previous_deck": null,

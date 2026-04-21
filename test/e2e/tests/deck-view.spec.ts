@@ -46,9 +46,6 @@ test.describe("deck view", () => {
     await expect(page.getByTestId("deck-details-xp")).toContainText(
       "XP required31",
     );
-    await expect(page.getByTestId("deck-details-taboo")).toContainText(
-      "Taboo list2.1",
-    );
     await expect(page.getByTestId("deck-tags")).toBeVisible();
 
     await expect(page.getByTestId("deck-details-deck-size")).toContainText(
@@ -339,10 +336,6 @@ test.describe("deck view", () => {
 
     await expect(page.getByTestId("deck-details-xp")).toContainText(
       "XP required31",
-    );
-
-    await expect(page.getByTestId("deck-details-taboo")).toContainText(
-      "Taboo list2.1",
     );
 
     await expect(page.getByTestId("deck-tags")).toBeVisible();

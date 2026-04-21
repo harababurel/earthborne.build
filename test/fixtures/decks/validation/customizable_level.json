@@ -8,6 +8,7 @@
   "investigator_code": "98010",
   "investigator_name": "Carolyn Fern",
   "slots": {
+    "60214": 2,
     "01000": 1,
     "01038": 2,
     "01065": 2,
@@ -24,8 +25,7 @@
     "06117": 2,
     "09021": 2,
     "09022": 2,
-    "09040": 2,
-    "60214": 2
+    "09040": 2
   },
   "sideSlots": [],
   "ignoreDeckLimitSlots": null,
@@ -34,7 +34,6 @@
   "xp_spent": null,
   "xp_adjustment": 0,
   "exile_string": null,
-  "taboo_id": null,
   "meta": "{\"cus_09040\":\"1|1\",\"cus_09021\":\"0|1,1|2,2|2,5|0,4|0,3|1\"}",
   "tags": "guardian",
   "previous_deck": null,

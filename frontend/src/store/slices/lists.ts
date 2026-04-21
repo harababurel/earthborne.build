@@ -297,14 +297,6 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
           break;
         }
 
-        case "taboo_set": {
-          filterValues[id] = {
-            ...filterValues[id],
-            value: payload as number | undefined,
-          };
-          break;
-        }
-
         case "subtype": {
           const currentValue = filterValues[id].value as SubtypeFilter;
           const value = { ...currentValue, ...payload };
@@ -855,15 +847,6 @@ function makeFilterValue(
       return makeFilterObject(
         type,
         typeof initialValue === "string" ? initialValue : undefined,
-        false,
-        locked,
-      );
-    }
-
-    case "taboo_set": {
-      return makeFilterObject(
-        type,
-        typeof initialValue === "number" ? initialValue : undefined,
         false,
         locked,
       );

@@ -4,7 +4,6 @@ import type { Deck } from "../schemas/deck.schema";
 import type { EncounterSet } from "../schemas/encounter-set.schema";
 import type { SubType, Type } from "../schemas/metadata.schema";
 import type { Pack } from "../schemas/pack.schema";
-import type { TabooSet } from "../schemas/taboo-set.schema";
 import type { AttachmentQuantities } from "../slices/deck-edits.types";
 
 // Stub type — ER has no attachment mechanic; kept for call-site compatibility.
@@ -201,7 +200,6 @@ export type ResolvedDeck = Omit<Deck, "sideSlots"> & {
     deckSizeTotal: number;
     charts: DeckCharts;
   };
-  tabooSet?: TabooSet;
 };
 
 export function isResolvedDeck(a: unknown): a is ResolvedDeck {

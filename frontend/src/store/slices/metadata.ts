@@ -13,8 +13,6 @@ export function getInitialMetadata(): Metadata {
     factions: {},
     subtypes: {},
     types: {},
-    tabooSets: {},
-    taboos: {},
   };
 }
 

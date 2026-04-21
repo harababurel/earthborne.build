@@ -31,14 +31,15 @@
     "09020": 1,
     "09028": 2
   },
-  "sideSlots": { "06285": 1 },
+  "sideSlots": {
+    "06285": 1
+  },
   "ignoreDeckLimitSlots": null,
   "version": "0.1",
   "xp": null,
   "xp_spent": null,
   "xp_adjustment": null,
   "exile_string": null,
-  "taboo_id": 5,
   "meta": "{\"faction_1\":\"guardian\",\"faction_2\":\"survivor\"}",
   "tags": "",
   "previous_deck": null,

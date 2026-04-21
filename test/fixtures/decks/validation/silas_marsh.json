@@ -8,6 +8,7 @@
   "investigator_code": "07005",
   "investigator_name": "Silas Marsh",
   "slots": {
+    "60507": 2,
     "01000": 1,
     "01079": 2,
     "01080": 2,
@@ -26,8 +27,7 @@
     "06165": 1,
     "07014": 1,
     "07015": 1,
-    "07016": 1,
-    "60507": 2
+    "07016": 1
   },
   "sideSlots": [],
   "ignoreDeckLimitSlots": null,
@@ -36,7 +36,6 @@
   "xp_spent": null,
   "xp_adjustment": null,
   "exile_string": null,
-  "taboo_id": 2,
   "meta": "{}",
   "tags": "",
   "previous_deck": null,
