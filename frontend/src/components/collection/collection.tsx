@@ -6,6 +6,7 @@ import PackIcon from "@/components/icons/pack-icon";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { useStore } from "@/store";
+import type { Pack } from "@/store/schemas/pack.schema";
 import type { SettingsState } from "@/store/slices/settings.types";
 import { displayPackName } from "@/utils/formatting";
 import { Button } from "../ui/button";

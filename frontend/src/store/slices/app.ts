@@ -563,7 +563,54 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     newDeck.meta = JSON.stringify(meta);
 
-    const _isShared = !!state.sharing.decks[deck.id];
+    const isShared = !!state.sharing.decks[deck.id];
+
+    set((prev) => {
+      const history = { ...prev.data.history };
+      history[newDeck.id] = [deck.id, ...history[deck.id]];
+      delete history[deck.id];
+
+      const deckEdits = { ...prev.deckEdits };
+      delete deckEdits[deck.id];
+
+      const undoHistory = { ...prev.data.undoHistory };
+      delete undoHistory[deck.id];
+
+      return {
+        deckEdits,
+        data: {
+          ...prev.data,
+          decks: {
+            ...prev.data.decks,
+            [deck.id]: { ...deck, next_deck: newDeck.id },
+            [newDeck.id]: newDeck,
+          },
+          history,
+          undoHistory,
+        },
+      };
+    });
+
+    if (isShared) {
+      await get().createShare(newDeck.id as string);
+    }
+
+    await dehydrate(get(), "app", "edits");
+    return newDeck;
+  },
+  async deleteUpgrade(id, cb) {
+    const state = get();
+
+    const deck = state.data.decks[id];
+    assert(deck, `Deck ${id} does not exist.`);
+
+    const previousId = deck.previous_deck;
+    assert(previousId, "Deck does not have a previous deck");
+    assert(state.data.decks[previousId], "Previous deck does not exist");
+    assert(
+      Array.isArray(state.data.history[deck.id]),
+      "Deck history does not exist",
+    );
 
     await state.deleteShare(deck.id as string).catch(console.error);
 
@@ -642,32 +689,10 @@ function synthesiseCycles(metadata: Metadata) {
   }
 }
 
-function _mergeInitialState(
-  initialState: StoreState,
-  persistedState: Partial<StoreState> | undefined,
-  overrides: Partial<StoreState> | undefined,
-) {
-  return {
-    ...initialState,
-    ...persistedState,
-    ...overrides,
-    app: {
-      ...persistedState?.app,
-      ...overrides?.app,
-      clientId:
-        overrides?.app?.clientId || persistedState?.app?.clientId || randomId(),
-    },
-    settings: {
-      ...initialState.settings,
-      ...persistedState?.settings,
-      ...overrides?.settings,
-      lists: {
-        ...initialState.settings.lists,
-        ...persistedState?.settings?.lists,
-        ...overrides?.settings?.lists,
-      },
-    },
-  };
+function incrementVersion(version: string) {
+  const [major, minor] = version.split(".");
+  const nextMinor = Number.parseInt(minor ?? "0", 10) + 1;
+  return `${major ?? "1"}.${Number.isNaN(nextMinor) ? 1 : nextMinor}`;
 }
 
 function mergeInitialState(

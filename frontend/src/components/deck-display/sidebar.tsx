@@ -4,6 +4,8 @@ import {
   CopyIcon,
   DicesIcon,
   EllipsisIcon,
+  ImportIcon,
+  PencilIcon,
   Trash2Icon,
 } from "lucide-react";
 import { useCallback, useState } from "react";

@@ -2,6 +2,7 @@ import { FloatingPortal } from "@floating-ui/react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams, useSearchParams } from "wouter";
 
+import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { CardScan } from "@/components/card-scan";
 import { Footer } from "@/components/footer";
 import { Masthead } from "@/components/masthead";

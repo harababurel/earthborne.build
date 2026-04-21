@@ -4,7 +4,7 @@ import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import type { TabooSet } from "@/store/schemas/taboo-set.schema";
 import i18n from "@/utils/i18n";
-import { LOCALES } from "./constants";
+import { LOCALES, type StorageProvider } from "./constants";
 
 export function capitalize(s: string | number) {
   const str = s.toString();
@@ -71,6 +71,10 @@ export function formatSlots(slots: string) {
     .map((slot) => i18n.t(`common.slot.${slot.trim().toLowerCase()}`))
     .join(". ");
   return `${formatted}${slotStrs.length > 1 ? "." : ""}`;
+}
+
+export function formatProviderName(name: StorageProvider) {
+  return capitalize(name);
 }
 
 export function displayPackName(pack: Pack | Cycle) {

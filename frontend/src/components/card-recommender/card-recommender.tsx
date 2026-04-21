@@ -42,8 +42,6 @@ export function CardRecommender(
   const { t } = useTranslation();
   const { resolvedDeck } = useResolvedDeck();
 
-  const setFilterValue = useStore((state) => state.setRecommenderDeckFilter);
-
   const listState = useStore((state) =>
     selectListCards(state, resolvedDeck, "slots"),
   );
@@ -133,11 +131,6 @@ export function CardRecommender(
             mode="force-hover"
             slotLeft={slotLeft}
             slotRight={slotRight}
-          />
-          <DecklistsDateRangeInput
-            className={css["toolbar-date-range"]}
-            value={dateRange}
-            onValueChange={setFilterValue}
           />
           <div className={cx(css["toggle-container"])}>
             <IncludeSideDeckToggle />

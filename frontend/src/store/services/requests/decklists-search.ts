@@ -31,8 +31,8 @@ export type DecklistsFiltersState = {
   sort_dir: "asc" | "desc";
 };
 
-export async function searchDecklists(_params: URLSearchParams) {
-  const res = await apiV2Request();
+export async function searchDecklists(params: URLSearchParams) {
+  const res = await apiV2Request(`/decklists?${params.toString()}`);
 
   return res.json() as Promise<DecklistSearchResponse>;
 }

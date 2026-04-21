@@ -3,7 +3,6 @@ import dataVersionStub from "@test/fixtures/stubs/data_version.json";
 import metadataStub from "@test/fixtures/stubs/metadata.json";
 import { useStore } from "@/store";
 import factions from "@/store/services/data/factions.json";
-import reprintPacks from "@/store/services/data/reprint_packs.json";
 import subTypes from "@/store/services/data/subtypes.json";
 import types from "@/store/services/data/types.json";
 
@@ -18,7 +17,7 @@ function queryStubMetadata() {
   return Promise.resolve({
     ...metadataAny.data,
     pack: metadataAny.data.pack,
-    reprint_pack: reprintPacks.map(packToApiFormat),
+    reprint_pack: [],
     faction: factions,
     type: types,
     subtype: subTypes,
