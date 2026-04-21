@@ -2,6 +2,9 @@
 
 Read this first if you are an AI agent (Claude Code, Gemini CLI, Cursor, Copilot, etc.) working in this repo.
 
+> [!IMPORTANT]
+> **Keep Files in Sync:** `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` must contain the exact same content. If you make any changes to this file, you must replicate them to the other two files.
+
 ## What this project is
 
 `earthborne.build` is a web-based deckbuilder for **Earthborne Rangers**, a cooperative LCG by Earthborne Games. The codebase is adapted from [`arkham.build`](https://github.com/fspoettel/arkham.build) (AGPL-3.0).
