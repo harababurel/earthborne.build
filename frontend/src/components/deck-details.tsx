@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { ResolvedDeck } from "@/store/lib/types";
 import { cx } from "@/utils/cx";
-import { formatDeckOptionString, formatTabooSet } from "@/utils/formatting";
+import { formatDeckOptionString } from "@/utils/formatting";
 import css from "./deck-details.module.css";
 import { FactionIcon } from "./icons/faction-icon";
 
@@ -38,18 +38,6 @@ export function DeckDetails(props: Props) {
           {deck.stats.xpRequired}
         </DeckDetail>
       )}
-
-      <DeckDetail
-        data-testid="deck-details-taboo"
-        icon={<i className="icon-taboo" />}
-        label={t("common.taboo")}
-      >
-        {deck.tabooSet ? (
-          <span>{formatTabooSet(deck.tabooSet)}</span>
-        ) : (
-          t("common.taboo_none")
-        )}
-      </DeckDetail>
 
       {!!deck.selections &&
         Object.entries(deck.selections).map(([key, selection]) => (

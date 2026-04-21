@@ -64,8 +64,7 @@
         "usable_by_interpolated": "Pula kart: <tooltip>{{name}}</tooltip>",
         "view_backside": "Rewers",
         "who_can_take": "Kto może wziąć tę kartę?",
-        "show_original_image": "Pokaż obrazek oryginalnej wersji karty",
-        "show_taboo_image": "Pokaż obrazek wersji tabu karty"
+        "show_original_image": "Pokaż obrazek oryginalnej wersji karty"
       },
       "faq": {
         "empty": "Brak dostępnych wpisów FAQ.",
@@ -294,12 +293,6 @@
         "wild": "Joker",
         "willpower": "Wola"
       },
-      "taboo": "Lista tabu",
-      "taboo_chained": "Kosztuje {{xp}} dodatkowego doświadczenia.",
-      "taboo_mutated": "Zmutowana",
-      "taboo_none": "żadna",
-      "taboo_original_text": "Originalny tekst karty",
-      "taboo_unchained": "Kosztuje {{xp}} doświadczenia mniej.",
       "total": "łącznie",
       "trait_few": "Cechy",
       "trait_many": "Cech",
@@ -916,7 +909,6 @@
           "shared": "Współdzielone",
           "title": "Miejsce przechowywania talii"
         },
-        "taboo": "Lista tabu",
         "tags": "Tagi",
         "tags_help": "Wprowadź tagi, oddzielone spacjami",
         "title_and_tags": "Edytuj tytuł i tagi",
@@ -1447,8 +1439,6 @@
       "error": "Nie udało się zapisać ustawień: {{error}}",
       "general": {
         "default_environment": "Domyślne środowisko gry",
-        "default_taboo": "Domyślna lista tabu",
-        "latest_taboo": "Najnowsza",
         "title": "Ogólne",
         "weakness_limited_card_pool": "Użyj ograniczonej puli kart do losowego dobierania podstawowych osłabień",
         "weakness_limited_card_pool_help": "Po zaznaczeniu tej opcji losowe dobieranie podstawowych osłabień będzie uwzględniać ograniczoną pulę kart talii, jeśli taka została zdefiniowana."

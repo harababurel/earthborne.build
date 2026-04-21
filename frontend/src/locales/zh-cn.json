@@ -62,7 +62,6 @@
         "open_on_rangersdb": "在RangersDB上打开",
         "reviews": "查看评论",
         "show_original_image": "Show original card image",
-        "show_taboo_image": "Show taboo card image",
         "usable_by": "卡池：{{prefix}}{{name}}",
         "usable_by_interpolated": "卡池：<tooltip>{{name}}</tooltip>",
         "view_backside": "背面",
@@ -290,12 +289,6 @@
         "wild": "百搭",
         "willpower": "意志"
       },
-      "taboo": "禁卡表",
-      "taboo_chained": "费用增加{{xp}}点经验值。",
-      "taboo_mutated": "异变",
-      "taboo_none": "无",
-      "taboo_original_text": "原始卡牌文本",
-      "taboo_unchained": "费用减少{{xp}}点经验值。",
       "total": "总计",
       "trait_one": "特性",
       "trait_other": "特性",
@@ -932,7 +925,6 @@
           "shared": "共享",
           "title": "存储服务商"
         },
-        "taboo": "禁卡表",
         "tags": "标签",
         "tags_help": "输入标签，以空格分隔",
         "title_and_tags": "编辑标题与标签",
@@ -1481,8 +1473,6 @@
       "error": "保存设置失败：{{error}}",
       "general": {
         "default_environment": "默认环境",
-        "default_taboo": "默认禁卡表",
-        "latest_taboo": "最新",
         "title": "通用",
         "weakness_limited_card_pool": "随机抽取基础弱点时使用限定牌池",
         "weakness_limited_card_pool_help": "勾选此项后，随机抽取基础弱点时将遵循卡组定义的限定卡池范围（若已设定）。"

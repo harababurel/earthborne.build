@@ -179,11 +179,6 @@
     font-style: normal;
   }
 
-  .taboo {
-    flex: 0 0 auto;
-    font-size: var(--text-2xs);
-  }
-
   .thumbnail {
     font-size: 1rem;
     width: var(--card-image-height);

@@ -62,7 +62,6 @@
         "open_on_rangersdb": "Abrir en RangersDB",
         "reviews": "Ver comentarios",
         "show_original_image": "Mostrar imagen original de la carta",
-        "show_taboo_image": "Mostrar imagen tabú de la carta",
         "usable_by": "Cartas permitidas de {{prefix}}{{name}}",
         "usable_by_interpolated": "Cartas permitidas de <tooltip>{{name}}</tooltip>",
         "view_backside": "Reverso",
@@ -287,12 +286,6 @@
         "wild": "Comodín",
         "willpower": "Voluntad"
       },
-      "taboo": "Lista de Tabúes",
-      "taboo_chained": "Cuesta {{xp}} puntos de experiencia adicionales.",
-      "taboo_mutated": "Mutada",
-      "taboo_none": "ninguno",
-      "taboo_original_text": "Texto original de la carta",
-      "taboo_unchained": "Cuesta {{xp}} puntos de experiencia menos.",
       "total": "total",
       "trait_one": "Rasgo",
       "trait_other": "Rasgos",
@@ -905,7 +898,6 @@
           "shared": "Compartido",
           "title": "Almacenamiento"
         },
-        "taboo": "Lista de Tabúes",
         "tags": "Etiquetas",
         "tags_help": "Introduce etiquetas, separadas por espacios",
         "title_and_tags": "Editar título y etiquetas",
@@ -1446,8 +1438,6 @@
       "error": "Error al guardar los ajustes: {{error}}",
       "general": {
         "default_environment": "Entorno por defecto",
-        "default_taboo": "Lista de tabúes por defecto",
-        "latest_taboo": "Más reciente",
         "title": "General",
         "weakness_limited_card_pool": "Usar el conjunto de cartas limitado para robos de debilidad básica aleatoria",
         "weakness_limited_card_pool_help": "Si está seleccionado, el robo de debilidad básica aleatoria respetará el conjunto de cartas limitado de un mazo si está definido."

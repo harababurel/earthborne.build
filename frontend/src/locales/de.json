@@ -62,7 +62,6 @@
         "open_on_rangersdb": "In RangersDB öffnen",
         "reviews": "Kommentare",
         "show_original_image": "Originalversion anzeigen",
-        "show_taboo_image": "Tabuversion anzeigen",
         "usable_by": "{{prefix}}{{name}} Kartenpool",
         "usable_by_interpolated": "<tooltip>{{name}}</tooltip> Kartenpool",
         "view_backside": "Rückseite",
@@ -290,12 +289,6 @@
         "wild": "Joker",
         "willpower": "Willenskraft"
       },
-      "taboo": "Tabuliste",
-      "taboo_chained": "Kostet {{xp}} weitere Erfahrungspunkte.",
-      "taboo_mutated": "Mutiert",
-      "taboo_none": "Keine Tabuliste",
-      "taboo_original_text": "Ursprünglicher Kartentext",
-      "taboo_unchained": "Kostet {{xp}} Erfahrungspunkte weniger.",
       "total": "insgesamt",
       "trait_one": "Merkmal",
       "trait_other": "Merkmale",
@@ -932,7 +925,6 @@
           "shared": "Freigegeben",
           "title": "Speicherort"
         },
-        "taboo": "Tabuliste",
         "tags": "Schlagwörter",
         "tags_help": "Schlagwörter, mit Leerzeichen getrennt",
         "title_and_tags": "Titel & Schlagwörter bearbeiten",
@@ -1481,8 +1473,6 @@
       "error": "Speichern der Einstellungen fehlgeschlagen: {{error}}",
       "general": {
         "default_environment": "Default environment",
-        "default_taboo": "Voreingestellte Tabuliste",
-        "latest_taboo": "Aktuelle Tabuliste",
         "title": "Allgemein",
         "weakness_limited_card_pool": "Zufällige Basisschwäche aus eingeschränktem Kartenpool ziehen",
         "weakness_limited_card_pool_help": "Wenn dies aktiviert ist, berücksichtigt das Ziehen der zufälligen Basisschwäche den eingeschränkten Kartenpool eines Decks, wenn einer hinterlegt ist."

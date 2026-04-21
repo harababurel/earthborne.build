@@ -62,7 +62,6 @@
         "open_on_rangersdb": "RangersDB에서 열기",
         "reviews": "댓글 보기",
         "show_original_image": "원본 카드 이미지 보기",
-        "show_taboo_image": "금기 카드 이미지 보기",
         "usable_by": "{{prefix}}{{name}} 조사자가 접근 가능한 모든 카드 보기",
         "usable_by_interpolated": "<tooltip>{{name}}</tooltip> 조사자가 접근 가능한 모든 카드 보기",
         "view_backside": "뒷면",
@@ -287,12 +286,6 @@
         "wild": "만능",
         "willpower": "의지"
       },
-      "taboo": "금기 목록",
-      "taboo_chained": "경험치가 {{xp}}점 더 많이 듭니다.",
-      "taboo_mutated": "변형",
-      "taboo_none": "없음",
-      "taboo_original_text": "원본 카드 문구",
-      "taboo_unchained": "경험치가 {{xp}}점 더 적게 듭니다.",
       "total": "총합",
       "trait_one": "특성",
       "trait_other": "특성",
@@ -918,7 +911,6 @@
           "shared": "공개됨",
           "title": "저장소 공급자"
         },
-        "taboo": "금기 목록",
         "tags": "태그",
         "tags_help": "스페이스로 구분된 태그 입력",
         "title_and_tags": "제목과 태그 편집",
@@ -1455,8 +1447,6 @@
       "error": "설정 저장에 실패함: {{error}}",
       "general": {
         "default_environment": "기본 환경",
-        "default_taboo": "기본 금기 목록",
-        "latest_taboo": "최신",
         "title": "일반",
         "weakness_limited_card_pool": "무작위 기본 약점 뽑기에 제한된 카드 구성 환경 사용",
         "weakness_limited_card_pool_help": "덱의 제한된 카드 구성 환경이 정의되어 있는 경우, 이 옵션을 선택하면 무작위 기본 약점 뽑기가 해당 제한 내용을 준수합니다."
