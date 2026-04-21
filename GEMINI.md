@@ -84,6 +84,18 @@ Start with these:
 - No hardcoded UI text. Use `react-i18next` with a key in `frontend/src/locales/en.json`.
 - No inline styles. Valid exception: dynamic CSS custom properties.
 
+## Environment Setup & Node Resolution
+
+Depending on the machine, `node`, `npm`, and `npx` may be installed as system-level packages (e.g., via `pacman` or `brew`) or managed via `fnm` (Fast Node Manager).
+
+- If you encounter "command not found" errors for `npm`, `npx`, or `node`, it is likely because `fnm` is used but not initialized in the current shell session.
+- To resolve this, check if `fnm` is available and initialize it before running Node commands:
+  ```bash
+  eval "$(fnm env)"
+  ```
+  If that fails, check for a specific path (for example, on some Google Linux machines it might be at `/usr/local/google/home/sergiup/.local/share/fnm/fnm`).
+- Always verify that Node is accessible before attempting to run tests or build commands.
+
 ## Testing & Validation
 
 - No mocking the database in integration tests.
