@@ -11,7 +11,6 @@ import { resolveCardWithRelations } from "../lib/resolve-card";
 import { makeSortFunction } from "../lib/sorting";
 import type { CardWithRelations, ResolvedDeck } from "../lib/types";
 import type { StoreState } from "../slices";
-import { selectCanonicalTabooSetId } from "./lists";
 import {
   selectLocaleSortingCollator,
   selectLookupTables,
@@ -26,26 +25,11 @@ export const selectCardWithRelations = createSelector(
   (_: StoreState, code: string) => code,
   (_: StoreState, __: string, withRelations: boolean) => withRelations,
   (_: StoreState, __: string, ___, resolvedDeck: ResolvedDeck) => resolvedDeck,
-  (
-    state: StoreState,
-    __: string,
-    ___,
-    resolvedDeck: ResolvedDeck | undefined,
-  ) => selectCanonicalTabooSetId(state, resolvedDeck),
-  (
-    metadata,
-    lookupTables,
-    collator,
-    code,
-    withRelations,
-    resolvedDeck,
-    canonicalTabooSetId,
-  ) =>
+  (metadata, lookupTables, collator, code, withRelations, resolvedDeck) =>
     resolveCardWithRelations(
       { metadata, lookupTables },
       collator,
       code,
-      canonicalTabooSetId,
       resolvedDeck?.customizations,
       withRelations,
     ),
@@ -56,9 +40,8 @@ export const selectUsableByInvestigators = createSelector(
   selectMetadata,
   selectLocaleSortingCollator,
   selectStaticBuildQlInterpreter,
-  (state) => selectCanonicalTabooSetId(state, undefined),
   (_: StoreState, card: Card) => card,
-  (lookupTables, metadata, collator, buildQlInterpreter, tabooSetId, card) => {
+  (lookupTables, metadata, collator, buildQlInterpreter, card) => {
     const investigatorCodes = Object.keys(
       lookupTables.typeCode["investigator"] ?? lookupTables.typeCode.role ?? {},
     );
@@ -69,7 +52,6 @@ export const selectUsableByInvestigators = createSelector(
           { metadata, lookupTables },
           collator,
           code,
-          tabooSetId,
           undefined,
           true,
         ),

@@ -15,7 +15,7 @@ describe("applyCardChanges", () => {
     const state = store.getState();
     const firstCard = Object.values(state.metadata.cards)[0];
     if (!firstCard) return;
-    const result = applyCardChanges(firstCard, state.metadata, null, undefined);
+    const result = applyCardChanges(firstCard, state.metadata, undefined);
     expect(result).toEqual(firstCard);
   });
 
@@ -23,7 +23,7 @@ describe("applyCardChanges", () => {
     const state = store.getState();
     const firstCard = Object.values(state.metadata.cards)[0];
     if (!firstCard) return;
-    const result = applyCardChanges(firstCard, state.metadata, 1, undefined);
+    const result = applyCardChanges(firstCard, state.metadata, undefined);
     expect(result).toEqual(firstCard);
   });
 
@@ -37,7 +37,6 @@ describe("applyCardChanges", () => {
     const result = applyCardChanges(
       firstCard,
       state.metadata,
-      null,
       customizations as never,
     );
     expect(result).toEqual(firstCard);

@@ -43,7 +43,6 @@ export function resolveDeck(
     deps,
     collator,
     investigatorCode,
-    deck.taboo_id,
     undefined,
     true,
   ) as CardWithRelations;
@@ -57,7 +56,6 @@ export function resolveDeck(
   const investigatorFront = getInvestigatorForSide(
     deps,
     collator,
-    deck.taboo_id,
     investigator,
     deckMeta,
     "alternate_front",
@@ -66,7 +64,6 @@ export function resolveDeck(
   let investigatorBack = getInvestigatorForSide(
     deps,
     collator,
-    deck.taboo_id,
     investigator,
     deckMeta,
     "alternate_back",
@@ -169,7 +166,6 @@ function getInvestigatorForSide(
     lookupTables: LookupTables;
   },
   collator: Intl.Collator,
-  tabooId: number | undefined | null,
   investigator: CardWithRelations,
   deckMeta: DeckMeta,
   key: "alternate_front" | "alternate_back",
@@ -179,7 +175,6 @@ function getInvestigatorForSide(
       deps,
       collator,
       deckMeta.transform_into,
-      tabooId,
       undefined,
       true,
     ) as CardWithRelations;
@@ -246,7 +241,6 @@ export function resolveDeckSummary(
     deps,
     collator,
     deck.investigator_code,
-    deck.taboo_id,
     undefined,
     true,
   ) as CardWithRelations;
@@ -260,7 +254,6 @@ export function resolveDeckSummary(
   const investigatorFront = getInvestigatorForSide(
     deps,
     collator,
-    deck.taboo_id,
     investigator,
     deckMeta,
     "alternate_front",
@@ -269,7 +262,6 @@ export function resolveDeckSummary(
   const investigatorBack = getInvestigatorForSide(
     deps,
     collator,
-    deck.taboo_id,
     investigator,
     deckMeta,
     "alternate_back",
@@ -327,12 +319,7 @@ function computeDeckStats(
     const rawCard = metadata.cards[code];
     if (!rawCard) continue;
 
-    const card = applyCardChanges(
-      rawCard,
-      metadata,
-      deck.taboo_id,
-      customizations,
-    );
+    const card = applyCardChanges(rawCard, metadata, customizations);
 
     deckSizeTotal += quantity;
 
@@ -351,12 +338,7 @@ function computeDeckStats(
       const rawCard = metadata.cards[code];
       if (!rawCard) continue;
 
-      const card = applyCardChanges(
-        rawCard,
-        metadata,
-        deck.taboo_id,
-        customizations,
-      );
+      const card = applyCardChanges(rawCard, metadata, customizations);
 
       xpRequired += countExperience(card, quantity);
       deckSizeTotal += quantity;

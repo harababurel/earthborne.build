@@ -13,7 +13,6 @@ export function resolveCardWithRelations<T extends boolean>(
   deps: Pick<StoreState, "metadata"> & { lookupTables: LookupTables },
   collator: Intl.Collator,
   code: string | undefined,
-  tabooSetId: number | null | undefined,
   customizations?: Customizations,
   withRelations?: T,
 ): T extends true ? CardWithRelations | undefined : ResolvedCard | undefined {
@@ -22,7 +21,7 @@ export function resolveCardWithRelations<T extends boolean>(
   let card = deps.metadata.cards[code];
   if (!card) return undefined;
 
-  card = applyCardChanges(card, deps.metadata, tabooSetId, customizations);
+  card = applyCardChanges(card, deps.metadata, customizations);
 
   const pack = deps.metadata.packs[card.pack_code];
   const type = deps.metadata.types[card.type_code];
@@ -45,7 +44,6 @@ export function resolveCardWithRelations<T extends boolean>(
         collator,
         "duplicates",
         card.code,
-        tabooSetId,
         customizations,
         false,
       ),
@@ -54,24 +52,11 @@ export function resolveCardWithRelations<T extends boolean>(
         collator,
         "reprints",
         card.code,
-        tabooSetId,
         customizations,
         false,
       ),
-      bound: resolveRelationArray(
-        deps,
-        collator,
-        "bound",
-        card.code,
-        tabooSetId,
-      ),
-      bonded: resolveRelationArray(
-        deps,
-        collator,
-        "bonded",
-        card.code,
-        tabooSetId,
-      ),
+      bound: resolveRelationArray(deps, collator, "bound", card.code),
+      bonded: resolveRelationArray(deps, collator, "bonded", card.code),
     };
   }
 
@@ -83,7 +68,6 @@ function resolveRelationArray(
   collator: Intl.Collator,
   key: keyof LookupTables["relations"],
   code: string,
-  tabooSetId: number | null | undefined,
   customizations?: Customizations,
   _ignoreDuplicates = true,
 ): ResolvedCard[] {
@@ -97,7 +81,6 @@ function resolveRelationArray(
           deps,
           collator,
           code,
-          tabooSetId,
           customizations,
           false,
         );

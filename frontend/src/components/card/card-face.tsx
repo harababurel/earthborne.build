@@ -15,11 +15,9 @@ import { CardText } from "./card-text";
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   className?: string;
-  ignoreTaboo?: boolean;
   omitImage?: boolean;
   onPrintingSelect?: (card: Card) => void;
   resolvedCard: CardWithRelations | ResolvedCard;
-  setIgnoreTaboo?: React.Dispatch<React.SetStateAction<boolean>>;
   size: "compact" | "tooltip" | "full";
   slotHeaderActions?: React.ReactNode;
   titleLinks?: "card" | "card-modal" | "dialog";
@@ -29,11 +27,9 @@ export function CardFace(props: Props) {
   const {
     children,
     className,
-    ignoreTaboo,
     omitImage,
     onPrintingSelect,
     resolvedCard,
-    setIgnoreTaboo,
     size,
     slotHeaderActions,
     titleLinks,
@@ -91,7 +87,7 @@ export function CardFace(props: Props) {
       {showImage &&
         (size === "full" ? (
           <div className={css["image"]}>
-            <CardScan card={card} onFlip={onFlip} ignoreTaboo={ignoreTaboo} />
+            <CardScan card={card} onFlip={onFlip} />
           </div>
         ) : (
           <div className={css["image"]}>

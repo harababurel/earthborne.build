@@ -156,10 +156,6 @@ export const selectLocaleSortingCollator = createSelector(
   },
 );
 
-export function selectSettingsTabooId(_settings: unknown, _metadata: unknown) {
-  return undefined;
-}
-
 export const selectCardMapper = createSelector(selectMetadata, (metadata) => {
   return (code: string) => metadata.cards[code];
 });

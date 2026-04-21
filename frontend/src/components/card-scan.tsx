@@ -22,7 +22,6 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   draggable?: boolean;
   flipped: boolean;
   hideFlipButton?: boolean;
-  ignoreTaboo?: boolean;
   lazy?: boolean;
   onFlip?: (value: boolean, sideways: boolean) => void;
   preventFlip?: boolean;
@@ -52,7 +51,6 @@ export function CardScanControlled(props: Props) {
     onFlip,
     card,
     hideFlipButton,
-    ignoreTaboo,
     lazy,
     suffix,
     ...rest

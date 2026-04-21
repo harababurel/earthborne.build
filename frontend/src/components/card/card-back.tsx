@@ -19,12 +19,11 @@ import { CardText } from "./card-text";
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   card: ResolvedCard["card"];
-  ignoreTaboo?: boolean;
   size: "compact" | "tooltip" | "full";
 }
 
 export function CardBack(props: Props) {
-  const { className, card, ignoreTaboo, size, ...rest } = props;
+  const { className, card, size, ...rest } = props;
 
   const { t } = useTranslation();
 
@@ -83,12 +82,7 @@ export function CardBack(props: Props) {
       {showImage &&
         (size === "full" ? (
           <div className={css["image"]}>
-            <CardScan
-              card={card}
-              suffix="b"
-              onFlip={onFlip}
-              ignoreTaboo={ignoreTaboo}
-            />
+            <CardScan card={card} suffix="b" onFlip={onFlip} />
           </div>
         ) : (
           <div className={css["image"]}>

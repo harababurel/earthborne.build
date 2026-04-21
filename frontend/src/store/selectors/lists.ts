@@ -417,13 +417,6 @@ export const selectActiveListFilter = createSelector(
   },
 );
 
-export function selectCanonicalTabooSetId(
-  _state: StoreState,
-  _resolvedDeck: unknown,
-) {
-  return undefined;
-}
-
 // Custom equality check for deck's card access.
 // Deck access is only affected by a few subset of deck changes:
 // 1. The deck changes.
@@ -649,7 +642,7 @@ const selectBaseListCards = createSelector(
     // filters can be impacted by card changes, apply them now.
     if (customizations) {
       filteredCards = filteredCards.map((c) =>
-        applyCardChanges(c, metadata, undefined, customizations),
+        applyCardChanges(c, metadata, customizations),
       );
     }
 
@@ -871,7 +864,6 @@ export const selectCardRelationsResolver = createSelector(
         { metadata, lookupTables },
         collator,
         code,
-        undefined,
         undefined,
         true,
       );
@@ -1556,14 +1548,11 @@ export const selectResolvedCardById = createSelector(
   selectLocaleSortingCollator,
   (_: StoreState, code: string) => code,
   (_: StoreState, __: string, resolvedDeck?: ResolvedDeck) => resolvedDeck,
-  (state: StoreState, __: string, resolvedDeck?: ResolvedDeck) =>
-    selectCanonicalTabooSetId(state, resolvedDeck),
-  (metadata, lookupTables, collator, code, resolvedDeck, tabooSetId) => {
+  (metadata, lookupTables, collator, code, resolvedDeck) => {
     return resolveCardWithRelations(
       { metadata, lookupTables },
       collator,
       code,
-      tabooSetId,
       resolvedDeck?.customizations,
       true,
     );
@@ -1590,12 +1579,6 @@ export function selectSubtypeOptions() {
     { code: "basicweakness", name: labels["basicweakness"] },
   ];
 }
-
-/**
- * Taboo Set
- */
-
-export const selectTabooSetOptions = (_state: unknown) => [] as unknown[];
 
 /**
  * Trait

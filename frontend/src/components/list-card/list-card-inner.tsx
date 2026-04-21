@@ -33,7 +33,6 @@ import { ApproachIcon } from "../icons/approach-icon";
 import { MulticlassIcons } from "../icons/multiclass-icons";
 import { SkillIcons } from "../skill-icons/skill-icons";
 import { SkillIconsInvestigator } from "../skill-icons/skill-icons-investigator";
-import { TabooIndicator } from "../taboo-indicator";
 import { useDialogContext } from "../ui/dialog.hooks";
 import { QuantityInput } from "../ui/quantity-input";
 import { QuantityOutput } from "../ui/quantity-output";
@@ -291,12 +290,6 @@ export function ListCardInner(props: Props) {
                       fancy={cardSkillIconsDisplay === "as_printed"}
                     />
                   )}
-
-                  <TabooIndicator
-                    className={css["taboo"]}
-                    card={card}
-                    cardLevelDisplay={cardLevelDisplay}
-                  />
 
                   {!!annotation && <AnnotationIndicator />}
 

@@ -92,7 +92,6 @@ export function decodeSlots(
       deps,
       collator,
       code,
-      deck.taboo_id,
       customizations,
       true,
     );
@@ -142,7 +141,6 @@ export function decodeSlots(
         deps,
         collator,
         code,
-        deck.taboo_id,
         customizations,
         false,
       ); // SAFE! we do not need relations for side deck.
@@ -161,7 +159,6 @@ export function decodeSlots(
       deps,
       collator,
       code,
-      deck.taboo_id,
       customizations,
       false,
     ); // SAFE! we do not need relations for exile deck.
@@ -178,7 +175,6 @@ export function decodeSlots(
         deps,
         collator,
         code,
-        deck.taboo_id,
         customizations,
         false,
       ); // SAFE! we do not need relations for extra deck.
@@ -199,7 +195,6 @@ export function decodeSlots(
       deps,
       collator,
       card.code,
-      deck.taboo_id,
       customizations,
       false,
     );

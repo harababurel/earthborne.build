@@ -35,7 +35,6 @@ export const selectDeckCreateInvestigators = createSelector(
           collator,
           code,
           undefined,
-          undefined,
           true,
         );
 

@@ -177,7 +177,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       metadata.cards[investigatorBackCode],
       metadata,
       undefined,
-      undefined,
     );
 
     for (const [key, value] of Object.entries(state.deckCreate.selections)) {

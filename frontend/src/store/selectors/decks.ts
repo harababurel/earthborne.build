@@ -167,7 +167,7 @@ function getHistoryEntry(
   metadata: StoreState["metadata"],
   collator: Intl.Collator,
 ): HistoryEntry {
-  const { customizations, exileSlots, id, stats, tabooSetId } = changes;
+  const { customizations, exileSlots, id, stats } = changes;
 
   const sortFn = makeSortFunction(["name"], metadata, collator);
   const sortDiff = diffSortingFn(sortFn);
@@ -176,34 +176,19 @@ function getHistoryEntry(
     slots: Object.entries(stats.changes.slots)
       .map(([code, diff]) => ({
         diff,
-        card: applyCardChanges(
-          metadata.cards[code],
-          metadata,
-          tabooSetId,
-          customizations,
-        ),
+        card: applyCardChanges(metadata.cards[code], metadata, customizations),
       }))
       .sort(sortDiff),
     extraSlots: Object.entries(stats.changes.extraSlots)
       .map(([code, diff]) => ({
         diff,
-        card: applyCardChanges(
-          metadata.cards[code],
-          metadata,
-          tabooSetId,
-          customizations,
-        ),
+        card: applyCardChanges(metadata.cards[code], metadata, customizations),
       }))
       .sort(sortDiff),
     exileSlots: Object.entries(exileSlots ?? {})
       .map(([code, diff]) => ({
         diff: diff * -1,
-        card: applyCardChanges(
-          metadata.cards[code],
-          metadata,
-          tabooSetId,
-          customizations,
-        ),
+        card: applyCardChanges(metadata.cards[code], metadata, customizations),
       }))
       .sort(sortDiff),
     customizations: [], // ER has no customization system.
