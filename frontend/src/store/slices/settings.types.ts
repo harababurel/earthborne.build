@@ -56,7 +56,6 @@ export type SettingsState = {
   showAllCards: boolean;
   showMoveToSideDeck: boolean;
   sortIgnorePunctuation: boolean;
-  useLimitedPoolForWeaknessDraw: boolean;
 };
 
 export type SettingsSlice = {

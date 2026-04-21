@@ -278,8 +278,6 @@ const tests = [
 ];
 
 function validate(store: StoreApi<StoreState>, deck: Deck) {
-  store.getState().cacheFanMadeContent([deck]);
-
   const state = store.getState();
   const metadata = selectMetadata(state);
   const lookupTables = selectLookupTables(state);

@@ -45,7 +45,6 @@ import {
   filterInvestigatorWeaknessAccess,
   filterLevel,
   filterMythosCards,
-  filterOfficial,
   filterOwnership,
   filterPackCode,
   filterProperties,
@@ -566,52 +565,21 @@ const selectDeckCustomizations = createSelector(
   (resolvedDeck) => resolvedDeck?.customizations,
 );
 
-const fanMadeDataEqual = (
-  a: ResolvedDeck | undefined,
-  b: ResolvedDeck | undefined,
-) => {
-  return isResolvedDeck(a) && isResolvedDeck(b)
-    ? JSON.stringify(a.fanMadeData) === JSON.stringify(b.fanMadeData)
-    : // biome-ignore lint/suspicious/noDoubleEquals: we want a shallow equality check in this context.
-      a == b;
-};
-
-const selectDeckCachedByFanMadeData = createSelector(
-  (_: StoreState, resolvedDeck: ResolvedDeck | undefined) => resolvedDeck,
-  (resolvedDeck) => resolvedDeck,
-  {
-    memoizeOptions: {
-      resultEqualityCheck: fanMadeDataEqual,
-    },
-  },
-);
-
-const selectDeckFanMadeData = createSelector(
-  selectDeckCachedByFanMadeData,
-  (resolvedDeck) => resolvedDeck?.fanMadeData,
-);
-
 const selectBaseListCards = createSelector(
   selectMetadata,
   selectLookupTables,
-  (state: StoreState) => state.fanMadeData.projects,
   (state: StoreState) => selectActiveList(state)?.systemFilter,
   (state: StoreState) => selectActiveList(state)?.filterValues,
-  (state: StoreState) => selectActiveList(state)?.fanMadeCycleCodes,
   selectDeckInvestigatorFilter,
   selectDeckCustomizations,
-  selectDeckFanMadeData,
   selectCollection,
   (
     metadata,
     lookupTables,
-    fanMadeProjects,
     systemFilter,
     filterValues,
-    fanMadeCycleCodes,
     deckInvestigatorFilter,
     customizations,
-    fanMadeData,
     collection,
   ) => {
     if (isEmpty(metadata.cards)) {
@@ -633,21 +601,6 @@ const selectBaseListCards = createSelector(
     let filters = [];
 
     if (systemFilter) filters.push(systemFilter);
-
-    // Filter fan made data that is not owned and does not belong to this specific deck.
-    // In ER, non-official cards have a pack_code starting with "fan_".
-    filters.push((card: Card) => {
-      if (!card.pack_code?.startsWith("fan_")) return true;
-
-      const pack = metadata.packs[card.pack_code];
-      if (!pack?.cycle_code) return false;
-
-      return Boolean(
-        fanMadeData?.cards?.[card.code] ||
-          fanMadeProjects?.[pack.cycle_code] ||
-          fanMadeCycleCodes?.includes(pack.cycle_code),
-      );
-    });
 
     if (deckInvestigatorFilter) {
       filters.push(deckInvestigatorFilter);
@@ -694,20 +647,6 @@ const selectBaseListCards = createSelector(
 
             return value === "owned" ? ownership : !ownership;
           });
-        }
-      }
-
-      const fanMadeContentFilter = Object.values(filterValues).find(
-        (f) => f.type === "fan_made_content",
-      );
-
-      if (fanMadeContentFilter) {
-        const value = fanMadeContentFilter.value as FanMadeContentFilter;
-
-        if (value === "official") {
-          filters.push(filterOfficial);
-        } else if (value === "fan-made") {
-          filters.push(not(filterOfficial));
         }
       }
     }
@@ -1325,14 +1264,12 @@ export const selectCyclesAndPacks = createSelector(
   selectMetadata,
   selectLookupTables,
   (state: StoreState) => state.settings,
-  (state: StoreState) => state.fanMadeData.projects,
-  (metadata, lookupTables, _settings, fanMadeProjects) => {
+  (metadata, lookupTables, _settings) => {
     const cycles = Object.entries(lookupTables.packsByCycle).reduce(
       (acc, [cycleCode, packTable]) => {
         const cycle = metadata.cycles[cycleCode];
 
-        // filter cycles that are only present in fan-made content cache
-        if (cycle.official === false && !fanMadeProjects?.[cycle.code]) {
+        if (cycle.official === false) {
           return acc;
         }
 
@@ -1433,18 +1370,15 @@ function newFormatPlayerPack(pack: Pack) {
 
 export const selectLimitedPoolPackOptions = createSelector(
   selectCyclesAndPacks,
-  (state: StoreState) => state.fanMadeData.projects,
   (_: StoreState, filter?: (cycle: Cycle) => boolean) => filter,
-  (cycles, fanMadeProjects, filter) => {
+  (cycles, filter) => {
     return cycles.flatMap((cycle) => {
       if (filter && !filter(cycle)) {
         return [];
       }
 
-      // Fan-made content
       if (!official(cycle)) {
-        if (!fanMadeProjects?.[cycle.code]) return [];
-        return cycle.packs;
+        return [];
       }
 
       // Non-deckbuilding

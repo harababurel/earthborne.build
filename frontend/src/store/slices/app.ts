@@ -17,7 +17,6 @@ import {
   encodeCardPool,
   encodeSealedDeck,
 } from "../lib/deck-meta";
-import { buildCacheFromDecks } from "../lib/fan-made-content";
 import { applyLocalData } from "../lib/local-data";
 import { mappedByCode } from "../lib/metadata-utils";
 import { resolveDeck } from "../lib/resolve-deck";
@@ -81,9 +80,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
           ui: {
             ...prev.ui,
             initialized: true,
-            fanMadeContentCache: buildCacheFromDecks(
-              Object.values(merged.data.decks),
-            ),
           },
         };
       });
@@ -128,9 +124,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
         metadata,
         ui: {
           ...merged.ui,
-          fanMadeContentCache: buildCacheFromDecks(
-            Object.values(merged.data.decks),
-          ),
         },
         lists: {
           ...makeLists(merged.settings, metadata),
@@ -224,25 +217,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       investigator_name: back.name,
       name: state.deckCreate.title,
       slots,
-      meta: JSON.stringify(meta),
-      problem: "too_few_cards",
     });
-
-    const resolved = resolveDeck(
-      {
-        lookupTables: selectLookupTables(state),
-        metadata,
-        sharing: state.sharing,
-      },
-      selectLocaleSortingCollator(state),
-      deck,
-    );
-
-    if (resolved.fanMadeData) {
-      const meta = decodeDeckMeta(deck);
-      meta.fan_made_content = resolved.fanMadeData;
-      deck.meta = JSON.stringify(meta);
-    }
 
     set((prev) => ({
       data: {
@@ -418,12 +393,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       nextDeck,
     );
 
-    if (resolved.fanMadeData) {
-      const meta = decodeDeckMeta(nextDeck);
-      meta.fan_made_content = resolved.fanMadeData;
-      nextDeck.meta = JSON.stringify(meta);
-    }
-
     const validation = selectDeckValid(state, resolved);
     nextDeck.problem = mapValidationToProblem(validation);
 
@@ -483,7 +452,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
   },
   async upgradeDeck({ id, xp, exileString, usurped }) {
     const state = get();
-    const metadata = selectMetadata(state);
 
     const deck = state.data.decks[id];
     assert(deck, `Deck ${id} does not exist.`);
@@ -535,28 +503,9 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
           extraSlots[code] -= quantity;
           if (extraSlots[code] <= 0) delete extraSlots[code];
         }
-
-        if (meta[`cus_${code}`]) {
-          delete meta[`cus_${code}`];
-        }
       }
 
       meta.extra_deck = encodeExtraSlots(extraSlots);
-    }
-
-    const resolved = resolveDeck(
-      {
-        lookupTables: selectLookupTables(state),
-        metadata,
-        sharing: state.sharing,
-      },
-      selectLocaleSortingCollator(state),
-      newDeck,
-    );
-
-    if (resolved.fanMadeData) {
-      const meta = decodeDeckMeta(newDeck);
-      meta.fan_made_content = resolved.fanMadeData;
     }
 
     newDeck.meta = JSON.stringify(meta);

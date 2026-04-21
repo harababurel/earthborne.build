@@ -95,22 +95,8 @@ export function resolveDeck(
 
   const customizations = decodeCustomizations(deckMeta, deps.metadata);
 
-  const {
-    bondedSlots,
-    cards,
-    deckSize,
-    deckSizeTotal,
-    fanMadeData,
-    xpRequired,
-    charts,
-  } = decodeSlots(
-    deps,
-    collator,
-    deck,
-    extraSlots,
-    investigator,
-    customizations,
-  );
+  const { bondedSlots, cards, deckSize, deckSizeTotal, xpRequired, charts } =
+    decodeSlots(deps, collator, deck, extraSlots, investigator, customizations);
 
   const availableAttachments = Object.entries(
     getAttachableCards(deck, deps.metadata),
@@ -135,7 +121,6 @@ export function resolveDeck(
     customizations,
     extraSlots,
     exileSlots: exileSlots,
-    fanMadeData,
     investigatorBack,
     investigatorFront,
     metaParsed: deckMeta,

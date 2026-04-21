@@ -59,16 +59,12 @@ function SuziStandaloneSetupInner(props: Pick<Props, "deck">) {
   const dialogContext = useDialogContextChecked();
   const { t } = useTranslation();
 
-  const { createEdit, defaultContentType, hasCollection, hasFanMadeContent } =
-    useStore(selectDependencies);
+  const { createEdit, hasCollection } = useStore(selectDependencies);
 
   const [results, setResults] = useState<Card[]>([]);
   const [revealed, setRevealed] = useState<Record<number, boolean>>({});
   const [xp, setXp] = useState<string>("");
   const [checkOwnership, setCheckOwnership] = useState<boolean>(hasCollection);
-  const [includeFanMade, setIncludeFanmade] = useState<boolean>(
-    defaultContentType === "fan-made",
-  );
   const [ultimatumOfExile, setUltimatumOfExile] = useState<boolean>(false);
 
   useEffect(
@@ -88,7 +84,6 @@ function SuziStandaloneSetupInner(props: Pick<Props, "deck">) {
         selectAvailableUpgrades(state, deck, {
           checkOwnership,
           ultimatumOfExile,
-          includeFanMade,
         }),
       );
 
@@ -108,7 +103,7 @@ function SuziStandaloneSetupInner(props: Pick<Props, "deck">) {
       setResults(drawn);
       setRevealed({});
     },
-    [deck, xp, checkOwnership, includeFanMade, ultimatumOfExile],
+    [deck, xp, checkOwnership, ultimatumOfExile],
   );
 
   const closeModal = useCallback(() => {
@@ -185,15 +180,7 @@ function SuziStandaloneSetupInner(props: Pick<Props, "deck">) {
                 onCheckedChange={(val) => setCheckOwnership(!!val)}
               />
             )}
-            {hasFanMadeContent && (
-              <Checkbox
-                checked={includeFanMade}
-                id="limit-fan-made"
-                label={t("suzi_standalone_setup.limit_fan_made")}
-                name="limit-fan-made"
-                onCheckedChange={(val) => setIncludeFanmade(!!val)}
-              />
-            )}
+
             <Checkbox
               checked={ultimatumOfExile}
               id="limit-exile"

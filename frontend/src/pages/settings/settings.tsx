@@ -1,7 +1,5 @@
-import { featherText } from "@lucide/lab";
 import {
   DatabaseBackupIcon,
-  Icon,
   LibraryIcon,
   SlidersVerticalIcon,
 } from "lucide-react";
@@ -9,7 +7,6 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearch } from "wouter";
 import { CollectionSettings } from "@/components/collection/collection";
-import { FanMadeContent } from "@/components/fan-made-content/fan-made-content";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTabUrlState } from "@/components/ui/tabs.hooks";
@@ -33,7 +30,6 @@ import { ShowAllCardsSetting } from "./show-all-cards";
 import { ShowMoveToSideDeckSetting } from "./show-move-to-side-deck";
 import { SortPunctuationSetting } from "./sort-punctuation-setting";
 import { ThemeSetting } from "./theme";
-import { WeaknessPoolSetting } from "./weakness-pool";
 
 function Settings() {
   const settings = useStore((state) => state.settings);
@@ -139,22 +135,12 @@ function SettingsInner({
                 <LibraryIcon />
                 <span>{t("settings.collection.title")}</span>
               </TabsTrigger>
-              <TabsTrigger data-testid="tab-fan-made" value="fan-made-content">
-                <Icon iconNode={featherText} />
-                <span>{t("fan_made_content.title")}</span>
-              </TabsTrigger>
               <TabsTrigger data-testid="tab-backup" value="backup">
                 <DatabaseBackupIcon />
                 <span>{t("settings.backup.title")}</span>
               </TabsTrigger>
             </TabsList>
             <TabsContent value="general">
-              <Section title={t("settings.general.title")}>
-                <WeaknessPoolSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-              </Section>
               <Section title={t("settings.display.title")}>
                 <LocaleSetting settings={settings} setSettings={setSettings} />
                 <ThemeSetting setTheme={setTheme} theme={theme} />
@@ -232,11 +218,6 @@ function SettingsInner({
                   settings={settings}
                   setSettings={setSettings}
                 />
-              </Section>
-            </TabsContent>
-            <TabsContent value="fan-made-content">
-              <Section title={t("fan_made_content.title")}>
-                <FanMadeContent settings={settings} setSettings={setSettings} />
               </Section>
             </TabsContent>
             <TabsContent value="backup">

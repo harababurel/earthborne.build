@@ -25,7 +25,6 @@ import { CycleFilter } from "./cycle-filter";
 import { EncounterSetFilter } from "./encounter-set-filter";
 import { EquipFilter } from "./equip-filter";
 import { ErAspectFilter } from "./er-aspect-filter";
-import { FanMadeContentFilter } from "./fan-made-content-filter";
 import css from "./filters.module.css";
 import { HealthFilter } from "./health-filter";
 import { IllustratorFilter } from "./illustrator-filter";
@@ -151,9 +150,6 @@ export function Filters(props: Props) {
                 )}
                 {filter === "level" && <LevelFilter {...params} />}
                 {filter === "ownership" && <OwnershipFilter {...params} />}
-                {filter === "fan_made_content" && (
-                  <FanMadeContentFilter {...params} />
-                )}
                 {filter === "pack" && <PackFilter {...params} />}
                 {filter === "properties" && <PropertiesFilter {...params} />}
                 {filter === "skill_icons" && <SkillIconsFilter {...params} />}

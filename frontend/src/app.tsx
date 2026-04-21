@@ -60,14 +60,6 @@ const BrowseDecklists = lazy(
 
 const Rules = lazy(() => import("./pages/rules-reference/rules-reference"));
 
-const InstallFanMadeContent = lazy(
-  () => import("./pages/install-fan-made-content/install-fan-made-content"),
-);
-
-const FanMadeContentPreview = lazy(
-  () => import("./pages/fan-made-content-preview/fan-made-content-preview"),
-);
-
 function App() {
   return (
     <Providers>
@@ -136,14 +128,6 @@ function AppInner() {
               <Route component={CollectionStats} path="/collection-stats" />
               <Route component={BrowseDecklists} path="/decklists" />
               <Route component={Rules} path="/rules" />
-              <Route
-                component={FanMadeContentPreview}
-                path="/fan-made-content/preview/:id"
-              />
-              <Route
-                component={InstallFanMadeContent}
-                path="/install-fan-made-content"
-              />
               <Route path="*">
                 <ErrorStatus statusCode={404} />
               </Route>

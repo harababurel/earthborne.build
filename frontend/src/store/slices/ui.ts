@@ -1,11 +1,5 @@
 import type { StateCreator } from "zustand";
-import {
-  addProjectToMetadata,
-  buildCacheFromDecks,
-} from "../lib/fan-made-content";
-import type { DeckFanMadeContent } from "../lib/types";
 import type { StoreState } from ".";
-import type { Metadata } from "./metadata.types";
 import type { UISlice, UIState } from "./ui.types";
 
 function getInitialUIState(): UIState {
@@ -14,7 +8,6 @@ function getInitialUIState(): UIState {
       initialized: false,
       showUnusableCards: false,
       showLimitedAccess: true,
-      fanMadeContentCache: {},
       navigationHistory: [],
       cardModal: {
         code: undefined,
@@ -33,76 +26,6 @@ export const createUISlice: StateCreator<StoreState, [], [], UISlice> = (
   },
   setShowLimitedAccess(showLimitedAccess: boolean) {
     set((state) => ({ ui: { ...state.ui, showLimitedAccess } }));
-  },
-  cacheFanMadeContent(decks) {
-    // FIXME: dont update if the cache is already up to date
-    set((state) => ({
-      ui: {
-        ...state.ui,
-        fanMadeContentCache: mergeFanMadeContent(
-          state.ui.fanMadeContentCache,
-          buildCacheFromDecks(decks),
-        ),
-      },
-    }));
-  },
-  cacheFanMadeProject(project) {
-    set((state) => {
-      const meta = {
-        cards: {},
-        packs: {},
-        cycles: {},
-        encounterSets: {},
-      } as Metadata;
-
-      addProjectToMetadata(meta, project);
-
-      return {
-        ui: {
-          ...state.ui,
-          fanMadeContentCache: mergeFanMadeContent(
-            state.ui.fanMadeContentCache,
-            meta,
-          ),
-        },
-      };
-    });
-  },
-  uncacheFanMadeProject(content) {
-    const cards = content.data.cards
-      ? Object.fromEntries(content.data.cards.map((card) => [card.code, card]))
-      : undefined;
-
-    const packs = undefined;
-    const encounterSets = undefined;
-
-    set((state) => ({
-      ui: {
-        ...state.ui,
-        fanMadeContentCache: {
-          cards: Object.fromEntries(
-            Object.entries(state.ui.fanMadeContentCache.cards || {}).filter(
-              ([code]) => !cards?.[code],
-            ),
-          ),
-          cycles: Object.fromEntries(
-            Object.entries(state.ui.fanMadeContentCache.cycles || {}).filter(
-              ([code]) => content.meta.code !== code,
-            ),
-          ),
-          packs: Object.fromEntries(
-            Object.entries(state.ui.fanMadeContentCache.packs || {}).filter(
-              ([code]) => !packs?.[code],
-            ),
-          ),
-          encounter_sets: Object.fromEntries(
-            Object.entries(
-              state.ui.fanMadeContentCache.encounter_sets || {},
-            ).filter(([code]) => !encounterSets?.[code]),
-          ),
-        },
-      },
-    }));
   },
   pushHistory(path: string) {
     set((state) => {
@@ -160,27 +83,3 @@ export const createUISlice: StateCreator<StoreState, [], [], UISlice> = (
     }));
   },
 });
-
-function mergeFanMadeContent(
-  a: Partial<DeckFanMadeContent> | undefined,
-  b: Partial<DeckFanMadeContent> | undefined,
-) {
-  return {
-    cards: {
-      ...a?.cards,
-      ...b?.cards,
-    },
-    cycles: {
-      ...a?.cycles,
-      ...b?.cycles,
-    },
-    packs: {
-      ...a?.packs,
-      ...b?.packs,
-    },
-    encounter_sets: {
-      ...a?.encounter_sets,
-      ...b?.encounter_sets,
-    },
-  };
-}

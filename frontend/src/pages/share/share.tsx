@@ -50,11 +50,8 @@ export function ShareInner(props: { id: string }) {
 
   const { t } = useTranslation();
 
-  const cacheFanMadeContent = useStore((state) => state.cacheFanMadeContent);
-
   async function queryFn() {
     const shareRead = await getShare(id);
-    cacheFanMadeContent([shareRead.data]);
     return shareRead;
   }
 

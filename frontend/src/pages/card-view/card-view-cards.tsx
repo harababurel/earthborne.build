@@ -15,11 +15,7 @@ import { filterBacksides } from "@/store/lib/filtering";
 import { getRelatedCards } from "@/store/lib/resolve-card";
 import { sortByPosition } from "@/store/lib/sorting";
 import type { CardWithRelations } from "@/store/lib/types";
-import {
-  selectLookupTables,
-  selectMetadata,
-  selectShowFanMadeRelations,
-} from "@/store/selectors/shared";
+import { selectLookupTables, selectMetadata } from "@/store/selectors/shared";
 import {
   cardUrl,
   displayAttribute,
@@ -153,9 +149,8 @@ export function CardViewCards({
 }: {
   cardWithRelations: CardWithRelations;
 }) {
-  const showFanMadeRelations = useStore(selectShowFanMadeRelations);
   const _settings = useStore((state) => state.settings);
-  const related = getRelatedCards(cardWithRelations, showFanMadeRelations);
+  const related = getRelatedCards(cardWithRelations);
 
   return (
     <>

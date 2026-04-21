@@ -2,73 +2,16 @@ import type { Card } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import { official } from "@/utils/card-utils";
 import i18n from "@/utils/i18n";
-import { isEmpty } from "@/utils/is-empty";
-import { time, timeEnd } from "@/utils/time";
 import { fields } from "../lib/buildql/fields";
 import { Interpreter } from "../lib/buildql/interpreter";
 import { isCardOwned } from "../lib/card-ownership";
-import { addProjectToMetadata, cloneMetadata } from "../lib/fan-made-content";
 import { createLookupTables } from "../lib/lookup-tables";
 import type { ResolvedDeck } from "../lib/types";
 import type { Cycle } from "../schemas/cycle.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { StoreState } from "../slices";
-import type { Metadata } from "../slices/metadata.types";
 
-export const selectMetadata = createSelector(
-  (state: StoreState) => state.metadata,
-  (state: StoreState) => state.fanMadeData.projects,
-  (state: StoreState) => state.ui.fanMadeContentCache,
-  (metadata, fanMadeProjects, cache) => {
-    const projects = Object.values(fanMadeProjects);
-
-    if (isEmpty(projects) && isEmpty(cache?.cards)) return metadata;
-
-    time("select_custom_data");
-
-    const meta = cloneMetadata(metadata);
-
-    for (const project of projects) {
-      addProjectToMetadata(meta, project);
-    }
-
-    if (cache?.cycles) {
-      for (const cycle of Object.values(cache.cycles)) {
-        if (!meta.cycles[cycle.code]) {
-          meta.cycles[cycle.code] = cycle;
-        }
-      }
-    }
-
-    if (cache?.packs) {
-      for (const pack of Object.values(cache.packs)) {
-        if (!meta.packs[pack.code]) {
-          meta.packs[pack.code] = pack;
-        }
-      }
-    }
-
-    if (cache?.cards) {
-      for (const card of Object.values(cache.cards)) {
-        if (!meta.cards[card.code]) {
-          meta.cards[card.code] = card;
-        }
-      }
-    }
-
-    if (cache?.encounter_sets) {
-      for (const set of Object.values(cache.encounter_sets)) {
-        if (!meta.encounterSets[set.code]) {
-          meta.encounterSets[set.code] = set;
-        }
-      }
-    }
-
-    timeEnd("select_custom_data");
-
-    return meta as Metadata;
-  },
-);
+export const selectMetadata = (state: StoreState) => state.metadata;
 
 export const selectLookupTables = createSelector(
   selectMetadata,
@@ -195,30 +138,12 @@ export const selectActiveList = (state: StoreState) => {
   return active ? state.lists[active] : undefined;
 };
 
-export const selectShowFanMadeRelations = createSelector(
-  selectActiveList,
-  (state: StoreState) => state.settings.cardListsDefaultContentType,
-  (activeList, defaultContentType) => {
-    if (activeList) {
-      const { filters, filterValues } = activeList;
-
-      const idx = filters.indexOf("fan_made_content");
-      const filterValue = idx !== -1 ? filterValues[idx] : undefined;
-
-      if (filterValue != null) return filterValue.value !== "official";
-    }
-
-    return defaultContentType !== "official";
-  },
-);
-
 export const selectPrintingsForCard = createSelector(
   selectMetadata,
   selectLookupTables,
   selectLocaleSortingCollator,
-  selectShowFanMadeRelations,
   (_: StoreState, code: string) => code,
-  (metadata, lookupTables, collator, showFanMadeRelations, cardCode) => {
+  (metadata, lookupTables, collator, cardCode) => {
     const duplicates = Object.keys(
       lookupTables.relations.duplicates[cardCode] ?? {},
     );
@@ -236,7 +161,7 @@ export const selectPrintingsForCard = createSelector(
     ).reduce((acc, code) => {
       const card = metadata.cards[code];
 
-      const canShow = showFanMadeRelations || official(card);
+      const canShow = official(card);
 
       if (!canShow) return acc;
 

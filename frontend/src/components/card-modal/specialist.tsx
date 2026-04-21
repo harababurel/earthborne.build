@@ -8,7 +8,6 @@ import { selectUsableByInvestigators } from "@/store/selectors/card-view";
 import {
   selectLocaleSortingCollator,
   selectMetadata,
-  selectShowFanMadeRelations,
   selectStaticBuildQlInterpreter,
 } from "@/store/selectors/shared";
 import type { StoreState } from "@/store/slices";
@@ -25,17 +24,9 @@ const selectSpecialistAccess = createSelector(
   selectMetadata,
   (state: StoreState) => state.settings,
   selectLocaleSortingCollator,
-  selectShowFanMadeRelations,
   selectStaticBuildQlInterpreter,
   (_: StoreState, card: Card) => card,
-  (
-    metadata,
-    _settings,
-    collator,
-    showFanMadeRelations,
-    buildQlInterpreter,
-    investigatorBack,
-  ) => {
+  (metadata, _settings, collator, buildQlInterpreter, investigatorBack) => {
     const investigatorFilter = filterInvestigatorAccess(
       investigatorBack,
       buildQlInterpreter,
@@ -44,10 +35,8 @@ const selectSpecialistAccess = createSelector(
 
     return Object.values(metadata.cards)
       .filter((card) => {
-        const fanMadeAllowed = showFanMadeRelations || official(card);
-
         return (
-          isSpecialist(card) && investigatorFilter?.(card) && fanMadeAllowed
+          isSpecialist(card) && investigatorFilter?.(card) && official(card)
         );
       })
       .sort(makeSortFunction(["name", "level"], metadata, collator))
@@ -79,9 +68,7 @@ export function SpecialistAccess(props: Props) {
 
 const selectUsableByInvestigatorsResolved = createSelector(
   selectUsableByInvestigators,
-  selectShowFanMadeRelations,
-  (cards, showFanMadeRelations) =>
-    cards.filter(({ card }) => showFanMadeRelations || official(card)),
+  (cards) => cards.filter(({ card }) => official(card)),
 );
 
 export function SpecialistInvestigators(props: Props) {

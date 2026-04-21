@@ -103,10 +103,7 @@ function sortRelations(a: string, b: string) {
   return CARD_SET_ORDER.indexOf(a) - CARD_SET_ORDER.indexOf(b);
 }
 
-export function getRelatedCards(
-  cardWithRelations: CardWithRelations,
-  showFanMadeRelations: boolean,
-) {
+export function getRelatedCards(cardWithRelations: CardWithRelations) {
   return Object.entries(cardWithRelations.relations ?? {})
     .reduce(
       (acc, [key, value]) => {
@@ -114,7 +111,7 @@ export function getRelatedCards(
 
         const values = (Array.isArray(value) ? value : [value]).filter((v) => {
           if (!v) return false;
-          return showFanMadeRelations || official(v.card);
+          return official(v.card);
         });
 
         if (values.length > 0) {

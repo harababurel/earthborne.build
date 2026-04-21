@@ -15,7 +15,6 @@ import {
   isCardTypeFilter,
   isCostFilter,
   isEquipFilter,
-  isFanMadeContentFilter,
   isInvestigatorSkillsFilter,
   isLevelFilter,
   isMultiSelectFilter,
@@ -30,7 +29,6 @@ import type {
   AssetFilter,
   CostFilter,
   EquipFilter,
-  FanMadeContentFilter,
   FilterKey,
   FilterMapping,
   LevelFilter,
@@ -242,15 +240,6 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
           );
 
           filterValues[id] = { ...filterValues[id], value };
-          break;
-        }
-
-        case "fan_made_content": {
-          assert(
-            isFanMadeContentFilter(payload),
-            `filter ${id} value must be a string.`,
-          );
-          filterValues[id] = { ...filterValues[id], value: payload };
           break;
         }
 
@@ -811,15 +800,6 @@ function makeFilterValue(
       );
     }
 
-    case "fan_made_content": {
-      return makeFilterObject(
-        type,
-        isFanMadeContentFilter(initialValue) ? initialValue : "all",
-        false,
-        locked,
-      );
-    }
-
     case "properties": {
       return makeFilterObject(
         type,
@@ -869,6 +849,8 @@ function makeFilterValue(
         locked,
       );
     }
+    default:
+      throw new Error(`Unhandled filter key: ${type}`);
   }
 }
 
@@ -926,7 +908,6 @@ function investigatorFilters({
   }
 
   filters.push(
-    "fan_made_content",
     "pack",
     "investigator_card_access",
     "trait",
@@ -957,7 +938,6 @@ function cardsFilters({
   ];
 
   if (showOwnershipFilter) filters.push("ownership");
-  filters.push("fan_made_content");
 
   return Array.from(new Set(filters));
 }
@@ -1043,9 +1023,6 @@ function mergeInitialValues(
   return {
     ...initialValues,
     card_type: initialValues.card_type ?? "player",
-    fan_made_content:
-      initialValues.fan_made_content ??
-      getInitialFanMadeContentFilter(settings),
     ownership: initialValues.ownership ?? getInitialOwnershipFilter(settings),
     pack: initialValues.pack ?? getInitialPackFilter(settings, metadata),
   };
@@ -1060,12 +1037,6 @@ function getInitialPackFilter(
   return Object.keys(metadata.packs).filter(
     (code) => settings.collection[code],
   );
-}
-
-function getInitialFanMadeContentFilter(
-  settings: SettingsState,
-): FanMadeContentFilter {
-  return settings.cardListsDefaultContentType ?? "all";
 }
 
 function getInitialOwnershipFilter(_settings: SettingsState): OwnershipFilter {

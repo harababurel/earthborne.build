@@ -5,10 +5,7 @@ import { migrate } from "./migrate";
 import { makeStorageAdapter, VERSION } from "./storage";
 import { TabSync } from "./tab-sync";
 
-type AppState = Pick<
-  StoreState,
-  "app" | "data" | "settings" | "sharing" | "fanMadeData"
->;
+type AppState = Pick<StoreState, "app" | "data" | "settings" | "sharing">;
 
 type StorageType = "app" | "edits" | "metadata";
 
@@ -29,7 +26,6 @@ export const appStorage = makeStorageAdapter<AppState>(
   "deckbuilder-app",
   (state) => ({
     app: state.app,
-    fanMadeData: state.fanMadeData,
     data: state.data,
     settings: state.settings,
     sharing: state.sharing,

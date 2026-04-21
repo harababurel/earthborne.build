@@ -46,8 +46,6 @@ const packRenderer = (cycle: Cycle) => (
 
 const packToString = (pack: Cycle) => displayPackName(pack).toLowerCase();
 
-const CAMPAIGN_PLAYALONG_PROJECT_ID = "5b6a1f95-73d1-4059-8af2-b9a645efd625";
-
 export function ConfigureEnvironmentModal(props: Props) {
   const { investigator, onValueChange } = props;
 
@@ -86,7 +84,6 @@ export function ConfigureEnvironmentModal(props: Props) {
                 <div className={css["nav-section"]}>
                   <h4>Custom</h4>
                 </div>
-                <EnvironmentsTabTrigger value="campaign_playalong" />
                 <EnvironmentsTabTrigger value="collection" />
                 <div className={css["nav-section"]}>
                   <h4>FAQ 2.5</h4>
@@ -103,9 +100,6 @@ export function ConfigureEnvironmentModal(props: Props) {
                 </EnvironmentsTabContent>
                 <EnvironmentsTabContent value="limited">
                   <LimitedTab {...tabProps} />
-                </EnvironmentsTabContent>
-                <EnvironmentsTabContent value="campaign_playalong">
-                  <CampaignPlayalongTab {...tabProps} />
                 </EnvironmentsTabContent>
                 <EnvironmentsTabContent
                   value="current_faq25"
@@ -266,75 +260,6 @@ function LimitedTab(props: TabProps) {
       <EnvironmentsTabConfirm
         disabled={!selectedItems.length}
         environment="limited"
-        onClick={applyEnvironment}
-      />
-    </>
-  );
-}
-
-function CampaignPlayalongTab(props: TabProps) {
-  const { dialogCtx, locale, onValueChange } = props;
-
-  const { t } = useTranslation();
-
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const cycles = useStore(selectCampaignCycles);
-
-  const campaignPlayalongProject = useStore(
-    (state) => state.fanMadeData.projects[CAMPAIGN_PLAYALONG_PROJECT_ID],
-  );
-
-  const applyEnvironment = () => {
-    if (!selectedItems.length) return;
-    const cycle = selectedItems[0];
-
-    const packs = environments.cpa(cycle);
-
-    if (campaignPlayalongProject) {
-      const projectData = campaignPlayalongProject.data as unknown as {
-        packs?: Array<{ code: string }>;
-      };
-      const packCodes = (projectData.packs ?? []).map(
-        (pack: { code: string }) => pack.code,
-      );
-
-      packs.push(...packCodes);
-    }
-
-    onValueChange(packs);
-    dialogCtx.setOpen(false);
-  };
-
-  const onSelectionChange = useCallback((items: CycleWithPacks[]) => {
-    setSelectedItems(items.map((cycle) => cycle.code));
-  }, []);
-
-  return (
-    <>
-      <Field full padded bordered>
-        <Combobox
-          autoFocus
-          id="cycle-select-combobox"
-          limit={1}
-          locale={locale}
-          placeholder={t("deck_edit.config.card_pool.choose_cycle_placeholder")}
-          renderItem={packRenderer}
-          renderResult={packRenderer}
-          itemToString={packToString}
-          onValueChange={onSelectionChange}
-          items={cycles}
-          label={capitalize(t("common.cycle", { count: 1 }))}
-          showLabel
-          selectedItems={
-            selectedItems
-              .map((code) => cycles.find((cycle) => cycle.code === code))
-              .filter(Boolean) as CycleWithPacks[]
-          }
-        />
-      </Field>
-      <EnvironmentsTabConfirm
-        disabled={!selectedItems.length}
-        environment="campaign_playalong"
         onClick={applyEnvironment}
       />
     </>

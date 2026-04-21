@@ -57,8 +57,6 @@ export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (
       Array.from(files).map((file) => file.text().then(JSON.parse)),
     ).then((res) => res.filter(isDeck));
 
-    get().cacheFanMadeContent(decks);
-
     const formatted = decks.map((deck) =>
       formatDeckImport(get(), deck, "deck"),
     );

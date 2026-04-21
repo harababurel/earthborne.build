@@ -20,20 +20,16 @@ import type { StoreState } from "@/store/slices";
 import { assert } from "@/utils/assert";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { and } from "@/utils/fp";
-import { isEmpty } from "@/utils/is-empty";
 
 export const selectDependencies = createStructuredSelector({
   defaultContentType: (state: StoreState) =>
     state.settings.cardListsDefaultContentType,
   hasCollection: (state: StoreState) => !state.settings.showAllCards,
-  hasFanMadeContent: (state: StoreState) =>
-    !isEmpty(state.fanMadeData.projects),
   createEdit: (state: StoreState) => state.createEdit,
 });
 
-type AvailableUpgradeOptions = {
+export type AvailableUpgradeOptions = {
   checkOwnership: boolean;
-  includeFanMade: boolean;
   ultimatumOfExile: boolean;
 };
 
@@ -53,7 +49,7 @@ export const selectAvailableUpgrades = createSelector(
     collection,
     buildQlInterpreter,
     deck,
-    { checkOwnership, includeFanMade, ultimatumOfExile },
+    { checkOwnership, ultimatumOfExile },
   ) => {
     const suzi = metadata.cards[SPECIAL_CARD_CODES.SUZI];
 
@@ -79,9 +75,7 @@ export const selectAvailableUpgrades = createSelector(
       );
     }
 
-    if (!includeFanMade) {
-      filters.push(filterOfficial);
-    }
+    filters.push(filterOfficial);
 
     if (ultimatumOfExile) {
       filters.push((c: Card) => !c.text?.includes("Exile"));
