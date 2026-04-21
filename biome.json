@@ -8,12 +8,11 @@
   "files": {
     "ignoreUnknown": false,
     "includes": [
-      "**",
-      "!**/dist",
-      "!**/coverage",
-      "!**/playwright-report",
-      "!**/test-results",
-      "!**/.wrangler"
+      "frontend/src/**",
+      "backend/src/**",
+      "shared/src/**",
+      "scripts/**",
+      "*.json"
     ],
     "maxSize": 10000000
   },
