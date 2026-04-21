@@ -123,7 +123,7 @@ function BrowseDecklists() {
             <ol className={css["results"]}>
               {data.data.map((result) => (
                 <li key={result.id}>
-                  <ArkhamDBDecklistResult result={result} showDetails />
+                  {/* Result display for ER decklists TODO */}
                 </li>
               ))}
             </ol>

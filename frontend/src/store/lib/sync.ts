@@ -1,12 +1,11 @@
 import type { StoreApi } from "zustand";
 import { ApiError } from "../services/requests/shared";
 import type { StoreState } from "../slices";
-import type { Provider } from "../slices/connections.types";
 
 export const syncAdapters = {};
 
 export function disconnectProviderIfUnauthorized(
-  provider: Provider,
+  _provider: never,
   err: unknown,
   set: StoreApi<StoreState>["setState"],
 ) {
@@ -16,8 +15,8 @@ export function disconnectProviderIfUnauthorized(
         ...state.connections,
         data: {
           ...state.connections.data,
-          [provider]: {
-            ...state.connections.data[provider],
+          [_provider]: {
+            ...state.connections.data[_provider],
             status: "disconnected",
           },
         },

@@ -95,11 +95,7 @@ function DeckDescription(props: Props) {
 
           if (code) {
             openCardModal(code);
-          } else {
-            redirectArkhamDBLinks(evt);
           }
-        } else {
-          redirectArkhamDBLinks(evt);
         }
       }
     },

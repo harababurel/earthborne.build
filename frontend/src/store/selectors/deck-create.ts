@@ -58,7 +58,7 @@ export const selectDeckCreateCardSets = createSelector(
   (metadata, lookupTables, collator, deckCreate, investigators) => {
     const groupings: CardSet[] = [];
 
-    const { back, investigator } = investigators;
+    const { back } = investigators;
     const { relations } = back;
 
     const deckSizeRequirement = 30;

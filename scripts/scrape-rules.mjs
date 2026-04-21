@@ -10,7 +10,11 @@
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cachedFetchText, createCache, parseCacheArgs } from "./lib/scraper-cache.mjs";
+import {
+  cachedFetchText,
+  createCache,
+  parseCacheArgs,
+} from "./lib/scraper-cache.mjs";
 
 const BASE = "https://thelivingvalley.earthbornegames.com/docs/rules_glossary";
 const BASE_ORIGIN = "https://thelivingvalley.earthbornegames.com";
@@ -303,7 +307,10 @@ function extractContent(html, letter, slug) {
 async function fetchEntry(letter, slug, cache) {
   const url = `${BASE}/${letter}/${slug}`;
   try {
-    const { body, fromCache } = await cachedFetchText(url, { cache, retries: 3 });
+    const { body, fromCache } = await cachedFetchText(url, {
+      cache,
+      retries: 3,
+    });
     const entry = extractContent(body, letter, slug);
     return entry ? { ...entry, fromCache } : null;
   } catch (err) {
@@ -384,7 +391,13 @@ async function main() {
     for (const slug of slugs) {
       const entry = await fetchEntry(letter, slug, cache);
       if (entry) {
-        const prefix = entry.fromCache ? "[H]" : cache.mode === "bypass" ? "[B]" : cache.mode === "refresh" ? "[R]" : "[M]";
+        const prefix = entry.fromCache
+          ? "[H]"
+          : cache.mode === "bypass"
+            ? "[B]"
+            : cache.mode === "refresh"
+              ? "[R]"
+              : "[M]";
         results.push({ slug, ...entry });
         console.log(`  ${prefix} OK: "${entry.title}" (${slug})`);
         total++;
@@ -404,7 +417,9 @@ async function main() {
 
   console.log(`\nFetched ${total} entries, ${failed} failed.`);
   const s = cache.stats();
-  console.log(`Cache: ${s.hits} hits, ${s.misses} misses, ${s.errors} errors, ${s.refreshes} refreshes, ${s.bypasses} bypasses  ·  cache dir: ${cache.dir}`);
+  console.log(
+    `Cache: ${s.hits} hits, ${s.misses} misses, ${s.errors} errors, ${s.refreshes} refreshes, ${s.bypasses} bypasses  ·  cache dir: ${cache.dir}`,
+  );
 
   const toc = buildToc(letterResults);
   const rules = buildRules(letterResults);

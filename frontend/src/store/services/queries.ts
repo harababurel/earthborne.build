@@ -305,19 +305,6 @@ export async function queryFanMadeProjects(): Promise<FanMadeProjectInfo[]> {
   });
 }
 
-// ER has no ArkhamDB deck import. Stub for call-site compatibility.
-// biome-ignore lint/suspicious/useAwait: stub for call-site compatibility
-export async function queryDeck(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _clientId: string | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _type: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _id: number,
-): Promise<unknown[]> {
-  return [];
-}
-
 export async function queryFanMadeProjectData(
   bucketPath: string,
 ): Promise<FanMadeProject> {

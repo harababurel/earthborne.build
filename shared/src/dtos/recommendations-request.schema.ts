@@ -1,7 +1,5 @@
 import { z } from "zod";
-import {
-  coerceStringArray,
-} from "../lib/search-params.ts";
+import { coerceStringArray } from "../lib/search-params.ts";
 import { DateRangeSchema } from "./date-range.schema.ts";
 
 export const RecommendationsRequestSchema = z.object({

@@ -1,7 +1,5 @@
 import { z } from "zod";
-import {
-  coerceStringArray,
-} from "../lib/search-params.ts";
+import { coerceStringArray } from "../lib/search-params.ts";
 import { DateRangeSchema } from "./date-range.schema.ts";
 
 export const DecklistSearchRequestSchema = z.object({
@@ -14,9 +12,7 @@ export const DecklistSearchRequestSchema = z.object({
   name: z.string().max(255).optional(),
   offset: z.coerce.number().int().min(0).optional().default(0),
   required: z.preprocess(coerceStringArray, z.array(z.string())).optional(),
-  sort_by: z
-    .enum(["date", "likes", "popularity"])
-    .default("popularity"),
+  sort_by: z.enum(["date", "likes", "popularity"]).default("popularity"),
   sort_dir: z.enum(["asc", "desc"]).optional().default("desc"),
   specialty: z.string().optional(),
 });

@@ -10,7 +10,7 @@ import { selectMetadata } from "@/store/selectors/shared";
 import type { StoreState } from "@/store/slices";
 import type { StorageProvider } from "@/utils/constants";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
-import { capitalize, formatProviderName } from "@/utils/formatting";
+import { capitalize } from "@/utils/formatting";
 import { isEmpty } from "@/utils/is-empty";
 import PackIcon from "../icons/pack-icon";
 import { ListCardInner } from "../list-card/list-card-inner";
@@ -87,9 +87,7 @@ export function ProviderTagInner({
 }) {
   let icon = null;
 
-  if (tag === "arkhamdb") {
-    icon = <i className="icon-elder_sign" />;
-  } else if (tag === "local") {
+  if (tag === "local") {
     icon = <LockKeyholeIcon />;
   } else if (tag === "shared") {
     icon = <ShareIcon />;
@@ -101,13 +99,11 @@ export function ProviderTagInner({
     <>
       {icon}
       <span>
-        {str === "arkhamdb"
-          ? formatProviderName(str)
-          : str === "local"
-            ? t("deck.tags.private")
-            : str === "shared"
-              ? t("deck.tags.shared")
-              : capitalize(str)}
+        {str === "local"
+          ? t("deck.tags.private")
+          : str === "shared"
+            ? t("deck.tags.shared")
+            : capitalize(str)}
       </span>
     </>
   );

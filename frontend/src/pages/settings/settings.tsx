@@ -22,9 +22,6 @@ import { useGoBack } from "@/utils/use-go-back";
 import { BackupRestore } from "./backup-restore";
 import { CardDataSync } from "./card-data-sync";
 import { CardDisplaySettings } from "./card-display";
-import { ColorSchemeSetting } from "./color-scheme";
-import { Connections } from "./connections";
-import { DefaultEnvironmentSetting } from "./default-environment";
 import { DevModeSetting } from "./dev-mode";
 import { FontSizeSetting } from "./font-size";
 import { ListSettings } from "./list-settings";
@@ -128,9 +125,6 @@ function SettingsInner({
         </header>
         <div className={css["container"]}>
           <div className={css["row"]}>
-            <Section title={t("settings.connections.title")}>
-              <Connections />
-            </Section>
             <Section title={t("settings.card_data.title")}>
               <CardDataSync showDetails />
             </Section>

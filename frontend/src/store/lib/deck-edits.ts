@@ -82,7 +82,6 @@ export function applyDeckEdits(
         continue;
       }
 
-      // account for arkhamdb representing empty side slots as an array.
       if (!deck[slotKey] || Array.isArray(deck[slotKey])) {
         deck[slotKey] = {};
       }

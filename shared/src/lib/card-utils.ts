@@ -50,7 +50,9 @@ export function cardAspectRequirement(
   return undefined;
 }
 
-export function cardApproachIcons(card: Card): Partial<Record<ApproachKey, number>> {
+export function cardApproachIcons(
+  card: Card,
+): Partial<Record<ApproachKey, number>> {
   const icons: Partial<Record<ApproachKey, number>> = {};
   if (card.approach_conflict) icons.conflict = card.approach_conflict;
   if (card.approach_reason) icons.reason = card.approach_reason;

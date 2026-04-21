@@ -31,9 +31,7 @@ import {
 import { Scroller } from "@/components/ui/scroller";
 import { useToast } from "@/components/ui/toast.hooks";
 import { useStore } from "@/store";
-import { selectConnectionsData } from "@/store/selectors/connections";
 import { selectDecksDisplayList } from "@/store/selectors/deck-collection";
-import { isEmpty } from "@/utils/is-empty";
 import { useHotkey } from "@/utils/use-hotkey";
 import { FileInput } from "../ui/file-input";
 import css from "./deck-collection.module.css";
@@ -51,7 +49,6 @@ export function DeckCollection() {
   const toast = useToast();
 
   const deckCollection = useStore(selectDecksDisplayList);
-  const hasConnections = !isEmpty(useStore(selectConnectionsData));
 
   const importDecks = useStore((state) => state.importFromFiles);
   const deleteAllDecks = useStore((state) => state.deleteAllDecks);
@@ -106,11 +103,7 @@ export function DeckCollection() {
       <header className={css["header"]}>
         <h2 className={css["title"]}>{t("deck_collection.title")}</h2>
         <div className={css["actions"]}>
-          {!hasConnections && (
-            <Popover>
-              <DeckCollectionImport />
-            </Popover>
-          )}
+          <DeckCollectionImport />
           <Link to="/decklists" asChild>
             <Button as="a" data-testid="collection-deck-guides" size="sm">
               <BookTextIcon />
@@ -240,12 +233,6 @@ export function DeckCollection() {
                   <Button variant="bare">
                     <PlusIcon />
                     {t("deck.actions.create")}
-                  </Button>
-                </Link>
-                <Link href="/settings" asChild>
-                  <Button variant="bare">
-                    <i className="icon-elder_sign" />
-                    {t("deck_collection.connect_arkhamdb")}
                   </Button>
                 </Link>
               </nav>

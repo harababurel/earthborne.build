@@ -4,10 +4,6 @@ import {
   CopyIcon,
   DicesIcon,
   EllipsisIcon,
-  ExternalLinkIcon,
-  ImportIcon,
-  PencilIcon,
-  ShareIcon,
   Trash2Icon,
 } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -27,21 +23,14 @@ import { useToast } from "@/components/ui/toast.hooks";
 import { UpgradeModal } from "@/pages/deck-view/upgrade-modal";
 import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
-import type { Id } from "@/store/schemas/deck.schema";
-import { selectConnectionsData } from "@/store/selectors/connections";
 import type { History } from "@/store/selectors/decks";
-import {
-  selectConnectionLock,
-  selectConnectionLockForDeck,
-} from "@/store/selectors/shared";
+import { selectConnectionLockForDeck } from "@/store/selectors/shared";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { cx } from "@/utils/cx";
-import { isEmpty } from "@/utils/is-empty";
 import { useHotkey } from "@/utils/use-hotkey";
 import { DeckDetail, DeckDetails } from "../deck-details";
 import { DeckInvestigatorModal } from "../deck-investigator/deck-investigator-modal";
 import { SuziStandaloneSetupDialog } from "../suzi-standalone-setup/suzi-standalone-setup";
-import { CopyToClipboard } from "../ui/copy-to-clipboard";
 import { HotkeyTooltip } from "../ui/hotkey";
 import type { DeckDisplayType } from "./deck-display";
 import { LatestUpgrade } from "./deck-history/latest-upgrade";
@@ -68,20 +57,6 @@ type Props = {
 export function Sidebar(props: Props) {
   const { className, history, innerClassName, origin, deck, type } = props;
 
-  const connectionsData = useStore(selectConnectionsData);
-
-  const uploadDeck = useUploadDeck();
-  const onUpload = useCallback(() => {
-    uploadDeck(deck.id);
-  }, [deck.id, uploadDeck]);
-
-  const isReadOnly = !!deck.next_deck;
-
-  const canUploadToArkhamDB =
-    origin === "local" && !isReadOnly && !isEmpty(connectionsData);
-
-  const onArkhamDBUpload = canUploadToArkhamDB ? onUpload : undefined;
-
   return (
     <div className={className}>
       <div className={cx(css["container"], innerClassName)}>
@@ -93,24 +68,11 @@ export function Sidebar(props: Props) {
         <SidebarActions
           deck={deck}
           history={history}
-          onArkhamDBUpload={onArkhamDBUpload}
           origin={origin}
           type={type}
         />
         <DeckDetails deck={deck} />
         {origin === "local" && <SidebarUpgrade deck={deck} />}
-
-        {(origin === "arkhamdb" || deck.source === "arkhamdb") && (
-          <ArkhamDBDetails deck={deck} type={type} />
-        )}
-
-        {deck.source !== "arkhamdb" && (
-          <Sharing
-            onArkhamDBUpload={onArkhamDBUpload}
-            deck={deck}
-            origin={origin}
-          />
-        )}
       </div>
     </div>
   );
@@ -153,8 +115,6 @@ function SidebarActions(props: {
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(
     origin === "local" && search.includes("upgrade") && !deck.next_deck,
   );
-
-  const _connectionLock = useStore(selectConnectionLock);
 
   const deckConnectionLock = useStore((state) =>
     selectConnectionLockForDeck(state, deck),
@@ -429,175 +389,5 @@ function SidebarActions(props: {
         </Popover>
       </div>
     </>
-  );
-}
-
-function Sharing(props: { deck: ResolvedDeck; origin: DeckOrigin }) {
-  const { deck, origin } = props;
-  const toast = useToast();
-  const { t } = useTranslation();
-
-  const deckData = useStore((state) => state.data.decks[props.deck.id]);
-  const share = useStore((state) => state.sharing.decks[props.deck.id]);
-  const devModeEnabled = useStore((state) => state.settings.devModeEnabled);
-
-  const _connectionLock = useStore(selectConnectionLock);
-
-  const createShare = useStore((state) => state.createShare);
-  const deleteShare = useStore((state) => state.deleteShare);
-  const updateShare = useStore((state) => state.updateShare);
-
-  async function withToast(fn: () => Promise<unknown>, action: string) {
-    const id = toast.show({
-      children: t(`deck_view.sharing.${action}`),
-      variant: "loading",
-    });
-
-    try {
-      await fn();
-      toast.dismiss(id);
-    } catch (err) {
-      toast.dismiss(id);
-      toast.show({
-        children: t(`deck_view.sharing.${action}_failed`, {
-          error: (err as Error).message,
-        }),
-        variant: "error",
-      });
-    }
-  }
-
-  const onCreateShare = async () => {
-    await withToast(() => createShare(deck.id as string), "create");
-  };
-
-  const onDeleteShare = async () => {
-    await withToast(() => deleteShare(deck.id as string), "delete");
-  };
-
-  const onUpdateShare = async () => {
-    await withToast(() => updateShare(deckData), "update");
-  };
-
-  const isReadOnly = !!deck.next_deck;
-
-  return (
-    <section className={css["details"]} data-testid="share">
-      <DeckDetail
-        as="div"
-        icon={<ShareIcon />}
-        label={t("deck_view.sharing.title")}
-      >
-        {share || origin !== "local" ? (
-          <div className={css["share"]}>
-            <ShareInfo id={deck.id} path={`/share/${deck.id}`} />
-            {(origin === "local" || devModeEnabled) && (
-              <nav className={css["share-actions"]}>
-                {origin === "local" && (
-                  <>
-                    {deck.date_update !== share && (
-                      <Button
-                        disabled={isReadOnly}
-                        onClick={onUpdateShare}
-                        size="sm"
-                      >
-                        {t("deck_view.sharing.update")}
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      onClick={onDeleteShare}
-                      data-testid="share-delete"
-                    >
-                      {t("deck_view.sharing.delete")}
-                    </Button>
-                  </>
-                )}
-                {devModeEnabled && <DevModeApiLinkButton id={deck.id} />}
-              </nav>
-            )}
-          </div>
-        ) : (
-          <div className={css["share-empty"]}>
-            <p>{t("deck_view.sharing.description")}</p>
-            <div className={css["share-actions"]}>
-              <Button
-                data-testid="share-create"
-                disabled={isReadOnly}
-                onClick={onCreateShare}
-                size="sm"
-                tooltip={
-                  <Trans
-                    t={t}
-                    i18nKey="deck_view.sharing.create_tooltip"
-                    components={{ br: <br />, strong: <strong /> }}
-                  />
-                }
-              >
-                <ShareIcon />
-                {t("deck_view.sharing.create")}
-              </Button>
-            </div>
-          </div>
-        )}
-      </DeckDetail>
-    </section>
-  );
-}
-
-function ShareInfo(props: { id: Id; path: string }) {
-  const { id, path } = props;
-  const { t } = useTranslation();
-
-  return (
-    <>
-      <p>
-        <Trans
-          t={t}
-          i18nKey="deck_view.sharing.description_present"
-          components={{
-            a: (
-              // biome-ignore lint/a11y/useAnchorContent: interpolation.
-              <a
-                data-testid="share-link"
-                href={path}
-                target="_blank"
-                rel="noreferrer"
-              />
-            ),
-          }}
-        />
-        <CopyToClipboard
-          className={css["share-copy"]}
-          text={`${window.location.origin}${path}`}
-          variant="bare"
-        />
-      </p>
-      <p>
-        {t("deck.id")}: <code>{id}</code>
-        <CopyToClipboard
-          className={css["share-copy"]}
-          text={`${id}`}
-          variant="bare"
-        />
-      </p>
-    </>
-  );
-}
-
-function DevModeApiLinkButton({ id }: { id: Id }) {
-  const { t } = useTranslation();
-  return (
-    <Button
-      as="a"
-      data-testid="share-api-link"
-      href={`${import.meta.env.VITE_API_LEGACY_URL}/v1/public/share/${id}`}
-      rel="noreferrer"
-      target="_blank"
-      size="sm"
-    >
-      <ExternalLinkIcon />
-      {t("deck_view.sharing.api_link")}
-    </Button>
   );
 }

@@ -4,12 +4,7 @@ export const COMPARISON_OPERATOR = ["=", "!="] as const;
 // IDs match the database: uppercase 3-letter abbreviations.
 export type AspectKey = "AWA" | "FIT" | "FOC" | "SPI";
 
-export const ASPECT_ORDER = [
-  "AWA",
-  "FIT",
-  "FOC",
-  "SPI",
-] as const;
+export const ASPECT_ORDER = ["AWA", "FIT", "FOC", "SPI"] as const;
 
 // Approaches — icons on cards committed as effort during tests.
 export type ApproachKey = "conflict" | "reason" | "exploration" | "connection";

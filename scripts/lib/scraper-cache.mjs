@@ -1,11 +1,15 @@
 // biome-ignore-all lint/suspicious/noConsole: scraper cache output.
 
+import * as crypto from "node:crypto";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import * as crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
-const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
+const repoRoot = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+);
 
 /**
  * @typedef {Object} ScraperCache
@@ -25,7 +29,11 @@ export function createCache({ dir, mode }) {
   const stats = { hits: 0, misses: 0, errors: 0, refreshes: 0, bypasses: 0 };
 
   const getPaths = (url) => {
-    const hash = crypto.createHash("sha256").update(url).digest("hex").slice(0, 32);
+    const hash = crypto
+      .createHash("sha256")
+      .update(url)
+      .digest("hex")
+      .slice(0, 32);
     const shard = hash.slice(0, 2);
     const shardDir = path.join(dir, shard);
     const bodyPath = path.join(shardDir, `${hash}.body.html`);
@@ -46,7 +54,9 @@ export function createCache({ dir, mode }) {
         return { body, meta };
       } catch (err) {
         if (err.code !== "ENOENT") {
-          console.warn(`[Cache Warning] Failed to read valid cache entry for ${url}: ${err.message}`);
+          console.warn(
+            `[Cache Warning] Failed to read valid cache entry for ${url}: ${err.message}`,
+          );
         }
         return null;
       }
@@ -67,7 +77,7 @@ export function createCache({ dir, mode }) {
     async clear() {
       await fs.rm(dir, { recursive: true, force: true });
       await fs.mkdir(dir, { recursive: true });
-    }
+    },
   };
 }
 
@@ -124,7 +134,8 @@ export async function cachedFetchText(url, options) {
         const meta = {
           url,
           status,
-          contentType: res.headers.get("content-type") || "text/html; charset=utf-8",
+          contentType:
+            res.headers.get("content-type") || "text/html; charset=utf-8",
           fetchedAt: new Date().toISOString(),
           bodyBytes: Buffer.byteLength(body, "utf8"),
         };
@@ -163,7 +174,8 @@ export async function cachedFetchText(url, options) {
  */
 export function parseCacheArgs(argv = process.argv.slice(2)) {
   let mode = "auto";
-  let dir = process.env.SCRAPER_CACHE_DIR || path.join(repoRoot, ".cache", "scraper");
+  let dir =
+    process.env.SCRAPER_CACHE_DIR || path.join(repoRoot, ".cache", "scraper");
   let clear = false;
 
   let modeShortcutCount = 0;

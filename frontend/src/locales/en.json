@@ -403,6 +403,7 @@
       "delete_all_error": "Failed to delete local decks: {{error}}",
       "delete_all_loading": "Deleting local decks...",
       "import": "Import",
+      "import_help": "Enter a public deck ID or URL to import. The deck will be <strong>copied</strong>; history and upgrades will not be imported.",
       "import_json": "Import from JSON files",
       "more_filters": "More filters",
       "search_placeholder": "Search decks...",

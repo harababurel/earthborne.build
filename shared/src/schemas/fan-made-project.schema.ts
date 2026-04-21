@@ -25,8 +25,7 @@ export const ProjectMetaSchema = z.object({
     description: "Credit for the banner image.",
   }),
   code: z.string().check(z.minLength(3)).register(z.globalRegistry, {
-    description:
-      "Unique identifier for the project.",
+    description: "Unique identifier for the project.",
   }),
   date_updated: z.string().nullish().register(z.globalRegistry, {
     description:

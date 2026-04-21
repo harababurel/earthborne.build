@@ -1,11 +1,6 @@
 import { FloatingPortal } from "@floating-ui/react";
-import { GlobeIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams, useSearchParams } from "wouter";
-import {
-  CardArkhamDBLink,
-  CardReviewsLink,
-} from "@/components/card-modal/card-modal-provider";
 
 import { CardScan } from "@/components/card-scan";
 import { Footer } from "@/components/footer";
@@ -76,10 +71,6 @@ function CardView() {
               <Printings code={cardWithRelations.card.code} />
             </SidebarSection>
             <SidebarSection title={t("card_view.section_actions")}>
-              <CardArkhamDBLink card={cardWithRelations.card} size="full">
-                <GlobeIcon /> {t("card_view.actions.open_on_rangersdb")}
-              </CardArkhamDBLink>
-              <CardReviewsLink card={cardWithRelations.card} size="full" />
               {isBuildableInvestigator && (
                 <Link asChild href={deckCreateLink(cardWithRelations.card)}>
                   <Button

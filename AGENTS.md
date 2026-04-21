@@ -65,6 +65,13 @@ Start with these:
 - Do not use `--no-verify`, `--no-gpg-sign`, or any flag that bypasses hooks/signing.
 - Stage specific files; avoid `git add -A` / `git add .`.
 
+## Environment setup
+
+- **Node/NPM/NPX:** These are managed via `fnm` and might not be in the `PATH` by default. Before running any command that requires them (like `npm run`, `npx`, or committing with hooks), you must initialize `fnm`:
+  ```bash
+  eval "$(/usr/local/google/home/sergiup/.local/share/fnm/fnm env)"
+  ```
+
 ## Verification before declaring work done
 
 When you change code, run the scoped checks for whatever you touched:

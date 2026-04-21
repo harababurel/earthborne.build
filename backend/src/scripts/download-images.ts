@@ -69,13 +69,20 @@ async function run() {
     try {
       res = await fetch(url);
     } catch (err) {
-      log("warn", `Network error for ${card.code}`, { url, error: (err as Error).message });
+      log("warn", `Network error for ${card.code}`, {
+        url,
+        error: (err as Error).message,
+      });
       failed++;
       continue;
     }
 
     if (res.status === 404) {
-      log("warn", `Image not found (expected for non-player cards): ${card.code}`, { url });
+      log(
+        "warn",
+        `Image not found (expected for non-player cards): ${card.code}`,
+        { url },
+      );
       missing++;
       continue;
     }

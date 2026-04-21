@@ -23,7 +23,8 @@ router.get("/:code", async (c) => {
     .where("code", "=", code)
     .executeTakeFirst();
 
-  if (!card) throw new HTTPException(404, { message: `Card '${code}' not found.` });
+  if (!card)
+    throw new HTTPException(404, { message: `Card '${code}' not found.` });
 
   const filePath = path.join(config.IMAGE_DIR, card.pack_id, `${code}.jpg`);
 
@@ -31,7 +32,9 @@ router.get("/:code", async (c) => {
   try {
     data = await fs.readFile(filePath);
   } catch {
-    throw new HTTPException(404, { message: `Image for '${code}' not found on disk.` });
+    throw new HTTPException(404, {
+      message: `Image for '${code}' not found on disk.`,
+    });
   }
 
   c.header("Content-Type", "image/jpeg");

@@ -1,7 +1,7 @@
 import type { Coded } from "./types";
 
 /**
- * Transform an array of arkhamdb-json-data into a map { [code]: data }.
+ * Transform an array of coded data into a map { [code]: data }.
  */
 export function mappedByCode<T extends Coded, S extends Coded = T>(
   arr: T[],

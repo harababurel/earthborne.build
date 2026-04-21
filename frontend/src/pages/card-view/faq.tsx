@@ -48,7 +48,7 @@ export function Faq(props: Props) {
       scrollHeight="20rem"
     >
       {/* biome-ignore lint/a11y: not relevant. */}
-      <div onClick={redirectArkhamDBLinks}>
+      <div>
         {response.isPending && t("card_view.faq.loading")}
 
         {!!response.error && t("card_view.faq.error")}

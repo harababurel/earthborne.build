@@ -22,7 +22,6 @@ export function DeckInvestigatorModal(props: Props) {
       <ModalInner size="52rem">
         <ModalActions>
           <CardPageLink card={deck.investigatorFront.card} />
-          <CardReviewsLink card={deck.investigatorFront.card} />
         </ModalActions>
         <DeckInvestigator
           canToggleBack={false}

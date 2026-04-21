@@ -1,39 +1,22 @@
-import { useQueries } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { useParams } from "wouter";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import {
   DeckDisplay,
   type DeckDisplayProps,
-  type DeckDisplayType,
 } from "@/components/deck-display/deck-display";
 import { ResolvedDeckProvider } from "@/components/resolved-deck-context-provider";
-import { Loader } from "@/components/ui/loader";
 import { useStore } from "@/store";
-import { resolveDeck } from "@/store/lib/resolve-deck";
 import type { Id } from "@/store/schemas/deck.schema";
 import {
-  getDeckHistory,
   selectDeckHistoryCached,
   selectDeckValid,
   selectResolvedDeckById,
 } from "@/store/selectors/decks";
-import {
-  selectClientId,
-  selectLocaleSortingCollator,
-  selectLookupTables,
-  selectMetadata,
-} from "@/store/selectors/shared";
-import { queryDeck } from "@/store/services/queries";
-import { fetchArkhamDBDecklistMeta } from "@/store/services/requests/decklist-meta";
-import { ApiError } from "@/store/services/requests/shared";
-import { isNumeric } from "@/utils/is-numeric";
-import { ErrorStatus } from "../errors/404";
 import { ShareInner } from "../share/share";
 
 function DeckView() {
-  const { id, type } = useParams<{ id: string; type: DeckDisplayType }>();
+  const { id, type } = useParams<{ id: string; type: string }>();
 
   const setActiveList = useStore((state) => state.setActiveList);
   const hasDeck = useStore((state) => !!state.data.decks[id]);
@@ -48,94 +31,7 @@ function DeckView() {
     return <LocalDeckView id={id} />;
   }
 
-  if (isNumeric(id)) {
-    return <ArkhamDBDeckView id={id} type={type} />;
-  }
-
   return <ShareInner id={id} />;
-}
-
-function ArkhamDBDeckView({ id, type }: { id: string; type: DeckDisplayType }) {
-  const clientId = useStore(selectClientId);
-  const { t } = useTranslation();
-
-  const idInt = Number.parseInt(id, 10);
-
-  const cacheFanMadeContent = useStore((state) => state.cacheFanMadeContent);
-
-  async function queryFn() {
-    const decks = await queryDeck(clientId, type, idInt);
-    cacheFanMadeContent(decks as Parameters<typeof cacheFanMadeContent>[0]);
-    return (decks as unknown[]).map((deck: unknown) =>
-      adapter.in(deck as Parameters<typeof adapter.in>[0]),
-    );
-  }
-
-  const [
-    { data, isPending, error },
-    { data: meta, isPending: metaPending, isEnabled: metaEnabled },
-  ] = useQueries({
-    queries: [
-      {
-        queryKey: ["deck", type, idInt],
-        queryFn,
-      },
-      {
-        queryKey: ["deck_meta", idInt],
-        queryFn: () => fetchArkhamDBDecklistMeta(idInt),
-        enabled: type === "decklist",
-      },
-    ],
-  });
-
-  const metadata = useStore(selectMetadata);
-  const lookupTables = useStore(selectLookupTables);
-  const sharing = useStore((state) => state.sharing);
-  const collator = useStore(selectLocaleSortingCollator);
-
-  if (Number.isNaN(idInt)) {
-    return <ErrorStatus statusCode={404} />;
-  }
-
-  if (isPending || (metaEnabled && metaPending)) {
-    return <Loader show message={t("deck_view.loading")} />;
-  }
-
-  if (error) {
-    const statusCode =
-      error instanceof ApiError ? (error.status === 429 ? 429 : 404) : 500;
-    return <ErrorStatus statusCode={statusCode} />;
-  }
-
-  const decks = (data ?? []).map((deck: unknown) =>
-    resolveDeck(
-      {
-        metadata,
-        lookupTables,
-        sharing,
-      },
-      collator,
-      deck as Parameters<typeof resolveDeck>[2],
-    ),
-  );
-
-  const deck = decks.find((d) => d.id === idInt);
-  if (!deck) {
-    return <ErrorStatus statusCode={404} />;
-  }
-
-  return (
-    <DeckViewInner
-      deck={deck}
-      headerSlot={meta ? <ArkhamdbDecklistMeta {...meta} /> : undefined}
-      history={
-        decks.length > 1
-          ? getDeckHistory(decks.toReversed(), metadata, collator)
-          : []
-      }
-      type={type}
-    />
-  );
 }
 
 function LocalDeckView({ id }: { id: Id }) {

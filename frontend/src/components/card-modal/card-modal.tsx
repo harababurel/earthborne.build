@@ -218,7 +218,6 @@ export function CardModal(props: Props) {
               </Link>
             )}
           <CardPageLink card={cardWithRelations.card} />
-          <CardReviewsLink card={cardWithRelations.card} />
           {canEdit &&
             !!deckQuantity &&
             traits?.includes("Task") &&

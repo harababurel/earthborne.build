@@ -169,7 +169,7 @@ export type ResolvedDeck = Omit<Deck, "sideSlots"> & {
   attachments: AttachmentQuantities | undefined;
   availableAttachments: Attachments[];
   bondedSlots: Record<string, number>;
-  sideSlots: Record<string, number> | null; // arkhamdb stores `[]` when empty, normalize to `null`.
+  sideSlots: Record<string, number> | null;
   extraSlots: Record<string, number> | null;
   exileSlots: Record<string, number>;
   cards: {

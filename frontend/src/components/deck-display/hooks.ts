@@ -107,7 +107,7 @@ export function useExportJson() {
       try {
         download(
           JSON.stringify(formatDeckShare(deck), null, 2),
-          `arkhambuild-${deck.id}.json`,
+          `earthbornebuild-${deck.id}.json`,
           "application/json",
         );
       } catch (err) {
@@ -135,7 +135,7 @@ export function useExportText() {
       try {
         download(
           formatDeckAsText(state, deck),
-          `arkhambuild-${deck.id}.md`,
+          `earthbornebuild-${deck.id}.md`,
           "text/markdown",
         );
       } catch (err) {
