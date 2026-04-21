@@ -710,11 +710,6 @@
       "victory": "승점",
       "xp": "경험치"
     },
-    "connect": {
-      "error": "{{provider}} 연결에 실패함: {{error}}",
-      "syncing": "{{provider}}에 동기화...",
-      "title": "{{provider}}에 연결..."
-    },
     "deck": {
       "actions": {
         "archive": "덱 보관",
@@ -1030,10 +1025,6 @@
         "save_upgrade_close_short": "저장하고 닫기",
         "save_upgrade_short": "향상",
         "upload": "{{provider}}에 업로드"
-      },
-      "connections": {
-        "description": "이 덱은 {{provider}}에 동기화되도록 설정되어 있습니다.",
-        "view": "{{provider}}에서 보기"
       },
       "discounts": {
         "adaptable": "적응력",
@@ -1427,32 +1418,6 @@
         "show_previews": "미리보기 카드 보기",
         "show_previews_help": "이 옵션을 선택하면 출시되지 않은 카드도 애플리케이션에 표시되며, 덱에도 추가할 수 있습니다.",
         "title": "보유 게임"
-      },
-      "connections": {
-        "connect": "연결하기",
-        "connect_help": "{{provider}} 계정을 연결하여 덱을 동기화합니다.",
-        "connected": "연결됨",
-        "created_at": "이후 연결됨",
-        "details": "상세 내역",
-        "disconnect": "연결 해제",
-        "disconnected": "이 연결에 문제가 있습니다. 다시 연결해 주세요.",
-        "disconnected_all": "연결 중 하나에 문제가 있습니다. 설정에서 새로고침을 진행해 주세요.",
-        "items_synced": "항목 동기화",
-        "last_modified": "데이터 타임스탬프",
-        "last_synced_at": "마지막 동기화",
-        "lock": "다른 {{provider}} 작업이 진행 중입니다. 잠시만 기다려 주십시오...",
-        "no_errors": "오류 없음",
-        "provider_error": "{{provider}}에 동기화 실패: {{error}}",
-        "provider_syncing": "{{provider}}에 동기화 중...",
-        "reconnect": "새로고침",
-        "sync": "동기화",
-        "sync_all": "{{collectionLabels}} 덱 동기화",
-        "sync_errors": "동기화 오류",
-        "sync_status": "동기화 상태",
-        "syncing": "동기화 진행 중",
-        "title": "계정 연결",
-        "user_id": "사용자 ID",
-        "username": "사용자 이름"
       },
       "display": {
         "card_display": "카드 표기 설정",

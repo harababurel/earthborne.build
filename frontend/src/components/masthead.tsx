@@ -6,14 +6,12 @@ import { useLogoUrl } from "@/utils/use-color-theme";
 import { HelpMenu } from "./help-menu";
 import { LocaleQuickSwitch } from "./locale-quick-switch";
 import css from "./masthead.module.css";
-import { SyncStatus } from "./sync-status";
 import { Button } from "./ui/button";
 
 type Props = {
   className?: string;
   children?: React.ReactNode;
   slotRight?: React.ReactNode;
-  hideSyncStatus?: boolean;
   hideLocaleSwitch?: boolean;
   hideSettings?: boolean;
   invert?: boolean;
@@ -25,7 +23,6 @@ export function Masthead(props: Props) {
     className,
     hideLocaleSwitch,
     hideSettings,
-    hideSyncStatus,
     invert,
     slotRight,
   } = props;
@@ -53,7 +50,6 @@ export function Masthead(props: Props) {
         {slotRight}
         {location !== "/settings" && (
           <>
-            {!hideSyncStatus && <SyncStatus />}
             {!hideLocaleSwitch && <LocaleQuickSwitch />}
             {!hideSettings && (
               <Link asChild href="~/settings">

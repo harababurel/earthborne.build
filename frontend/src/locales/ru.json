@@ -650,11 +650,6 @@
       "sort_desc": "Сортировка по убыванию",
       "taboo_original_text": "Оригинальный текст карты"
     },
-    "connect": {
-      "error": "Ошибка соединения {{provider}}: {{error}}",
-      "syncing": "Синхронизация {{provider}}…",
-      "title": "Подключение {{provider}}…"
-    },
     "deck": {
       "actions": {
         "archive": "Архивировать",
@@ -953,10 +948,6 @@
         "save_upgrade_close_short": "Сохранить и закрыть",
         "save_upgrade_short": "Улучшить",
         "upload": "Загрузить на {{provider}}"
-      },
-      "connections": {
-        "description": "Эта колода синхронизирована с {{provider}}.",
-        "view": "Посмотреть на {{provider}}"
       },
       "discounts": {
         "adaptable": "Приспособляемость",
@@ -1274,32 +1265,6 @@
         "show_previews": "Показывать невыпущенные карты",
         "show_previews_help": "Вы будете видеть и сможете добавлять в колоды карты из ещё не выпущенных дополнений.",
         "title": "Коллекция"
-      },
-      "connections": {
-        "connect": "Подключить",
-        "connect_help": "Подключите аккаунт {{provider}} для синхронизации колод.",
-        "connected": "Подключено",
-        "created_at": "Подключено с",
-        "details": "Детали",
-        "disconnect": "Отключиться",
-        "disconnected": "Проблема с подключением, необходимо переподключиться.",
-        "disconnected_all": "Проблема с одним из подключений. Обновите подключение в настройках",
-        "items_synced": "Объектов синхронизировано",
-        "last_modified": "Дата",
-        "last_synced_at": "Последнее подключение",
-        "no_errors": "Нет ошибок",
-        "provider_error": "Ошибка синхронизации с {{provider}}: {{error}}",
-        "provider_syncing": "Синхронизация с {{provider}}…",
-        "reconnect": "Обновить",
-        "sync": "Синхронизировать",
-        "sync_all": "Sync {{collectionLabels}} decks",
-        "sync_errors": "Ошибки синхронизации",
-        "sync_status": "Статус синхронизации",
-        "syncing": "Синхронизация в процессе",
-        "title": "Подключённые аккаунты",
-        "user_id": "ID пользователя",
-        "username": "Имя пользователя",
-        "lock": "Другая операция {{provider}} активна, пожалуйста подождите…"
       },
       "display": {
         "card_display": "Настройки отображения карт",

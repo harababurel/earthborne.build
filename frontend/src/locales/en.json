@@ -322,11 +322,6 @@
         "xp": "XP"
       }
     },
-    "connect": {
-      "error": "Failed to connect {{provider}}: {{error}}",
-      "syncing": "Syncing {{provider}}...",
-      "title": "Connecting {{provider}}..."
-    },
     "deck": {
       "actions": {
         "archive": "Archive deck",
@@ -544,10 +539,6 @@
         "display_as_scans": "Display as scans",
         "import": "Import deck to collection",
         "upload": "Upload to {{provider}}"
-      },
-      "connections": {
-        "description": "This deck is set up to sync with {{provider}}.",
-        "view": "View on {{provider}}"
       },
       "history": {
         "added": "Added",
@@ -926,32 +917,6 @@
         "show_previews": "Show preview cards",
         "show_previews_help": "When this is checked, unreleased cards will be shown in the application and can be added to decks.",
         "title": "Collection"
-      },
-      "connections": {
-        "connect": "Connect",
-        "connect_help": "Connect your {{provider}} account to sync your decks.",
-        "connected": "Connected",
-        "created_at": "Connected since",
-        "details": "Details",
-        "disconnect": "Disconnect",
-        "disconnected": "There is a problem with this connection, please reconnect.",
-        "disconnected_all": "There is a problem with one of your connections. Please refresh it in the settings.",
-        "items_synced": "Items synced",
-        "last_modified": "Data timestamp",
-        "last_synced_at": "Last sync",
-        "lock": "Another {{provider}} operation is in progress, please wait...",
-        "no_errors": "No errors",
-        "provider_error": "Syncing {{provider}} failed: {{error}}",
-        "provider_syncing": "Syncing {{provider}}...",
-        "reconnect": "Refresh",
-        "sync": "Sync",
-        "sync_all": "Sync {{collectionLabels}} decks",
-        "sync_errors": "Sync errors",
-        "sync_status": "Sync status",
-        "syncing": "Sync in progress",
-        "title": "Connected accounts",
-        "user_id": "User ID",
-        "username": "Username"
       },
       "developer": {
         "dev_mode_enabled": "Enable developer mode",

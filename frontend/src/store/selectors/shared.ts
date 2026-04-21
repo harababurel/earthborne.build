@@ -124,21 +124,6 @@ export const selectCardOwnedCount = createSelector(
   },
 );
 
-export const selectConnectionLock = createSelector(
-  (state: StoreState) => state.remoting,
-  (remoting) => {
-    return remoting.sync ? "Syncing..." : undefined;
-  },
-);
-
-export const selectConnectionLockForDeck = createSelector(
-  selectConnectionLock,
-  (_: StoreState, deck: Pick<ResolvedDeck, "source">) => deck,
-  (_remoting, _deck) => {
-    return undefined;
-  },
-);
-
 export const selectBackCard = createSelector(
   selectMetadata,
   selectLookupTables,

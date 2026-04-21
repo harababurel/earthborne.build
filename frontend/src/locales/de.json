@@ -716,11 +716,6 @@
       "victory": "Sieg",
       "xp": "EP"
     },
-    "connect": {
-      "error": "Verbindung mit {{provider}} fehlgeschlagen: {{error}}",
-      "syncing": "{{provider}} synchronisiert...",
-      "title": "{{provider}} verbindet..."
-    },
     "deck": {
       "actions": {
         "archive": "Deck archivieren",
@@ -1044,10 +1039,6 @@
         "save_upgrade_close_short": "Speichern und schließen",
         "save_upgrade_short": "Verbessern",
         "upload": "Zu {{provider}} hochladen"
-      },
-      "connections": {
-        "description": "Dieses Deck synchronisiert mit {{provider}}.",
-        "view": "In {{provider}} anzeigen"
       },
       "discounts": {
         "adaptable": "Anpassungsfähig",
@@ -1449,32 +1440,6 @@
         "show_previews": "Vorschauen anzeigen",
         "show_previews_help": "Wenn dies aktiviert ist, werden Vorschauen in der Anwendung angezeigt und können zu Decks hinzugefügt werden.",
         "title": "Kartensammlung"
-      },
-      "connections": {
-        "connect": "Verbinden",
-        "connect_help": "Verbinde dein {{provider}}-Konto, um deine Decks zu synchronisieren.",
-        "connected": "Verbunden",
-        "created_at": "Verbunden seit",
-        "details": "Details",
-        "disconnect": "Trennen",
-        "disconnected": "Es besteht ein Problem mit dieser Verbindung. Bitte erneut verbinden..",
-        "disconnected_all": "Es besteht ein Problem mit einer deiner Verbindungen. Bitte in den Einstellungen erneut verbinden.",
-        "items_synced": "Synchronisierte Objekte",
-        "last_modified": "Letzte Änderung",
-        "last_synced_at": "Letzte Synchronisierung",
-        "lock": "Another {{provider}} operation is in progress, please wait...",
-        "no_errors": "Keine Fehler",
-        "provider_error": "Synchronisierung mit {{provider}} fehlgeschlagen: {{error}}",
-        "provider_syncing": "{{provider}} synchronisieren...",
-        "reconnect": "Erneut verbinden",
-        "sync": "Sync",
-        "sync_all": "{{collectionLabels}} Decks synchronisieren",
-        "sync_errors": "Fehler",
-        "sync_status": "Status",
-        "syncing": "Synchronisierung läuft...",
-        "title": "Verbundene Konten",
-        "user_id": "Nutzer ID",
-        "username": "Nutzername"
       },
       "developer": {
         "dev_mode_enabled": "Enable developer mode",

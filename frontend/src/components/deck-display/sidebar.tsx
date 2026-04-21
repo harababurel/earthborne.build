@@ -26,7 +26,6 @@ import { UpgradeModal } from "@/pages/deck-view/upgrade-modal";
 import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { History } from "@/store/selectors/decks";
-import { selectConnectionLockForDeck } from "@/store/selectors/shared";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { cx } from "@/utils/cx";
 import { useHotkey } from "@/utils/use-hotkey";
@@ -116,10 +115,6 @@ function SidebarActions(props: {
 
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(
     origin === "local" && search.includes("upgrade") && !deck.next_deck,
-  );
-
-  const deckConnectionLock = useStore((state) =>
-    selectConnectionLockForDeck(state, deck),
   );
 
   const deleteDeck = useDeleteDeck();
@@ -366,10 +361,9 @@ function SidebarActions(props: {
                   {!!deck.previous_deck && (
                     <DropdownButton
                       data-testid="view-delete-upgrade"
-                      disabled={isReadOnly || !!deckConnectionLock}
+                      disabled={isReadOnly}
                       hotkey="cmd+shift+backspace"
                       onClick={onDeleteUpgrade}
-                      tooltip={deckConnectionLock}
                     >
                       <i className="icon-xp-bold" />{" "}
                       {t("deck.actions.delete_upgrade")}
@@ -377,10 +371,9 @@ function SidebarActions(props: {
                   )}
                   <DropdownButton
                     data-testid="view-delete"
-                    disabled={isReadOnly || !!deckConnectionLock}
+                    disabled={isReadOnly}
                     hotkey="cmd+backspace"
                     onClick={onDelete}
-                    tooltip={deckConnectionLock}
                   >
                     <Trash2Icon /> {t("deck.actions.delete")}
                   </DropdownButton>

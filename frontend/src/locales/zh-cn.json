@@ -716,11 +716,6 @@
       "victory": "胜利",
       "xp": "XP"
     },
-    "connect": {
-      "error": "连接{{provider}}失败：{{error}}",
-      "syncing": "同步{{provider}}中...",
-      "title": "正在连接 {{provider}}..."
-    },
     "deck": {
       "actions": {
         "archive": "归档卡组",
@@ -1044,10 +1039,6 @@
         "save_upgrade_close_short": "保存并关闭",
         "save_upgrade_short": "升级",
         "upload": "上传至{{provider}}"
-      },
-      "connections": {
-        "description": "该卡组已设置为与{{provider}}同步。",
-        "view": "在{{provider}}上查看"
       },
       "discounts": {
         "adaptable": "适应性",
@@ -1449,32 +1440,6 @@
         "show_previews": "显示预览卡牌",
         "show_previews_help": "勾选此项时，未发布的卡牌将在应用程序中显示并可加入卡组。",
         "title": "收藏"
-      },
-      "connections": {
-        "connect": "连接",
-        "connect_help": "连接你的{{provider}}账号以同步卡组",
-        "connected": "已连接",
-        "created_at": "连接于",
-        "details": "详情",
-        "disconnect": "断开连接",
-        "disconnected": "此连接存在问题，请重新连接。",
-        "disconnected_all": "你的某个连接出现问题。请在设置中重新连接。",
-        "items_synced": "已同步",
-        "last_modified": "数据时间戳",
-        "last_synced_at": "最近同步",
-        "lock": "另一个{{provider}}操作正在进行中，请稍候...",
-        "no_errors": "无错误",
-        "provider_error": "同步{{provider}}失败：{{error}}",
-        "provider_syncing": "正在同步 {{provider}}...",
-        "reconnect": "重新连接",
-        "sync": "同步",
-        "sync_all": "同步{{collectionLabels}}卡组",
-        "sync_errors": "同步错误",
-        "sync_status": "同步状态",
-        "syncing": "同步中",
-        "title": "关联账户",
-        "user_id": "用户ID",
-        "username": "用户名"
       },
       "developer": {
         "dev_mode_enabled": "Enable developer mode",

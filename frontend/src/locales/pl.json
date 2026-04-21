@@ -706,11 +706,6 @@
       "victory": "Zwycięstwo",
       "xp": "XP"
     },
-    "connect": {
-      "error": "Nie udało się połączyć z {{provider}}: {{error}}",
-      "syncing": "Synchronizuję {{provider}}...",
-      "title": "Łącze z {{provider}}..."
-    },
     "deck": {
       "actions": {
         "archive": "Archiwizuj talię",
@@ -1030,10 +1025,6 @@
         "save_upgrade_close_short": "Zapisz i zamknij",
         "save_upgrade_short": "Ulepsz",
         "upload": "Wyślij na {{provider}}"
-      },
-      "connections": {
-        "description": "Ta talia jest zsynchronizowana z {{provider}}.",
-        "view": "Zobacz na {{provider}}"
       },
       "discounts": {
         "adaptable": "Elastyczny",
@@ -1419,32 +1410,6 @@
         "show_previews": "Pokazuj nieopublikowane karty",
         "show_previews_help": "Jeśli ta opcja jest zaznaczona, nieopublikowane karty będą wyświetlane w aplikacji i będzie je można dodać do talii.",
         "title": "Kolekcja"
-      },
-      "connections": {
-        "connect": "Połącz",
-        "connect_help": "Połącz swoje konto {{provider}} w celu synchronizacji talii.",
-        "connected": "Połączone",
-        "created_at": "Połączone od",
-        "details": "Szczegóły",
-        "disconnect": "Rozłącz",
-        "disconnected": "Wystąpił problem z połączeniem, spróbuj ponownie.",
-        "disconnected_all": "Wystąpił problem z jednym z twoich połączenych kont. Odśwież je proszę w Ustawieniach.",
-        "items_synced": "Elementy zsynchronizowane",
-        "last_modified": "Znacznik czasu danych",
-        "last_synced_at": "Ostatnia synchronizacja",
-        "lock": "Inna operacja związana z {{provider}} jest w trakcie, proszę czekać...",
-        "no_errors": "Brak błędów",
-        "provider_error": "Synchronizacja {{provider}} nie udała się: {{error}}",
-        "provider_syncing": "Synchronizacja {{provider}}...",
-        "reconnect": "Odśwież",
-        "sync": "Synchronizuj",
-        "sync_all": "Synchronizuj talie {{collectionLabels}}",
-        "sync_errors": "Błędy synchronizacji",
-        "sync_status": "Status synchronizacji",
-        "syncing": "Synchronizacja w trakcie",
-        "title": "Połączone konta",
-        "user_id": "ID użytkownika",
-        "username": "Nazwa użytkownika"
       },
       "display": {
         "card_display": "Opcje wyświetlania kart",

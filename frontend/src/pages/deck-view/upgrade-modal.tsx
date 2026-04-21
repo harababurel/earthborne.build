@@ -19,7 +19,6 @@ import { Scroller } from "@/components/ui/scroller";
 import { useToast } from "@/components/ui/toast.hooks";
 import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
-import { selectConnectionLockForDeck } from "@/store/selectors/shared";
 import { decodeExileSlots, displayAttribute } from "@/utils/card-utils";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { isEmpty } from "@/utils/is-empty";
@@ -73,9 +72,6 @@ export function UpgradeModal(props: Props) {
   const toast = useToast();
   const { t } = useTranslation();
 
-  const connectionLock = useStore((state) =>
-    selectConnectionLockForDeck(state, deck),
-  );
   const upgradeDeck = useStore((state) => state.upgradeDeck);
 
   const [xp, setXp] = useState(
@@ -182,7 +178,7 @@ export function UpgradeModal(props: Props) {
 
   const cssVariables = useAccentColor(deck.cards.investigator.card);
 
-  const disabled = xp === "" || !!connectionLock;
+  const disabled = xp === "";
 
   const onSave = useCallback(() => {
     onUpgrade("edit");
@@ -217,9 +213,7 @@ export function UpgradeModal(props: Props) {
               <div className={css["footer-row"]}>
                 <HotkeyTooltip
                   keybind="cmd+enter"
-                  description={
-                    connectionLock ?? t("deck_view.actions.save_upgrade")
-                  }
+                  description={t("deck_view.actions.save_upgrade")}
                 >
                   <Button
                     data-testid="upgrade-save"
@@ -232,9 +226,7 @@ export function UpgradeModal(props: Props) {
                 </HotkeyTooltip>
                 <HotkeyTooltip
                   keybind="cmd+shift+enter"
-                  description={
-                    connectionLock ?? t("deck_view.actions.save_upgrade_close")
-                  }
+                  description={t("deck_view.actions.save_upgrade_close")}
                 >
                   <Button
                     data-testid="upgrade-save-close"

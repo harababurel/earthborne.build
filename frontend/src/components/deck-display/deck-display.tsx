@@ -15,7 +15,6 @@ import type { DeckValidationResult } from "@/store/lib/deck-validation";
 import { deckTags } from "@/store/lib/resolve-deck";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { History } from "@/store/selectors/decks";
-import { selectConnectionLockForDeck } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import { useAccentColor } from "@/utils/use-accent-color";
 import DeckDescription from "../deck-description";
@@ -267,10 +266,6 @@ function TitleEditModal(props: TitleEditModalProps) {
 
   const [loading, setLoading] = useState(false);
 
-  const connectionLock = useStore((state) =>
-    selectConnectionLockForDeck(state, deck),
-  );
-
   const { t } = useTranslation();
   const toast = useToast();
   const modalContext = useDialogContextChecked();
@@ -351,11 +346,10 @@ function TitleEditModal(props: TitleEditModalProps) {
               </Field>
               <div className={css["name-modal-footer"]}>
                 <Button
-                  disabled={!!connectionLock || loading}
+                  disabled={loading}
                   variant="primary"
                   type="submit"
                   data-testid="name-edit-submit"
-                  tooltip={connectionLock}
                 >
                   {t("deck_edit.save_short")}
                 </Button>

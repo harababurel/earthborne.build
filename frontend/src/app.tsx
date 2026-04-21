@@ -13,10 +13,8 @@ import { ErrorBoundary } from "./components/error-boundary";
 import { Loader } from "./components/ui/loader";
 import { ToastProvider } from "./components/ui/toast";
 import { useToast } from "./components/ui/toast.hooks";
-import { Connect } from "./pages/connect/connect";
 import { ErrorStatus } from "./pages/errors/404";
 import { useStore } from "./store";
-import { shouldAutoSync, useSync } from "./store/hooks/use-sync";
 import { selectIsInitialized } from "./store/selectors/shared";
 import {
   queryCards,
@@ -137,7 +135,6 @@ function AppInner() {
               <Route component={Share} path="/share/:id" />
               <Route component={CollectionStats} path="/collection-stats" />
               <Route component={BrowseDecklists} path="/decklists" />
-              <Route component={Connect} path="/connect" />
               <Route component={Rules} path="/rules" />
               <Route
                 component={FanMadeContentPreview}
@@ -194,7 +191,6 @@ function RouteReset() {
 }
 
 function CardDataSyncTask() {
-  const [location] = useLocation();
   const locale = useStore((state) => state.settings.locale);
   const dataVersion = useStore((state) => state.metadata.dataVersion);
 
@@ -203,8 +199,7 @@ function CardDataSyncTask() {
   const toast = useToast();
   const toastId = useRef<string | undefined>(undefined);
 
-  const shouldQueryDataVersion =
-    !navigator.webdriver && !location.includes("/connect");
+  const shouldQueryDataVersion = !navigator.webdriver;
 
   const { data: remoteDataVersion } = useQuery({
     enabled: shouldQueryDataVersion,
@@ -269,21 +264,7 @@ function CardDataSyncTask() {
 }
 
 function AppTasks() {
-  const connections = useStore((state) => state.connections);
-
-  const sync = useSync();
-  const [location] = useLocation();
-
   useAgathaEasterEggHint();
-
-  const autoSyncLock = useRef(false);
-
-  useEffect(() => {
-    if (!autoSyncLock.current && shouldAutoSync(location, connections)) {
-      autoSyncLock.current = true;
-      sync().catch(console.error);
-    }
-  }, [sync, location, connections]);
 
   return null;
 }

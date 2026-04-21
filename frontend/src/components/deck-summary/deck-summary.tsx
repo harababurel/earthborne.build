@@ -9,12 +9,10 @@ import {
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
-import { useStore } from "@/store";
 import type { DeckValidationResult } from "@/store/lib/deck-validation";
 import { deckTags } from "@/store/lib/resolve-deck";
 import type { DeckSummary as DeckSummaryType } from "@/store/lib/types";
 import type { Id } from "@/store/schemas/deck.schema";
-import { selectConnectionLockForDeck } from "@/store/selectors/shared";
 import { displayAttribute, getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardThumbnail } from "../card-thumbnail";
@@ -136,10 +134,6 @@ export function DeckSummaryQuickActions(props: DeckSummaryQuickActionsProps) {
   const { t } = useTranslation();
   const [, navigate] = useLocation();
 
-  const connectionLock = useStore((state) =>
-    selectConnectionLockForDeck(state, deck),
-  );
-
   const onDuplicate = useCallback(
     (evt: React.MouseEvent) => {
       cancelEvent(evt);
@@ -226,9 +220,8 @@ export function DeckSummaryQuickActions(props: DeckSummaryQuickActionsProps) {
       <Button
         className={css["quick-action"]}
         iconOnly
-        disabled={!!connectionLock}
         onClick={onDelete}
-        tooltip={connectionLock ? connectionLock : t("deck.actions.delete")}
+        tooltip={t("deck.actions.delete")}
       >
         <Trash2Icon />
       </Button>
