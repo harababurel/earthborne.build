@@ -1,7 +1,6 @@
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { displayAttribute } from "@/utils/card-utils";
-import { environments } from "@/utils/environments";
 import { getDefaultDeckName } from "../lib/deck-factory";
 import { selectMetadata, selectSettingsTabooId } from "../selectors/shared";
 import type { StoreState } from ".";
@@ -29,11 +28,7 @@ export const createDeckCreateSlice: StateCreator<
       const provider = settings.defaultStorageProvider;
       const providerExists = provider === "local" || provider === "shared";
 
-      // Apply current environment packs if default environment is set to "current"
-      const cardPool =
-        settings.defaultEnvironment === "current"
-          ? environments.current()
-          : undefined;
+      const cardPool = undefined;
 
       return {
         deckCreate: {

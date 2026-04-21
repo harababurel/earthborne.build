@@ -35,7 +35,6 @@ export type SettingsState = {
   cardSkillIconsDisplay: "simple" | "as_printed";
   colorScheme: ColorScheme;
   collection: Record<string, boolean>;
-  defaultEnvironment: "current" | "legacy";
   defaultStorageProvider: StorageProvider;
   devModeEnabled: boolean;
   flags?: Record<string, boolean>;

@@ -187,32 +187,7 @@ test.describe("settings", () => {
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   });
 
-  test("default environment setting applies to deck creation", async ({
-    page,
-  }) => {
-    await page.goto("/");
 
-    await page.goto("/deck/create");
-    await fillSearch(page, "yorick");
-    await page.getByTestId("create-choose-investigator").click();
-
-    await expect(page.getByTestId("limited-card-pool-field")).toBeVisible();
-    await expect(page.getByText("Revised Core Set")).not.toBeVisible();
-
-    await page.goto("/settings");
-    await page
-      .getByTestId("settings-default-environment")
-      .selectOption("current");
-    await page.getByTestId("settings-save").click();
-    await page.getByTestId("settings-back").click();
-
-    await page.goto("/deck/create");
-    await fillSearch(page, "yorick");
-    await page.getByTestId("create-choose-investigator").click();
-
-    await expect(page.getByTestId("limited-card-pool-field")).toBeVisible();
-    await expect(page.getByText("Core Set (2026)")).toBeVisible();
-  });
 
   test("rbw are limited to card pool when configured", async ({ page }) => {
     await importDeckFromFile(page, "validation/base_case.json", {
