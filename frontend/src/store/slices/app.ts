@@ -12,6 +12,7 @@ import { applyLocalData } from "../lib/local-data";
 import { mappedByCode } from "../lib/metadata-utils";
 import { resolveDeck } from "../lib/resolve-deck";
 import { dehydrate, hydrate } from "../persist";
+import type { DataVersion } from "../schemas/data-version.schema";
 import { selectDeckValid } from "../selectors/decks";
 import {
   selectLocaleSortingCollator,
@@ -45,6 +46,19 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const persistedState = await hydrate();
 
     if (!refresh && persistedState?.metadata?.dataVersion?.cards_updated_at) {
+      const remoteDataVersion = await queryDataVersion(locale);
+
+      if (
+        dataVersionKey(remoteDataVersion) !==
+        dataVersionKey(persistedState.metadata.dataVersion)
+      ) {
+        return get().init(queryMetadata, queryDataVersion, queryCards, {
+          refresh: true,
+          locale,
+          overrides,
+        });
+      }
+
       const metadata = applyLocalData(persistedState.metadata);
       synthesiseCycles(metadata);
 
@@ -427,6 +441,16 @@ function incrementVersion(version: string) {
   const [major, minor] = version.split(".");
   const nextMinor = Number.parseInt(minor ?? "0", 10) + 1;
   return `${major ?? "1"}.${Number.isNaN(nextMinor) ? 1 : nextMinor}`;
+}
+
+function dataVersionKey(version: DataVersion) {
+  return JSON.stringify({
+    card_count: version.card_count,
+    cards_updated_at: version.cards_updated_at,
+    locale: version.locale,
+    translation_updated_at: version.translation_updated_at,
+    version: version.version ?? null,
+  });
 }
 
 function mergeInitialState(

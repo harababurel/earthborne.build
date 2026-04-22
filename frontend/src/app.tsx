@@ -1,26 +1,14 @@
-import {
-  QueryClient,
-  QueryClientProvider,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Router, Switch, useLocation, useSearch } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
 import { ErrorBoundary } from "./components/error-boundary";
 import { Loader } from "./components/ui/loader";
 import { ToastProvider } from "./components/ui/toast";
-import { useToast } from "./components/ui/toast.hooks";
 import { ErrorStatus } from "./pages/errors/404";
 import { useStore } from "./store";
 import { selectIsInitialized } from "./store/selectors/shared";
-import {
-  queryCards,
-  queryDataVersion,
-  queryMetadata,
-} from "./store/services/queries";
 import { useAgathaEasterEggHint } from "./utils/easter-egg-agatha";
 import { useColorThemeListener } from "./utils/use-color-theme";
 
@@ -127,7 +115,6 @@ function AppInner() {
               </Route>
             </Switch>
             <RouteReset />
-            <CardDataSyncTask />
             <AppTasks />
           </Router>
         )}
@@ -164,80 +151,6 @@ function RouteReset() {
       window.scrollTo(0, 0);
     } catch (_) {}
   }, [pathname]);
-
-  return null;
-}
-
-function CardDataSyncTask() {
-  const locale = useStore((state) => state.settings.locale);
-  const dataVersion = useStore((state) => state.metadata.dataVersion);
-
-  const { t } = useTranslation();
-
-  const toast = useToast();
-  const toastId = useRef<string | undefined>(undefined);
-
-  const shouldQueryDataVersion = !navigator.webdriver;
-
-  const { data: remoteDataVersion } = useQuery({
-    enabled: shouldQueryDataVersion,
-    queryFn: () => queryDataVersion(locale),
-    queryKey: ["tasks", "dataVersion", locale],
-    staleTime: 24 * 60 * 60 * 1000,
-  });
-
-  const init = useStore((state) => state.init);
-  const queryClient = useQueryClient();
-
-  const { isError, isPending, mutateAsync } = useMutation({
-    mutationFn: async () => {
-      await init(queryMetadata, queryDataVersion, queryCards, {
-        refresh: true,
-        locale,
-      });
-      queryClient.setQueryData(
-        ["tasks", "dataVersion", locale],
-        useStore.getState().metadata.dataVersion,
-      );
-    },
-  });
-
-  useEffect(() => {
-    if (!remoteDataVersion || !dataVersion || isPending || isError) {
-      return;
-    }
-
-    const upToDate =
-      remoteDataVersion.card_count === dataVersion.card_count &&
-      remoteDataVersion.locale === dataVersion.locale &&
-      remoteDataVersion.cards_updated_at === dataVersion.cards_updated_at &&
-      remoteDataVersion.translation_updated_at ===
-        dataVersion.translation_updated_at &&
-      remoteDataVersion.version === dataVersion.version;
-
-    if (!upToDate) {
-      toastId.current = toast.show({
-        variant: "loading",
-        children: t("settings.card_data.loading"),
-      });
-
-      mutateAsync()
-        .then(() => {
-          if (toastId.current) {
-            toast.dismiss(toastId.current);
-          }
-        })
-        .catch(console.error);
-    }
-  }, [
-    dataVersion,
-    isError,
-    isPending,
-    mutateAsync,
-    remoteDataVersion,
-    toast,
-    t,
-  ]);
 
   return null;
 }
