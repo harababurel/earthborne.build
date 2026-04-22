@@ -5,7 +5,7 @@ import {
   SquarePenIcon,
 } from "lucide-react";
 import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDialogContextChecked } from "@/components/ui/dialog.hooks";
 import { Field, FieldLabel } from "@/components/ui/field";
