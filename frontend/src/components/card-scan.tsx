@@ -11,7 +11,6 @@ import {
   sideways,
 } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
-import { useAgathaEasterEggTransform } from "@/utils/easter-egg-agatha";
 import css from "./card-scan.module.css";
 import { Button } from "./ui/button";
 
@@ -68,9 +67,9 @@ export function CardScanControlled(props: Props) {
       ? (backCard?.code ?? (suffix ? code : `${code}b`))
       : backType;
 
-  const imageCode = useAgathaEasterEggTransform(`${code}${suffix ?? ""}`);
+  const imageCode = `${code}${suffix ?? ""}`;
 
-  const reverseImageCode = useAgathaEasterEggTransform(backCode);
+  const reverseImageCode = backCode;
 
   const isSideways = sideways(card);
 

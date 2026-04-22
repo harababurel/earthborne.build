@@ -9,7 +9,6 @@ import { ToastProvider } from "./components/ui/toast";
 import { ErrorStatus } from "./pages/errors/404";
 import { useStore } from "./store";
 import { selectIsInitialized } from "./store/selectors/shared";
-import { useAgathaEasterEggHint } from "./utils/easter-egg-agatha";
 import { useColorThemeListener } from "./utils/use-color-theme";
 
 const Index = lazy(() => import("./pages/index"));
@@ -110,7 +109,6 @@ function AppInner() {
               </Route>
             </Switch>
             <RouteReset />
-            <AppTasks />
           </Router>
         )}
       </Suspense>
@@ -146,12 +144,6 @@ function RouteReset() {
       window.scrollTo(0, 0);
     } catch (_) {}
   }, [pathname]);
-
-  return null;
-}
-
-function AppTasks() {
-  useAgathaEasterEggHint();
 
   return null;
 }

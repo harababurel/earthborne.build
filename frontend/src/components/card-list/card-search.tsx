@@ -5,7 +5,6 @@ import { selectActiveListSearch } from "@/store/selectors/lists";
 import { assert } from "@/utils/assert";
 import { cx } from "@/utils/cx";
 import { debounce } from "@/utils/debounce";
-import { useAgathaEasterEggTrigger } from "@/utils/easter-egg-agatha";
 import { useHotkey } from "@/utils/use-hotkey";
 import { useResolvedDeck } from "../resolved-deck-context";
 import { Checkbox } from "../ui/checkbox";
@@ -44,8 +43,6 @@ export function CardSearch(props: Props) {
   const search = useStore(selectActiveListSearch);
   assert(search, "Search bar requires an active list.");
 
-  const easterEggHandler = useAgathaEasterEggTrigger();
-
   const [inputValue, setInputValue] = useState(search.value ?? "");
   const [iconSlotSize, setIconSlotSize] = useState(0);
 
@@ -78,12 +75,8 @@ export function CardSearch(props: Props) {
     (val: string) => {
       setInputValue(val);
       debouncedSetSearchValue(val, resolvedDeck);
-      if (easterEggHandler(val)) {
-        setInputValue("");
-        debouncedSetSearchValue("", resolvedDeck);
-      }
     },
-    [debouncedSetSearchValue, easterEggHandler, resolvedDeck],
+    [debouncedSetSearchValue, resolvedDeck],
   );
 
   const onToggleGameText = useCallback(
