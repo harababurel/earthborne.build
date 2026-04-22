@@ -63,7 +63,10 @@ export const selectDeckCreateSpecialtyCards = createSelector(
     resolveCards(
       { metadata, lookupTables },
       collator,
-      (card) => !!specialty && card.specialty_type === specialty,
+      (card) =>
+        !!specialty &&
+        card.specialty_type === specialty &&
+        card.type_code !== "role",
     ),
 );
 
