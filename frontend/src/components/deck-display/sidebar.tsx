@@ -80,7 +80,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                   <AspectIcon
                     aspect="AWA"
                     className={css["white-icon"]}
-                    size="3rem"
+                    size="3.75rem"
                   />
                   <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
@@ -95,7 +95,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                   <AspectIcon
                     aspect="SPI"
                     className={css["white-icon"]}
-                    size="3rem"
+                    size="3.75rem"
                   />
                   <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
@@ -110,7 +110,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                   <AspectIcon
                     aspect="FIT"
                     className={css["white-icon"]}
-                    size="3rem"
+                    size="3.75rem"
                   />
                   <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
@@ -125,7 +125,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                   <AspectIcon
                     aspect="FOC"
                     className={css["white-icon"]}
-                    size="3rem"
+                    size="3.75rem"
                   />
                   <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
