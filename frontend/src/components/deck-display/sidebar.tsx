@@ -78,7 +78,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
               <div className={css["stat-item"]}>
                 <div className={cx(css["aspect-square"], css["awa"])}>
                   <AspectIcon
-                    aspect="AWA"
+                    aspect={null}
                     className={css["white-icon"]}
                     size="3rem"
                   />
@@ -93,7 +93,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
               <div className={css["stat-item"]}>
                 <div className={cx(css["aspect-square"], css["spi"])}>
                   <AspectIcon
-                    aspect="SPI"
+                    aspect={null}
                     className={css["white-icon"]}
                     size="3rem"
                   />
@@ -108,7 +108,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
               <div className={css["stat-item"]}>
                 <div className={cx(css["aspect-square"], css["fit"])}>
                   <AspectIcon
-                    aspect="FIT"
+                    aspect={null}
                     className={css["white-icon"]}
                     size="3rem"
                   />
@@ -123,7 +123,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
               <div className={css["stat-item"]}>
                 <div className={cx(css["aspect-square"], css["foc"])}>
                   <AspectIcon
-                    aspect="FOC"
+                    aspect={null}
                     className={css["white-icon"]}
                     size="3rem"
                   />
