@@ -28,7 +28,6 @@ import { ErAspectFilter } from "./er-aspect-filter";
 import css from "./filters.module.css";
 import { HealthFilter } from "./health-filter";
 import { IllustratorFilter } from "./illustrator-filter";
-import { InvestigatorCardAccessFilter } from "./investigator-card-access-filter";
 import { InvestigatorFilter } from "./investigator-filter";
 import { InvestigatorSkillsFilter } from "./investigator-skills-filter";
 import { LevelFilter } from "./level-filter";
@@ -160,9 +159,6 @@ export function Filters(props: Props) {
                 {filter === "faction" && <ErAspectFilter {...params} />}
                 {filter === "investigator_skills" && (
                   <InvestigatorSkillsFilter {...params} />
-                )}
-                {filter === "investigator_card_access" && (
-                  <InvestigatorCardAccessFilter {...params} />
                 )}
                 {filter === "health" && <HealthFilter {...params} />}
                 {filter === "sanity" && <SanityFilter {...params} />}

@@ -162,12 +162,6 @@ export function isStaticInvestigator(_card: Card) {
   return false;
 }
 
-// Stub — ER has no specialist/restriction mechanic.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function isSpecialist(_card: Card) {
-  return false;
-}
-
 export function cardLimit(card: Card, limitOverride?: number) {
   return limitOverride ?? card.deck_limit ?? 0;
 }

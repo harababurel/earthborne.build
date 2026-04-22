@@ -13,11 +13,7 @@ import {
 } from "@/store/lib/resolve-card";
 import { selectCardWithRelations } from "@/store/selectors/card-view";
 import type { CardModalConfig } from "@/store/slices/ui.types";
-import {
-  deckCreateLink,
-  isSpecialist,
-  isStaticInvestigator,
-} from "@/utils/card-utils";
+import { deckCreateLink, isStaticInvestigator } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { formatRelationTitle } from "@/utils/formatting";
 import { isEmpty } from "@/utils/is-empty";
@@ -35,7 +31,6 @@ import css from "./card-modal.module.css";
 import { AnnotationEdit } from "./card-modal-annotation-edit";
 import { CardModalQuantities } from "./card-modal-quantities";
 import { CardPageLink } from "./card-page-link";
-import { SpecialistAccess, SpecialistInvestigators } from "./specialist";
 
 type Props = {
   code: string;
@@ -146,14 +141,6 @@ export function CardModal(props: Props) {
               />
             );
           })}
-          {cardWithRelations.card.type_code === "role" && (
-            <SpecialistAccess card={cardWithRelations.card} />
-          )}
-        </div>
-      )}
-      {isSpecialist(cardWithRelations.card) && (
-        <div className={css["related"]}>
-          <SpecialistInvestigators card={cardWithRelations.card} />
         </div>
       )}
       {!ctx.resolvedDeck &&

@@ -83,8 +83,6 @@ export type InvestigatorSkillsFilter = Record<
   [number, number] | undefined
 >;
 
-type InvestigatorCardAccessFilter = string[] | undefined;
-
 export type FilterMapping = {
   action: MultiselectFilter;
   approach_icons: ApproachIconsFilter;
@@ -100,7 +98,6 @@ export type FilterMapping = {
   health: HealthFilter;
   illustrator: MultiselectFilter;
   investigator: SelectFilter;
-  investigator_card_access: InvestigatorCardAccessFilter;
   investigator_skills: InvestigatorSkillsFilter;
   level: LevelFilter;
   ownership: OwnershipFilter;

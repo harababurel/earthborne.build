@@ -31,7 +31,6 @@ import { cx } from "@/utils/cx";
 import { ErrorStatus } from "../errors/404";
 import css from "./card-view.module.css";
 import { Faq } from "./faq";
-import { UsableBy } from "./usable-by";
 
 function CardView() {
   const { code } = useParams();
@@ -48,8 +47,6 @@ function CardView() {
   const isInvestigator = cardWithRelations.card.type_code === "role";
   const isBuildableInvestigator =
     isInvestigator && !isStaticInvestigator(cardWithRelations.card);
-
-  const deckbuildable = !isInvestigator;
 
   return (
     <CardModalProvider>
@@ -84,26 +81,6 @@ function CardView() {
             {official(cardWithRelations.card) && (
               <SidebarSection title={t("card_view.section_faq")}>
                 <Faq card={cardWithRelations.card} />
-              </SidebarSection>
-            )}
-
-            {(deckbuildable || isInvestigator) && (
-              <SidebarSection title={t("card_view.section_deckbuilding")}>
-                {isBuildableInvestigator && (
-                  <Link
-                    asChild
-                    href={`/card/${cardWithRelations.card.code}/usable_cards`}
-                  >
-                    <Button size="full" data-testid="usable-cards" as="a">
-                      <i className="icon-cards" />
-                      {t("card_view.actions.usable_by", {
-                        prefix: "",
-                        name: displayAttribute(cardWithRelations.card, "name"),
-                      })}
-                    </Button>
-                  </Link>
-                )}
-                {deckbuildable && <UsableBy card={cardWithRelations.card} />}
               </SidebarSection>
             )}
           </div>

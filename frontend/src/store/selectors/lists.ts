@@ -301,26 +301,6 @@ function makeUserFilter(
         break;
       }
 
-      case "investigator_card_access": {
-        const value = filterValue.value as MultiselectFilter;
-        if (value.length) {
-          const filter = (card: Card) => {
-            if (card.type_code !== "role") return false;
-
-            const innerFilter = filterInvestigatorAccess(
-              card,
-              buildQlInterpreter,
-            );
-
-            if (!innerFilter) return false;
-            return value.every((code) => innerFilter(metadata.cards[code]));
-          };
-
-          filters.push(filter);
-        }
-        break;
-      }
-
       case "illustrator": {
         const value = filterValue.value as MultiselectFilter;
         if (value.length) {
@@ -1633,12 +1613,6 @@ export function selectIllustratorChanges(value: MultiselectFilter) {
   return value.join(` ${i18n.t("filters.or")} `);
 }
 
-function selectInvestigatorCardAccessChanges(value: MultiselectFilter) {
-  const count = value.length;
-  if (!count) return "";
-  return `${count} ${i18n.t("common.card", { count })}`;
-}
-
 const selectInvestigatorChanges = createSelector(
   (_: StoreState, value: SelectFilter) => value,
   selectMetadata,
@@ -1814,10 +1788,6 @@ export function selectFilterChanges<T extends keyof FilterMapping>(
 
     case "investigator": {
       return selectInvestigatorChanges(state, value as SelectFilter);
-    }
-
-    case "investigator_card_access": {
-      return selectInvestigatorCardAccessChanges(value as MultiselectFilter);
     }
 
     case "investigator_skills": {

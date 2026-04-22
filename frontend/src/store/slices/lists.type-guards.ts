@@ -159,12 +159,6 @@ export function isInvestigatorSkillsFilterObject(
   return !!filter && filter.type === "investigator_skills";
 }
 
-export function isInvestigatorCardAccessFilterObject(
-  filter?: FilterObject<FilterKey>,
-): filter is FilterObject<"investigator_card_access"> {
-  return !!filter && filter.type === "investigator_card_access";
-}
-
 export function isIllustratorFilterObject(
   filter?: FilterObject<FilterKey>,
 ): filter is FilterObject<"illustrator"> {

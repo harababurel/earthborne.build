@@ -3,10 +3,6 @@ import { ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useSearchParams } from "wouter";
 import { Card } from "@/components/card/card";
-import {
-  SpecialistAccess,
-  SpecialistInvestigators,
-} from "@/components/card-modal/specialist";
 import PackIcon from "@/components/icons/pack-icon";
 import { OwnershipPartitionedCardList } from "@/components/ownership-partitioned-card-list";
 import { Button } from "@/components/ui/button";
@@ -19,7 +15,6 @@ import { selectLookupTables, selectMetadata } from "@/store/selectors/shared";
 import {
   cardUrl,
   displayAttribute,
-  isSpecialist,
   oldFormatCardUrl,
   parseCardTitle,
 } from "@/utils/card-utils";
@@ -184,19 +179,6 @@ export function CardViewCards({
             </CardViewSection>
           );
         })}
-
-      {cardWithRelations.card.type_code === "role" && (
-        <CardViewSection title={formatRelationTitle("specialist")}>
-          <SpecialistAccess card={cardWithRelations.card} />
-        </CardViewSection>
-      )}
-      {isSpecialist(cardWithRelations.card) && (
-        <CardViewSection
-          title={formatRelationTitle("specialist_investigators")}
-        >
-          <SpecialistInvestigators card={cardWithRelations.card} />
-        </CardViewSection>
-      )}
     </>
   );
 }

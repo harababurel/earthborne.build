@@ -354,15 +354,6 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
           filterValues[id] = { ...filterValues[id], value: payload };
           break;
         }
-
-        case "investigator_card_access": {
-          assert(
-            isMultiSelectFilter(payload),
-            `filter ${id} value must be an array.`,
-          );
-          filterValues[id] = { ...filterValues[id], value: payload };
-          break;
-        }
       }
 
       return {
@@ -758,7 +749,6 @@ function makeFilterValue(
     }
 
     case "illustrator":
-    case "investigator_card_access":
     case "action":
     case "approach_icons":
     case "cycle":
@@ -907,14 +897,7 @@ function investigatorFilters({
     filters.push("ownership");
   }
 
-  filters.push(
-    "pack",
-    "investigator_card_access",
-    "trait",
-    "health",
-    "sanity",
-    ...additionalFilters,
-  );
+  filters.push("pack", "trait", "health", "sanity", ...additionalFilters);
 
   return filters;
 }
