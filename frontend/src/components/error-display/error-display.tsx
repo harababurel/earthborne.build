@@ -30,8 +30,8 @@ export function ErrorImage({ className }: { className?: string }) {
   return (
     <img
       className={cx(className, css["error-image"])}
-      src={theme === "dark" ? "/404-dark.png" : "/404-light.png"}
-      alt="Stylized illustration of the False Lead card"
+      src={theme === "dark" ? "/404-dark.png" : "/404.png"}
+      alt="Pokodo"
     />
   );
 }
