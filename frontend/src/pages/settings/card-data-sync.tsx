@@ -29,6 +29,7 @@ export function CardDataSync(props: Props) {
   const upToDate =
     data &&
     dataVersion &&
+    data.card_count === dataVersion.card_count &&
     data.locale === dataVersion.locale &&
     data.cards_updated_at === dataVersion.cards_updated_at &&
     data.translation_updated_at === dataVersion.translation_updated_at &&

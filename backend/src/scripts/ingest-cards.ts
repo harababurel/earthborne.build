@@ -10,7 +10,9 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import { sql, type Transaction } from "kysely";
 import { getDatabase } from "../db/db.ts";
+import type { DB } from "../db/schema.types.ts";
 import { configFromEnv } from "../lib/config.ts";
 import { log } from "../lib/logger.ts";
 
@@ -39,8 +41,11 @@ try {
 
 async function ingest() {
   const startedAt = Date.now();
+  const cardsUpdatedAt = new Date().toISOString();
 
   await db.transaction().execute(async (tx) => {
+    await ensureAppMetadataTable(tx);
+
     // Clear existing data in dependency order
     await tx.deleteFrom("card").execute();
     await tx.deleteFrom("card_set").execute();
@@ -151,9 +156,20 @@ async function ingest() {
     }
 
     log("info", `Inserted ${totalCards} cards total`);
+
+    await tx
+      .insertInto("app_metadata")
+      .values({ key: "cards_updated_at", value: cardsUpdatedAt })
+      .onConflict((oc) =>
+        oc.column("key").doUpdateSet({ value: cardsUpdatedAt }),
+      )
+      .execute();
   });
 
-  log("info", "Ingestion finished", { duration_ms: Date.now() - startedAt });
+  log("info", "Ingestion finished", {
+    cards_updated_at: cardsUpdatedAt,
+    duration_ms: Date.now() - startedAt,
+  });
 }
 
 // Raw shape coming out of rangers-card-data JSON files
@@ -253,4 +269,13 @@ function readJson<T>(filename: string): Promise<T> {
 async function readFile<T>(filePath: string): Promise<T> {
   const raw = await fs.readFile(filePath, "utf-8");
   return JSON.parse(raw) as T;
+}
+
+async function ensureAppMetadataTable(db: Transaction<DB>) {
+  await sql`
+    CREATE TABLE IF NOT EXISTS app_metadata (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    )
+  `.execute(db);
 }

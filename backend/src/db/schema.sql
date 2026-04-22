@@ -47,8 +47,8 @@ CREATE TABLE card (
   cost INTEGER,
   equip INTEGER,
   presence INTEGER,
-  harm INTEGER,
-  progress INTEGER,
+  harm TEXT,
+  progress TEXT,
   progress_fixed INTEGER,
   approach_conflict INTEGER,
   approach_reason INTEGER,
@@ -82,8 +82,14 @@ CREATE TABLE fan_made_project_info (
   bucket_path TEXT NOT NULL,
   meta TEXT NOT NULL
 );
+CREATE TABLE app_metadata (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);
 CREATE TABLE "schema_migrations" (version varchar(128) primary key);
 -- Dbmate schema migrations
 INSERT INTO "schema_migrations" (version) VALUES
   ('20260413000000'),
-  ('20260416000000');
+  ('20260416000000'),
+  ('20260420000000'),
+  ('20260422000000');

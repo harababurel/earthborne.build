@@ -65,14 +65,7 @@ export async function queryDataVersion(
   _locale: Locale = "en",
 ): Promise<DataVersion> {
   const res = await apiV2Request("/version");
-  const { card_count }: { card_count: number } = await res.json();
-
-  return {
-    card_count,
-    cards_updated_at: "2026-04-13T00:00:00",
-    locale: "en",
-    translation_updated_at: "2026-04-13T00:00:00",
-  };
+  return await res.json();
 }
 
 export async function queryCards(_locale: Locale = "en"): Promise<Card[]> {

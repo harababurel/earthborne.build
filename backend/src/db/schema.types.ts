@@ -93,6 +93,11 @@ export interface FanMadeProjectInfo {
   meta: string; // JSON as text
 }
 
+export interface AppMetadata {
+  key: string;
+  value: string;
+}
+
 export interface DB {
   pack: Pack;
   aspect: Aspect;
@@ -103,4 +108,5 @@ export interface DB {
   area: Area;
   card: Card;
   fan_made_project_info: FanMadeProjectInfo;
+  app_metadata: AppMetadata;
 }
