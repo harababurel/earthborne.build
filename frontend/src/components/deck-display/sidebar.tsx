@@ -59,20 +59,17 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
             {t("deck_create.steps.aspect")}
           </h2>
           <div className={css["card-info"]}>
-            <h3 className={css["card-name"]}>{aspectCard?.name}</h3>
-            {aspectCard && (
-              <CardScan
-                card={aspectCard}
-                className={css["card-scan"]}
-                hideFlipButton
-                lazy
-              />
-            )}
             <div className={css["aspect-stats"]}>
               <div className={css["stat-item"]}>
                 <AspectIcon aspect="AWA" size="1.25rem" />
                 <span className={css["stat-value"]}>
                   {aspectCard?.aspect_awareness}
+                </span>
+              </div>
+              <div className={css["stat-item"]}>
+                <AspectIcon aspect="SPI" size="1.25rem" />
+                <span className={css["stat-value"]}>
+                  {aspectCard?.aspect_spirit}
                 </span>
               </div>
               <div className={css["stat-item"]}>
@@ -85,12 +82,6 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                 <AspectIcon aspect="FOC" size="1.25rem" />
                 <span className={css["stat-value"]}>
                   {aspectCard?.aspect_focus}
-                </span>
-              </div>
-              <div className={css["stat-item"]}>
-                <AspectIcon aspect="SPI" size="1.25rem" />
-                <span className={css["stat-value"]}>
-                  {aspectCard?.aspect_spirit}
                 </span>
               </div>
             </div>
