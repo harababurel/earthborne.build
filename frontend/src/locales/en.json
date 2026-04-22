@@ -445,6 +445,17 @@
         "talespinner": "Talespinner",
         "traveler": "Traveler"
       },
+      "background_type_description": {
+        "artisan": "Artisans are skilled craftspeople who work with tools and support equipped gear, both their own and other Rangers'.",
+        "forager": "Foragers know the Valley's plants deeply. Their cards key off flora and can use it as a resource in ways other backgrounds cannot.",
+        "shepherd": "Shepherds tend ironwool flocks and have a natural affinity for animals. Their cards often affect beings and help pacify predators without violence.",
+        "talespinner": "Talespinners study story, song, and spoken tradition. Their cards soothe fatigue, manipulate the fatigue stack, and support Rangers with tale moments.",
+        "traveler": "Travelers are at home on the Valley's footpaths. Their cards primarily revolve around making the most of moment cards."
+      },
+      "card_disabled": {
+        "aspect_requirement": "You have {{actual}} {{aspect}}, but this card requires {{required}}.",
+        "background_limit": "You have already selected {{count}} / {{target}} background cards."
+      },
       "name": {
         "title": "Name ranger"
       },

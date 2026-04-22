@@ -18,6 +18,9 @@ type Props = {
   omitImage?: boolean;
   onPrintingSelect?: (card: CardT) => void;
   resolvedCard: ResolvedCard | CardWithRelations;
+  slotImageWrapperProps?: React.HTMLAttributes<HTMLDivElement> & {
+    ref?: React.Ref<HTMLDivElement>;
+  };
   slotCardFooter?: React.ReactNode;
   slotHeaderActions?: React.ReactNode;
   titleLinks?: "card" | "card-modal" | "dialog";
@@ -39,6 +42,7 @@ export function Card(props: Props) {
     onPrintingSelect,
     resolvedCard,
     size = "full",
+    slotImageWrapperProps,
     slotCardFooter,
     slotHeaderActions,
     titleLinks,
@@ -58,6 +62,7 @@ export function Card(props: Props) {
       onPrintingSelect={onPrintingSelect}
       resolvedCard={resolvedCard}
       size={size}
+      slotImageWrapperProps={slotImageWrapperProps}
       slotHeaderActions={slotHeaderActions}
       titleLinks={titleLinks}
     >

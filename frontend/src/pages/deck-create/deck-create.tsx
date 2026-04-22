@@ -1,21 +1,28 @@
 import {
+  type AspectKey,
   BACKGROUND_PICKS,
   BACKGROUND_TYPES,
+  type Card as CardT,
   OUTSIDE_INTEREST_PICKS,
   SPECIALTY_PICKS,
 } from "@arkham-build/shared";
+import type { TFunction } from "i18next";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "wouter";
 import { Card } from "@/components/card/card";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
+import { CardScan } from "@/components/card-scan";
+import { PortaledCardTooltip } from "@/components/card-tooltip/card-tooltip-portaled";
 import { Footer } from "@/components/footer";
 import { Masthead } from "@/components/masthead";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast.hooks";
+import { DefaultTooltip } from "@/components/ui/tooltip";
+import { useRestingTooltip } from "@/components/ui/tooltip.hooks";
 import { useStore } from "@/store";
 import type { ResolvedCard } from "@/store/lib/types";
 import {
@@ -185,25 +192,39 @@ function DeckCreateStepBackground() {
   const deckCreate = useStore(selectDeckCreateChecked);
   const setBackground = useStore((state) => state.deckCreateSetBackground);
   const toggle = useStore((state) => state.deckCreateToggleBackgroundCard);
+  const aspectCards = useStore(selectDeckCreateAspectCards);
   const cards = useStore((state) =>
     selectDeckCreateBackgroundCards(state, deckCreate.background),
   );
+  const aspectCard = aspectCards.find(
+    (card) => card.card.code === deckCreate.aspectCode,
+  );
+  const count = selectedCount(deckCreate.backgroundSlots);
 
   return (
     <PickerStep
-      count={selectedCount(deckCreate.backgroundSlots)}
+      count={count}
       target={BACKGROUND_PICKS}
       title={t("deck_create.background.title")}
     >
-      <div className={css["segmented"]}>
+      <div className={css["background-options"]}>
         {BACKGROUND_TYPES.map((type) => (
-          <Button
+          <button
+            className={cx(
+              css["background-option"],
+              deckCreate.background === type && css["background-option-active"],
+            )}
             key={type}
             onClick={() => setBackground(type)}
-            variant={deckCreate.background === type ? "primary" : "secondary"}
+            type="button"
           >
-            {t(`deck_create.background_type.${type}`)}
-          </Button>
+            <span className={css["background-option-title"]}>
+              {t(`deck_create.background_type.${type}`)}
+            </span>
+            <span className={css["background-option-description"]}>
+              {t(`deck_create.background_type_description.${type}`)}
+            </span>
+          </button>
         ))}
       </div>
       <CardGrid>
@@ -211,9 +232,20 @@ function DeckCreateStepBackground() {
           <SelectableCard
             key={card.card.code}
             card={card}
+            disabledReason={
+              deckCreate.backgroundSlots[card.card.code]
+                ? undefined
+                : getBackgroundCardDisabledReason(
+                    t,
+                    card.card,
+                    aspectCard?.card,
+                    count,
+                  )
+            }
             disabled={
               !deckCreate.backgroundSlots[card.card.code] &&
-              selectedCount(deckCreate.backgroundSlots) >= BACKGROUND_PICKS
+              (!!getAspectRequirementShortfall(card.card, aspectCard?.card) ||
+                count >= BACKGROUND_PICKS)
             }
             onSelect={() => toggle(card.card.code)}
             selected={!!deckCreate.backgroundSlots[card.card.code]}
@@ -470,24 +502,115 @@ function CardGrid({ children }: { children: React.ReactNode }) {
 function SelectableCard({
   card,
   disabled,
+  disabledReason,
   onSelect,
   selected,
 }: {
   card: ResolvedCard;
   disabled?: boolean;
+  disabledReason?: string;
   onSelect?: () => void;
   selected: boolean;
 }) {
-  return (
+  const { refs, referenceProps, isMounted, floatingStyles, transitionStyles } =
+    useRestingTooltip();
+
+  const button = (
     <button
-      className={cx(css["selectable-card"], selected && css["selected"])}
-      disabled={disabled}
-      onClick={onSelect}
+      aria-disabled={disabled || undefined}
+      className={cx(
+        css["selectable-card"],
+        selected && css["selected"],
+        disabled && css["selectable-card-disabled"],
+      )}
+      onClick={disabled ? undefined : onSelect}
       type="button"
     >
-      <Card resolvedCard={card} size="compact" />
+      <Card
+        resolvedCard={card}
+        size="compact"
+        slotImageWrapperProps={{
+          ...referenceProps,
+          ref: refs.setReference,
+        }}
+      />
     </button>
   );
+
+  return (
+    <>
+      {disabledReason ? (
+        <DefaultTooltip tooltip={disabledReason}>{button}</DefaultTooltip>
+      ) : (
+        button
+      )}
+      {isMounted && (
+        <PortaledCardTooltip
+          card={card.card}
+          ref={refs.setFloating}
+          floatingStyles={floatingStyles}
+          transitionStyles={transitionStyles}
+          tooltip={
+            <div className={css["card-scan-tooltip"]}>
+              <CardScan card={card.card} lazy />
+            </div>
+          }
+        />
+      )}
+    </>
+  );
+}
+
+function getBackgroundCardDisabledReason(
+  t: TFunction,
+  card: CardT,
+  aspectCard: CardT | undefined,
+  selectedCountValue: number,
+) {
+  const shortfall = getAspectRequirementShortfall(card, aspectCard);
+  if (shortfall) {
+    return t("deck_create.card_disabled.aspect_requirement", {
+      actual: shortfall.actual,
+      aspect: t(`common.factions.${shortfall.aspect.toLowerCase()}`),
+      required: shortfall.required,
+    });
+  }
+
+  if (selectedCountValue >= BACKGROUND_PICKS) {
+    return t("deck_create.card_disabled.background_limit", {
+      count: selectedCountValue,
+      target: BACKGROUND_PICKS,
+    });
+  }
+
+  return undefined;
+}
+
+function getAspectRequirementShortfall(
+  card: CardT,
+  aspectCard: CardT | undefined,
+) {
+  const aspect = card.aspect_requirement_type;
+  const required = card.aspect_requirement_value;
+  if (!aspect || required == null) return undefined;
+
+  const actual = aspectCard ? getAspectValue(aspectCard, aspect) : 0;
+  if (actual >= required) return undefined;
+
+  return { actual, aspect, required };
+}
+
+function getAspectValue(card: CardT, aspect: AspectKey) {
+  switch (aspect) {
+    case "AWA":
+      return card.aspect_awareness ?? 0;
+    case "FIT":
+      return card.aspect_fitness ?? 0;
+    case "FOC":
+      return card.aspect_focus ?? 0;
+    case "SPI":
+      return card.aspect_spirit ?? 0;
+  }
 }
 
 function ReviewGroup({

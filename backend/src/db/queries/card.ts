@@ -49,6 +49,10 @@ type CardRow = {
   approach_reason: number | null;
   approach_exploration: number | null;
   approach_connection: number | null;
+  aspect_awareness: number | null;
+  aspect_fitness: number | null;
+  aspect_focus: number | null;
+  aspect_spirit: number | null;
   token_count: number | null;
   area_id: string | null;
   guide_entry: string | null;
@@ -92,6 +96,10 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.approach_reason",
       "card.approach_exploration",
       "card.approach_connection",
+      "card.aspect_awareness",
+      "card.aspect_fitness",
+      "card.aspect_focus",
+      "card.aspect_spirit",
       "card.token_count",
       "card.area_id",
       "card.guide_entry",
@@ -141,6 +149,10 @@ export async function getCardByCode(
       "card.approach_reason",
       "card.approach_exploration",
       "card.approach_connection",
+      "card.aspect_awareness",
+      "card.aspect_fitness",
+      "card.aspect_focus",
+      "card.aspect_spirit",
       "card.token_count",
       "card.area_id",
       "card.guide_entry",
@@ -201,6 +213,10 @@ function transformCard(row: CardRow): {
   token_name: string | null;
   token_count: number | null;
   area: "within_reach" | "along_the_way" | null;
+  aspect_awareness: number | null;
+  aspect_fitness: number | null;
+  aspect_focus: number | null;
+  aspect_spirit: number | null;
   campaign_guide_entry: number | null;
   quantity: number;
   deck_limit: number | null;
@@ -269,6 +285,10 @@ function transformCard(row: CardRow): {
     token_name: row.token_name,
     token_count: row.token_count,
     area,
+    aspect_awareness: row.aspect_awareness,
+    aspect_fitness: row.aspect_fitness,
+    aspect_focus: row.aspect_focus,
+    aspect_spirit: row.aspect_spirit,
     campaign_guide_entry: row.guide_entry ? Number(row.guide_entry) : null,
     quantity: row.quantity,
     deck_limit: row.deck_limit,

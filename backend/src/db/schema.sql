@@ -54,6 +54,10 @@ CREATE TABLE card (
   approach_reason INTEGER,
   approach_exploration INTEGER,
   approach_connection INTEGER,
+  aspect_awareness INTEGER,
+  aspect_fitness INTEGER,
+  aspect_focus INTEGER,
+  aspect_spirit INTEGER,
   token_id TEXT REFERENCES token(id),
   token_count INTEGER,
   area_id TEXT REFERENCES area(id),
@@ -92,4 +96,5 @@ INSERT INTO "schema_migrations" (version) VALUES
   ('20260413000000'),
   ('20260416000000'),
   ('20260420000000'),
-  ('20260422000000');
+  ('20260422000000'),
+  ('20260422010000');

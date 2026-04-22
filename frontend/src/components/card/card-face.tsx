@@ -19,6 +19,9 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   onPrintingSelect?: (card: Card) => void;
   resolvedCard: CardWithRelations | ResolvedCard;
   size: "compact" | "tooltip" | "full";
+  slotImageWrapperProps?: React.HTMLAttributes<HTMLDivElement> & {
+    ref?: React.Ref<HTMLDivElement>;
+  };
   slotHeaderActions?: React.ReactNode;
   titleLinks?: "card" | "card-modal" | "dialog";
 }
@@ -31,6 +34,7 @@ export function CardFace(props: Props) {
     onPrintingSelect,
     resolvedCard,
     size,
+    slotImageWrapperProps,
     slotHeaderActions,
     titleLinks,
     ...rest
@@ -86,11 +90,11 @@ export function CardFace(props: Props) {
 
       {showImage &&
         (size === "full" ? (
-          <div className={css["image"]}>
+          <div {...slotImageWrapperProps} className={css["image"]}>
             <CardScan card={card} onFlip={onFlip} />
           </div>
         ) : (
-          <div className={css["image"]}>
+          <div {...slotImageWrapperProps} className={css["image"]}>
             <CardThumbnail card={card} />
           </div>
         ))}

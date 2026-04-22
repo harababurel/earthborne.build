@@ -68,6 +68,10 @@ export interface Card {
   approach_reason: number | null;
   approach_exploration: number | null;
   approach_connection: number | null;
+  aspect_awareness: number | null;
+  aspect_fitness: number | null;
+  aspect_focus: number | null;
+  aspect_spirit: number | null;
   token_id: string | null;
   token_count: number | null;
   area_id: string | null;

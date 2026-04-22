@@ -13,6 +13,7 @@ import path from "node:path";
 import { sql, type Transaction } from "kysely";
 import { getDatabase } from "../db/db.ts";
 import type { DB } from "../db/schema.types.ts";
+import { ASPECT_CARD_VALUES_BY_CODE } from "../lib/aspect-card-values.ts";
 import { configFromEnv } from "../lib/config.ts";
 import { log } from "../lib/logger.ts";
 
@@ -213,6 +214,8 @@ interface RawCard {
 }
 
 function normalizeCard(c: RawCard, packId: string) {
+  const aspectValues = ASPECT_CARD_VALUES_BY_CODE[c.id];
+
   return {
     id: c.id,
     code: c.id,
@@ -236,6 +239,10 @@ function normalizeCard(c: RawCard, packId: string) {
     approach_reason: c.approach_reason ?? null,
     approach_exploration: c.approach_exploration ?? null,
     approach_connection: c.approach_connection ?? null,
+    aspect_awareness: aspectValues?.aspect_awareness ?? null,
+    aspect_fitness: aspectValues?.aspect_fitness ?? null,
+    aspect_focus: aspectValues?.aspect_focus ?? null,
+    aspect_spirit: aspectValues?.aspect_spirit ?? null,
     token_id: c.token_id ?? null,
     token_count: c.token_count ?? null,
     area_id: c.area_id ?? null,
