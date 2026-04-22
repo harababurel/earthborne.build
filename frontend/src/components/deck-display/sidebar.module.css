@@ -57,36 +57,61 @@
 
 .stat-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
 }
 
-.stat-icon-wrapper {
+.aspect-square {
   position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--rounded);
+  overflow: hidden;
+}
+
+.white-icon {
+  color: white !important;
+  opacity: 0.8;
 }
 
 .stat-overlay {
   position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  line-height: 1.1;
+  line-height: 1;
+  color: white;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
 }
 
 .stat-value {
   font-size: var(--font-xl);
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .stat-label {
   font-size: 0.65rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
+}
+
+.awa {
+  background-color: var(--color-awa);
+}
+.spi {
+  background-color: var(--color-spi);
+}
+.fit {
+  background-color: var(--color-fit);
+}
+.foc {
+  background-color: var(--color-foc);
 }
 
 .identity-info {

@@ -76,9 +76,13 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
           <div className={css["card-info"]}>
             <div className={css["aspect-stats"]}>
               <div className={css["stat-item"]}>
-                <div className={css["stat-icon-wrapper"]}>
-                  <AspectIcon aspect="AWA" size="3.5rem" />
-                  <div className={cx(css["stat-overlay"], "color-AWA")}>
+                <div className={cx(css["aspect-square"], css["awa"])}>
+                  <AspectIcon
+                    aspect="AWA"
+                    className={css["white-icon"]}
+                    size="3rem"
+                  />
+                  <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
                       {aspectCard?.aspect_awareness}
                     </span>
@@ -87,9 +91,13 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                 </div>
               </div>
               <div className={css["stat-item"]}>
-                <div className={css["stat-icon-wrapper"]}>
-                  <AspectIcon aspect="SPI" size="3.5rem" />
-                  <div className={cx(css["stat-overlay"], "color-SPI")}>
+                <div className={cx(css["aspect-square"], css["spi"])}>
+                  <AspectIcon
+                    aspect="SPI"
+                    className={css["white-icon"]}
+                    size="3rem"
+                  />
+                  <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
                       {aspectCard?.aspect_spirit}
                     </span>
@@ -98,9 +106,13 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                 </div>
               </div>
               <div className={css["stat-item"]}>
-                <div className={css["stat-icon-wrapper"]}>
-                  <AspectIcon aspect="FIT" size="3.5rem" />
-                  <div className={cx(css["stat-overlay"], "color-FIT")}>
+                <div className={cx(css["aspect-square"], css["fit"])}>
+                  <AspectIcon
+                    aspect="FIT"
+                    className={css["white-icon"]}
+                    size="3rem"
+                  />
+                  <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
                       {aspectCard?.aspect_fitness}
                     </span>
@@ -109,9 +121,13 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                 </div>
               </div>
               <div className={css["stat-item"]}>
-                <div className={css["stat-icon-wrapper"]}>
-                  <AspectIcon aspect="FOC" size="3.5rem" />
-                  <div className={cx(css["stat-overlay"], "color-FOC")}>
+                <div className={cx(css["aspect-square"], css["foc"])}>
+                  <AspectIcon
+                    aspect="FOC"
+                    className={css["white-icon"]}
+                    size="3rem"
+                  />
+                  <div className={css["stat-overlay"]}>
                     <span className={css["stat-value"]}>
                       {aspectCard?.aspect_focus}
                     </span>
