@@ -75,8 +75,7 @@
 }
 
 .white-icon {
-  color: white;
-  opacity: 0.8;
+  color: white !important;
 }
 
 .stat-overlay {
