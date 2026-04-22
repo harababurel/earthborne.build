@@ -108,3 +108,12 @@
 .identity-value {
   font-weight: 600;
 }
+
+.card-link {
+  color: var(--accent-11);
+  text-decoration: none;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+}

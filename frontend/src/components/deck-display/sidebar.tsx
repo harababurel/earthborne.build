@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "wouter";
 import { CardText } from "@/components/card/card-text";
 import { CardScan } from "@/components/card-scan";
 import { AspectIcon } from "@/components/icons/aspect-icon";
@@ -28,6 +30,19 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
   const roleCard = metadata.cards[deck.role_code];
   const aspectCard = metadata.cards[deck.aspect_code];
   const cssVariables = useAccentColor(roleCard);
+
+  const outsideInterestCard = useMemo(() => {
+    return Object.values(deck.cards.slots).find(({ card }) => {
+      if (card.is_expert) return false;
+      if (card.category === "background") {
+        return !!deck.background && card.background_type !== deck.background;
+      }
+      if (card.category === "specialty") {
+        return !!deck.specialty && card.specialty_type !== deck.specialty;
+      }
+      return false;
+    })?.card;
+  }, [deck]);
 
   return (
     <aside className={cx(css["container"], className)} style={cssVariables}>
@@ -134,6 +149,21 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
                 {t(`common.set.${deck.specialty}`)}
               </span>
             </div>
+            {outsideInterestCard && (
+              <div className={css["identity-item"]}>
+                <span className={css["identity-label"]}>
+                  {t("deck_create.steps.outside_interest")}:
+                </span>
+                <span className={css["identity-value"]}>
+                  <Link
+                    className={css["card-link"]}
+                    href={`/card/${outsideInterestCard.code}`}
+                  >
+                    {outsideInterestCard.name}
+                  </Link>
+                </span>
+              </div>
+            )}
           </div>
         </Plane>
       </div>
