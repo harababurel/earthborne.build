@@ -496,11 +496,12 @@ const selectBaseListCards = createSelector(
 
     if (filterValues) {
       const cardTypeFilter = Object.values(filterValues).find(
-        (f: any) => f.type === "card_type",
+        (f) => (f as Record<string, unknown>).type === "card_type",
       );
 
       if (cardTypeFilter) {
-        const value = (cardTypeFilter as any).value as CardTypeFilter;
+        const value = (cardTypeFilter as Record<string, unknown>)
+          .value as CardTypeFilter;
 
         if (value === "player") {
           filters.push(not(filterEncounterCards));
@@ -517,11 +518,12 @@ const selectBaseListCards = createSelector(
 
     if (filterValues) {
       const ownershipFilter = Object.values(filterValues).find(
-        (f: any) => f.type === "ownership",
+        (f) => (f as Record<string, unknown>).type === "ownership",
       );
 
       if (ownershipFilter) {
-        const value = (ownershipFilter as any).value as OwnershipFilter;
+        const value = (ownershipFilter as Record<string, unknown>)
+          .value as OwnershipFilter;
 
         if (value !== "all") {
           filters.push((card: Card) => {

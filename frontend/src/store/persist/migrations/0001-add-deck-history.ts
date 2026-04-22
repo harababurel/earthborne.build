@@ -5,7 +5,7 @@ function migrate(_state: unknown, version: number) {
 
   if (version < 2) {
     for (const deck of Object.values(state.data.decks)) {
-      if ((deck as any).next_deck != null) {
+      if ((deck as Record<string, unknown>).next_deck != null) {
         delete state.data.decks[deck.id];
       }
     }
