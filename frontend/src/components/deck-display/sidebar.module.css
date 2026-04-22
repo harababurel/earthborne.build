@@ -62,9 +62,18 @@
   gap: 0.5rem;
 }
 
+.stat-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .stat-value {
-  font-size: var(--font-lg);
-  font-weight: 700;
+  position: absolute;
+  font-size: var(--font-xl);
+  font-weight: 800;
+  line-height: 1;
 }
 
 .identity-info {

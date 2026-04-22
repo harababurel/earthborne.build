@@ -61,28 +61,36 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
           <div className={css["card-info"]}>
             <div className={css["aspect-stats"]}>
               <div className={css["stat-item"]}>
-                <AspectIcon aspect="AWA" size="1.25rem" />
-                <span className={css["stat-value"]}>
-                  {aspectCard?.aspect_awareness}
-                </span>
+                <div className={css["stat-icon-wrapper"]}>
+                  <AspectIcon aspect="AWA" size="3.5rem" />
+                  <span className={css["stat-value"]}>
+                    {aspectCard?.aspect_awareness}
+                  </span>
+                </div>
               </div>
               <div className={css["stat-item"]}>
-                <AspectIcon aspect="SPI" size="1.25rem" />
-                <span className={css["stat-value"]}>
-                  {aspectCard?.aspect_spirit}
-                </span>
+                <div className={css["stat-icon-wrapper"]}>
+                  <AspectIcon aspect="SPI" size="3.5rem" />
+                  <span className={css["stat-value"]}>
+                    {aspectCard?.aspect_spirit}
+                  </span>
+                </div>
               </div>
               <div className={css["stat-item"]}>
-                <AspectIcon aspect="FIT" size="1.25rem" />
-                <span className={css["stat-value"]}>
-                  {aspectCard?.aspect_fitness}
-                </span>
+                <div className={css["stat-icon-wrapper"]}>
+                  <AspectIcon aspect="FIT" size="3.5rem" />
+                  <span className={css["stat-value"]}>
+                    {aspectCard?.aspect_fitness}
+                  </span>
+                </div>
               </div>
               <div className={css["stat-item"]}>
-                <AspectIcon aspect="FOC" size="1.25rem" />
-                <span className={css["stat-value"]}>
-                  {aspectCard?.aspect_focus}
-                </span>
+                <div className={css["stat-icon-wrapper"]}>
+                  <AspectIcon aspect="FOC" size="3.5rem" />
+                  <span className={css["stat-value"]}>
+                    {aspectCard?.aspect_focus}
+                  </span>
+                </div>
               </div>
             </div>
             <CardText
