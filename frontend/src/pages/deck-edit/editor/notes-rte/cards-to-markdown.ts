@@ -230,7 +230,7 @@ function getCardColor(card: Card): string {
     case "FIT":
     case "FOC":
     case "SPI":
-      return `fg-${aspect}`;
+      return `color-${aspect}`;
     default:
       return "";
   }
