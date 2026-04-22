@@ -623,10 +623,5 @@ export function containsCard(
   card: Card,
 ): boolean {
   if (!deck) return false;
-  return (
-    deck.slots[card.code] != null ||
-    deck.extraSlots?.[card.code] != null ||
-    deck.sideSlots?.[card.code] != null ||
-    deck.investigator_code === card.code
-  );
+  return deck.slots[card.code] != null || deck.role_code === card.code;
 }

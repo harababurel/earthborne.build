@@ -1,4 +1,4 @@
-import { type Card, countExperience } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
 import { LayoutGridIcon, LayoutListIcon, SortDescIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ import { cx } from "@/utils/cx";
 import { isEmpty } from "@/utils/is-empty";
 import { useHotkey } from "@/utils/use-hotkey";
 import { AnnotationIndicator } from "../annotation-indicator";
-import { Attachments } from "../attachments/attachments";
+import Attachments from "../attachments/attachments";
 import { getMatchingAttachables } from "../attachments/attachments.helpers";
 import { AllAttachables } from "../deck-tools/all-attachables";
 import { LimitedSlots } from "../deck-tools/limited-slots";
@@ -96,9 +96,6 @@ export function Decklist(props: Props) {
     [renderCardExtra],
   );
 
-  const hasAdditional =
-    groups.bondedSlots || groups.extraSlots || groups.sideSlots;
-
   const onSetViewMode = useCallback(
     (mode: ViewMode) => {
       if (mode) {
@@ -137,9 +134,6 @@ export function Decklist(props: Props) {
   const labels = useMemo(
     () => ({
       slots: t("common.decks.slots"),
-      sideSlots: t("common.decks.sideSlots"),
-      bondedSlots: t("common.decks.bondedSlots"),
-      extraSlots: t("common.decks.extraSlots"),
     }),
     [t],
   );
@@ -205,59 +199,6 @@ export function Decklist(props: Props) {
           </DecklistSection>
         )}
 
-        {hasAdditional && (
-          <div className={css["decklist-additional"]}>
-            {groups.sideSlots && (
-              <DecklistSection
-                columns={getColumnMode(viewMode as ViewMode, groups.sideSlots)}
-                showTitle
-                title={labels["sideSlots"]}
-                extraInfos={`${computeXPSum(deck, "sideSlots")} ${t("common.xp")}`}
-              >
-                <DecklistGroup
-                  deck={deck}
-                  grouping={groups.sideSlots}
-                  getListCardProps={getListCardProps}
-                  viewMode={viewMode as ViewMode}
-                  showXP
-                />
-              </DecklistSection>
-            )}
-            {groups.bondedSlots && (
-              <DecklistSection
-                columns={getColumnMode(
-                  viewMode as ViewMode,
-                  groups.bondedSlots,
-                )}
-                title={labels["bondedSlots"]}
-                showTitle
-              >
-                <DecklistGroup
-                  deck={deck}
-                  grouping={groups.bondedSlots}
-                  getListCardProps={getListCardProps}
-                  viewMode={viewMode as ViewMode}
-                />
-              </DecklistSection>
-            )}
-
-            {groups.extraSlots && (
-              <DecklistSection
-                columns={getColumnMode(viewMode as ViewMode, groups.extraSlots)}
-                title={labels["extraSlots"]}
-                showTitle
-              >
-                <DecklistGroup
-                  deck={deck}
-                  grouping={groups.extraSlots}
-                  getListCardProps={getListCardProps}
-                  viewMode={viewMode as ViewMode}
-                />
-              </DecklistSection>
-            )}
-          </div>
-        )}
-
         <div className={css["decklist-tools"]}>
           <LimitedSlots deck={deck} />
           <AllAttachables deck={deck} readonly />
@@ -270,14 +211,4 @@ export function Decklist(props: Props) {
 function getColumnMode(viewMode: ViewMode, group: DeckGrouping) {
   if (viewMode === "scans") return "scans";
   return countGroupRows(group) < 5 ? "single" : "auto";
-}
-
-function computeXPSum(deck: ResolvedDeck, slotKey: "sideSlots" | "slots") {
-  if (!deck[slotKey]) return 0;
-
-  return Object.entries(deck[slotKey]).reduce((acc, [code, quantity]) => {
-    const card = deck.cards[slotKey][code]?.card;
-
-    return acc + (card ? countExperience(card, quantity) : 0);
-  }, 0);
 }

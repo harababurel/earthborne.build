@@ -11,12 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { useStore } from "@/store";
 import type { SettingsState } from "@/store/slices/settings.types";
-import {
-  cardLimit,
-  displayAttribute,
-  getCardColor,
-  hasSkillIcons,
-} from "@/utils/card-utils";
+import { cardLimit, displayAttribute, getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { dataLanguage } from "@/utils/formatting";
 import { preventLeftClick } from "@/utils/prevent-links";
@@ -31,8 +26,7 @@ import { CardName } from "../card-name";
 import { CardThumbnail } from "../card-thumbnail";
 import { ApproachIcon } from "../icons/approach-icon";
 import { MulticlassIcons } from "../icons/multiclass-icons";
-import { SkillIcons } from "../skill-icons/skill-icons";
-import { SkillIconsInvestigator } from "../skill-icons/skill-icons-investigator";
+
 import { useDialogContext } from "../ui/dialog.hooks";
 import { QuantityInput } from "../ui/quantity-input";
 import { QuantityOutput } from "../ui/quantity-output";
@@ -87,7 +81,6 @@ export function ListCardInner(props: Props) {
     cardLevelDisplay,
     cardShowCollectionNumber,
     cardShowUniqueIcon,
-    cardSkillIconsDisplay,
     className,
     disableKeyboard,
     disableModalOpen,
@@ -280,34 +273,16 @@ export function ListCardInner(props: Props) {
                     />
                   )}
 
-                  {hasSkillIcons(card) && (
-                    <SkillIcons
-                      className={cx(
-                        css["skill-icons"],
-                        cardSkillIconsDisplay && css[cardSkillIconsDisplay],
-                      )}
-                      card={card}
-                      fancy={cardSkillIconsDisplay === "as_printed"}
-                    />
-                  )}
-
                   {!!annotation && <AnnotationIndicator />}
 
                   {/* ER has no subname field */}
 
                   {showInvestigatorIcons && card.type_code === "role" && (
-                    <>
-                      <CardHealth
-                        className={css["investigator-health"]}
-                        health={card.harm_threshold}
-                        sanity={card.progress_threshold}
-                      />
-                      <SkillIconsInvestigator
-                        card={card}
-                        className={css["investigator-skills"]}
-                        iconClassName={css["investigator-skill"]}
-                      />
-                    </>
+                    <CardHealth
+                      className={css["investigator-health"]}
+                      health={card.harm_threshold}
+                      sanity={card.progress_threshold}
+                    />
                   )}
                   {renderCardMetaExtra?.(card, quantity)}
                 </div>

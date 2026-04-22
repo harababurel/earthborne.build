@@ -25,12 +25,11 @@ export const selectCardWithRelations = createSelector(
   (_: StoreState, code: string) => code,
   (_: StoreState, __: string, withRelations: boolean) => withRelations,
   (_: StoreState, __: string, ___, resolvedDeck: ResolvedDeck) => resolvedDeck,
-  (metadata, lookupTables, collator, code, withRelations, resolvedDeck) =>
+  (metadata, lookupTables, collator, code, withRelations, _resolvedDeck) =>
     resolveCardWithRelations(
       { metadata, lookupTables },
       collator,
       code,
-      resolvedDeck?.customizations,
       withRelations,
     ),
 );
@@ -52,7 +51,6 @@ export const selectUsableByInvestigators = createSelector(
           { metadata, lookupTables },
           collator,
           code,
-          undefined,
           true,
         ),
       )

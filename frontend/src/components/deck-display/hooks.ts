@@ -41,38 +41,6 @@ export function useDeleteDeck() {
   );
 }
 
-export function useDeleteUpgrade() {
-  const toast = useToast();
-  const { t } = useTranslation();
-  const [, navigate] = useLocation();
-  const deleteUpgrade = useStore((state) => state.deleteUpgrade);
-
-  return useCallback(
-    async (deckId: Id) => {
-      const confirmed = confirm(t("deck.toasts.delete_upgrade_confirm"));
-      if (confirmed) {
-        const toastId = toast.show({
-          children: t("deck.toasts.delete_upgrade_loading"),
-        });
-
-        try {
-          await deleteUpgrade(deckId, (id) => navigate(`/deck/view/${id}`));
-          toast.dismiss(toastId);
-        } catch (err) {
-          toast.dismiss(toastId);
-          toast.show({
-            children: t("deck.toasts.delete_upgrade_error", {
-              error: (err as Error)?.message,
-            }),
-            variant: "error",
-          });
-        }
-      }
-    },
-    [deleteUpgrade, navigate, toast, t],
-  );
-}
-
 export function useDuplicateDeck() {
   const toast = useToast();
   const { t } = useTranslation();

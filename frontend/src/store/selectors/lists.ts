@@ -20,16 +20,12 @@ import i18n from "@/utils/i18n";
 import { isEmpty } from "@/utils/is-empty";
 import { time, timeEnd } from "@/utils/time";
 import type { Interpreter } from "../lib/buildql/interpreter";
-import { applyCardChanges } from "../lib/card-edits";
-import { getAdditionalDeckOptions } from "../lib/deck-validation";
 import {
-  containsCard,
   filterActions,
   filterApproachIcons,
   filterAspectRequirement,
   filterAssets,
   filterBacksides,
-  filterCardPool,
   filterCost,
   filterCycleCode,
   filterDuplicates,
@@ -43,12 +39,10 @@ import {
   filterInvestigatorAccess,
   filterInvestigatorSkills,
   filterInvestigatorWeaknessAccess,
-  filterLevel,
   filterMythosCards,
   filterOwnership,
   filterPackCode,
   filterProperties,
-  filterSealed,
   filterSetCode,
   filterSkillIcons,
   filterSubtypes,
@@ -123,7 +117,7 @@ function makeUserFilter(
   metadata: Metadata,
   lookupTables: LookupTables,
   list: List,
-  resolvedDeck: ResolvedDeck | undefined,
+  _resolvedDeck: ResolvedDeck | undefined,
   targetDeck: TargetDeck | undefined,
   buildQlInterpreter: Interpreter,
 ) {
@@ -236,33 +230,6 @@ function makeUserFilter(
           if (weaknessFilter) filter.push(weaknessFilter);
 
           filters.push(or(filter));
-        }
-
-        break;
-      }
-
-      case "level": {
-        const value = filterValue.value as LevelFilter;
-
-        if (value.range) {
-          if (resolvedDeck) {
-            const filter = filterLevel(
-              value,
-              buildQlInterpreter,
-              resolvedDeck?.investigatorBack?.card,
-            );
-            if (filter) filters.push(filter);
-          } else {
-            const filterIndex = list.filters.indexOf("investigator");
-            const filterValue = filterIndex
-              ? list.filterValues[filterIndex]?.value
-              : undefined;
-            const investigator = filterValue
-              ? metadata.cards[filterValue as string]
-              : undefined;
-            const filter = filterLevel(value, buildQlInterpreter, investigator);
-            if (filter) filters.push(filter);
-          }
         }
 
         break;
@@ -419,23 +386,16 @@ const deckAccessEqual = (
 ) => {
   if (isResolvedDeck(a) && isResolvedDeck(b)) {
     return (
-      a.id === b.id && // 1
-      a.investigatorFront.card.code === b.investigatorFront.card.code && // 3
-      a.investigatorBack.card.code === b.investigatorBack.card.code && // 3
-      JSON.stringify(getAdditionalDeckOptions(a)) ===
-        JSON.stringify(getAdditionalDeckOptions(b)) && // 4
-      JSON.stringify(a.customizations) === JSON.stringify(b.customizations) && // 5
-      JSON.stringify(a.selections) === JSON.stringify(b.selections) && // 6
-      JSON.stringify(a.cardPool) === JSON.stringify(b.cardPool) && // 7
-      a.sealedDeck === b.sealedDeck && // 8
-      a.date_update === b.date_update && // 9
-      a.metaParsed.buildql_deck_options_override ===
-        b.metaParsed.buildql_deck_options_override // 10
+      a.id === b.id &&
+      a.date_update === b.date_update &&
+      a.role_code === b.role_code &&
+      a.aspect_code === b.aspect_code &&
+      a.background === b.background &&
+      a.specialty === b.specialty
     );
   }
 
-  // biome-ignore lint/suspicious/noDoubleEquals: we want a shallow equality check in this context.
-  return a == b;
+  return a === b;
 };
 
 const selectDeckCachedByCardAccess = createSelector(
@@ -463,7 +423,7 @@ const selectDeckInvestigatorFilter = createSelector(
   (state: StoreState) => state.ui.showLimitedAccess,
   (
     metadata,
-    lookupTables,
+    _lookupTables,
     resolvedDeck,
     buildQlInterpreter,
     _settings,
@@ -473,20 +433,17 @@ const selectDeckInvestigatorFilter = createSelector(
   ) => {
     if (!resolvedDeck) return undefined;
 
-    const investigatorBack = resolvedDeck.investigatorBack.card;
-    if (!investigatorBack) return undefined;
+    const roleCard = metadata.cards[resolvedDeck.role_code];
+    if (!roleCard) return undefined;
 
     if (showUnusableCards) {
-      return and([
-        filterMythosCards,
-        (card: Card) => !lookupTables.relations.bonded[card.code],
-      ]);
+      return filterMythosCards;
     }
 
     const ors = [];
 
     const investigatorFilter = filterInvestigatorAccess(
-      investigatorBack,
+      roleCard,
       buildQlInterpreter,
       {
         targetDeck: targetDeck === "both" ? undefined : targetDeck,
@@ -494,75 +451,15 @@ const selectDeckInvestigatorFilter = createSelector(
       },
     );
 
-    const weaknessFilter = filterInvestigatorWeaknessAccess(investigatorBack, {
+    const weaknessFilter = filterInvestigatorWeaknessAccess(roleCard, {
       targetDeck: targetDeck === "both" ? undefined : targetDeck,
     });
 
     if (investigatorFilter) ors.push(investigatorFilter);
     if (weaknessFilter) ors.push(weaknessFilter);
 
-    const investigatorAccessFilter = or(ors);
-
-    const ands = [investigatorAccessFilter];
-
-    const cardPool = resolvedDeck.cardPool;
-    const sealedDeck = resolvedDeck.sealedDeck?.cards;
-
-    if (!cardPool?.length && !sealedDeck) {
-      return and(ands);
-    }
-
-    const cardInDeckFilter = (card: Card) => containsCard(resolvedDeck, card);
-
-    // ER has no XP/restrictions/encounter_code concept — cards in the pool
-    // are either accessible or not; no bypass needed.
-    const xpNullPoolFilter = (_card: Card) => false;
-
-    if (cardPool?.length) {
-      const cardPoolFilter = filterCardPool(cardPool, metadata, lookupTables);
-
-      if (cardPoolFilter) {
-        ands.push(or([cardPoolFilter, xpNullPoolFilter, cardInDeckFilter]));
-      }
-    }
-
-    if (sealedDeck) {
-      ands.push(
-        or([
-          filterSealed(sealedDeck, lookupTables),
-          xpNullPoolFilter,
-          cardInDeckFilter,
-        ]),
-      );
-    }
-
-    return and(ands);
+    return or(ors);
   },
-);
-
-const customizationsEqual = (
-  a: ResolvedDeck | undefined,
-  b: ResolvedDeck | undefined,
-) => {
-  return isResolvedDeck(a) && isResolvedDeck(b)
-    ? JSON.stringify(a.customizations) === JSON.stringify(b.customizations)
-    : // biome-ignore lint/suspicious/noDoubleEquals: we want a shallow equality check in this context.
-      a == b;
-};
-
-const selectDeckCachedByCustomizations = createSelector(
-  (_: StoreState, resolvedDeck: ResolvedDeck | undefined) => resolvedDeck,
-  (resolvedDeck) => resolvedDeck,
-  {
-    memoizeOptions: {
-      resultEqualityCheck: customizationsEqual,
-    },
-  },
-);
-
-const selectDeckCustomizations = createSelector(
-  selectDeckCachedByCustomizations,
-  (resolvedDeck) => resolvedDeck?.customizations,
 );
 
 const selectBaseListCards = createSelector(
@@ -571,7 +468,6 @@ const selectBaseListCards = createSelector(
   (state: StoreState) => selectActiveList(state)?.systemFilter,
   (state: StoreState) => selectActiveList(state)?.filterValues,
   selectDeckInvestigatorFilter,
-  selectDeckCustomizations,
   selectCollection,
   (
     metadata,
@@ -579,7 +475,6 @@ const selectBaseListCards = createSelector(
     systemFilter,
     filterValues,
     deckInvestigatorFilter,
-    customizations,
     collection,
   ) => {
     if (isEmpty(metadata.cards)) {
@@ -591,13 +486,6 @@ const selectBaseListCards = createSelector(
 
     let filteredCards = Object.values(metadata.cards);
 
-    // filters can be impacted by card changes, apply them now.
-    if (customizations) {
-      filteredCards = filteredCards.map((c) =>
-        applyCardChanges(c, metadata, customizations),
-      );
-    }
-
     let filters = [];
 
     if (systemFilter) filters.push(systemFilter);
@@ -608,11 +496,11 @@ const selectBaseListCards = createSelector(
 
     if (filterValues) {
       const cardTypeFilter = Object.values(filterValues).find(
-        (f) => f.type === "card_type",
+        (f: any) => f.type === "card_type",
       );
 
       if (cardTypeFilter) {
-        const value = cardTypeFilter.value as CardTypeFilter;
+        const value = (cardTypeFilter as any).value as CardTypeFilter;
 
         if (value === "player") {
           filters.push(not(filterEncounterCards));
@@ -629,11 +517,11 @@ const selectBaseListCards = createSelector(
 
     if (filterValues) {
       const ownershipFilter = Object.values(filterValues).find(
-        (f) => f.type === "ownership",
+        (f: any) => f.type === "ownership",
       );
 
       if (ownershipFilter) {
-        const value = ownershipFilter.value as OwnershipFilter;
+        const value = (ownershipFilter as any).value as OwnershipFilter;
 
         if (value !== "all") {
           filters.push((card: Card) => {
@@ -656,7 +544,10 @@ const selectBaseListCards = createSelector(
     }
 
     timeEnd("select_base_list_cards");
-    return { filteredCards, totalCardCount };
+    return { filteredCards, totalCardCount } as {
+      filteredCards: Card[];
+      totalCardCount: number;
+    };
   },
 );
 
@@ -787,7 +678,6 @@ export const selectCardRelationsResolver = createSelector(
         { metadata, lookupTables },
         collator,
         code,
-        undefined,
         true,
       );
     };
@@ -1466,12 +1356,11 @@ export const selectResolvedCardById = createSelector(
   selectLocaleSortingCollator,
   (_: StoreState, code: string) => code,
   (_: StoreState, __: string, resolvedDeck?: ResolvedDeck) => resolvedDeck,
-  (metadata, lookupTables, collator, code, resolvedDeck) => {
+  (metadata, lookupTables, collator, code, _resolvedDeck) => {
     return resolveCardWithRelations(
       { metadata, lookupTables },
       collator,
       code,
-      resolvedDeck?.customizations,
       true,
     );
   },

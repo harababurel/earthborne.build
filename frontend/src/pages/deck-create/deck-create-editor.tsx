@@ -1,38 +1,31 @@
 import type { Card } from "@arkham-build/shared";
-import type { TFunction } from "i18next";
 import { ArrowRightLeftIcon, Settings2Icon } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "wouter";
 import { LimitedCardPoolField } from "@/components/limited-card-pool/limited-card-pool-field";
 import { SealedDeckField } from "@/components/limited-card-pool/sealed-deck-field";
-import { ListCard } from "@/components/list-card/list-card";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { PageTitle } from "@/components/ui/page-title";
-import type { SelectOption } from "@/components/ui/select";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast.hooks";
 import { useStore } from "@/store";
-import { decodeSelections } from "@/store/lib/deck-meta";
-import type { CardWithRelations } from "@/store/lib/types";
 import {
   selectDeckCreateChecked,
   selectDeckCreateInvestigators,
 } from "@/store/selectors/deck-create";
 import { selectLimitedPoolPacks } from "@/store/selectors/lists";
 import type { StorageProvider } from "@/utils/constants";
-import { isEmpty } from "@/utils/is-empty";
 import { useGoBack } from "@/utils/use-go-back";
 import { useAccentColor } from "../../utils/use-accent-color";
-import { SelectionEditor } from "../deck-edit/editor/selection-editor";
 import css from "./deck-create.module.css";
 
 export function DeckCreateEditor() {
   const { t } = useTranslation();
 
   const deckCreate = useStore(selectDeckCreateChecked);
-  const { back, investigator } = useStore(selectDeckCreateInvestigators);
+  const { investigator } = useStore(selectDeckCreateInvestigators);
 
   const settings = useStore((state) => state.settings);
 
@@ -78,7 +71,7 @@ export function DeckCreateEditor() {
     [setTitle],
   );
 
-  const onInvestigatorChange = useCallback(
+  const _onInvestigatorChange = useCallback(
     (evt: React.ChangeEvent<HTMLSelectElement>) => {
       if (evt.target instanceof HTMLSelectElement) {
         const side = evt.target.getAttribute("data-side") as "front" | "back";
@@ -89,7 +82,7 @@ export function DeckCreateEditor() {
     [setInvestigatorCode],
   );
 
-  const onChangeSelection = useCallback(
+  const _onChangeSelection = useCallback(
     (evt: React.ChangeEvent<HTMLSelectElement>) => {
       if (evt.target instanceof HTMLSelectElement) {
         const key = evt.target.dataset.field;
@@ -108,7 +101,7 @@ export function DeckCreateEditor() {
     });
   }, [deckCreate.provider]);
 
-  const investigatorActionRenderer = useCallback(
+  const _investigatorActionRenderer = useCallback(
     (card: Card) => (
       <Button size="sm" onClick={() => setInvestigatorCode(card.code)}>
         <ArrowRightLeftIcon />
@@ -118,7 +111,6 @@ export function DeckCreateEditor() {
     [setInvestigatorCode, t],
   );
 
-  const selections = decodeSelections(back, deckCreate.selections);
   const cssVariables = useAccentColor(investigator.card);
 
   const storageProviderOptions = useMemo(
@@ -181,58 +173,6 @@ export function DeckCreateEditor() {
         />
       </Field>
 
-      {investigator.relations?.parallel && (
-        <>
-          <Field full padded>
-            <FieldLabel htmlFor="investigator-front">
-              {t("deck_edit.config.sides.investigator_front")}
-            </FieldLabel>
-            <Select
-              data-side="front"
-              data-testid="create-investigator-front"
-              name="investigator-front"
-              onChange={onInvestigatorChange}
-              options={getInvestigatorOptions(investigator, "front", t)}
-              required
-              value={deckCreate.investigatorFrontCode}
-            />
-          </Field>
-          <Field full padded>
-            <FieldLabel htmlFor="investigator-back">
-              {t("deck_edit.config.sides.investigator_back")}
-            </FieldLabel>
-            <Select
-              data-side="back"
-              data-testid="create-investigator-back"
-              name="investigator-back"
-              onChange={onInvestigatorChange}
-              options={getInvestigatorOptions(investigator, "back", t)}
-              required
-              value={deckCreate.investigatorBackCode}
-            />
-          </Field>
-        </>
-      )}
-
-      {selections && (
-        <SelectionEditor
-          onChangeSelection={onChangeSelection}
-          selections={selections}
-        />
-      )}
-
-      {!isEmpty(investigator.relations?.otherVersions) && (
-        <Field>
-          <FieldLabel>{t("deck_edit.config.version.title")}</FieldLabel>
-          <ListCard
-            card={investigator.relations.otherVersions[0].card}
-            size="sm"
-            omitBorders
-            renderCardExtra={investigatorActionRenderer}
-          />
-        </Field>
-      )}
-
       <DeckCreateCardPool investigator={investigator.card} />
 
       <nav className={css["editor-nav"]}>
@@ -249,23 +189,6 @@ export function DeckCreateEditor() {
       </nav>
     </div>
   );
-}
-
-function getInvestigatorOptions(
-  investigator: CardWithRelations,
-  type: "front" | "back",
-  t: TFunction,
-): SelectOption[] {
-  return [
-    {
-      value: investigator.card.code,
-      label: t(`deck_edit.config.sides.original_${type}`),
-    },
-    {
-      value: investigator.relations?.parallel?.card.code as string,
-      label: t(`deck_edit.config.sides.parallel_${type}`),
-    },
-  ];
 }
 
 function DeckCreateCardPool({ investigator }: { investigator: Card }) {

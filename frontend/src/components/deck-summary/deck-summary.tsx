@@ -9,10 +9,12 @@ import {
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
+import { useStore } from "@/store";
 import type { DeckValidationResult } from "@/store/lib/deck-validation";
 import { deckTags } from "@/store/lib/resolve-deck";
 import type { DeckSummary as DeckSummaryType } from "@/store/lib/types";
 import type { Id } from "@/store/schemas/deck.schema";
+import { selectMetadata } from "@/store/selectors/shared";
 import { displayAttribute, getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardThumbnail } from "../card-thumbnail";
@@ -57,10 +59,12 @@ export function DeckSummary(props: DeckSummaryProps) {
     ...rest
   } = props;
 
-  const backgroundCls = getCardColor(deck.investigatorBack.card, "background");
-  const borderCls = getCardColor(deck.investigatorBack.card, "border");
+  const metadata = useStore(selectMetadata);
+  const roleCard = metadata.cards[deck.role_code];
+  const backgroundCls = roleCard ? getCardColor(roleCard, "background") : "";
+  const borderCls = roleCard ? getCardColor(roleCard, "border") : "";
 
-  const card = deck.investigatorFront.card;
+  const card = roleCard;
 
   return (
     <article

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { GroupedVirtuosoHandle, ListRange } from "react-virtuoso";
 import { GroupedVirtuoso, Virtuoso } from "react-virtuoso";
 import { useStore } from "@/store";
-import { getDeckLimitOverride } from "@/store/lib/resolve-deck";
+
 import type { ListState } from "@/store/selectors/lists";
 import {
   selectCanCheckOwnership,
@@ -40,7 +40,7 @@ export function CardList(props: CardListImplementationProps) {
   const activeGroup = useRef<string | undefined>(undefined);
   const canCheckOwnerhip = useStore(selectCanCheckOwnership);
   const cardOwnedCount = useStore(selectCardOwnedCount);
-  const lookupTables = useStore(selectLookupTables);
+  const _lookupTables = useStore(selectLookupTables);
 
   const onScrollChange = useCallback(() => {
     setCurrentTop(-1);
@@ -154,11 +154,6 @@ export function CardList(props: CardListImplementationProps) {
     const itemProps = {
       listCardProps: {
         ...getListCardProps?.(card),
-        limitOverride: getDeckLimitOverride(
-          lookupTables,
-          resolvedDeck,
-          data.cards[index],
-        ),
         ownedCount: canCheckOwnerhip
           ? cardOwnedCount(data.cards[index])
           : undefined,

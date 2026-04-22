@@ -15,13 +15,11 @@ describe("data slice", () => {
     const mockState = {
       data: {
         decks: {
-          "1": { id: "1" } as Deck,
-          "2": { id: "2", next_deck: "1" } as Deck,
-          "3": { id: "3", next_deck: "2" } as Deck,
-          "4": { id: "4" } as Deck,
+          "1": { id: "1" } as unknown as Deck,
+          "4": { id: "4" } as unknown as Deck,
         },
         history: {
-          "1": ["2", "3"],
+          "1": [],
           "4": [],
         },
         folders: {},
@@ -33,18 +31,6 @@ describe("data slice", () => {
       store = await getMockStore();
     });
 
-    it("does not delete decks with upgrades", async () => {
-      store.setState(mockState);
-
-      try {
-        await store.getState().deleteDeck("2");
-      } catch (err) {
-        expect((err as Error).message).toMatchInlineSnapshot(
-          `"Cannot delete a deck that has upgrades."`,
-        );
-      }
-    });
-
     it("removes a deck from state", async () => {
       store.setState(mockState);
       await store.getState().deleteDeck("4");
@@ -54,21 +40,6 @@ describe("data slice", () => {
       expect(state.data.history["4"]).toBeUndefined();
       expect(state.data.decks["1"]).toBeDefined();
     });
-
-    it("removes deck and its upgrades from state", async () => {
-      store.setState(mockState);
-      await store.getState().deleteDeck("1");
-
-      const state = store.getState();
-
-      expect(state.data.decks).toEqual({
-        "4": { id: "4" },
-      });
-
-      expect(state.data.history).toEqual({
-        "4": [],
-      });
-    });
   });
 
   describe("actions.duplicateDeck", () => {
@@ -77,11 +48,10 @@ describe("data slice", () => {
         decks: {
           "1": {
             id: "1",
-            previous_deck: "2",
-          } as Deck,
+          } as unknown as Deck,
         },
         history: {
-          "1": ["2", "3"],
+          "1": [],
         },
         folders: {},
         deckFolders: {},
@@ -100,7 +70,6 @@ describe("data slice", () => {
 
       expect(state.data.decks[id]).toMatchObject({
         id,
-        previous_deck: null,
         version: "0.1",
       });
 

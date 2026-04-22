@@ -16,7 +16,6 @@ import type {
   DeckProperties,
   DeckPropertyName,
   DeckValidity,
-  RangeMinMax,
   SortOrder,
 } from "../slices/deck-collection.types";
 import type { MultiselectFilter } from "../slices/lists.types";
@@ -47,8 +46,7 @@ export const selectDeckFactionFilter = (state: StoreState) =>
   state.deckCollection.filters.faction;
 
 const filterDeckByFaction = (faction: string) => {
-  return (deck: DeckSummary) =>
-    deck.investigatorFront.card.energy_aspect === faction;
+  return (deck: DeckSummary) => deck.aspect_code === faction;
 };
 
 const makeDeckFactionFilter = (values: MultiselectFilter) => {
@@ -75,11 +73,7 @@ export const selectTagsChanges = createSelector(
 
 const filterDeckByCard = (cardCode: string, lookupTables: LookupTables) => {
   return (deck: DeckSummary) => {
-    const allCodes = [
-      ...Object.keys(deck.slots),
-      ...Object.keys(deck.sideSlots ?? {}),
-      ...Object.keys(deck.extraSlots ?? {}),
-    ];
+    const allCodes = [...Object.keys(deck.slots)];
 
     const duplicates = Object.keys(
       lookupTables.relations.duplicates[cardCode] ?? {},
@@ -161,39 +155,6 @@ const makeDeckValidityFilter = (value: Omit<DeckValidity, "all">) => {
 };
 
 // Exp Cost
-export const selectDecksMinMaxXpCost = createSelector(
-  selectLocalDeckSummaries,
-  (decks) => {
-    const minmax: RangeMinMax = decks.reduce<[number, number]>(
-      (acc, val) => {
-        const { xpRequired } = val.stats;
-        acc[0] = Math.min(acc[0], xpRequired);
-        acc[1] = Math.max(acc[1], xpRequired);
-        return acc;
-      },
-      [Number.POSITIVE_INFINITY, 0],
-    );
-    return minmax;
-  },
-);
-
-export const selectXpCostChanges = createSelector(
-  selectDeckFilters,
-  (filters) => {
-    const xpMinMax = filters.xpCost;
-    return xpMinMax
-      ? `${xpMinMax[0]}-${xpMinMax[1]} ${i18n.t("common.xp", { count: 2 })}`
-      : "";
-  },
-);
-
-const makeDeckXpCostFilter = (minmax: [number, number]) => {
-  return (deck: DeckSummary) => {
-    return (
-      deck.stats.xpRequired >= minmax[0] && deck.stats.xpRequired <= minmax[1]
-    );
-  };
-};
 
 const makeDeckProviderFilter = (values: StorageProvider[]) => {
   return (deck: DeckSummary) => {
@@ -256,14 +217,6 @@ const selectFilteringFunc = createSelector(
           break;
         }
 
-        case "xpCost": {
-          const currentFilter = filters[filter];
-          if (currentFilter) {
-            filterFuncs.push(makeDeckXpCostFilter(currentFilter));
-          }
-          break;
-        }
-
         case "provider": {
           const currentFilter = filters[filter];
           if (currentFilter) {
@@ -287,7 +240,7 @@ export const selectFactionsInLocalDecks = createSelector(
     const factionsSet = new Set<string>();
 
     for (const deck of decks) {
-      const aspect = deck.investigatorFront.card.energy_aspect;
+      const aspect = deck.aspect_code;
       if (aspect) factionsSet.add(aspect);
     }
 
@@ -318,7 +271,8 @@ const selectDecksFiltered = createSelector(
   selectLocalDeckSummaries,
   selectDeckSearchTerm,
   selectFilteringFunc,
-  (decks, searchTerm, filterFunc) => {
+  selectMetadata,
+  (decks, searchTerm, filterFunc, metadata) => {
     let decksToFilter: DeckSummary[];
 
     if (searchTerm) {
@@ -331,7 +285,7 @@ const selectDecksFiltered = createSelector(
         decksToFilter = decks.filter((deck) => {
           const text = [
             deck.name,
-            displayAttribute(deck.investigatorFront.card, "name"),
+            displayAttribute(metadata.cards[deck.role_code], "name"),
           ];
           return fuzzyMatch(text, needle);
         });
@@ -386,13 +340,6 @@ function makeDeckUpdatedSort(order: SortOrder) {
   ) => dateSort(a.date_update, b.date_update, order);
 }
 
-function makeXPSort(order: SortOrder) {
-  return (
-    a: { stats: { xpRequired: number } },
-    b: { stats: { xpRequired: number } },
-  ) => genericSort(a.stats.xpRequired, b.stats.xpRequired, order);
-}
-
 const selectDecksSortingFunc = createSelector(
   selectDecksSorting,
   (sortingInfo) => {
@@ -403,9 +350,7 @@ const selectDecksSortingFunc = createSelector(
       case "date_updated": {
         return makeDeckUpdatedSort(sortingInfo.order);
       }
-      case "xp": {
-        return makeXPSort(sortingInfo.order);
-      }
+
       case "date_created": {
         return makeDeckCreatedSort(sortingInfo.order);
       }
@@ -544,7 +489,6 @@ export const selectProviderChanges = createSelector(
 
 export const selectDeckFilterChanges = createSelector(
   selectCardsChanges,
-  selectXpCostChanges,
   selectDeckPropertiesChanges,
   selectTagsChanges,
   selectDeckFactionChanges,

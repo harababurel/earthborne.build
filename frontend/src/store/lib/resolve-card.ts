@@ -4,7 +4,7 @@ import type { StoreState } from "../slices";
 import { applyCardChanges } from "./card-edits";
 import type { LookupTables } from "./lookup-tables.types";
 import { makeSortFunction } from "./sorting";
-import type { CardWithRelations, Customizations, ResolvedCard } from "./types";
+import type { CardWithRelations, ResolvedCard } from "./types";
 
 /**
  * Given a card code, resolve the card and its relations for display.
@@ -13,7 +13,6 @@ export function resolveCardWithRelations<T extends boolean>(
   deps: Pick<StoreState, "metadata"> & { lookupTables: LookupTables },
   collator: Intl.Collator,
   code: string | undefined,
-  customizations?: Customizations,
   withRelations?: T,
 ): T extends true ? CardWithRelations | undefined : ResolvedCard | undefined {
   if (!code) return undefined;
@@ -21,7 +20,7 @@ export function resolveCardWithRelations<T extends boolean>(
   let card = deps.metadata.cards[code];
   if (!card) return undefined;
 
-  card = applyCardChanges(card, deps.metadata, customizations);
+  card = applyCardChanges(card, deps.metadata, undefined);
 
   const pack = deps.metadata.packs[card.pack_code];
   const type = deps.metadata.types[card.type_code];
@@ -44,7 +43,6 @@ export function resolveCardWithRelations<T extends boolean>(
         collator,
         "duplicates",
         card.code,
-        customizations,
         false,
       ),
       reprints: resolveRelationArray(
@@ -52,11 +50,9 @@ export function resolveCardWithRelations<T extends boolean>(
         collator,
         "reprints",
         card.code,
-        customizations,
         false,
       ),
       bound: resolveRelationArray(deps, collator, "bound", card.code),
-      bonded: resolveRelationArray(deps, collator, "bonded", card.code),
     };
   }
 
@@ -68,7 +64,6 @@ function resolveRelationArray(
   collator: Intl.Collator,
   key: keyof LookupTables["relations"],
   code: string,
-  customizations?: Customizations,
   _ignoreDuplicates = true,
 ): ResolvedCard[] {
   const { metadata, lookupTables } = deps;
@@ -77,13 +72,7 @@ function resolveRelationArray(
 
   const relations = relation[code]
     ? Object.keys(relation[code]).reduce<CardWithRelations[]>((acc, code) => {
-        const card = resolveCardWithRelations(
-          deps,
-          collator,
-          code,
-          customizations,
-          false,
-        );
+        const card = resolveCardWithRelations(deps, collator, code, false);
 
         if (card) {
           acc.push(card);

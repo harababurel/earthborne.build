@@ -1,6 +1,6 @@
 import type { Card } from "@arkham-build/shared";
 import { PlusIcon } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
@@ -8,13 +8,11 @@ import { Button } from "@/components/ui/button";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { ListLayoutNoSidebar } from "@/layouts/list-layout-no-sidebar";
 import { useStore } from "@/store";
-import type { CardWithRelations } from "@/store/lib/types";
 import { selectCardRelationsResolver } from "@/store/selectors/lists";
 import { selectActiveList } from "@/store/selectors/shared";
 import { displayAttribute } from "@/utils/card-utils";
 import { useAccentColor } from "@/utils/use-accent-color";
 import css from "./choose-investigator.module.css";
-import { SignatureLink } from "./signature-link";
 
 function DeckCreateChooseInvestigator() {
   const { t } = useTranslation();
@@ -22,7 +20,7 @@ function DeckCreateChooseInvestigator() {
 
   const setActiveList = useStore((state) => state.setActiveList);
 
-  const cardResolver = useStore(selectCardRelationsResolver);
+  const _cardResolver = useStore(selectCardRelationsResolver);
 
   const activeList = useStore(selectActiveList);
 
@@ -41,12 +39,10 @@ function DeckCreateChooseInvestigator() {
               </p>
             )
           : undefined,
-      renderCardAfter: (card: Card) => (
-        <ListcardExtra code={card.code} cardResolver={cardResolver} />
-      ),
+
       size: "investigator" as const,
     }),
-    [activeList?.display.viewMode, cardResolver],
+    [activeList?.display.viewMode],
   );
 
   if (activeListId !== "create_deck") return null;
@@ -60,29 +56,6 @@ function DeckCreateChooseInvestigator() {
         />
       </ListLayoutContextProvider>
     </CardModalProvider>
-  );
-}
-
-function ListcardExtra({
-  cardResolver,
-  code,
-}: {
-  cardResolver: (code: string) => CardWithRelations | undefined;
-  code: string;
-}) {
-  const signaturesRef = useRef<HTMLUListElement | null>(null);
-
-  const resolved = cardResolver(code);
-  const signatures = resolved?.relations?.requiredCards;
-
-  if (!signatures?.length) return null;
-
-  return (
-    <ul className={css["signatures"]} ref={signaturesRef}>
-      {signatures.map(({ card }) => (
-        <SignatureLink card={card} key={card.code} ref={signaturesRef} />
-      ))}
-    </ul>
   );
 }
 

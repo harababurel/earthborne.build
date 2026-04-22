@@ -14,7 +14,6 @@ import {
 import { selectCardWithRelations } from "@/store/selectors/card-view";
 import type { CardModalConfig } from "@/store/slices/ui.types";
 import {
-  canShowCardPoolExtension,
   deckCreateLink,
   isSpecialist,
   isStaticInvestigator,
@@ -27,8 +26,6 @@ import { useMedia } from "@/utils/use-media";
 import { Annotation } from "../annotations/annotation";
 import { Card } from "../card/card";
 import { CardSet } from "../cardset";
-import { AttachableCards } from "../deck-tools/attachable-cards";
-import { CardPoolExtension } from "../limited-card-pool/card-pool-extension";
 import { useResolvedDeck } from "../resolved-deck-context";
 import { Button } from "../ui/button";
 import { useDialogContextChecked } from "../ui/dialog.hooks";
@@ -36,7 +33,6 @@ import { HotkeyTooltip } from "../ui/hotkey";
 import { Modal, ModalActions, ModalBackdrop, ModalInner } from "../ui/modal";
 import css from "./card-modal.module.css";
 import { AnnotationEdit } from "./card-modal-annotation-edit";
-import { CardModalAttachmentQuantities } from "./card-modal-attachment-quantities";
 import { CardModalQuantities } from "./card-modal-quantities";
 import { CardPageLink } from "./card-page-link";
 import { SpecialistAccess, SpecialistInvestigators } from "./specialist";
@@ -100,12 +96,7 @@ export function CardModal(props: Props) {
 
   const showQuantities =
     !!ctx.resolvedDeck && cardWithRelations?.card.type_code !== "role";
-  const showExtraQuantities = ctx.resolvedDeck?.hasExtraDeck;
   const related = getRelatedCards(cardWithRelations);
-
-  const attachableDefinition = ctx.resolvedDeck?.availableAttachments.find(
-    (config) => config.code === cardWithRelations.card.code,
-  );
 
   const annotation = ctx.resolvedDeck?.annotations[cardWithRelations.card.code];
 
@@ -117,46 +108,24 @@ export function CardModal(props: Props) {
         onPrintingSelect={handlePrintingSelect}
         size={canRenderFull ? "full" : "compact"}
         slotCardFooter={
-          <>
-            {ctx.resolvedDeck &&
-              canShowCardPoolExtension(cardWithRelations.card) && (
-                <div className={css["related"]}>
-                  <CardPoolExtension
-                    canEdit={canEdit}
-                    card={cardWithRelations.card}
-                    deck={ctx.resolvedDeck}
-                    showLabel
-                  />
-                </div>
-              )}
-
-            {!!ctx.resolvedDeck &&
-              (canEdit ? (
-                <div className={css["related"]}>
-                  <AnnotationEdit
-                    cardCode={cardWithRelations.card.code}
-                    deckId={ctx.resolvedDeck.id}
-                    text={annotation}
-                  />
-                </div>
-              ) : (
-                annotation && (
-                  <div className={css["related"]}>
-                    <Annotation content={annotation} />
-                  </div>
-                )
-              ))}
-          </>
+          !!ctx.resolvedDeck &&
+          (canEdit ? (
+            <div className={css["related"]}>
+              <AnnotationEdit
+                cardCode={cardWithRelations.card.code}
+                deckId={ctx.resolvedDeck.id}
+                text={annotation}
+              />
+            </div>
+          ) : (
+            annotation && (
+              <div className={css["related"]}>
+                <Annotation content={annotation} />
+              </div>
+            )
+          ))
         }
       >
-        {ctx.resolvedDeck && !!attachableDefinition && (
-          <AttachableCards
-            card={cardWithRelations.card}
-            definition={attachableDefinition}
-            readonly={!canEdit}
-            resolvedDeck={ctx.resolvedDeck}
-          />
-        )}
         {/* ER has no customization system */}
       </Card>
       {!isEmpty(related) && (
@@ -246,13 +215,6 @@ export function CardModal(props: Props) {
                   card={cardWithRelations.card}
                   deck={ctx.resolvedDeck}
                   onCloseModal={onCloseModal}
-                  showExtraQuantities={showExtraQuantities}
-                />
-              )}
-              {!isEmpty(ctx.resolvedDeck?.availableAttachments) && (
-                <CardModalAttachmentQuantities
-                  card={cardWithRelations.card}
-                  resolvedDeck={ctx.resolvedDeck}
                 />
               )}
             </div>

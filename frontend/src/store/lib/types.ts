@@ -1,39 +1,9 @@
-import type { Card, SealedDeckResponse } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
 import type { Cycle } from "../schemas/cycle.schema";
 import type { Deck } from "../schemas/deck.schema";
 import type { EncounterSet } from "../schemas/encounter-set.schema";
 import type { SubType, Type } from "../schemas/metadata.schema";
 import type { Pack } from "../schemas/pack.schema";
-import type { AttachmentQuantities } from "../slices/deck-edits.types";
-
-// Stub type — ER has no attachment mechanic; kept for call-site compatibility.
-export type Attachments = {
-  code: string;
-  cards: Record<string, { quantity: number }>;
-  limit?: number;
-  traits?: string[];
-  filters?: Array<
-    {
-      attribute: string;
-      value: string | number | null | undefined;
-      operator?: "=" | "!=";
-    } & Record<string, unknown>
-  >;
-  requiredCards?: Record<string, number>;
-  name?: string;
-  icon?: string;
-  targetSize?: number;
-};
-
-// Stub type — ER has no OptionSelect mechanic; kept for call-site compatibility.
-export type OptionSelect = {
-  id: string;
-  name: string;
-};
-
-export function isOptionSelect(x: unknown): x is OptionSelect {
-  return typeof x === "object" && x != null && "id" in x;
-}
 
 export type Coded = {
   code: string;
@@ -52,141 +22,36 @@ export type ResolvedCard = {
 export type CardWithRelations = ResolvedCard & {
   relations?: {
     bound?: ResolvedCard[];
-    bonded?: ResolvedCard[];
-
-    restrictedTo?: ResolvedCard[];
-    parallel?: ResolvedCard;
-    base?: ResolvedCard;
-
-    advanced?: ResolvedCard[];
-    replacement?: ResolvedCard[];
-    requiredCards?: ResolvedCard[];
-    sideDeckRequiredCards?: ResolvedCard[];
-    parallelCards?: ResolvedCard[];
     duplicates?: ResolvedCard[];
     reprints?: ResolvedCard[];
     otherVersions?: ResolvedCard[];
-
-    level?: ResolvedCard[];
-
-    // For signature -> signature navigation.
-    otherSignatures?: ResolvedCard[];
   };
 };
 
-export type Customization = {
-  index: number;
-  xp_spent: number;
-  selections?: string;
-};
-
-export type Customizations = Record<
-  string,
-  Record<number | string, Customization>
->;
-
 export type DeckMeta = {
-  alternate_back?: string | null;
-  alternate_front?: string | null;
-  buildql_deck_options_override?: string | null;
-  card_pool?: string | null;
-  deck_size_selected?: string | null;
-  extra_deck?: string | null;
-  hidden_slots?: unknown;
-  faction_1?: string | null;
-  faction_2?: string | null;
-  faction_selected?: string | null;
-  option_selected?: string | null;
-  sealed_deck_name?: string | null;
-  sealed_deck?: string | null;
-  transform_into?: string | null;
   banner_url?: string | null;
   intro_md?: string | null;
 } & {
-  [key in `cus_${string}`]: string | null;
-} & {
-  [key in `attachments_${string}`]: string | null;
-} & {
   [key in `annotation_${string}`]: string | null;
-} & {
-  [key in `card_pool_extension_${string}`]: string | null;
 };
-
-type DeckSizeSelection = {
-  type: "deckSize";
-  value: number;
-  options: string[];
-  name: string;
-  accessor: string;
-};
-
-type FactionSelection = {
-  type: "faction";
-  value?: string;
-  options: string[];
-  name: string;
-  accessor: string;
-};
-
-type OptionSelection = {
-  type: "option";
-  value?: OptionSelect;
-  options: OptionSelect[];
-  name: string;
-  accessor: string;
-};
-
-export type Selection = OptionSelection | FactionSelection | DeckSizeSelection;
-
-// selections, keyed by their `id`, or if not present their `name`.
-export type Selections = Record<string, Selection>;
 
 export type DeckCharts = {
   costCurve: Map<number, number>;
-  skillIcons: Map<string, number>;
-  factions: Map<string, number>;
+  approachIcons: Map<string, number>;
+  aspects: Map<string, number>;
   traits: Map<string, number>;
 };
 
 export type Annotations = Record<string, string | null>;
 
-export type ResolvedDeck = Omit<Deck, "sideSlots"> & {
-  // ER fields threaded through from Deck (already on Deck via spread, typed here for clarity)
-  background: string | null | undefined;
-  specialty: string | null | undefined;
-  aspect_code: string | null | undefined;
-  role_code: string | null | undefined;
+export type ResolvedDeck = Deck & {
   annotations: Annotations;
-  attachments: AttachmentQuantities | undefined;
-  availableAttachments: Attachments[];
-  bondedSlots: Record<string, number>;
-  sideSlots: Record<string, number> | null;
-  extraSlots: Record<string, number> | null;
-  exileSlots: Record<string, number>;
   cards: {
-    bondedSlots: Record<string, ResolvedCard>;
-    exileSlots: Record<string, ResolvedCard>;
-    extraSlots: Record<string, ResolvedCard>;
-    ignoreDeckLimitSlots: Record<string, ResolvedCard>;
-    investigator: CardWithRelations;
-    sideSlots: Record<string, ResolvedCard>;
     slots: Record<string, ResolvedCard>;
   };
-  cardPool?: string[];
-  metaParsed: DeckMeta;
-  customizations?: Customizations;
-  investigatorFront: CardWithRelations;
-  investigatorBack: CardWithRelations;
-  hasExtraDeck: boolean;
-  hasReplacements: boolean;
-  hasParallel: boolean;
-  otherInvestigatorVersion?: ResolvedCard;
   originalDeck: Deck;
-  sealedDeck?: SealedDeckResponse;
-  selections?: Selections;
   shared: boolean;
   stats: {
-    xpRequired: number;
     deckSize: number;
     deckSizeTotal: number;
     charts: DeckCharts;
@@ -194,7 +59,7 @@ export type ResolvedDeck = Omit<Deck, "sideSlots"> & {
 };
 
 export function isResolvedDeck(a: unknown): a is ResolvedDeck {
-  return (a as ResolvedDeck)?.investigatorFront != null;
+  return (a as ResolvedDeck)?.role_code != null;
 }
 
 export type DeckSummary = Pick<
@@ -206,21 +71,11 @@ export type DeckSummary = Pick<
   | "problem"
   | "source"
   | "tags"
-  | "xp"
-  | "xp_adjustment"
   | "slots"
+  | "role_code"
+  | "aspect_code"
 > &
-  Pick<
-    ResolvedDeck,
-    | "investigatorFront"
-    | "investigatorBack"
-    | "cardPool"
-    | "extraSlots"
-    | "hasParallel"
-    | "sealedDeck"
-    | "shared"
-    | "sideSlots"
-  > & {
+  Pick<ResolvedDeck, "shared"> & {
     stats: Omit<ResolvedDeck["stats"], "charts">;
   };
 

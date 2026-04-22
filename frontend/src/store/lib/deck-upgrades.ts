@@ -7,8 +7,6 @@ import type { ResolvedDeck } from "./types";
 
 type DeckChanges = {
   slots: Record<string, number>;
-  extraSlots: Record<string, number>;
-  customizations: Record<string, never[]>;
 };
 
 // Stub type — ER has no XP upgrade modifiers.
@@ -58,8 +56,6 @@ function deckChanges(prev: ResolvedDeck, next: ResolvedDeck): DeckChanges {
 
   return {
     slots: slotDiff(prev.slots ?? {}, next.slots ?? {}),
-    extraSlots: slotDiff(prev.extraSlots ?? {}, next.extraSlots ?? {}),
-    customizations: {},
   };
 }
 

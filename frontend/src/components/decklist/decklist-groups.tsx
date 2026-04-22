@@ -1,16 +1,13 @@
 import type { Card } from "@arkham-build/shared";
 import { Fragment, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import {
   type DeckGrouping,
   isGroupCollapsed,
   resolveParents,
   resolveQuantities,
-  resolveXP,
 } from "@/store/lib/deck-grouping";
 import { type GroupingResult, NONE } from "@/store/lib/grouping";
-import { getDeckLimitOverride } from "@/store/lib/resolve-deck";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { Slots } from "@/store/schemas/deck.schema";
 import {
@@ -30,7 +27,7 @@ import { CardGridItem } from "../card-list/card-grid";
 import { GroupLabel } from "../card-list/grouphead";
 import type { FilteredListCardPropsGetter } from "../card-list/types";
 import { CardScan } from "../card-scan";
-import { CustomizableSheet } from "../customizable-sheet";
+
 import { ListCard } from "../list-card/list-card";
 import css from "./decklist-groups.module.css";
 
@@ -46,7 +43,7 @@ export function DecklistGroup(props: DecklistGroupsProps) {
   const { deck, grouping, getListCardProps, viewMode } = props;
 
   const metadata = useStore(selectMetadata);
-  const lookupTables = useStore(selectLookupTables);
+  const _lookupTables = useStore(selectLookupTables);
   const canCheckOwnership = useStore(selectCanCheckOwnership);
   const forbiddenCards = useStore((state) => selectForbiddenCards(state, deck));
   const cardsNotInLimitedPool = useStore((state) =>
@@ -55,7 +52,6 @@ export function DecklistGroup(props: DecklistGroupsProps) {
   const cardOwnedCount = useStore(selectCardOwnedCount);
 
   const quantities = resolveQuantities(grouping);
-  const xp = resolveXP(grouping);
 
   const seenParents = new Set<string>();
 
@@ -88,9 +84,6 @@ export function DecklistGroup(props: DecklistGroupsProps) {
                       metadata={metadata}
                     />
                     <GroupQuantity quantity={quantities.get(parent.key) ?? 0} />
-                    {props.showXP && (
-                      <GroupExtraInfo text={`${xp.get(parent.key) ?? 0}`} />
-                    )}
                   </h2>
                 ),
             )}
@@ -136,12 +129,6 @@ export function DecklistGroup(props: DecklistGroupsProps) {
                     }
                     card={card}
                     isRemoved={grouping.quantities?.[card.code] === 0}
-                    isIgnored={deck.ignoreDeckLimitSlots?.[card.code]}
-                    limitOverride={getDeckLimitOverride(
-                      lookupTables,
-                      deck,
-                      card,
-                    )}
                     key={card.code}
                     omitBorders
                     onChangeCardQuantity={
@@ -170,7 +157,7 @@ function Scans(props: {
   group: GroupingResult;
   getListCardProps?: FilteredListCardPropsGetter;
 }) {
-  const { deck, getListCardProps, group, grouping } = props;
+  const { getListCardProps, group, grouping } = props;
 
   const styles = useMemo(
     () =>
@@ -193,15 +180,6 @@ function Scans(props: {
               getListCardProps={getListCardProps}
             />
           </li>
-          {false && (
-            /* ER has no customizations */ <li>
-              <figure className={css["scan"]}>
-                <div className={css["scan-images"]}>
-                  <CustomizableSheet card={card} deck={deck} />
-                </div>
-              </figure>
-            </li>
-          )}
         </Fragment>
       ))}
     </ol>
@@ -251,14 +229,4 @@ function Scan(props: {
 }
 function GroupQuantity(props: { quantity: number }) {
   return <span className={css["group-quantity"]}>{props.quantity}</span>;
-}
-
-function GroupExtraInfo(props: { text: string }) {
-  const { t } = useTranslation();
-
-  return (
-    <span className={css["group-extra-info"]}>
-      ({`${props.text} ${t("common.xp")}`})
-    </span>
-  );
 }

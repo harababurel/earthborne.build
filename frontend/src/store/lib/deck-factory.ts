@@ -3,10 +3,12 @@ import { randomId } from "@/utils/crypto";
 import i18n from "@/utils/i18n";
 
 type Payload = {
-  investigator_code: string;
-  investigator_name: string;
   name: string;
   slots: Record<string, number>;
+  aspect_code: string;
+  role_code: string;
+  background: string;
+  specialty: string;
 } & Partial<Omit<Deck, "id" | "date_creation" | "date_update">>;
 
 export function createDeck(values: Payload): Deck {
@@ -18,16 +20,8 @@ export function createDeck(values: Payload): Deck {
     date_update: timestamp,
     description_md: "",
     meta: "",
-    ignoreDeckLimitSlots: {},
-    sideSlots: {},
-    next_deck: null,
-    previous_deck: null,
     tags: "",
     version: "0.1",
-    xp: null,
-    xp_spent: null,
-    exile_string: null,
-    xp_adjustment: null,
     ...values,
   };
 }
@@ -45,13 +39,7 @@ export function cloneDeck(deck: Deck): Deck {
     name: `(Copy) ${deck.name}`,
     date_creation: now,
     date_update: now,
-    exile_string: null,
-    next_deck: null,
-    previous_deck: null,
     version: "0.1",
     source: undefined,
-    xp: null,
-    xp_adjustment: null,
-    xp_spent: null,
   };
 }

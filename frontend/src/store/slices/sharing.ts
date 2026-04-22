@@ -3,13 +3,7 @@ import { assert } from "@/utils/assert";
 import { formatDeckImport, formatDeckShare } from "../lib/deck-io";
 import { dehydrate } from "../persist";
 import { type Deck, isDeck } from "../schemas/deck.schema";
-import { selectDeckHistory } from "../selectors/decks";
-import {
-  selectClientId,
-  selectLocaleSortingCollator,
-  selectLookupTables,
-  selectMetadata,
-} from "../selectors/shared";
+import { selectClientId } from "../selectors/shared";
 import { createShare, deleteShare, updateShare } from "../services/queries";
 import type { StoreState } from ".";
 import type { SharingSlice } from "./sharing.types";
@@ -36,23 +30,7 @@ export const createSharingSlice: StateCreator<
     const deck = state.data.decks[id];
     assert(deck, `Deck with id ${id} not found.`);
 
-    const previousDeckId = deck.previous_deck;
-    const previousDeckShared =
-      previousDeckId && !!state.sharing.decks[previousDeckId];
-
-    await createShare(
-      selectClientId(state),
-      formatDeckShare(deck, previousDeckShared ? previousDeckId : null),
-      selectDeckHistory(
-        {
-          ...state,
-          metadata: selectMetadata(state),
-        },
-        selectLookupTables(state),
-        selectLocaleSortingCollator(state),
-        deck,
-      ),
-    );
+    await createShare(selectClientId(state), formatDeckShare(deck), []);
 
     set((prev) => ({
       sharing: {
@@ -75,15 +53,7 @@ export const createSharingSlice: StateCreator<
       selectClientId(state),
       deck.id.toString(),
       formatDeckShare(deck),
-      selectDeckHistory(
-        {
-          ...state,
-          metadata: selectMetadata(state),
-        },
-        selectLookupTables(state),
-        selectLocaleSortingCollator(state),
-        deck,
-      ),
+      [],
     );
 
     set((prev) => ({

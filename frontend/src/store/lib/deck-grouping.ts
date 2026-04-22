@@ -1,5 +1,4 @@
-import { type Card, countExperience } from "@arkham-build/shared";
-import type { Slots } from "@/store/schemas/deck.schema";
+import type { Card } from "@arkham-build/shared";
 import { isEmpty } from "@/utils/is-empty";
 import type { Metadata } from "../slices/metadata.types";
 import type { DecklistConfig } from "../slices/settings.types";
@@ -12,7 +11,7 @@ import {
 import { makeSortFunction } from "./sorting";
 import type { ResolvedDeck } from "./types";
 
-const SLOT_KEYS = ["slots", "sideSlots", "extraSlots", "bondedSlots"] as const;
+const SLOT_KEYS = ["slots"] as const;
 
 type SlotKey = (typeof SLOT_KEYS)[number];
 
@@ -20,7 +19,6 @@ export type DeckGrouping = GroupedCards & {
   id: string;
   static: boolean;
   quantities: Record<string, number>;
-  ignoredQuantities?: Slots | null;
 };
 
 type Groupings = Partial<{
@@ -56,11 +54,7 @@ export function groupDeckCards(
 
     grouped.id = key;
     grouped.quantities = quantities;
-    grouped.static = key === "bondedSlots";
-
-    if (grouped.id === "slots") {
-      grouped.ignoredQuantities = resolvedDeck.ignoreDeckLimitSlots;
-    }
+    grouped.static = false;
 
     acc[key] = grouped;
     return acc;
@@ -73,13 +67,6 @@ export function countGroupRows(grouping: DeckGrouping) {
 
 function countGroup(cards: Card[], quantities?: Record<string, number>) {
   return cards.reduce((acc, card) => acc + (quantities?.[card.code] ?? 0), 0);
-}
-
-function countXPGroup(cards: Card[], quantities?: Record<string, number>) {
-  return cards.reduce(
-    (acc, card) => acc + countExperience(card, quantities?.[card.code] ?? 0),
-    0,
-  );
 }
 
 export function resolveParents(grouping: DeckGrouping, group: GroupingResult) {
@@ -111,24 +98,6 @@ export function resolveQuantities(grouping: DeckGrouping) {
   }
 
   return quantities;
-}
-
-export function resolveXP(grouping: DeckGrouping) {
-  const xp = new Map<string, number>();
-
-  for (const group of grouping.data) {
-    const xpGroup = countXPGroup(group.cards, grouping.quantities);
-    xp.set(group.key, xpGroup);
-
-    const parents = resolveParents(grouping, group);
-
-    for (const parent of parents) {
-      const parentQuantity = xp.get(parent.key) ?? 0;
-      xp.set(parent.key, parentQuantity + xpGroup);
-    }
-  }
-
-  return xp;
 }
 
 export function isGroupCollapsed(group: GroupingResult) {

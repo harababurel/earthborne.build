@@ -3,11 +3,10 @@ import {
   type DeckValidationResult,
   validateDeck,
 } from "@/store/lib/deck-validation";
-import type { Deck, DeckProblem, Id } from "@/store/schemas/deck.schema";
+import type { Deck, DeckProblem } from "@/store/schemas/deck.schema";
 import type { StoreState } from "@/store/slices";
 import { displayAttribute } from "@/utils/card-utils";
 import { randomId } from "@/utils/crypto";
-import { formatDeckOptionString } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
 import { isEmpty } from "@/utils/is-empty";
 import {
@@ -27,7 +26,7 @@ import {
 import { getGroupingKeyLabel } from "./grouping";
 import { resolveDeck } from "./resolve-deck";
 import { makeSortFunction } from "./sorting";
-import type { Customizations, ResolvedDeck } from "./types";
+import type { ResolvedDeck } from "./types";
 
 export function formatDeckImport(
   state: StoreState,
@@ -74,22 +73,12 @@ export function formatDeckImport(
       type === "decklist"
         ? (deck.tags?.replaceAll(", ", " ") ?? null)
         : deck.tags,
-    previous_deck: null,
-    next_deck: null,
-    xp: null,
-    xp_adjustment: null,
-    xp_spent: null,
   };
 }
 
-export function formatDeckShare(
-  _deck: Deck,
-  previousDeck: Id | null = null,
-): Deck {
+export function formatDeckShare(_deck: Deck): Deck {
   const deck = structuredClone(_deck);
-  deck.previous_deck = previousDeck;
   deck.source = undefined;
-  deck.next_deck = null;
   return deck;
 }
 
@@ -109,11 +98,11 @@ export function mapValidationToProblem(
     case "INVALID_CARD_COUNT":
       return "too_many_copies";
     case "INVALID_DECK_OPTION":
-      return "deck_options_limit";
+      return "invalid_cards";
     case "FORBIDDEN":
       return "invalid_cards";
     default:
-      return "investigator";
+      return null;
   }
 }
 
@@ -122,49 +111,15 @@ export function formatDeckAsText(state: StoreState, deck: ResolvedDeck) {
   let text = "";
 
   const t = i18n.t;
+  const metadata = selectMetadata(state);
 
   const investigatorName = displayAttribute(
-    deck.cards.investigator.card,
+    metadata.cards[deck.role_code],
     "name",
   );
 
   text += `# ${deck.name}\n\n`;
   text += `${t("common.type.investigator")}: ${investigatorName}  \n`;
-
-  if (deck.hasParallel) {
-    const front =
-      deck.cards.investigator.card.code === deck.investigatorFront.card.code
-        ? t("deck_edit.config.sides.original_front")
-        : t("deck_edit.config.sides.parallel_front");
-
-    const back =
-      deck.cards.investigator.card.code === deck.investigatorBack.card.code
-        ? t("deck_edit.config.sides.original_back")
-        : t("deck_edit.config.sides.parallel_back");
-
-    text += `${t("common.parallel")}: ${front}, ${back}  \n`;
-  }
-
-  if (deck.selections) {
-    for (const selection of Object.values(deck.selections)) {
-      const value = selection.value;
-
-      let str = t("common.none");
-      if (value) {
-        if (selection.type === "faction") {
-          str = t(`common.factions.${value}`);
-        } else if (selection.type === "option") {
-          str = formatDeckOptionString((value as { name: string }).name);
-        } else {
-          str = value as string;
-        }
-      }
-
-      text += `${formatDeckOptionString(selection.name)}: ${str}  \n`;
-    }
-  }
-
-  text += `\n${t("common.xp")}: ${deck.stats.xpRequired}  \n`;
 
   const groups = groupDeckCards(
     selectMetadata(state),
@@ -174,15 +129,7 @@ export function formatDeckAsText(state: StoreState, deck: ResolvedDeck) {
   );
 
   if (groups.slots && !isEmpty(deck.slots)) {
-    text += `\n## ${t("common.decks.slots")}\n\n${formatGrouping(state, groups.slots, deck.slots, deck.customizations)}`;
-  }
-
-  if (groups.sideSlots && !isEmpty(deck.sideSlots)) {
-    text += `\n## ${t("common.decks.sideSlots")}\n\n${formatGrouping(state, groups.sideSlots, deck.sideSlots, {})}`;
-  }
-
-  if (groups.extraSlots && deck.extraSlots) {
-    text += `## ${t("common.decks.extraSlots")}\n\n${formatGrouping(state, groups.extraSlots, deck.extraSlots, {})}`;
+    text += `\n## ${t("common.decks.slots")}\n\n${formatGrouping(state, groups.slots, deck.slots)}`;
   }
 
   return text;
@@ -192,7 +139,6 @@ function formatGrouping(
   state: StoreState,
   grouping: DeckGrouping,
   slots: { [code: string]: number },
-  customizations?: Customizations,
 ) {
   let text = "";
 
@@ -219,7 +165,7 @@ function formatGrouping(
       text += `_${getGroupingKeyLabel(type, key, metadata)}_ (${quantities.get(group.key) ?? 0})  \n`;
     }
 
-    text += formatGroupAsText(state, group.cards, slots, customizations);
+    text += formatGroupAsText(state, group.cards, slots);
     if (i < grouping.data.length - 1) text += "\n";
   });
 
@@ -230,7 +176,6 @@ function formatGroupAsText(
   state: StoreState,
   data: Card[],
   quantities: { [code: string]: number },
-  customizations: Customizations | undefined,
 ) {
   if (!data.length) return "";
 
@@ -244,7 +189,7 @@ function formatGroupAsText(
 
   const cards = [...data]
     .sort(sortFn)
-    .map((c) => formatCardAsText(state, c, quantities, customizations))
+    .map((c) => formatCardAsText(state, c, quantities))
     .join("\n");
 
   return `${cards}\n`;
@@ -254,7 +199,6 @@ function formatCardAsText(
   _state: StoreState,
   card: Card,
   quantities: { [code: string]: number },
-  _customizations: Customizations | undefined,
 ) {
   const name = displayAttribute(card, "name");
 
@@ -268,21 +212,15 @@ function isApiDeckKey(key: string): key is keyof Deck {
     "date_creation",
     "date_update",
     "description_md",
-    "exile_string",
-    "ignoreDeckLimitSlots",
     "id",
-    "investigator_code",
-    "meta",
     "name",
-    "next_deck",
-    "previous_deck",
     "problem",
-    "sideSlots",
     "slots",
     "tags",
     "version",
-    "xp_adjustment",
-    "xp_spent",
-    "xp",
+    "aspect_code",
+    "role_code",
+    "background",
+    "specialty",
   ].includes(key);
 }

@@ -12,7 +12,6 @@ import { PageTitle } from "@/components/ui/page-title";
 import { useRestingTooltip } from "@/components/ui/tooltip.hooks";
 import { CardViewCards } from "@/pages/card-view/card-view-cards";
 import { useStore } from "@/store";
-import type { CardWithRelations } from "@/store/lib/types";
 import { selectCardWithRelations } from "@/store/selectors/card-view";
 import {
   type Printing as PrintingT,
@@ -51,9 +50,6 @@ function CardView() {
     isInvestigator && !isStaticInvestigator(cardWithRelations.card);
 
   const deckbuildable = !isInvestigator;
-
-  const parallel = (cardWithRelations as CardWithRelations).relations?.parallel
-    ?.card;
 
   return (
     <CardModalProvider>
@@ -94,44 +90,18 @@ function CardView() {
             {(deckbuildable || isInvestigator) && (
               <SidebarSection title={t("card_view.section_deckbuilding")}>
                 {isBuildableInvestigator && (
-                  <>
-                    <Link
-                      asChild
-                      href={`/card/${cardWithRelations.card.code}/usable_cards`}
-                    >
-                      <Button size="full" data-testid="usable-cards" as="a">
-                        <i className="icon-cards" />
-                        {t("card_view.actions.usable_by", {
-                          prefix: "",
-                          name: displayAttribute(
-                            cardWithRelations.card,
-                            "name",
-                          ),
-                        })}
-                      </Button>
-                    </Link>
-                    {parallel && (
-                      <Link
-                        asChild
-                        href={`/card/${parallel.code}/usable_cards`}
-                      >
-                        <Button
-                          size="full"
-                          data-testid="usable-cards-parallel"
-                          as="a"
-                        >
-                          <i className="icon-cards" />
-                          {t("card_view.actions.usable_by", {
-                            prefix: `${t("common.parallel")} `,
-                            name: displayAttribute(
-                              cardWithRelations.card,
-                              "name",
-                            ),
-                          })}
-                        </Button>
-                      </Link>
-                    )}
-                  </>
+                  <Link
+                    asChild
+                    href={`/card/${cardWithRelations.card.code}/usable_cards`}
+                  >
+                    <Button size="full" data-testid="usable-cards" as="a">
+                      <i className="icon-cards" />
+                      {t("card_view.actions.usable_by", {
+                        prefix: "",
+                        name: displayAttribute(cardWithRelations.card, "name"),
+                      })}
+                    </Button>
+                  </Link>
                 )}
                 {deckbuildable && <UsableBy card={cardWithRelations.card} />}
               </SidebarSection>

@@ -11,8 +11,8 @@ export type ChartableData<T extends string | number = number> = {
 export function emptyDeckCharts(): DeckCharts {
   return {
     costCurve: new Map(),
-    skillIcons: new Map(),
-    factions: new Map(ASPECT_ORDER.map((aspect) => [aspect, 0] as const)),
+    approachIcons: new Map(),
+    aspects: new Map(ASPECT_ORDER.map((aspect) => [aspect, 0] as const)),
     traits: new Map(),
   };
 }
@@ -31,8 +31,8 @@ export function addCardToDeckCharts(
 
   // Aspect requirements
   if (card.aspect_requirement_type) {
-    const entry = accumulator.factions.get(card.aspect_requirement_type) ?? 0;
-    accumulator.factions.set(card.aspect_requirement_type, entry + quantity);
+    const entry = accumulator.aspects.get(card.aspect_requirement_type) ?? 0;
+    accumulator.aspects.set(card.aspect_requirement_type, entry + quantity);
   }
 
   // Traits

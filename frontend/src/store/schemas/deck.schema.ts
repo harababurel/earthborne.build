@@ -11,12 +11,10 @@ const DeckProblemSchema = z.enum([
   "too_many_cards",
   "too_many_copies",
   "invalid_cards",
-  "deck_options_limit",
-  "investigator",
 ]);
 export type DeckProblem = z.infer<typeof DeckProblemSchema>;
 
-const SafeSlotsSchema = z.preprocess(
+const _SafeSlotsSchema = z.preprocess(
   (val) => (Array.isArray(val) ? {} : val),
   SlotsSchema.nullish(),
 );
@@ -25,31 +23,21 @@ export const DeckSchema = z.object({
   date_creation: z.string(),
   date_update: z.string(),
   description_md: z.string(),
-  exile_string: z.string().nullish(),
-  ignoreDeckLimitSlots: SafeSlotsSchema,
-  id: idSchema,
-  investigator_code: z.string(),
-  investigator_name: z.string().nullish(),
   meta: z.string(),
+  id: idSchema,
   name: z.string(),
-  next_deck: idSchema.nullish(),
-  previous_deck: idSchema.nullish(),
   problem: z.union([DeckProblemSchema, z.string()]).nullish(),
-  sideSlots: SafeSlotsSchema,
   slots: SlotsSchema,
   source: z.string().nullish(),
   tags: z.string(),
   user_id: z.number().nullish(),
   version: z.string(),
-  xp_adjustment: z.number().nullish(),
-  xp_spent: z.number().nullish(),
-  xp: z.number().nullish(),
 
   // ER-specific fields — set during deck creation and persisted with the deck.
-  aspect_code: z.string().nullish(),
-  role_code: z.string().nullish(),
-  background: z.string().nullish(),
-  specialty: z.string().nullish(),
+  aspect_code: z.string(),
+  role_code: z.string(),
+  background: z.string(),
+  specialty: z.string(),
 });
 
 export type Deck = z.infer<typeof DeckSchema>;

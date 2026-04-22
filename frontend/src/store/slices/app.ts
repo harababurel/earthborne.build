@@ -1,30 +1,19 @@
 import type { StateCreator } from "zustand";
 import { applyDeckEdits, getChangeRecord } from "@/store/lib/deck-edits";
 import { createDeck } from "@/store/lib/deck-factory";
-import type { Deck } from "@/store/schemas/deck.schema";
 
 import { assert } from "@/utils/assert";
-import { decodeExileSlots } from "@/utils/card-utils";
-import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { randomId } from "@/utils/crypto";
 import { download } from "@/utils/download";
 import { time, timeEnd } from "@/utils/time";
 import { prepareBackup, restoreBackup } from "../lib/backup";
-import { applyCardChanges } from "../lib/card-edits";
 import { mapValidationToProblem } from "../lib/deck-io";
-import {
-  decodeDeckMeta,
-  encodeCardPool,
-  encodeSealedDeck,
-} from "../lib/deck-meta";
 import { applyLocalData } from "../lib/local-data";
 import { mappedByCode } from "../lib/metadata-utils";
 import { resolveDeck } from "../lib/resolve-deck";
-import { decodeExtraSlots, encodeExtraSlots } from "../lib/slots";
-import type { DeckMeta } from "../lib/types";
 import { dehydrate, hydrate } from "../persist";
 import { selectDeckCreateCardSets } from "../selectors/deck-create";
-import { selectDeckValid, selectLatestUpgrade } from "../selectors/decks";
+import { selectDeckValid } from "../selectors/decks";
 import {
   selectLocaleSortingCollator,
   selectLookupTables,
@@ -147,35 +136,13 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
   },
   async createDeck() {
     const state = get();
-    const metadata = selectMetadata(state);
+    const _metadata = selectMetadata(state);
 
     assert(state.deckCreate, "DeckCreate state must be initialized.");
 
-    const extraSlots: Record<string, number> = {};
-    const meta: DeckMeta = {};
     const slots: Record<string, number> = {};
 
-    const { investigatorCode, investigatorFrontCode, investigatorBackCode } =
-      state.deckCreate;
-
-    if (investigatorCode !== investigatorFrontCode) {
-      meta.alternate_front = investigatorFrontCode;
-    }
-
-    if (investigatorCode !== investigatorBackCode) {
-      meta.alternate_back = investigatorBackCode;
-    }
-
-    const back = applyCardChanges(
-      metadata.cards[investigatorBackCode],
-      metadata,
-      undefined,
-    );
-
-    for (const [key, value] of Object.entries(state.deckCreate.selections)) {
-      meta[key as keyof Omit<DeckMeta, "fan_made_content" | "hidden_slots">] =
-        value;
-    }
+    const { investigatorCode } = state.deckCreate;
 
     const cardSets = selectDeckCreateCardSets(state);
 
@@ -189,34 +156,17 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
         if (!quantity) continue;
 
-        if (set.id === "sideDeckRequiredCards") {
-          extraSlots[card.code] = quantity;
-        } else {
-          slots[card.code] = quantity;
-        }
+        slots[card.code] = quantity;
       }
     }
 
-    if (Object.keys(extraSlots).length) {
-      meta.extra_deck = encodeExtraSlots(extraSlots);
-    }
-
-    const cardPool = state.deckCreate.cardPool ?? [];
-    if (cardPool.length) {
-      meta.card_pool = encodeCardPool(cardPool);
-    }
-
-    const sealedDeck = state.deckCreate.sealed;
-
-    if (sealedDeck) {
-      Object.assign(meta, encodeSealedDeck(sealedDeck));
-    }
-
     const deck = createDeck({
-      investigator_code: state.deckCreate.investigatorCode,
-      investigator_name: back.name,
       name: state.deckCreate.title,
       slots,
+      role_code: investigatorCode,
+      aspect_code: "unknown",
+      background: "unknown",
+      specialty: "unknown",
     });
 
     set((prev) => ({
@@ -246,7 +196,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const state = get();
 
     const deck = state.data.decks[id];
-    assert(deck.next_deck == null, "Cannot delete a deck that has upgrades.");
 
     await Promise.allSettled(
       [...state.data.history[id], deck.id].map((curr) =>
@@ -340,7 +289,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       const edit = prev.deckEdits[deckId];
 
       if (edit) {
-        if (properties.slots || properties.sideSlots || properties.meta) {
+        if (properties.slots) {
           delete nextEdits[deckId];
         } else {
           const nextEdit = structuredClone(edit);
@@ -375,11 +324,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const deck = state.data.decks[deckId];
     if (!deck) return deckId;
 
-    const previousDeck = deck.previous_deck
-      ? state.data.decks[deck.previous_deck]
-      : undefined;
-
-    const nextDeck = applyDeckEdits(deck, edits, metadata, true, previousDeck);
+    const nextDeck = applyDeckEdits(deck, edits, metadata, true, undefined);
     nextDeck.date_update = new Date().toISOString();
     nextDeck.version = incrementVersion(deck.version);
 
@@ -395,13 +340,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     const validation = selectDeckValid(state, resolved);
     nextDeck.problem = mapValidationToProblem(validation);
-
-    const upgrade = selectLatestUpgrade(state, resolved);
-
-    if (upgrade) {
-      nextDeck.xp_spent = upgrade.xpSpent ?? 0;
-      nextDeck.xp_adjustment = upgrade.xpAdjustment ?? 0;
-    }
 
     await state.updateShare(nextDeck);
 
@@ -450,150 +388,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     await dehydrate(get(), "app", "edits");
     return nextDeck.id;
   },
-  async upgradeDeck({ id, xp, exileString, usurped }) {
-    const state = get();
 
-    const deck = state.data.decks[id];
-    assert(deck, `Deck ${id} does not exist.`);
-
-    assert(
-      !deck.next_deck,
-      `Deck ${id} already has an upgrade: ${deck.next_deck}.`,
-    );
-
-    const xpCarryover =
-      (deck.xp ?? 0) + (deck.xp_adjustment ?? 0) - (deck.xp_spent ?? 0);
-
-    const now = new Date().toISOString();
-
-    const newDeck: Deck = {
-      ...structuredClone(deck),
-      id: randomId(),
-      date_creation: now,
-      date_update: now,
-      next_deck: null,
-      previous_deck: deck.id,
-      version: "0.1",
-      xp: xp + xpCarryover,
-      xp_spent: null,
-      xp_adjustment: null,
-      exile_string: exileString ?? null,
-    };
-
-    const meta = decodeDeckMeta(deck);
-
-    if (usurped) {
-      delete newDeck.slots[SPECIAL_CARD_CODES.THE_GREAT_WORK];
-      meta.transform_into = SPECIAL_CARD_CODES.LOST_HOMUNCULUS;
-
-      // ER has no investigator restrictions to handle.
-    }
-
-    if (exileString) {
-      const exiledSlots = decodeExileSlots(exileString);
-      const extraSlots = decodeExtraSlots(meta);
-
-      for (const [code, quantity] of Object.entries(exiledSlots)) {
-        if (newDeck.slots[code]) {
-          newDeck.slots[code] -= quantity;
-          if (newDeck.slots[code] <= 0) delete newDeck.slots[code];
-        }
-
-        if (extraSlots[code]) {
-          extraSlots[code] -= quantity;
-          if (extraSlots[code] <= 0) delete extraSlots[code];
-        }
-      }
-
-      meta.extra_deck = encodeExtraSlots(extraSlots);
-    }
-
-    newDeck.meta = JSON.stringify(meta);
-
-    const isShared = !!state.sharing.decks[deck.id];
-
-    set((prev) => {
-      const history = { ...prev.data.history };
-      history[newDeck.id] = [deck.id, ...history[deck.id]];
-      delete history[deck.id];
-
-      const deckEdits = { ...prev.deckEdits };
-      delete deckEdits[deck.id];
-
-      const undoHistory = { ...prev.data.undoHistory };
-      delete undoHistory[deck.id];
-
-      return {
-        deckEdits,
-        data: {
-          ...prev.data,
-          decks: {
-            ...prev.data.decks,
-            [deck.id]: { ...deck, next_deck: newDeck.id },
-            [newDeck.id]: newDeck,
-          },
-          history,
-          undoHistory,
-        },
-      };
-    });
-
-    if (isShared) {
-      await get().createShare(newDeck.id as string);
-    }
-
-    await dehydrate(get(), "app", "edits");
-    return newDeck;
-  },
-  async deleteUpgrade(id, cb) {
-    const state = get();
-
-    const deck = state.data.decks[id];
-    assert(deck, `Deck ${id} does not exist.`);
-
-    const previousId = deck.previous_deck;
-    assert(previousId, "Deck does not have a previous deck");
-    assert(state.data.decks[previousId], "Previous deck does not exist");
-    assert(
-      Array.isArray(state.data.history[deck.id]),
-      "Deck history does not exist",
-    );
-
-    await state.deleteShare(deck.id as string).catch(console.error);
-
-    cb?.(previousId);
-
-    set((prev) => {
-      const decks = { ...prev.data.decks };
-      const history = { ...prev.data.history };
-      const deckHistory = history[deck.id];
-
-      history[previousId] = deckHistory.filter((x) => deck.previous_deck !== x);
-      delete history[deck.id];
-
-      decks[previousId] = { ...decks[previousId], next_deck: null };
-      delete decks[deck.id];
-
-      const deckEdits = { ...prev.deckEdits };
-      delete deckEdits[deck.id];
-
-      const undoHistory = { ...prev.data.undoHistory };
-      delete undoHistory[deck.id];
-
-      return {
-        deckEdits,
-        data: {
-          ...prev.data,
-          decks,
-          history,
-          undoHistory,
-        },
-      };
-    });
-
-    await dehydrate(get(), "app", "edits");
-    return previousId;
-  },
   backup() {
     download(
       prepareBackup(get()),

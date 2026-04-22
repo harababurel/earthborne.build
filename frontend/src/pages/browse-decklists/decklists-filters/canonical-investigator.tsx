@@ -60,7 +60,6 @@ export function CanonicalInvestigator({
       { metadata, lookupTables },
       collator,
       selectedCard.code,
-      undefined,
       true,
     );
   }, [metadata, lookupTables, collator, selectedCard]);

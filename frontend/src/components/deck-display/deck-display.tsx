@@ -15,6 +15,7 @@ import type { DeckValidationResult } from "@/store/lib/deck-validation";
 import { deckTags } from "@/store/lib/resolve-deck";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { History } from "@/store/selectors/decks";
+import { selectMetadata } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import { useAccentColor } from "@/utils/use-accent-color";
 import DeckDescription from "../deck-description";
@@ -46,7 +47,7 @@ import { DefaultTooltip } from "../ui/tooltip";
 import css from "./deck-display.module.css";
 import { DeckHistory } from "./deck-history/deck-history";
 import { DecklistPopover } from "./decklist-popover";
-import { Sidebar } from "./sidebar";
+import Sidebar from "./sidebar";
 import type { DeckOrigin } from "./types";
 
 export type DeckDisplayType = "deck" | "decklist";
@@ -75,7 +76,9 @@ export function DeckDisplay(props: DeckDisplayProps) {
   const scrollState = useRef<Record<string, number>>({});
 
   const { t } = useTranslation();
-  const cssVariables = useAccentColor(deck.investigatorBack.card);
+  const metadata = useStore(selectMetadata);
+  const roleCard = metadata.cards[deck.role_code];
+  const cssVariables = useAccentColor(roleCard);
   const hasHistory = history && history?.length > 1;
 
   const onTabChange = useCallback(
@@ -148,16 +151,6 @@ export function DeckDisplay(props: DeckDisplayProps) {
             </DeckTagsContainer>
           </div>
           {headerSlot && <div>{headerSlot}</div>}
-          {deck.metaParsed?.banner_url && (
-            <div className={css["banner"]}>
-              <img alt="Deck banner" src={deck.metaParsed.banner_url} />
-            </div>
-          )}
-          {deck.metaParsed.intro_md && (
-            <Plane>
-              <DeckDescription content={deck.metaParsed.intro_md} centered />
-            </Plane>
-          )}
         </header>
 
         <Dialog>
@@ -269,7 +262,9 @@ function TitleEditModal(props: TitleEditModalProps) {
   const { t } = useTranslation();
   const toast = useToast();
   const modalContext = useDialogContextChecked();
-  const cssVariables = useAccentColor(deck.investigatorBack.card);
+  const metadata = useStore(selectMetadata);
+  const roleCard = metadata.cards[deck.role_code];
+  const cssVariables = useAccentColor(roleCard);
 
   const updateDeckProperties = useStore((state) => state.updateDeckProperties);
 

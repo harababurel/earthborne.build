@@ -1,30 +1,10 @@
-import { type Card, countExperience } from "@arkham-build/shared";
-import { decodeExileSlots, isSpecialCard } from "@/utils/card-utils";
-import { SPECIAL_CARD_CODES } from "@/utils/constants";
-import { isEmpty } from "@/utils/is-empty";
+import { isSpecialCard } from "@/utils/card-utils";
 import type { Deck } from "../schemas/deck.schema";
 import type { StoreState } from "../slices";
-import { getAttachableCards } from "./attachments";
-import { applyCardChanges } from "./card-edits";
-import {
-  decodeAnnotations,
-  decodeAttachments,
-  decodeCardPoolFromSlots,
-  decodeCustomizations,
-  decodeDeckMeta,
-  decodeSealedDeck,
-  decodeSelections,
-} from "./deck-meta";
+import { decodeAnnotations, decodeDeckMeta } from "./deck-meta";
 import type { LookupTables } from "./lookup-tables.types";
-import { resolveCardWithRelations } from "./resolve-card";
-import { decodeExtraSlots, decodeSlots } from "./slots";
-import type {
-  Attachments,
-  CardWithRelations,
-  DeckMeta,
-  DeckSummary,
-  ResolvedDeck,
-} from "./types";
+import { decodeSlots } from "./slots";
+import type { DeckSummary, ResolvedDeck } from "./types";
 
 /**
  * Given a decoded deck, resolve all cards and metadata for display.
@@ -37,105 +17,22 @@ export function resolveDeck(
   deck: Deck,
 ): ResolvedDeck {
   const deckMeta = decodeDeckMeta(deck);
-  const investigatorCode = deck.investigator_code;
 
-  const investigator = resolveCardWithRelations(
+  const { cards, deckSize, deckSizeTotal, charts } = decodeSlots(
     deps,
     collator,
-    investigatorCode,
-    undefined,
-    true,
-  ) as CardWithRelations;
-
-  if (!investigator) {
-    throw new Error(
-      `Investigator not found in store: ${deck.id} - ${deck.investigator_code}`,
-    );
-  }
-
-  const investigatorFront = getInvestigatorForSide(
-    deps,
-    collator,
-    investigator,
-    deckMeta,
-    "alternate_front",
+    deck,
   );
-
-  let investigatorBack = getInvestigatorForSide(
-    deps,
-    collator,
-    investigator,
-    deckMeta,
-    "alternate_back",
-  );
-
-  if (
-    deckMeta.buildql_deck_options_override &&
-    SPECIAL_CARD_CODES.GENERIC_CUSTOM_INVESTIGATORS.includes(
-      investigatorBack.card.code,
-    )
-  ) {
-    investigatorBack = structuredClone(investigatorBack);
-    // ER has no deck_options override mechanism.
-  }
-
-  const hasExtraDeck = false;
-  const hasParallel = !!investigator.relations?.parallel;
-  const hasReplacements = !isEmpty(investigator.relations?.replacement);
-
-  if (!investigatorFront || !investigatorBack) {
-    throw new Error(`Investigator not found: ${deck.investigator_code}`);
-  }
-
-  const sealedDeck = decodeSealedDeck(deckMeta);
-
-  const exileSlots = decodeExileSlots(deck.exile_string);
-
-  const extraSlots = decodeExtraSlots(deckMeta);
-
-  const customizations = decodeCustomizations(deckMeta, deps.metadata);
-
-  const { bondedSlots, cards, deckSize, deckSizeTotal, xpRequired, charts } =
-    decodeSlots(deps, collator, deck, extraSlots, investigator, customizations);
-
-  const availableAttachments = Object.entries(
-    getAttachableCards(deck, deps.metadata),
-  ).reduce<Attachments[]>((acc, [code, value]) => {
-    if (investigatorBack.card.code === code || !!deck.slots[code]) {
-      acc.push(value);
-    }
-
-    return acc;
-  }, []);
-
-  const cardPool = decodeCardPoolFromSlots(deck.slots, deps.metadata, deckMeta);
 
   const resolved = {
     ...deck,
-    bondedSlots,
     annotations: decodeAnnotations(deckMeta),
-    attachments: decodeAttachments(deckMeta),
-    availableAttachments,
-    cardPool,
     cards,
-    customizations,
-    extraSlots,
-    exileSlots: exileSlots,
-    investigatorBack,
-    investigatorFront,
-    metaParsed: deckMeta,
-    hasExtraDeck,
-    hasParallel,
-    hasReplacements,
     originalDeck: deck,
-    sealedDeck,
-    selections: decodeSelections(investigatorBack, deckMeta),
-    sideSlots: Array.isArray(deck.sideSlots) ? {} : deck.sideSlots,
     shared: !!deps.sharing.decks[deck.id],
     stats: {
       deckSize,
       deckSizeTotal,
-      xpRequired: xpRequired,
       charts,
     },
   } as ResolvedDeck;
@@ -143,191 +40,45 @@ export function resolveDeck(
   return resolved as ResolvedDeck;
 }
 
-function getInvestigatorForSide(
-  deps: Pick<StoreState, "metadata"> & {
-    lookupTables: LookupTables;
-  },
-  collator: Intl.Collator,
-  investigator: CardWithRelations,
-  deckMeta: DeckMeta,
-  key: "alternate_front" | "alternate_back",
-) {
-  if (deckMeta.transform_into) {
-    return resolveCardWithRelations(
-      deps,
-      collator,
-      deckMeta.transform_into,
-      undefined,
-      true,
-    ) as CardWithRelations;
-  }
-
-  const val = deckMeta[key];
-
-  const hasAlternate = val && val !== investigator.card.code;
-  if (!hasAlternate) return investigator;
-
-  if (investigator.relations?.parallel?.card.code === val) {
-    return investigator.relations?.parallel;
-  }
-
-  return investigator;
-}
-
-export function getDeckLimitOverride(
-  lookupTables: LookupTables,
-  deck: ResolvedDeck | undefined,
-  card: Card,
-): number | undefined {
-  const code = card.code;
-  const deckLimit = card.deck_limit ?? Number.MAX_SAFE_INTEGER;
-
-  const sealed = deck?.sealedDeck?.cards;
-  if (!sealed) return undefined;
-
-  if (code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS) {
-    return deckLimit;
-  }
-
-  if (sealed[code] != null) {
-    return Math.min(sealed[code], deckLimit);
-  }
-
-  const duplicates = lookupTables.relations.duplicates[code];
-  if (!duplicates) return undefined;
-
-  for (const duplicateCode of Object.keys(duplicates)) {
-    if (sealed[duplicateCode] != null) {
-      return Math.min(sealed[duplicateCode], deckLimit);
-    }
-  }
-
-  return undefined;
-}
-
-/**
- * Lightweight deck resolution for collection display.
- * Resolves only the investigator and computes stats from raw metadata lookups,
- * skipping full card resolution, charts, and other expensive operations.
- */
 export function resolveDeckSummary(
-  deps: Pick<StoreState, "metadata" | "sharing"> & {
-    lookupTables: LookupTables;
-  },
-  collator: Intl.Collator,
+  deps: Pick<StoreState, "metadata" | "sharing">,
+  _collator: Intl.Collator,
   deck: Deck,
 ): DeckSummary {
-  const deckMeta = decodeDeckMeta(deck);
-
-  const investigator = resolveCardWithRelations(
-    deps,
-    collator,
-    deck.investigator_code,
-    undefined,
-    true,
-  ) as CardWithRelations;
-
-  if (!investigator) {
-    throw new Error(
-      `Investigator not found in store: ${deck.id} - ${deck.investigator_code}`,
-    );
-  }
-
-  const investigatorFront = getInvestigatorForSide(
-    deps,
-    collator,
-    investigator,
-    deckMeta,
-    "alternate_front",
-  );
-
-  const investigatorBack = getInvestigatorForSide(
-    deps,
-    collator,
-    investigator,
-    deckMeta,
-    "alternate_back",
-  );
-
-  if (!investigatorFront || !investigatorBack) {
-    throw new Error(`Investigator not found: ${deck.investigator_code}`);
-  }
-
-  const customizations = decodeCustomizations(deckMeta, deps.metadata);
-  const extraSlots = decodeExtraSlots(deckMeta);
-
-  const { xpRequired, deckSize, deckSizeTotal } = computeDeckStats(
-    deps.metadata,
-    deck,
-    extraSlots,
-    customizations,
-  );
+  const { deckSize, deckSizeTotal } = computeDeckStats(deps.metadata, deck);
 
   return {
-    cardPool: decodeCardPoolFromSlots(deck.slots, deps.metadata, deckMeta),
     date_creation: deck.date_creation,
     date_update: deck.date_update,
-    extraSlots,
-    hasParallel: !!investigator.relations?.parallel,
     id: deck.id,
-    investigatorBack,
-    investigatorFront,
     name: deck.name,
     problem: deck.problem,
-    sealedDeck: decodeSealedDeck(deckMeta),
-    shared: !!deps.sharing.decks[deck.id],
-    sideSlots: Array.isArray(deck.sideSlots) ? null : (deck.sideSlots ?? null),
-    slots: deck.slots,
     source: deck.source,
-    stats: { xpRequired, deckSize, deckSizeTotal },
     tags: deck.tags,
-    xp: deck.xp,
-    xp_adjustment: deck.xp_adjustment,
+    slots: deck.slots,
+    shared: !!deps.sharing.decks[deck.id],
+    stats: { deckSize, deckSizeTotal },
+    role_code: deck.role_code,
+    aspect_code: deck.aspect_code,
   };
 }
 
-function computeDeckStats(
-  metadata: StoreState["metadata"],
-  deck: Deck,
-  extraSlots: Record<string, number> | null,
-  customizations: ReturnType<typeof decodeCustomizations>,
-) {
-  let xpRequired = 0;
+function computeDeckStats(metadata: StoreState["metadata"], deck: Deck) {
   let deckSize = 0;
   let deckSizeTotal = 0;
-  const _myriadCounted: Record<string, boolean> = {};
 
   for (const [code, quantity] of Object.entries(deck.slots)) {
     const rawCard = metadata.cards[code];
     if (!rawCard) continue;
 
-    const card = applyCardChanges(rawCard, metadata, customizations);
-
     deckSizeTotal += quantity;
 
-    xpRequired += countExperience(card, quantity);
-
-    if (!isSpecialCard(card)) {
-      deckSize += Math.max(
-        quantity - (deck.ignoreDeckLimitSlots?.[code] ?? 0),
-        0,
-      );
+    if (!isSpecialCard(rawCard)) {
+      deckSize += quantity;
     }
   }
 
-  if (extraSlots) {
-    for (const [code, quantity] of Object.entries(extraSlots)) {
-      const rawCard = metadata.cards[code];
-      if (!rawCard) continue;
-
-      const card = applyCardChanges(rawCard, metadata, customizations);
-
-      xpRequired += countExperience(card, quantity);
-      deckSizeTotal += quantity;
-    }
-  }
-
-  return { xpRequired, deckSize, deckSizeTotal };
+  return { deckSize, deckSizeTotal };
 }
 
 export function deckTags(deck: Pick<DeckSummary, "tags">, delimiter = " ") {
