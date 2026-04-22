@@ -5,11 +5,13 @@ import { CardText } from "@/components/card/card-text";
 import { CardScan } from "@/components/card-scan";
 import { AspectIcon } from "@/components/icons/aspect-icon";
 import { Plane } from "@/components/ui/plane";
+import { DefaultTooltip } from "@/components/ui/tooltip";
 import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { History } from "@/store/selectors/decks";
 import { selectMetadata } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
+import { isEvolvedDeck } from "@/utils/deck-utils";
 import { useAccentColor } from "@/utils/use-accent-color";
 import type { DeckDisplayType } from "./deck-display";
 import css from "./sidebar.module.css";
@@ -149,6 +151,28 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
             {t("deck_create.steps.review")}
           </h2>
           <div className={css["identity-info"]}>
+            <div className={css["identity-item"]}>
+              <span className={css["identity-label"]}>
+                {t("deck.evolution.status")}:
+              </span>
+              <span className={css["identity-value"]}>
+                <DefaultTooltip
+                  tooltip={t(
+                    `deck.evolution.${
+                      isEvolvedDeck(deck) ? "evolved" : "starter"
+                    }_description`,
+                  )}
+                >
+                  <span className={css["status-value"]}>
+                    {t(
+                      `deck.evolution.${
+                        isEvolvedDeck(deck) ? "evolved" : "starter"
+                      }`,
+                    )}
+                  </span>
+                </DefaultTooltip>
+              </span>
+            </div>
             <div className={css["identity-item"]}>
               <span className={css["identity-label"]}>
                 {t("deck_create.steps.background")}:

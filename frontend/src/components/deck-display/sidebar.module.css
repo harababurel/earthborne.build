@@ -134,6 +134,13 @@
   font-weight: 600;
 }
 
+.status-value {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--palette-4);
+  cursor: help;
+}
+
 .card-link {
   color: var(--accent-11);
   text-decoration: none;

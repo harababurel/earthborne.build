@@ -367,9 +367,12 @@
       "evolution": {
         "displaced": "Displaced cards",
         "evolved": "Evolved",
+        "evolved_description": "A deck that has played through at least one play session and had alterations made or unlocked rewards.",
         "maladies": "Maladies",
         "rewards": "Unlocked rewards",
-        "starter": "Starter"
+        "starter": "Starter",
+        "starter_description": "Freshly constructed, usually for the beginning of a campaign.",
+        "status": "Deck status"
       },
       "tools": {
         "cards": "Cards",
