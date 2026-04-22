@@ -63,33 +63,45 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
               <div className={css["stat-item"]}>
                 <div className={css["stat-icon-wrapper"]}>
                   <AspectIcon aspect="AWA" size="3.5rem" />
-                  <span className={css["stat-value"]}>
-                    {aspectCard?.aspect_awareness}
-                  </span>
+                  <div className={cx(css["stat-overlay"], "color-AWA")}>
+                    <span className={css["stat-value"]}>
+                      {aspectCard?.aspect_awareness}
+                    </span>
+                    <span className={css["stat-label"]}>AWA</span>
+                  </div>
                 </div>
               </div>
               <div className={css["stat-item"]}>
                 <div className={css["stat-icon-wrapper"]}>
                   <AspectIcon aspect="SPI" size="3.5rem" />
-                  <span className={css["stat-value"]}>
-                    {aspectCard?.aspect_spirit}
-                  </span>
+                  <div className={cx(css["stat-overlay"], "color-SPI")}>
+                    <span className={css["stat-value"]}>
+                      {aspectCard?.aspect_spirit}
+                    </span>
+                    <span className={css["stat-label"]}>SPI</span>
+                  </div>
                 </div>
               </div>
               <div className={css["stat-item"]}>
                 <div className={css["stat-icon-wrapper"]}>
                   <AspectIcon aspect="FIT" size="3.5rem" />
-                  <span className={css["stat-value"]}>
-                    {aspectCard?.aspect_fitness}
-                  </span>
+                  <div className={cx(css["stat-overlay"], "color-FIT")}>
+                    <span className={css["stat-value"]}>
+                      {aspectCard?.aspect_fitness}
+                    </span>
+                    <span className={css["stat-label"]}>FIT</span>
+                  </div>
                 </div>
               </div>
               <div className={css["stat-item"]}>
                 <div className={css["stat-icon-wrapper"]}>
                   <AspectIcon aspect="FOC" size="3.5rem" />
-                  <span className={css["stat-value"]}>
-                    {aspectCard?.aspect_focus}
-                  </span>
+                  <div className={cx(css["stat-overlay"], "color-FOC")}>
+                    <span className={css["stat-value"]}>
+                      {aspectCard?.aspect_focus}
+                    </span>
+                    <span className={css["stat-label"]}>FOC</span>
+                  </div>
                 </div>
               </div>
             </div>
