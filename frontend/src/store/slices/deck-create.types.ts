@@ -16,6 +16,7 @@ type DeckCreateState = {
   roleCode: string;
   aspectCode?: string;
   background?: string;
+  specialty?: string;
   backgroundSlots: Record<string, number>;
   specialtySlots: Record<string, number>;
   personalitySlots: Record<string, number>;
@@ -33,6 +34,7 @@ export type DeckCreateSlice = {
   deckCreateSetProvider(provider: "local" | "shared"): void;
   deckCreateSetAspect(code: string): void;
   deckCreateSetBackground(type: string): void;
+  deckCreateSetSpecialty(type: string): void;
   deckCreateToggleBackgroundCard(code: string): void;
   deckCreateToggleSpecialtyCard(code: string): void;
   deckCreateToggleOutsideInterest(code: string): void;

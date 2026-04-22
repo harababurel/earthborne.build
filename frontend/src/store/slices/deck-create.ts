@@ -98,6 +98,20 @@ export const createDeckCreateSlice: StateCreator<
     });
   },
 
+  deckCreateSetSpecialty(type) {
+    set((state) => {
+      assert(state.deckCreate, "DeckCreate slice must be initialized.");
+      return {
+        deckCreate: {
+          ...state.deckCreate,
+          specialty: type,
+          specialtySlots: {},
+          outsideInterestSlots: {},
+        },
+      };
+    });
+  },
+
   deckCreateToggleBackgroundCard(code) {
     set((state) => toggleSlot(state, "backgroundSlots", code, 5));
   },

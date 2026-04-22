@@ -160,8 +160,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       ...state.deckCreate.outsideInterestSlots,
     };
 
-    const role = metadata.cards[state.deckCreate.roleCode];
-    const specialty = role?.specialty_type ?? "unknown";
+    const specialty = state.deckCreate.specialty ?? "unknown";
 
     const deck = createDeck({
       name: state.deckCreate.name,

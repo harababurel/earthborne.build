@@ -454,7 +454,22 @@
       },
       "card_disabled": {
         "aspect_requirement": "You have {{actual}} {{aspect}}, but this card requires {{required}}.",
-        "background_limit": "You have already selected {{count}} / {{target}} background cards."
+        "background_limit": "You have already selected {{count}} / {{target}} background cards.",
+        "specialty_limit": "You have already selected {{count}} / {{target}} specialty cards."
+      },
+      "specialty_type": {
+        "artificer": "Artificer",
+        "conciliator": "Conciliator",
+        "explorer": "Explorer",
+        "shaper": "Shaper",
+        "spirit_speaker": "Spirit Speaker"
+      },
+      "specialty_type_description": {
+        "artificer": "Artificers are inventors who work with tech and gear. Their cards help Rangers find, play, and enhance equipment.",
+        "conciliator": "Conciliators resolve conflict through presence and de-escalation. Their cards pacify beings, protect Rangers, and support aid efforts.",
+        "explorer": "Explorers push into unknown terrain. Their cards improve tests, navigate path cards, and keep Rangers moving through the Valley.",
+        "shaper": "Shapers are attuned to the Valley's ancient forces. Their cards interact with conduits, manipulate manifestations, and read the challenge ahead.",
+        "spirit_speaker": "Spirit Speakers commune with the Valley's unseen spirits. Their cards channel spiritspeak and build deep connections with the land."
       },
       "name": {
         "title": "Name ranger"

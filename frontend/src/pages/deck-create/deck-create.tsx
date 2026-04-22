@@ -5,6 +5,7 @@ import {
   type Card as CardT,
   OUTSIDE_INTEREST_PICKS,
   SPECIALTY_PICKS,
+  SPECIALTY_TYPES,
 } from "@arkham-build/shared";
 import type { TFunction } from "i18next";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "lucide-react";
@@ -259,27 +260,62 @@ function DeckCreateStepBackground() {
 function DeckCreateStepSpecialty() {
   const { t } = useTranslation();
   const deckCreate = useStore(selectDeckCreateChecked);
-  const role = useStore(selectDeckCreateRole);
-  const specialty = role.card.specialty_type ?? undefined;
-  const cards = useStore((state) =>
-    selectDeckCreateSpecialtyCards(state, specialty),
-  );
+  const setSpecialty = useStore((state) => state.deckCreateSetSpecialty);
   const toggle = useStore((state) => state.deckCreateToggleSpecialtyCard);
+  const aspectCards = useStore(selectDeckCreateAspectCards);
+  const cards = useStore((state) =>
+    selectDeckCreateSpecialtyCards(state, deckCreate.specialty),
+  );
+  const aspectCard = aspectCards.find(
+    (card) => card.card.code === deckCreate.aspectCode,
+  );
+  const count = selectedCount(deckCreate.specialtySlots);
 
   return (
     <PickerStep
-      count={selectedCount(deckCreate.specialtySlots)}
+      count={count}
       target={SPECIALTY_PICKS}
       title={t("deck_create.specialty.title")}
     >
+      <div className={css["background-options"]}>
+        {SPECIALTY_TYPES.map((type) => (
+          <button
+            className={cx(
+              css["background-option"],
+              deckCreate.specialty === type && css["background-option-active"],
+            )}
+            key={type}
+            onClick={() => setSpecialty(type)}
+            type="button"
+          >
+            <span className={css["background-option-title"]}>
+              {t(`deck_create.specialty_type.${type}`)}
+            </span>
+            <span className={css["background-option-description"]}>
+              {t(`deck_create.specialty_type_description.${type}`)}
+            </span>
+          </button>
+        ))}
+      </div>
       <CardGrid>
         {cards.map((card) => (
           <SelectableCard
             key={card.card.code}
             card={card}
+            disabledReason={
+              deckCreate.specialtySlots[card.card.code]
+                ? undefined
+                : getSpecialtyCardDisabledReason(
+                    t,
+                    card.card,
+                    aspectCard?.card,
+                    count,
+                  )
+            }
             disabled={
               !deckCreate.specialtySlots[card.card.code] &&
-              selectedCount(deckCreate.specialtySlots) >= SPECIALTY_PICKS
+              (!!getAspectRequirementShortfall(card.card, aspectCard?.card) ||
+                count >= SPECIALTY_PICKS)
             }
             onSelect={() => toggle(card.card.code)}
             selected={!!deckCreate.specialtySlots[card.card.code]}
@@ -309,12 +345,11 @@ function DeckCreateStepOutsideInterest() {
   const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const deckCreate = useStore(selectDeckCreateChecked);
-  const role = useStore(selectDeckCreateRole);
   const cards = useStore((state) =>
     selectDeckCreateOutsideInterestCards(
       state,
       deckCreate.background,
-      role.card.specialty_type ?? undefined,
+      deckCreate.specialty,
     ),
   );
   const toggle = useStore((state) => state.deckCreateToggleOutsideInterest);
@@ -359,16 +394,13 @@ function DeckCreateStepReview() {
     selectDeckCreateBackgroundCards(state, deckCreate.background),
   );
   const specialty = useStore((state) =>
-    selectDeckCreateSpecialtyCards(
-      state,
-      role.card.specialty_type ?? undefined,
-    ),
+    selectDeckCreateSpecialtyCards(state, deckCreate.specialty),
   );
   const outside = useStore((state) =>
     selectDeckCreateOutsideInterestCards(
       state,
       deckCreate.background,
-      role.card.specialty_type ?? undefined,
+      deckCreate.specialty,
     ),
   );
 
@@ -561,6 +593,31 @@ function SelectableCard({
   );
 }
 
+function getSpecialtyCardDisabledReason(
+  t: TFunction,
+  card: CardT,
+  aspectCard: CardT | undefined,
+  selectedCountValue: number,
+) {
+  const shortfall = getAspectRequirementShortfall(card, aspectCard);
+  if (shortfall) {
+    return t("deck_create.card_disabled.aspect_requirement", {
+      actual: shortfall.actual,
+      aspect: t(`common.factions.${shortfall.aspect.toLowerCase()}`),
+      required: shortfall.required,
+    });
+  }
+
+  if (selectedCountValue >= SPECIALTY_PICKS) {
+    return t("deck_create.card_disabled.specialty_limit", {
+      count: selectedCountValue,
+      target: SPECIALTY_PICKS,
+    });
+  }
+
+  return undefined;
+}
+
 function getBackgroundCardDisabledReason(
   t: TFunction,
   card: CardT,
@@ -652,7 +709,10 @@ function canAdvance(deckCreate: ReturnType<typeof selectDeckCreateChecked>) {
     );
   }
   if (deckCreate.step === "specialty") {
-    return selectedCount(deckCreate.specialtySlots) === SPECIALTY_PICKS;
+    return (
+      !!deckCreate.specialty &&
+      selectedCount(deckCreate.specialtySlots) === SPECIALTY_PICKS
+    );
   }
   if (deckCreate.step === "outside_interest") {
     return (
