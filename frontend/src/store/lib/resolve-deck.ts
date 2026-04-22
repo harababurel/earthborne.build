@@ -1,5 +1,5 @@
+import type { Deck } from "@arkham-build/shared";
 import { isSpecialCard } from "@/utils/card-utils";
-import type { Deck } from "../schemas/deck.schema";
 import type { StoreState } from "../slices";
 import { decodeAnnotations, decodeDeckMeta } from "./deck-meta";
 import type { LookupTables } from "./lookup-tables.types";

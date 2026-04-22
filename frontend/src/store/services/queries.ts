@@ -5,14 +5,16 @@ import type {
   SealedDeckResponse,
 } from "@arkham-build/shared";
 import {
+  type Deck,
   encodeSearch,
+  type Id,
+  isDeck,
   type RecommendationsRequest,
   type RecommendationsResponse,
   RecommendationsResponseSchema,
 } from "@arkham-build/shared";
 import { assert } from "@/utils/assert";
 import type { DataVersion } from "../schemas/data-version.schema";
-import { type Deck, type Id, isDeck } from "../schemas/deck.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { History } from "../selectors/decks";
 import type { Locale } from "../slices/settings.types";
@@ -109,7 +111,7 @@ type ShareRead = {
 };
 
 export async function getShare(id: string): Promise<ShareRead> {
-  const res = await apiV2Request(`/public/share_history/${id}`);
+  const res = await apiV2Request(`/v2/public/share/history/${id}`);
   const data = await res.json();
   return data;
 }
@@ -119,7 +121,7 @@ export async function createShare(
   deck: Deck,
   history: History,
 ) {
-  await apiV2Request("/public/share", {
+  await apiV2Request("/v2/public/share", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -135,7 +137,7 @@ export async function updateShare(
   deck: Deck,
   history: History,
 ) {
-  await apiV2Request(`/public/share/${id}`, {
+  await apiV2Request(`/v2/public/share/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -149,7 +151,7 @@ export async function updateShare(
 }
 
 export async function deleteShare(clientId: string, id: string) {
-  await apiV2Request(`/public/share/${id}`, {
+  await apiV2Request(`/v2/public/share/${id}`, {
     method: "DELETE",
     headers: {
       "X-Client-Id": clientId,

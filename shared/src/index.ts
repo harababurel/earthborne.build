@@ -98,6 +98,16 @@ export {
 } from "./schemas/card.schema.ts";
 
 export {
+  type Deck,
+  type DeckProblem,
+  DeckSchema,
+  type Id,
+  isDeck,
+  type Slots,
+  SlotsSchema,
+} from "./schemas/deck.schema.ts";
+
+export {
   type Decklist,
   DecklistSchema,
 } from "./schemas/decklist.schema.ts";

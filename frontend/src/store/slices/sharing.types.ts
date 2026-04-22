@@ -1,5 +1,5 @@
+import type { Deck, Id } from "@arkham-build/shared";
 import type { DeckDisplayType } from "@/components/deck-display/deck-display";
-import type { Deck, Id } from "@/store/schemas/deck.schema";
 import type { ResolvedDeck } from "../lib/types";
 
 type SharingState = {

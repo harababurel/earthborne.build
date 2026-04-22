@@ -1,8 +1,8 @@
+import type { Id } from "@arkham-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { displayAttribute } from "@/utils/card-utils";
 import { dehydrate } from "../persist";
-import type { Id } from "../schemas/deck.schema";
 import { selectResolvedDeckById } from "../selectors/decks";
 import type { StoreState } from ".";
 import {

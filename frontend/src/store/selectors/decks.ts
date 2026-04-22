@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card, Id } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import { resolveDeck, resolveDeckSummary } from "@/store/lib/resolve-deck";
 import { time, timeEnd } from "@/utils/time";
@@ -21,7 +21,6 @@ import {
 import { limitedSlotOccupation } from "../lib/limited-slots";
 import { makeSortFunction, sortAlphabeticalLatin } from "../lib/sorting";
 import type { DeckSummary, ResolvedDeck } from "../lib/types";
-import type { Id } from "../schemas/deck.schema";
 import type { StoreState } from "../slices";
 import type { DecklistConfig } from "../slices/settings.types";
 import {

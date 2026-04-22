@@ -1,4 +1,4 @@
-import type { Deck } from "@/store/schemas/deck.schema";
+import type { Deck } from "@arkham-build/shared";
 import type { Annotations, DeckMeta } from "./types";
 
 export function decodeDeckMeta(deck: Deck): DeckMeta {

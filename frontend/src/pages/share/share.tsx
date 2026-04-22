@@ -1,3 +1,4 @@
+import type { Deck } from "@arkham-build/shared";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { createSelector } from "reselect";
@@ -8,7 +9,6 @@ import { ResolvedDeckProvider } from "@/components/resolved-deck-context-provide
 import { Loader } from "@/components/ui/loader";
 import { useStore } from "@/store";
 import { resolveDeck } from "@/store/lib/resolve-deck";
-import type { Deck } from "@/store/schemas/deck.schema";
 import { selectDeckValid } from "@/store/selectors/decks";
 import {
   selectLocaleSortingCollator,

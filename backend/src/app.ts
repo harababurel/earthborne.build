@@ -14,6 +14,7 @@ import cardsRouter from "./routes/cards.ts";
 import fanMadeProjectInfoRouter from "./routes/fan-made-project-info.ts";
 import imagesRouter from "./routes/images.ts";
 import packsRouter from "./routes/packs.ts";
+import sharingRouter from "./routes/sharing.ts";
 
 export function appFactory(config: Config, database: Database) {
   const app = new Hono<HonoEnv>();
@@ -39,6 +40,7 @@ export function appFactory(config: Config, database: Database) {
   pub.route("/cards", cardsRouter);
   pub.route("/packs", packsRouter);
   pub.route("/fan-made-project-info", fanMadeProjectInfoRouter);
+  pub.route("/share", sharingRouter);
   app.route("/v2/public", pub);
 
   app.get("/up", (c) => c.text("ok"));
@@ -47,6 +49,10 @@ export function appFactory(config: Config, database: Database) {
     const dataVersions = await getAppDataVersions(c.get("db"));
     if (!dataVersions) throw new Error("could not infer data versions");
     return c.json(dataVersions);
+  });
+
+  app.notFound((c) => {
+    return c.json({ message: "Not Found" }, 404);
   });
 
   app.onError(errorHandler);

@@ -14,8 +14,16 @@ export async function apiV2Request(
   const res = await fetch(`${import.meta.env.VITE_API_URL}${path}`, options);
 
   if (!res.ok) {
-    const err = await res.json();
-    throw new ApiError(err.message, res.status);
+    let message = res.statusText || `Request failed with status ${res.status}`;
+    try {
+      const err = await res.json();
+      if (err.message) {
+        message = err.message;
+      }
+    } catch (_) {
+      // Ignore JSON parse error, use default message.
+    }
+    throw new ApiError(message, res.status);
   }
 
   return res;

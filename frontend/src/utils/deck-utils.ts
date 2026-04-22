@@ -1,4 +1,4 @@
-import type { Deck } from "@/store/schemas/deck.schema";
+import type { Deck } from "@arkham-build/shared";
 
 export function isEvolvedDeck(
   deck: Pick<Deck, "rewards" | "displaced" | "maladies">,

@@ -1,4 +1,4 @@
-import type { Deck } from "@/store/schemas/deck.schema";
+import type { Deck } from "@arkham-build/shared";
 import { isSpecialCard } from "@/utils/card-utils";
 import type { StoreState } from "../slices";
 import { addCardToDeckCharts, emptyDeckCharts } from "./deck-charts";

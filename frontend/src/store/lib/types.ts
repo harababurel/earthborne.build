@@ -1,6 +1,5 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card, Deck } from "@arkham-build/shared";
 import type { Cycle } from "../schemas/cycle.schema";
-import type { Deck } from "../schemas/deck.schema";
 import type { EncounterSet } from "../schemas/encounter-set.schema";
 import type { SubType, Type } from "../schemas/metadata.schema";
 import type { Pack } from "../schemas/pack.schema";

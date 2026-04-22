@@ -1,9 +1,8 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card, Deck, DeckProblem } from "@arkham-build/shared";
 import {
   type DeckValidationResult,
   validateDeck,
 } from "@/store/lib/deck-validation";
-import type { Deck, DeckProblem } from "@/store/schemas/deck.schema";
 import type { StoreState } from "@/store/slices";
 import { displayAttribute } from "@/utils/card-utils";
 import { randomId } from "@/utils/crypto";

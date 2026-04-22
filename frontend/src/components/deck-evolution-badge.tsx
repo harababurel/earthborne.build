@@ -1,5 +1,5 @@
+import type { Deck } from "@arkham-build/shared";
 import { useTranslation } from "react-i18next";
-import type { Deck } from "@/store/schemas/deck.schema";
 import { cx } from "@/utils/cx";
 import { isEvolvedDeck } from "@/utils/deck-utils";
 import css from "./deck-evolution-badge.module.css";

@@ -1,4 +1,4 @@
-import type { Card as CardT } from "@arkham-build/shared";
+import type { Card as CardT, Slots } from "@arkham-build/shared";
 import { CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,6 @@ import { useStore } from "@/store";
 import type { DeckValidationError } from "@/store/lib/deck-validation";
 import { resolveCardWithRelations } from "@/store/lib/resolve-card";
 import type { ResolvedCard, ResolvedDeck } from "@/store/lib/types";
-import type { Slots } from "@/store/schemas/deck.schema";
 import {
   selectDeckValid,
   selectResolvedDeckById,

@@ -1,3 +1,4 @@
+import type { Id } from "@arkham-build/shared";
 import { useEffect } from "react";
 import { useParams } from "wouter";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
@@ -7,7 +8,6 @@ import {
 } from "@/components/deck-display/deck-display";
 import { ResolvedDeckProvider } from "@/components/resolved-deck-context-provider";
 import { useStore } from "@/store";
-import type { Id } from "@/store/schemas/deck.schema";
 import {
   type History,
   selectDeckValid,

@@ -1,7 +1,5 @@
-import type { Card } from "@arkham-build/shared";
-
+import type { Card, Id } from "@arkham-build/shared";
 import type { Annotations } from "../lib/types";
-import type { Id } from "../schemas/deck.schema";
 
 export type Slot = "slots" | "rewards" | "displaced" | "maladies";
 

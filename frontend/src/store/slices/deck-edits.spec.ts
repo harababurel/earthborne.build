@@ -1,8 +1,8 @@
+import { DeckSchema } from "@arkham-build/shared";
 import deckExtraSlots from "@test/fixtures/decks/extra_slots.json";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { StoreApi } from "zustand";
 import { getMockStore } from "@/test/get-mock-store";
-import { DeckSchema } from "../schemas/deck.schema";
 import { selectResolvedDeckById } from "../selectors/decks";
 import type { StoreState } from ".";
 

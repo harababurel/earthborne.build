@@ -102,6 +102,15 @@ export interface AppMetadata {
   value: string;
 }
 
+export interface SharedDeck {
+  id: string;
+  client_id: string;
+  data: string; // JSON as text
+  history: string; // JSON as text
+  created_at: string;
+  updated_at: string;
+}
+
 export interface DB {
   pack: Pack;
   aspect: Aspect;
@@ -113,4 +122,5 @@ export interface DB {
   card: Card;
   fan_made_project_info: FanMadeProjectInfo;
   app_metadata: AppMetadata;
+  shared_deck: SharedDeck;
 }

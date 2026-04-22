@@ -1,4 +1,4 @@
-import type { Deck, Id } from "@/store/schemas/deck.schema";
+import type { Deck, Id } from "@arkham-build/shared";
 import type {
   AllCardResponse,
   DataVersionResponse,

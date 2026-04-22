@@ -1,3 +1,4 @@
+import { type Deck, type Id, isDeck } from "@arkham-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { ARCHIVE_FOLDER_ID } from "@/utils/constants";
@@ -6,7 +7,6 @@ import { applyDeckEdits } from "../lib/deck-edits";
 import { cloneDeck } from "../lib/deck-factory";
 import { formatDeckImport } from "../lib/deck-io";
 import { dehydrate } from "../persist";
-import { type Deck, type Id, isDeck } from "../schemas/deck.schema";
 import { selectClientId, selectMetadata } from "../selectors/shared";
 import { importDeck } from "../services/queries";
 import type { StoreState } from ".";

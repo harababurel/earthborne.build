@@ -14,11 +14,6 @@ const DeckProblemSchema = z.enum([
 ]);
 export type DeckProblem = z.infer<typeof DeckProblemSchema>;
 
-const _SafeSlotsSchema = z.preprocess(
-  (val) => (Array.isArray(val) ? {} : val),
-  SlotsSchema.nullish(),
-);
-
 export const DeckSchema = z.object({
   date_creation: z.string(),
   date_update: z.string(),
@@ -47,8 +42,5 @@ export type Deck = z.infer<typeof DeckSchema>;
 
 export function isDeck(x: unknown): x is Deck {
   const res = DeckSchema.safeParse(x);
-  if (!res.success) {
-    console.error(res.error);
-  }
   return res.success;
 }
