@@ -257,8 +257,13 @@ export function ListCardInner(props: Props) {
               {!omitDetails && size !== "xs" && (
                 <div className={css["type-traits"]}>
                   <span>
-                    {t(`common.type.${card.type_code}`)}
-                    {card.traits ? ` / ${card.traits}` : ""}
+                    {card.type_code !== "role" &&
+                      t(`common.type.${card.type_code}`)}
+                    {card.traits
+                      ? card.type_code !== "role"
+                        ? ` / ${card.traits}`
+                        : card.traits
+                      : ""}
                   </span>
                   <CardEquipLoad card={card} />
                 </div>
