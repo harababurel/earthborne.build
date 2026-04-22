@@ -1,1 +1,1 @@
-export const NotesEditor = (_props: unknown) => null;
+export const NotesEditor = (_props: Record<string, unknown>) => null;

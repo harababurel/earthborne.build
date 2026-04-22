@@ -1,1 +1,1 @@
-export const LatestUpgrade = (_props: unknown) => null;
+export const LatestUpgrade = (_props: Record<string, unknown>) => null;

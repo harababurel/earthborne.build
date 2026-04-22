@@ -1,5 +1,1 @@
-export const DrawBasicWeakness = (_props: {
-  deckId: unknown;
-  quantity: unknown;
-  targetDeck: unknown;
-}) => null;
+export const DrawBasicWeakness = (_props: Record<string, unknown>) => null;

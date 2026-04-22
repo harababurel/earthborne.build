@@ -1,1 +1,3 @@
-export const CardModalAttachmentQuantities = (_props: unknown) => null;
+export const CardModalAttachmentQuantities = (
+  _props: Record<string, unknown>,
+) => null;

@@ -1,1 +1,1 @@
-export const SelectionEditor = (_props: unknown) => null;
+export const SelectionEditor = (_props: Record<string, unknown>) => null;

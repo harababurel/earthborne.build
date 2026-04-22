@@ -1,3 +1,3 @@
-export default function Sidebar(_props: unknown) {
+export default function Sidebar(_props: Record<string, unknown>) {
   return null;
 }

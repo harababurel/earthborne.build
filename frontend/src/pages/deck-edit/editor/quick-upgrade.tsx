@@ -1,1 +1,1 @@
-export const QuickUpgrade = (_props: unknown) => null;
+export const QuickUpgrade = (_props: Record<string, unknown>) => null;

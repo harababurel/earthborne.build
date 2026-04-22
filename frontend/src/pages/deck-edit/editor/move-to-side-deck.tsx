@@ -1,2 +1,1 @@
-export const MoveToSideDeck = (_props: { card: unknown; deck: unknown }) =>
-  null;
+export const MoveToSideDeck = (_props: Record<string, unknown>) => null;

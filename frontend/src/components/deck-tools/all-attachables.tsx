@@ -1,1 +1,1 @@
-export const AllAttachables = (_props: unknown) => null;
+export const AllAttachables = (_props: Record<string, unknown>) => null;

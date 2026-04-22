@@ -1,1 +1,1 @@
-export const DeckXPCostFilter = (_props: unknown) => null;
+export const DeckXPCostFilter = (_props: Record<string, unknown>) => null;

@@ -1,3 +1,3 @@
-export default function Attachments(_props: unknown) {
+export default function Attachments(_props: Record<string, unknown>) {
   return null;
 }

@@ -1,1 +1,1 @@
-export const DrawSimulator = (_props: unknown) => null;
+export const DrawSimulator = (_props: Record<string, unknown>) => null;
