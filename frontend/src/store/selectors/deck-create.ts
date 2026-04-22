@@ -21,16 +21,30 @@ export const selectDeckCreateRole = createSelector(
   selectMetadata,
   selectLookupTables,
   selectLocaleSortingCollator,
-  (deckCreate, metadata, lookupTables, collator) => {
-    const card = resolveCardWithRelations(
+  (deckCreate, metadata, lookupTables, collator): ResolvedCard | undefined => {
+    if (!deckCreate.roleCode) return undefined;
+    return (
+      resolveCardWithRelations(
+        { metadata, lookupTables },
+        collator,
+        deckCreate.roleCode,
+        true,
+      ) ?? undefined
+    );
+  },
+);
+
+export const selectDeckCreateRoleCards = createSelector(
+  selectMetadata,
+  selectLookupTables,
+  selectLocaleSortingCollator,
+  (_: StoreState, specialty?: string) => specialty,
+  (metadata, lookupTables, collator, specialty) =>
+    resolveCards(
       { metadata, lookupTables },
       collator,
-      deckCreate.roleCode,
-      true,
-    );
-    assert(card, "Role card must be resolved.");
-    return card;
-  },
+      (card) => card.type_code === "role" && card.specialty_type === specialty,
+    ),
 );
 
 export const selectDeckCreateAspectCards = createCardListSelector(

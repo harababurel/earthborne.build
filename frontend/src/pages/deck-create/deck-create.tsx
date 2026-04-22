@@ -1,9 +1,11 @@
 import {
+  ASPECT_ORDER,
   type AspectKey,
   BACKGROUND_PICKS,
   BACKGROUND_TYPES,
   type Card as CardT,
   OUTSIDE_INTEREST_PICKS,
+  PERSONALITY_PICKS,
   SPECIALTY_PICKS,
   SPECIALTY_TYPES,
 } from "@arkham-build/shared";
@@ -11,7 +13,7 @@ import type { TFunction } from "i18next";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useParams } from "wouter";
+import { useLocation } from "wouter";
 import { Card } from "@/components/card/card";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { CardScan } from "@/components/card-scan";
@@ -33,6 +35,7 @@ import {
   selectDeckCreateOutsideInterestCards,
   selectDeckCreatePersonalityCards,
   selectDeckCreateRole,
+  selectDeckCreateRoleCards,
   selectDeckCreateSpecialtyCards,
 } from "@/store/selectors/deck-create";
 import type { DeckCreateStep } from "@/store/slices/deck-create.types";
@@ -43,23 +46,23 @@ import css from "./deck-create.module.css";
 const steps: DeckCreateStep[] = [
   "name",
   "aspect",
+  "personality",
   "background",
   "specialty",
-  "personality",
   "outside_interest",
+  "role",
   "review",
 ];
 
 function DeckCreate() {
-  const { code } = useParams<{ code: string }>();
   const deckCreate = useStore((state) => state.deckCreate);
   const destroy = useStore((state) => state.resetCreate);
   const initialize = useStore((state) => state.initCreate);
 
   useEffect(() => {
-    initialize(code);
+    initialize();
     return () => destroy();
-  }, [code, destroy, initialize]);
+  }, [destroy, initialize]);
 
   return deckCreate ? (
     <CardModalProvider>
@@ -71,7 +74,12 @@ function DeckCreate() {
 function DeckCreateInner() {
   const deckCreate = useStore(selectDeckCreateChecked);
   const role = useStore(selectDeckCreateRole);
-  const cssVariables = useAccentColor(role.card);
+  const aspectCards = useStore(selectDeckCreateAspectCards);
+  const aspectCard = aspectCards.find(
+    (card) => card.card.code === deckCreate.aspectCode,
+  );
+  const accentSource = role?.card ?? aspectCard?.card;
+  const cssVariables = useAccentColor(accentSource);
 
   return (
     <div className={cx(css["wizard-layout"], "fade-in")} style={cssVariables}>
@@ -86,6 +94,7 @@ function DeckCreateInner() {
         {deckCreate.step === "outside_interest" && (
           <DeckCreateStepOutsideInterest />
         )}
+        {deckCreate.step === "role" && <DeckCreateStepRole />}
         {deckCreate.step === "review" && <DeckCreateStepReview />}
         <DeckCreateNavigation />
       </main>
@@ -266,6 +275,9 @@ function DeckCreateStepSpecialty() {
   const cards = useStore((state) =>
     selectDeckCreateSpecialtyCards(state, deckCreate.specialty),
   );
+  const roleCards = useStore((state) =>
+    selectDeckCreateRoleCards(state, deckCreate.specialty),
+  );
   const aspectCard = aspectCards.find(
     (card) => card.card.code === deckCreate.aspectCode,
   );
@@ -297,6 +309,20 @@ function DeckCreateStepSpecialty() {
           </button>
         ))}
       </div>
+      {deckCreate.specialty && roleCards.length > 0 && (
+        <div className={css["role-preview"]}>
+          <p className={css["role-preview-label"]}>
+            {t("deck_create.specialty.role_preview")}
+          </p>
+          <div className={css["card-grid"]}>
+            {roleCards.map((card) => (
+              <div className={css["role-preview-card"]} key={card.card.code}>
+                <Card resolvedCard={card} size="compact" />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <CardGrid>
         {cards.map((card) => (
           <SelectableCard
@@ -328,15 +354,52 @@ function DeckCreateStepSpecialty() {
 
 function DeckCreateStepPersonality() {
   const { t } = useTranslation();
+  const deckCreate = useStore(selectDeckCreateChecked);
   const cards = useStore(selectDeckCreatePersonalityCards);
+  const select = useStore((state) => state.deckCreateSelectPersonalityCard);
+
+  const byAspect = ASPECT_ORDER.map((aspect) => ({
+    aspect,
+    cards: cards.filter((c) => c.card.aspect_requirement_type === aspect),
+  }));
+
+  const count = selectedCount(deckCreate.personalitySlots);
 
   return (
-    <PickerStep title={t("deck_create.personality.title")}>
-      <CardGrid>
-        {cards.map((card) => (
-          <SelectableCard key={card.card.code} card={card} selected />
-        ))}
-      </CardGrid>
+    <PickerStep
+      count={count}
+      target={PERSONALITY_PICKS}
+      title={t("deck_create.personality.title")}
+    >
+      <p className={css["step-instructions"]}>
+        {t("deck_create.personality.instructions")}
+      </p>
+      {byAspect.map(({ aspect, cards: aspectCards }) => {
+        const hasSelection = aspectCards.some(
+          (c) => !!deckCreate.personalitySlots[c.card.code],
+        );
+        return (
+          <div key={aspect} className={css["personality-section"]}>
+            <h2 className={css["personality-section-title"]}>
+              {t(`common.factions.${aspect.toLowerCase()}`)}
+            </h2>
+            <CardGrid>
+              {aspectCards.map((card) => {
+                const selected = !!deckCreate.personalitySlots[card.card.code];
+                return (
+                  <SelectableCard
+                    key={card.card.code}
+                    card={card}
+                    disabled={!selected && hasSelection}
+                    onSelect={() => select(card.card.code)}
+                    selected={selected}
+                  />
+                );
+              })}
+            </CardGrid>
+          </div>
+        );
+      })}
     </PickerStep>
   );
 }
@@ -384,6 +447,30 @@ function DeckCreateStepOutsideInterest() {
   );
 }
 
+function DeckCreateStepRole() {
+  const { t } = useTranslation();
+  const deckCreate = useStore(selectDeckCreateChecked);
+  const cards = useStore((state) =>
+    selectDeckCreateRoleCards(state, deckCreate.specialty),
+  );
+  const setRole = useStore((state) => state.deckCreateSetRole);
+
+  return (
+    <PickerStep title={t("deck_create.role.title")}>
+      <CardGrid>
+        {cards.map((card) => (
+          <SelectableCard
+            key={card.card.code}
+            card={card}
+            onSelect={() => setRole(card.card.code)}
+            selected={deckCreate.roleCode === card.card.code}
+          />
+        ))}
+      </CardGrid>
+    </PickerStep>
+  );
+}
+
 function DeckCreateStepReview() {
   const { t } = useTranslation();
   const deckCreate = useStore(selectDeckCreateChecked);
@@ -412,7 +499,7 @@ function DeckCreateStepReview() {
     <section className={css["wizard-step"]}>
       <h1>{t("deck_create.review.title")}</h1>
       <div className={css["identity"]}>
-        <Card resolvedCard={role} size="compact" />
+        {role && <Card resolvedCard={role} size="compact" />}
         {aspect && <Card resolvedCard={aspect} size="compact" />}
       </div>
       <ReviewGroup
@@ -687,11 +774,40 @@ function ReviewGroup({
           .filter((card) => slots[card.card.code] > 0)
           .map((card) => (
             <li key={card.card.code}>
-              {slots[card.card.code]}x {card.card.name}
+              {slots[card.card.code]}x{" "}
+              <ReviewCardLink card={card} />
             </li>
           ))}
       </ul>
     </section>
+  );
+}
+
+function ReviewCardLink({ card }: { card: ResolvedCard }) {
+  const { refs, referenceProps, isMounted, floatingStyles, transitionStyles } =
+    useRestingTooltip();
+
+  return (
+    <>
+      <a
+        {...referenceProps}
+        className={css["review-card-link"]}
+        href={`/card/${card.card.code}`}
+        ref={refs.setReference}
+        rel="noreferrer"
+        target="_blank"
+      >
+        {card.card.name}
+      </a>
+      {isMounted && (
+        <PortaledCardTooltip
+          card={card.card}
+          ref={refs.setFloating}
+          floatingStyles={floatingStyles}
+          transitionStyles={transitionStyles}
+        />
+      )}
+    </>
   );
 }
 
@@ -702,6 +818,9 @@ function selectedCount(slots: Record<string, number>) {
 function canAdvance(deckCreate: ReturnType<typeof selectDeckCreateChecked>) {
   if (deckCreate.step === "name") return deckCreate.name.trim().length > 0;
   if (deckCreate.step === "aspect") return !!deckCreate.aspectCode;
+  if (deckCreate.step === "personality") {
+    return selectedCount(deckCreate.personalitySlots) === PERSONALITY_PICKS;
+  }
   if (deckCreate.step === "background") {
     return (
       !!deckCreate.background &&
@@ -719,6 +838,7 @@ function canAdvance(deckCreate: ReturnType<typeof selectDeckCreateChecked>) {
       selectedCount(deckCreate.outsideInterestSlots) === OUTSIDE_INTEREST_PICKS
     );
   }
+  if (deckCreate.step === "role") return !!deckCreate.roleCode;
   return true;
 }
 

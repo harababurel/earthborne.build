@@ -18,10 +18,6 @@ const BrowseRoutes = lazy(() => import("./pages/browse/index"));
 
 const DeckEdit = lazy(() => import("./pages/deck-edit/deck-edit"));
 
-const ChooseInvestigator = lazy(
-  () => import("./pages/choose-investigator/choose-investigator"),
-);
-
 const DeckCreate = lazy(() => import("./pages/deck-create/deck-create"));
 
 const DeckView = lazy(() => import("./pages/deck-view/deck-view"));
@@ -99,8 +95,7 @@ function AppInner() {
               <Route component={BrowseRoutes} path="/browse/pack/:pack_code" />
               <Route component={Search} path="/search" />
               <Route component={CardView} path="/card/:code" />
-              <Route component={ChooseInvestigator} path="/deck/create" />
-              <Route component={DeckCreate} path="/deck/create/:code" />
+              <Route component={DeckCreate} path="/deck/create" />
               <Route component={DeckView} path="/:type/view/:id" />
               <Route component={DeckView} path="/:type/view/:id/:slug" />
               <Route component={DeckEdit} nest path="/deck/edit/:id" />

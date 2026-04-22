@@ -1,8 +1,6 @@
-import { DECK_CARD_COPIES, PERSONALITY_PICKS } from "@arkham-build/shared";
+import { DECK_CARD_COPIES } from "@arkham-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
-import { displayAttribute } from "@/utils/card-utils";
-import { getDefaultDeckName } from "../lib/deck-factory";
 import { selectMetadata } from "../selectors/shared";
 import type { StoreState } from ".";
 import type { DeckCreateSlice, DeckCreateStep } from "./deck-create.types";
@@ -15,37 +13,18 @@ export const createDeckCreateSlice: StateCreator<
 > = (set) => ({
   deckCreate: undefined,
 
-  initCreate(code: string) {
+  initCreate() {
     set((state) => {
-      const metadata = selectMetadata(state);
-      const role = metadata.cards[code];
-      assert(
-        role && role.type_code === "role",
-        "Deck configure must be initialized with a role card.",
-      );
-
       const provider = state.settings.defaultStorageProvider;
-      const personalitySlots = Object.values(metadata.cards)
-        .filter((card) => card.category === "personality")
-        .slice(0, PERSONALITY_PICKS)
-        .reduce<Record<string, number>>((acc, card) => {
-          acc[card.code] = DECK_CARD_COPIES;
-          return acc;
-        }, {});
-
       return {
         deckCreate: {
           step: "name",
-          name: getDefaultDeckName(
-            displayAttribute(role, "name"),
-            role.energy_aspect ?? "",
-          ),
+          name: "New Ranger",
           provider:
             provider === "local" || provider === "shared" ? provider : "local",
-          roleCode: role.code,
           backgroundSlots: {},
           specialtySlots: {},
-          personalitySlots,
+          personalitySlots: {},
           outsideInterestSlots: {},
         },
       };
@@ -107,8 +86,43 @@ export const createDeckCreateSlice: StateCreator<
           specialty: type,
           specialtySlots: {},
           outsideInterestSlots: {},
+          roleCode: undefined,
         },
       };
+    });
+  },
+
+  deckCreateSetRole(code) {
+    set((state) => {
+      assert(state.deckCreate, "DeckCreate slice must be initialized.");
+      return { deckCreate: { ...state.deckCreate, roleCode: code } };
+    });
+  },
+
+  deckCreateSelectPersonalityCard(code) {
+    set((state) => {
+      assert(state.deckCreate, "DeckCreate slice must be initialized.");
+      const metadata = selectMetadata(state);
+      const card = metadata.cards[code];
+      const aspect = card?.aspect_requirement_type;
+      const current = state.deckCreate.personalitySlots;
+
+      if (current[code]) {
+        const nextSlots = { ...current };
+        delete nextSlots[code];
+        return { deckCreate: { ...state.deckCreate, personalitySlots: nextSlots } };
+      }
+
+      // Select new card, replacing any existing selection for the same aspect.
+      const nextSlots: Record<string, number> = {};
+      for (const [c, q] of Object.entries(current)) {
+        if (metadata.cards[c]?.aspect_requirement_type !== aspect) {
+          nextSlots[c] = q;
+        }
+      }
+      nextSlots[code] = DECK_CARD_COPIES;
+
+      return { deckCreate: { ...state.deckCreate, personalitySlots: nextSlots } };
     });
   },
 

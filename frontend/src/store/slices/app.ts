@@ -152,6 +152,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const metadata = selectMetadata(state);
 
     assert(state.deckCreate, "DeckCreate state must be initialized.");
+    assert(state.deckCreate.roleCode, "Role must be selected before creating a deck.");
 
     const slots = {
       ...state.deckCreate.personalitySlots,

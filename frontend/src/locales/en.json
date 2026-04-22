@@ -478,13 +478,18 @@
         "title": "Choose outside interest"
       },
       "personality": {
-        "title": "Confirm personality cards"
+        "instructions": "Choose one card from each aspect. Each chosen card will be added to your deck in two copies.",
+        "title": "Choose personality cards"
       },
       "review": {
         "title": "Review deck"
       },
       "search": "Search cards",
+      "role": {
+        "title": "Choose role"
+      },
       "specialty": {
+        "role_preview": "Your role will be chosen from:",
         "title": "Choose specialty cards"
       },
       "steps": {
@@ -494,6 +499,7 @@
         "outside_interest": "Outside Interest",
         "personality": "Personality",
         "review": "Review",
+        "role": "Role",
         "specialty": "Specialty"
       },
       "title": "Create {{name}} deck"

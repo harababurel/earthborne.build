@@ -264,6 +264,15 @@
   gap: 0.75rem;
 }
 
+.review-card-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.review-card-link:hover {
+  text-decoration: underline;
+}
+
 .review-group {
   border-top: 1px solid var(--palette-1);
   padding-top: 0.75rem;
@@ -271,6 +280,46 @@
 
 .review-group ul {
   columns: 2 16rem;
+}
+
+.step-instructions {
+  margin: 0;
+  color: var(--text);
+  opacity: 0.8;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.personality-section {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.personality-section-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.role-preview {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.role-preview-label {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.role-preview-card {
+  opacity: 0.65;
+  pointer-events: none;
+  user-select: none;
 }
 
 .wizard-nav {

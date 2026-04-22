@@ -3,17 +3,18 @@ import type { StorageProvider } from "@/utils/constants";
 export type DeckCreateStep =
   | "name"
   | "aspect"
+  | "personality"
   | "background"
   | "specialty"
-  | "personality"
   | "outside_interest"
+  | "role"
   | "review";
 
 type DeckCreateState = {
   step: DeckCreateStep;
   name: string;
   provider: Extract<StorageProvider, "local" | "shared">;
-  roleCode: string;
+  roleCode?: string;
   aspectCode?: string;
   background?: string;
   specialty?: string;
@@ -26,7 +27,7 @@ type DeckCreateState = {
 export type DeckCreateSlice = {
   deckCreate: DeckCreateState | undefined;
 
-  initCreate: (code: string) => void;
+  initCreate: () => void;
   resetCreate: () => void;
 
   deckCreateSetStep(step: DeckCreateStep): void;
@@ -35,6 +36,8 @@ export type DeckCreateSlice = {
   deckCreateSetAspect(code: string): void;
   deckCreateSetBackground(type: string): void;
   deckCreateSetSpecialty(type: string): void;
+  deckCreateSetRole(code: string): void;
+  deckCreateSelectPersonalityCard(code: string): void;
   deckCreateToggleBackgroundCard(code: string): void;
   deckCreateToggleSpecialtyCard(code: string): void;
   deckCreateToggleOutsideInterest(code: string): void;
