@@ -133,7 +133,6 @@ export type Search = {
 
 export type GroupingType =
   | "aspect"
-  | "base_upgrades"
   | "category"
   | "cost"
   | "cycle"

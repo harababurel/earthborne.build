@@ -162,14 +162,6 @@ export function DeckSummaryQuickActions(props: DeckSummaryQuickActionsProps) {
     [deck.id, navigate],
   );
 
-  const onUpgrade = useCallback(
-    (evt: React.MouseEvent) => {
-      cancelEvent(evt);
-      navigate(`/deck/view/${deck.id}?upgrade`);
-    },
-    [deck.id, navigate],
-  );
-
   const { isArchived, toggleArchived } = useChangeArchiveStatus(deck.id);
 
   const onArchive = useCallback(
@@ -189,14 +181,6 @@ export function DeckSummaryQuickActions(props: DeckSummaryQuickActionsProps) {
         onClick={onEdit}
       >
         <PencilIcon />
-      </Button>
-      <Button
-        className={css["quick-action"]}
-        iconOnly
-        tooltip={t("deck.actions.upgrade")}
-        onClick={onUpgrade}
-      >
-        <i className="icon-xp-bold" />
       </Button>
       <Button
         className={css["quick-action"]}

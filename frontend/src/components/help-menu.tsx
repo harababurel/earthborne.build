@@ -184,7 +184,6 @@ export function HelpMenu() {
             { keybind: "t", description: t("deck_view.tab_tools") },
             { keybind: "h", description: t("deck_view.tab_history") },
             { keybind: "e", description: t("deck.actions.edit") },
-            { keybind: "u", description: t("deck.actions.upgrade") },
             {
               keybind: "cmd+a",
               description: t("deck.actions.archive"),
@@ -197,10 +196,6 @@ export function HelpMenu() {
               keybind: "cmd+backspace",
               description: t("deck.actions.delete"),
             },
-            {
-              keybind: "cmd+shift+backspace",
-              description: t("deck.actions.delete_upgrade"),
-            },
             { keybind: "cmd+i", description: t("deck_view.actions.import") },
             {
               keybind: "alt+l",
@@ -209,19 +204,6 @@ export function HelpMenu() {
             {
               keybind: "alt+s",
               description: t("deck_view.actions.display_as_scans"),
-            },
-          ],
-        ],
-        [
-          t("help.shortcuts.group_upgrade_modal"),
-          [
-            {
-              keybind: "cmd+enter",
-              description: t("deck_view.actions.save_upgrade"),
-            },
-            {
-              keybind: "cmd+shift+enter",
-              description: t("deck_view.actions.save_upgrade_close"),
             },
           ],
         ],

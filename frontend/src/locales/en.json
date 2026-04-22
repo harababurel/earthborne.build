@@ -409,7 +409,7 @@
       "delete_all_error": "Failed to delete local decks: {{error}}",
       "delete_all_loading": "Deleting local decks...",
       "import": "Import",
-      "import_help": "Enter a public deck ID or URL to import. The deck will be <strong>copied</strong>; history and upgrades will not be imported.",
+      "import_help": "Enter a public deck ID or URL to import. The deck will be <strong>copied</strong>; history will not be imported.",
       "import_json": "Import from JSON files",
       "more_filters": "More filters",
       "search_placeholder": "Search decks...",
@@ -595,7 +595,6 @@
           "symbol_tooltip": "Insert a symbol"
         }
       },
-      "read_only": "This deck has an upgrade and is read-only.",
       "recommendations": {
         "absolute": "Absolute",
         "absolute_help": "Shows the most used cards in {{name}} decks, ranked by percentage of decks that contain them.",
@@ -649,12 +648,10 @@
       },
       "history": {
         "added": "Added",
-        "current_upgrade": "Current upgrade",
         "initial_deck": "Initial deck",
         "no_changes": "No changes",
         "removed": "Removed",
-        "slot_changes": "{{slot}} changes",
-        "upgrade": "Upgrade #{{index}}"
+        "slot_changes": "{{slot}} changes"
       },
       "import_failed": "Failed to import deck: {{error}}",
       "latest_version": "<a>Jump to latest version</a>.",
@@ -887,7 +884,6 @@
         "group_deck_editor": "Deck editor",
         "group_deck_view": "Deck view",
         "group_general": "General",
-        "group_upgrade_modal": "Upgrade modal",
         "title": "Keyboard shortcuts"
       },
       "title": "Help"

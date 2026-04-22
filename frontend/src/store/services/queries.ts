@@ -248,27 +248,6 @@ export async function deleteDeck(
   });
 }
 
-export async function upgradeDeck(
-  clientId: string,
-  id: Id,
-  payload: {
-    xp: number;
-    exiles?: string;
-    meta?: string;
-  },
-) {
-  const res = await authenticatedRequest(`/user/decks/${id}/upgrade`, {
-    headers: {
-      "Content-Type": "application/json",
-      "X-Client-Id": clientId,
-    },
-    body: JSON.stringify(payload),
-    method: "POST",
-  });
-
-  return await res.json();
-}
-
 export async function getRecommendations(
   req: RecommendationsRequest,
 ): Promise<RecommendationsResponse["data"]["recommendations"]> {

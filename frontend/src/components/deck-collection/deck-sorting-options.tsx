@@ -43,14 +43,6 @@ export function DeckSortingOptions(props: Props) {
         label: t("deck_collection.sorting.alphabetical_desc"),
         sorting: { order: "desc", criteria: "alphabetical" },
       },
-      {
-        label: t("deck_collection.sorting.xp_desc"),
-        sorting: { order: "desc", criteria: "xp" },
-      },
-      {
-        label: t("deck_collection.sorting.xp_asc"),
-        sorting: { order: "asc", criteria: "xp" },
-      },
     ],
     [t],
   );

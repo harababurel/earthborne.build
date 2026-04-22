@@ -18,7 +18,6 @@ function getInitialUIState(): DeckCollectionState {
       search: "",
       tags: [],
       validity: "all",
-      xpCost: undefined,
     },
     open: {
       cards: false,
@@ -26,7 +25,6 @@ function getInitialUIState(): DeckCollectionState {
       provider: true,
       tags: false,
       validity: false,
-      xpCost: false,
     },
     sort: {
       criteria: "date_updated",

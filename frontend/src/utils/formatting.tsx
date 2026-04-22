@@ -35,22 +35,6 @@ export function formatRelationTitle(id: string) {
   return i18next.t(`common.relations.${id}`);
 }
 
-export function formatUpgradeXP(
-  xp: number | null,
-  adjustment: number | null,
-  spent: number | null,
-) {
-  const text = i18next.t("deck_view.history.upgrade_xp", {
-    xp: xp ?? 0,
-    spent: spent ?? 0,
-    adjustment: adjustment
-      ? `(${adjustment >= 0 ? "+" : "-"}${Math.abs(adjustment)})`
-      : "",
-  });
-
-  return <span>{text}</span>;
-}
-
 export function formatGroupingType(type: string) {
   return i18n.t(`lists.categories.${type}`);
 }

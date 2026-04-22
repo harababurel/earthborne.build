@@ -3,7 +3,6 @@ import Attachments from "@/components/attachments/attachments";
 import { getMatchingAttachables } from "@/components/attachments/attachments.helpers";
 import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
-import { selectAvailableUpgrades } from "@/store/selectors/lists";
 import { mapTabToSlot } from "@/store/slices/deck-edits.types";
 import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { isEmpty } from "@/utils/is-empty";
@@ -13,7 +12,6 @@ import { DraftBasicWeakness } from "./editor/draft-basic-weakness";
 import { DrawBasicWeakness } from "./editor/draw-basic-weakness";
 import { MoveToMainDeck } from "./editor/move-to-main-deck";
 import { MoveToSideDeck } from "./editor/move-to-side-deck";
-import { QuickUpgrade } from "./editor/quick-upgrade";
 
 type Props = {
   canEdit?: boolean;
@@ -28,14 +26,6 @@ export function CardExtras(props: Props) {
   const { canEdit, card, deck, quantity, currentTab, currentTool } = props;
 
   const settings = useStore((state) => state.settings);
-
-  const availableUpgrades = useStore((state) =>
-    selectAvailableUpgrades(
-      state,
-      deck,
-      currentTab === "extraSlots" ? "extraSlots" : "slots",
-    ),
-  );
 
   if (currentTab === "config" || currentTab === "ignoreDeckLimitSlots") {
     return null;
@@ -71,26 +61,14 @@ export function CardExtras(props: Props) {
   const hasAttachable =
     currentTab === "slots" && !isEmpty(getMatchingAttachables(card, deck));
 
-  const hasUpgrades =
-    canEdit && !isEmpty(availableUpgrades.upgrades[card.code]);
-
   const canShowMoveButton = !!quantity && currentTab !== "slots";
 
-  if (!hasAttachable && !hasUpgrades && !canShowMoveButton) {
+  if (!hasAttachable && !canShowMoveButton) {
     return null;
   }
 
   return (
     <div className={css["extra-row"]}>
-      {hasUpgrades && (
-        <QuickUpgrade
-          availableUpgrades={availableUpgrades}
-          currentTab={currentTab}
-          hideButton={!quantity}
-          card={card}
-          deck={deck}
-        />
-      )}
       {currentTab === "slots" &&
         canShowMoveButton &&
         settings.showMoveToSideDeck && (

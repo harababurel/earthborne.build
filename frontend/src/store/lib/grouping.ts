@@ -328,7 +328,6 @@ function applyGrouping(
       // ER has no slots; fall through to "none".
       return [{ cards, key: "all", type: "none" }];
     case "level":
-    case "base_upgrades":
       // ER has no XP levels; fall through to "none".
       return [{ cards, key: "all", type: "none" }];
     case "faction":
@@ -478,10 +477,6 @@ export function getGroupingKeyLabel(
     case "category": {
       if (segment === NONE) return "";
       return i18n.t(`common.category.${segment}`);
-    }
-
-    case "base_upgrades": {
-      return "";
     }
 
     case "pack": {

@@ -19,7 +19,6 @@ import { DeckPropertiesFilter } from "./deck-properties-filter";
 import { DeckProviderFilter } from "./deck-provider-filter";
 import { DeckSortingOptions } from "./deck-sorting-options";
 import { DeckTagsFilter } from "./deck-tags-filter";
-import { DeckXPCostFilter } from "./deck-xp-cost-filter";
 
 type Props = {
   filteredCount: number;
@@ -90,7 +89,6 @@ export function DeckCollectionFilters(props: Props) {
               )}
               <DeckCardsFilter containerClass={css["filter"]} />
               <DeckTagsFilter containerClass={css["filter"]} />
-              <DeckXPCostFilter containerClass={css["filter"]} />
               <DeckProviderFilter containerClass={css["filter"]} />
               <DeckPropertiesFilter containerClass={css["filter"]} />
             </Scroller>

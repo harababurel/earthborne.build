@@ -4,7 +4,6 @@ export type DeckProperties = Record<DeckPropertyName, string | boolean>;
 
 type DeckFiltersType = {
   cards: string[];
-  xpCost: RangeMinMax;
   faction: string[];
   properties: DeckProperties;
   provider: StorageProvider[];
@@ -53,8 +52,4 @@ export type DeckCollectionSlice = {
 
 export type DeckPropertyName = "parallel";
 
-export type SortCriteria =
-  | "date_updated"
-  | "date_created"
-  | "alphabetical"
-  | "xp";
+export type SortCriteria = "date_updated" | "date_created" | "alphabetical";
