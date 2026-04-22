@@ -258,6 +258,12 @@
     font-weight: 500;
   }
 
+  .container.tooltip .name button,
+  .container.tooltip .name a,
+  .container.tooltip .name span {
+    font-weight: 700;
+  }
+
   .name button,
   .name a,
   .name span {
