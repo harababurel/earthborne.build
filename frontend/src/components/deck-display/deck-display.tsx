@@ -12,13 +12,19 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
 import type { DeckValidationResult } from "@/store/lib/deck-validation";
+import { resolveCardWithRelations } from "@/store/lib/resolve-card";
 import { deckTags } from "@/store/lib/resolve-deck";
-import type { ResolvedDeck } from "@/store/lib/types";
+import type { ResolvedCard, ResolvedDeck } from "@/store/lib/types";
 import type { History } from "@/store/selectors/decks";
-import { selectMetadata } from "@/store/selectors/shared";
+import {
+  selectLocaleSortingCollator,
+  selectLookupTables,
+  selectMetadata,
+} from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import { useAccentColor } from "@/utils/use-accent-color";
 import DeckDescription from "../deck-description";
+import { DeckEvolutionBadge } from "../deck-evolution-badge";
 import {
   DeckTags,
   DeckTagsContainer,
@@ -148,6 +154,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
               <LimitedCardPoolTag deck={deck} />
               <SealedDeckTag deck={deck} />
               <DeckTags tags={deckTags(deck, type === "deck" ? " " : ", ")} />
+              <DeckEvolutionBadge deck={deck} />
             </DeckTagsContainer>
           </div>
           {headerSlot && <div>{headerSlot}</div>}
@@ -225,6 +232,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
                   validation={validation}
                 />
                 <Decklist deck={deck} />
+                <DeckCampaignSections deck={deck} />
               </div>
             </TabsContent>
             <TabsContent className={css["tab"]} value="tools">
@@ -248,6 +256,66 @@ export function DeckDisplay(props: DeckDisplayProps) {
       </main>
     </AppLayout>
   );
+}
+
+function DeckCampaignSections({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+  const rewards = useResolvedSlotCards(deck.rewards);
+  const displaced = useResolvedSlotCards(deck.displaced);
+  const maladies = useResolvedSlotCards(deck.maladies);
+
+  if (!rewards.length && !displaced.length && !maladies.length) return null;
+
+  return (
+    <Plane>
+      <CampaignSection title={t("deck.evolution.rewards")} cards={rewards} />
+      <CampaignSection
+        title={t("deck.evolution.displaced")}
+        cards={displaced}
+      />
+      <CampaignSection title={t("deck.evolution.maladies")} cards={maladies} />
+    </Plane>
+  );
+}
+
+function CampaignSection({
+  cards,
+  title,
+}: {
+  cards: ResolvedCard[];
+  title: string;
+}) {
+  if (!cards.length) return null;
+
+  return (
+    <section className={css["campaign-section"]}>
+      <h2>{title}</h2>
+      <ul>
+        {cards.map((card) => (
+          <li key={card.card.code}>{card.card.name}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function useResolvedSlotCards(slots: ResolvedDeck["rewards"]) {
+  const metadata = useStore(selectMetadata);
+  const lookupTables = useStore(selectLookupTables);
+  const collator = useStore(selectLocaleSortingCollator);
+
+  return Object.entries(slots ?? {})
+    .filter(([, quantity]) => quantity > 0)
+    .map(([code]) =>
+      resolveCardWithRelations(
+        { metadata, lookupTables },
+        collator,
+        code,
+        true,
+      ),
+    )
+    .filter((card): card is ResolvedCard => !!card)
+    .sort((a, b) => collator.compare(a.card.name, b.card.name));
 }
 
 type TitleEditModalProps = {

@@ -2,11 +2,9 @@
   margin-right: 1rem;
 }
 
-.traits {
+.role-text {
   font-family: var(--font-family-content);
-  font-style: italic;
   font-size: var(--text-2xs);
-  font-weight: 700;
 }
 
 .signatures {

@@ -1,10 +1,11 @@
+import { DECK_CARD_COPIES, PERSONALITY_PICKS } from "@arkham-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { displayAttribute } from "@/utils/card-utils";
 import { getDefaultDeckName } from "../lib/deck-factory";
 import { selectMetadata } from "../selectors/shared";
 import type { StoreState } from ".";
-import type { CardSet, DeckCreateSlice } from "./deck-create.types";
+import type { DeckCreateSlice, DeckCreateStep } from "./deck-create.types";
 
 export const createDeckCreateSlice: StateCreator<
   StoreState,
@@ -14,182 +15,140 @@ export const createDeckCreateSlice: StateCreator<
 > = (set) => ({
   deckCreate: undefined,
 
-  initCreate(code: string, _initialInvestigatorChoice?: string) {
+  initCreate(code: string) {
     set((state) => {
       const metadata = selectMetadata(state);
-      const settings = state.settings;
-
-      const investigator = metadata.cards[code];
+      const role = metadata.cards[code];
       assert(
-        investigator && investigator.type_code === "role",
+        role && role.type_code === "role",
         "Deck configure must be initialized with a role card.",
       );
 
-      const provider = settings.defaultStorageProvider;
-      const providerExists = provider === "local" || provider === "shared";
-
-      const cardPool = undefined;
+      const provider = state.settings.defaultStorageProvider;
+      const personalitySlots = Object.values(metadata.cards)
+        .filter((card) => card.category === "personality")
+        .slice(0, PERSONALITY_PICKS)
+        .reduce<Record<string, number>>((acc, card) => {
+          acc[card.code] = DECK_CARD_COPIES;
+          return acc;
+        }, {});
 
       return {
         deckCreate: {
-          extraCardQuantities: {},
-          investigatorBackCode: investigator.code,
-          investigatorCode: investigator.code,
-          investigatorFrontCode: investigator.code,
-          provider: providerExists ? provider : "local",
-          selections: {},
-          sets: ["requiredCards"],
-          title: getDefaultDeckName(
-            displayAttribute(investigator, "name"),
-            investigator.energy_aspect ?? "",
+          step: "name",
+          name: getDefaultDeckName(
+            displayAttribute(role, "name"),
+            role.energy_aspect ?? "",
           ),
-          cardPool,
+          provider:
+            provider === "local" || provider === "shared" ? provider : "local",
+          roleCode: role.code,
+          backgroundSlots: {},
+          specialtySlots: {},
+          personalitySlots,
+          outsideInterestSlots: {},
         },
       };
     });
   },
 
   resetCreate() {
-    set({
-      deckCreate: undefined,
-    });
+    set({ deckCreate: undefined });
   },
 
-  deckCreateSetTitle(value: string) {
+  deckCreateSetStep(step: DeckCreateStep) {
     set((state) => {
       assert(state.deckCreate, "DeckCreate slice must be initialized.");
-
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          title: value,
-        },
-      };
+      return { deckCreate: { ...state.deckCreate, step } };
     });
   },
 
-  deckCreateSetInvestigatorCode(value: string, side?: "front" | "back") {
+  deckCreateSetName(value: string) {
     set((state) => {
       assert(state.deckCreate, "DeckCreate slice must be initialized.");
-
-      if (!side) {
-        return {
-          deckCreate: {
-            ...state.deckCreate,
-            investigatorCode: value,
-            investigatorFrontCode: value,
-            investigatorBackCode: value,
-          },
-        };
-      }
-
-      const path =
-        side === "front" ? "investigatorFrontCode" : "investigatorBackCode";
-
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          [path]: value,
-        },
-      };
+      return { deckCreate: { ...state.deckCreate, name: value } };
     });
   },
 
-  deckCreateSetSelection(key, value) {
-    set((state) => {
-      assert(state.deckCreate, "DeckCreate slice must be initialized.");
-
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          selections: {
-            ...state.deckCreate.selections,
-            [key]: value,
-          },
-        },
-      };
-    });
-  },
-
-  deckCreateToggleCardSet(value) {
-    set((state) => {
-      assert(state.deckCreate, "DeckCreate slice must be initialized.");
-      assert(isCardSet(value), "Invalid card set value.");
-
-      const nextSets: CardSet[] = state.deckCreate.sets.filter((set) => {
-        const mutuallyExclusive =
-          (set === "advanced" && value === "requiredCards") ||
-          (set === "requiredCards" && value === "advanced");
-
-        return !mutuallyExclusive;
-      });
-
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          sets: nextSets.includes(value)
-            ? nextSets.filter((set) => set !== value)
-            : [...nextSets, value],
-        },
-      };
-    });
-  },
-
-  deckCreateChangeExtraCardQuantity(card, quantity) {
-    set((state) => {
-      assert(state.deckCreate, "DeckCreate slice must be initialized.");
-
-      const currentQuantity =
-        state.deckCreate.extraCardQuantities[card.code] ?? card.quantity;
-
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          extraCardQuantities: {
-            ...state.deckCreate.extraCardQuantities,
-            [card.code]: currentQuantity + quantity,
-          },
-        },
-      };
-    });
-  },
-  deckCreateSetCardPool(value) {
-    set((state) => {
-      assert(state.deckCreate, "DeckCreate slice must be initialized.");
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          cardPool: value,
-        },
-      };
-    });
-  },
-  deckCreateSetSealed(sealed) {
-    set((state) => {
-      assert(state.deckCreate, "DeckCreate slice must be initialized.");
-      return {
-        deckCreate: {
-          ...state.deckCreate,
-          sealed,
-        },
-      };
-    });
-  },
   deckCreateSetProvider(provider) {
     set((state) => {
       assert(state.deckCreate, "DeckCreate slice must be initialized.");
+      return { deckCreate: { ...state.deckCreate, provider } };
+    });
+  },
+
+  deckCreateSetAspect(code) {
+    set((state) => {
+      assert(state.deckCreate, "DeckCreate slice must be initialized.");
+      return { deckCreate: { ...state.deckCreate, aspectCode: code } };
+    });
+  },
+
+  deckCreateSetBackground(type) {
+    set((state) => {
+      assert(state.deckCreate, "DeckCreate slice must be initialized.");
       return {
         deckCreate: {
           ...state.deckCreate,
-          provider,
+          background: type,
+          backgroundSlots: {},
+          outsideInterestSlots: {},
+        },
+      };
+    });
+  },
+
+  deckCreateToggleBackgroundCard(code) {
+    set((state) => toggleSlot(state, "backgroundSlots", code, 5));
+  },
+
+  deckCreateToggleSpecialtyCard(code) {
+    set((state) => toggleSlot(state, "specialtySlots", code, 5));
+  },
+
+  deckCreateToggleOutsideInterest(code) {
+    set((state) => {
+      assert(state.deckCreate, "DeckCreate slice must be initialized.");
+      const selected = state.deckCreate.outsideInterestSlots[code];
+      return {
+        deckCreate: {
+          ...state.deckCreate,
+          outsideInterestSlots: selected ? {} : { [code]: DECK_CARD_COPIES },
         },
       };
     });
   },
 });
 
-function isCardSet(value: string): value is CardSet {
-  return (
-    value === "requiredCards" || value === "advanced" || value === "replacement"
-  );
+type SlotGroup = "backgroundSlots" | "specialtySlots" | "outsideInterestSlots";
+
+function toggleSlot(
+  state: StoreState,
+  group: SlotGroup,
+  code: string,
+  limit: number,
+) {
+  assert(state.deckCreate, "DeckCreate slice must be initialized.");
+
+  const slots = state.deckCreate[group];
+  const selected = !!slots[code];
+  const selectedCount = Object.values(slots).filter((q) => q > 0).length;
+
+  if (!selected && selectedCount >= limit) {
+    return { deckCreate: state.deckCreate };
+  }
+
+  const nextSlots = { ...slots };
+  if (selected) {
+    delete nextSlots[code];
+  } else {
+    nextSlots[code] = DECK_CARD_COPIES;
+  }
+
+  return {
+    deckCreate: {
+      ...state.deckCreate,
+      [group]: nextSlots,
+    },
+  };
 }

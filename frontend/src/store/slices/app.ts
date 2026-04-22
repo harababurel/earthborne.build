@@ -12,7 +12,6 @@ import { applyLocalData } from "../lib/local-data";
 import { mappedByCode } from "../lib/metadata-utils";
 import { resolveDeck } from "../lib/resolve-deck";
 import { dehydrate, hydrate } from "../persist";
-import { selectDeckCreateCardSets } from "../selectors/deck-create";
 import { selectDeckValid } from "../selectors/decks";
 import {
   selectLocaleSortingCollator,
@@ -136,37 +135,30 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
   },
   async createDeck() {
     const state = get();
-    const _metadata = selectMetadata(state);
+    const metadata = selectMetadata(state);
 
     assert(state.deckCreate, "DeckCreate state must be initialized.");
 
-    const slots: Record<string, number> = {};
+    const slots = {
+      ...state.deckCreate.personalitySlots,
+      ...state.deckCreate.backgroundSlots,
+      ...state.deckCreate.specialtySlots,
+      ...state.deckCreate.outsideInterestSlots,
+    };
 
-    const { investigatorCode } = state.deckCreate;
-
-    const cardSets = selectDeckCreateCardSets(state);
-
-    for (const set of cardSets) {
-      if (!set.selected) continue;
-
-      for (const { card } of set.cards) {
-        const quantity =
-          state.deckCreate.extraCardQuantities?.[card.code] ??
-          set.quantities?.[card.code];
-
-        if (!quantity) continue;
-
-        slots[card.code] = quantity;
-      }
-    }
+    const role = metadata.cards[state.deckCreate.roleCode];
+    const specialty = role?.specialty_type ?? "unknown";
 
     const deck = createDeck({
-      name: state.deckCreate.title,
+      name: state.deckCreate.name,
       slots,
-      role_code: investigatorCode,
-      aspect_code: "unknown",
-      background: "unknown",
-      specialty: "unknown",
+      role_code: state.deckCreate.roleCode,
+      aspect_code: state.deckCreate.aspectCode ?? "unknown",
+      background: state.deckCreate.background ?? "unknown",
+      specialty,
+      rewards: null,
+      displaced: null,
+      maladies: null,
     });
 
     set((prev) => ({

@@ -1,38 +1,39 @@
-import type { Card, SealedDeckResponse } from "@arkham-build/shared";
+import type { StorageProvider } from "@/utils/constants";
 
-export type CardSet = "requiredCards" | "advanced" | "replacement";
+export type DeckCreateStep =
+  | "name"
+  | "aspect"
+  | "background"
+  | "specialty"
+  | "personality"
+  | "outside_interest"
+  | "review";
 
 type DeckCreateState = {
-  title: string;
-  investigatorCode: string;
-  investigatorFrontCode: string;
-  investigatorBackCode: string;
-  extraCardQuantities: Record<string, number>;
-  provider: string;
-  sets: CardSet[];
-  selections: {
-    [key: string]: string;
-  };
-  cardPool?: string[];
-  sealed?: SealedDeckResponse;
+  step: DeckCreateStep;
+  name: string;
+  provider: Extract<StorageProvider, "local" | "shared">;
+  roleCode: string;
+  aspectCode?: string;
+  background?: string;
+  backgroundSlots: Record<string, number>;
+  specialtySlots: Record<string, number>;
+  personalitySlots: Record<string, number>;
+  outsideInterestSlots: Record<string, number>;
 };
 
 export type DeckCreateSlice = {
   deckCreate: DeckCreateState | undefined;
 
-  initCreate: (code: string, initialInvestigatorChoice?: string) => void;
+  initCreate: (code: string) => void;
   resetCreate: () => void;
 
-  deckCreateChangeExtraCardQuantity: (card: Card, quantity: number) => void;
-
-  deckCreateSetProvider(provider: string): void;
-  deckCreateSetSelection(key: string, value: string): void;
-  deckCreateSetTitle: (value: string) => void;
-  deckCreateToggleCardSet: (value: string) => void;
-  deckCreateSetInvestigatorCode: (
-    value: string,
-    side?: "front" | "back",
-  ) => void;
-  deckCreateSetCardPool: (value: string[]) => void;
-  deckCreateSetSealed: (payload: SealedDeckResponse | undefined) => void;
+  deckCreateSetStep(step: DeckCreateStep): void;
+  deckCreateSetName(value: string): void;
+  deckCreateSetProvider(provider: "local" | "shared"): void;
+  deckCreateSetAspect(code: string): void;
+  deckCreateSetBackground(type: string): void;
+  deckCreateToggleBackgroundCard(code: string): void;
+  deckCreateToggleSpecialtyCard(code: string): void;
+  deckCreateToggleOutsideInterest(code: string): void;
 };

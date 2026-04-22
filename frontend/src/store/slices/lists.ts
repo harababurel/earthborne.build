@@ -887,21 +887,6 @@ function makeList({
   };
 }
 
-function investigatorFilters({
-  additionalFilters = [] as FilterKey[],
-  showOwnershipFilter = false,
-}) {
-  const filters: FilterKey[] = ["faction", "investigator_skills"];
-
-  if (showOwnershipFilter) {
-    filters.push("ownership");
-  }
-
-  filters.push("pack", "trait", "health", "sanity", ...additionalFilters);
-
-  return filters;
-}
-
 function cardsFilters({
   additionalFilters = [] as FilterKey[],
   showOwnershipFilter = false,
@@ -970,9 +955,7 @@ export function makeLists(
       ]),
       initialValues,
       key: "create_deck",
-      filters: investigatorFilters({
-        showOwnershipFilter: true,
-      }),
+      filters: ["ownership", "pack"],
     }),
     editor: makeList({
       display: getDisplaySettings(initialValues, settings),

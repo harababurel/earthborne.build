@@ -102,3 +102,125 @@
 .provider-default {
   margin-top: 0.25rem;
 }
+
+.wizard-layout {
+  min-height: 100dvh;
+  margin-inline: auto;
+  max-width: var(--layout-max-width);
+  padding-inline: var(--layout-padding);
+  padding-bottom: 0.5rem;
+}
+
+.wizard {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.progress {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--palette-1);
+  border-radius: var(--rounded);
+  color: var(--text);
+  opacity: 0.65;
+}
+
+.progress-step svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.progress-step-active {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+.wizard-step {
+  display: grid;
+  gap: 1rem;
+}
+
+.wizard-step h1,
+.wizard-step h2 {
+  margin: 0;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.selectable-card {
+  display: block;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--rounded);
+  background: transparent;
+  color: inherit;
+  text-align: initial;
+  cursor: pointer;
+}
+
+.selectable-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.selectable-card.selected {
+  border-color: var(--accent);
+}
+
+.identity {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.75rem;
+}
+
+.review-group {
+  border-top: 1px solid var(--palette-1);
+  padding-top: 0.75rem;
+}
+
+.review-group ul {
+  columns: 2 16rem;
+}
+
+.wizard-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: 0.75rem;
+  background: var(--palette-point-five);
+}

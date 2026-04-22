@@ -3,9 +3,12 @@ import type { Card } from "@arkham-build/shared";
 import type { Annotations } from "../lib/types";
 import type { Id } from "../schemas/deck.schema";
 
-export type Slot = "slots";
+export type Slot = "slots" | "rewards" | "displaced" | "maladies";
 
-export function mapTabToSlot(_tab: string): Slot {
+export function mapTabToSlot(tab: string): Slot {
+  if (tab === "rewards" || tab === "displaced" || tab === "maladies") {
+    return tab;
+  }
   return "slots";
 }
 
@@ -15,6 +18,9 @@ export type EditState = {
   name?: string | null;
   quantities?: {
     slots?: Record<string, number>;
+    rewards?: Record<string, number>;
+    displaced?: Record<string, number>;
+    maladies?: Record<string, number>;
   };
   annotations?: Annotations;
   tags?: string | null;
@@ -45,6 +51,22 @@ export type DeckEditsSlice = {
   ): void;
 
   updateInvestigatorCode(deckId: Id, code: string): void;
+
+  unlockReward(deckId: Id, cardCode: string): void;
+
+  removeUnlockedReward(deckId: Id, cardCode: string): void;
+
+  swapRewardIntoSlots(
+    deckId: Id,
+    rewardCode: string,
+    displacedCode: string,
+  ): void;
+
+  restoreDisplaced(deckId: Id, displacedCode: string, outCode?: string): void;
+
+  addMalady(deckId: Id, cardCode: string): void;
+
+  removeMalady(deckId: Id, cardCode: string): void;
 
   updateName(deckId: Id, value: string): void;
 

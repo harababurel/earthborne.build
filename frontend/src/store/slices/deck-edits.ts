@@ -128,6 +128,61 @@ export const createDeckEditsSlice: StateCreator<
     dehydrate(get(), "edits").catch(console.error);
   },
 
+  unlockReward(deckId, cardCode) {
+    set((state) =>
+      setQuantityEdits(state, deckId, { rewards: { [cardCode]: 1 } }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
+  removeUnlockedReward(deckId, cardCode) {
+    set((state) =>
+      setQuantityEdits(state, deckId, { rewards: { [cardCode]: 0 } }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
+  swapRewardIntoSlots(deckId, rewardCode, displacedCode) {
+    set((state) =>
+      setQuantityEdits(state, deckId, {
+        rewards: { [rewardCode]: 0 },
+        slots: { [rewardCode]: 2, [displacedCode]: 0 },
+        displaced: { [displacedCode]: 2 },
+      }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
+  restoreDisplaced(deckId, displacedCode, outCode) {
+    set((state) =>
+      setQuantityEdits(state, deckId, {
+        displaced: {
+          [displacedCode]: 0,
+          ...(outCode ? { [outCode]: 2 } : {}),
+        },
+        slots: {
+          [displacedCode]: 2,
+          ...(outCode ? { [outCode]: 0 } : {}),
+        },
+      }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
+  addMalady(deckId, cardCode) {
+    set((state) =>
+      setQuantityEdits(state, deckId, { maladies: { [cardCode]: 1 } }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
+  removeMalady(deckId, cardCode) {
+    set((state) =>
+      setQuantityEdits(state, deckId, { maladies: { [cardCode]: 0 } }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
   completeTask(deckId, card) {
     assert(
       card.traits?.includes("Task"),
@@ -208,4 +263,32 @@ function getCardQuantityUpdate(
   };
 
   return nextState;
+}
+
+function setQuantityEdits(
+  state: StoreState,
+  deckId: Id,
+  quantities: Partial<Record<Slot, Record<string, number>>>,
+): Partial<StoreState> {
+  const edits = currentEdits(state, deckId);
+  const nextQuantities = { ...edits.quantities };
+
+  for (const [slot, changes] of Object.entries(quantities)) {
+    const slotKey = slot as Slot;
+    nextQuantities[slotKey] = {
+      ...nextQuantities[slotKey],
+      ...changes,
+    };
+  }
+
+  return {
+    deckEdits: {
+      ...state.deckEdits,
+      [deckId]: {
+        ...edits,
+        quantities: nextQuantities,
+        type: "user" as const,
+      },
+    },
+  };
 }

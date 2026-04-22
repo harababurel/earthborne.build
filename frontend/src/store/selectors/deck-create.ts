@@ -1,8 +1,8 @@
+import type { Card } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import { assert } from "@/utils/assert";
-import { formatRelationTitle } from "@/utils/formatting";
 import { resolveCardWithRelations } from "../lib/resolve-card";
-import type { CardSet, CardWithRelations } from "../lib/types";
+import type { ResolvedCard } from "../lib/types";
 import type { StoreState } from "../slices";
 import {
   selectLocaleSortingCollator,
@@ -16,64 +16,94 @@ export function selectDeckCreateChecked(state: StoreState) {
   return deckCreate;
 }
 
-export const selectDeckCreateInvestigators = createSelector(
+export const selectDeckCreateRole = createSelector(
   selectDeckCreateChecked,
   selectMetadata,
   selectLookupTables,
   selectLocaleSortingCollator,
   (deckCreate, metadata, lookupTables, collator) => {
-    return Object.entries({
-      investigator: deckCreate.investigatorCode,
-      back: deckCreate.investigatorBackCode,
-      front: deckCreate.investigatorFrontCode,
-    }).reduce(
-      (acc, [key, code]) => {
-        const card = resolveCardWithRelations(
-          { metadata, lookupTables },
-          collator,
-          code,
-          true,
-        );
-
-        assert(card, `${key} card must be resolved.`);
-
-        acc[key] = card;
-        return acc;
-      },
-      {} as Record<string, CardWithRelations>,
+    const card = resolveCardWithRelations(
+      { metadata, lookupTables },
+      collator,
+      deckCreate.roleCode,
+      true,
     );
+    assert(card, "Role card must be resolved.");
+    return card;
   },
 );
 
-export const selectDeckCreateCardSets = createSelector(
+export const selectDeckCreateAspectCards = createCardListSelector(
+  (card) => card.type_code === "aspect",
+);
+
+export const selectDeckCreatePersonalityCards = createCardListSelector(
+  (card) => card.category === "personality",
+);
+
+export const selectDeckCreateBackgroundCards = createSelector(
   selectMetadata,
   selectLookupTables,
   selectLocaleSortingCollator,
-  selectDeckCreateChecked,
-  selectDeckCreateInvestigators,
-  (_metadata, _lookupTables, _collator, _deckCreate, investigators) => {
-    const groupings: CardSet[] = [];
-
-    const { back } = investigators;
-    const { relations } = back;
-
-    if (relations?.bound?.length) {
-      groupings.push({
-        id: "bound",
-        title: formatRelationTitle("bound"),
-        canSelect: false,
-        selected: false,
-        cards: relations.bound,
-        quantities: relations.bound.reduce(
-          (acc, { card }) => {
-            acc[card.code] = card.quantity;
-            return acc;
-          },
-          {} as Record<string, number>,
-        ),
-      });
-    }
-
-    return groupings;
-  },
+  (_: StoreState, background?: string) => background,
+  (metadata, lookupTables, collator, background) =>
+    resolveCards(
+      { metadata, lookupTables },
+      collator,
+      (card) => !!background && card.background_type === background,
+    ),
 );
+
+export const selectDeckCreateSpecialtyCards = createSelector(
+  selectMetadata,
+  selectLookupTables,
+  selectLocaleSortingCollator,
+  (_: StoreState, specialty?: string) => specialty,
+  (metadata, lookupTables, collator, specialty) =>
+    resolveCards(
+      { metadata, lookupTables },
+      collator,
+      (card) => !!specialty && card.specialty_type === specialty,
+    ),
+);
+
+export const selectDeckCreateOutsideInterestCards = createSelector(
+  selectMetadata,
+  selectLookupTables,
+  selectLocaleSortingCollator,
+  (_: StoreState, background?: string) => background,
+  (_: StoreState, _background?: string, specialty?: string) => specialty,
+  (metadata, lookupTables, collator, background, specialty) =>
+    resolveCards({ metadata, lookupTables }, collator, (card) => {
+      if (card.is_expert) return false;
+      if (card.category === "background") {
+        return !!background && card.background_type !== background;
+      }
+      if (card.category === "specialty") {
+        return !!specialty && card.specialty_type !== specialty;
+      }
+      return false;
+    }),
+);
+
+function createCardListSelector(predicate: (card: Card) => boolean) {
+  return createSelector(
+    selectMetadata,
+    selectLookupTables,
+    selectLocaleSortingCollator,
+    (metadata, lookupTables, collator) =>
+      resolveCards({ metadata, lookupTables }, collator, predicate),
+  );
+}
+
+function resolveCards(
+  deps: Parameters<typeof resolveCardWithRelations>[0],
+  collator: Intl.Collator,
+  predicate: (card: Card) => boolean,
+): ResolvedCard[] {
+  return Object.values(deps.metadata.cards)
+    .filter(predicate)
+    .sort((a, b) => collator.compare(a.name, b.name))
+    .map((card) => resolveCardWithRelations(deps, collator, card.code, true))
+    .filter((card): card is ResolvedCard => !!card);
+}

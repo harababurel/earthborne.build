@@ -9,6 +9,7 @@ import { ResolvedDeckProvider } from "@/components/resolved-deck-context-provide
 import { useStore } from "@/store";
 import type { Id } from "@/store/schemas/deck.schema";
 import {
+  type History,
   selectDeckValid,
   selectResolvedDeckById,
 } from "@/store/selectors/decks";
@@ -34,7 +35,7 @@ function DeckView() {
 }
 
 function LocalDeckView({ id }: { id: Id }) {
-  const history: unknown[] = [];
+  const history: History = [];
 
   const resolvedDeck = useStore((state) =>
     selectResolvedDeckById(state, id, false),

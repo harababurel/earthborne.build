@@ -1208,7 +1208,7 @@ export const selectPackOptions = createSelector(
   selectListFilterProperties,
   selectCyclesAndPacks,
   (listFilterProperties, cycles) => {
-    return cycles.reduce((acc, cycle) => {
+    const packs = cycles.reduce((acc, cycle) => {
       if (cycle.reprintPacks.length && cycle.code !== "core") {
         acc.push(
           ...cycle.reprintPacks.filter((p) =>
@@ -1233,6 +1233,13 @@ export const selectPackOptions = createSelector(
 
       return acc;
     }, [] as Pack[]);
+
+    return packs.filter(
+      (pack): pack is Pack =>
+        !!pack?.code &&
+        !!displayPackName(pack).trim() &&
+        listFilterProperties.packs.has(pack.code),
+    );
   },
 );
 

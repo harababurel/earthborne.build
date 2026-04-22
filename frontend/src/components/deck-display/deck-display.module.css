@@ -108,3 +108,11 @@
   position: sticky;
   top: 0.125rem;
 }
+
+.campaign-section + .campaign-section {
+  margin-top: 1rem;
+}
+
+.campaign-section h2 {
+  margin-top: 0;
+}

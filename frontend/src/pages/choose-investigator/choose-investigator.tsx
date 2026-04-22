@@ -3,6 +3,7 @@ import { PlusIcon } from "lucide-react";
 import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
+import { CardText } from "@/components/card/card-text";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { Button } from "@/components/ui/button";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
@@ -34,9 +35,13 @@ function DeckCreateChooseInvestigator() {
       renderCardMetaExtra:
         activeList?.display.viewMode === "compact"
           ? (card: Card) => (
-              <p className={css["traits"]}>
-                &middot; {displayAttribute(card, "traits")}
-              </p>
+              <div className={css["role-text"]}>
+                <CardText
+                  size="compact"
+                  text={displayAttribute(card, "text")}
+                  typeCode={card.type_code}
+                />
+              </div>
             )
           : undefined,
 

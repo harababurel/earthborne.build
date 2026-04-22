@@ -113,6 +113,7 @@
       "no_entries": "No entries",
       "non_collection_cards": "{{count}} non-collection cards",
       "none": "None",
+      "next": "Next",
       "ok": "OK",
       "pack_one": "pack",
       "pack_other": "packs",
@@ -363,6 +364,13 @@
         "upload_error": "Failed to upload deck to {{provider}}: {{error}}",
         "upload_loading": "Uploading deck to {{provider}}..."
       },
+      "evolution": {
+        "displaced": "Displaced cards",
+        "evolved": "Evolved",
+        "maladies": "Maladies",
+        "rewards": "Unlocked rewards",
+        "starter": "Starter"
+      },
       "tools": {
         "cards": "Cards",
         "count": "Count",
@@ -424,19 +432,68 @@
       },
       "error": "Failed to create deck: {{error}}",
       "loading": "Creating deck...",
+      "aspect": {
+        "title": "Choose aspect"
+      },
+      "background": {
+        "title": "Choose background"
+      },
+      "background_type": {
+        "artisan": "Artisan",
+        "forager": "Forager",
+        "shepherd": "Shepherd",
+        "talespinner": "Talespinner",
+        "traveler": "Traveler"
+      },
+      "name": {
+        "title": "Name ranger"
+      },
+      "outside_interest": {
+        "title": "Choose outside interest"
+      },
+      "personality": {
+        "title": "Confirm personality cards"
+      },
+      "review": {
+        "title": "Review deck"
+      },
+      "search": "Search cards",
+      "specialty": {
+        "title": "Choose specialty cards"
+      },
+      "steps": {
+        "aspect": "Aspect",
+        "background": "Background",
+        "name": "Name",
+        "outside_interest": "Outside Interest",
+        "personality": "Personality",
+        "review": "Review",
+        "specialty": "Specialty"
+      },
       "title": "Create {{name}} deck"
     },
     "deck_edit": {
       "actions": {
+        "add_malady": "Add malady",
+        "add_reward": "Add reward",
+        "add_to_deck": "Add to deck",
         "add_to_notes": "Add to notes",
         "cycle_decks": "Cycle deck lists",
+        "decrease": "Decrease quantity",
         "decrement_quantity": "Decrement deck quantity",
         "edit_annotation": "Edit annotation",
+        "increase": "Increase quantity",
         "increment_quantity": "Increment deck quantity",
         "move_to_main_deck": "Move to deck",
         "quick_discard": "Discard changes (and stay on page)",
         "quick_save_deck": "Save deck (and stay on page)",
+        "remove": "Remove",
+        "replace": "Replace card",
+        "restore": "Restore",
         "set_quantity": "Set deck quantity"
+      },
+      "campaign": {
+        "empty": "This is a starter deck. Add unlocked rewards to begin tracking campaign changes."
       },
       "changes_restored": "Unsaved changes were restored.",
       "config": {
@@ -471,6 +528,7 @@
       "discard": "Discard changes",
       "discard_confirm": "Are you sure you want to discard your changes?",
       "notes": {
+        "annotation": "Card annotation",
         "banner_url": "Banner URL",
         "banner_url_help": "Banner image for the deck. Will be displayed on the deck view and in social media previews. Aspect ratio is 4:1, optimal width is 1440px.",
         "banner_url_placeholder": "Enter URL",
@@ -526,7 +584,21 @@
       "tab_notes": "Notes",
       "tab_recommendations": "Recommendations",
       "tab_tools": "Tools",
+      "tabs": {
+        "campaign": "Campaign",
+        "deck": "Deck",
+        "notes": "Notes"
+      },
+      "sections": {
+        "background": "Background",
+        "outside_interest": "Outside Interest",
+        "personality": "Personality",
+        "specialty": "Specialty"
+      },
       "title": "Edit: {{name}}",
+      "validation": {
+        "valid": "Deck is valid."
+      },
       "versions": {
         "entry_title": "Version {{version}}",
         "entry_title_current": "Current version",
