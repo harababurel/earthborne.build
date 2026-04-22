@@ -10,6 +10,7 @@ import type { Locale } from "./settings.types";
 type AppState = {
   clientId: string;
   bannersDismissed?: string[];
+  starterDecksSeeded?: boolean;
 };
 
 export type AppSlice = {

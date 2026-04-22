@@ -1,6 +1,7 @@
 import type { StateCreator } from "zustand";
 import { applyDeckEdits, getChangeRecord } from "@/store/lib/deck-edits";
 import { createDeck } from "@/store/lib/deck-factory";
+import { buildStarterDecks } from "@/store/lib/predefined-decks";
 
 import { assert } from "@/utils/assert";
 import { randomId } from "@/utils/crypto";
@@ -458,7 +459,7 @@ function mergeInitialState(
   persistedState: Partial<StoreState> | undefined,
   overrides: Partial<StoreState> | undefined,
 ) {
-  return {
+  const merged = {
     ...initialState,
     ...persistedState,
     ...overrides,
@@ -479,4 +480,18 @@ function mergeInitialState(
       },
     },
   };
+
+  if (!merged.app.starterDecksSeeded) {
+    const starterDecks = buildStarterDecks();
+    const decks = { ...merged.data.decks };
+    const history = { ...merged.data.history };
+    for (const deck of starterDecks) {
+      decks[deck.id] = deck;
+      history[deck.id] = [];
+    }
+    merged.app = { ...merged.app, starterDecksSeeded: true };
+    merged.data = { ...merged.data, decks, history };
+  }
+
+  return merged;
 }

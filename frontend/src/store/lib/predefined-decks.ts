@@ -1,0 +1,75 @@
+import { DECK_CARD_COPIES } from "@arkham-build/shared";
+import { createDeck } from "./deck-factory";
+import type { Deck } from "@/store/schemas/deck.schema";
+
+const C = DECK_CARD_COPIES;
+
+export function buildStarterDecks(): Deck[] {
+  return [
+    createDeck({
+      name: "Undaunted Seeker",
+      role_code: "01037",
+      aspect_code: "01251",
+      background: "traveler",
+      specialty: "explorer",
+      slots: {
+        "01001": C, "01008": C, "01006": C, "01005": C, "01003": C,
+        "01044": C, "01039": C, "01042": C, "01043": C, "01048": C,
+        "01056": C,
+        "01101": C, "01099": C, "01093": C, "01105": C,
+      },
+    }),
+    createDeck({
+      name: "Voice of the Elders",
+      role_code: "01066",
+      aspect_code: "01241",
+      background: "shepherd",
+      specialty: "conciliator",
+      slots: {
+        "01026": C, "01025": C, "01022": C, "01027": C, "01023": C,
+        "01078": C, "01070": C, "01073": C, "01077": C, "01067": C,
+        "01018": C,
+        "01107": C, "01104": C, "01097": C, "01095": C,
+      },
+    }),
+    createDeck({
+      name: "Masterful Engineer",
+      role_code: "01051",
+      aspect_code: "01247",
+      background: "artisan",
+      specialty: "artificer",
+      slots: {
+        "01017": C, "01013": C, "01015": C, "01011": C, "01012": C,
+        "01062": C, "01053": C, "01059": C, "01060": C, "01061": C,
+        "01007": C,
+        "01098": C, "01103": C, "01096": C, "01108": C,
+      },
+    }),
+    createDeck({
+      name: "Adherent of the First Ideal",
+      role_code: "01079",
+      aspect_code: "01255",
+      background: "forager",
+      specialty: "shaper",
+      slots: {
+        "01031": C, "01028": C, "01029": C, "01034": C, "01035": C,
+        "01081": C, "01085": C, "01082": C, "01083": C, "01084": C,
+        "01090": C,
+        "01100": C, "01106": C, "01102": C, "01094": C,
+      },
+    }),
+    createDeck({
+      name: "Cartographer of Many Worlds",
+      role_code: "03038",
+      aspect_code: "01249",
+      background: "talespinner",
+      specialty: "spirit_speaker",
+      slots: {
+        "03059": C, "03060": C, "03063": C, "03065": C, "03066": C,
+        "03050": C, "03044": C, "03046": C, "03049": C, "03054": C,
+        "03009": C,
+        "03069": C, "03071": C, "03074": C, "03075": C,
+      },
+    }),
+  ];
+}
