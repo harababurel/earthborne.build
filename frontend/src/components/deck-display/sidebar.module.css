@@ -2,29 +2,85 @@
   display: flex;
   flex-flow: column nowrap;
   gap: 0.75rem;
-  padding-right: 0.125rem;
 }
 
-.actions {
+.sidebar-inner {
   display: flex;
-  gap: 0.375rem;
+  flex-flow: column nowrap;
+  gap: 0.75rem;
 }
 
-.share-empty > * + * {
-  margin-top: 0.75rem;
+.section {
+  padding: 1rem;
 }
 
-.share > * + * {
-  margin-top: 0.75rem;
+.section-title {
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  margin-bottom: 0.75rem;
 }
 
-.share-actions {
+.card-info {
   display: flex;
+  flex-flow: column nowrap;
   gap: 0.5rem;
 }
 
-.share-copy {
-  display: inline-flex;
-  vertical-align: middle;
-  margin-left: 2px;
+.card-name {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  margin: 0;
+  color: var(--accent-11);
+}
+
+.card-scan {
+  margin-inline: auto;
+  max-width: 100%;
+}
+
+.card-text {
+  font-size: var(--font-sm);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.aspect-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+  border-block: 1px solid var(--palette-3);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.stat-value {
+  font-size: var(--font-lg);
+  font-weight: 700;
+}
+
+.identity-info {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.375rem;
+}
+
+.identity-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-sm);
+}
+
+.identity-label {
+  opacity: 0.7;
+}
+
+.identity-value {
+  font-weight: 600;
 }
