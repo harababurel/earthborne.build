@@ -34,7 +34,7 @@ export function AspectsChart({ data }: Props) {
           outerRadius="90%"
           stroke={chartTheme.colors.pieStroke}
           strokeWidth={chartTheme.strokeWidth.pie}
-          label={renderAspectLabel}
+          label={false}
           labelLine={false}
           isAnimationActive={false}
           shape={renderAspectSector}
@@ -48,50 +48,42 @@ export function AspectsChart({ data }: Props) {
 }
 
 function renderAspectSector(props: PieSectorShapeProps) {
-  const aspect = props.payload?.x as string | undefined;
-  const fill = aspect ? `var(--color-${aspect.toLowerCase()})` : "var(--text)";
-  return <Sector {...props} fill={fill} />;
-}
-
-function renderAspectLabel(props: {
-  cx?: number;
-  cy?: number;
-  midAngle?: number;
-  innerRadius?: number;
-  outerRadius?: number;
-  payload?: { x: string };
-}) {
-  const {
-    cx = 0,
-    cy = 0,
-    midAngle = 0,
-    innerRadius = 0,
-    outerRadius = 0,
-    payload,
-  } = props;
-  if (!payload) return null;
-
-  const RADIAN = Math.PI / 180;
-  // Calculate center of the slice
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  const size = 24;
-
-  const iconClass =
-    ASPECT_ICON_CLASS[payload.x as AspectKey] || "core-fit_chakra";
+  const { cx = 0, cy = 0, outerRadius = 0, payload } = props;
+  const aspect = payload?.x as AspectKey;
+  const iconClass = ASPECT_ICON_CLASS[aspect] || "core-fit_chakra";
+  const clipId = `clip-aspect-${aspect}`;
 
   return (
-    <foreignObject x={x - size / 2} y={y - size / 2} width={size} height={size}>
-      <i
-        className={iconClass}
-        style={{
-          fontSize: "24px",
-          color: "white",
-          opacity: 0.75,
-        }}
-      />
-    </foreignObject>
+    <g>
+      <defs>
+        <clipPath id={clipId}>
+          <Sector {...props} />
+        </clipPath>
+      </defs>
+      <Sector {...props} />
+      <foreignObject
+        x={cx - outerRadius}
+        y={cy - outerRadius}
+        width={outerRadius * 2}
+        height={outerRadius * 2}
+        clipPath={`url(#${clipId})`}
+        style={{ pointerEvents: "none" }}
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            opacity: 0.75,
+          }}
+        >
+          <i className={iconClass} style={{ fontSize: outerRadius * 1.6 }} />
+        </div>
+      </foreignObject>
+    </g>
   );
 }
 
