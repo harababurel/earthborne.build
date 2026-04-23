@@ -3,7 +3,7 @@
   "main": "src/main.ts",
   "type": "module",
   "engines": {
-    "node": "24.x"
+    "node": ">=24"
   },
   "scripts": {
     "check": "tsc",
@@ -22,6 +22,7 @@
     "better-sqlite3": "^12.9.0",
     "hono": "4.12.12",
     "kysely": "0.28.14",
+    "node-addon-api": "^8.3.0",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
