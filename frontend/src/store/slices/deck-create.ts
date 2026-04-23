@@ -110,7 +110,9 @@ export const createDeckCreateSlice: StateCreator<
       if (current[code]) {
         const nextSlots = { ...current };
         delete nextSlots[code];
-        return { deckCreate: { ...state.deckCreate, personalitySlots: nextSlots } };
+        return {
+          deckCreate: { ...state.deckCreate, personalitySlots: nextSlots },
+        };
       }
 
       // Select new card, replacing any existing selection for the same aspect.
@@ -122,7 +124,9 @@ export const createDeckCreateSlice: StateCreator<
       }
       nextSlots[code] = DECK_CARD_COPIES;
 
-      return { deckCreate: { ...state.deckCreate, personalitySlots: nextSlots } };
+      return {
+        deckCreate: { ...state.deckCreate, personalitySlots: nextSlots },
+      };
     });
   },
 

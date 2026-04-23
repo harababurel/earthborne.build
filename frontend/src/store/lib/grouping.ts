@@ -166,10 +166,9 @@ function groupByEncounterSet(
   metadata: Metadata,
   collator: Intl.Collator,
 ) {
-  // ER has no encounter sets; group all together under NONE.
   const results = cards.reduce<Grouping>(
     (acc, card) => {
-      const code = NONE;
+      const code = card.set_code ?? NONE;
 
       if (!acc.data[code]) {
         acc.data[code] = [card];
@@ -445,7 +444,8 @@ export function getGroupingKeyLabel(
     }
 
     case "encounter_set": {
-      return metadata.encounterSets[segment]?.name ?? "";
+      if (segment === NONE) return i18n.t("common.level.none");
+      return metadata.encounterSets[segment]?.name ?? segment;
     }
 
     case "slot": {

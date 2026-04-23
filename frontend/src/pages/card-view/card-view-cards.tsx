@@ -67,14 +67,35 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
     () =>
       Object.values(metadata.cards)
         .filter(
-          and([filterBacksides, (card) => card.pack_code === targetPack.code]),
+          and([
+            filterBacksides,
+            (card) => card.pack_code === targetPack.code,
+            (card) =>
+              !currentCard.card.set_code ||
+              card.set_code === currentCard.card.set_code,
+          ]),
         )
         .sort(sortByPosition),
-    [metadata.cards, targetPack],
+    [metadata.cards, targetPack, currentCard.card.set_code],
   );
 
   const cardListIndex = filteredCards.findIndex(
     (card) => card.code === currentCard.card.code,
+  );
+
+  const setDisplay = currentCard.encounterSet
+    ? currentCard.encounterSet.name
+    : currentCard.card.set_code;
+
+  const setLink = currentCard.card.set_code && (
+    <a
+      className="link-current"
+      href={`/browse/pack/${targetPack.code}?set=${currentCard.card.set_code}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {setDisplay}
+    </a>
   );
 
   return (
@@ -83,6 +104,12 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
         <h3>
           {<PackIcon code={targetPack.code} />}
           {displayPackName(targetPack)}
+          {setDisplay && (
+            <>
+              <small>&nbsp;&gt;&nbsp;</small>
+              {setLink || setDisplay}
+            </>
+          )}
         </h3>
       </div>
       <div className={css["card-set-nav-container"]}>

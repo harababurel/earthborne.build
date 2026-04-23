@@ -33,7 +33,7 @@ type CardRow = {
   name: string;
   pack_id: string;
   set_id: string | null;
-  set_position: number | null;
+  set_position: number | string | null;
   position: number;
   quantity: number;
   deck_limit: number | null;
@@ -189,7 +189,7 @@ function transformCard(row: CardRow): {
   name: string;
   pack_code: string;
   set_code: string | null;
-  set_position: number | null;
+  set_position: number | string | null;
   type_code: string;
   category:
     | "personality"

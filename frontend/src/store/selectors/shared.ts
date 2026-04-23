@@ -8,6 +8,7 @@ import { isCardOwned } from "../lib/card-ownership";
 import { createLookupTables } from "../lib/lookup-tables";
 import type { ResolvedDeck } from "../lib/types";
 import type { Cycle } from "../schemas/cycle.schema";
+import type { EncounterSet } from "../schemas/encounter-set.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { StoreState } from "../slices";
 
@@ -24,6 +25,30 @@ export const selectLookupTables = createSelector(
 export const selectClientId = (state: StoreState) => {
   return state.app.clientId;
 };
+
+export const selectPacksWithSets = createSelector(
+  selectMetadata,
+  (metadata) => {
+    const packs = Object.values(metadata.packs).sort(
+      (a, b) => a.position - b.position,
+    );
+    const sets = Object.values(metadata.encounterSets);
+
+    const setPackMap: Record<string, string> = {};
+    for (const card of Object.values(metadata.cards)) {
+      if (card.set_code && !setPackMap[card.set_code]) {
+        setPackMap[card.set_code] = card.pack_code;
+      }
+    }
+
+    return packs.map((pack) => ({
+      ...pack,
+      sets: sets
+        .filter((s) => setPackMap[s.code] === pack.code)
+        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0)),
+    }));
+  },
+);
 
 export const selectIsInitialized = (state: StoreState) => {
   return state.ui.initialized;
@@ -131,6 +156,7 @@ export type Printing = {
   card: Card;
   pack: Pack;
   cycle: Cycle;
+  set?: EncounterSet;
 };
 
 export const selectActiveList = (state: StoreState) => {
@@ -173,11 +199,15 @@ export const selectPrintingsForCard = createSelector(
       .map(([packCode, card]) => {
         const pack = metadata.packs[packCode];
         const cycle = metadata.cycles[pack.cycle_code];
+        const set = card.set_code
+          ? metadata.encounterSets[card.set_code]
+          : undefined;
         return {
           card,
           cycle,
           id: `${pack.code}-${card.code}`,
           pack,
+          set,
         } as Printing;
       })
       .sort((a, b) => {

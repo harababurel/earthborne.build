@@ -15,16 +15,18 @@ import {
 } from "@arkham-build/shared";
 import { assert } from "@/utils/assert";
 import type { DataVersion } from "../schemas/data-version.schema";
+import type { EncounterSet } from "../schemas/encounter-set.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { History } from "../selectors/decks";
 import type { Locale } from "../slices/settings.types";
 import { apiV2Request } from "./requests/shared";
 
 /**
- * ER metadata response — packs only (no cycles, encounter sets, or taboo sets).
+ * ER metadata response — packs and sets.
  */
 export type MetadataResponse = {
   pack: Pack[];
+  encounterSet: EncounterSet[];
 };
 
 export type DataVersionResponse = DataVersion;
@@ -32,15 +34,19 @@ export type DataVersionResponse = DataVersion;
 export type AllCardResponse = Card[];
 
 /**
- * ER API — metadata (packs)
+ * ER API — metadata (packs and sets)
  */
 
 export async function queryMetadata(
   _locale: Locale = "en",
 ): Promise<MetadataResponse> {
-  const res = await apiV2Request("/v2/public/packs");
+  const [packRes, setRes] = await Promise.all([
+    apiV2Request("/v2/public/packs"),
+    apiV2Request("/v2/public/sets"),
+  ]);
+
   const {
-    data,
+    data: packData,
   }: {
     data: Array<{
       id: string;
@@ -48,9 +54,21 @@ export async function queryMetadata(
       short_name: string | null;
       position: number;
     }>;
-  } = await res.json();
+  } = await packRes.json();
 
-  const packs: Pack[] = data.map((p) => ({
+  const {
+    data: setData,
+  }: {
+    data: Array<{
+      id: string;
+      name: string;
+      type_id: string | null;
+      size: number | null;
+      pack_code: string | null;
+    }>;
+  } = await setRes.json();
+
+  const packs: Pack[] = packData.map((p) => ({
     code: p.id,
     // ER has no cycles; use pack code as cycle_code placeholder.
     cycle_code: p.id,
@@ -60,7 +78,14 @@ export async function queryMetadata(
     official: true,
   }));
 
-  return { pack: packs };
+  const encounterSets: EncounterSet[] = setData.map((s) => ({
+    code: s.id,
+    name: s.name,
+    official: true,
+    pack_code: s.pack_code ?? "",
+  }));
+
+  return { pack: packs, encounterSet: encounterSets };
 }
 
 export async function queryDataVersion(

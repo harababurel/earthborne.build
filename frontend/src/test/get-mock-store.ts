@@ -22,6 +22,7 @@ const allCardAny = allCardStub as unknown as {
 function queryStubMetadata(): Promise<MetadataResponse> {
   return Promise.resolve({
     pack: metadataAny.data.pack,
+    encounterSet: [],
   });
 }
 

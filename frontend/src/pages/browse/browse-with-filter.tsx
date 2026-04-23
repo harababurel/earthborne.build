@@ -12,11 +12,12 @@ import { selectIsInitialized } from "@/store/selectors/shared";
 interface Props {
   listKeyPrefix: string;
   packCode: string;
+  setCode?: string | null;
   title: string;
 }
 
 export function BrowseWithFilter(props: Props) {
-  const { listKeyPrefix, packCode, title } = props;
+  const { listKeyPrefix, packCode, setCode, title } = props;
 
   const activeListId = useStore((state) => state.activeList);
   const isInitalized = useStore(selectIsInitialized);
@@ -26,7 +27,7 @@ export function BrowseWithFilter(props: Props) {
   const setActiveList = useStore((state) => state.setActiveList);
   const removeList = useStore((state) => state.removeList);
 
-  const listKey = `${listKeyPrefix}-${packCode}`;
+  const listKey = `${listKeyPrefix}-${packCode}-${setCode ?? "all"}`;
 
   useEffect(() => {
     addList(
@@ -34,9 +35,10 @@ export function BrowseWithFilter(props: Props) {
       {
         card_type: "",
         pack: [packCode],
+        set: setCode ? [setCode] : [],
       },
       {
-        additionalFilters: ["pack", "illustrator"],
+        additionalFilters: ["pack", "set", "illustrator"],
       },
     );
 
@@ -46,7 +48,7 @@ export function BrowseWithFilter(props: Props) {
       removeList(listKey);
       setActiveList(undefined);
     };
-  }, [addList, removeList, setActiveList, listKey, packCode]);
+  }, [addList, removeList, setActiveList, listKey, packCode, setCode]);
 
   if (!activeList || !isInitalized || !activeListId?.startsWith(listKey)) {
     return null;

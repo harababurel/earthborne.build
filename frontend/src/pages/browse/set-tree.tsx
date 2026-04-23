@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
-import { useShallow } from "zustand/react/shallow";
 import PackIcon from "@/components/icons/pack-icon";
 import { Scroller } from "@/components/ui/scroller";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStore } from "@/store";
-import { selectMetadata } from "@/store/selectors/shared";
+import { selectPacksWithSets } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import { displayPackName } from "@/utils/formatting";
 import css from "./set-tree.module.css";
@@ -32,9 +31,7 @@ export function SetTree({
   onCardTypeTabChange,
 }: SetTreeProps) {
   const { t } = useTranslation();
-  const packs = useStore(
-    useShallow((state) => Object.values(selectMetadata(state).packs)),
-  );
+  const packs = useStore(selectPacksWithSets);
 
   return (
     <Scroller className={css["tree"]}>
@@ -72,6 +69,22 @@ export function SetTree({
                   {displayPackName(pack)}
                 </Link>
               </div>
+              {pack.sets.length > 0 && (
+                <ol className={css["children"]}>
+                  {pack.sets.map((set) => (
+                    <li key={set.code}>
+                      <div className={css["node"]}>
+                        <Link
+                          className={css["node-link"]}
+                          to={`/browse/pack/${pack.code}?set=${set.code}`}
+                        >
+                          {set.name}
+                        </Link>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
             </li>
           );
         })}

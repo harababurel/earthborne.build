@@ -300,13 +300,12 @@ export function filterCycleCode(
 }
 
 /**
- * Encounter set — ER has no encounter sets. Stub returns undefined.
+ * Encounter set — uses ER set_code field.
  */
 export function filterEncounterCode(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _filterState: MultiselectFilter,
+  filterState: MultiselectFilter,
 ): Filter | undefined {
-  return undefined;
+  return filterSetCode(filterState);
 }
 
 /**

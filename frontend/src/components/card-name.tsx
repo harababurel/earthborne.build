@@ -68,6 +68,19 @@ function CardPackDetail(props: { card: Card; invert?: boolean }) {
   const pack = metadata.packs[card.pack_code];
   const cycle = metadata.cycles[pack.cycle_code];
   const displayPack = cycleOrPack(cycle, pack);
+  const set = card.set_code ? metadata.encounterSets[card.set_code] : undefined;
+  const setDisplay = set ? set.name : card.set_code;
+
+  const setLink = card.set_code && (
+    <a
+      className="link-current"
+      href={`/browse/pack/${pack.code}?set=${card.set_code}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {setDisplay}
+    </a>
+  );
 
   return (
     <span className={cx(css["pack-detail"], invert && css["invert"])}>
@@ -76,7 +89,11 @@ function CardPackDetail(props: { card: Card; invert?: boolean }) {
         code={displayPack.code}
         invert={invert}
       />{" "}
-      <span className={css["pack-detail-position"]}>{card.set_position}</span>
+      {setDisplay && <small>{setLink || setDisplay}</small>}
+      <span className={css["pack-detail-position"]}>
+        <small>&nbsp;#</small>
+        {card.set_position}
+      </span>
     </span>
   );
 }

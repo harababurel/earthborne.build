@@ -25,12 +25,15 @@ export function resolveCardWithRelations<T extends boolean>(
   const pack = deps.metadata.packs[card.pack_code];
   const type = deps.metadata.types[card.type_code];
   const cycle = pack ? deps.metadata.cycles[pack.cycle_code] : undefined;
+  const encounterSet = card.set_code
+    ? deps.metadata.encounterSets[card.set_code]
+    : undefined;
 
   const cardWithRelations: CardWithRelations = {
     back: undefined,
     card,
     cycle,
-    encounterSet: undefined,
+    encounterSet,
     pack,
     subtype: undefined,
     type,

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Switch, useParams } from "wouter";
+import { Route, Switch, useParams, useSearchParams } from "wouter";
 import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { Filters } from "@/components/filters/filters";
@@ -95,6 +95,9 @@ export function Browse() {
 
 export function BrowsePack() {
   const { pack_code } = useParams<{ pack_code: string }>();
+  const [search] = useSearchParams();
+  const setCode = search.get("set");
+
   const pack = useStore((state) =>
     pack_code ? selectMetadata(state).packs[pack_code] : undefined,
   );
@@ -105,6 +108,7 @@ export function BrowsePack() {
     <BrowseWithFilter
       listKeyPrefix="browse-pack"
       packCode={pack_code}
+      setCode={setCode}
       title={displayPackName(pack)}
     />
   );

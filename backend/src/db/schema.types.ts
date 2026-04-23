@@ -57,7 +57,7 @@ export interface Card {
   pack_id: string;
   category_id: string | null;
   set_id: string | null;
-  set_position: number | null;
+  set_position: number | string | null;
   position: number;
   quantity: number;
   deck_limit: number | null;

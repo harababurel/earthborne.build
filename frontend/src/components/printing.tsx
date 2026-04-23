@@ -23,11 +23,36 @@ export function Printing({
   printing,
   showCopyId,
 }: Props) {
-  const { pack, card } = printing;
+  const { pack, card, set } = printing;
 
   const packName = displayPackName(pack);
 
   const packFormat = pack.reprint ? "new" : "old";
+
+  const packLink = (
+    <a
+      className="link-current"
+      href={`/browse/pack/${pack.code}${packFormat ? `?format=${packFormat}` : ""}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {packName}
+    </a>
+  );
+
+  const setDisplay =
+    set?.name || (card.set_code !== card.pack_code ? card.set_code : undefined);
+
+  const setLink = card.set_code && (
+    <a
+      className="link-current"
+      href={`/browse/pack/${pack.code}?set=${card.set_code}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {setDisplay}
+    </a>
+  );
 
   return (
     <PrintingInner
@@ -38,16 +63,25 @@ export function Printing({
       icon={<PackIcon code={pack.code} />}
       name={
         linked ? (
-          <a
-            className="link-current"
-            href={`/browse/pack/${pack.code}${packFormat ? `?format=${packFormat}` : ""}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {packName}
-          </a>
+          <>
+            {packLink}
+            {setDisplay && (
+              <>
+                <small>&nbsp;&gt;&nbsp;</small>
+                {setLink || setDisplay}
+              </>
+            )}
+          </>
         ) : (
-          <span>{packName}</span>
+          <>
+            {packName}
+            {setDisplay && (
+              <>
+                <small>&nbsp;&gt;&nbsp;</small>
+                {setDisplay}
+              </>
+            )}
+          </>
         )
       }
       position={card.set_position ?? ""}
@@ -84,7 +118,7 @@ export function PrintingInner({
     <span className={cx(css["printing"], active && css["active"], className)}>
       <span className={css["printing-icon"]}>{icon}</span> {name}
       <span className="nowrap">
-        <small>&nbsp;#&nbsp;</small>
+        <small>&nbsp;#</small>
         {position}
       </span>
       {!!quantity && (

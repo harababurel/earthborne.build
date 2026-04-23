@@ -1422,17 +1422,16 @@ export const selectTypeOptions = createSelector(
  * Set
  */
 
-export const selectSetMapper = createSelector(
-  selectLocaleSortingCollator,
-  (_) => {
-    return (code: string) => {
-      return {
+export const selectSetMapper = createSelector(selectMetadata, (metadata) => {
+  return (code: string) => {
+    return (
+      metadata.encounterSets[code] ?? {
         code,
         name: i18n.t(`common.set.${code}`),
-      };
-    };
-  },
-);
+      }
+    );
+  };
+});
 
 export const selectSetOptions = createSelector(
   selectListFilterProperties,

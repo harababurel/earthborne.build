@@ -44,7 +44,17 @@ function sortByAspect(a: Card, b: Card) {
 }
 
 export function sortByPosition(a: Card, b: Card) {
-  return (a.set_position ?? 0) - (b.set_position ?? 0);
+  const aPos =
+    typeof a.set_position === "string"
+      ? Number.parseInt(a.set_position.split("-")[0] ?? "0", 10)
+      : (a.set_position ?? 0);
+
+  const bPos =
+    typeof b.set_position === "string"
+      ? Number.parseInt(b.set_position.split("-")[0] ?? "0", 10)
+      : (b.set_position ?? 0);
+
+  return aPos - bPos;
 }
 
 function sortByCycle(metadata: Metadata) {

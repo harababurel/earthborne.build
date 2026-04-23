@@ -51,7 +51,9 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
       if (
         dataVersionKey(remoteDataVersion) !==
-        dataVersionKey(persistedState.metadata.dataVersion)
+          dataVersionKey(persistedState.metadata.dataVersion) ||
+        !persistedState.metadata.encounterSets ||
+        Object.keys(persistedState.metadata.encounterSets).length === 0
       ) {
         return get().init(queryMetadata, queryDataVersion, queryCards, {
           refresh: true,
@@ -103,6 +105,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       ...getInitialMetadata(),
       dataVersion: dataVersionResponse,
       packs: mappedByCode(metadataResponse.pack),
+      encounterSets: mappedByCode(metadataResponse.encounterSet),
       cards: {},
     };
 
@@ -150,10 +153,13 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
   },
   async createDeck() {
     const state = get();
-    const metadata = selectMetadata(state);
+    const _metadata = selectMetadata(state);
 
     assert(state.deckCreate, "DeckCreate state must be initialized.");
-    assert(state.deckCreate.roleCode, "Role must be selected before creating a deck.");
+    assert(
+      state.deckCreate.roleCode,
+      "Role must be selected before creating a deck.",
+    );
 
     const slots = {
       ...state.deckCreate.personalitySlots,
