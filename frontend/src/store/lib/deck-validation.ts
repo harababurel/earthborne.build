@@ -397,6 +397,10 @@ function countUniqueByCategory(
     outside: 0,
   };
 
+  let backgroundMatch = 0;
+  let specialtyMatch = 0;
+  let mismatches = 0;
+
   for (const [code, quantity] of Object.entries(deck.slots)) {
     if (!quantity) continue;
 
@@ -409,19 +413,34 @@ function countUniqueByCategory(
       counts.personality++;
     } else if (category === "background") {
       if (card.background_type === background) {
-        counts.background++;
+        backgroundMatch++;
       } else {
-        counts.outside++;
+        mismatches++;
       }
     } else if (category === "specialty") {
       if (card.specialty_type === specialty) {
-        counts.specialty++;
+        specialtyMatch++;
       } else {
-        counts.outside++;
+        mismatches++;
       }
     }
     // rewards and maladies are not counted against the pick limits
   }
+
+  // A ranger MUST pick BACKGROUND_PICKS (5) unique cards from their chosen background
+  // and SPECIALTY_PICKS (5) unique cards from their chosen specialty.
+  // One card from ANY background or specialty set is picked as OUTSIDE_INTEREST_PICKS (1).
+  // This card can be from the chosen background/specialty, or a different one.
+
+  // We first satisfy the mandatory picks for the chosen background and specialty.
+  counts.background = Math.min(backgroundMatch, BACKGROUND_PICKS);
+  counts.specialty = Math.min(specialtyMatch, SPECIALTY_PICKS);
+
+  // Any surplus in the chosen sets, plus all cards from other sets, count as outside interest.
+  const backgroundSurplus = Math.max(0, backgroundMatch - BACKGROUND_PICKS);
+  const specialtySurplus = Math.max(0, specialtyMatch - SPECIALTY_PICKS);
+
+  counts.outside = mismatches + backgroundSurplus + specialtySurplus;
 
   return counts;
 }

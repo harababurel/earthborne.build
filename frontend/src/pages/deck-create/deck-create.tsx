@@ -408,16 +408,20 @@ function DeckCreateStepOutsideInterest() {
   const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const deckCreate = useStore(selectDeckCreateChecked);
-  const cards = useStore((state) =>
-    selectDeckCreateOutsideInterestCards(
-      state,
-      deckCreate.background,
-      deckCreate.specialty,
-    ),
-  );
+  const cards = useStore(selectDeckCreateOutsideInterestCards);
   const toggle = useStore((state) => state.deckCreateToggleOutsideInterest);
-  const filtered = cards.filter((card) =>
-    card.card.name.toLowerCase().includes(query.toLowerCase()),
+
+  const alreadySelected = useMemo(() => {
+    return new Set([
+      ...Object.keys(deckCreate.backgroundSlots),
+      ...Object.keys(deckCreate.specialtySlots),
+    ]);
+  }, [deckCreate.backgroundSlots, deckCreate.specialtySlots]);
+
+  const filtered = cards.filter(
+    (card) =>
+      !alreadySelected.has(card.card.code) &&
+      card.card.name.toLowerCase().includes(query.toLowerCase()),
   );
 
   return (
@@ -483,13 +487,7 @@ function DeckCreateStepReview() {
   const specialty = useStore((state) =>
     selectDeckCreateSpecialtyCards(state, deckCreate.specialty),
   );
-  const outside = useStore((state) =>
-    selectDeckCreateOutsideInterestCards(
-      state,
-      deckCreate.background,
-      deckCreate.specialty,
-    ),
-  );
+  const outside = useStore(selectDeckCreateOutsideInterestCards);
 
   const aspect = aspectCards.find(
     (card) => card.card.code === deckCreate.aspectCode,
@@ -774,8 +772,7 @@ function ReviewGroup({
           .filter((card) => slots[card.card.code] > 0)
           .map((card) => (
             <li key={card.card.code}>
-              {slots[card.card.code]}x{" "}
-              <ReviewCardLink card={card} />
+              {slots[card.card.code]}x <ReviewCardLink card={card} />
             </li>
           ))}
       </ul>

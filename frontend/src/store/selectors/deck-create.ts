@@ -88,18 +88,10 @@ export const selectDeckCreateOutsideInterestCards = createSelector(
   selectMetadata,
   selectLookupTables,
   selectLocaleSortingCollator,
-  (_: StoreState, background?: string) => background,
-  (_: StoreState, _background?: string, specialty?: string) => specialty,
-  (metadata, lookupTables, collator, background, specialty) =>
+  (metadata, lookupTables, collator) =>
     resolveCards({ metadata, lookupTables }, collator, (card) => {
       if (card.is_expert) return false;
-      if (card.category === "background") {
-        return !!background && card.background_type !== background;
-      }
-      if (card.category === "specialty") {
-        return !!specialty && card.specialty_type !== specialty;
-      }
-      return false;
+      return card.category === "background" || card.category === "specialty";
     }),
 );
 
