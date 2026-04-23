@@ -79,7 +79,7 @@ export interface Card {
   aspect_focus: number | null;
   aspect_spirit: number | null;
   token_id: string | null;
-  token_count: number | null;
+  token_count: number | string | null;
   area_id: string | null;
   guide_entry: string | null;
   locations: string | null; // JSON array as text

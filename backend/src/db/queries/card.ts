@@ -53,7 +53,7 @@ type CardRow = {
   aspect_fitness: number | null;
   aspect_focus: number | null;
   aspect_spirit: number | null;
-  token_count: number | null;
+  token_count: number | string | null;
   area_id: string | null;
   guide_entry: string | null;
   illustrator: string | null;
@@ -214,7 +214,7 @@ function transformCard(row: CardRow): {
   harm_threshold: string | number | null;
   progress_threshold: string | number | null;
   token_name: string | null;
-  token_count: number | null;
+  token_count: string | number | null;
   area: "within_reach" | "along_the_way" | null;
   aspect_awareness: number | null;
   aspect_fitness: number | null;
@@ -287,7 +287,7 @@ function transformCard(row: CardRow): {
     harm_threshold: normalizeThreshold(row.harm),
     progress_threshold: normalizeThreshold(row.progress),
     token_name: row.token_name,
-    token_count: row.token_count,
+    token_count: normalizeThreshold(row.token_count),
     area,
     aspect_awareness: row.aspect_awareness,
     aspect_fitness: row.aspect_fitness,

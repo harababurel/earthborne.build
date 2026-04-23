@@ -187,6 +187,9 @@ async function ingest() {
 
     for (const packId of packDirs) {
       const packDirPath = path.join(dataDir, "packs", packId);
+      const stats = await fs.stat(packDirPath);
+      if (!stats.isDirectory()) continue;
+
       const files = (await fs.readdir(packDirPath)).sort();
 
       for (const file of files) {
@@ -207,6 +210,61 @@ async function ingest() {
     }
 
     const cardsToInsert = Array.from(allCardsMap.values());
+
+    // Validation
+    const validAspects = new Set(aspects.map((a) => a.id));
+    const validTypes = new Set(cardTypes.map((t) => t.id));
+    const validSets = new Set(cardSets.map((s) => s.id));
+    const validTokens = new Set(tokens.map((t) => t.id));
+    const validAreas = new Set(areas.map((a) => a.id));
+    const validCategories = new Set(categories.map((c) => c.id));
+    const validPacks = new Set(packs.map((p) => remapPackId(p).id));
+
+    let validationFailed = false;
+    for (const c of cardsToInsert) {
+      if (!validPacks.has(c.pack_id)) {
+        log("error", `Card ${c.id} has invalid pack_id: ${c.pack_id}`);
+        validationFailed = true;
+      }
+      if (c.aspect_id && !validAspects.has(c.aspect_id)) {
+        log("error", `Card ${c.id} has invalid aspect_id: ${c.aspect_id}`);
+        validationFailed = true;
+      }
+      if (!validTypes.has(c.type_id)) {
+        log("error", `Card ${c.id} has invalid type_id: ${c.type_id}`);
+        validationFailed = true;
+      }
+      if (c.set_id && !validSets.has(c.set_id)) {
+        log("error", `Card ${c.id} has invalid set_id: ${c.set_id}`);
+        validationFailed = true;
+      }
+      if (c.token_id && !validTokens.has(c.token_id)) {
+        log("error", `Card ${c.id} has invalid token_id: ${c.token_id}`);
+        validationFailed = true;
+      }
+      if (c.area_id && !validAreas.has(c.area_id)) {
+        log("error", `Card ${c.id} has invalid area_id: ${c.area_id}`);
+        validationFailed = true;
+      }
+      if (c.category_id && !validCategories.has(c.category_id)) {
+        log("error", `Card ${c.id} has invalid category_id: ${c.category_id}`);
+        validationFailed = true;
+      }
+      if (c.back_card_id && !allCardsMap.has(c.back_card_id)) {
+        log(
+          "error",
+          `Card ${c.id} has invalid back_card_id: ${c.back_card_id}`,
+        );
+        validationFailed = true;
+      }
+    }
+
+    if (validationFailed) {
+      throw new Error(
+        "Validation failed for one or more cards. See logs for details.",
+      );
+    }
+
     if (cardsToInsert.length > 0) {
       // Insert in chunks to avoid SQLite parameter limits
       const CHUNK_SIZE = 50;
@@ -260,7 +318,7 @@ interface RawCard {
   focus?: number;
   spirit?: number;
   token_id?: string;
-  token_count?: number;
+  token_count?: string | number;
   area_id?: string;
   guide_entry?: string;
   locations?: string[];

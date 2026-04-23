@@ -26,6 +26,14 @@ describe("parseCardTextHtml", () => {
     expect(parseCardTextHtml("[action]")).toBe('<i class="icon-action"></i>');
   });
 
+  it("handles numeric values in brackets as literal text", () => {
+    expect(parseCardTextHtml("Repair [2]")).toBe("Repair [2]");
+  });
+
+  it("handles escaped brackets", () => {
+    expect(parseCardTextHtml("Escaped \\[token]")).toBe("Escaped [token]");
+  });
+
   it("handles bold italic markers", () => {
     expect(parseCardTextHtml("[[text]]")).toBe("<b><em>text</em></b>");
   });

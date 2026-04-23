@@ -100,7 +100,11 @@ export function parseCardTextHtml(
 
   parsed = parsed
     .replaceAll(/\[\[(.*?)\]\]/g, "<b><em>$1</em></b>")
-    .replaceAll(/\[((?:\w|_)+?)\]/g, (_, token: string) => {
+    .replaceAll(/(\\?)\[((?:\w|_)+?)\]/g, (match, esc, token: string) => {
+      if (esc === "\\") {
+        return match.slice(1);
+      }
+
       const t = token === "right_arrow" ? "conditional" : token;
       if (ER_CORE_FONT_TOKENS.has(t)) {
         return `<span class="core-${t}"></span>`;
@@ -108,6 +112,11 @@ export function parseCardTextHtml(
       if (ER_STAT_TOKENS.has(t)) {
         return `<b class="color-${t}">${t}</b>`;
       }
+
+      if (/^\d+$/.test(token)) {
+        return match;
+      }
+
       return `<i class="icon-${token}"></i>`;
     });
 
