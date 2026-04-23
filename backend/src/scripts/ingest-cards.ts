@@ -129,11 +129,11 @@ async function ingest() {
     // Cards — all JSON files per pack inside packs/{pack_id}/*.json
     const dataDir = CARD_DATA_DIR as string;
     const packDirs = await fs.readdir(path.join(dataDir, "packs"));
-    let totalCards = 0;
+    const allCardsMap = new Map<string, any>();
 
     for (const packId of packDirs) {
       const packDirPath = path.join(dataDir, "packs", packId);
-      const files = await fs.readdir(packDirPath);
+      const files = (await fs.readdir(packDirPath)).sort();
 
       for (const file of files) {
         if (!file.endsWith(".json")) continue;
@@ -141,21 +141,28 @@ async function ingest() {
         const packFile = path.join(packDirPath, file);
         const rawCards = await readFile<RawCard[]>(packFile);
 
-        const cards = rawCards.map((c) =>
-          normalizeCard(c, remapPackId({ id: packId }).id),
-        );
-        if (cards.length === 0) continue;
-
-        await tx.insertInto("card").values(cards).execute();
-        totalCards += cards.length;
+        for (const c of rawCards) {
+          const normalized = normalizeCard(c, remapPackId({ id: packId }).id);
+          allCardsMap.set(normalized.id, normalized);
+        }
         log(
           "info",
-          `Inserted ${cards.length} cards from pack '${packId}' file '${file}'`,
+          `Processed ${rawCards.length} cards from pack '${packId}' file '${file}'`,
         );
       }
     }
 
-    log("info", `Inserted ${totalCards} cards total`);
+    const cardsToInsert = Array.from(allCardsMap.values());
+    if (cardsToInsert.length > 0) {
+      // Insert in chunks to avoid SQLite parameter limits
+      const CHUNK_SIZE = 50;
+      for (let i = 0; i < cardsToInsert.length; i += CHUNK_SIZE) {
+        const chunk = cardsToInsert.slice(i, i + CHUNK_SIZE);
+        await tx.insertInto("card").values(chunk).execute();
+      }
+    }
+
+    log("info", `Inserted ${cardsToInsert.length} cards total`);
 
     await tx
       .insertInto("app_metadata")

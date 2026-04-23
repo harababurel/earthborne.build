@@ -41,7 +41,7 @@ try {
 async function run() {
   const cards = await db
     .selectFrom("card")
-    .select(["code", "pack_id"])
+    .select(["code", "pack_id", "imagesrc"])
     .orderBy("code asc")
     .execute();
 
@@ -63,7 +63,10 @@ async function run() {
     }
 
     const upstreamPackId = getUpstreamPackId(card.pack_id);
-    const url = `${RANGERSDB_IMAGE_BASE}/${upstreamPackId}/${card.code}.jpg`;
+    const url =
+      card.imagesrc && card.imagesrc.startsWith("http")
+        ? card.imagesrc
+        : `${RANGERSDB_IMAGE_BASE}/${upstreamPackId}/${card.code}.jpg`;
 
     let res: Response;
     try {
