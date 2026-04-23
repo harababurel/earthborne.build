@@ -39,9 +39,57 @@ try {
   process.exit(1);
 }
 
+async function runMigrations() {
+  const migrationsDir = path.join(import.meta.dirname, "../db/migrations");
+  const files = (await fs.readdir(migrationsDir))
+    .filter((f) => f.endsWith(".sql"))
+    .sort();
+
+  await db.transaction().execute(async (tx) => {
+    await sql`CREATE TABLE IF NOT EXISTS schema_migrations (version TEXT PRIMARY KEY)`.execute(
+      tx,
+    );
+
+    const applied = await sql<{
+      version: string;
+    }>`SELECT version FROM schema_migrations`.execute(tx);
+    const appliedVersions = new Set(applied.rows.map((r) => r.version));
+
+    for (const file of files) {
+      const version = file.split("_")[0];
+      if (version && !appliedVersions.has(version)) {
+        log("info", `Applying migration ${file}`);
+        const content = await fs.readFile(
+          path.join(migrationsDir, file),
+          "utf-8",
+        );
+
+        // Split by -- migrate:up and -- migrate:down if present, or just run everything
+        const upPart = content.split("-- migrate:down")[0] ?? content;
+        const statements = upPart
+          .replace(/-- migrate:up/g, "")
+          .split(";")
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0);
+
+        for (const statement of statements) {
+          await sql.raw(statement).execute(tx);
+        }
+
+        await sql`INSERT INTO schema_migrations (version) VALUES (${version})`.execute(
+          tx,
+        );
+      }
+    }
+  });
+}
+
 async function ingest() {
   const startedAt = Date.now();
   const cardsUpdatedAt = new Date().toISOString();
+
+  // Ensure database schema is up to date before ingesting.
+  await runMigrations();
 
   await db.transaction().execute(async (tx) => {
     await ensureAppMetadataTable(tx);
