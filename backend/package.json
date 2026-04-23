@@ -23,6 +23,7 @@
     "hono": "4.12.12",
     "kysely": "0.28.14",
     "node-addon-api": "^8.3.0",
+    "node-gyp": "^11.1.0",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
