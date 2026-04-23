@@ -30,7 +30,7 @@ export function SkillIconsChart({ data }: Props) {
         height={chartTheme.height}
         cx="50%"
         cy="50%"
-        outerRadius="90%"
+        outerRadius="80%"
         responsive
       >
         <PolarGrid
@@ -67,16 +67,25 @@ export function SkillIconsChart({ data }: Props) {
 function SkillIconTick(props: {
   x?: number;
   y?: number;
+  cx?: number;
+  cy?: number;
   payload?: { value: string };
 }) {
-  const { x, y, payload } = props;
+  const { x = 0, y = 0, cx = 0, cy = 0, payload } = props;
   const skill = payload?.value ?? "conflict";
   const size = 24;
 
+  // Push icons slightly further out from the center
+  const dx = x - cx;
+  const dy = y - cy;
+  const offsetFactor = 0.1; // 10% further out
+  const adjustedX = x + dx * offsetFactor;
+  const adjustedY = y + dy * offsetFactor;
+
   return (
     <foreignObject
-      x={(x ?? 0) - size / 2}
-      y={(y ?? 0) - size / 2}
+      x={adjustedX - size / 2}
+      y={adjustedY - size / 2}
       width={size}
       height={size}
     >
