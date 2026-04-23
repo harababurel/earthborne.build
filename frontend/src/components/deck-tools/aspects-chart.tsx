@@ -57,14 +57,23 @@ function renderAspectLabel(props: {
   cx?: number;
   cy?: number;
   midAngle?: number;
+  innerRadius?: number;
   outerRadius?: number;
   payload?: { x: string };
 }) {
-  const { cx = 0, cy = 0, midAngle = 0, outerRadius = 0, payload } = props;
+  const {
+    cx = 0,
+    cy = 0,
+    midAngle = 0,
+    innerRadius = 0,
+    outerRadius = 0,
+    payload,
+  } = props;
   if (!payload) return null;
 
   const RADIAN = Math.PI / 180;
-  const radius = outerRadius + 16;
+  // Calculate center of the slice
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
   const size = 24;
@@ -78,7 +87,8 @@ function renderAspectLabel(props: {
         className={iconClass}
         style={{
           fontSize: "24px",
-          color: `var(--color-${payload.x.toLowerCase()})`,
+          color: "white",
+          opacity: 0.75,
         }}
       />
     </foreignObject>
@@ -89,9 +99,19 @@ function formatTooltip(t: TFunction, data: Record<string, unknown>) {
   const aspect = data.x as string;
   const count = data.y as number;
 
-  return t("deck.tools.factions_tooltip", {
-    count,
-    faction: t(`common.factions.${aspect.toLowerCase()}`),
-    cards: t("common.card", { count }),
-  });
+  const iconClass = ASPECT_ICON_CLASS[aspect as AspectKey] || "core-fit_chakra";
+
+  return (
+    <span className={css["tooltip-content"]}>
+      {count} {t(`common.factions.${aspect.toLowerCase()}`)}{" "}
+      <i
+        className={iconClass}
+        style={{
+          fontSize: "1.2em",
+          verticalAlign: "middle",
+          color: `var(--color-${aspect.toLowerCase()})`,
+        }}
+      />
+    </span>
+  );
 }

@@ -80,7 +80,11 @@ function SkillIconTick(props: {
       width={size}
       height={size}
     >
-      <SkillIconFancy skill={skill} className={css["skill-icon-label"]} />
+      <SkillIconFancy
+        skill={skill}
+        className={css["skill-icon-label"]}
+        color="currentColor"
+      />
     </foreignObject>
   );
 }
@@ -89,9 +93,13 @@ function formatTooltip(t: TFunction, data: Record<string, unknown>) {
   const skill = data.x as string;
   const count = (data.y as number) ?? 0;
 
-  return t("deck.tools.skill_icons_tooltip", {
-    count,
-    skill: t(`common.skill.${skill}`),
-    icons: t("common.icon", { count }),
-  });
+  return (
+    <span className={css["tooltip-content"]}>
+      {count} {t(`common.skill.${skill}`)}{" "}
+      <i
+        className={`core-${skill}`}
+        style={{ fontSize: "1.2em", verticalAlign: "middle" }}
+      />
+    </span>
+  );
 }

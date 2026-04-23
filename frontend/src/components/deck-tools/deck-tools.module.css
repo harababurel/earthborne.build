@@ -54,6 +54,12 @@
   border-radius: var(--rounded);
 }
 
+.tooltip-content {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
 .table-container {
   max-height: 330px;
   width: 100%;
