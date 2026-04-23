@@ -1,6 +1,6 @@
 import type { AspectKey } from "@arkham-build/shared";
 import type { TFunction } from "i18next";
-import { useMemo } from "react";
+import { useId, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { PieSectorShapeProps } from "recharts";
 import { Pie, PieChart, Sector, Tooltip } from "recharts";
@@ -16,6 +16,7 @@ type Props = {
 
 export function AspectsChart({ data }: Props) {
   const { t } = useTranslation();
+  const chartId = useId();
 
   const normalizedData = useMemo(() => {
     return data.filter((tick) => tick.y !== 0);
@@ -37,7 +38,9 @@ export function AspectsChart({ data }: Props) {
           label={false}
           labelLine={false}
           isAnimationActive={false}
-          shape={renderAspectSector}
+          shape={(props: PieSectorShapeProps) => (
+            <AspectSector {...props} chartId={chartId} />
+          )}
         />
         <Tooltip
           content={<ChartTooltip formatter={(d) => formatTooltip(t, d)} />}
@@ -47,11 +50,15 @@ export function AspectsChart({ data }: Props) {
   );
 }
 
-function renderAspectSector(props: PieSectorShapeProps) {
-  const { cx = 0, cy = 0, outerRadius = 0, payload } = props;
+function AspectSector(props: PieSectorShapeProps & { chartId: string }) {
+  const { cx = 0, cy = 0, outerRadius = 0, payload, chartId } = props;
   const aspect = payload?.x as AspectKey;
   const iconClass = ASPECT_ICON_CLASS[aspect] || "core-fit_chakra";
-  const clipId = `clip-aspect-${aspect}`;
+  const clipId = `clip-${chartId}-${aspect}`;
+
+  const fill = aspect
+    ? `var(--color-${aspect.toLowerCase()})`
+    : "var(--text-mythos)";
 
   return (
     <g>
@@ -60,7 +67,7 @@ function renderAspectSector(props: PieSectorShapeProps) {
           <Sector {...props} />
         </clipPath>
       </defs>
-      <Sector {...props} />
+      <Sector {...props} fill={fill} />
       <foreignObject
         x={cx - outerRadius}
         y={cy - outerRadius}
