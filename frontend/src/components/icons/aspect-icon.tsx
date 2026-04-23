@@ -10,7 +10,8 @@ export const ASPECT_DISPLAY_NAMES: Record<AspectKey, string> = {
   SPI: "spirit",
 };
 
-const ASPECT_ICON_CLASS: Record<AspectKey, string> = {
+// biome-ignore lint/style/useComponentExportOnlyModules: constant exported alongside component
+export const ASPECT_ICON_CLASS: Record<AspectKey, string> = {
   AWA: "core-awa_chakra",
   FIT: "core-fit_chakra",
   FOC: "core-foc_chakra",

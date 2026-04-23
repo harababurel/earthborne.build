@@ -1,5 +1,5 @@
 import type { Card } from "@arkham-build/shared";
-import { ASPECT_ORDER } from "@arkham-build/shared";
+import { APPROACH_ORDER, ASPECT_ORDER } from "@arkham-build/shared";
 import { splitMultiValue } from "@/utils/card-utils";
 import type { DeckCharts } from "./types";
 
@@ -11,7 +11,7 @@ export type ChartableData<T extends string | number = number> = {
 export function emptyDeckCharts(): DeckCharts {
   return {
     costCurve: new Map(),
-    approachIcons: new Map(),
+    approachIcons: new Map(APPROACH_ORDER.map((approach) => [approach, 0])),
     aspects: new Map(ASPECT_ORDER.map((aspect) => [aspect, 0] as const)),
     traits: new Map(),
   };
@@ -27,6 +27,16 @@ export function addCardToDeckCharts(
     const normalizedCost = card.energy_cost >= 7 ? 7 : card.energy_cost;
     const entry = accumulator.costCurve.get(normalizedCost) ?? 0;
     accumulator.costCurve.set(normalizedCost, entry + quantity);
+  }
+
+  // Approach icons
+  for (const approach of APPROACH_ORDER) {
+    const key = `approach_${approach}` as keyof Card;
+    const value = card[key];
+    if (typeof value === "number" && value > 0) {
+      const entry = accumulator.approachIcons.get(approach) ?? 0;
+      accumulator.approachIcons.set(approach, entry + value * quantity);
+    }
   }
 
   // Aspect requirements

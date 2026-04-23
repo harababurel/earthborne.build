@@ -70,7 +70,7 @@ function SkillIconTick(props: {
   payload?: { value: string };
 }) {
   const { x, y, payload } = props;
-  const skill = payload?.value?.replace("skill_", "") ?? "wild";
+  const skill = payload?.value ?? "conflict";
   const size = 24;
 
   return (
@@ -86,7 +86,7 @@ function SkillIconTick(props: {
 }
 
 function formatTooltip(t: TFunction, data: Record<string, unknown>) {
-  const skill = (data.x as string).replace("skill_", "");
+  const skill = data.x as string;
   const count = (data.y as number) ?? 0;
 
   return t("deck.tools.skill_icons_tooltip", {

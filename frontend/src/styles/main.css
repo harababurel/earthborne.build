@@ -205,6 +205,12 @@
     --foc-dark: #223f8d;
     --spi-dark: #e08816;
 
+    /* ER approaches */
+    --conflict: #f15a24;
+    --reason: #00aeef;
+    --exploration: #8cc63f;
+    --connection: #92278f;
+
     --rounded: 0.375rem;
     --rounded-lg: 1.25rem;
     --rounded-xl: 1.75rem;
@@ -299,6 +305,11 @@
     --color-focus: var(--foc);
     --color-spirit: var(--spi);
 
+    --color-conflict: var(--conflict);
+    --color-reason: var(--reason);
+    --color-exploration: var(--exploration);
+    --color-connection: var(--connection);
+
     --text: var(--palette-4);
     --text-mythos: var(--theme-text-dim-dark);
     --text-neutral: var(--theme-text-dim-dark);
@@ -330,6 +341,11 @@
     --color-fitness: var(--fit-dark);
     --color-focus: var(--foc-dark);
     --color-spirit: var(--spi-dark);
+
+    --color-conflict: var(--conflict);
+    --color-reason: var(--reason);
+    --color-exploration: var(--exploration);
+    --color-connection: var(--connection);
 
     --text: var(--theme-text-light);
     --text-mythos: var(--theme-text-dim-light);

@@ -1,9 +1,11 @@
+import type { AspectKey } from "@arkham-build/shared";
 import type { TFunction } from "i18next";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { PieSectorShapeProps } from "recharts";
 import { Pie, PieChart, Sector, Tooltip } from "recharts";
 import type { ChartableData } from "@/store/lib/deck-charts";
+import { ASPECT_ICON_CLASS } from "../icons/aspect-icon";
 import { chartTheme } from "./chart-theme";
 import { ChartTooltip } from "./chart-tooltip";
 import css from "./deck-tools.module.css";
@@ -12,7 +14,7 @@ type Props = {
   data: ChartableData<string>;
 };
 
-export function FactionsChart({ data }: Props) {
+export function AspectsChart({ data }: Props) {
   const { t } = useTranslation();
 
   const normalizedData = useMemo(() => {
@@ -32,10 +34,10 @@ export function FactionsChart({ data }: Props) {
           outerRadius="90%"
           stroke={chartTheme.colors.pieStroke}
           strokeWidth={chartTheme.strokeWidth.pie}
-          label={renderFactionLabel}
+          label={renderAspectLabel}
           labelLine={false}
           isAnimationActive={false}
-          shape={renderFactionSector}
+          shape={renderAspectSector}
         />
         <Tooltip
           content={<ChartTooltip formatter={(d) => formatTooltip(t, d)} />}
@@ -45,15 +47,13 @@ export function FactionsChart({ data }: Props) {
   );
 }
 
-function renderFactionSector(props: PieSectorShapeProps) {
-  const faction = props.payload?.x as string | undefined;
-  const fill = faction
-    ? `var(--${faction === "neutral" ? "text" : "color"}-${faction})`
-    : "var(--text)";
+function renderAspectSector(props: PieSectorShapeProps) {
+  const aspect = props.payload?.x as string | undefined;
+  const fill = aspect ? `var(--color-${aspect.toLowerCase()})` : "var(--text)";
   return <Sector {...props} fill={fill} />;
 }
 
-function renderFactionLabel(props: {
+function renderAspectLabel(props: {
   cx?: number;
   cy?: number;
   midAngle?: number;
@@ -69,23 +69,29 @@ function renderFactionLabel(props: {
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
   const size = 24;
 
+  const iconClass =
+    ASPECT_ICON_CLASS[payload.x as AspectKey] || "core-fit_chakra";
+
   return (
     <foreignObject x={x - size / 2} y={y - size / 2} width={size} height={size}>
       <i
-        className={`icon-${payload.x} fg-${payload.x}`}
-        style={{ fontSize: "24px" }}
+        className={iconClass}
+        style={{
+          fontSize: "24px",
+          color: `var(--color-${payload.x.toLowerCase()})`,
+        }}
       />
     </foreignObject>
   );
 }
 
 function formatTooltip(t: TFunction, data: Record<string, unknown>) {
-  const faction = data.x as string;
+  const aspect = data.x as string;
   const count = data.y as number;
 
   return t("deck.tools.factions_tooltip", {
     count,
-    faction: t(`common.factions.${faction}`),
+    faction: t(`common.factions.${aspect.toLowerCase()}`),
     cards: t("common.card", { count }),
   });
 }

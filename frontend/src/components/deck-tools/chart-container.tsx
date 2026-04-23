@@ -1,9 +1,9 @@
 import { toChartableData } from "@/store/lib/deck-charts";
 import type { ResolvedDeck } from "@/store/lib/types";
 import { Plane } from "../ui/plane";
+import { AspectsChart } from "./aspects-chart";
 import { CostCurveChart } from "./cost-curve-chart";
 import css from "./deck-tools.module.css";
-import { FactionsChart } from "./factions-chart";
 import { SkillIconsChart } from "./skill-icons-chart";
 import { TraitsChart } from "./traits-chart";
 
@@ -20,7 +20,7 @@ export default function ChartContainer(props: { deck: ResolvedDeck }) {
         data={toChartableData(deck.stats.charts.traits, "value")}
         deck={deck}
       />
-      <FactionsChart data={toChartableData(deck.stats.charts.aspects)} />
+      <AspectsChart data={toChartableData(deck.stats.charts.aspects)} />
     </Plane>
   );
 }
