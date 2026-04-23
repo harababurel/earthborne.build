@@ -74,6 +74,9 @@ export function CardFace(props: Props) {
 
       <div className={css["content"]}>
         <CardText
+          challengeCrest={card.challenge_crest}
+          challengeMountain={card.challenge_mountain}
+          challengeSun={card.challenge_sun}
           flavor={displayAttribute(card, "flavor")}
           size={size}
           text={displayAttribute(card, "text")}

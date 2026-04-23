@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { BackgroundType, Card, SpecialtyType } from "@arkham-build/shared";
 import { describe, expect, it } from "vitest";
 import { validateDeck } from "./deck-validation";
 import type { ResolvedDeck } from "./types";
@@ -18,9 +18,9 @@ const mockCard = (overrides: Partial<Card>): Card =>
 
 const personalityCard = (code: string) =>
   mockCard({ code, category: "personality", type_code: "moment" });
-const backgroundCard = (code: string, type: string) =>
+const backgroundCard = (code: string, type: BackgroundType) =>
   mockCard({ code, category: "background", background_type: type });
-const specialtyCard = (code: string, type: string) =>
+const specialtyCard = (code: string, type: SpecialtyType) =>
   mockCard({ code, category: "specialty", specialty_type: type });
 
 describe("Earthborne Rangers Deck Validation", () => {
