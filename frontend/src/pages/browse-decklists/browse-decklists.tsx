@@ -9,6 +9,8 @@ import { Head } from "@/components/ui/head";
 import { Loader } from "@/components/ui/loader";
 import { Pagination } from "@/components/ui/pagination";
 import { AppLayout } from "@/layouts/app-layout";
+import { useStore } from "@/store";
+import { selectMetadata } from "@/store/selectors/shared";
 import {
   type DecklistsFiltersState,
   deckSearchQuery,
@@ -167,7 +169,7 @@ function DecklistResultItem({ result }: { result: DecklistSearchResult }) {
       }}
     >
       <h3 style={{ margin: "0 0 0.5rem 0" }}>
-        <Link href={`/decks/view/${result.id}`}>
+        <Link href={`/decklist/view/${result.id}`}>
           {result.name || t("deck.untitled_deck")}
         </Link>
       </h3>
@@ -180,14 +182,10 @@ function DecklistResultItem({ result }: { result: DecklistSearchResult }) {
           : "-"}{" "}
         &nbsp;|&nbsp;
         <strong>{t("deck.background")}:</strong>{" "}
-        {result.background
-          ? t(`deck_create.background_type.${result.background}`)
-          : "-"}{" "}
+        {result.background ? t(`common.set.${result.background}`) : "-"}{" "}
         &nbsp;|&nbsp;
         <strong>{t("deck.specialty")}:</strong>{" "}
-        {result.specialty
-          ? t(`deck_create.specialty_type.${result.specialty}`)
-          : "-"}
+        {result.specialty ? t(`common.set.${result.specialty}`) : "-"}
         <br />
         <strong>{t("common.date")}:</strong>{" "}
         {new Date(result.date_creation).toLocaleDateString()}

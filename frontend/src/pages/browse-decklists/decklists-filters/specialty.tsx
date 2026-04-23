@@ -21,7 +21,7 @@ export function SpecialtyFilter({
         items={[
           { label: t("common.any"), value: "" },
           ...SPECIALTY_TYPES.map((s) => ({
-            label: t(`deck_create.specialty_type.${s}`),
+            label: t(`common.set.${s}`),
             value: s,
           })),
         ]}

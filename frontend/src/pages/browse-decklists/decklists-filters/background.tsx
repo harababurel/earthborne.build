@@ -23,7 +23,7 @@ export function BackgroundFilter({
         items={[
           { label: t("common.any"), value: "" },
           ...BACKGROUND_TYPES.map((b) => ({
-            label: t(`deck_create.background_type.${b}`),
+            label: t(`common.set.${b}`),
             value: b,
           })),
         ]}
