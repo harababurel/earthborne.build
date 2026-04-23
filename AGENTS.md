@@ -13,7 +13,7 @@ The goal is a full-featured deckbuilder at **earthborne.build** — card browsin
 
 ## Project status & priorities
 
-Phases 1–3 of the adaptation are complete (schema, ArkhamDB removal, card data pipeline). The Earthborne-specific schema, data pipeline, and SQLite-backed API are in place; some inherited arkham.build code paths still live in the frontend.
+Phases 1–3 of the adaptation are complete (schema, ArkhamDB removal, card data pipeline). The Earthborne-specific schema, data pipeline, and SQLite-backed API are in place, including support for deck sharing and a public deck directory (Deck Guides). Some inherited arkham.build code paths still live in the frontend.
 
 When working on this project, follow the schema-first order described in `docs/adaptation-plan.md`. Do not rework UI components before the underlying data model is settled.
 

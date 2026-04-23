@@ -12,7 +12,7 @@ This repository is an `npm` workspace with three packages:
 - `backend/`: Hono-based Node.js API backed by SQLite
 - `shared/`: shared schemas, DTOs, and helpers
 
-The current backend serves Earthborne Rangers card and pack data, local image delivery, and fan-made project metadata. The frontend still contains some upstream `arkham.build` integration code paths; unless you provide a compatible legacy backend, features such as remote sync, share links, and provider auth are not available in a self-hosted deployment.
+The current backend serves Earthborne Rangers card and pack data, local image delivery, and fan-made project metadata. It also provides a public directory of decks shared by users. The frontend still contains some upstream `arkham.build` integration code paths; features such as remote sync and provider auth are not available in a self-hosted deployment.
 
 ## Requirements
 

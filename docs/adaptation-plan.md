@@ -281,6 +281,18 @@ The ER filters have been fully implemented. Added: type, aspect requirement, ene
 - **Auto-Hide Unreleased Packs:** Added `TEMPORARILY_HIDDEN_PACKS` to easily filter out unreleased or non-relevant packs (`itm`, `sas`, `rcd`) without deleting them from the core config.
 - **Removed Preview Cards:** Completely removed the "show preview cards" setting, banner, and filtering logic, as Earthborne Rangers does not use rolling preview releases.
 
+### Phase 11: Deck Guides Redesign — **Done (2026-04-22)**
+
+Repurposed the "Deck Guides" page from a popular ArkhamDB decklist fetcher into a public directory of decks shared by users via the local "Share" feature.
+
+- **Backend API:** Added `GET /v2/public/decklists` which queries the `shared_deck` table using SQLite's `json_extract()` for efficient filtering on Role, Background, Specialty, and Tags.
+- **Shared DTOs:** Updated `DecklistSearchRequestSchema` to include Earthborne-specific fields and removed legacy Arkham fields.
+- **Frontend Filters:** Overhauled the sidebar to include dropdowns for Role, Background, and Specialty, a text search for Tags, and preserved card-based required/excluded filters.
+- **Results Rendering:** Implemented `DecklistResultItem` to show deck metadata, resolving card codes to names and translating game concepts.
+- **Fixed Routing/Proxy:** Prefixed the search API with `/v2/public` to avoid collisions with the frontend `/decklists` route, fixing a 404/JSON parsing error.
+- **Internationalization:** Added missing translation keys for deck metadata and filter labels in `en.json`.
+- **Robustness:** Improved `apiV2Request` to provide clearer error messages when receiving non-JSON responses.
+
 ---
 
 ## Current state

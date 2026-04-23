@@ -34,6 +34,23 @@ All public data endpoints live under `/v2/public`.
 - `GET /v2/public/packs`
   Returns all ingested packs as `{ data: Pack[] }`.
 
+### Decklists
+
+- `GET /v2/public/decklists`
+  Searches for shared decklists. Supports the following query parameters:
+  - `name`: Filter by deck name (LIKE match)
+  - `role_code`: Filter by Ranger Role card code
+  - `aspect_code`: Filter by Ranger Aspect card code
+  - `background`: Filter by Background type
+  - `specialty`: Filter by Specialty type
+  - `tags`: Filter by deck tags (LIKE match)
+  - `required[]`: Array of card codes that must be in the deck
+  - `excluded[]`: Array of card codes that must not be in the deck
+  - `limit`: Number of results to return (default 10)
+  - `offset`: Number of results to skip (default 0)
+
+  Returns `{ data: DecklistSearchResult[], meta: { total: number, limit: number, offset: number } }`.
+
 ### Fan-made project info
 
 - `GET /v2/public/fan-made-project-info`
