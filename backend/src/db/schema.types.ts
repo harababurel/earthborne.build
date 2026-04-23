@@ -86,6 +86,7 @@ export interface Card {
   flavor: string | null;
   objective: string | null;
   imagesrc: string | null;
+  image_rect: string | null;
   sun_challenge: string | null;
   mountain_challenge: string | null;
   crest_challenge: string | null;

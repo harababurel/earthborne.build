@@ -13,6 +13,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import sharp from "sharp";
 import { getDatabase } from "../db/db.ts";
 import { log } from "../lib/logger.ts";
 
@@ -41,7 +42,7 @@ try {
 async function run() {
   const cards = await db
     .selectFrom("card")
-    .select(["code", "pack_id", "imagesrc"])
+    .select(["code", "pack_id", "imagesrc", "image_rect"])
     .orderBy("code asc")
     .execute();
 
@@ -96,7 +97,44 @@ async function run() {
     }
 
     const buffer = Buffer.from(await res.arrayBuffer());
+
     await fs.mkdir(destDir, { recursive: true });
+
+    if (card.image_rect) {
+      try {
+        const [index, cols, rows] = JSON.parse(card.image_rect) as [
+          number,
+          number,
+          number,
+        ];
+        const image = sharp(buffer);
+        const { width: totalWidth, height: totalHeight } =
+          await image.metadata();
+
+        if (totalWidth && totalHeight) {
+          const width = Math.round(totalWidth / cols);
+          const height = Math.round(totalHeight / rows);
+          const left = (index % cols) * width;
+          const top = Math.floor(index / cols) * height;
+
+          await image
+            .extract({ left, top, width, height })
+            .toFormat("jpeg")
+            .toFile(destFile);
+
+          downloaded++;
+          log("info", `Cropped and saved ${card.code} from spritesheet`);
+          continue;
+        }
+      } catch (err) {
+        log("error", `Failed to crop ${card.code}`, {
+          error: (err as Error).message,
+        });
+        failed++;
+        continue;
+      }
+    }
+
     await fs.writeFile(destFile, buffer);
     downloaded++;
     log("info", `Downloaded ${card.code} (${buffer.length} bytes)`);

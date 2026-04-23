@@ -218,6 +218,7 @@ interface RawCard {
   flavor?: string;
   objective?: string;
   imagesrc?: string;
+  image_rect?: number[];
   sun_challenge?: string;
   mountain_challenge?: string;
   crest_challenge?: string;
@@ -265,6 +266,7 @@ function normalizeCard(c: RawCard, packId: string) {
     flavor: c.flavor ?? null,
     objective: c.objective ?? null,
     imagesrc: c.imagesrc ?? null,
+    image_rect: c.image_rect != null ? JSON.stringify(c.image_rect) : null,
     sun_challenge: c.sun_challenge ?? null,
     mountain_challenge: c.mountain_challenge ?? null,
     crest_challenge: c.crest_challenge ?? null,
