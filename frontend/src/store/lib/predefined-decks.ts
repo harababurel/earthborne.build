@@ -12,6 +12,7 @@ export function buildStarterDecks(): Deck[] {
       aspect_code: "01251",
       background: "traveler",
       specialty: "explorer",
+      tags: "premade",
       slots: {
         "01001": C,
         "01008": C,
@@ -36,6 +37,7 @@ export function buildStarterDecks(): Deck[] {
       aspect_code: "01241",
       background: "shepherd",
       specialty: "conciliator",
+      tags: "premade",
       slots: {
         "01026": C,
         "01025": C,
@@ -60,6 +62,7 @@ export function buildStarterDecks(): Deck[] {
       aspect_code: "01247",
       background: "artisan",
       specialty: "artificer",
+      tags: "premade",
       slots: {
         "01017": C,
         "01013": C,
@@ -84,6 +87,7 @@ export function buildStarterDecks(): Deck[] {
       aspect_code: "01255",
       background: "forager",
       specialty: "shaper",
+      tags: "premade",
       slots: {
         "01031": C,
         "01028": C,
@@ -108,6 +112,7 @@ export function buildStarterDecks(): Deck[] {
       aspect_code: "01249",
       background: "talespinner",
       specialty: "spirit_speaker",
+      tags: "premade",
       slots: {
         "03059": C,
         "03060": C,
