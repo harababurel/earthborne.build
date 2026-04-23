@@ -95,6 +95,7 @@
 .white-icon {
   color: white;
   opacity: 0.75;
+  transform: translateY(0.125rem);
 }
 
 .stat-overlay {
