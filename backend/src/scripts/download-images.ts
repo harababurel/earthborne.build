@@ -23,6 +23,7 @@ if (!IMAGE_DIR) {
   process.exit(1);
 }
 
+const FORCE = !!process.env["FORCE"];
 const SQLITE_PATH = process.env["SQLITE_PATH"] ?? "./earthborne.db";
 const RANGERSDB_IMAGE_BASE = "https://static.rangersdb.com/img/card";
 const UPSTREAM_PACK_IDS: Record<string, string> = {
@@ -57,8 +58,8 @@ async function run() {
     const destDir = path.join(IMAGE_DIR as string, card.pack_id);
     const destFile = path.join(destDir, `${card.code}.jpg`);
 
-    // Skip if already downloaded
-    if (await fileExists(destFile)) {
+    // Skip if already downloaded (unless FORCE is enabled)
+    if (!FORCE && (await fileExists(destFile))) {
       skipped++;
       continue;
     }
