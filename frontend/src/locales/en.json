@@ -113,6 +113,8 @@
       "no_entries": "No entries",
       "non_collection_cards": "{{count}} non-collection cards",
       "none": "None",
+      "any": "Any",
+      "tags": "Tags",
       "next": "Next",
       "ok": "OK",
       "pack_one": "pack",
@@ -324,6 +326,11 @@
       }
     },
     "deck": {
+      "aspect": "Aspect",
+      "background": "Background",
+      "specialty": "Specialty",
+      "name": "Deck Name",
+      "untitled_deck": "Untitled Deck",
       "actions": {
         "archive": "Archive deck",
         "copy_id": "Copy deck id",

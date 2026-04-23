@@ -7,32 +7,14 @@ import {
 } from "@arkham-build/shared";
 import { apiV2Request } from "./shared";
 
-export type SortType = "user_reputation" | "date" | "likes" | "popularity";
-
-// Extra filter fields used by UI components — not part of ER DecklistSearchRequest
-// but kept for call-site compatibility with the inherited filter UI.
-type ExtraFilterFields = {
-  analyze_side_decks?: boolean;
-  canonical_investigator_code?: string;
-  description_length?: number;
-  investigator_factions?: string[];
-  xp?: [number, number];
-};
-
 export type DecklistsFiltersState = {
-  filters: Omit<
-    DecklistSearchRequest,
-    "offset" | "sort_by" | "sort_dir" | "limit"
-  > &
-    ExtraFilterFields;
+  filters: Omit<DecklistSearchRequest, "offset" | "limit">;
   limit: number;
   offset: number;
-  sort_by: SortType;
-  sort_dir: "asc" | "desc";
 };
 
 export async function searchDecklists(params: URLSearchParams) {
-  const res = await apiV2Request(`/decklists?${params.toString()}`);
+  const res = await apiV2Request(`/v2/public/decklists?${params.toString()}`);
 
   return res.json() as Promise<DecklistSearchResponse>;
 }
@@ -64,7 +46,7 @@ export function parseDeckSearchQuery(
     {} as Record<string, string[]>,
   );
 
-  const { limit, offset, sort_by, sort_dir, ...filters } = decodeSearch(
+  const { limit, offset, ...filters } = decodeSearch(
     DecklistSearchRequestSchema,
     queries,
   );
@@ -73,7 +55,5 @@ export function parseDeckSearchQuery(
     filters,
     limit,
     offset,
-    sort_by: sort_by as SortType,
-    sort_dir,
   };
 }

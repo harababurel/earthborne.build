@@ -5,14 +5,13 @@ import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Plane } from "@/components/ui/plane";
 import type { DecklistsFiltersState } from "@/store/services/requests/decklists-search";
 import css from "../browser-decklists.module.css";
-import { AnalyzeSideDecks } from "./analyze-side-decks";
-import { Author } from "./author";
-import { CanonicalInvestigator } from "./canonical-investigator";
+import { BackgroundFilter } from "./background";
 import { DeckName } from "./deck-name";
-import { DescriptionLength } from "./description-length";
 import { ExcludedCards } from "./excluded-cards";
-import { InvestigatorFactions } from "./investigator-factions";
 import { RequiredCards } from "./required-cards";
+import { RoleFilter } from "./role";
+import { SpecialtyFilter } from "./specialty";
+import { TagsFilter } from "./tags";
 
 type Props = {
   filters: DecklistsFiltersState["filters"];
@@ -51,13 +50,12 @@ export function DecklistsFilters({
         <CollapsibleContent>
           <form className={css["filters"]} onSubmit={handleSubmit}>
             <div className={css["filters-col"]}>
-              <CanonicalInvestigator
-                disabled={!!formState.investigator_factions?.length}
+              <RoleFilter formState={formState} setFormState={setFormState} />
+              <BackgroundFilter
                 formState={formState}
                 setFormState={setFormState}
               />
-              <InvestigatorFactions
-                disabled={!!formState.canonical_investigator_code}
+              <SpecialtyFilter
                 formState={formState}
                 setFormState={setFormState}
               />
@@ -70,18 +68,10 @@ export function DecklistsFilters({
                 formState={formState}
                 setFormState={setFormState}
               />
-              <AnalyzeSideDecks
-                formState={formState}
-                setFormState={setFormState}
-              />
             </div>
             <div className={css["filters-col"]}>
-              <Author formState={formState} setFormState={setFormState} />
               <DeckName formState={formState} setFormState={setFormState} />
-              <DescriptionLength
-                formState={formState}
-                setFormState={setFormState}
-              />
+              <TagsFilter formState={formState} setFormState={setFormState} />
             </div>
             <footer className={css["filters-footer"]}>
               <Button type="submit" variant="primary">

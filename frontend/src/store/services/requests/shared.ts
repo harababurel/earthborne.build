@@ -15,15 +15,28 @@ export async function apiV2Request(
 
   if (!res.ok) {
     let message = res.statusText || `Request failed with status ${res.status}`;
-    try {
-      const err = await res.json();
-      if (err.message) {
-        message = err.message;
+    const contentType = res.headers.get("content-type");
+    if (contentType?.includes("application/json")) {
+      try {
+        const err = await res.json();
+        if (err.message) {
+          message = err.message;
+        }
+      } catch (_) {
+        // Ignore JSON parse error, use default message.
       }
-    } catch (_) {
-      // Ignore JSON parse error, use default message.
+    } else if (contentType?.includes("text/html")) {
+      message = `Server returned HTML instead of JSON. This might be a misconfigured API URL or a 404 error handled by the frontend. (Status: ${res.status})`;
     }
     throw new ApiError(message, res.status);
+  }
+
+  const contentType = res.headers.get("content-type");
+  if (!contentType?.includes("application/json")) {
+    throw new ApiError(
+      `Expected JSON response but received ${contentType || "unknown"}. This usually indicates a routing issue.`,
+      200,
+    );
   }
 
   return res;

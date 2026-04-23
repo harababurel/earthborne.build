@@ -11,6 +11,7 @@ import type { HonoEnv } from "./lib/hono-env.ts";
 import { logger, requestLogger } from "./lib/logger.ts";
 import adminRouter from "./routes/admin.ts";
 import cardsRouter from "./routes/cards.ts";
+import decklistsRouter from "./routes/decklists.ts";
 import fanMadeProjectInfoRouter from "./routes/fan-made-project-info.ts";
 import imagesRouter from "./routes/images.ts";
 import packsRouter from "./routes/packs.ts";
@@ -41,6 +42,7 @@ export function appFactory(config: Config, database: Database) {
   pub.route("/packs", packsRouter);
   pub.route("/fan-made-project-info", fanMadeProjectInfoRouter);
   pub.route("/share", sharingRouter);
+  pub.route("/decklists", decklistsRouter);
   app.route("/v2/public", pub);
 
   app.get("/up", (c) => c.text("ok"));

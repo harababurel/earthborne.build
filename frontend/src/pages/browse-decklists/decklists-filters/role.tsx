@@ -38,7 +38,7 @@ const selectRoleCards = createSelector(
   },
 );
 
-export function CanonicalInvestigator({
+export function RoleFilter({
   disabled,
   formState,
   setFormState,
@@ -50,8 +50,7 @@ export function CanonicalInvestigator({
   const collator = useStore(selectLocaleSortingCollator);
   const locale = useStore((state) => state.settings.locale);
 
-  // ER uses required[] to filter by role card code
-  const selectedCode = formState.required?.[0];
+  const selectedCode = formState.role_code;
   const selectedCard = selectedCode ? metadata.cards[selectedCode] : undefined;
 
   const resolvedCard = useMemo(() => {
@@ -77,7 +76,7 @@ export function CanonicalInvestigator({
           const card = cards[0];
           setFormState((prev) => ({
             ...prev,
-            required: card ? [card.code] : undefined,
+            role_code: card ? card.code : undefined,
           }));
         }}
         selectedItems={resolvedCard ? [resolvedCard.card] : []}

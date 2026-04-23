@@ -1,19 +1,18 @@
+import type { DecklistSearchResult } from "@arkham-build/shared";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { ArrowDownWideNarrowIcon, LoaderCircleIcon } from "lucide-react";
+import { LoaderCircleIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "wouter";
+import { Link, useSearchParams } from "wouter";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { Head } from "@/components/ui/head";
 import { Loader } from "@/components/ui/loader";
 import { Pagination } from "@/components/ui/pagination";
-import { Select } from "@/components/ui/select";
 import { AppLayout } from "@/layouts/app-layout";
 import {
   type DecklistsFiltersState,
   deckSearchQuery,
   parseDeckSearchQuery,
-  type SortType,
   searchDecklists,
 } from "@/store/services/requests/decklists-search";
 import { ApiError } from "@/store/services/requests/shared";
@@ -68,12 +67,6 @@ function BrowseDecklists() {
     setSearchParams(initialSearchParams.current);
   };
 
-  const onSortByChange = (sort_by: SortType) => {
-    const nextState = { ...state, sort_by, offset: 0 };
-    setState(nextState);
-    setSearchParams(deckSearchQuery(nextState, 30));
-  };
-
   return (
     <CardModalProvider>
       <AppLayout
@@ -107,11 +100,6 @@ function BrowseDecklists() {
                   })
                 )}
               </span>
-              <Sorting
-                disabled={isPlaceholderData}
-                onSortByChange={onSortByChange}
-                sortBy={state.sort_by}
-              />
             </nav>
             <Pagination
               disabled={isPlaceholderData}
@@ -123,7 +111,7 @@ function BrowseDecklists() {
             <ol className={css["results"]}>
               {data.data.map((result) => (
                 <li key={result.id}>
-                  {/* Result display for ER decklists TODO */}
+                  <DecklistResultItem result={result} />
                 </li>
               ))}
             </ol>
@@ -160,48 +148,50 @@ function BrowseDecklists() {
   );
 }
 
-function Sorting({
-  disabled,
-  onSortByChange,
-  sortBy,
-}: {
-  disabled?: boolean;
-  onSortByChange: (sortBy: SortType) => void;
-  sortBy: SortType;
-}) {
+function DecklistResultItem({ result }: { result: DecklistSearchResult }) {
   const { t } = useTranslation();
+  const metadata = useStore(selectMetadata);
 
-  const options: { value: SortType; label: string }[] = [
-    {
-      value: "popularity",
-      label: t("decklists.sorting.popularity"),
-    },
-    {
-      value: "date",
-      label: t("decklists.sorting.date"),
-    },
-    {
-      value: "likes",
-      label: t("decklists.sorting.likes"),
-    },
-    {
-      value: "user_reputation",
-      label: t("decklists.sorting.user_reputation"),
-    },
-  ];
+  const roleCard = result.role_code
+    ? metadata.cards[result.role_code]
+    : undefined;
 
   return (
-    <div className={css["sorting"]}>
-      <ArrowDownWideNarrowIcon />
-      <Select
-        disabled={disabled}
-        onChange={(evt) => {
-          onSortByChange(evt.target.value as SortType);
-        }}
-        options={options}
-        required
-        value={sortBy}
-      />
+    <div
+      className={css["result-item"]}
+      style={{
+        padding: "1rem",
+        border: "1px solid var(--border-color)",
+        marginBottom: "1rem",
+        borderRadius: "4px",
+      }}
+    >
+      <h3 style={{ margin: "0 0 0.5rem 0" }}>
+        <Link href={`/decks/view/${result.id}`}>
+          {result.name || t("deck.untitled_deck")}
+        </Link>
+      </h3>
+      <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-muted)" }}>
+        <strong>{t("common.type.role")}:</strong>{" "}
+        {roleCard ? roleCard.name : result.role_code || "-"} &nbsp;|&nbsp;
+        <strong>{t("deck.aspect")}:</strong>{" "}
+        {result.aspect_code
+          ? t(`common.factions.${result.aspect_code.toLowerCase()}`)
+          : "-"}{" "}
+        &nbsp;|&nbsp;
+        <strong>{t("deck.background")}:</strong>{" "}
+        {result.background
+          ? t(`deck_create.background_type.${result.background}`)
+          : "-"}{" "}
+        &nbsp;|&nbsp;
+        <strong>{t("deck.specialty")}:</strong>{" "}
+        {result.specialty
+          ? t(`deck_create.specialty_type.${result.specialty}`)
+          : "-"}
+        <br />
+        <strong>{t("common.date")}:</strong>{" "}
+        {new Date(result.date_creation).toLocaleDateString()}
+      </p>
     </div>
   );
 }
