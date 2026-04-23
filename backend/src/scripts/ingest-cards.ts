@@ -129,7 +129,7 @@ async function ingest() {
     // Cards — all JSON files per pack inside packs/{pack_id}/*.json
     const dataDir = CARD_DATA_DIR as string;
     const packDirs = await fs.readdir(path.join(dataDir, "packs"));
-    const allCardsMap = new Map<string, any>();
+    const allCardsMap = new Map<string, ReturnType<typeof normalizeCard>>();
 
     for (const packId of packDirs) {
       const packDirPath = path.join(dataDir, "packs", packId);

@@ -63,10 +63,9 @@ async function run() {
     }
 
     const upstreamPackId = getUpstreamPackId(card.pack_id);
-    const url =
-      card.imagesrc && card.imagesrc.startsWith("http")
-        ? card.imagesrc
-        : `${RANGERSDB_IMAGE_BASE}/${upstreamPackId}/${card.code}.jpg`;
+    const url = card.imagesrc?.startsWith("http")
+      ? card.imagesrc
+      : `${RANGERSDB_IMAGE_BASE}/${upstreamPackId}/${card.code}.jpg`;
 
     let res: Response;
     try {
