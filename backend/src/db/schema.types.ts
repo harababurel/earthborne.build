@@ -46,10 +46,16 @@ export interface Area {
   name: string;
 }
 
+export interface Category {
+  id: string; // ranger | path | location | weather | mission | challenge
+  name: string;
+}
+
 export interface Card {
   id: string;
   code: string;
   pack_id: string;
+  category_id: string | null;
   set_id: string | null;
   set_position: number | null;
   position: number;
@@ -120,6 +126,7 @@ export interface DB {
   card_set: CardSet;
   token: Token;
   area: Area;
+  category: Category;
   card: Card;
   fan_made_project_info: FanMadeProjectInfo;
   app_metadata: AppMetadata;

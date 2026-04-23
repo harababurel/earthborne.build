@@ -32,10 +32,15 @@ CREATE TABLE area (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL
 );
+CREATE TABLE category (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL
+);
 CREATE TABLE card (
   id TEXT PRIMARY KEY,
   code TEXT NOT NULL,
   pack_id TEXT NOT NULL REFERENCES pack(id),
+  category_id TEXT REFERENCES category(id),
   set_id TEXT REFERENCES card_set(id),
   set_position INTEGER,
   position INTEGER NOT NULL,

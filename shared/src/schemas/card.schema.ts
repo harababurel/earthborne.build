@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   ASPECT_ORDER,
   BACKGROUND_TYPES,
+  CARD_CATEGORY_IDS,
   CARD_TYPE_ORDER,
   KEYWORDS,
   RANGER_CARD_CATEGORY,
@@ -24,6 +25,7 @@ export const CardSchema = z.object({
   set_position: z.number().nullish(),
   type_code: z.enum(CARD_TYPE_ORDER),
   category: z.enum(RANGER_CARD_CATEGORY).nullish(),
+  category_id: z.enum(CARD_CATEGORY_IDS).nullish(),
 
   // Card text
   text: z.string().nullish(),

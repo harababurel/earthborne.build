@@ -140,7 +140,7 @@ export function CardScanControlled(props: Props) {
                 hidden={!flipped}
                 lazy={lazy}
                 sideways={false}
-                url={backUrl || cardBackTypeUrl(backType)}
+                url={backUrl || cardBackTypeUrl(card)}
               />
             )}
           </div>

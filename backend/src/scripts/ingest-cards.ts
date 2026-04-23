@@ -54,6 +54,7 @@ async function ingest() {
     await tx.deleteFrom("card_type").execute();
     await tx.deleteFrom("token").execute();
     await tx.deleteFrom("area").execute();
+    await tx.deleteFrom("category").execute();
     await tx.deleteFrom("pack").execute();
 
     // Lookup tables
@@ -110,6 +111,11 @@ async function ingest() {
     const areas = await readJson<{ id: string; name: string }[]>("areas.json");
     await tx.insertInto("area").values(areas).execute();
     log("info", `Inserted ${areas.length} areas`);
+
+    const categories =
+      await readJson<{ id: string; name: string }[]>("categories.json");
+    await tx.insertInto("category").values(categories).execute();
+    log("info", `Inserted ${categories.length} categories`);
 
     const packs =
       await readJson<
@@ -185,6 +191,7 @@ interface RawCard {
   position: number;
   quantity: number;
   deck_limit?: number;
+  category_id?: string;
   set_id?: string;
   set_position?: number;
   type_id: string;
@@ -229,6 +236,7 @@ function normalizeCard(c: RawCard, packId: string) {
     id: c.id,
     code: c.id,
     pack_id: packId,
+    category_id: c.category_id ?? null,
     set_id: c.set_id ?? null,
     set_position: c.set_position ?? null,
     position: c.position,

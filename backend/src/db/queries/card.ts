@@ -63,6 +63,7 @@ type CardRow = {
   sun_challenge: string | null;
   mountain_challenge: string | null;
   crest_challenge: string | null;
+  category_id: string | null;
   // joined fields
   set_type_id: string | null;
   token_name: string | null;
@@ -110,6 +111,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.sun_challenge",
       "card.mountain_challenge",
       "card.crest_challenge",
+      "card.category_id",
       "card_set.type_id as set_type_id",
       "token.name as token_name",
     ])
@@ -163,6 +165,7 @@ export async function getCardByCode(
       "card.sun_challenge",
       "card.mountain_challenge",
       "card.crest_challenge",
+      "card.category_id",
       "card_set.type_id as set_type_id",
       "token.name as token_name",
     ])
@@ -225,6 +228,7 @@ function transformCard(row: CardRow): {
   is_expert: boolean;
   background_type: string | null;
   specialty_type: string | null;
+  category_id: string | null;
   illustrator: string | null;
   challenge_sun: string | null;
   challenge_mountain: string | null;
@@ -297,6 +301,7 @@ function transformCard(row: CardRow): {
     is_expert: isExpert,
     background_type,
     specialty_type,
+    category_id: row.category_id,
     illustrator: row.illustrator,
     challenge_sun: row.sun_challenge,
     challenge_mountain: row.mountain_challenge,

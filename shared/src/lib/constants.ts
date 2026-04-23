@@ -46,6 +46,16 @@ export const RANGER_CARD_CATEGORY = [
 
 export type RangerCardCategory = (typeof RANGER_CARD_CATEGORY)[number];
 
+export const CARD_CATEGORY_IDS = [
+  "ranger",
+  "path",
+  "location",
+  "weather",
+  "mission",
+  "challenge",
+] as const;
+export type CardCategoryId = (typeof CARD_CATEGORY_IDS)[number];
+
 // Background types (choose 1 during ranger creation).
 export const BACKGROUND_TYPES = [
   "artisan",
