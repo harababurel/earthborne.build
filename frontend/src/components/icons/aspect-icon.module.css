@@ -1,0 +1,15 @@
+:where(.awa) {
+  color: var(--color-awa);
+}
+
+:where(.fit) {
+  color: var(--color-fit);
+}
+
+:where(.foc) {
+  color: var(--color-foc);
+}
+
+:where(.spi) {
+  color: var(--color-spi);
+}

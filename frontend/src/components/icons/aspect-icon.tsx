@@ -1,5 +1,6 @@
 import type { AspectKey } from "@arkham-build/shared";
 import { cx } from "@/utils/cx";
+import css from "./aspect-icon.module.css";
 
 // biome-ignore lint/style/useComponentExportOnlyModules: constant exported alongside component
 export const ASPECT_DISPLAY_NAMES: Record<AspectKey, string> = {
@@ -29,9 +30,12 @@ export function AspectIcon({ aspect, className, size = "1em" }: Props) {
   return (
     <i
       aria-hidden
-      className={cx(iconClass, className)}
+      className={cx(
+        iconClass,
+        aspect && css[aspect.toLowerCase() as keyof typeof css],
+        className,
+      )}
       style={{
-        color: aspect ? `var(--color-${aspect.toLowerCase()})` : "currentColor",
         display: "block",
         fontSize: size,
         lineHeight: 1,
