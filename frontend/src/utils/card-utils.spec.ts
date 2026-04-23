@@ -1,0 +1,38 @@
+import { describe, expect, it } from "vitest";
+import { parseCardTextHtml } from "./card-utils";
+
+describe("parseCardTextHtml", () => {
+  it("maps [right_arrow] to core-conditional span", () => {
+    const text = "Exhaust this being. [right_arrow] Suffer 1 injury.";
+    const expected =
+      'Exhaust this being. <span class="core-conditional"></span> Suffer 1 injury.';
+    expect(parseCardTextHtml(text)).toBe(expected);
+  });
+
+  it("maps Earthborne specific tokens to core- spans", () => {
+    expect(parseCardTextHtml("[harm]")).toBe('<span class="core-harm"></span>');
+    expect(parseCardTextHtml("[progress]")).toBe(
+      '<span class="core-progress"></span>',
+    );
+    expect(parseCardTextHtml("[sun]")).toBe('<span class="core-sun"></span>');
+  });
+
+  it("maps stat tokens to bold colored text", () => {
+    expect(parseCardTextHtml("[FIT]")).toBe('<b class="color-FIT">FIT</b>');
+    expect(parseCardTextHtml("[SPI]")).toBe('<b class="color-SPI">SPI</b>');
+  });
+
+  it("maps other tokens to icon- i tags", () => {
+    expect(parseCardTextHtml("[action]")).toBe('<i class="icon-action"></i>');
+  });
+
+  it("handles bold italic markers", () => {
+    expect(parseCardTextHtml("[[text]]")).toBe("<b><em>text</em></b>");
+  });
+
+  it("replaces newlines with hr.break by default", () => {
+    expect(parseCardTextHtml("line 1\nline 2")).toBe(
+      "line 1<hr class='break'>line 2",
+    );
+  });
+});

@@ -20,6 +20,7 @@ const ER_CORE_FONT_TOKENS = new Set([
   "sun",
   "crest",
   "mountain",
+  "conditional",
 ]);
 
 export function splitMultiValue(s: string | null | undefined) {
@@ -100,11 +101,12 @@ export function parseCardTextHtml(
   parsed = parsed
     .replaceAll(/\[\[(.*?)\]\]/g, "<b><em>$1</em></b>")
     .replaceAll(/\[((?:\w|_)+?)\]/g, (_, token: string) => {
-      if (ER_CORE_FONT_TOKENS.has(token)) {
-        return `<span class="core-${token}"></span>`;
+      const t = token === "right_arrow" ? "conditional" : token;
+      if (ER_CORE_FONT_TOKENS.has(t)) {
+        return `<span class="core-${t}"></span>`;
       }
-      if (ER_STAT_TOKENS.has(token)) {
-        return `<b class="color-${token}">${token}</b>`;
+      if (ER_STAT_TOKENS.has(t)) {
+        return `<b class="color-${t}">${t}</b>`;
       }
       return `<i class="icon-${token}"></i>`;
     });
