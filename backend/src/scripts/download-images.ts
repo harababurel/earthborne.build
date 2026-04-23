@@ -113,10 +113,16 @@ async function run() {
           await image.metadata();
 
         if (totalWidth && totalHeight) {
-          const width = Math.round(totalWidth / cols);
-          const height = Math.round(totalHeight / rows);
-          const left = (index % cols) * width;
-          const top = Math.floor(index / cols) * height;
+          const colIndex = index % cols;
+          const rowIndex = Math.floor(index / cols);
+
+          const left = Math.round((colIndex * totalWidth) / cols);
+          const top = Math.round((rowIndex * totalHeight) / rows);
+          const right = Math.round(((colIndex + 1) * totalWidth) / cols);
+          const bottom = Math.round(((rowIndex + 1) * totalHeight) / rows);
+
+          const width = right - left;
+          const height = bottom - top;
 
           await image
             .extract({ left, top, width, height })
