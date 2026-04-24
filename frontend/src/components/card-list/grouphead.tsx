@@ -89,8 +89,10 @@ export function GroupLabel(props: GroupLabelProps) {
 
   if (type === "encounter_set") {
     const set = metadata.encounterSets[segment];
+    const packCode = set?.pack_code || segment;
     return (
       <span className={className}>
+        <PackIcon className={css["icon"]} code={packCode} />
         <Link
           className="link-current"
           href={
