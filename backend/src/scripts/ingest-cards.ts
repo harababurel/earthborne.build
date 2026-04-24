@@ -28,6 +28,7 @@ const db = getDatabase(config.SQLITE_PATH);
 // The upstream card data uses "core" for the base set; we use "ebr" instead.
 const PACK_ID_REMAP: Record<string, { id: string; name?: string }> = {
   core: { id: "ebr", name: "Earthborne Rangers" },
+  ebr: { id: "ebr", name: "Earthborne Rangers" },
 };
 
 try {

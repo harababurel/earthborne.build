@@ -518,4 +518,57 @@
   :lang(ko, zh, zh-Hant, zh-Hans) :where(.sub) {
     font-style: normal;
   }
+
+  .token-box {
+    display: flex;
+    flex-direction: column;
+    width: 2.1rem;
+    height: 2.1rem;
+    line-height: 1;
+    overflow: hidden;
+    flex: 0 0 auto;
+    margin-top: 0.3rem;
+  }
+
+  .token-count {
+    height: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1;
+    padding-top: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .token-label {
+    height: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e0e0e0;
+    font-size: 0.45rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding-top: 2px;
+  }
+
+  .token-box.color-awa {
+    background-color: var(--awa);
+  }
+  .token-box.color-fit {
+    background-color: var(--fit);
+  }
+  .token-box.color-foc {
+    background-color: var(--foc);
+  }
+  .token-box.color-spi {
+    background-color: var(--spi);
+  }
+  .token-box.color-neutral {
+    background-color: var(--palette-3);
+  }
 }

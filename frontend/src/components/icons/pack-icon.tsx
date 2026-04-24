@@ -33,6 +33,7 @@ function getPackIcon(code?: string) {
   switch (code) {
     case "side_stories":
     case "investigator":
+    case "ebr":
       return "core";
 
     case "core_ch2":

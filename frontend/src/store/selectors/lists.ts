@@ -1209,7 +1209,11 @@ export const selectPackOptions = createSelector(
   selectCyclesAndPacks,
   (listFilterProperties, cycles) => {
     const packs = cycles.reduce((acc, cycle) => {
-      if (cycle.reprintPacks.length && cycle.code !== "core") {
+      if (
+        cycle.reprintPacks.length &&
+        cycle.code !== "core" &&
+        cycle.code !== "ebr"
+      ) {
         acc.push(
           ...cycle.reprintPacks.filter((p) =>
             listFilterProperties.packs.has(p.code),
@@ -1270,7 +1274,7 @@ export const selectLimitedPoolPackOptions = createSelector(
       }
 
       // Core set
-      if (cycle.code === "core") {
+      if (cycle.code === "core" || cycle.code === "ebr") {
         return [...cycle.reprintPacks, ...cycle.packs];
       }
 

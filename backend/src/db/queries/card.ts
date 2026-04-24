@@ -67,6 +67,7 @@ type CardRow = {
   // joined fields
   set_type_id: string | null;
   token_name: string | null;
+  token_plural: string | null;
 };
 
 export type CardApiShape = ReturnType<typeof transformCard>;
@@ -114,6 +115,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.category_id",
       "card_set.type_id as set_type_id",
       "token.name as token_name",
+      "token.plurals as token_plural",
     ])
     .orderBy("card.pack_id")
     .orderBy("card.position")
@@ -168,6 +170,7 @@ export async function getCardByCode(
       "card.category_id",
       "card_set.type_id as set_type_id",
       "token.name as token_name",
+      "token.plurals as token_plural",
     ])
     .where("card.code", "=", code)
     .limit(1)
@@ -214,6 +217,7 @@ function transformCard(row: CardRow): {
   harm_threshold: string | number | null;
   progress_threshold: string | number | null;
   token_name: string | null;
+  token_plural: string | null;
   token_count: string | number | null;
   area: "within_reach" | "along_the_way" | null;
   aspect_awareness: number | null;
@@ -287,6 +291,7 @@ function transformCard(row: CardRow): {
     harm_threshold: normalizeThreshold(row.harm),
     progress_threshold: normalizeThreshold(row.progress),
     token_name: row.token_name,
+    token_plural: row.token_plural?.split(",")[1] ?? null,
     token_count: normalizeThreshold(row.token_count),
     area,
     aspect_awareness: row.aspect_awareness,

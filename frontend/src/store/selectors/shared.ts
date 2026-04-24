@@ -230,7 +230,10 @@ export const selectPrintingsForCard = createSelector(
           }
         }
 
-        if (a.cycle.code === "core" && b.cycle.code === "core") {
+        if (
+          (a.cycle.code === "core" || a.cycle.code === "ebr") &&
+          (b.cycle.code === "core" || b.cycle.code === "ebr")
+        ) {
           return a.pack.position - b.pack.position;
         }
 

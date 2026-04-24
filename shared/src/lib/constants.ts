@@ -155,3 +155,8 @@ export const PERSONALITY_PICKS = 4;
 export const BACKGROUND_PICKS = 5;
 export const SPECIALTY_PICKS = 5;
 export const OUTSIDE_INTEREST_PICKS = 1;
+
+export const IRREGULAR_TOKEN_PLURALS: Record<string, string> = {
+  damage: "damage",
+  xp: "xp",
+};

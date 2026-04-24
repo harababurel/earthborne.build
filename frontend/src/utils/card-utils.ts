@@ -182,9 +182,13 @@ export function cardLimit(card: Card, limitOverride?: number) {
   return limitOverride ?? card.deck_limit ?? 0;
 }
 
-// Stub — ER has no "uses" mechanic.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function cardUses(_card: Card) {
+export function cardUses(card: Card) {
+  if (card.token_count != null && card.token_name) {
+    return {
+      count: card.token_count,
+      name: card.token_name,
+    };
+  }
   return undefined;
 }
 

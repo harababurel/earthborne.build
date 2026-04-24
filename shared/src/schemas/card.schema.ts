@@ -55,6 +55,7 @@ export const CardSchema = z.object({
 
   // Tokens (named tokens placed on the card)
   token_name: z.string().nullish(),
+  token_plural: z.string().nullish(),
   token_count: z.union([z.number(), z.string()]).nullish(),
 
   // Area indicator (path cards)

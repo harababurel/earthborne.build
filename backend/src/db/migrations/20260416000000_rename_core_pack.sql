@@ -4,6 +4,7 @@
 -- SQLite FK enforcement is off by default so direct UPDATE is safe here.
 UPDATE card SET pack_id = 'ebr' WHERE pack_id = 'core';
 UPDATE pack SET id = 'ebr', name = 'Earthborne Rangers' WHERE id = 'core';
+UPDATE pack SET name = 'Earthborne Rangers' WHERE id = 'ebr';
 
 -- migrate:down
 
