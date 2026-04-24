@@ -78,10 +78,10 @@ function CardPackDetail(props: { card: Card; invert?: boolean }) {
   return (
     <span className={cx(css["pack-detail"], invert && css["invert"])}>
       {setDisplay && <small>{setLink || setDisplay}</small>}
+      {setDisplay && card.set_position && " · "}
       <span className={css["pack-detail-position"]}>
-        <small>&nbsp;#</small>
         {card.set_position}
-        {card.set_size ? ` / ${card.set_size}` : ""}
+        {card.set_size ? ` of ${card.set_size}` : ""}
       </span>
     </span>
   );

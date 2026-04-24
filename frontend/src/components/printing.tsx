@@ -113,10 +113,10 @@ export function PrintingInner({
   return (
     <span className={cx(css["printing"], active && css["active"], className)}>
       {name}
+      {position && " · "}
       <span className="nowrap">
-        <small>&nbsp;#</small>
         {position}
-        {card.set_size ? ` / ${card.set_size}` : ""}
+        {card.set_size ? ` of ${card.set_size}` : ""}
       </span>
       {!!quantity && (
         <>
