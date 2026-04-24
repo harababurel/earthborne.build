@@ -180,7 +180,7 @@ export async function getCardByCode(
   return transformCard(row as unknown as CardRow);
 }
 
-function normalizeThreshold(value: string | number | null) {
+export function normalizeThreshold(value: string | number | null) {
   if (value == null) return null;
   if (typeof value === "number") return value;
   if (/^\d+(\.0+)?$/.test(value)) return Number(value);
@@ -272,7 +272,7 @@ function transformCard(row: CardRow): {
     name: row.name,
     pack_code: row.pack_id,
     set_code: row.set_id,
-    set_position: row.set_position,
+    set_position: normalizeThreshold(row.set_position),
     type_code: row.type_id,
     category,
     text: row.text,
