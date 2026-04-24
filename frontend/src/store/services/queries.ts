@@ -83,6 +83,7 @@ export async function queryMetadata(
     name: s.name,
     official: true,
     pack_code: s.pack_code ?? "",
+    size: s.size ?? undefined,
   }));
 
   return { pack: packs, encounterSet: encounterSets };

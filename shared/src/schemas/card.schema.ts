@@ -23,6 +23,7 @@ export const CardSchema = z.object({
   pack_code: z.string(),
   set_code: z.string().nullish(),
   set_position: z.union([z.number(), z.string()]).nullish(),
+  set_size: z.number().nullish(),
   type_code: z.enum(CARD_TYPE_ORDER),
   category: z.enum(RANGER_CARD_CATEGORY).nullish(),
   category_id: z.enum(CARD_CATEGORY_IDS).nullish(),

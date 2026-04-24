@@ -3,7 +3,6 @@ import { ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useSearchParams } from "wouter";
 import { Card } from "@/components/card/card";
-import PackIcon from "@/components/icons/pack-icon";
 import { OwnershipPartitionedCardList } from "@/components/ownership-partitioned-card-list";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store";
@@ -102,7 +101,6 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
     <div>
       <div className={css["card-set-nav-title"]}>
         <h3>
-          {<PackIcon code={targetPack.code} />}
           {displayPackName(targetPack)}
           {setDisplay && (
             <>

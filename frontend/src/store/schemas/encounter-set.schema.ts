@@ -12,6 +12,7 @@ const EncounterSetSchema = JsonDataEncounterSetSchema.extend({
   icon_url: z.string().nullish(),
   pack_code: z.string(),
   position: z.number().nullish(),
+  size: z.number().nullish(),
 });
 
 export type EncounterSet = z.infer<typeof EncounterSetSchema>;

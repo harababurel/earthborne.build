@@ -8,7 +8,6 @@ import type { Metadata } from "@/store/slices/metadata.types";
 import { splitMultiValue } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { FactionIconFancy } from "../icons/faction-icon-fancy";
-import PackIcon from "../icons/pack-icon";
 import SlotIcon from "../icons/slot-icon";
 import css from "./grouphead.module.css";
 
@@ -74,7 +73,6 @@ export function GroupLabel(props: GroupLabelProps) {
   if (type === "cycle") {
     return (
       <span className={className}>
-        <PackIcon className={css["icon"]} code={segment} />
         <a
           className="link-current"
           href={`/browse/pack/${segment}`}
@@ -89,10 +87,8 @@ export function GroupLabel(props: GroupLabelProps) {
 
   if (type === "encounter_set") {
     const set = metadata.encounterSets[segment];
-    const packCode = set?.pack_code || segment;
     return (
       <span className={className}>
-        <PackIcon className={css["icon"]} code={packCode} />
         <Link
           className="link-current"
           href={
@@ -138,7 +134,6 @@ export function GroupLabel(props: GroupLabelProps) {
   if (type === "pack") {
     return (
       <span className={className}>
-        <PackIcon className={css["icon"]} code={segment} />
         <button
           className={cx("link-current", css["filter-button"])}
           type="button"

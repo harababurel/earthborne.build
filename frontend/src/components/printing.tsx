@@ -2,7 +2,6 @@ import type { Card } from "@arkham-build/shared";
 import type { Printing as PrintingT } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import { displayPackName } from "@/utils/formatting";
-import PackIcon from "./icons/pack-icon";
 import css from "./printing.module.css";
 import { CopyToClipboard } from "./ui/copy-to-clipboard";
 
@@ -60,7 +59,6 @@ export function Printing({
       actionNode={actionNode}
       className={className}
       card={card}
-      icon={<PackIcon code={pack.code} />}
       name={
         linked ? (
           <>
@@ -96,7 +94,6 @@ type PrintingInnerProps = {
   active?: boolean;
   card: Card;
   className?: string;
-  icon: React.ReactNode;
   name: React.ReactNode;
   position: number | string;
   quantity?: number;
@@ -108,7 +105,6 @@ export function PrintingInner({
   actionNode,
   className,
   card,
-  icon,
   name,
   position,
   quantity,
@@ -116,10 +112,11 @@ export function PrintingInner({
 }: PrintingInnerProps) {
   return (
     <span className={cx(css["printing"], active && css["active"], className)}>
-      <span className={css["printing-icon"]}>{icon}</span> {name}
+      {name}
       <span className="nowrap">
         <small>&nbsp;#</small>
         {position}
+        {card.set_size ? ` / ${card.set_size}` : ""}
       </span>
       {!!quantity && (
         <>

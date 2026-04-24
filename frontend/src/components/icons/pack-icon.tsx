@@ -31,15 +31,6 @@ function PackIcon(props: Props) {
 
 function getPackIcon(code?: string) {
   switch (code) {
-    case "side_stories":
-    case "investigator":
-    case "ebr":
-      return "core";
-
-    case "core_ch2":
-    case "core_2026":
-      return "core_2026";
-
     case "hfa":
     case "otr":
     case "ptr":

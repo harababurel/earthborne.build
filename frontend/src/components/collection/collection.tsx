@@ -2,7 +2,6 @@ import { BarChart3Icon, ExternalLinkIcon } from "lucide-react";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
-import PackIcon from "@/components/icons/pack-icon";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { useStore } from "@/store";
@@ -212,7 +211,6 @@ export function CollectionSettings(props: Props) {
                           className={css["cycle-label"]}
                           style={{ width: "auto", flex: "1 1 auto" }}
                         >
-                          <PackIcon code={pack.code} />
                           {displayPackName(pack)}
                         </div>
                       </label>

@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
-import PackIcon from "@/components/icons/pack-icon";
 import { Scroller } from "@/components/ui/scroller";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStore } from "@/store";
@@ -65,7 +64,6 @@ export function SetTree({
                   className={css["node-link"]}
                   to={`/browse/pack/${pack.code}${window.location.search}`}
                 >
-                  <PackIcon className={css["node-icon"]} code={pack.code} />
                   {displayPackName(pack)}
                 </Link>
               </div>

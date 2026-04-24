@@ -34,6 +34,7 @@ type CardRow = {
   pack_id: string;
   set_id: string | null;
   set_position: number | string | null;
+  set_size: number | null;
   position: number;
   quantity: number;
   deck_limit: number | null;
@@ -83,6 +84,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.pack_id",
       "card.set_id",
       "card.set_position",
+      "card_set.size as set_size",
       "card.position",
       "card.quantity",
       "card.deck_limit",
@@ -138,6 +140,7 @@ export async function getCardByCode(
       "card.pack_id",
       "card.set_id",
       "card.set_position",
+      "card_set.size as set_size",
       "card.position",
       "card.quantity",
       "card.deck_limit",
@@ -193,6 +196,7 @@ function transformCard(row: CardRow): {
   pack_code: string;
   set_code: string | null;
   set_position: number | string | null;
+  set_size: number | null;
   type_code: string;
   category:
     | "personality"
@@ -273,6 +277,7 @@ function transformCard(row: CardRow): {
     pack_code: row.pack_id,
     set_code: row.set_id,
     set_position: normalizeThreshold(row.set_position),
+    set_size: row.set_size,
     type_code: row.type_id,
     category,
     text: row.text,

@@ -11,7 +11,6 @@ import {
 import { isCycleFilterObject } from "@/store/slices/lists.type-guards";
 import { assert } from "@/utils/assert";
 import { displayPackName } from "@/utils/formatting";
-import PackIcon from "../icons/pack-icon";
 import type { FilterProps } from "./filters.types";
 import { MultiselectFilter } from "./primitives/multiselect-filter";
 
@@ -41,12 +40,7 @@ export function CycleFilter({ id }: FilterProps) {
   const nameRenderer = useCallback((cycle: Cycle | undefined) => {
     if (!cycle) return undefined;
 
-    return (
-      <>
-        <PackIcon code={cycle.code} />
-        {displayPackName(cycle)}
-      </>
-    );
+    return <>{displayPackName(cycle)}</>;
   }, []);
 
   return (
