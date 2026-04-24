@@ -568,6 +568,9 @@
   .token-box.color-spi {
     background-color: var(--spi);
   }
+  .token-box.color-spi .token-label {
+    color: white;
+  }
   .token-box.color-neutral {
     background-color: var(--palette-3);
   }
