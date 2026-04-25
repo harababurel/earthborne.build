@@ -307,4 +307,4 @@ Repurposed the "Deck Guides" page from a popular ArkhamDB decklist fetcher into 
 - **Browse page**: All cards visible with full ER filter sidebar (type, aspect, cost, trait, pack/set, category, approach icons, equip, properties).
 - **Deck sharing**: Local backend stores and serves shared decks. Public Deck Guides directory with search by role, background, specialty, and tags.
 - **Collection settings**: Earthborne Rangers-specific visual banners and simplified boolean toggles per expansion.
-- **Arkham residue**: Significant cleanup still pending — see `docs/arkham-residue-cleanup.md` for the phased plan.
+- **Arkham residue**: The active frontend residue cleanup described here was followed up in `docs/arkham-residue-audit-2026-04.md`, which now serves as the current status record.

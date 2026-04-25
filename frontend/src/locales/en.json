@@ -1043,8 +1043,6 @@
         "font_size_preview": "The rangers ventured deeper into the wilderness, each step carrying them further from the familiar world they had left behind, guided only by their skills and the bonds they had forged.",
         "show_card_modal_popular_decks": "Show popular decks in card modals",
         "show_card_modal_popular_decks_help": "When this is checked, popular decks containing the card will be shown in the card modal.",
-        "show_move_to_side_deck": "Show \"Move to side deck\" button",
-        "show_move_to_side_deck_help": "This shows a button that allows you to move cards from the deck to the side deck when editing decks.",
         "sort_ignore_punctuation": "Sort ignores punctuation",
         "sort_ignore_punctuation_help": "When this is checked, the card list will ignore quotes and other punctuation when sorting.",
         "theme": "Appearance",
