@@ -7,7 +7,6 @@ import type {
   FanMadeContentFilter,
   FilterKey,
   FilterObject,
-  InvestigatorSkillsFilter,
   LevelFilter,
   OwnershipFilter,
   PropertiesFilter,
@@ -81,10 +80,10 @@ export function isFanMadeContentFilterObject(
   return !!filter && filter.type === "fan_made_content";
 }
 
-export function isInvestigatorFilterObject(
+export function isRoleFilterObject(
   filter?: FilterObject<FilterKey>,
-): filter is FilterObject<"investigator"> {
-  return !!filter && filter.type === "investigator";
+): filter is FilterObject<"role"> {
+  return !!filter && filter.type === "role";
 }
 
 export function isLevelFilterObject(
@@ -151,12 +150,6 @@ export function isHealthFilterObject(
   filter?: FilterObject<FilterKey>,
 ): filter is FilterObject<"health"> {
   return !!filter && filter.type === "health";
-}
-
-export function isInvestigatorSkillsFilterObject(
-  filter?: FilterObject<FilterKey>,
-): filter is FilterObject<"investigator_skills"> {
-  return !!filter && filter.type === "investigator_skills";
 }
 
 export function isIllustratorFilterObject(
@@ -258,15 +251,5 @@ export function isSkillIconsFilter(value: unknown): value is SkillIconsFilter {
     typeof value === "object" &&
     value != null &&
     Object.values(value).every((v) => typeof v === "number" || v == null)
-  );
-}
-
-export function isInvestigatorSkillsFilter(
-  value: unknown,
-): value is InvestigatorSkillsFilter {
-  return (
-    typeof value === "object" &&
-    value != null &&
-    Object.values(value).every((v) => v == null || isRangeFilter)
   );
 }

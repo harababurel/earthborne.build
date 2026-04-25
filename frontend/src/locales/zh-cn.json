@@ -160,13 +160,8 @@
         "You must have at least 7 cards from each class": "你的卡组中必须包含至少7张来自每个职阶的卡牌"
       },
       "decks": {
-        "bondedSlots": "绑定卡牌",
-        "bondedSlots_short": "绑定槽位",
         "extraSlots": "额外卡组",
         "extraSlots_short": "额外",
-        "ignoreDeckLimitSlots": "无视卡组限制",
-        "sideSlots": "副卡组",
-        "sideSlots_short": "副卡组",
         "slots": "卡组"
       },
       "doom": "毁灭",
@@ -279,7 +274,7 @@
         "guardian": "守卫者",
         "intellect": "智慧",
         "mystic": "潜修者",
-        "per_investigator": "每名调查员",
+        "per_ranger": "每名调查员",
         "reaction": "反应触发能力",
         "rogue": "流浪者",
         "seeker": "探求者",
@@ -744,8 +739,7 @@
         "increment_xp": "Increase available amount of XP for this upgrade",
         "no_changes": "无变更。",
         "summary": "已消耗 {{xpSpent}} / {{xp}} 点经验值",
-        "title": "最新升级",
-        "xp_spent": "经验值消耗"
+        "title": "最新升级"
       },
       "limited_decks": {
         "Collector": "Collector",
@@ -758,7 +752,6 @@
         "ignored_one": "{{count}}张不计入卡组容量。",
         "ignored_other": "{{count}}张卡牌不计入卡组总张数。",
         "unowned": "不可用：{{total}}张卡牌中的{{count}}张",
-        "uses_parallel": "使用平行版本",
         "xp_available_help": "最新升级获得的经验值",
         "xp_required": "所需经验值",
         "xp_required_help": "构建该卡组所需的总经验值。"
@@ -808,7 +801,6 @@
     "deck_collection": {
       "archive": "归档",
       "collection_empty": "收藏为空",
-      "connect_arkhamdb": "连接至ArkhamDB",
       "count": "{{count}}个卡组",
       "count_hidden": "（{{count}}张隐藏）",
       "deck_url_or_id": "卡组URL或ID",
@@ -817,8 +809,6 @@
       "delete_all_error": "删除本地卡组失败：{{error}}",
       "delete_all_loading": "正在删除本地卡组...",
       "import": "导入",
-      "import_arkhamdb": "从ArkhamDB导入",
-      "import_arkhamdb_help": "输入公开的ArkhamDB卡组ID、卡组网址或卡组指南网址。卡组将被<strong>复制</strong>过来，但不会导入卡组历史记录和升级状态。若需同步ArkhamDB卡组与本应用，请<settings_link>关联你的ArkhamDB账户</settings_link>。",
       "import_json": "从JSON文件导入",
       "more_filters": "更多筛选条件",
       "search_placeholder": "搜索卡组...",
@@ -870,7 +860,6 @@
         "increment_quantity": "增加数量（卡组）",
         "increment_side_quantity": "增加数量（副卡组）",
         "move_to_main_deck": "移至卡组",
-        "move_to_side_deck": "移至副卡组",
         "quick_discard": "放弃更改（并留在当前页面）",
         "quick_save_deck": "保存卡组（停留在当前页面）",
         "quick_upgrade": "升级{{name}}",
@@ -916,9 +905,7 @@
           "investigator_back": "调查员背面",
           "investigator_front": "调查员正面",
           "original_back": "原版背面",
-          "original_front": "原始正面",
-          "parallel_back": "平行背面",
-          "parallel_front": "平行正面"
+          "original_front": "原始正面"
         },
         "storage_provider": {
           "local": "私人",
@@ -993,7 +980,6 @@
       "recommendations": {
         "absolute": "绝对",
         "absolute_help": "统计每张卡牌在{{name}}卡组中的使用次数",
-        "analyze_side_decks": "分析副卡组",
         "core": "核心",
         "core_help": "将卡牌标记为\"核心\"会告知推荐引擎仅考虑包含该卡牌的卡组。",
         "error": "无法获取推荐内容。",
@@ -1460,8 +1446,6 @@
         "hide_weaknesses_help": "勾选此项时，弱点卡牌默认会在玩家卡牌列表中隐藏，需在<strong>子类型</strong>过滤器中启用才能显示。",
         "show_card_modal_popular_decks": "在卡牌弹窗中显示热门牌组",
         "show_card_modal_popular_decks_help": "勾选此项后，卡牌弹窗将显示包含该卡牌的热门牌组。",
-        "show_move_to_side_deck": "显示\"移至副卡组\"按钮",
-        "show_move_to_side_deck_help": "显示一个按钮，允许在编辑卡组时将卡牌从主卡组移至副卡组。此功能特别适合采用\"dayorbyte方法\"（即先超额填充卡组再精简卡牌）的卡组构建方式。",
         "sort_ignore_punctuation": "排序忽略标点符号",
         "sort_ignore_punctuation_help": "勾选此项后，卡牌列表排序时将忽略引号及其他标点符号。",
         "theme": "主题",

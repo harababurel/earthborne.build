@@ -163,13 +163,8 @@
         "You must have at least 7 cards from each class": "Musisz mieć co najmniej 7 kart z każdej klasy"
       },
       "decks": {
-        "bondedSlots": "Powiązane karty",
-        "bondedSlots_short": "Powiązana",
         "extraSlots": "Talia dodatkowa",
         "extraSlots_short": "Dodatkowa",
-        "ignoreDeckLimitSlots": "Ignoruj limit talii",
-        "sideSlots": "Talia poboczna",
-        "sideSlots_short": "Poboczna",
         "slots": "Talia"
       },
       "doom": "Zagłada",
@@ -283,7 +278,7 @@
         "guardian": "Strażnik",
         "intellect": "Intelekt",
         "mystic": "Mistyk",
-        "per_investigator": "Na badacza",
+        "per_ranger": "Na badacza",
         "reaction": "Aktywacja w reakcji",
         "rogue": "Łotr",
         "seeker": "Poszukiwacz",
@@ -732,8 +727,7 @@
         "add_to_deck": "Dodaj do aktualnej talii",
         "no_changes": "Brak zmian.",
         "summary": "Wydano {{xpSpent}} z {{xp}} XP",
-        "title": "Ostatnie ulepszenie",
-        "xp_spent": "Wydane XP"
+        "title": "Ostatnie ulepszenie"
       },
       "limited_decks": {
         "Secondary Class": "Drugorzędna klasa",
@@ -747,7 +741,6 @@
         "ignored_one": "{{count}} kopia nie wlicza się do rozmiaru talii.",
         "ignored_other": "{{count}} kopie nie wliczają się do rozmiaru talii.",
         "unowned": "Unavailable: {{count}} of {{total}} cards",
-        "uses_parallel": "Używa strony z równoległego świata",
         "xp_available_help": "XP zdobyte przy ostatnim ulepszeniu.",
         "xp_required": "Wymagane XP",
         "xp_required_help": "Liczba XP wymagana do zbudowania tej talii od podstaw."
@@ -796,7 +789,6 @@
     "deck_collection": {
       "archive": "Archiwum",
       "collection_empty": "Kolekcja talii pusta",
-      "connect_arkhamdb": "Połącz z ArkhamDB",
       "count": "{{count}} talie",
       "count_one": "{{count}} talia",
       "count_few": "{{count}} talie",
@@ -808,8 +800,6 @@
       "delete_all_error": "Nie udało się usunąć lokalnych talii: {{error}}",
       "delete_all_loading": "Usuwanie lokalnych talii...",
       "import": "Zaimportuj",
-      "import_arkhamdb": "Importuj z ArkhamDB",
-      "import_arkhamdb_help": "Wprowadź ID publicznej talii, jej URL lub URL przewodnika talii. Talia zostanie <strong>skopiowana</strong> bez jej historii i stanu ulepszenia. Jeśli zamierzasz zsynchornizować swoje talie z ArkhamDB z tą aplikacją, <settings_link>połącz swoje konto ArkhamDB.</settings_link>",
       "import_json": "Importuj z plików JSON",
       "more_filters": "Więcej filtrów",
       "search_placeholder": "Szukaj talii...",
@@ -860,7 +850,6 @@
         "increment_quantity": "Zwiększ ilość w talii",
         "increment_side_quantity": "Zwiększ ilość w talii pobocznej",
         "move_to_main_deck": "Przenieś do talii",
-        "move_to_side_deck": "Przenieś do talii pobocznej",
         "quick_discard": "Odrzuć zmiany (i pozostań na stronie)",
         "quick_save_deck": "Zapisz talię (i pozostań na stronie)",
         "quick_upgrade": "Ulepsz {{name}}",
@@ -900,9 +889,7 @@
           "investigator_back": "Rewers badacza",
           "investigator_front": "Awers badacza",
           "original_back": "Originalny rewers",
-          "original_front": "Originalny awers",
-          "parallel_back": "Równoległy rewers",
-          "parallel_front": "Równoległy awers"
+          "original_front": "Originalny awers"
         },
         "storage_provider": {
           "local": "Lokalne",
@@ -979,7 +966,6 @@
       "recommendations": {
         "absolute": "Absolutnie",
         "absolute_help": "Pokazuje najczęściej używane karty w talii {{name}}, posortowane według procentu talii, które je zawierają.",
-        "analyze_side_decks": "Analizuj talie poboczne",
         "core": "Istotna",
         "core_help": "Oznaczenie karty jako \"Istotna\" spowoduje wzięcie pod uwagę przez silnik rekomendujący tylko talii ją zawierających.",
         "error": "Nie udało się wczytać rekomendacji.",
@@ -1426,8 +1412,6 @@
         "hide_weaknesses_help": "Jeśli ta opcja jest zaznaczona, osłabienia są domyślnie ukryte w liście kart gracza. Aby je wyświetlić, należy użyć filtra <strong>Podtyp</strong>.",
         "show_card_modal_popular_decks": "Pokazuj popularne talie w oknie karty",
         "show_card_modal_popular_decks_help": "Jeśli ta opcja jest zaznaczona, popularne talie zawierające wyświetloną kartę będą pokazywane w jej oknie.",
-        "show_move_to_side_deck": "Pokazuj przycisk \"Przenieś do talii pobocznej\"",
-        "show_move_to_side_deck_help": "Jeśli ta opcja jest zaznaczona, przycisk pozwalający na przeniesienie kart z talii do talii pobocznej będzie zawsze widoczny w trakcie edytowania talii. Pomocne jeśli budujesz swoją talię poprzez przepełnienie talli, a następnie jej redukowanie.",
         "sort_ignore_punctuation": "Sortowanie ignoruje interpunkcję",
         "sort_ignore_punctuation_help": "Jeśli ta opcja jest zaznaczona, lista kart ignoruje cudzysłowy i inne znaki interpunkcyjne przy sortowaniu.",
         "theme": "Motyw",

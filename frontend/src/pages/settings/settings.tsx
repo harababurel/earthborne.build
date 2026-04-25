@@ -183,7 +183,7 @@ function SettingsInner({
                     setSettings={setSettings}
                   />
                   <ListSettings
-                    listKey="investigator"
+                    listKey="role"
                     title={t("common.type.role", { count: 2 })}
                     settings={settings}
                     setSettings={setSettings}

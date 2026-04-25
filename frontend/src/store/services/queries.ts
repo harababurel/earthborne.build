@@ -223,27 +223,6 @@ export async function getDecks(
       };
 }
 
-export async function newDeck(
-  clientId: string,
-  payload: Record<string, unknown>,
-): Promise<Deck> {
-  const res = await authenticatedRequest("/user/decks", {
-    headers: {
-      "Content-Type": "application/json",
-      "X-Client-Id": clientId,
-    },
-    body: JSON.stringify({
-      investigator: payload.investigator_code,
-      name: payload.name,
-      slots: payload.slots,
-      meta: payload.meta,
-    }),
-    method: "POST",
-  });
-
-  return await res.json();
-}
-
 export async function updateDeck(
   clientId: string,
   deck: Record<string, unknown>,

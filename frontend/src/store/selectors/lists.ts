@@ -56,7 +56,6 @@ import type {
   FanMadeContentFilter,
   FilterMapping,
   HealthFilter,
-  InvestigatorSkillsFilter,
   LevelFilter,
   List,
   MultiselectFilter,
@@ -176,7 +175,7 @@ function makeUserFilter(
         break;
       }
 
-      case "investigator": {
+      case "role": {
         const value = filterValue.value as string | undefined;
 
         if (value) {
@@ -250,10 +249,6 @@ function makeUserFilter(
         if (value) {
           filters.push(filterHealthProp(value, false, filterValue.type));
         }
-        break;
-      }
-
-      case "investigator_skills": {
         break;
       }
 
@@ -339,7 +334,7 @@ const selectDeckCachedByCardAccess = createSelector(
   },
 );
 
-const selectDeckInvestigatorFilter = createSelector(
+const selectDeckRoleFilter = createSelector(
   selectMetadata,
   selectLookupTables,
   selectDeckCachedByCardAccess,
@@ -373,16 +368,12 @@ const selectDeckInvestigatorFilter = createSelector(
 
     const ors = [];
 
-    const investigatorFilter = filterInvestigatorAccess(
-      roleCard,
-      buildQlInterpreter,
-      {
-        targetDeck: targetDeck === "both" ? undefined : targetDeck,
-        showLimitedAccess,
-      },
-    );
+    const roleFilter = filterInvestigatorAccess(roleCard, buildQlInterpreter, {
+      targetDeck: targetDeck === "both" ? undefined : targetDeck,
+      showLimitedAccess,
+    });
 
-    if (investigatorFilter) ors.push(investigatorFilter);
+    if (roleFilter) ors.push(roleFilter);
 
     return or(ors);
   },
@@ -393,7 +384,7 @@ const selectBaseListCards = createSelector(
   selectLookupTables,
   (state: StoreState) => selectActiveList(state)?.systemFilter,
   (state: StoreState) => selectActiveList(state)?.filterValues,
-  selectDeckInvestigatorFilter,
+  selectDeckRoleFilter,
   selectCollection,
   (
     metadata,
@@ -965,7 +956,7 @@ export const selectIllustratorOptions = createSelector(
  * Investigator
  */
 
-export const selectInvestigatorOptions = createSelector(
+export const selectRoleOptions = createSelector(
   selectListFilterProperties,
   selectMetadata,
   selectLocaleSortingCollator,
@@ -1493,19 +1484,6 @@ const selectInvestigatorChanges = createSelector(
   },
 );
 
-function selectInvestigatorSkillIconsChanges(value?: InvestigatorSkillsFilter) {
-  if (!value) return "";
-
-  return Object.entries(value).reduce((acc, [key, val]) => {
-    if (!val) return acc;
-
-    const skillStr = i18n.t(`common.skill.${key}`);
-    const s = `${val[0]}-${val[1]} ${skillStr}`;
-
-    return acc ? `${acc} ${i18n.t("filters.and")} ${s}` : s;
-  }, "");
-}
-
 function selectLevelChanges(value: LevelFilter) {
   if (!value.range) return undefined;
 
@@ -1656,14 +1634,8 @@ export function selectFilterChanges<T extends keyof FilterMapping>(
       return selectHealthChanges(value as HealthFilter);
     }
 
-    case "investigator": {
+    case "role": {
       return selectInvestigatorChanges(state, value as SelectFilter);
-    }
-
-    case "investigator_skills": {
-      return selectInvestigatorSkillIconsChanges(
-        value as InvestigatorSkillsFilter,
-      );
     }
 
     case "level": {

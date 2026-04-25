@@ -153,11 +153,6 @@
         "You cannot have more than one Covenant in your deck.": "У вас не может быть больше одного завета в колоде."
       },
       "decks": {
-        "bondedSlots": "Зависимые карты",
-        "bondedSlots_short": "Зависимые",
-        "ignoreDeckLimitSlots": "Игнорировать лимит карт колоды",
-        "sideSlots": "Отложенные карты",
-        "sideSlots_short": "Отложенные",
         "slots": "Колода",
         "extraSlots": "Особая колода",
         "extraSlots_short": "Особая"
@@ -264,7 +259,7 @@
         "guardian": "Хранитель",
         "intellect": "Интеллект",
         "mystic": "Мистик",
-        "per_investigator": "За сыщика",
+        "per_ranger": "За сыщика",
         "reaction": "Активация реакцией",
         "rogue": "Ловкач",
         "seeker": "Искатель",
@@ -677,8 +672,7 @@
         "add_to_deck": "Добавить к текущей колоде",
         "no_changes": "Без изменений.",
         "summary": "{{xpSpent}} из {{xp}} опыта потрачено",
-        "title": "Последнее улучшение",
-        "xp_spent": "опыта потрачено"
+        "title": "Последнее улучшение"
       },
       "limited_decks": {
         "Secondary Class": "Дополнительный класс",
@@ -736,7 +730,6 @@
     },
     "deck_collection": {
       "collection_empty": "Коллекция пуста",
-      "connect_arkhamdb": "Подключение к ArkhamDB",
       "count": "{{count}} колод",
       "count_hidden": " ({{count}} скрыто)",
       "deck_url_or_id": "URL или ID колоды",
@@ -745,8 +738,6 @@
       "delete_all_error": "Ошибка удаления локальных колод: {{error}}",
       "delete_all_loading": "Удаление локальных колод…",
       "import": "Импортирование",
-      "import_arkhamdb": "Импортировать из ArkhamDB",
-      "import_arkhamdb_help": "Введите публичный ID или ссылку ArkhamDB колоды. Колоды будут <strong>скопированы</strong> и история и улучшения колоды не будет импортированы. Если вы хотите синхронизировать ваш ArkhamDB аккаунт с этим сайтом, <settings_link>подключите ваш аккаунт в настройках.</settings_link>",
       "import_json": "Импортировать из JSON файлов",
       "more_filters": "Показать фильтры",
       "search_placeholder": "Поиск по колодам",
@@ -788,7 +779,6 @@
         "draw_random_basic_weakness_success": "Ваша случайная базовая слабость — <strong>{{name}}</strong>.",
         "edit_annotation": "Редактировать аннотацию",
         "move_to_main_deck": "Переместить в колоду",
-        "move_to_side_deck": "Переместить в отложенные карты",
         "quick_discard": "Отменить изменения (и остаться на странице)",
         "quick_save_deck": "Сохранить колоду (и остаться на странице)",
         "quick_upgrade": "Улучшить {{name}}",
@@ -826,9 +816,7 @@
           "investigator_back": "Оборот сыщика",
           "investigator_front": "Лицо сыщика",
           "original_back": "Обычный оборот",
-          "original_front": "Обычное лицо",
-          "parallel_back": "Альтернативный оборот",
-          "parallel_front": "Альтернативное лицо"
+          "original_front": "Обычное лицо"
         },
         "storage_provider": {
           "local": "Локально",
@@ -902,7 +890,6 @@
       "recommendations": {
         "absolute": "Абсолютно",
         "absolute_help": "Считает в скольких колодах {{name}} использована каждая карта",
-        "analyze_side_decks": "Анализировать отложенные карты",
         "core": "Основа",
         "core_help": "Это указывает алгоритму учитывать только колоды с этой картой.",
         "error": "Не получились загрузить рекомендации.",
@@ -1279,8 +1266,6 @@
         "font_size": "Размер шрифта",
         "hide_weaknesses": "Скрывать слабости в списке карт игрока",
         "hide_weaknesses_help": "Скрывает слабости в списке карт игрока по умолчанию и требует включения в фильтре <strong>Подтип</strong> для отображения.",
-        "show_move_to_side_deck": "Показывать кнопку «Переместить в отложенные карты»",
-        "show_move_to_side_deck_help": "Показывает кнопку, которая позволяет переместить карты из колоды в отложенные карты при редактировании колоды. Это полезно, если вы в основном собираете колоду, переполняя ее картами, а затем сокращаете (метод dayorbyte).",
         "sort_ignore_punctuation": "Сортировка игнорирует пунктуацию",
         "sort_ignore_punctuation_help": "Список карт будет игнорировать кавычки и другую пунктуацию при сортировке.",
         "theme": "Тема",

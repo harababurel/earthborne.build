@@ -12,7 +12,6 @@ import { Scroller } from "../ui/scroller";
 import { SearchInput } from "../ui/search-input";
 import { DeckCardsFilter } from "./deck-cards-filter";
 import css from "./deck-collection-filters.module.css";
-import { DeckPropertiesFilter } from "./deck-properties-filter";
 import { DeckProviderFilter } from "./deck-provider-filter";
 import { DeckSortingOptions } from "./deck-sorting-options";
 import { DeckTagsFilter } from "./deck-tags-filter";
@@ -74,7 +73,6 @@ export function DeckCollectionFilters(props: Props) {
               <DeckCardsFilter containerClass={css["filter"]} />
               <DeckTagsFilter containerClass={css["filter"]} />
               <DeckProviderFilter containerClass={css["filter"]} />
-              <DeckPropertiesFilter containerClass={css["filter"]} />
             </Scroller>
           </PopoverContent>
         </Popover>

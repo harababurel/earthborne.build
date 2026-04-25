@@ -43,7 +43,7 @@ export type SettingsState = {
   lists: {
     encounter: ListConfig;
     mixed: ListConfig;
-    investigator: ListConfig;
+    role: ListConfig;
     player: ListConfig;
     deck: DecklistConfig;
     deckScans: DecklistConfig;
@@ -54,7 +54,6 @@ export type SettingsState = {
     defaultOrigin: CardOrigin;
   };
   showAllCards: boolean;
-  showMoveToSideDeck: boolean;
   sortIgnorePunctuation: boolean;
 };
 

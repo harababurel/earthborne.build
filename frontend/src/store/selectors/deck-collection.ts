@@ -13,8 +13,6 @@ import type { StoreState } from "../slices";
 import type { Folder } from "../slices/data.types";
 import type {
   DeckFiltersKey,
-  DeckProperties,
-  DeckPropertyName,
   DeckValidity,
   SortOrder,
 } from "../slices/deck-collection.types";
@@ -103,45 +101,6 @@ export const selectCardsChanges = createSelector(
   },
 );
 
-// Properties
-const selectDeckPropertiesFilter = (state: StoreState) =>
-  state.deckCollection.filters.properties;
-
-export const selectDeckProperties = createSelector(
-  (state: StoreState) => state.deckCollection.filters.properties,
-  (_) => {
-    return {
-      parallel: i18n.t("common.parallel"),
-    } as Record<string, string>;
-  },
-);
-
-export const selectDeckPropertiesChanges = createSelector(
-  selectDeckPropertiesFilter,
-  selectDeckProperties,
-  (filterValues, properties) => {
-    return Object.keys(filterValues)
-      .filter((prop) => filterValues[prop as DeckPropertyName])
-      .map((prop) => properties[prop])
-      .join(` ${i18n.t("filters.and")} `);
-  },
-);
-
-const makeDeckPropertiesFilter = (properties: DeckProperties) => {
-  const filters = [];
-  for (const property of Object.keys(properties)) {
-    if (properties[property as DeckPropertyName]) {
-      switch (property) {
-        case "parallel": {
-          // ER has no parallel investigators.
-          filters.push((_deck: DeckSummary) => false);
-        }
-      }
-    }
-  }
-  return and(filters);
-};
-
 // Validity
 const makeDeckValidityFilter = (value: Omit<DeckValidity, "all">) => {
   switch (value) {
@@ -198,14 +157,6 @@ const selectFilteringFunc = createSelector(
           if (currentFilter.length) {
             filterFuncs.push(makeDeckTagsFilter(currentFilter));
           }
-          break;
-        }
-
-        case "properties": {
-          const currentFilter = filters[filter];
-          filterFuncs.push(
-            makeDeckPropertiesFilter(currentFilter as DeckProperties),
-          );
           break;
         }
 
@@ -489,7 +440,6 @@ export const selectProviderChanges = createSelector(
 
 export const selectDeckFilterChanges = createSelector(
   selectCardsChanges,
-  selectDeckPropertiesChanges,
   selectTagsChanges,
   selectDeckFactionChanges,
   selectProviderChanges,

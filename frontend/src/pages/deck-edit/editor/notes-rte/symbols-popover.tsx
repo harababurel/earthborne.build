@@ -32,7 +32,7 @@ const availableSymbols = [
   "guardian",
   "intellect",
   "mystic",
-  "per_investigator",
+  "per_ranger",
   "reaction",
   "rogue",
   "seeker",

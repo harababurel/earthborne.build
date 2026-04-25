@@ -1,11 +1,8 @@
 import type { StorageProvider } from "@/utils/constants";
 
-export type DeckProperties = Record<DeckPropertyName, string | boolean>;
-
 type DeckFiltersType = {
   cards: string[];
   faction: string[];
-  properties: DeckProperties;
   provider: StorageProvider[];
   search: string;
   tags: string[];
@@ -49,7 +46,5 @@ export type DeckCollectionSlice = {
   setDeckSort(payload: Partial<DeckSortPayload>): void;
   toggleFolderExpanded(folderId: string): void;
 };
-
-export type DeckPropertyName = "parallel";
 
 export type SortCriteria = "date_updated" | "date_created" | "alphabetical";

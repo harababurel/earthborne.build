@@ -27,7 +27,7 @@ export const ENCOUNTER_DEFAULTS: ListConfig = {
   viewMode: "compact",
 };
 
-export const INVESTIGATOR_DEFAULTS: ListConfig = {
+export const ROLE_DEFAULTS: ListConfig = {
   group: ["cycle"],
   sort: ["position"],
   viewMode: "compact",
@@ -85,7 +85,7 @@ export function getInitialListsSetting(): SettingsState["lists"] {
     deck: structuredClone(DECK_DEFAULTS),
     deckScans: structuredClone(DECK_SCANS_DEFAULTS),
     encounter: structuredClone(ENCOUNTER_DEFAULTS),
-    investigator: structuredClone(INVESTIGATOR_DEFAULTS),
+    role: structuredClone(ROLE_DEFAULTS),
     mixed: structuredClone(MIXED_DEFAULTS),
     player: structuredClone(PLAYER_DEFAULTS),
   };
@@ -114,7 +114,6 @@ export function getInitialSettings(): SettingsState {
       defaultOrigin: "player",
     },
     showAllCards: false,
-    showMoveToSideDeck: false,
     sortIgnorePunctuation: false,
   };
 }

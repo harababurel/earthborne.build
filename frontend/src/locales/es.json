@@ -158,13 +158,8 @@
         "You must have at least 7 cards from each class": "Debes tener al menos 7 cartas de cada clase"
       },
       "decks": {
-        "bondedSlots": "Cartas enlazadas",
-        "bondedSlots_short": "Enlazadas",
         "extraSlots": "Mazo adicional",
         "extraSlots_short": "Adicional",
-        "ignoreDeckLimitSlots": "Ignorar límite del mazo",
-        "sideSlots": "Mazo secundario",
-        "sideSlots_short": "Secundario",
         "slots": "Mazo"
       },
       "doom": "Perdición",
@@ -276,7 +271,7 @@
         "guardian": "Guardián",
         "intellect": "Intelecto",
         "mystic": "Místico",
-        "per_investigator": "Por investigador",
+        "per_ranger": "Por investigador",
         "reaction": "Activación por reacción",
         "rogue": "Rebelde",
         "seeker": "Buscador",
@@ -725,8 +720,7 @@
         "increment_xp": "Aumentar la cantidad de XP disponible para esta mejora",
         "no_changes": "Sin cambios.",
         "summary": "{{xpSpent}} de {{xp}} XP gastados",
-        "title": "Última mejora",
-        "xp_spent": "XP gastados"
+        "title": "Última mejora"
       },
       "limited_decks": {
         "Secondary Class": "Clase secundaria",
@@ -738,7 +732,6 @@
         "ignored_one": "{{count}} copia no cuenta para el tamaño del mazo.",
         "ignored_other": "{{count}} copias no cuentan para el tamaño del mazo.",
         "unowned": "No disponible: {{count}} de {{total}} cartas",
-        "uses_parallel": "Usa un lado paralelo",
         "xp_available_help": "XP obtenido con la última mejora.",
         "xp_required": "XP requerido",
         "xp_required_help": "Cantidad de XP requerida para construir este mazo desde cero."
@@ -788,7 +781,6 @@
     "deck_collection": {
       "archive": "Archivo",
       "collection_empty": "Colección vacía",
-      "connect_arkhamdb": "Conectar con ArkhamDB",
       "count": "{{count}} mazos",
       "count_hidden": " ({{count}} ocultos)",
       "deck_url_or_id": "URL o ID del mazo",
@@ -797,8 +789,6 @@
       "delete_all_error": "Error al eliminar los mazos locales: {{error}}",
       "delete_all_loading": "Eliminando mazos locales...",
       "import": "Importar",
-      "import_arkhamdb": "Importar desde ArkhamDB",
-      "import_arkhamdb_help": "Introduce una ID de mazo público de ArkhamDB, URL del mazo o URL de la guía del mazo. El mazo se <strong>copiará</strong>, sin embargo el historial y las mejoras no se importarán. Si quieres sincronizar tus mazos de ArkhamDB con ArkhamBuild, <settings_link>conecta con tu cuenta de ArkhamDB.</settings_link>",
       "import_json": "Importar desde un archivo JSON",
       "more_filters": "Más filtros",
       "search_placeholder": "Buscar mazos...",
@@ -849,7 +839,6 @@
         "increment_quantity": "Aumentar cantidad del mazo",
         "increment_side_quantity": "Aumentar cantidad del mazo secundario",
         "move_to_main_deck": "Mover al mazo",
-        "move_to_side_deck": "Mover al mazo secundario",
         "quick_discard": "Descartar cambios (y permanecer en la página)",
         "quick_save_deck": "Guardar mazo (y permanecer en la página)",
         "quick_upgrade": "Mejorar {{name}}",
@@ -889,9 +878,7 @@
           "investigator_back": "Reverso del Investigador",
           "investigator_front": "Anverso del Investigador",
           "original_back": "Reverso original",
-          "original_front": "Anverso original",
-          "parallel_back": "Reverso paralelo",
-          "parallel_front": "Anverso paralelo"
+          "original_front": "Anverso original"
         },
         "storage_provider": {
           "local": "Privado",
@@ -966,7 +953,6 @@
       "recommendations": {
         "absolute": "Absoluto",
         "absolute_help": "Cuenta en cuántos mazos de {{name}} se usa cada carta",
-        "analyze_side_decks": "Analizar mazos secundarios",
         "core": "Esencial",
         "core_help": "Marcar una carta como \"Esencial\" indica al motor de recomendaciones que sólo considere mazos que la contengan.",
         "error": "No se pudieron obtener recomendaciones.",
@@ -1425,8 +1411,6 @@
         "hide_weaknesses_help": "Cuando está seleccionado, las debilidades se ocultan por defecto en las listas de cartas de jugador y deben habilitarse en el filtro <strong>Subtipo</strong> para ser visibles.",
         "show_card_modal_popular_decks": "Mostrar mazos populares en las páginas de las cartas",
         "show_card_modal_popular_decks_help": "Cuando está seleccionado, se mostrarán mazos populares que contengan la carta en la página de la carta.",
-        "show_move_to_side_deck": "Mostrar botón \"Mover al mazo secundario\"",
-        "show_move_to_side_deck_help": "Mostrar un botón que te permite mover cartas del mazo principal al mazo secundario al editar mazos.",
         "sort_ignore_punctuation": "Ignorar signos de puntuación al ordenar cartas",
         "sort_ignore_punctuation_help": "Cuando está seleccionado, la lista de cartas ignorará comillas y otros signos de puntuación al ordenar.",
         "theme": "Tema",

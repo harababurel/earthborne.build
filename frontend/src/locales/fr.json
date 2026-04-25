@@ -125,13 +125,8 @@
         "You must have at least 7 cards from each class": "Vous devez inclure au moins 7 cartes de chaque classe."
       },
       "decks": {
-        "bondedSlots": "Cartes liées",
-        "bondedSlots_short": "Liées",
         "extraSlots": "Deck supplémentaire",
         "extraSlots_short": "Supplémentaire",
-        "ignoreDeckLimitSlots": "Ignorer la limite de deck",
-        "sideSlots": "Deck annexe",
-        "sideSlots_short": "Annexe",
         "slots": "Deck"
       },
       "doom": "Fatalité",
@@ -235,7 +230,7 @@
         "guardian": "Gardien",
         "intellect": "Intelligence",
         "mystic": "Mystique",
-        "per_investigator": "Par investigateur",
+        "per_ranger": "Par investigateur",
         "reaction": "Déclenchement en Réaction",
         "rogue": "Truand",
         "seeker": "Chercheur",
@@ -652,8 +647,7 @@
         "add_to_deck": "Ajouter au deck actuel",
         "no_changes": "Aucun changement.",
         "summary": "{{xpSpent}} de {{xp}} XP dépensés",
-        "title": "Dernière amélioration",
-        "xp_spent": "XP dépensés"
+        "title": "Dernière amélioration"
       },
       "limited_decks": {
         "Secondary Class": "Classe secondaire",
@@ -665,7 +659,6 @@
         "ignored_one": "{{count}} exemplaire ne compte pas dans la limite de deck.",
         "ignored_other": "{{count}} exemplaires ne comptent pas dans la limite de deck.",
         "unowned": "Indisponible : {{count}} sur {{total}} cartes",
-        "uses_parallel": "Utilise un côté parallèle",
         "xp_available_help": "XP gagné avec la dernière amélioration.",
         "xp_required": "XP requis",
         "xp_required_help": "Montant d’XP requis pour construire ce deck depuis le début."
@@ -710,7 +703,6 @@
     },
     "deck_collection": {
       "collection_empty": "Collection vide",
-      "connect_arkhamdb": "Se connecter à ArkhamDB",
       "count": "{{count}} decks",
       "count_hidden": " ({{count}} masqués)",
       "deck_url_or_id": "URL ou ID du deck",
@@ -719,8 +711,6 @@
       "delete_all_error": "Échec de la suppression des decks locaux : {{error}}",
       "delete_all_loading": "Suppression des decks locaux...",
       "import": "Importer",
-      "import_arkhamdb": "Importer depuis ArkhamDB",
-      "import_arkhamdb_help": "Saisissez un ID de deck ArkhamDB public, une URL de deck ou l’URL d’un guide de deck. Les decks seront <strong>copiés</strong>, et l’historique ainsi que l’état d’amélioration ne seront pas importés. Si vous souhaitiez synchroniser vos decks ArkhamDB, <settings_link>connectez votre compte ArkhamDB.</settings_link>",
       "import_json": "Importer depuis des fichiers JSON",
       "more_filters": "Plus de filtres",
       "search_placeholder": "Rechercher dans les decks...",
@@ -768,7 +758,6 @@
         "increment_quantity": "Augmenter la quantité du deck",
         "increment_side_quantity": "Augmenter la quantité du deck annexe",
         "move_to_main_deck": "Déplacer vers le deck principal",
-        "move_to_side_deck": "Déplacer vers le deck annexe",
         "quick_discard": "Ignorer les modifications (rester sur la page)",
         "quick_save_deck": "Enregistrer le deck (rester sur la page)",
         "quick_upgrade": "Améliorer {{name}}",
@@ -798,9 +787,7 @@
           "investigator_back": "Dos de l’investigateur",
           "investigator_front": "Recto de l’investigateur",
           "original_back": "Dos original",
-          "original_front": "Recto original",
-          "parallel_back": "Dos parallèle",
-          "parallel_front": "Recto parallèle"
+          "original_front": "Recto original"
         },
         "storage_provider": {
           "local": "Privé",
@@ -841,7 +828,6 @@
       "recommendations": {
         "absolute": "Absolu",
         "absolute_help": "Compte combien de decks {{name}} utilisent chaque carte",
-        "analyze_side_decks": "Analyser les decks annexes",
         "core": "Core",
         "core_help": "Cocher une carte comme « Core » indique au moteur de recommandations de ne considérer que les decks qui contiennent cette carte.",
         "error": "Impossible de récupérer les recommandations.",
@@ -1160,8 +1146,6 @@
         "font_size_preview": "Armitage pensait que cet alphabet pouvait être utilisé à des fins ésotériques par certains cultes interdits issus de temps anciens, héritant de nombreuses formes et traditions des sorciers du monde sarrazin.",
         "hide_weaknesses": "Masquer les faiblesses dans la liste des cartes Joueur",
         "hide_weaknesses_help": "Si activé, les faiblesses ne s’affichent pas par défaut dans la liste de cartes Joueur. Elles doivent être explicitement activées via le filtre <strong>Sous-type</strong>.",
-        "show_move_to_side_deck": "Afficher le bouton « Déplacer vers la deck annexe »",
-        "show_move_to_side_deck_help": "Ajoute un bouton permettant de déplacer des cartes du deck principal vers un deck annexe lors de la construction. Pratique si vous construisez en « sur-remplissant » avant de réduire (méthode dayorbyte).",
         "sort_ignore_punctuation": "Le tri ignore la ponctuation",
         "sort_ignore_punctuation_help": "Si activé, la liste de cartes ignore les guillemets et autres signes de ponctuation lors du tri.",
         "theme": "Thème",

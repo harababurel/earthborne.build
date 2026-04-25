@@ -159,13 +159,8 @@
         "You must have at least 7 cards from each class": "반드시 서로 다른 역할군에서 각각 7장 이상의 카드를 포함하여야 합니다."
       },
       "decks": {
-        "bondedSlots": "결속 카드",
-        "bondedSlots_short": "결속",
         "extraSlots": "기타 덱",
         "extraSlots_short": "기타",
-        "ignoreDeckLimitSlots": "덱 슬롯 제한 무시",
-        "sideSlots": "보조 덱",
-        "sideSlots_short": "보조",
         "slots": "덱"
       },
       "doom": "파멸",
@@ -276,7 +271,7 @@
         "guardian": "수호자",
         "intellect": "지식",
         "mystic": "신비주의자",
-        "per_investigator": "조사자당",
+        "per_ranger": "조사자당",
         "reaction": "반응 격발",
         "rogue": "무법자",
         "seeker": "탐구자",
@@ -738,8 +733,7 @@
         "increment_xp": "이번 향상에 대해 사용가능한 경험치를 늘리기",
         "no_changes": "변경점 없음.",
         "summary": "소비한 경험치: {{xpSpent}}/{{xp}}",
-        "title": "마지막 향상",
-        "xp_spent": "점 소비됨"
+        "title": "마지막 향상"
       },
       "limited_decks": {
         "Secondary Class": "보조 역할군",
@@ -751,7 +745,6 @@
         "ignored_one": "{{count}}장의 사본은 덱 크기에 포함되지 않습니다.",
         "ignored_other": "{{count}}장의 사본은 덱 크기에 포함되지 않습니다.",
         "unowned": "사용 불가능: 카드 {{total}}장 중 {{count}}장",
-        "uses_parallel": "평행 면 사용",
         "xp_available_help": "점의 경험치가 최신 향상 후에도 사용 가능합니다.",
         "xp_required": "필요 경험치",
         "xp_required_help": "이 덱을 처음부터 새로 구성하는 데 필요한 경험치입니다."
@@ -801,7 +794,6 @@
     "deck_collection": {
       "archive": "보관하기",
       "collection_empty": "보유 게임이 비어있음",
-      "connect_arkhamdb": "아컴디비 사이트에 연결",
       "count": "덱 {{count}}개",
       "count_hidden": " ({{count}}개 숨겨짐)",
       "deck_url_or_id": "덱 URL 또는 ID",
@@ -810,8 +802,6 @@
       "delete_all_error": "로컬 덱을 삭제하는데 실패함: {{error}}",
       "delete_all_loading": "로컬 덱 삭제하는 중...",
       "import": "가져오기",
-      "import_arkhamdb": "아컴디비 사이트에서 가져오기",
-      "import_arkhamdb_help": "아컴디비 사이트에서 공개되어 있는 덱 ID, 덱 URL 또는 덱 가이드 URL을 입력하세요. 덱은 <strong>복사</strong>되며 덱 기록은 가져오지 않습니다.",
       "import_json": "JSON 형태로 파일 가져오기",
       "more_filters": "더 많은 필터",
       "search_placeholder": "덱 탐색하기...",
@@ -862,7 +852,6 @@
         "increment_quantity": "덱 수량 늘리기",
         "increment_side_quantity": "보조 덱 수량 늘리기",
         "move_to_main_deck": "덱으로 이동",
-        "move_to_side_deck": "보조 덱으로 이동",
         "quick_discard": "변경 사항 폐기 (페이지에 머무르기)",
         "quick_save_deck": "덱 저장 (페이지에 머무르기)",
         "quick_upgrade": "{{name}} 향상",
@@ -902,9 +891,7 @@
           "investigator_back": "조사자 뒷면",
           "investigator_front": "조사자 앞면",
           "original_back": "일반 뒷면",
-          "original_front": "일반 앞면",
-          "parallel_back": "평행 뒷면",
-          "parallel_front": "평행 앞면"
+          "original_front": "일반 앞면"
         },
         "storage_provider": {
           "local": "비공개",
@@ -979,7 +966,6 @@
       "recommendations": {
         "absolute": "절대값",
         "absolute_help": "각 카드가 몇 개의 {{name}} 덱에서 사용되는지 계산합니다.",
-        "analyze_side_decks": "보조 덱 분석",
         "core": "핵심",
         "core_help": "카드의 “핵심” 항목에 체크 표시하면, 카드 추천 엔진은 해당 카드가 반드시 포함된 덱을 기준으로 연산하게 됩니다.",
         "error": "추천 내역을 검색할 수 없습니다.",
@@ -1434,8 +1420,6 @@
         "hide_weaknesses_help": "이 옵션을 선택하면 기본적으로 플레이어 카드 목록에서 약점이 숨겨지며, 약점을 보려면 <strong>보조 유형</strong> 필터에서 활성화해야 합니다.",
         "show_card_modal_popular_decks": "카드 화면에서 인기 있는 덱 표시",
         "show_card_modal_popular_decks_help": "이 항목이 선택되면, 해당 카드가 포함되어 있는 인기 있는 덱이 카드 화면에 표시됩니다.",
-        "show_move_to_side_deck": "“보조 덱으로 옮기기” 버튼 보기",
-        "show_move_to_side_deck_help": "덱을 편집할 때 카드를 덱에서 보조 덱으로 이동할 수 있는 버튼이 표시됩니다. 주로 덱을 옵션으로 가득 채운 다음 줄이는 방식으로 덱을 구성하는 경우에 유용합니다.",
         "sort_ignore_punctuation": "문장 부호 무시하고 정렬하기",
         "sort_ignore_punctuation_help": "이 항목이 체크되어 있다면, 카드 목록은 따옴표 등 모든 문장 부호들을 무시하고 정렬됩니다.",
         "theme": "테마",

@@ -25,6 +25,17 @@ It does **not** treat historical attribution or intentional upstream references 
 - historical adaptation notes in `docs/adaptation-plan.md`
 - AGPL/upstream credit
 
+## Non-Regression Rule
+
+These cleanup phases must not negatively impact the current Earthborne UI or rendering behavior.
+
+Apply this rule when deciding whether to rename, delete, or preserve a leftover:
+
+- remove dead code and unreachable UI freely
+- rename stale internal concepts when behavior stays the same
+- preserve active Earthborne user flows and current rendering unless a change is required to remove an invalid Arkham-only behavior
+- if there is any doubt whether a path is still active, verify usage before deleting it
+
 ## Executive Summary
 
 The old cleanup plan is not a reliable source of truth anymore.

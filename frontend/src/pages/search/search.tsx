@@ -35,7 +35,7 @@ function Search() {
       },
       {
         search: "",
-        showInvestigatorFilter: false,
+        showRoleFilter: false,
         showOwnershipFilter: false,
       },
     );

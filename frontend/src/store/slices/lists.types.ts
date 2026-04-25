@@ -77,12 +77,6 @@ export type HealthFilter = [number, number] | undefined;
 
 export type SanityFilter = [number, number] | undefined;
 
-// Stub — ER has no investigator skill stats; kept for API compatibility.
-export type InvestigatorSkillsFilter = Record<
-  "agility" | "combat" | "intellect" | "willpower",
-  [number, number] | undefined
->;
-
 export type FilterMapping = {
   action: MultiselectFilter;
   approach_icons: ApproachIconsFilter;
@@ -97,8 +91,7 @@ export type FilterMapping = {
   fan_made_content: FanMadeContentFilter;
   health: HealthFilter;
   illustrator: MultiselectFilter;
-  investigator: SelectFilter;
-  investigator_skills: InvestigatorSkillsFilter;
+  role: SelectFilter;
   level: LevelFilter;
   ownership: OwnershipFilter;
   pack: MultiselectFilter;
@@ -208,7 +201,7 @@ export type ListsSlice = {
       fanMadeCycleCodes?: string[];
       lockedFilters?: Set<FilterKey>;
       search?: string;
-      showInvestigatorFilter?: boolean;
+      showRoleFilter?: boolean;
       showOwnershipFilter?: boolean;
       systemFilter?: Filter;
     },

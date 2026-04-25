@@ -5,7 +5,7 @@
 The current deckbuilding UI is inherited from arkham.build and doesn't match Earthborne Rangers' rules or UX needs:
 
 - `deck-create.tsx` has AH-era three-column layout (investigator front/back + bound cards) — none of which applies to ER
-- `deck-edit.tsx` is `export default function DeckEdit() { return null; }` — a complete stub
+- `deck-edit.tsx` is no longer a stub, but this plan predates the current implementation and should not be treated as the source of truth for the live deck edit page
 - `DeckSchema` (frontend) lacks `rewards`, `maladies`, `displaced` fields that already exist in `shared/src/schemas/decklist.schema.ts`
 - No store actions exist for campaign evolution mechanics
 - No visual distinction between starter and evolved decks

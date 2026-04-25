@@ -24,14 +24,15 @@ The role is what starts in play; the other 30 cards are the deck.
 
 ## Current flow vs target flow
 
-### Current
+### Historical Current
 
 ```
-Homepage → /deck/create (ChooseInvestigator picker) → click role →
+Homepage → /deck/create (older ChooseInvestigator picker) → click role →
   /deck/create/:code (wizard: name → aspect → background → specialty →
   personality → outside_interest → review) → create
 ```
 
+This section describes the old flow that existed when this plan was written.
 Role is chosen first, wizard is initialized with `roleCode`, specialty is
 decoupled from the role (the wizard lets you pick any specialty even though
 your role already implies one).
@@ -51,7 +52,7 @@ removed.
 
 ### 1. Routing & entry points
 
-- `frontend/src/app.tsx`: drop the `ChooseInvestigator` route at
+- `frontend/src/app.tsx`: drop the older `ChooseInvestigator` route at
   `/deck/create` and the `/deck/create/:code` route. Single route
   `/deck/create → DeckCreate`.
 - Delete `frontend/src/pages/choose-investigator/` entirely (directory +

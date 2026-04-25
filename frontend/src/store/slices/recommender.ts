@@ -6,7 +6,6 @@ import type { RecommenderSlice, RecommenderState } from "./recommender.types";
 function getInitialRecommenderState(): RecommenderState {
   return {
     recommender: {
-      includeSideDeck: true,
       isRelative: false,
       deckFilter: ["", ""],
       coreCards: {},
@@ -21,14 +20,6 @@ export const createRecommenderSlice: StateCreator<
   RecommenderSlice
 > = (set) => ({
   ...getInitialRecommenderState(),
-  setIncludeSideDeck(value) {
-    set((state) => ({
-      recommender: {
-        ...state.recommender,
-        includeSideDeck: value,
-      },
-    }));
-  },
   setIsRelative(value) {
     set((state) => ({
       recommender: {

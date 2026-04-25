@@ -15,7 +15,6 @@ import {
   isCardTypeFilter,
   isCostFilter,
   isEquipFilter,
-  isInvestigatorSkillsFilter,
   isLevelFilter,
   isMultiSelectFilter,
   isOwnershipFilter,
@@ -277,7 +276,7 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
           break;
         }
 
-        case "investigator": {
+        case "role": {
           assert(
             typeof payload === "string",
             `filter ${id} value must be a string.`,
@@ -343,15 +342,6 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
           const value = { ...currentValue, ...payload };
 
           filterValues[id] = { ...filterValues[id], value };
-          break;
-        }
-
-        case "investigator_skills": {
-          assert(
-            isInvestigatorSkillsFilter(payload),
-            `filter ${id} value must be an object.`,
-          );
-          filterValues[id] = { ...filterValues[id], value: payload };
           break;
         }
       }
@@ -547,7 +537,7 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
       fanMadeCycleCodes: undefined,
       search: "",
       showOwnershipFilter: true,
-      showInvestigatorFilter: true,
+      showRoleFilter: true,
       additionalFilters: ["illustrator"],
       lockedFilters: new Set<FilterKey>(),
     },
@@ -572,7 +562,7 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
         filters: cardsFilters({
           additionalFilters: opts.additionalFilters ?? ["illustrator"],
           showOwnershipFilter: opts.showOwnershipFilter,
-          showInvestigatorsFilter: opts.showOwnershipFilter,
+          showRoleFilter: opts.showRoleFilter,
         }),
         initialValues: values,
         key,
@@ -732,22 +722,6 @@ function makeFilterValue(
       );
     }
 
-    case "investigator_skills": {
-      return makeFilterObject(
-        type,
-        isInvestigatorSkillsFilter(initialValue)
-          ? initialValue
-          : {
-              agility: undefined,
-              combat: undefined,
-              intellect: undefined,
-              willpower: undefined,
-            },
-        false,
-        locked,
-      );
-    }
-
     case "illustrator":
     case "action":
     case "approach_icons":
@@ -813,7 +787,7 @@ function makeFilterValue(
       );
     }
 
-    case "investigator": {
+    case "role": {
       return makeFilterObject(
         type,
         typeof initialValue === "string" ? initialValue : undefined,
@@ -890,7 +864,7 @@ function makeList({
 function cardsFilters({
   additionalFilters = [] as FilterKey[],
   showOwnershipFilter = false,
-  showInvestigatorsFilter: _showInvestigatorsFilter = false,
+  showRoleFilter: _showRoleFilter = false,
 }): FilterKey[] {
   const filters: FilterKey[] = [
     "type",
@@ -944,9 +918,9 @@ export function makeLists(
   return {
     create_deck: makeList({
       display: {
-        grouping: settings.lists.investigator.group,
-        sorting: settings.lists.investigator.sort,
-        viewMode: settings.lists.investigator.viewMode,
+        grouping: settings.lists.role.group,
+        sorting: settings.lists.role.sort,
+        viewMode: settings.lists.role.viewMode,
       },
       systemFilter: and([
         systemFilter,
@@ -964,7 +938,7 @@ export function makeLists(
       systemFilter,
       filters: cardsFilters({
         showOwnershipFilter: true,
-        showInvestigatorsFilter: false,
+        showRoleFilter: false,
       }),
     }),
     index: makeList({
@@ -975,7 +949,7 @@ export function makeLists(
       filters: cardsFilters({
         additionalFilters: ["illustrator"],
         showOwnershipFilter: true,
-        showInvestigatorsFilter: true,
+        showRoleFilter: true,
       }),
     }),
   };

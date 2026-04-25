@@ -11,9 +11,6 @@ function getInitialUIState(): DeckCollectionState {
     filters: {
       cards: [],
       faction: [],
-      properties: {
-        parallel: false,
-      },
       provider: [],
       search: "",
       tags: [],
@@ -21,7 +18,6 @@ function getInitialUIState(): DeckCollectionState {
     },
     open: {
       cards: false,
-      properties: true,
       provider: true,
       tags: false,
       validity: false,
