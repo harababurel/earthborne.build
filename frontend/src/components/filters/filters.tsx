@@ -28,14 +28,12 @@ import { ErAspectFilter } from "./er-aspect-filter";
 import css from "./filters.module.css";
 import { HealthFilter } from "./health-filter";
 import { IllustratorFilter } from "./illustrator-filter";
-import { InvestigatorFilter } from "./investigator-filter";
 import { LevelFilter } from "./level-filter";
 import { OwnershipFilter } from "./ownership-filter";
 import { PackFilter } from "./pack-filter";
 import { PropertiesFilter } from "./properties-filter";
 import { SanityFilter } from "./sanity-filter";
 import { SetFilter } from "./set-filter";
-import { SkillIconsFilter } from "./skill-icons-filter";
 import { SubtypeFilter } from "./subtype-filter";
 import { TraitFilter } from "./trait-filter";
 import { TypeFilter } from "./type-filter";
@@ -143,14 +141,10 @@ export function Filters(props: Props) {
                   <EncounterSetFilter {...params} />
                 )}
                 {filter === "equip" && <EquipFilter {...params} />}
-                {filter === "investigator" && (
-                  <InvestigatorFilter {...params} />
-                )}
                 {filter === "level" && <LevelFilter {...params} />}
                 {filter === "ownership" && <OwnershipFilter {...params} />}
                 {filter === "pack" && <PackFilter {...params} />}
                 {filter === "properties" && <PropertiesFilter {...params} />}
-                {filter === "skill_icons" && <SkillIconsFilter {...params} />}
                 {filter === "subtype" && <SubtypeFilter {...params} />}
                 {filter === "trait" && <TraitFilter {...params} />}
                 {filter === "type" && <TypeFilter {...params} />}

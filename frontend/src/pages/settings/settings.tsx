@@ -27,7 +27,6 @@ import { LocaleSetting } from "./locale-setting";
 import { Section } from "./section";
 import css from "./settings.module.css";
 import { ShowAllCardsSetting } from "./show-all-cards";
-import { ShowMoveToSideDeckSetting } from "./show-move-to-side-deck";
 import { SortPunctuationSetting } from "./sort-punctuation-setting";
 import { ThemeSetting } from "./theme";
 
@@ -159,10 +158,6 @@ function SettingsInner({
                   setSettings={setSettings}
                 />
                 <SortPunctuationSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-                <ShowMoveToSideDeckSetting
                   settings={settings}
                   setSettings={setSettings}
                 />

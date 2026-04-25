@@ -3,7 +3,6 @@ import { getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import css from "./card-icon.module.css";
 import { EnergyCostIcon } from "./icons/energy-cost-icon";
-import { FactionIcon } from "./icons/faction-icon";
 
 type Props = {
   card: Card;
@@ -12,24 +11,14 @@ type Props = {
 };
 
 export function CardIcon(props: Props) {
-  const { card, className, inverted } = props;
+  const { card, className } = props;
 
   if (card.category_id === "path" || card.type_code === "aspect") {
     return null;
   }
 
   if (card.type_code === "role") {
-    return (
-      <div
-        className={cx(
-          css["icon_large"],
-          className,
-          inverted && css["icon_inverted"],
-        )}
-      >
-        <FactionIcon code={card.aspect_requirement_type ?? ""} />
-      </div>
-    );
+    return null;
   }
 
   const colorCls = getCardColor(card);

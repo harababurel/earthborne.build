@@ -7,7 +7,6 @@ import type { CardGroup } from "@/store/selectors/lists";
 import type { Metadata } from "@/store/slices/metadata.types";
 import { splitMultiValue } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
-import { FactionIconFancy } from "../icons/faction-icon-fancy";
 import SlotIcon from "../icons/slot-icon";
 import css from "./grouphead.module.css";
 
@@ -122,10 +121,9 @@ export function GroupLabel(props: GroupLabelProps) {
     );
   }
 
-  if (type === "faction") {
+  if (type === "faction" || type === "aspect") {
     return (
       <span className={className}>
-        <FactionIconFancy className={css["icon"]} code={segment} />
         <span>{keyLabel}</span>
       </span>
     );

@@ -3,12 +3,9 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import {
-  selectDeckFactionFilter,
   selectDeckFilterChanges,
   selectDeckSearchTerm,
-  selectFactionsInLocalDecks,
 } from "@/store/selectors/deck-collection";
-import { FactionToggle } from "../faction-toggle";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Scroller } from "../ui/scroller";
@@ -38,12 +35,6 @@ export function DeckCollectionFilters(props: Props) {
   };
   const searchRef = useRef<HTMLInputElement>(null);
   const searchValue = useStore(selectDeckSearchTerm);
-
-  const factionOptions = useStore(selectFactionsInLocalDecks);
-  const selectedFactions = useStore(selectDeckFactionFilter);
-  const onFactionFilterChange = (value: string[]) => {
-    addFilter("faction", value);
-  };
 
   return (
     <section
@@ -80,13 +71,6 @@ export function DeckCollectionFilters(props: Props) {
               className={css["filters-container"]}
               data-testid="deck-filters-expanded"
             >
-              {factionOptions.length > 1 && (
-                <FactionToggle
-                  options={factionOptions}
-                  value={selectedFactions}
-                  onValueChange={onFactionFilterChange}
-                />
-              )}
               <DeckCardsFilter containerClass={css["filter"]} />
               <DeckTagsFilter containerClass={css["filter"]} />
               <DeckProviderFilter containerClass={css["filter"]} />

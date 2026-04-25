@@ -114,70 +114,6 @@ export function CardDisplaySettings(props: SettingProps) {
         />
       </Field>
 
-      <Field>
-        <FieldLabel htmlFor="display-card-level">
-          {t("settings.display.card_level")}
-        </FieldLabel>
-        <div>
-          <Select
-            className={css["input"]}
-            onChange={(evt) => {
-              setValue({
-                cardLevelDisplay: evt.target
-                  .value as SettingsState["cardLevelDisplay"],
-              });
-            }}
-            options={[
-              {
-                value: "icon-only",
-                label: t("settings.display.card_level_icon_only"),
-              },
-              {
-                value: "dots",
-                label: t("settings.display.card_level_as_dots"),
-              },
-              {
-                value: "text",
-                label: t("settings.display.card_level_as_text"),
-              },
-            ]}
-            required
-            name="display-card-level"
-            value={resolve("cardLevelDisplay")}
-          />
-        </div>
-      </Field>
-
-      <Field>
-        <FieldLabel htmlFor="display-card-skill-icons">
-          {t("settings.display.card_skill_icons")}
-        </FieldLabel>
-        <div>
-          <Select
-            className={css["input"]}
-            onChange={(evt) => {
-              setValue({
-                cardSkillIconsDisplay: evt.target
-                  .value as SettingsState["cardSkillIconsDisplay"],
-              });
-            }}
-            options={[
-              {
-                value: "simple",
-                label: t("settings.display.card_skill_icons_simple"),
-              },
-              {
-                value: "as_printed",
-                label: t("settings.display.card_skill_icons_as_printed"),
-              },
-            ]}
-            required
-            name="display-card-skill-icons"
-            value={resolve("cardSkillIconsDisplay")}
-          />
-        </div>
-      </Field>
-
       <div className={css["preview"]}>
         <h4>{t("settings.preview")}</h4>
         <ol>
@@ -188,9 +124,7 @@ export function CardDisplaySettings(props: SettingProps) {
               <ListCardInner
                 as="li"
                 card={card}
-                cardLevelDisplay={resolve("cardLevelDisplay")}
                 cardShowCollectionNumber={resolve("cardShowCollectionNumber")}
-                cardSkillIconsDisplay={resolve("cardSkillIconsDisplay")}
                 cardShowUniqueIcon={resolve("cardShowUniqueIcon")}
                 key={id}
                 omitBorders
