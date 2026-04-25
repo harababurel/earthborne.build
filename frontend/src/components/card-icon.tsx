@@ -14,6 +14,10 @@ type Props = {
 export function CardIcon(props: Props) {
   const { card, className, inverted } = props;
 
+  if (card.category_id === "path") {
+    return null;
+  }
+
   if (card.type_code === "role") {
     return (
       <div
