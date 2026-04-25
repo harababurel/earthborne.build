@@ -4,7 +4,6 @@ import "@fontsource-variable/noto-sans/standard-italic.css";
 import "@fontsource-variable/noto-serif/standard.css";
 import "@fontsource-variable/noto-serif/standard-italic.css";
 import "./styles/icons-core.css";
-import "./styles/icons-encounters.css";
 import "./styles/icons-icon.css";
 
 import React from "react";

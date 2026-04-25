@@ -166,32 +166,11 @@
 .icon-health:before {
   content: "\51";
 }
-.icon-sanity:before {
-  content: "\52";
-}
-.icon-sanity_inverted:before {
-  content: "\53";
-}
 .icon-health_inverted:before {
   content: "\54";
 }
 .icon-numNull1:before {
   content: "\30";
-}
-.icon-guardian:before {
-  content: "\29";
-}
-.icon-seeker:before {
-  content: "\62";
-}
-.icon-mystic:before {
-  content: "\63";
-}
-.icon-rogue:before {
-  content: "\64";
-}
-.icon-survivor:before {
-  content: "\65";
 }
 .icon-willpower:before {
   content: "\66";
@@ -232,9 +211,6 @@
 .icon-per_investigator:before {
   content: "\72";
 }
-.icon-weakness:before {
-  content: "\73";
-}
 .icon-action:before {
   content: "\74";
 }
@@ -250,38 +226,8 @@
 .icon-guide_bullet:before {
   content: "\78";
 }
-.icon-curse:before {
-  content: "\79";
-}
-.icon-bless:before {
-  content: "\7a";
-}
 .icon-parallel:before {
   content: "\e92d";
-}
-.icon-skill_willpower:before {
-  content: "\e90a";
-}
-.icon-skill_willpower_inverted:before {
-  content: "\e90b";
-}
-.icon-skill_intellect:before {
-  content: "\e90c";
-}
-.icon-skill_intellect_inverted:before {
-  content: "\e90d";
-}
-.icon-skill_combat:before {
-  content: "\e90e";
-}
-.icon-skill_combat_inverted:before {
-  content: "\e92e";
-}
-.icon-skill_agility:before {
-  content: "\e92f";
-}
-.icon-skill_agility_inverted:before {
-  content: "\e930";
 }
 .icon-skill_wild:before {
   content: "\e931";
@@ -301,26 +247,8 @@
 .icon-day:before {
   content: "\e903";
 }
-.icon-class_guardian:before {
-  content: "\e919";
-}
-.icon-class_seeker:before {
-  content: "\e915";
-}
-.icon-class_rogue:before {
-  content: "\e914";
-}
-.icon-class_mystic:before {
-  content: "\e918";
-}
-.icon-class_survivor:before {
-  content: "\e916";
-}
 .icon-multiclass:before {
   content: "\e989";
-}
-.icon-class_neutral:before {
-  content: "\e917";
 }
 .icon-xp-bold:before {
   content: "\e9a3";
@@ -333,9 +261,6 @@
 }
 .icon-upgrade:before {
   content: "\e940";
-}
-.icon-taboo:before {
-  content: "\e93a";
 }
 .icon-cards:before {
   content: "\e92b";
