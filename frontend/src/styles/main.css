@@ -575,6 +575,22 @@
     color: var(--sanity);
   }
 
+  .color-AWA {
+    color: var(--color-awa) !important;
+  }
+
+  .color-FIT {
+    color: var(--color-fit) !important;
+  }
+
+  .color-FOC {
+    color: var(--color-foc) !important;
+  }
+
+  .color-SPI {
+    color: var(--color-spi) !important;
+  }
+
   .longform .thumbnail {
     display: inline-block;
     padding: 0.375rem;
