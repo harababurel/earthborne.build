@@ -158,5 +158,6 @@ export const OUTSIDE_INTEREST_PICKS = 1;
 
 export const IRREGULAR_TOKEN_PLURALS: Record<string, string> = {
   damage: "damage",
+  strength: "strength",
   xp: "xp",
 };
