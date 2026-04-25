@@ -22,7 +22,13 @@ export function CardDetails(props: Props) {
   const aspectColorClass = getCardColor(card).toLowerCase();
 
   const countVal = card.token_count;
-  const countNum = Number(countVal);
+  const countIsPerRanger =
+    typeof countVal === "string" && countVal.includes("[per_ranger]");
+  const countDisplay =
+    typeof countVal === "string"
+      ? countVal.replace(/\[per_ranger\]/g, "")
+      : countVal;
+  const countNum = Number(countDisplay);
   const tokenName = card.token_name;
   const tokenKey = tokenName?.toLowerCase() ?? "";
 
@@ -50,7 +56,12 @@ export function CardDetails(props: Props) {
 
         {countVal != null && tokenName && (
           <div className={cx(css["token-box"], css[aspectColorClass])}>
-            <div className={css["token-count"]}>{numericalStr(countVal)}</div>
+            <div className={css["token-count"]}>
+              {numericalStr(countDisplay)}
+              {countIsPerRanger && (
+                <i className={cx(css["token-count-per-ranger"], "core-per_ranger")} />
+              )}
+            </div>
             <div className={css["token-label"]}>{tokenLabel}</div>
           </div>
         )}

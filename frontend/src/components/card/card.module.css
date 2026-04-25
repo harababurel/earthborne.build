@@ -543,6 +543,12 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   }
 
+  .token-count-per-ranger {
+    font-size: 0.55em;
+    margin-left: 0.1em;
+    vertical-align: super;
+  }
+
   .token-label {
     height: 25%;
     display: flex;
