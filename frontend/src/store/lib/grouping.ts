@@ -444,7 +444,7 @@ export function getGroupingKeyLabel(
     }
 
     case "encounter_set": {
-      if (segment === NONE) return i18n.t("common.level.none");
+      if (segment === NONE) return "";
       return metadata.encounterSets[segment]?.name ?? segment;
     }
 
@@ -454,8 +454,8 @@ export function getGroupingKeyLabel(
     }
 
     case "level": {
-      if (segment === NONE) return i18n.t("common.level.none");
-      return i18n.t("common.level.value", { level: segment });
+      if (segment === NONE) return "";
+      return segment;
     }
 
     case "cost": {
