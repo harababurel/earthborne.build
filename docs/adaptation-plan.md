@@ -229,11 +229,11 @@ Replaced the Arkham Horror rules reference HTML with the full EBR rules glossary
 | `backend/src/db/schema.types.ts` | Kysely DB types | Done (Phase 3) |
 | `backend/src/scripts/ingest-cards.ts` | Card ingestion from rangers-card-data | Done (Phase 3) |
 | `backend/src/routes/cards.ts` | Cards API endpoints | Done (Phase 3) |
-| `frontend/src/store/lib/deck-validation.ts` | Deckbuilding rules | Needs full rewrite (Phase 4) |
-| `frontend/src/store/lib/filtering.ts` | Card access filtering | Needs full rewrite (Phase 4) |
-| `frontend/src/store/lib/buildql/fields.ts` | Search field definitions | Needs remapping (Phase 4) |
-| `frontend/src/utils/constants.ts` | Game constants + special card codes | Needs cleanup (Phase 4) |
-| `frontend/src/utils/card-utils.ts` | Image URL construction | Minimal change — env var (Phase 7) |
+| `frontend/src/store/lib/deck-validation.ts` | Deckbuilding rules | Done (Phase 4) |
+| `frontend/src/store/lib/filtering.ts` | Card access filtering | Done (Phase 4) |
+| `frontend/src/store/lib/buildql/fields.ts` | Search field definitions | Done (Phase 4) |
+| `frontend/src/utils/constants.ts` | Game constants + special card codes | Done (Phase 4) |
+| `frontend/src/utils/card-utils.ts` | Image URL construction | Done (Phase 7) |
 | `frontend/src/assets/rules.html` | Rules glossary content | Done (Phase 9) — regenerate with `node scripts/scrape-rules.mjs` |
 
 ---
@@ -298,11 +298,13 @@ Repurposed the "Deck Guides" page from a popular ArkhamDB decklist fetcher into 
 ## Current state
 
 - **Shared package**: compiles clean.
-- **Backend package**: compiles clean. SQLite DB with 260 cards. APIs: `GET /v2/public/cards`, `GET /v2/public/packs`, `GET /version`.
+- **Backend package**: compiles clean. SQLite DB with cards from `rangers-card-data`. APIs: `GET /v2/public/cards`, `GET /v2/public/packs`, `GET /v2/public/sets`, `POST|GET|PUT|DELETE /v2/public/share`, `GET /v2/public/decklists`, `GET /version`.
 - **Frontend package**: Vite build clean. `tsc --noEmit` = 0 errors.
 - **Deployment**: nginx + systemd, no Docker/Cloudflare/Kamal. See `docs/nginx.conf.example` and `docs/earthborne.service`.
-- **Card data**: 260 cards ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
-- **Card images**: 260 JPGs at `/home/sergiu/work/earthborne.images/cards/` (outside repo). Backend serves via `GET /images/:code`.
+- **Card data**: Ingested from `rangers-card-data` (5 packs: core, loa, sib, sos, sotv). Local clone at `/home/sergiu/work/rangers-card-data`.
+- **Card images**: JPGs at `/home/sergiu/work/earthborne.images/cards/` (outside repo). Backend serves via `GET /images/:code`. Spritesheet images are auto-cropped during download.
 - **Rulebook**: downloaded to `docs/rulebook.pdf` (21MB), text extracted to `docs/rulebook.txt` (5024 lines, not committed).
-- **Browse page**: all 260 cards visible. Filter sidebar has been successfully rebuilt for Earthborne Rangers.
-- **Collection settings**: Successfully transitioned to an Earthborne Rangers-specific presentation using visual banners and simplified boolean toggles.
+- **Browse page**: All cards visible with full ER filter sidebar (type, aspect, cost, trait, pack/set, category, approach icons, equip, properties).
+- **Deck sharing**: Local backend stores and serves shared decks. Public Deck Guides directory with search by role, background, specialty, and tags.
+- **Collection settings**: Earthborne Rangers-specific visual banners and simplified boolean toggles per expansion.
+- **Arkham residue**: Significant cleanup still pending — see `docs/arkham-residue-cleanup.md` for the phased plan.

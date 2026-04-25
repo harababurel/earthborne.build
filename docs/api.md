@@ -34,6 +34,25 @@ All public data endpoints live under `/v2/public`.
 - `GET /v2/public/packs`
   Returns all ingested packs as `{ data: Pack[] }`.
 
+### Card sets
+
+- `GET /v2/public/sets`
+  Returns all ingested card sets as `{ data: CardSet[] }`.
+
+### Deck sharing
+
+- `POST /v2/public/share`
+  Creates a new shared deck. Returns the created `Decklist` record with its `id`.
+
+- `GET /v2/public/share/history/:id`
+  Returns the shared deck with the given `id`, or `404` if not found.
+
+- `PUT /v2/public/share/:id`
+  Updates an existing shared deck. Requires the same `client_id` that created it.
+
+- `DELETE /v2/public/share/:id`
+  Deletes a shared deck. Requires the same `client_id` that created it.
+
 ### Decklists
 
 - `GET /v2/public/decklists`

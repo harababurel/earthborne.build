@@ -9,14 +9,15 @@
 - Routing handled client-side with `wouter`
 - Card data, pack metadata, and version checks fetched from the backend
 
-The app was adapted from `arkham.build`, so some upstream sync/share/auth code paths still exist in the frontend. They are optional and depend on external legacy services, not on the local backend in this repo.
+The app was adapted from `arkham.build`. Deck sharing is now handled by the local backend (`/v2/public/share`). Some other upstream sync/auth code paths still exist in the frontend but are not backed by any service in this repo.
 
 ## Backend
 
 The Node.js backend in `backend/` is responsible for:
 
-- serving ingested Earthborne Rangers cards
-- serving ingested pack metadata
+- serving ingested Earthborne Rangers cards, packs, and card sets
+- deck sharing (create, read, update, delete)
+- public shared deck search and directory
 - serving fan-made project info records
 - serving locally hosted card images from disk
 - reporting the ingested card count via `/version`

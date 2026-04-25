@@ -13,7 +13,9 @@ The goal is a full-featured deckbuilder at **earthborne.build** — card browsin
 
 ## Project status & priorities
 
-Phases 1–3 of the adaptation are complete (schema, ArkhamDB removal, card data pipeline). The Earthborne-specific schema, data pipeline, and SQLite-backed API are in place, including support for deck sharing and a public deck directory (Deck Guides). Some inherited arkham.build code paths still live in the frontend.
+All core adaptation phases (1–11) are complete. The deckbuilder is functional end-to-end: card browsing with filters, deck creation and editing, deck sharing, a public Deck Guides directory, and the full Earthborne Rangers rules reference. The backend is SQLite-backed with a complete card data pipeline from `rangers-card-data`.
+
+Ongoing work is focused on cleaning up remaining arkham.build residue (see `docs/arkham-residue-cleanup.md` for the phased plan) and UI polish.
 
 When working on this project, follow the schema-first order described in `docs/adaptation-plan.md`. Do not rework UI components before the underlying data model is settled.
 
@@ -57,7 +59,8 @@ Start with these:
 - [`docs/metadata.md`](./docs/metadata.md) — card data sources and normalization
 - [`docs/deployment.md`](./docs/deployment.md) — self-hosted deployment
 - [`docs/translations.md`](./docs/translations.md) — i18n workflow
-- [`docs/adaptation-plan.md`](./docs/adaptation-plan.md) — historical and ongoing arkham → earthborne adaptation
+- [`docs/adaptation-plan.md`](./docs/adaptation-plan.md) — historical arkham → earthborne adaptation record
+- [`docs/arkham-residue-cleanup.md`](./docs/arkham-residue-cleanup.md) — phased plan for removing remaining arkham.build residue
 - [`docs/rules-reference-retrospective.md`](./docs/rules-reference-retrospective.md) — how the embedded `/rules` reference was built
 - [`docs/card-data-issues.md`](./docs/card-data-issues.md) — known data quirks
 - [`docs/scraper-caching-plan.md`](./docs/scraper-caching-plan.md) — pending plan for caching the Living Valley scrapers
