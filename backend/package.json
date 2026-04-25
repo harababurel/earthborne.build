@@ -17,6 +17,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@earthborne-build/shared": "^0.1.0",
     "@fast-csv/parse": "5.0.5",
     "@hono/node-server": "1.19.13",
     "better-sqlite3": "^12.9.0",

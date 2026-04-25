@@ -19,7 +19,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@test/*": ["../test/*"],
-      "@arkham-build/shared": ["../shared/src/index.ts"]
+      "@earthborne-build/shared": ["../shared/src/index.ts"]
     }
   },
   "include": ["src", "../shared/src"],

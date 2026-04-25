@@ -591,6 +591,10 @@
     color: var(--color-spi) !important;
   }
 
+  .color-neutral {
+    color: var(--text-neutral);
+  }
+
   .longform .thumbnail {
     display: inline-block;
     padding: 0.375rem;
