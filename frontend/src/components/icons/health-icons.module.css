@@ -40,7 +40,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(-0.1em);
 
   /** Chrome < 123 has a bug with paint-order, but lists is as supported. We use a feature with similar browser support as proxy check */
   @supports (text-wrap-style: balance) {
@@ -55,10 +54,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(
-    -50%,
-    -46%
-  ); /* Slight vertical offset for optical centering */
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
