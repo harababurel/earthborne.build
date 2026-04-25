@@ -292,7 +292,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     };
 
     nextDeck.date_update = new Date().toISOString();
-    nextDeck.version = incrementVersion(deck.version);
 
     await state.updateShare(nextDeck);
 
@@ -339,7 +338,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     const nextDeck = applyDeckEdits(deck, edits, metadata, true, undefined);
     nextDeck.date_update = new Date().toISOString();
-    nextDeck.version = incrementVersion(deck.version);
 
     const resolved = resolveDeck(
       {
@@ -379,7 +377,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
           true,
         ),
         date_update: nextDeck.date_update,
-        version: nextDeck.version,
       };
 
       return {
@@ -442,12 +439,6 @@ function synthesiseCycles(metadata: Metadata) {
       official: true,
     };
   }
-}
-
-function incrementVersion(version: string) {
-  const [major, minor] = version.split(".");
-  const nextMinor = Number.parseInt(minor ?? "0", 10) + 1;
-  return `${major ?? "1"}.${Number.isNaN(nextMinor) ? 1 : nextMinor}`;
 }
 
 function dataVersionKey(version: DataVersion) {

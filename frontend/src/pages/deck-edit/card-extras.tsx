@@ -1,17 +1,11 @@
 import type { Card } from "@arkham-build/shared";
 import Attachments from "@/components/attachments/attachments";
 import { getMatchingAttachables } from "@/components/attachments/attachments.helpers";
-import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
-import { mapTabToSlot } from "@/store/slices/deck-edits.types";
-import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { isEmpty } from "@/utils/is-empty";
 import css from "./deck-edit.module.css";
 import { AddToNotes } from "./editor/add-to-notes";
-import { DraftBasicWeakness } from "./editor/draft-basic-weakness";
-import { DrawBasicWeakness } from "./editor/draw-basic-weakness";
 import { MoveToMainDeck } from "./editor/move-to-main-deck";
-import { MoveToSideDeck } from "./editor/move-to-side-deck";
 
 type Props = {
   canEdit?: boolean;
@@ -24,8 +18,6 @@ type Props = {
 
 export function CardExtras(props: Props) {
   const { canEdit, card, deck, quantity, currentTab, currentTool } = props;
-
-  const settings = useStore((state) => state.settings);
 
   if (currentTab === "config" || currentTab === "ignoreDeckLimitSlots") {
     return null;
@@ -41,23 +33,6 @@ export function CardExtras(props: Props) {
     ) : null;
   }
 
-  if (card.code === SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS) {
-    return (
-      <div className={css["extra-row"]}>
-        <DrawBasicWeakness
-          deckId={deck.id}
-          quantity={quantity}
-          targetDeck={mapTabToSlot(currentTab)}
-        />
-        <DraftBasicWeakness
-          deck={deck}
-          quantity={quantity}
-          targetDeck={mapTabToSlot(currentTab)}
-        />
-      </div>
-    );
-  }
-
   const hasAttachable =
     currentTab === "slots" && !isEmpty(getMatchingAttachables(card, deck));
 
@@ -69,11 +44,6 @@ export function CardExtras(props: Props) {
 
   return (
     <div className={css["extra-row"]}>
-      {currentTab === "slots" &&
-        canShowMoveButton &&
-        settings.showMoveToSideDeck && (
-          <MoveToSideDeck card={card} deck={deck} />
-        )}
       {hasAttachable && <Attachments card={card} resolvedDeck={deck} />}
     </div>
   );

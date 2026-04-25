@@ -6,13 +6,11 @@ import {
   selectActiveListFilter,
   selectAssetOptions,
   selectFilterChanges,
-  selectSlotsMapper,
   selectUsesMapper,
 } from "@/store/selectors/lists";
 import { isAssetFilterObject } from "@/store/slices/lists.type-guards";
 import type { AssetFilter as AssetFilterType } from "@/store/slices/lists.types";
 import { assert } from "@/utils/assert";
-import { SkillIcon } from "../icons/skill-icon";
 import SlotIcon from "../icons/slot-icon";
 import { Checkbox } from "../ui/checkbox";
 import { Combobox } from "../ui/combobox/combobox";
@@ -31,7 +29,7 @@ function renderName(c: Option) {
   return c.name;
 }
 
-function renderSlot(c: Option) {
+function _renderSlot(c: Option) {
   return (
     <>
       <SlotIcon code={c.code} /> {c.name}
@@ -59,7 +57,6 @@ export function AssetFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
 
   const locale = useStore((state) => state.settings.locale);
 
-  const slotsMapper = useStore(selectSlotsMapper);
   const usesMapper = useStore(selectUsesMapper);
 
   const { onReset, onChange, onOpenChange, locked } =
@@ -72,13 +69,6 @@ export function AssetFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
     [onChange],
   );
 
-  const onChangeSlot = useCallback(
-    (value: Coded[]) => {
-      onChange({ slots: value.map(({ code }) => code) });
-    },
-    [onChange],
-  );
-
   const onChangeRange = useCallback(
     function setValue<K extends keyof AssetFilterType>(
       key: K,
@@ -87,25 +77,6 @@ export function AssetFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
       onChange({ [key]: value });
     },
     [onChange],
-  );
-
-  const onSkillBoostChange = useCallback(
-    (code: string, value: string | boolean) => {
-      if (typeof value === "boolean") {
-        const next = [...filter.value.skillBoosts];
-        if (value) {
-          next.push(code);
-        } else {
-          const idx = next.indexOf(code);
-          if (idx !== -1) {
-            next.splice(idx, 1);
-          }
-        }
-
-        onChange({ skillBoosts: next });
-      }
-    },
-    [onChange, filter.value.skillBoosts],
   );
 
   const onHealthXChange = useCallback(
@@ -125,36 +96,6 @@ export function AssetFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
       open={filter.open}
       title={t("filters.asset.title")}
     >
-      <Combobox
-        disabled={locked}
-        id="asset-slots"
-        items={options.slots}
-        label={t("filters.slot.title")}
-        locale={locale}
-        onValueChange={onChangeSlot}
-        placeholder={t("filters.slot.placeholder")}
-        renderItem={renderSlot}
-        renderResult={renderSlot}
-        selectedItems={filter.value.slots.map(slotsMapper)}
-        showLabel
-      />
-
-      <fieldset className={css["skill-boosts"]}>
-        <legend className={css["skill-boosts-label"]}>
-          {t("filters.skill_boost.title")}
-        </legend>
-        {options.skillBoosts.map((skill) => (
-          <Checkbox
-            disabled={locked}
-            checked={filter.value.skillBoosts.includes(skill)}
-            id={`asset-skillboost-${skill}`}
-            key={skill}
-            label={<SkillIcon skill={skill} />}
-            onCheckedChange={(val) => onSkillBoostChange(skill, val)}
-          />
-        ))}
-      </fieldset>
-
       <Combobox
         disabled={locked}
         id="asset-uses"

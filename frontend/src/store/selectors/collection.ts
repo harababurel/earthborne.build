@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { and } from "@/utils/fp";
 import { isCardOwned } from "../lib/card-ownership";
 import {
@@ -71,10 +70,7 @@ export const selectCycleCardCounts = createSelector(
       packs: {},
     };
 
-    const filter = and([
-      filterBacksides,
-      (c) => c.code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS,
-    ]);
+    const filter = and([filterBacksides]);
 
     for (const card of Object.values(metadata.cards)) {
       if (!filter(card)) continue;

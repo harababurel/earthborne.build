@@ -30,15 +30,15 @@ export function UndoHistory(props: Props) {
           <h2 className={css["title"]}>{t("deck_edit.versions.title")}</h2>
         </header>
         <ol className={css["entries"]}>
-          {history.map((entry) => {
+          {history.map((entry, index) => {
             return (
               <DeckHistoryEntry
-                key={entry.version}
+                key={entry.dateUpdate}
                 data={entry.data}
                 deck={deck}
                 size="sm"
                 title={
-                  entry.version === "current" ? (
+                  index === 0 ? (
                     <div className={css["entry-title"]}>
                       <span className={css["version"]}>
                         {t("deck_edit.versions.entry_title_current")}
@@ -47,9 +47,7 @@ export function UndoHistory(props: Props) {
                   ) : (
                     <div className={css["entry-title"]}>
                       <span className={css["version"]}>
-                        {t("deck_edit.versions.entry_title", {
-                          version: entry.version,
-                        })}
+                        {t("deck_edit.versions.entry_title")}
                       </span>
                       <span
                         className={css["timestamp"]}

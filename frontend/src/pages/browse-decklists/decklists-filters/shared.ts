@@ -24,12 +24,11 @@ export type DecklistFilterProps = {
 
 export const selectPlayerCardsFilter = createSelector(
   selectLookupTables,
-  (lookupTables) => {
+  (_lookupTables) => {
     const playerCardFilter = and([
       not(filterEncounterCards),
       not(filterType(["role"]) ?? (() => true)),
       filterDuplicates,
-      (c) => lookupTables.relations.bonded[c.code] == null,
       (c) => official(c),
     ]);
 

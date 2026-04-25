@@ -1,74 +1,22 @@
 import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import type { Metadata } from "@/store/slices/metadata.types";
-import { RETURN_TO_CYCLES } from "./constants";
 
 export const environments = {
   current() {
-    return ["cycle:core_ch2", "cycle:investigator_decks_ch2"];
+    return [];
   },
   limited(packs: string[]) {
-    return [
-      ...packs.flatMap((code) => {
-        const cycle = code.substring(0, code.length - 1);
-        if (RETURN_TO_CYCLES[cycle]) {
-          return [code, RETURN_TO_CYCLES[cycle]];
-        }
-        return [code];
-      }),
-      "cycle:core_ch2",
-      "cycle:investigator_decks_ch2",
-    ];
-  },
-  cpa(cycle: string) {
-    const packs = [];
-
-    if (cycle !== "core") {
-      packs.push(`${cycle}p`);
-    }
-
-    if (RETURN_TO_CYCLES[cycle]) {
-      packs.push(RETURN_TO_CYCLES[cycle]);
-    }
-
-    packs.push("cycle:investigator", "cycle:core", "rtnotz");
-
     return packs;
   },
-  currentFaq25(cycles: Cycle[]) {
-    const CURRENT_CYCLE_POSITION = 11;
-
-    const packs = [];
-
-    for (let i = CURRENT_CYCLE_POSITION; i >= CURRENT_CYCLE_POSITION - 2; i--) {
-      const cycle = cycles.find((c) => c.position === i);
-      if (!cycle) continue;
-
-      if (cycle.code !== "core") {
-        packs.push(`${cycle.code}p`);
-      }
-    }
-
-    packs.push("cycle:investigator", "cycle:core");
-
-    return packs;
+  cpa(_cycle: string) {
+    return [];
   },
-  limitedFaq25(cycles: Cycle[]) {
-    const packs = [];
-
-    for (const cycle of cycles) {
-      if (cycle.code !== "core") {
-        packs.push(`${cycle.code}p`);
-      }
-
-      if (RETURN_TO_CYCLES[cycle.code]) {
-        packs.push(RETURN_TO_CYCLES[cycle.code]);
-      }
-    }
-
-    packs.push("cycle:investigator", "cycle:core", "rtnotz");
-
-    return packs;
+  currentFaq25(_cycles: Cycle[]) {
+    return [];
+  },
+  limitedFaq25(_cycles: Cycle[]) {
+    return [];
   },
 };
 

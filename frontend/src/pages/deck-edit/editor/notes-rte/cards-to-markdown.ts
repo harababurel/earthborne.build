@@ -1,4 +1,4 @@
-import { type Card, cardLevel } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
 import type { LookupTables } from "@/store/lib/lookup-tables.types";
 import type { Metadata } from "@/store/slices/metadata.types";
 import { cycleOrPack, displayAttribute } from "@/utils/card-utils";
@@ -332,31 +332,9 @@ function renderSubname(
 }
 
 function renderLevel(
-  card: Card,
-  format: CardFormatDefinition,
-  lookupTables: LookupTables,
+  _card: Card,
+  _format: CardFormatDefinition,
+  _lookupTables: LookupTables,
 ) {
-  const config = format.placeholderOptions.name.level;
-  const level = cardLevel(card);
-
-  if (level == null || !config.display) return "";
-
-  if (config.display === "disambiguate") {
-    const otherLevels = lookupTables.relations.level[card.code];
-    if (!otherLevels) return "";
-  }
-
-  let str = "";
-
-  if (config.type === "dots" && level > 0) {
-    str = wrapHtmlTag("•".repeat(level), "span", {
-      class: "card-xp",
-    });
-  } else if (config.type === "number-parentheses" && level > 0) {
-    str = wrapParentheses(level.toString());
-  } else if (config.type === "number-parenteses-with-zero") {
-    str = wrapParentheses(level.toString());
-  }
-
-  return str ? pad(str, config.padding) : str;
+  return "";
 }

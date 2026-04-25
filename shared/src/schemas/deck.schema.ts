@@ -29,7 +29,6 @@ export const DeckSchema = z.object({
   source: z.string().nullish(),
   tags: z.string(),
   user_id: z.number().nullish(),
-  version: z.string(),
 
   // ER-specific fields — set during deck creation and persisted with the deck.
   aspect_code: z.string(),

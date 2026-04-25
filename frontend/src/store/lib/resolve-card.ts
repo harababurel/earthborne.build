@@ -1,5 +1,4 @@
 import { official } from "@/utils/card-utils";
-import { CARD_SET_ORDER } from "@/utils/constants";
 import type { StoreState } from "../slices";
 import { applyCardChanges } from "./card-edits";
 import type { LookupTables } from "./lookup-tables.types";
@@ -92,7 +91,7 @@ function resolveRelationArray(
 }
 
 function sortRelations(a: string, b: string) {
-  return CARD_SET_ORDER.indexOf(a) - CARD_SET_ORDER.indexOf(b);
+  return a.localeCompare(b);
 }
 
 export function getRelatedCards(cardWithRelations: CardWithRelations) {
@@ -122,7 +121,7 @@ export function getRelatedCardQuantity(
   set: ResolvedCard | ResolvedCard[],
 ) {
   const cards = Array.isArray(set) ? set : [set];
-  const canShowQuantity = key !== "level" && key !== "restrictedTo";
+  const canShowQuantity = key !== "level";
 
   return canShowQuantity
     ? cards.reduce<Record<string, number>>((acc, { card }) => {

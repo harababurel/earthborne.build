@@ -1,11 +1,9 @@
-import { type Card, cardLevel } from "@arkham-build/shared";
+import type { Card } from "@arkham-build/shared";
 import { useStore } from "@/store";
 import { selectMetadata } from "@/store/selectors/shared";
 import { displayAttribute, parseCardTextHtml } from "@/utils/card-utils";
-import { SPECIAL_CARD_CODES } from "@/utils/constants";
 import { cx } from "@/utils/cx";
 import css from "./card-name.module.css";
-import { ExperienceDots } from "./experience-dots";
 
 interface Props {
   card: Card;
@@ -20,14 +18,12 @@ interface Props {
 export function CardName(props: Props) {
   const {
     card,
-    cardLevelDisplay,
     cardShowCollectionNumber,
     cardShowUniqueIcon,
     children,
     className,
     invert,
   } = props;
-  const level = cardLevel(card);
 
   return (
     <div className={cx(css["name"], className)} data-testid="card-name-inner">
@@ -43,14 +39,9 @@ export function CardName(props: Props) {
           }),
         }}
       />
-      {!!level && cardLevelDisplay === "dots" && <ExperienceDots xp={level} />}
-      {level != null && cardLevelDisplay === "text" && (
-        <span className={css["xp"]}>({level})</span>
+      {cardShowCollectionNumber && (
+        <CardPackDetail card={card} invert={invert} />
       )}
-      {cardShowCollectionNumber &&
-        card.code !== SPECIAL_CARD_CODES.RANDOM_BASIC_WEAKNESS && (
-          <CardPackDetail card={card} invert={invert} />
-        )}
     </div>
   );
 }

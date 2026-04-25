@@ -4,7 +4,6 @@ import type { ChangeRecord } from "../lib/deck-edits";
 type UndoEntry = {
   changes: ChangeRecord;
   date_update: string;
-  version: string;
 };
 
 export type Folder = {

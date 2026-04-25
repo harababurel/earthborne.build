@@ -1,17 +1,11 @@
 import type { Card } from "@arkham-build/shared";
-import {
-  APPROACH_ORDER,
-  ASPECT_ORDER,
-  ASSET_SLOT_ORDER,
-  SKILL_KEYS,
-} from "@arkham-build/shared";
+import { APPROACH_ORDER, ASPECT_ORDER } from "@arkham-build/shared";
 import { createSelector } from "reselect";
 import {
   displayAttribute,
   official,
   splitMultiValue,
 } from "@/utils/card-utils";
-import { NO_SLOT_STRING } from "@/utils/constants";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
 import { capitalize, displayPackName } from "@/utils/formatting";
 import type { Filter } from "@/utils/fp";
@@ -21,13 +15,10 @@ import { isEmpty } from "@/utils/is-empty";
 import { time, timeEnd } from "@/utils/time";
 import type { Interpreter } from "../lib/buildql/interpreter";
 import {
-  filterActions,
   filterApproachIcons,
   filterAspectRequirement,
-  filterAssets,
   filterBacksides,
   filterCost,
-  filterCycleCode,
   filterDuplicates,
   filterDuplicatesFromContext,
   filterEncounterCards,
@@ -37,15 +28,11 @@ import {
   filterHealthProp,
   filterIllustrator,
   filterInvestigatorAccess,
-  filterInvestigatorSkills,
-  filterInvestigatorWeaknessAccess,
   filterMythosCards,
   filterOwnership,
   filterPackCode,
   filterProperties,
   filterSetCode,
-  filterSkillIcons,
-  filterSubtypes,
   filterTraits,
   filterType,
 } from "../lib/filtering";
@@ -58,11 +45,7 @@ import {
   sortByEncounterSet,
   sortByName,
 } from "../lib/sorting";
-import {
-  type CardWithRelations,
-  isResolvedDeck,
-  type ResolvedDeck,
-} from "../lib/types";
+import { isResolvedDeck, type ResolvedDeck } from "../lib/types";
 import type { Cycle } from "../schemas/cycle.schema";
 import type { Pack } from "../schemas/pack.schema";
 import type { StoreState } from "../slices";
@@ -131,18 +114,10 @@ function makeUserFilter(
 
     switch (filterValue.type) {
       case "action": {
-        const value = filterValue.value as MultiselectFilter;
-        if (value.length) {
-          const filter = filterActions(value);
-          if (filter) filters.push(filter);
-        }
         break;
       }
 
       case "asset": {
-        const value = filterValue.value as AssetFilter;
-        const filter = filterAssets(value, lookupTables);
-        if (filter) filters.push(filter);
         break;
       }
 
@@ -174,11 +149,6 @@ function makeUserFilter(
       }
 
       case "cycle": {
-        const value = filterValue.value as MultiselectFilter;
-        if (value.length) {
-          const filter = filterCycleCode(value, metadata, lookupTables);
-          if (filter) filters.push(filter);
-        }
         break;
       }
 
@@ -221,13 +191,8 @@ function makeUserFilter(
               targetDeck: targetDeck === "both" ? undefined : targetDeck,
             },
           );
-          const weaknessFilter = filterInvestigatorWeaknessAccess(
-            metadata.cards[value],
-            { targetDeck: targetDeck === "both" ? undefined : targetDeck },
-          );
 
           if (accessFilter) filter.push(accessFilter);
-          if (weaknessFilter) filter.push(weaknessFilter);
 
           filters.push(or(filter));
         }
@@ -252,9 +217,6 @@ function makeUserFilter(
       }
 
       case "skill_icons": {
-        const value = filterValue.value as SkillIconsFilter;
-        const filter = filterSkillIcons(value);
-        if (filter) filters.push(filter);
         break;
       }
 
@@ -295,9 +257,6 @@ function makeUserFilter(
       }
 
       case "investigator_skills": {
-        const value = filterValue.value as InvestigatorSkillsFilter;
-        const filter = filterInvestigatorSkills(value);
-        if (filter) filters.push(filter);
         break;
       }
 
@@ -312,11 +271,6 @@ function makeUserFilter(
       }
 
       case "subtype": {
-        const value = filterValue.value as SubtypeFilter;
-        if (value) {
-          const filter = filterSubtypes(value);
-          if (filter) filters.push(filter);
-        }
         break;
       }
 
@@ -431,12 +385,7 @@ const selectDeckInvestigatorFilter = createSelector(
       },
     );
 
-    const weaknessFilter = filterInvestigatorWeaknessAccess(roleCard, {
-      targetDeck: targetDeck === "both" ? undefined : targetDeck,
-    });
-
     if (investigatorFilter) ors.push(investigatorFilter);
-    if (weaknessFilter) ors.push(weaknessFilter);
 
     return or(ors);
   },
@@ -681,14 +630,6 @@ export const selectListFilterProperties = createSelector(
     const health = { min: Number.MAX_SAFE_INTEGER, max: 0 };
     const sanity = { min: Number.MAX_SAFE_INTEGER, max: 0 };
 
-    const skills = SKILL_KEYS.reduce(
-      (acc, key) => {
-        acc[key] = { min: Number.MAX_SAFE_INTEGER, max: 0 };
-        return acc;
-      },
-      {} as Record<string, { min: number; max: number }>,
-    );
-
     const actions = new Set<string>();
     const approachIcons = new Set<string>();
     const aspectRequirements = new Set<string>();
@@ -805,7 +746,6 @@ export const selectListFilterProperties = createSelector(
       packs,
       sets,
       sanity,
-      skills,
       traits,
       types,
     };
@@ -907,19 +847,6 @@ export const selectUsesMapper = createSelector(
   },
 );
 
-export const selectSlotsMapper = createSelector(
-  selectLocaleSortingCollator,
-  (_) => {
-    return (code: string) => {
-      const displayStr =
-        code === NO_SLOT_STRING
-          ? i18n.t("common.slot.none")
-          : i18n.t(`common.slot.${code.toLowerCase()}`);
-      return { code, name: displayStr };
-    };
-  },
-);
-
 export const selectAssetOptions = createSelector(
   selectLookupTables,
   selectLocaleSortingCollator,
@@ -934,22 +861,12 @@ export const selectAssetOptions = createSelector(
       }))
       .sort((a, b) => collator.compare(a.name, b.name));
 
-    const skillBoosts = SKILL_KEYS.filter((x) => x !== "wild");
-
     uses.sort();
 
     return {
       health: filterProps.health,
       sanity: filterProps.sanity,
       uses,
-      slots: [
-        { code: NO_SLOT_STRING, name: i18n.t("common.slot.none") },
-        ...ASSET_SLOT_ORDER.map((code) => ({
-          code,
-          name: i18n.t(`common.slot.${code.toLowerCase()}`),
-        })),
-      ],
-      skillBoosts,
     };
   },
 );
@@ -1103,15 +1020,6 @@ export const selectCardOptions = createSelector(
       })
       .sort(sortFn);
   },
-);
-
-/**
- * Investigator Skill Icons
- */
-
-export const selectSkillIconsMinMax = createSelector(
-  selectListFilterProperties,
-  ({ skills }) => skills,
 );
 
 /**
@@ -1447,45 +1355,6 @@ export const selectSetOptions = createSelector(
       .sort((a, b) => collator.compare(a.name, b.name));
   },
 );
-
-/**
- * Upgrades
- */
-
-export type AvailableUpgrades = {
-  upgrades: Record<string, Card[]>;
-  shrewdAnalysisPresent: boolean;
-};
-
-// ER has no XP upgrade system — always returns empty.
-export const selectAvailableUpgrades = createSelector(
-  selectDeckInvestigatorFilter,
-  selectMetadata,
-  selectLookupTables,
-  (_: StoreState, deck: ResolvedDeck) => deck,
-  (_: StoreState, __: ResolvedDeck, target: "slots" | "extraSlots") => target,
-  (
-    _accessFilter,
-    _metadata,
-    _lookupTables,
-    _deck,
-    _target,
-  ): AvailableUpgrades => {
-    return { upgrades: {}, shrewdAnalysisPresent: false };
-  },
-);
-
-// ER has no XP upgrade system — always returns empty.
-export function selectResolvedUpgrades(
-  _state: StoreState,
-  availableUpgrades: AvailableUpgrades,
-  _deck: ResolvedDeck,
-  card: Card,
-) {
-  return (availableUpgrades.upgrades[card.code] ?? []).map(
-    (_) => undefined as CardWithRelations | undefined,
-  );
-}
 
 /**
  * Filter changes

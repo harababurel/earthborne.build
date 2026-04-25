@@ -110,7 +110,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
 
   const titleNode = (
     <h1 className={css["title"]} data-testid="view-title">
-      {deck.name} <small>{deck.version}</small>
+      {deck.name}
     </h1>
   );
 

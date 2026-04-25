@@ -24,7 +24,6 @@ export function createDeck(values: Payload): Deck {
     displaced: null,
     maladies: null,
     tags: "",
-    version: "0.1",
     ...values,
   };
 }
@@ -42,7 +41,6 @@ export function cloneDeck(deck: Deck): Deck {
     name: `(Copy) ${deck.name}`,
     date_creation: now,
     date_update: now,
-    version: "0.1",
     source: undefined,
   };
 }

@@ -224,7 +224,6 @@ export const selectUndoHistory = createSelector(
         metadata,
         collator,
       ),
-      version: "current",
       dateUpdate: new Date().toISOString(),
     };
 
@@ -233,7 +232,6 @@ export const selectUndoHistory = createSelector(
     const history = data.undoHistory?.[deck.id].map((undoEntry) => ({
       data: getHistoryEntry(undoEntry.changes, metadata, collator),
       dateUpdate: undoEntry.date_update,
-      version: undoEntry.version,
     }));
 
     return [current, ...history.reverse()];

@@ -641,7 +641,7 @@
         "valid": "Deck is valid."
       },
       "versions": {
-        "entry_title": "Version {{version}}",
+        "entry_title": "Saved version",
         "entry_title_current": "Current version",
         "title": "Versions"
       }

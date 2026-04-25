@@ -36,7 +36,7 @@ export const LOCALES: Record<string, Locale> = {
 export const FLOATING_PORTAL_ID = "floating";
 
 export const ISSUE_URL =
-  "https://github.com/fspoettel/arkham.build/issues/new/choose";
+  "https://github.com/harababurel/earthborne.build/issues/new/choose";
 
 export const MQ_FLOATING_SIDEBAR = "(max-width: 52rem)";
 export const MQ_FLOATING_FILTERS = "(max-width: 75rem)";
@@ -50,18 +50,3 @@ export type StorageProvider = "local" | "shared";
 export const STORAGE_PROVIDERS = ["local", "shared"] as const;
 
 export const DEFAULT_LIST_SORT_ID = "list_default";
-
-// Stubs — Arkham-specific constants removed. Will be replaced in Phase 4.
-export const SPECIAL_CARD_CODES: Record<string, string> = {};
-export const PREVIEW_PACKS: string[] = [];
-export const RETURN_TO_CYCLES: Record<string, string> = {};
-export const SIDEWAYS_TYPE_CODES: string[] = [];
-export const ORIENTATION_CHANGED_CARDS: string[] = [];
-export const NO_SLOT_STRING = "No Slot";
-export const REGEX_USES = /Uses \((\w+)\)/;
-export const REGEX_BONDED = /Bonded \((.*?)\)/;
-export const REGEX_SKILL_BOOST = /\[(\w+)\] \+(\d+)/g;
-export const TAG_REGEX_FALLBACKS: Record<string, RegExp> = {};
-export const ACTION_TEXT_ENTRIES: [string, string][] = [];
-export const REGEX_SUCCEED_BY = /Succeed By (\d+)/;
-export const CARD_SET_ORDER: string[] = [];
