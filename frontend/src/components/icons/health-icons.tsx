@@ -46,6 +46,7 @@ export function SanityIcon({
 }) {
   if (sanity == null) return null;
 
+  const isRanger = typeof sanity === "string" && sanity === "[ranger]";
   const value =
     typeof sanity === "string" ? sanity.replace(/\[per_ranger\]/g, "") : sanity;
   const isPerRanger =
@@ -64,9 +65,15 @@ export function SanityIcon({
             isPerRanger && css["icon-cost-wrapper--per-ranger"],
           )}
         >
-          <CostIcon className={css["icon-cost"]} cost={value} />
-          {isPerRanger && (
-            <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
+          {isRanger ? (
+            <i className={cx(css["icon-ranger"], "core-ranger")} />
+          ) : (
+            <>
+              <CostIcon className={css["icon-cost"]} cost={value} />
+              {isPerRanger && (
+                <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
+              )}
+            </>
           )}
         </div>
       )}
