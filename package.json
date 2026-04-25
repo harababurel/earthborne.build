@@ -1,5 +1,5 @@
 {
-  "name": "arkham-build-monorepo",
+  "name": "earthborne-build-monorepo",
   "version": "3.9.0",
   "private": true,
   "type": "module",

@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import {
   BACKGROUND_PICKS,
   DECK_CARD_COPIES,
@@ -6,7 +6,7 @@ import {
   OUTSIDE_INTEREST_PICKS,
   PERSONALITY_PICKS,
   SPECIALTY_PICKS,
-} from "@arkham-build/shared";
+} from "@earthborne-build/shared";
 import { cardLimit } from "@/utils/card-utils";
 import { time, timeEnd } from "@/utils/time";
 import type { Metadata } from "../slices/metadata.types";

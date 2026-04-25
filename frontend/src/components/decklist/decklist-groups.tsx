@@ -1,4 +1,4 @@
-import type { Card, Slots } from "@arkham-build/shared";
+import type { Card, Slots } from "@earthborne-build/shared";
 import { Fragment, useMemo } from "react";
 import { useStore } from "@/store";
 import {

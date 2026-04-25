@@ -1,4 +1,4 @@
-import type { Card, Recommendation } from "@arkham-build/shared";
+import type { Card, Recommendation } from "@earthborne-build/shared";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { displayAttribute, getCardColor } from "@/utils/card-utils";

@@ -1,5 +1,5 @@
-import type { Card } from "@arkham-build/shared";
-import { APPROACH_ORDER, ASPECT_ORDER } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
+import { APPROACH_ORDER, ASPECT_ORDER } from "@earthborne-build/shared";
 import { createSelector } from "reselect";
 import {
   displayAttribute,

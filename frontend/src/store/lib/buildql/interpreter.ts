@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { fuzzyMatch, prepareNeedle } from "@/utils/fuzzy";
 import { BackArray } from "./fields";
 import type {

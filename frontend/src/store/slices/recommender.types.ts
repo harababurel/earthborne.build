@@ -1,4 +1,4 @@
-import type { Id } from "@arkham-build/shared";
+import type { Id } from "@earthborne-build/shared";
 
 export type RecommenderState = {
   recommender: {

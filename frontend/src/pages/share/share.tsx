@@ -1,4 +1,4 @@
-import type { Deck } from "@arkham-build/shared";
+import type { Deck } from "@earthborne-build/shared";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { createSelector } from "reselect";

@@ -1,4 +1,4 @@
-import { APPROACH_ORDER, type ApproachKey } from "@arkham-build/shared";
+import { APPROACH_ORDER, type ApproachKey } from "@earthborne-build/shared";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import {

@@ -1,4 +1,4 @@
-import type { DecklistSearchRequest } from "@arkham-build/shared";
+import type { DecklistSearchRequest } from "@earthborne-build/shared";
 import { sql } from "kysely";
 import type { Database } from "../db.ts";
 

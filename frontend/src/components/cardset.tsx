@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { CircleHelpIcon } from "lucide-react";
 import { useStore } from "@/store";
 import type { CardSet as CardSetType } from "@/store/lib/types";

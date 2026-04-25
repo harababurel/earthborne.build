@@ -1,4 +1,4 @@
-import type { DecklistSearchResult } from "@arkham-build/shared";
+import type { DecklistSearchResult } from "@earthborne-build/shared";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { LoaderCircleIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";

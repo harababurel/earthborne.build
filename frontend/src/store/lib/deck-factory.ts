@@ -1,4 +1,4 @@
-import type { Deck } from "@arkham-build/shared";
+import type { Deck } from "@earthborne-build/shared";
 import { randomId } from "@/utils/crypto";
 import i18n from "@/utils/i18n";
 

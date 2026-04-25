@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { displayPackName, shortenPackName } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
 import type { GroupingType } from "../slices/lists.types";

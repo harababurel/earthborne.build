@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { FloatingPortal } from "@floating-ui/react";
 import { FLOATING_PORTAL_ID } from "@/utils/constants";
 import { CardTooltip } from "./card-tooltip";

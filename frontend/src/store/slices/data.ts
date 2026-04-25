@@ -1,4 +1,4 @@
-import { type Deck, type Id, isDeck } from "@arkham-build/shared";
+import { type Deck, type Id, isDeck } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { ARCHIVE_FOLDER_ID } from "@/utils/constants";

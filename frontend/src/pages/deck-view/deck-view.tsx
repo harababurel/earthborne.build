@@ -1,4 +1,4 @@
-import type { Id } from "@arkham-build/shared";
+import type { Id } from "@earthborne-build/shared";
 import { useEffect } from "react";
 import { useParams } from "wouter";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";

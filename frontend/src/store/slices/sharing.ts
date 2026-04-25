@@ -1,4 +1,4 @@
-import { type Deck, isDeck } from "@arkham-build/shared";
+import { type Deck, isDeck } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { formatDeckImport, formatDeckShare } from "../lib/deck-io";

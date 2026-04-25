@@ -1,4 +1,4 @@
-import type { Deck } from "@arkham-build/shared";
+import type { Deck } from "@earthborne-build/shared";
 import type { Annotations, DeckMeta } from "./types";
 
 export function decodeDeckMeta(deck: Deck): DeckMeta {

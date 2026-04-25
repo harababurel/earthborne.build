@@ -3,7 +3,7 @@ import {
   CARD_TYPE_ORDER,
   type Card,
   type CardType,
-} from "@arkham-build/shared";
+} from "@earthborne-build/shared";
 import { displayAttribute, splitMultiValue } from "@/utils/card-utils";
 import type { SortingType } from "../slices/lists.types";
 import type { Metadata } from "../slices/metadata.types";

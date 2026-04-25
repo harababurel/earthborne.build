@@ -1,5 +1,5 @@
 // Stub — ER has no multiclass/multi-faction cards.
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function MulticlassIcons(_props: {

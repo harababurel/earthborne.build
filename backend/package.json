@@ -1,5 +1,5 @@
 {
-  "name": "@arkham-build/backend",
+  "name": "@earthborne-build/backend",
   "main": "src/main.ts",
   "type": "module",
   "engines": {

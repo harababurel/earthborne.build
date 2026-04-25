@@ -3,7 +3,7 @@ import type {
   FanMadeProject,
   FanMadeProjectInfo,
   SealedDeckResponse,
-} from "@arkham-build/shared";
+} from "@earthborne-build/shared";
 import {
   type Deck,
   encodeSearch,
@@ -12,7 +12,7 @@ import {
   type RecommendationsRequest,
   type RecommendationsResponse,
   RecommendationsResponseSchema,
-} from "@arkham-build/shared";
+} from "@earthborne-build/shared";
 import { assert } from "@/utils/assert";
 import type { DataVersion } from "../schemas/data-version.schema";
 import type { EncounterSet } from "../schemas/encounter-set.schema";

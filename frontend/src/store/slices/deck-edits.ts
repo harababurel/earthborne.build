@@ -1,4 +1,4 @@
-import type { Id } from "@arkham-build/shared";
+import type { Id } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { displayAttribute } from "@/utils/card-utils";

@@ -1,4 +1,4 @@
-import { FanMadeProjectInfoSchema } from "@arkham-build/shared";
+import { FanMadeProjectInfoSchema } from "@earthborne-build/shared";
 import { type Context, Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
 import { upsertFanMadeProjectInfo } from "../db/queries/fan-made-project-info.ts";

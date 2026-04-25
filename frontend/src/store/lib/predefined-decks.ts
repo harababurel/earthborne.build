@@ -1,5 +1,5 @@
-import type { Deck } from "@arkham-build/shared";
-import { DECK_CARD_COPIES } from "@arkham-build/shared";
+import type { Deck } from "@earthborne-build/shared";
+import { DECK_CARD_COPIES } from "@earthborne-build/shared";
 import { createDeck } from "./deck-factory";
 
 const C = DECK_CARD_COPIES;

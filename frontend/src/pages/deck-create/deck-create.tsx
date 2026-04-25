@@ -8,7 +8,7 @@ import {
   PERSONALITY_PICKS,
   SPECIALTY_PICKS,
   SPECIALTY_TYPES,
-} from "@arkham-build/shared";
+} from "@earthborne-build/shared";
 import type { TFunction } from "i18next";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";

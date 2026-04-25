@@ -1,4 +1,4 @@
-import type { Deck, Id } from "@arkham-build/shared";
+import type { Deck, Id } from "@earthborne-build/shared";
 import type {
   AllCardResponse,
   DataVersionResponse,

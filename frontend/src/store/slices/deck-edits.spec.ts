@@ -1,4 +1,4 @@
-import { DeckSchema } from "@arkham-build/shared";
+import { DeckSchema } from "@earthborne-build/shared";
 import deckExtraSlots from "@test/fixtures/decks/extra_slots.json";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { StoreApi } from "zustand";

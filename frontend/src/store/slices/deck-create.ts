@@ -1,4 +1,4 @@
-import { DECK_CARD_COPIES } from "@arkham-build/shared";
+import { DECK_CARD_COPIES } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { selectMetadata } from "../selectors/shared";

@@ -1,4 +1,4 @@
-import type { Card, Id } from "@arkham-build/shared";
+import type { Card, Id } from "@earthborne-build/shared";
 import { createSelector } from "reselect";
 import { resolveDeck, resolveDeckSummary } from "@/store/lib/resolve-deck";
 import { time, timeEnd } from "@/utils/time";

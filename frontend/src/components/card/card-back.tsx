@@ -1,4 +1,4 @@
-import type { Card as CardType } from "@arkham-build/shared";
+import type { Card as CardType } from "@earthborne-build/shared";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ResolvedCard } from "@/store/lib/types";

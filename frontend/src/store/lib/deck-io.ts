@@ -1,4 +1,4 @@
-import type { Card, Deck, DeckProblem } from "@arkham-build/shared";
+import type { Card, Deck, DeckProblem } from "@earthborne-build/shared";
 import {
   type DeckValidationResult,
   validateDeck,

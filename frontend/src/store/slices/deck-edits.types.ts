@@ -1,4 +1,4 @@
-import type { Card, Id } from "@arkham-build/shared";
+import type { Card, Id } from "@earthborne-build/shared";
 import type { Annotations } from "../lib/types";
 
 export type Slot = "slots" | "rewards" | "displaced" | "maladies";

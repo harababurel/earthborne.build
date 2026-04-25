@@ -6,7 +6,7 @@
  * replaced with ER equivalents or stubs.
  */
 
-import type { Card, SealedDeckResponse } from "@arkham-build/shared";
+import type { Card, SealedDeckResponse } from "@earthborne-build/shared";
 import { official, splitMultiValue } from "@/utils/card-utils";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
 import type { Filter } from "@/utils/fp";

@@ -1,4 +1,4 @@
-import type { Card, Deck } from "@arkham-build/shared";
+import type { Card, Deck } from "@earthborne-build/shared";
 import type { Cycle } from "../schemas/cycle.schema";
 import type { EncounterSet } from "../schemas/encounter-set.schema";
 import type { SubType, Type } from "../schemas/metadata.schema";

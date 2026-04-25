@@ -1,4 +1,4 @@
-import type { ApproachKey } from "@arkham-build/shared";
+import type { ApproachKey } from "@earthborne-build/shared";
 
 // biome-ignore lint/style/useComponentExportOnlyModules: constant exported alongside component
 export const APPROACH_ICON_DATA: Record<

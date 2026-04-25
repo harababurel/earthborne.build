@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { getCardColor, thumbnailUrl } from "@/utils/card-utils";

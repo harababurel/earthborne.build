@@ -1,4 +1,4 @@
-import type { Card as CardType } from "@arkham-build/shared";
+import type { Card as CardType } from "@earthborne-build/shared";
 import { ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useSearchParams } from "wouter";

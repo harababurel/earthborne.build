@@ -1,4 +1,4 @@
-import { ASPECT_ORDER } from "@arkham-build/shared";
+import { ASPECT_ORDER } from "@earthborne-build/shared";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { RangeSelect } from "@/components/ui/range-select";

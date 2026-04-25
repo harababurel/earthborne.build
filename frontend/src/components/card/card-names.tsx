@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { useCallback } from "react";
 import { Link } from "wouter";
 import { useStore } from "@/store";

@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { createSelector } from "reselect";
 import { official } from "@/utils/card-utils";
 import i18n from "@/utils/i18n";

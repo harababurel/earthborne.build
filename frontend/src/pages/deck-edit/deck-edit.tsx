@@ -1,4 +1,4 @@
-import type { Card as CardT, Slots } from "@arkham-build/shared";
+import type { Card as CardT, Slots } from "@earthborne-build/shared";
 import { CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";

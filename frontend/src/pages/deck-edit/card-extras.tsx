@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import Attachments from "@/components/attachments/attachments";
 import { getMatchingAttachables } from "@/components/attachments/attachments.helpers";
 import type { ResolvedDeck } from "@/store/lib/types";

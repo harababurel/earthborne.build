@@ -1,4 +1,8 @@
-import type { BackgroundType, Card, SpecialtyType } from "@arkham-build/shared";
+import type {
+  BackgroundType,
+  Card,
+  SpecialtyType,
+} from "@earthborne-build/shared";
 import { describe, expect, it } from "vitest";
 import { validateDeck } from "./deck-validation";
 import type { ResolvedDeck } from "./types";

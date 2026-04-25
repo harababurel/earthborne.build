@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardIcon } from "../card-icon";

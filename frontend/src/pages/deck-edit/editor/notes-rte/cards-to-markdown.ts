@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import type { LookupTables } from "@/store/lib/lookup-tables.types";
 import type { Metadata } from "@/store/slices/metadata.types";
 import { cycleOrPack, displayAttribute } from "@/utils/card-utils";

@@ -1,4 +1,4 @@
-import type { Deck } from "@arkham-build/shared";
+import type { Deck } from "@earthborne-build/shared";
 import { isSpecialCard } from "@/utils/card-utils";
 import type { StoreState } from "../slices";
 import { decodeAnnotations, decodeDeckMeta } from "./deck-meta";

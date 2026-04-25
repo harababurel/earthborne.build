@@ -1,4 +1,4 @@
-import { CARD_TYPE_ORDER } from "@arkham-build/shared";
+import { CARD_TYPE_ORDER } from "@earthborne-build/shared";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import {

@@ -1,4 +1,4 @@
-import type { Deck, Id, Slots } from "@arkham-build/shared";
+import type { Deck, Id, Slots } from "@earthborne-build/shared";
 import type { EditState, Slot } from "../slices/deck-edits.types";
 import type { Metadata } from "../slices/metadata.types";
 import {

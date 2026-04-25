@@ -1,5 +1,5 @@
-import type { Card } from "@arkham-build/shared";
-import { MAX_EQUIP_VALUE } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
+import { MAX_EQUIP_VALUE } from "@earthborne-build/shared";
 import { getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import css from "./card-equip-load.module.css";

@@ -1,4 +1,4 @@
-name: api-arkham-build
+name: api-earthborne-build
 
 services:
   db:

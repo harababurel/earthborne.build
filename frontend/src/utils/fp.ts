@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import type { DeckSummary, ResolvedDeck } from "@/store/lib/types";
 
 type Filterable = Card | DeckSummary | ResolvedDeck;

@@ -1,4 +1,4 @@
-import type { Deck } from "@arkham-build/shared";
+import type { Deck } from "@earthborne-build/shared";
 
 export function isEvolvedDeck(
   deck: Pick<Deck, "rewards" | "displaced" | "maladies">,

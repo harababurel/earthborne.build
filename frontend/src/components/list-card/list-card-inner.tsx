@@ -1,9 +1,9 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import {
   APPROACH_ORDER,
   type ApproachKey,
   cardApproachIcons,
-} from "@arkham-build/shared";
+} from "@earthborne-build/shared";
 import type { ReferenceType } from "@floating-ui/react";
 import { FileWarningIcon, StarIcon } from "lucide-react";
 import { useCallback } from "react";

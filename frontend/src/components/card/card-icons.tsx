@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { cx } from "@/utils/cx";
 import { CardHealth } from "../card-health";
 

@@ -1,4 +1,4 @@
-import type { Card, Slots } from "@arkham-build/shared";
+import type { Card, Slots } from "@earthborne-build/shared";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { ListState, TargetDeck } from "@/store/selectors/lists";
 import type { ListDisplay, Search } from "@/store/slices/lists.types";

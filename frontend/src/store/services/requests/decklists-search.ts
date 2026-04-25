@@ -4,7 +4,7 @@ import {
   type DecklistSearchResponse,
   decodeSearch,
   encodeSearch,
-} from "@arkham-build/shared";
+} from "@earthborne-build/shared";
 import { apiV2Request } from "./shared";
 
 export type DecklistsFiltersState = {

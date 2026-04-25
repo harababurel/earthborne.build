@@ -1,4 +1,4 @@
-import type { Id } from "@arkham-build/shared";
+import type { Id } from "@earthborne-build/shared";
 import { useStore } from "@/store";
 import { Tag } from "../ui/tag";
 import { FolderIcon } from "./folder-icon";

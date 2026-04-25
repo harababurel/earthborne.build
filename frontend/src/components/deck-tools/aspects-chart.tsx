@@ -1,4 +1,4 @@
-import type { AspectKey } from "@arkham-build/shared";
+import type { AspectKey } from "@earthborne-build/shared";
 import type { TFunction } from "i18next";
 import { useId, useMemo } from "react";
 import { useTranslation } from "react-i18next";

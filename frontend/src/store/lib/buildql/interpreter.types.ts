@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import type { i18n } from "i18next";
 import type { Metadata } from "@/store/slices/metadata.types";
 import type { LookupTables } from "../lookup-tables.types";

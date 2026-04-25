@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import type { Filter } from "@/utils/fp";
 import type { CardTypeTab } from "./set-tree";
 

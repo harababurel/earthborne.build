@@ -7,7 +7,7 @@ on:
     inputs:
       BASE_URL:
         required: true
-        default: https://arkham.build
+        default: https://earthborne.build
 
 jobs:
   e2e:

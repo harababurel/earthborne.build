@@ -1,4 +1,4 @@
-import type { SealedDeckResponse } from "@arkham-build/shared";
+import type { SealedDeckResponse } from "@earthborne-build/shared";
 import { BookLockIcon, XIcon } from "lucide-react";
 import { useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";

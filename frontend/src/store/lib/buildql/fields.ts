@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { splitMultiValue } from "@/utils/card-utils";
 import { displayPackName } from "@/utils/formatting";
 import type {

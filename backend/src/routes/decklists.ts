@@ -1,4 +1,4 @@
-import { DecklistSearchRequestSchema } from "@arkham-build/shared";
+import { DecklistSearchRequestSchema } from "@earthborne-build/shared";
 import { Hono } from "hono";
 import { searchSharedDecks } from "../db/queries/decklists.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";

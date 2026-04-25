@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { createSelector } from "reselect";
 import { assert } from "@/utils/assert";
 import { resolveCardWithRelations } from "../lib/resolve-card";

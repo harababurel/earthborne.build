@@ -1,4 +1,4 @@
-import { BACKGROUND_TYPES } from "@arkham-build/shared";
+import { BACKGROUND_TYPES } from "@earthborne-build/shared";
 import { useTranslation } from "react-i18next";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { Field, FieldLabel } from "@/components/ui/field";

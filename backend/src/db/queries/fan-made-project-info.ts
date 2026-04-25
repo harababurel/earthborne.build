@@ -1,4 +1,4 @@
-import type { FanMadeProjectInfo } from "@arkham-build/shared";
+import type { FanMadeProjectInfo } from "@earthborne-build/shared";
 import type { Database } from "../db.ts";
 
 export function getAllFanMadeProjectInfos(db: Database) {

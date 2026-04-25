@@ -1,4 +1,4 @@
-import type { AspectKey } from "@arkham-build/shared";
+import type { AspectKey } from "@earthborne-build/shared";
 import { cx } from "@/utils/cx";
 import css from "./aspect-icon.module.css";
 

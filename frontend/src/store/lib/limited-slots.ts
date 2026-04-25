@@ -1,5 +1,5 @@
 // Stub — ER has no deck-option limited-slot system.
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import type { Interpreter } from "./buildql/interpreter";
 import type { ResolvedDeck } from "./types";
 

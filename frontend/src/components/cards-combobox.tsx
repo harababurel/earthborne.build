@@ -1,4 +1,4 @@
-import type { Card } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { displayAttribute } from "@/utils/card-utils";

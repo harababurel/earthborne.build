@@ -1,5 +1,5 @@
-import type { Card } from "@arkham-build/shared";
-import { IRREGULAR_TOKEN_PLURALS } from "@arkham-build/shared";
+import type { Card } from "@earthborne-build/shared";
+import { IRREGULAR_TOKEN_PLURALS } from "@earthborne-build/shared";
 import { useTranslation } from "react-i18next";
 import {
   displayAttribute,
@@ -59,7 +59,12 @@ export function CardDetails(props: Props) {
             <div className={css["token-count"]}>
               {numericalStr(countDisplay)}
               {countIsPerRanger && (
-                <i className={cx(css["token-count-per-ranger"], "core-per_ranger")} />
+                <i
+                  className={cx(
+                    css["token-count-per-ranger"],
+                    "core-per_ranger",
+                  )}
+                />
               )}
             </div>
             <div className={css["token-label"]}>{tokenLabel}</div>
