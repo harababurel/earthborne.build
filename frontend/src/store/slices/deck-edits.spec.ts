@@ -19,7 +19,13 @@ describe("deck-view slice", () => {
         deckEdits: {},
         data: {
           decks: {
-            "deck-id": DeckSchema.parse(deckExtraSlots),
+            "deck-id": DeckSchema.parse({
+              ...deckExtraSlots,
+              aspect_code: "awareness",
+              role_code: "10001",
+              background: "artisan",
+              specialty: "forager",
+            }),
           },
           history: {
             "deck-id": [],

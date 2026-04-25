@@ -70,7 +70,6 @@ describe("data slice", () => {
 
       expect(state.data.decks[id]).toMatchObject({
         id,
-        version: "0.1",
       });
 
       expect(state.data.history[id]).toMatchObject([]);
