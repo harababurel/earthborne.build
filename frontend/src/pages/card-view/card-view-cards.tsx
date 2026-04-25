@@ -6,7 +6,6 @@ import { Card } from "@/components/card/card";
 import { OwnershipPartitionedCardList } from "@/components/ownership-partitioned-card-list";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store";
-import { filterBacksides } from "@/store/lib/filtering";
 import { getRelatedCards } from "@/store/lib/resolve-card";
 import { sortByPosition } from "@/store/lib/sorting";
 import type { CardWithRelations } from "@/store/lib/types";
@@ -67,7 +66,6 @@ function CardSetNav(props: { currentCard: CardWithRelations }) {
       Object.values(metadata.cards)
         .filter(
           and([
-            filterBacksides,
             (card) => card.pack_code === targetPack.code,
             (card) =>
               !currentCard.card.set_code ||

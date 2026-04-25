@@ -32,24 +32,12 @@ export function splitMultiValue(s: string | null | undefined) {
   }, []);
 }
 
-// Stub — ER has no skill icons.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function hasSkillIcons(_card: Card) {
-  return false;
-}
-
 // Stub — ER has no faction color system; will be replaced with aspect colors.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getCardColor(card: Card, _prop = "color") {
   const aspect = card.energy_aspect ?? card.aspect_requirement_type;
   if (aspect) return `color-${aspect}`;
   return "color-neutral";
-}
-
-// Stub — ER cards are not displayed sideways.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function sideways(_card: Card) {
-  return false;
 }
 
 type CardBackType = "player" | "card";
@@ -69,12 +57,6 @@ export function cardBackTypeUrl(card: Card) {
     return DEFAULT_PLAYER_CARD_BACK_URL;
   }
   return `${import.meta.env.VITE_CARD_IMAGE_URL}/back_${type}.jpg`;
-}
-
-// In ER, double-sided cards are not "reversed" in the AH sense.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function reversed(_card: Card) {
-  return false;
 }
 
 export function imageUrl(code: string) {
@@ -135,14 +117,6 @@ export function parseCardTitle(title: string) {
   return title.replaceAll(/\[((?:\w|_)+?)\]/g, `<i class="icon-$1"></i>`);
 }
 
-// Stub — ER has no exile slots.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function decodeExileSlots(
-  _s: string | null | undefined,
-): Record<string, number> {
-  return {};
-}
-
 // In ER, "special" cards are non-deck-buildable: role, aspect, path cards etc.
 export function isSpecialCard(card: Card) {
   const deckBuildableTypes = new Set([
@@ -166,18 +140,6 @@ export function getCanonicalCardCode(card: Card) {
   return card.code;
 }
 
-// Stub — ER has no weaknesses/basic weakness mechanic.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function isRandomBasicWeaknessLike(_card: Card) {
-  return false;
-}
-
-// Stub — ER has no static investigator concept.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function isStaticInvestigator(_card: Card) {
-  return false;
-}
-
 export function cardLimit(card: Card, limitOverride?: number) {
   return limitOverride ?? card.deck_limit ?? 0;
 }
@@ -197,12 +159,6 @@ export function displayAttribute(
   key: "text" | "name" | "traits" | "flavor",
 ) {
   return card?.[key] ?? "";
-}
-
-// Stub — ER has no cycle/standalone-pack distinction; always return the pack.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function cycleOrPack(_cycle: Cycle, pack: Pack) {
-  return pack;
 }
 
 export function numericalIcon(num: string | number | null | undefined) {
@@ -234,12 +190,6 @@ export function cardUrl(card: Card) {
 export function oldFormatCardUrl(card: Card) {
   const baseUrl = cardUrl(card);
   return `${baseUrl}?old_format=true`;
-}
-
-// Stub — ER has no card pool extension mechanic.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function canShowCardPoolExtension(_card: Card) {
-  return false;
 }
 
 export function doubleSidedBackCard(card: Card, t: TFunction) {

@@ -1,7 +1,7 @@
 import type { Card } from "@earthborne-build/shared";
 import type { LookupTables } from "@/store/lib/lookup-tables.types";
 import type { Metadata } from "@/store/slices/metadata.types";
-import { cycleOrPack, displayAttribute } from "@/utils/card-utils";
+import { displayAttribute } from "@/utils/card-utils";
 import { displayPackName } from "@/utils/formatting";
 
 export type CardFormat =
@@ -277,10 +277,9 @@ function renderSet(
   metadata: Metadata,
 ) {
   const pack = metadata.packs[card.pack_code];
-  const cycle = metadata.cycles[pack.cycle_code];
   const config = format.placeholderOptions.set;
 
-  let str = displayPackName(cycleOrPack(cycle, pack));
+  let str = displayPackName(pack);
 
   if (config.collectionNumber) {
     str += ` #${card.set_position ?? card.set_code}`;

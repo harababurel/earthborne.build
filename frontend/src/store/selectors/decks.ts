@@ -2,7 +2,6 @@ import type { Card, Id } from "@earthborne-build/shared";
 import { createSelector } from "reselect";
 import { resolveDeck, resolveDeckSummary } from "@/store/lib/resolve-deck";
 import { time, timeEnd } from "@/utils/time";
-import { applyCardChanges } from "../lib/card-edits";
 import {
   applyDeckEdits,
   type ChangeRecord,
@@ -169,7 +168,7 @@ function getHistoryEntry(
     slots: Object.entries(stats.changes.slots)
       .map(([code, diff]) => ({
         diff,
-        card: applyCardChanges(metadata.cards[code], metadata, undefined),
+        card: metadata.cards[code],
       }))
       .sort(sortDiff),
   };

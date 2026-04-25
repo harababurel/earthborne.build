@@ -1,7 +1,7 @@
 import type { Card } from "@earthborne-build/shared";
 import { useCallback, useState } from "react";
 import type { CardWithRelations, ResolvedCard } from "@/store/lib/types";
-import { displayAttribute, sideways } from "@/utils/card-utils";
+import { displayAttribute } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardScan } from "../card-scan";
 import { CardThumbnail } from "../card-thumbnail";
@@ -41,7 +41,7 @@ export function CardFace(props: Props) {
   } = props;
 
   const { card } = resolvedCard;
-  const [isSideways, setSideways] = useState(sideways(card));
+  const [isSideways, setSideways] = useState(false);
 
   const showImage = !omitImage;
 

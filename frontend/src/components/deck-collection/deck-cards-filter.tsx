@@ -3,11 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { CardsCombobox } from "@/components/cards-combobox";
 import { useStore } from "@/store";
-import {
-  filterDuplicates,
-  filterMythosCards,
-  filterType,
-} from "@/store/lib/filtering";
+import { filterType } from "@/store/lib/filtering";
 import { makeSortFunction } from "@/store/lib/sorting";
 import {
   selectCardsChanges,
@@ -41,11 +37,7 @@ export function DeckCardsFilter({ containerClass }: Props) {
   const resetFilter = useStore((state) => state.resetDeckFilter);
 
   const playerCards = useMemo(() => {
-    const playerCardFilter = and([
-      filterMythosCards,
-      not(filterType(["role"]) ?? (() => true)),
-      filterDuplicates,
-    ]);
+    const playerCardFilter = and([not(filterType(["role"]) ?? (() => true))]);
 
     const cards = Object.values(metadata.cards).filter(playerCardFilter);
     const sortFn = makeSortFunction(

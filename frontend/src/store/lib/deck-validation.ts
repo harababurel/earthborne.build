@@ -155,12 +155,6 @@ export type DeckValidationError =
   | TooFewCardsError
   | DeckRequirementsNotMetError;
 
-// Kept for API compatibility with callers that have not yet been updated.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getAdditionalDeckOptions(_deck: ResolvedDeck) {
-  return [];
-}
-
 export function validateDeck(
   deck: ResolvedDeck,
   _metadata: Metadata,

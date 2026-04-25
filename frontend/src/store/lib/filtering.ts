@@ -1,11 +1,3 @@
-/**
- * Earthborne Rangers card filtering functions.
- *
- * Function signatures are kept compatible with the original AH version where
- * callers have not yet been updated (Phase 5). AH-specific implementations are
- * replaced with ER equivalents or stubs.
- */
-
 import type { Card, SealedDeckResponse } from "@earthborne-build/shared";
 import { official, splitMultiValue } from "@/utils/card-utils";
 import { resolveLimitedPoolPacks } from "@/utils/environments";
@@ -23,16 +15,11 @@ type AttributeFilter = {
 import type {
   ApproachIconsFilter,
   AspectRequirementFilter,
-  AssetFilter,
   CostFilter,
   EquipFilter,
-  InvestigatorSkillsFilter,
-  LevelFilter,
   List,
   MultiselectFilter,
   PropertiesFilter,
-  SkillIconsFilter,
-  SubtypeFilter,
 } from "../slices/lists.types";
 import type { Metadata } from "../slices/metadata.types";
 import type { Interpreter } from "./buildql/interpreter";
@@ -43,16 +30,6 @@ import type { ResolvedDeck } from "./types";
 /**
  * Misc. card identity filters
  */
-
-// ER has no duplicate/hidden cards, so all cards pass.
-export function filterDuplicates(_card: Card) {
-  return true;
-}
-
-// ER has no alternate-art or parallel cards, so all cards pass.
-export function filterAlternates(_card: Card) {
-  return true;
-}
 
 // Non-player cards in ER are mapped to the "encounter" card type filter.
 export function filterEncounterCards(card: Card) {
@@ -66,28 +43,8 @@ export function filterEncounterCards(card: Card) {
   ].includes(card.type_code);
 }
 
-// ER has no Mythos faction. All cards pass.
-export function filterMythosCards(_card: Card) {
-  return true;
-}
-
-// ER has no separate back-side card entries. All cards pass.
-export function filterBacksides(_card: Card) {
-  return true;
-}
-
 export function filterOfficial(card: Card) {
   return official(card);
-}
-
-/**
- * Actions — ER has no action icon filter; stub returns undefined.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function filterActions(
-  _filterState: MultiselectFilter,
-): Filter | undefined {
-  return undefined;
 }
 
 /**
@@ -107,18 +64,6 @@ export function filterHealthProp(
     if (v == null) return false;
     return v >= min && v <= max;
   };
-}
-
-/**
- * Asset filter — ER has no slot/uses/skill-boost filter. Always returns undefined.
- */
-export function filterAssets(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _value: AssetFilter,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _lookupTables: LookupTables,
-): Filter | undefined {
-  return undefined;
 }
 
 /**
@@ -286,20 +231,6 @@ export function filterApproachIcons(
 }
 
 /**
- * Cycle — ER has no cycles. Stub returns undefined.
- */
-export function filterCycleCode(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _filterState: MultiselectFilter,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _metadata: Metadata,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _lookupTables: LookupTables,
-): Filter | undefined {
-  return undefined;
-}
-
-/**
  * Encounter set — uses ER set_code field.
  */
 export function filterEncounterCode(
@@ -320,20 +251,6 @@ export function filterFactions(factions: string[]): Filter | undefined {
     if (!aspect) return false;
     return factions.some((f) => f === aspect);
   };
-}
-
-/**
- * Level / XP — ER has no XP system. Stub returns undefined.
- */
-export function filterLevel(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _filterState: LevelFilter,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _interpreter?: Interpreter,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _ranger?: Card,
-): Filter | undefined {
-  return undefined;
 }
 
 /**
@@ -406,36 +323,6 @@ export function filterProperties(
   }
 
   return filters.length ? and(filters) : undefined;
-}
-
-/**
- * Skill icons — ER has no skill icons. Stub returns undefined.
- */
-export function filterSkillIcons(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _filterState: SkillIconsFilter,
-): Filter | undefined {
-  return undefined;
-}
-
-/**
- * Investigator skills — ER has no investigator skill stats. Stub returns undefined.
- */
-export function filterInvestigatorSkills(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _filterState: InvestigatorSkillsFilter,
-): Filter | undefined {
-  return undefined;
-}
-
-/**
- * Subtypes — ER has no card subtypes. Stub returns undefined.
- */
-export function filterSubtypes(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _filter: SubtypeFilter,
-): Filter | undefined {
-  return undefined;
 }
 
 /**
@@ -574,20 +461,6 @@ export function filterInvestigatorWeaknessAccess(
   _config?: Pick<InvestigatorAccessConfig, "targetDeck">,
 ): Filter {
   return () => false;
-}
-
-/**
- * makeOptionFilter — ER has no deck options. Stub returns undefined.
- * Kept for API compatibility with limited-slots.ts.
- */
-export function makeOptionFilter(
-  _option: unknown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _interpreter?: Interpreter,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _config?: InvestigatorAccessConfig,
-): Filter | undefined {
-  return undefined;
 }
 
 /**

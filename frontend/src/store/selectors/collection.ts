@@ -1,11 +1,7 @@
 import { createSelector } from "reselect";
 import { and } from "@/utils/fp";
 import { isCardOwned } from "../lib/card-ownership";
-import {
-  filterBacksides,
-  filterDuplicates,
-  filterEncounterCards,
-} from "../lib/filtering";
+import { filterEncounterCards } from "../lib/filtering";
 import type { StoreState } from "../slices";
 import { selectLookupTables, selectMetadata } from "./shared";
 
@@ -29,11 +25,7 @@ export const selectTotalOwned = createSelector(
     let ownedPlayerCards = 0;
     let ownedEncounterCards = 0;
 
-    const filter = and([
-      (c) => !(c as unknown as { hidden?: boolean }).hidden,
-      filterBacksides,
-      filterDuplicates,
-    ]);
+    const filter = and([(c) => !(c as unknown as { hidden?: boolean }).hidden]);
 
     for (const card of cards) {
       if (!filter(card)) continue;
@@ -70,11 +62,7 @@ export const selectCycleCardCounts = createSelector(
       packs: {},
     };
 
-    const filter = and([filterBacksides]);
-
     for (const card of Object.values(metadata.cards)) {
-      if (!filter(card)) continue;
-
       const packCode = card.pack_code;
       const isEncounter = filterEncounterCards(card);
 

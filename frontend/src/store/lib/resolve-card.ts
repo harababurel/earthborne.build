@@ -1,6 +1,5 @@
 import { official } from "@/utils/card-utils";
 import type { StoreState } from "../slices";
-import { applyCardChanges } from "./card-edits";
 import type { LookupTables } from "./lookup-tables.types";
 import { makeSortFunction } from "./sorting";
 import type { CardWithRelations, ResolvedCard } from "./types";
@@ -16,10 +15,8 @@ export function resolveCardWithRelations<T extends boolean>(
 ): T extends true ? CardWithRelations | undefined : ResolvedCard | undefined {
   if (!code) return undefined;
 
-  let card = deps.metadata.cards[code];
+  const card = deps.metadata.cards[code];
   if (!card) return undefined;
-
-  card = applyCardChanges(card, deps.metadata, undefined);
 
   const pack = deps.metadata.packs[card.pack_code];
   const type = deps.metadata.types[card.type_code];

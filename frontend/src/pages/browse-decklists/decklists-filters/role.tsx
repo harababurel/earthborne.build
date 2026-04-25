@@ -4,7 +4,7 @@ import { createSelector } from "reselect";
 import { CardsCombobox } from "@/components/cards-combobox";
 import { Field } from "@/components/ui/field";
 import { useStore } from "@/store";
-import { filterDuplicates, filterType } from "@/store/lib/filtering";
+import { filterType } from "@/store/lib/filtering";
 import { resolveCardWithRelations } from "@/store/lib/resolve-card";
 import { makeSortFunction } from "@/store/lib/sorting";
 import {
@@ -23,7 +23,6 @@ const selectRoleCards = createSelector(
     const roleFilter = and([
       filterType(["role"]) ?? (() => true),
       (c) => official(c),
-      filterDuplicates,
     ]);
 
     const roles = Object.values(metadata.cards).filter(roleFilter);

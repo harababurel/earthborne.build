@@ -15,8 +15,6 @@ export type Metadata = {
   // biome-ignore lint/suspicious/noExplicitAny: AH stubs
   factions: Record<string, any>;
   // biome-ignore lint/suspicious/noExplicitAny: AH stubs
-  subtypes: Record<string, any>;
-  // biome-ignore lint/suspicious/noExplicitAny: AH stubs
   types: Record<string, any>;
 };
 

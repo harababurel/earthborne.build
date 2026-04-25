@@ -121,7 +121,7 @@ export function CardSearch(props: Props) {
           css["buildql-tag"],
           search.mode === "buildql" && css["active"],
         )}
-        href="https://github.com/arkham-build/arkham.build/blob/main/frontend/src/store/lib/buildql/buildql.md#buildql"
+        href="https://github.com/harababurel/earthborne.build/blob/main/frontend/src/store/lib/buildql/buildql.md#buildql"
         target="_blank"
         rel="noreferrer"
       >

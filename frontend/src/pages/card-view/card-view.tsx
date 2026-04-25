@@ -22,7 +22,6 @@ import {
   cardUrl,
   deckCreateLink,
   displayAttribute,
-  isStaticInvestigator,
   official,
   oldFormatCardUrl,
 } from "@/utils/card-utils";
@@ -45,8 +44,7 @@ function CardView() {
   }
 
   const isInvestigator = cardWithRelations.card.type_code === "role";
-  const isBuildableInvestigator =
-    isInvestigator && !isStaticInvestigator(cardWithRelations.card);
+  const isBuildableInvestigator = isInvestigator;
 
   return (
     <CardModalProvider>

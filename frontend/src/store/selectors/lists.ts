@@ -17,9 +17,7 @@ import type { Interpreter } from "../lib/buildql/interpreter";
 import {
   filterApproachIcons,
   filterAspectRequirement,
-  filterBacksides,
   filterCost,
-  filterDuplicates,
   filterDuplicatesFromContext,
   filterEncounterCards,
   filterEncounterCode,
@@ -28,7 +26,6 @@ import {
   filterHealthProp,
   filterIllustrator,
   filterInvestigatorAccess,
-  filterMythosCards,
   filterOwnership,
   filterPackCode,
   filterProperties,
@@ -371,7 +368,7 @@ const selectDeckInvestigatorFilter = createSelector(
     if (!roleCard) return undefined;
 
     if (showUnusableCards) {
-      return filterMythosCards;
+      return () => true;
     }
 
     const ors = [];
@@ -1010,13 +1007,7 @@ export const selectCardOptions = createSelector(
 
     return Object.values(metadata.cards)
       .filter((card) => {
-        return (
-          !filterEncounterCards(card) &&
-          filterMythosCards(card) &&
-          filterDuplicates(card) &&
-          filterBacksides(card) &&
-          card.type_code !== "role"
-        );
+        return !filterEncounterCards(card) && card.type_code !== "role";
       })
       .sort(sortFn);
   },

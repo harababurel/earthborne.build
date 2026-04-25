@@ -13,7 +13,7 @@ import {
 } from "@/store/lib/resolve-card";
 import { selectCardWithRelations } from "@/store/selectors/card-view";
 import type { CardModalConfig } from "@/store/slices/ui.types";
-import { deckCreateLink, isStaticInvestigator } from "@/utils/card-utils";
+import { deckCreateLink } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { formatRelationTitle } from "@/utils/formatting";
 import { isEmpty } from "@/utils/is-empty";
@@ -159,18 +159,17 @@ export function CardModal(props: Props) {
       <ModalBackdrop />
       <ModalInner size="60rem">
         <ModalActions>
-          {cardWithRelations.card.type_code === "role" &&
-            !isStaticInvestigator(cardWithRelations.card) && (
-              <Link
-                asChild
-                href={deckCreateLink(cardWithRelations.card)}
-                onClick={onCloseModal}
-              >
-                <Button as="a" data-testid="card-modal-create-deck">
-                  <i className="icon-deck" /> {t("deck.actions.create")}
-                </Button>
-              </Link>
-            )}
+          {cardWithRelations.card.type_code === "role" && (
+            <Link
+              asChild
+              href={deckCreateLink(cardWithRelations.card)}
+              onClick={onCloseModal}
+            >
+              <Button as="a" data-testid="card-modal-create-deck">
+                <i className="icon-deck" /> {t("deck.actions.create")}
+              </Button>
+            </Link>
+          )}
           <CardPageLink card={cardWithRelations.card} />
           {canEdit &&
             !!deckQuantity &&

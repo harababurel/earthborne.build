@@ -11,7 +11,6 @@ export function getInitialMetadata(): Metadata {
     encounterSets: {},
     cycles: {},
     factions: {},
-    subtypes: {},
     types: {},
   };
 }

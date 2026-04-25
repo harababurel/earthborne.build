@@ -1,9 +1,5 @@
 import { createSelector } from "reselect";
-import {
-  filterDuplicates,
-  filterEncounterCards,
-  filterType,
-} from "@/store/lib/filtering";
+import { filterEncounterCards, filterType } from "@/store/lib/filtering";
 import { makeSortFunction } from "@/store/lib/sorting";
 import {
   selectLocaleSortingCollator,
@@ -28,7 +24,6 @@ export const selectPlayerCardsFilter = createSelector(
     const playerCardFilter = and([
       not(filterEncounterCards),
       not(filterType(["role"]) ?? (() => true)),
-      filterDuplicates,
       (c) => official(c),
     ]);
 

@@ -402,7 +402,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
   backup() {
     download(
       prepareBackup(get()),
-      `arkham-build-${new Date().toISOString()}.json`,
+      `earthborne-build-${new Date().toISOString()}.json`,
       "application/json",
     );
   },

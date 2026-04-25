@@ -2,11 +2,7 @@ import type { Card as CardType } from "@earthborne-build/shared";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ResolvedCard } from "@/store/lib/types";
-import {
-  displayAttribute,
-  doubleSidedBackCard,
-  sideways,
-} from "@/utils/card-utils";
+import { displayAttribute, doubleSidedBackCard } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardScan } from "../card-scan";
 import { CardThumbnail } from "../card-thumbnail";
@@ -33,7 +29,7 @@ export function CardBack(props: Props) {
     [card, t],
   );
 
-  const [isSideways, setSideways] = useState(sideways(card));
+  const [isSideways, setSideways] = useState(false);
   const hasHeader = card.type_code !== "role";
 
   const showImage = size === "full" || card.type_code !== "role";
