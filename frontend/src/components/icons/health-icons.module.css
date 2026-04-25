@@ -31,15 +31,12 @@
 }
 
 .icon-cost {
-  position: relative;
   font-size: 1.1em;
   color: var(--white);
   font-weight: 600;
-  z-index: 3;
+  font-family: "Hypatia Sans Pro", sans-serif;
   text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  line-height: 1;
 
   /** Chrome < 123 has a bug with paint-order, but lists is as supported. We use a feature with similar browser support as proxy check */
   @supports (text-wrap-style: balance) {
@@ -50,15 +47,25 @@
   }
 }
 
+.icon-content {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.02em;
+  z-index: 3;
+}
+
 .icon-cost-wrapper {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  grid-auto-flow: column;
   z-index: 3;
+  transform: translateY(0.08em);
 }
 
 .icon-ranger {
@@ -77,10 +84,9 @@
 
 .icon-per-ranger {
   font-size: 0.65em;
-  margin-left: 0.05em;
-  transform: translateY(0.35em);
   color: var(--white);
   text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+  transform: translateY(0.12em);
 
   /** Chrome < 123 has a bug with paint-order, but lists is as supported. We use a feature with similar browser support as proxy check */
   @supports (text-wrap-style: balance) {

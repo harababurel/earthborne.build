@@ -1,5 +1,4 @@
 import { cx } from "@/utils/cx";
-import { CostIcon } from "./cost-icon";
 import css from "./health-icons.module.css";
 
 export function HealthIcon({
@@ -21,16 +20,13 @@ export function HealthIcon({
       {hideCost && <i className={cx(css["icon-background"], "core-harm")} />}
       <i className={cx(css["icon-base"], "core-harm")} />
       {!hideCost && (
-        <div
-          className={cx(
-            css["icon-cost-wrapper"],
-            isPerRanger && css["icon-cost-wrapper--per-ranger"],
-          )}
-        >
-          <CostIcon className={css["icon-cost"]} cost={value} />
-          {isPerRanger && (
-            <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
-          )}
+        <div className={css["icon-cost-wrapper"]}>
+          <span className={css["icon-content"]}>
+            <span className={css["icon-cost"]}>{value}</span>
+            {isPerRanger && (
+              <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
+            )}
+          </span>
         </div>
       )}
     </div>
@@ -59,21 +55,16 @@ export function SanityIcon({
       )}
       <i className={cx(css["icon-base"], "core-progress")} />
       {!hideCost && (
-        <div
-          className={cx(
-            css["icon-cost-wrapper"],
-            isPerRanger && css["icon-cost-wrapper--per-ranger"],
-          )}
-        >
+        <div className={css["icon-cost-wrapper"]}>
           {isRanger ? (
             <i className={cx(css["icon-ranger"], "core-ranger")} />
           ) : (
-            <>
-              <CostIcon className={css["icon-cost"]} cost={value} />
+            <span className={css["icon-content"]}>
+              <span className={css["icon-cost"]}>{value}</span>
               {isPerRanger && (
                 <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
               )}
-            </>
+            </span>
           )}
         </div>
       )}
