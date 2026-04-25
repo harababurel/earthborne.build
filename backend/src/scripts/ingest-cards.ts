@@ -227,8 +227,14 @@ async function ingest() {
         log("error", `Card ${c.id} has invalid pack_id: ${c.pack_id}`);
         validationFailed = true;
       }
-      if (c.aspect_id && !validAspects.has(c.aspect_id)) {
-        log("error", `Card ${c.id} has invalid aspect_id: ${c.aspect_id}`);
+      if (
+        c.aspect_requirement_type &&
+        !validAspects.has(c.aspect_requirement_type)
+      ) {
+        log(
+          "error",
+          `Card ${c.id} has invalid aspect_requirement_type: ${c.aspect_requirement_type}`,
+        );
         validationFailed = true;
       }
       if (!validTypes.has(c.type_id)) {
@@ -249,13 +255,6 @@ async function ingest() {
       }
       if (c.category_id && !validCategories.has(c.category_id)) {
         log("error", `Card ${c.id} has invalid category_id: ${c.category_id}`);
-        validationFailed = true;
-      }
-      if (c.back_card_id && !allCardsMap.has(c.back_card_id)) {
-        log(
-          "error",
-          `Card ${c.id} has invalid back_card_id: ${c.back_card_id}`,
-        );
         validationFailed = true;
       }
     }
@@ -309,7 +308,6 @@ interface RawCard {
   presence?: number;
   harm?: string | number;
   progress?: string | number;
-  progress_fixed?: boolean;
   approach_conflict?: number;
   approach_reason?: number;
   approach_exploration?: number;
@@ -322,16 +320,11 @@ interface RawCard {
   token_count?: string | number;
   area_id?: string;
   guide_entry?: string;
-  locations?: string[];
-  back_card_id?: string;
   illustrator?: string;
-  spoiler?: boolean;
   name: string;
   traits?: string;
   text?: string;
   flavor?: string;
-  objective?: string;
-  imagesrc?: string;
   image_rect?: number[];
   sun_challenge?: string;
   mountain_challenge?: string;
@@ -350,15 +343,13 @@ function normalizeCard(c: RawCard, packId: string) {
     quantity: c.quantity,
     deck_limit: c.deck_limit ?? null,
     type_id: c.type_id,
-    aspect_id: c.aspect_id ?? null,
-    level: c.level ?? null,
-    cost: c.cost ?? null,
+    aspect_requirement_type: c.aspect_id ?? null,
+    aspect_requirement_value: c.level ?? null,
+    energy_cost: c.cost ?? null,
     equip: c.equip ?? null,
     presence: c.presence ?? null,
     harm: c.harm ?? null,
     progress: c.progress ?? null,
-    progress_fixed:
-      c.progress_fixed != null ? (c.progress_fixed ? 1 : 0) : null,
     approach_conflict: c.approach_conflict ?? null,
     approach_reason: c.approach_reason ?? null,
     approach_exploration: c.approach_exploration ?? null,
@@ -371,16 +362,11 @@ function normalizeCard(c: RawCard, packId: string) {
     token_count: c.token_count ?? null,
     area_id: c.area_id ?? null,
     guide_entry: c.guide_entry ?? null,
-    locations: c.locations != null ? JSON.stringify(c.locations) : null,
-    back_card_id: c.back_card_id ?? null,
     illustrator: c.illustrator ?? null,
-    spoiler: c.spoiler != null ? (c.spoiler ? 1 : 0) : null,
     name: c.name,
     traits: c.traits ?? null,
     text: c.text ?? null,
     flavor: c.flavor ?? null,
-    objective: c.objective ?? null,
-    imagesrc: c.imagesrc ?? null,
     image_rect: c.image_rect != null ? JSON.stringify(c.image_rect) : null,
     sun_challenge: c.sun_challenge ?? null,
     mountain_challenge: c.mountain_challenge ?? null,

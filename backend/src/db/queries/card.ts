@@ -39,9 +39,9 @@ type CardRow = {
   quantity: number;
   deck_limit: number | null;
   type_id: string;
-  aspect_id: string | null;
-  level: number | null;
-  cost: number | null;
+  aspect_requirement_type: string | null;
+  aspect_requirement_value: number | null;
+  energy_cost: number | null;
   equip: number | null;
   presence: number | null;
   harm: string | number | null;
@@ -89,9 +89,9 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.quantity",
       "card.deck_limit",
       "card.type_id",
-      "card.aspect_id",
-      "card.level",
-      "card.cost",
+      "card.aspect_requirement_type",
+      "card.aspect_requirement_value",
+      "card.energy_cost",
       "card.equip",
       "card.presence",
       "card.harm",
@@ -145,9 +145,9 @@ export async function getCardByCode(
       "card.quantity",
       "card.deck_limit",
       "card.type_id",
-      "card.aspect_id",
-      "card.level",
-      "card.cost",
+      "card.aspect_requirement_type",
+      "card.aspect_requirement_value",
+      "card.energy_cost",
       "card.equip",
       "card.presence",
       "card.harm",
@@ -283,10 +283,10 @@ function transformCard(row: CardRow): {
     text: row.text,
     flavor: row.flavor,
     traits: row.traits,
-    energy_cost: row.cost,
+    energy_cost: row.energy_cost,
     energy_aspect: null,
-    aspect_requirement_type: row.aspect_id,
-    aspect_requirement_value: row.level,
+    aspect_requirement_type: row.aspect_requirement_type,
+    aspect_requirement_value: row.aspect_requirement_value,
     equip_value: row.equip,
     approach_conflict: row.approach_conflict,
     approach_reason: row.approach_reason,

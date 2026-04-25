@@ -62,14 +62,13 @@ export interface Card {
   quantity: number;
   deck_limit: number | null;
   type_id: string;
-  aspect_id: string | null;
-  level: number | null;
-  cost: number | null;
+  aspect_requirement_type: string | null;
+  aspect_requirement_value: number | null;
+  energy_cost: number | null;
   equip: number | null;
   presence: number | null;
   harm: string | number | null;
   progress: string | number | null;
-  progress_fixed: number | null; // 0 | 1
   approach_conflict: number | null;
   approach_reason: number | null;
   approach_exploration: number | null;
@@ -82,16 +81,11 @@ export interface Card {
   token_count: number | string | null;
   area_id: string | null;
   guide_entry: string | null;
-  locations: string | null; // JSON array as text
-  back_card_id: string | null;
   illustrator: string | null;
-  spoiler: number | null; // 0 | 1
   name: string;
   traits: string | null;
   text: string | null;
   flavor: string | null;
-  objective: string | null;
-  imagesrc: string | null;
   image_rect: string | null;
   sun_challenge: string | null;
   mountain_challenge: string | null;
