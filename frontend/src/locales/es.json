@@ -645,15 +645,15 @@
         "enemy": "Enemigo",
         "enemy_location": "Lugar-Enemigo",
         "event": "Evento",
-        "investigator": "Investigador",
-        "investigator_one": "Investigador",
-        "investigator_other": "Investigadores",
         "key": "Llave",
         "location": "Lugar",
         "scenario": "Escenario",
         "skill": "Habilidad",
         "story": "Historia",
-        "treachery": "Traición"
+        "treachery": "Traición",
+        "role": "Investigador",
+        "role_one": "Investigador",
+        "role_other": "Investigadores"
       },
       "undo": "Deshacer",
       "unique": "Única",
@@ -1200,17 +1200,6 @@
         "placeholder": "Seleccionar ilustradores...",
         "title": "Ilustrador"
       },
-      "investigator": {
-        "placeholder": "Seleccionar investigadores...",
-        "title": "Investigador"
-      },
-      "investigator_card_access": {
-        "help": "Si necesitas más, usa la herramienta <a>Who can use</a> de arkham-starter.",
-        "title": "Acceso a cartas"
-      },
-      "investigator_skills": {
-        "title": "Atributos"
-      },
       "level": {
         "no_level": "Nulo",
         "title": "Nivel"
@@ -1261,6 +1250,17 @@
       "uses": {
         "placeholder": "Seleccionar tipo de usos...",
         "title": "Usos"
+      },
+      "role": {
+        "placeholder": "Seleccionar investigadores...",
+        "title": "Investigador"
+      },
+      "card_access": {
+        "help": "Si necesitas más, usa la herramienta <a>Who can use</a> de arkham-starter.",
+        "title": "Acceso a cartas"
+      },
+      "approaches": {
+        "title": "Atributos"
       }
     },
     "help": {

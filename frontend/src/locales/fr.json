@@ -583,15 +583,15 @@
         "enemy": "Ennemi",
         "enemy_location": "Ennemi-Lieu",
         "event": "Événement",
-        "investigator": "Investigateur",
-        "investigator_one": "Investigateur",
-        "investigator_other": "Investigateurs",
         "key": "Clé",
         "location": "Lieu",
         "scenario": "Scénario",
         "skill": "Compétence",
         "story": "Histoire",
-        "treachery": "Traîtrise"
+        "treachery": "Traîtrise",
+        "role": "Investigateur",
+        "role_one": "Investigateur",
+        "role_other": "Investigateurs"
       },
       "undo": "Annuler",
       "unique": "Unique",
@@ -971,17 +971,6 @@
         "placeholder": "Sélectionner des illustrateurs...",
         "title": "Illustrateur"
       },
-      "investigator": {
-        "placeholder": "Sélectionner des investigateurs...",
-        "title": "Investigateur"
-      },
-      "investigator_card_access": {
-        "help": "Si vous avez besoin de plus d’options, utilisez l’outil <a>/who</a> d’arkham-starter.",
-        "title": "Accès aux cartes"
-      },
-      "investigator_skills": {
-        "title": "Caractéristiques"
-      },
       "level": {
         "no_level": "Nul",
         "title": "Niveau"
@@ -1032,6 +1021,17 @@
       "uses": {
         "placeholder": "Sélectionner des attributs de charges...",
         "title": "Utilisations"
+      },
+      "role": {
+        "placeholder": "Sélectionner des investigateurs...",
+        "title": "Investigateur"
+      },
+      "card_access": {
+        "help": "Si vous avez besoin de plus d’options, utilisez l’outil <a>/who</a> d’arkham-starter.",
+        "title": "Accès aux cartes"
+      },
+      "approaches": {
+        "title": "Caractéristiques"
       }
     },
     "help": {

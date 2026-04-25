@@ -22,7 +22,7 @@ export function CollectionCount(props: Props) {
         })}
       >
         <div className={css["collection-count"]}>
-          <i className="icon-per_investigator" /> {counts.player}
+          <i className="icon-per_ranger" /> {counts.player}
         </div>
       </DefaultTooltip>
       <DefaultTooltip

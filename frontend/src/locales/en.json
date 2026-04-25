@@ -245,14 +245,11 @@
         "challenge": "Challenge",
         "feature": "Feature",
         "gear": "Gear",
-        "investigator": "Ranger",
-        "investigator_one": "Ranger",
-        "investigator_other": "Rangers",
         "location": "Location",
         "malady": "Malady",
         "mission": "Mission",
         "moment": "Moment",
-        "role": "Role",
+        "role": "Ranger",
         "role_one": "Ranger",
         "role_other": "Rangers",
         "stat": "Stat"
@@ -831,16 +828,6 @@
         "placeholder": "Select illustrators...",
         "title": "Illustrator"
       },
-      "investigator": {
-        "placeholder": "Any ranger",
-        "title": "Ranger"
-      },
-      "investigator_card_access": {
-        "title": "Card access"
-      },
-      "investigator_skills": {
-        "title": "Approaches"
-      },
       "locked": "This filter is locked",
       "or": "or",
       "ownership": {
@@ -878,6 +865,16 @@
       "uses": {
         "placeholder": "Select uses attributes...",
         "title": "Uses"
+      },
+      "role": {
+        "placeholder": "Any ranger",
+        "title": "Ranger"
+      },
+      "card_access": {
+        "title": "Card access"
+      },
+      "approaches": {
+        "title": "Approaches"
       }
     },
     "help": {

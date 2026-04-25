@@ -661,15 +661,15 @@
         "enemy": "敌人",
         "enemy_location": "敌人-地点",
         "event": "事件",
-        "investigator": "调查员",
-        "investigator_one": "调查员",
-        "investigator_other": "调查员",
         "key": "钥匙",
         "location": "地点",
         "scenario": "剧本",
         "skill": "技能",
         "story": "故事",
-        "treachery": "诡计"
+        "treachery": "诡计",
+        "role": "调查员",
+        "role_one": "调查员",
+        "role_other": "调查员"
       },
       "undo": "撤销",
       "unique": "独特",
@@ -1229,17 +1229,6 @@
         "placeholder": "选择插画师...",
         "title": "插画师"
       },
-      "investigator": {
-        "placeholder": "选择调查员...",
-        "title": "调查员"
-      },
-      "investigator_card_access": {
-        "help": "如需更多信息，请使用arkham-starter的<a>/who工具</a>。",
-        "title": "卡牌获取"
-      },
-      "investigator_skills": {
-        "title": "属性"
-      },
       "level": {
         "no_level": "无等级",
         "title": "等级"
@@ -1291,6 +1280,17 @@
       "uses": {
         "placeholder": "选择使用属性...",
         "title": "使用"
+      },
+      "role": {
+        "placeholder": "选择调查员...",
+        "title": "调查员"
+      },
+      "card_access": {
+        "help": "如需更多信息，请使用arkham-starter的<a>/who工具</a>。",
+        "title": "卡牌获取"
+      },
+      "approaches": {
+        "title": "属性"
       }
     },
     "help": {

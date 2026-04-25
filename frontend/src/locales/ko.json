@@ -657,15 +657,15 @@
         "enemy": "적",
         "enemy_location": "적-장소",
         "event": "이벤트",
-        "investigator": "조사자",
-        "investigator_one": "조사자",
-        "investigator_other": "조사자",
         "key": "열쇠",
         "location": "장소",
         "scenario": "시나리오",
         "skill": "능력",
         "story": "이야기",
-        "treachery": "음모"
+        "treachery": "음모",
+        "role": "조사자",
+        "role_one": "조사자",
+        "role_other": "조사자"
       },
       "undo": "되돌리기",
       "unique": "고유",
@@ -1209,17 +1209,6 @@
         "placeholder": "일러스트레이터 선택하기...",
         "title": "일러스트레이터"
       },
-      "investigator": {
-        "placeholder": "조사자 선택하기...",
-        "title": "조사자"
-      },
-      "investigator_card_access": {
-        "help": "더 많은 정보가 필요한 경우, arkham-starter의 <a>/who tool</a> 명령어를 사용하세요.",
-        "title": "카드 접근"
-      },
-      "investigator_skills": {
-        "title": "능력값"
-      },
       "level": {
         "no_level": "Null",
         "title": "레벨"
@@ -1271,6 +1260,17 @@
       "uses": {
         "placeholder": "이용물 속성 선택...",
         "title": "이용물"
+      },
+      "role": {
+        "placeholder": "조사자 선택하기...",
+        "title": "조사자"
+      },
+      "card_access": {
+        "help": "더 많은 정보가 필요한 경우, arkham-starter의 <a>/who tool</a> 명령어를 사용하세요.",
+        "title": "카드 접근"
+      },
+      "approaches": {
+        "title": "능력값"
       }
     },
     "help": {

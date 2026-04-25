@@ -661,15 +661,15 @@
         "enemy": "Gegner",
         "enemy_location": "Gegner-Ort",
         "event": "Ereignis",
-        "investigator": "Ermittler",
-        "investigator_one": "Ermittler",
-        "investigator_other": "Ermittler",
         "key": "Schlüssel",
         "location": "Ort",
         "scenario": "Szenarioübersicht",
         "skill": "Fertigkeit",
         "story": "Handlung",
-        "treachery": "Verrat"
+        "treachery": "Verrat",
+        "role": "Ermittler",
+        "role_one": "Ermittler",
+        "role_other": "Ermittler"
       },
       "undo": "Rückgängig",
       "unique": "Einzigartig",
@@ -1229,17 +1229,6 @@
         "placeholder": "Illustratoren auswählen...",
         "title": "Illustrator"
       },
-      "investigator": {
-        "placeholder": "Ermittler auswählen...",
-        "title": "Ermittler"
-      },
-      "investigator_card_access": {
-        "help": "If you need more, use arkham-starter's <a>/who tool</a>.",
-        "title": "Verfügbare Karten"
-      },
-      "investigator_skills": {
-        "title": "Ermittlerfertigkeiten"
-      },
       "level": {
         "no_level": "Keine Stufe",
         "title": "Stufe"
@@ -1291,6 +1280,17 @@
       "uses": {
         "placeholder": "Anwendungsattribut auswählen...",
         "title": "Anwendungen"
+      },
+      "role": {
+        "placeholder": "Ermittler auswählen...",
+        "title": "Ermittler"
+      },
+      "card_access": {
+        "help": "If you need more, use arkham-starter's <a>/who tool</a>.",
+        "title": "Verfügbare Karten"
+      },
+      "approaches": {
+        "title": "Ermittlerfertigkeiten"
       }
     },
     "help": {

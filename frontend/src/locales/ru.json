@@ -591,16 +591,16 @@
         "enemy": "Враг",
         "enemy_location": "Враг-локация",
         "event": "События",
-        "investigator": "Сыщик",
         "investigator_few": "Сыщика",
         "investigator_many": "Сыщиков",
-        "investigator_one": "Сыщик",
         "key": "Ключ",
         "location": "Локация",
         "scenario": "Сценарий",
         "skill": "Навык",
         "story": "Сюжет",
-        "treachery": "Напасть"
+        "treachery": "Напасть",
+        "role": "Сыщик",
+        "role_one": "Сыщик"
       },
       "undo": "Откатить",
       "unique": "Уникальный",
@@ -1063,17 +1063,6 @@
         "placeholder": "Выберите художников…",
         "title": "Художник"
       },
-      "investigator": {
-        "placeholder": "Выбрать сыщиков",
-        "title": "Сыщик"
-      },
-      "investigator_card_access": {
-        "help": "Для большего функционала можете использовать arkham-starter утилиту <a>/who tool</a>.",
-        "title": "Доступ к карте"
-      },
-      "investigator_skills": {
-        "title": "Навыки"
-      },
       "level": {
         "no_level": "Без уровня",
         "title": "Уровень"
@@ -1133,6 +1122,17 @@
         "fan_made": "Только фанатский контент",
         "official": "Только официальный контент",
         "title": "Фанатский контент"
+      },
+      "role": {
+        "placeholder": "Выбрать сыщиков",
+        "title": "Сыщик"
+      },
+      "card_access": {
+        "help": "Для большего функционала можете использовать arkham-starter утилиту <a>/who tool</a>.",
+        "title": "Доступ к карте"
+      },
+      "approaches": {
+        "title": "Навыки"
       }
     },
     "help": {

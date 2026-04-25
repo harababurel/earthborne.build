@@ -654,15 +654,15 @@
         "enemy": "Wróg",
         "enemy_location": "Wróg-lokalizacja",
         "event": "Wydarzenie",
-        "investigator": "Badacz",
-        "investigator_one": "Badacz",
-        "investigator_other": "Badaczy",
         "key": "Klucz",
         "location": "Lokalizacja",
         "scenario": "Scenariusz",
         "skill": "Umiejętność",
         "story": "Fabularna",
-        "treachery": "Podstęp"
+        "treachery": "Podstęp",
+        "role": "Badacz",
+        "role_one": "Badacz",
+        "role_other": "Badaczy"
       },
       "undo": "Anuluj",
       "unique": "Unikatowa",
@@ -1204,17 +1204,6 @@
         "placeholder": "Wybierz ilustratorów...",
         "title": "Ilustrator"
       },
-      "investigator": {
-        "placeholder": "Wybierz badaczy...",
-        "title": "Badacz"
-      },
-      "investigator_card_access": {
-        "help": "Jeśli potrzebujesz więcej, użyj narzędzia <a>/who tool</a> dostępnej na stronie arkham-starter.",
-        "title": "Dostęp do kart"
-      },
-      "investigator_skills": {
-        "title": "Statystyki"
-      },
       "level": {
         "no_level": "Brak",
         "title": "Poziom"
@@ -1265,6 +1254,17 @@
       "uses": {
         "placeholder": "Wybierz zużywalne atrybuty...",
         "title": "Zużywalny"
+      },
+      "role": {
+        "placeholder": "Wybierz badaczy...",
+        "title": "Badacz"
+      },
+      "card_access": {
+        "help": "Jeśli potrzebujesz więcej, użyj narzędzia <a>/who tool</a> dostępnej na stronie arkham-starter.",
+        "title": "Dostęp do kart"
+      },
+      "approaches": {
+        "title": "Statystyki"
       }
     },
     "help": {

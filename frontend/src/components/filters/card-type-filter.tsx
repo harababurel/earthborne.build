@@ -54,8 +54,7 @@ export function CardTypeFilter(props: FilterProps & { className?: string }) {
     >
       <HotkeyTooltip keybind="alt+p" description={t("common.player_cards")}>
         <ToggleGroupItem data-testid="card-type-player" value="player">
-          <i className="icon-per_investigator" />{" "}
-          {t("common.player_cards_short")}
+          <i className="icon-per_ranger" /> {t("common.player_cards_short")}
         </ToggleGroupItem>
       </HotkeyTooltip>
       <HotkeyTooltip keybind="alt+c" description={t("common.encounter_cards")}>

@@ -118,7 +118,7 @@ export function formatDeckAsText(state: StoreState, deck: ResolvedDeck) {
   );
 
   text += `# ${deck.name}\n\n`;
-  text += `${t("common.type.investigator")}: ${investigatorName}  \n`;
+  text += `${t("common.type.role")}: ${investigatorName}  \n`;
 
   const groups = groupDeckCards(
     selectMetadata(state),

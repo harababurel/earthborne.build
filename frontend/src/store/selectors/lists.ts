@@ -988,7 +988,7 @@ export const selectInvestigatorOptions = createSelector(
     investigators.sort(sortByName(collator));
 
     return [
-      { label: i18n.t("filters.investigator.any_investigator"), value: "" },
+      { label: i18n.t("filters.role.any_investigator"), value: "" },
       ...investigators.map((card) => ({
         label: displayAttribute(card, "name"),
         value: card.code,
