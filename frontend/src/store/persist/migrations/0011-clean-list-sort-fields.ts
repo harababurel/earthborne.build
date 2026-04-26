@@ -2,8 +2,8 @@ import type { StoreState } from "@/store/slices";
 import {
   DECK_DEFAULTS,
   DECK_SCANS_DEFAULTS,
-  ENCOUNTER_DEFAULTS,
   MIXED_DEFAULTS,
+  PATH_DEFAULTS,
   PLAYER_DEFAULTS,
 } from "@/store/slices/settings";
 import type {
@@ -84,7 +84,7 @@ function migrate(state: Partial<StoreState>, version: number) {
   if (lists.encounter) {
     lists.encounter = cleanListConfig(
       lists.encounter as ListConfig,
-      ENCOUNTER_DEFAULTS,
+      PATH_DEFAULTS,
     );
   }
   if (lists.mixed) {

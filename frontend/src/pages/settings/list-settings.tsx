@@ -12,8 +12,8 @@ import { SORTING_TYPES } from "@/store/lib/sorting";
 import {
   DECK_DEFAULTS,
   DECK_SCANS_DEFAULTS,
-  ENCOUNTER_DEFAULTS,
   MIXED_DEFAULTS,
+  PATH_DEFAULTS,
   PLAYER_DEFAULTS,
 } from "@/store/slices/settings";
 import type { SettingsState } from "@/store/slices/settings.types";
@@ -48,7 +48,7 @@ function getSortItemsForList(_listKey: keyof SettingsState["lists"]) {
 
 function getDefaultsForList(listKey: keyof SettingsState["lists"]) {
   if (listKey === "encounter") {
-    return structuredClone(ENCOUNTER_DEFAULTS);
+    return structuredClone(PATH_DEFAULTS);
   }
 
   if (listKey === "deck") {
