@@ -72,7 +72,7 @@ function TraitsChartRow({
       if (splitMultiValue(card.traits).includes(trait.x)) acc.push(card);
       return acc;
     }, [] as Card[])
-    .sort(makeSortFunction(["name", "level", "position"], metadata, collator));
+    .sort(makeSortFunction(["name", "position"], metadata, collator));
 
   return (
     <tr className={open ? css["open"] : css["closed"]}>

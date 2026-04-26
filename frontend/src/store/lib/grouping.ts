@@ -1,4 +1,4 @@
-import type { Card } from "@earthborne-build/shared";
+import { APPROACH_ORDER, type Card } from "@earthborne-build/shared";
 import { displayPackName, shortenPackName } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
 import type { GroupingType } from "../slices/lists.types";
@@ -14,19 +14,18 @@ import {
 export const NONE = "none";
 
 export const PLAYER_GROUPING_TYPES: GroupingType[] = [
-  "aspect",
   "category",
-  "cost",
-  "cycle",
-  "pack",
   "type",
+  "aspect",
+  "approach",
+  "cost",
+  "pack",
 ];
 
-export const ENCOUNTER_GROUPING_TYPES: GroupingType[] = [
-  "cycle",
-  "encounter_set",
-  "pack",
+export const PATH_GROUPING_TYPES: GroupingType[] = [
   "type",
+  "path_set",
+  "pack",
 ];
 
 type Key = string | number;
@@ -161,7 +160,7 @@ function groupByCategory(cards: Card[]) {
   return toGroupingResult(results);
 }
 
-function groupByEncounterSet(
+function groupByPathSet(
   cards: Card[],
   metadata: Metadata,
   collator: Intl.Collator,
@@ -179,11 +178,52 @@ function groupByEncounterSet(
 
       return acc;
     },
-    { data: {}, groupings: [], type: "encounter_set" },
+    { data: {}, groupings: [], type: "path_set" },
   );
 
   omitEmptyGroupings(results);
   results.groupings.sort(sortByEncounterSet(metadata, collator));
+
+  return toGroupingResult(results);
+}
+
+function dominantApproach(card: Card): string {
+  const values: [string, number][] = APPROACH_ORDER.map((a) => [
+    a,
+    (card[`approach_${a}` as keyof Card] as number | null | undefined) ?? 0,
+  ]);
+  const max = Math.max(...values.map(([, v]) => v));
+  if (max === 0) return NONE;
+  const winner = values.find(([, v]) => v === max);
+  return winner ? winner[0] : NONE;
+}
+
+function groupByApproach(cards: Card[]) {
+  const results = cards.reduce<Grouping>(
+    (acc, card) => {
+      const approach = dominantApproach(card);
+
+      if (!acc.data[approach]) {
+        acc.data[approach] = [card];
+        acc.groupings.push(approach);
+      } else {
+        acc.data[approach].push(card);
+      }
+
+      return acc;
+    },
+    { data: {}, groupings: [], type: "approach" },
+  );
+
+  omitEmptyGroupings(results);
+  results.groupings.sort((a, b) => {
+    const ai = APPROACH_ORDER.indexOf(a as (typeof APPROACH_ORDER)[number]);
+    const bi = APPROACH_ORDER.indexOf(b as (typeof APPROACH_ORDER)[number]);
+    if (ai === -1 && bi === -1) return 0;
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
 
   return toGroupingResult(results);
 }
@@ -318,24 +358,16 @@ function applyGrouping(
         },
       ];
     }
-    case "subtype":
-      // ER has no subtypes; fall through to "none".
-      return [{ cards, key: "all", type: "none" }];
     case "type":
       return groupByTypeCode(cards);
-    case "slot":
-      // ER has no slots; fall through to "none".
-      return [{ cards, key: "all", type: "none" }];
-    case "level":
-      // ER has no XP levels; fall through to "none".
-      return [{ cards, key: "all", type: "none" }];
-    case "faction":
     case "aspect":
       return groupByAspect(cards);
+    case "approach":
+      return groupByApproach(cards);
     case "category":
       return groupByCategory(cards);
-    case "encounter_set":
-      return groupByEncounterSet(cards, metadata, collator);
+    case "path_set":
+      return groupByPathSet(cards, metadata, collator);
     case "cost":
       return groupByCost(cards);
     case "cycle":
@@ -430,11 +462,6 @@ export function getGroupingKeyLabel(
       return i18n.t("lists.all_cards");
     }
 
-    case "subtype": {
-      if (segment === NONE) return "";
-      return i18n.t(`common.subtype.${segment}`);
-    }
-
     case "type": {
       return i18n.t(`common.type.${segment}`, { count: 1 });
     }
@@ -443,19 +470,9 @@ export function getGroupingKeyLabel(
       return displayPackName(metadata.cycles[segment]) ?? "";
     }
 
-    case "encounter_set": {
+    case "path_set": {
       if (segment === NONE) return "";
       return metadata.encounterSets[segment]?.name ?? segment;
-    }
-
-    case "slot": {
-      if (segment === NONE) return i18n.t("common.slot.none");
-      return segment;
-    }
-
-    case "level": {
-      if (segment === NONE) return "";
-      return segment;
     }
 
     case "cost": {
@@ -468,10 +485,14 @@ export function getGroupingKeyLabel(
       return i18n.t("common.cost.value", { cost: segment });
     }
 
-    case "aspect":
-    case "faction": {
-      if (segment === NONE) return i18n.t("common.aspect.none");
-      return i18n.t(`common.aspects.${segment}`);
+    case "aspect": {
+      if (segment === NONE) return i18n.t("common.none");
+      return i18n.t(`common.factions.${segment.toLowerCase()}`);
+    }
+
+    case "approach": {
+      if (segment === NONE) return i18n.t("common.none");
+      return i18n.t(`common.skill.${segment}`);
     }
 
     case "category": {

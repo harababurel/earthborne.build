@@ -916,11 +916,15 @@
       },
       "all_cards": "All cards",
       "categories": {
+        "approach": "Approach",
+        "aspect": "Aspect",
+        "category": "Category",
         "cost": "Cost",
         "cycle": "Cycle",
-        "faction": "Aspect",
+        "equip": "Equip",
         "name": "Name",
         "pack": "Pack",
+        "path_set": "Path set",
         "position": "Position",
         "type": "Type"
       },

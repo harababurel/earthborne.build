@@ -1,4 +1,5 @@
 import {
+  APPROACH_ORDER,
   ASPECT_ORDER,
   CARD_TYPE_ORDER,
   type Card,
@@ -13,12 +14,15 @@ import type { Metadata } from "../slices/metadata.types";
  */
 
 export const SORTING_TYPES: SortingType[] = [
-  "cost",
-  "cycle",
+  "category",
+  "type",
   "aspect",
+  "approach",
+  "cost",
+  "equip",
+  "pack",
   "name",
   "position",
-  "type",
 ];
 
 export type SortFunction = (a: Card, b: Card) => number;
@@ -94,6 +98,58 @@ function sortByType(a: Card, b: Card) {
   );
 }
 
+function dominantApproach(card: Card): string {
+  const values: [string, number][] = APPROACH_ORDER.map((a) => [
+    a,
+    (card[`approach_${a}` as keyof Card] as number | null | undefined) ?? 0,
+  ]);
+  const max = Math.max(...values.map(([, v]) => v));
+  if (max === 0) return "";
+  const winner = values.find(([, v]) => v === max);
+  return winner ? winner[0] : "";
+}
+
+function sortByApproach(a: Card, b: Card) {
+  const aApproach = dominantApproach(a);
+  const bApproach = dominantApproach(b);
+  const ai = APPROACH_ORDER.indexOf(aApproach as (typeof APPROACH_ORDER)[number]);
+  const bi = APPROACH_ORDER.indexOf(bApproach as (typeof APPROACH_ORDER)[number]);
+  if (ai === -1 && bi === -1) return 0;
+  if (ai === -1) return 1;
+  if (bi === -1) return -1;
+  return ai - bi;
+}
+
+function sortByEquip(a: Card, b: Card) {
+  const aEquip = a.equip_value ?? null;
+  const bEquip = b.equip_value ?? null;
+  if (aEquip === null && bEquip === null) return 0;
+  if (aEquip === null) return 1;
+  if (bEquip === null) return -1;
+  return bEquip - aEquip;
+}
+
+function sortByPack(metadata: Metadata) {
+  return (a: Card, b: Card) => {
+    const packA = metadata.packs[a.pack_code];
+    const packB = metadata.packs[b.pack_code];
+    if (!packA || !packB) return 0;
+
+    const cycleA = metadata.cycles[packA.cycle_code];
+    const cycleB = metadata.cycles[packB.cycle_code];
+
+    const aChapter = packA.chapter ?? 1;
+    const bChapter = packB.chapter ?? 1;
+    if (aChapter !== bChapter) return aChapter - bChapter;
+
+    if (cycleA && cycleB && cycleA.position !== cycleB.position) {
+      return cycleA.position - cycleB.position;
+    }
+
+    return packA.position - packB.position;
+  };
+}
+
 export function makeSortFunction(
   sortings: SortingType[],
   metadata: Metadata,
@@ -101,33 +157,26 @@ export function makeSortFunction(
 ): SortFunction {
   const sorts = sortings.map((sorting) => {
     switch (sorting) {
-      case "name": {
+      case "name":
         return sortByName(collator);
-      }
-
-      case "cycle": {
+      case "cycle":
         return sortByCycle(metadata);
-      }
-
-      case "aspect": {
+      case "pack":
+        return sortByPack(metadata);
+      case "aspect":
         return sortByAspect;
-      }
-
-      case "type": {
+      case "approach":
+        return sortByApproach;
+      case "type":
         return sortByType;
-      }
-
-      case "cost": {
+      case "cost":
         return sortByCost;
-      }
-
-      case "category": {
+      case "equip":
+        return sortByEquip;
+      case "category":
         return sortByCategory;
-      }
-
-      default: {
+      default:
         return sortByPosition;
-      }
     }
   });
 

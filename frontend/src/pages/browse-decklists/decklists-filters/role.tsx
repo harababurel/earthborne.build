@@ -28,7 +28,7 @@ const selectRoleCards = createSelector(
     const roles = Object.values(metadata.cards).filter(roleFilter);
 
     const sortFn = makeSortFunction(
-      ["name", "level", "position"],
+      ["name", "position"],
       metadata,
       collator,
     );

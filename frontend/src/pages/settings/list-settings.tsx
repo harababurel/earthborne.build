@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sortable } from "@/components/ui/sortable";
 import {
-  ENCOUNTER_GROUPING_TYPES,
+  PATH_GROUPING_TYPES,
   PLAYER_GROUPING_TYPES,
 } from "@/store/lib/grouping";
 import { SORTING_TYPES } from "@/store/lib/sorting";
@@ -30,23 +30,19 @@ interface Props extends SettingProps {
 
 function getGroupItemsForList(listKey: keyof SettingsState["lists"]) {
   if (listKey === "encounter") {
-    return [...ENCOUNTER_GROUPING_TYPES];
+    return [...PATH_GROUPING_TYPES];
   }
 
   if (listKey === "mixed") {
     return Array.from(
-      new Set([...ENCOUNTER_GROUPING_TYPES, ...PLAYER_GROUPING_TYPES]),
+      new Set([...PATH_GROUPING_TYPES, ...PLAYER_GROUPING_TYPES]),
     );
   }
 
   return [...PLAYER_GROUPING_TYPES];
 }
 
-function getSortItemsForList(listKey: keyof SettingsState["lists"]) {
-  if (listKey === "encounter") {
-    return [...SORTING_TYPES].filter((x) => x !== "level");
-  }
-
+function getSortItemsForList(_listKey: keyof SettingsState["lists"]) {
   return [...SORTING_TYPES];
 }
 

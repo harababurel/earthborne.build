@@ -35,6 +35,6 @@ export const selectPlayerCardsSort = createSelector(
   selectMetadata,
   selectLocaleSortingCollator,
   (metadata, collator) => {
-    return makeSortFunction(["name", "level", "position"], metadata, collator);
+    return makeSortFunction(["name", "position"], metadata, collator);
   },
 );

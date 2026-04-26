@@ -125,30 +125,26 @@ export type Search = {
 };
 
 export type GroupingType =
+  | "approach"
   | "aspect"
   | "category"
   | "cost"
   | "cycle"
-  | "encounter_set"
-  | "faction"
-  | "level"
   | "none"
   | "pack"
-  | "slot"
-  | "subtype"
+  | "path_set"
   | "type";
 
 export type SortingType =
+  | "approach"
   | "aspect"
   | "category"
   | "cost"
   | "cycle"
-  | "faction"
-  | "level"
+  | "equip"
   | "name"
+  | "pack"
   | "position"
-  | "slot"
-  | "subtype"
   | "type";
 
 export type ViewMode =

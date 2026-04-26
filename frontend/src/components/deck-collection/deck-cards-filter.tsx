@@ -41,7 +41,7 @@ export function DeckCardsFilter({ containerClass }: Props) {
 
     const cards = Object.values(metadata.cards).filter(playerCardFilter);
     const sortFn = makeSortFunction(
-      ["name", "level", "position"],
+      ["name", "position"],
       metadata,
       collator,
     );

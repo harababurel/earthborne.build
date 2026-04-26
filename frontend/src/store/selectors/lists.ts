@@ -994,7 +994,7 @@ export const selectCardOptions = createSelector(
   selectMetadata,
   selectLocaleSortingCollator,
   (metadata, collator) => {
-    const sortFn = makeSortFunction(["name", "level"], metadata, collator);
+    const sortFn = makeSortFunction(["name", "position"], metadata, collator);
 
     return Object.values(metadata.cards)
       .filter((card) => {

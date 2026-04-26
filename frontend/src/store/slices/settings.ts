@@ -16,63 +16,32 @@ import type {
 } from "./settings.types";
 
 export const PLAYER_DEFAULTS: ListConfig = {
-  group: ["subtype", "type", "slot"],
-  sort: ["name", "level", "position"],
+  group: ["category", "type"],
+  sort: ["cost", "name"],
   viewMode: "compact",
 };
 
 export const ENCOUNTER_DEFAULTS: ListConfig = {
-  group: ["pack", "encounter_set"],
+  group: ["pack", "path_set"],
   sort: ["position"],
   viewMode: "compact",
 };
 
 export const MIXED_DEFAULTS: ListConfig = {
-  group: ["pack", "encounter_set"],
-  sort: ["position"],
+  group: ["type"],
+  sort: ["name"],
   viewMode: "compact",
 };
 
 export const DECK_DEFAULTS: DecklistConfig = {
-  group: ["type", "slot"],
-  sort: ["name", "level"],
+  group: ["category", "type"],
+  sort: ["cost", "name"],
 };
 
 export const DECK_SCANS_DEFAULTS: DecklistConfig = {
-  group: ["type"],
-  sort: ["slot", "name", "level", "position"],
+  group: ["category"],
+  sort: ["type", "name"],
 };
-
-export const SORTING_PRESETS: DecklistConfig[] = [
-  {
-    group: ["faction", "type"],
-    sort: ["name", "level", "position"],
-  },
-  {
-    group: ["pack", "encounter_set"],
-    sort: ["name", "level", "position"],
-  },
-  {
-    group: ["pack"],
-    sort: ["position"],
-  },
-  {
-    group: ["pack", "type"],
-    sort: ["name", "level", "position"],
-  },
-  {
-    group: ["type", "slot"],
-    sort: ["name", "level", "position"],
-  },
-  {
-    group: [],
-    sort: ["name", "level", "position"],
-  },
-  {
-    group: ["level"],
-    sort: ["name", "level", "position"],
-  },
-];
 
 export function getInitialListsSetting(): SettingsState["lists"] {
   return {
