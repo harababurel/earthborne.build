@@ -12,25 +12,7 @@ type Locale = {
  * Diacritics are fine and will be normalised with `String.prototype.normalize()` before searching.
  */
 export const LOCALES: Record<string, Locale> = {
-  de: { value: "de", label: "Deutsch (de)", additionalCharacters: "ß" },
   en: { value: "en", label: "English (en)" },
-  es: { value: "es", label: "Español (es)", additionalCharacters: "ñ" },
-  fr: { value: "fr", label: "Français (fr)" },
-  ko: { value: "ko", label: "한국어/Korean (ko)", unicode: true },
-  pl: { value: "pl", label: "Polski (pl)" },
-  ru: { value: "ru", label: "Русский (ru)", unicode: true },
-  "zh-cn": {
-    value: "zh-cn",
-    displayValue: "zh-Hans",
-    label: "简体中文/Chinese (zh-Hans)",
-    unicode: true,
-  },
-  zh: {
-    value: "zh",
-    displayValue: "zh-Hant",
-    label: "繁體中文/Chinese (zh-Hant)",
-    unicode: true,
-  },
 };
 
 export const FLOATING_PORTAL_ID = "floating";
