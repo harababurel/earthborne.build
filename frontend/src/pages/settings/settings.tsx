@@ -166,25 +166,23 @@ function SettingsInner({
                 <div className={css["lists"]}>
                   <ListSettings
                     listKey="player"
-                    title={t("common.player_cards")}
+                    title={t("settings.lists.ranger_cards", {
+                      defaultValue: t("common.player_cards"),
+                    })}
                     settings={settings}
                     setSettings={setSettings}
                   />
                   <ListSettings
                     listKey="encounter"
-                    title={t("common.encounter_cards")}
+                    title={t("settings.lists.path_cards", {
+                      defaultValue: t("common.encounter_cards"),
+                    })}
                     settings={settings}
                     setSettings={setSettings}
                   />
                   <ListSettings
                     listKey="mixed"
                     title={t("lists.all_cards")}
-                    settings={settings}
-                    setSettings={setSettings}
-                  />
-                  <ListSettings
-                    listKey="role"
-                    title={t("common.type.role", { count: 2 })}
                     settings={settings}
                     setSettings={setSettings}
                   />

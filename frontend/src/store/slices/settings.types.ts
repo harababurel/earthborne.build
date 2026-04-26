@@ -43,7 +43,6 @@ export type SettingsState = {
   lists: {
     encounter: ListConfig;
     mixed: ListConfig;
-    role: ListConfig;
     player: ListConfig;
     deck: DecklistConfig;
     deckScans: DecklistConfig;

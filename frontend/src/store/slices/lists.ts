@@ -3,9 +3,8 @@ import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { DEFAULT_LIST_SORT_ID } from "@/utils/constants";
 import type { Filter } from "@/utils/fp";
-import { and, not } from "@/utils/fp";
+import { and } from "@/utils/fp";
 import { parse as parseBuildQl } from "../lib/buildql/parser";
-import { filterEncounterCards, filterType } from "../lib/filtering";
 import type { ResolvedDeck } from "../lib/types";
 import { selectBuildQlInterpreter } from "../selectors/shared";
 import type { StoreState } from ".";
@@ -46,10 +45,6 @@ import type { DecklistConfig, SettingsState } from "./settings.types";
 const SYSTEM_FILTERS: Filter[] = [];
 
 function getInitialList() {
-  if (window.location.href.includes("/deck/create")) {
-    return "create_deck";
-  }
-
   if (window.location.href.includes("/deck/")) {
     return "editor";
   }
@@ -916,21 +911,6 @@ export function makeLists(
   const systemFilter = and(systemFilters);
 
   return {
-    create_deck: makeList({
-      display: {
-        grouping: settings.lists.role.group,
-        sorting: settings.lists.role.sort,
-        viewMode: settings.lists.role.viewMode,
-      },
-      systemFilter: and([
-        systemFilter,
-        filterType(["role"]) ?? (() => true),
-        not(filterEncounterCards),
-      ]),
-      initialValues,
-      key: "create_deck",
-      filters: ["ownership", "pack"],
-    }),
     editor: makeList({
       display: getDisplaySettings(initialValues, settings),
       initialValues,

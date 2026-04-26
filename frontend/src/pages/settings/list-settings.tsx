@@ -15,7 +15,6 @@ import {
   ENCOUNTER_DEFAULTS,
   MIXED_DEFAULTS,
   PLAYER_DEFAULTS,
-  ROLE_DEFAULTS,
 } from "@/store/slices/settings";
 import type { SettingsState } from "@/store/slices/settings.types";
 import { formatGroupingType } from "@/utils/formatting";
@@ -34,10 +33,6 @@ function getGroupItemsForList(listKey: keyof SettingsState["lists"]) {
     return [...ENCOUNTER_GROUPING_TYPES];
   }
 
-  if (listKey === "role") {
-    return ["cycle", "faction"];
-  }
-
   if (listKey === "mixed") {
     return Array.from(
       new Set([...ENCOUNTER_GROUPING_TYPES, ...PLAYER_GROUPING_TYPES]),
@@ -48,10 +43,6 @@ function getGroupItemsForList(listKey: keyof SettingsState["lists"]) {
 }
 
 function getSortItemsForList(listKey: keyof SettingsState["lists"]) {
-  if (listKey === "role") {
-    return ["cycle", "faction", "name", "position"];
-  }
-
   if (listKey === "encounter") {
     return [...SORTING_TYPES].filter((x) => x !== "level");
   }
@@ -70,10 +61,6 @@ function getDefaultsForList(listKey: keyof SettingsState["lists"]) {
 
   if (listKey === "deckScans") {
     return structuredClone(DECK_SCANS_DEFAULTS);
-  }
-
-  if (listKey === "role") {
-    return structuredClone(ROLE_DEFAULTS);
   }
 
   if (listKey === "mixed") {

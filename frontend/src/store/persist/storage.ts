@@ -1,7 +1,7 @@
 import { get, set } from "idb-keyval";
 import type { StoreState } from "../slices";
 
-export const VERSION = 10;
+export const VERSION = 11;
 
 type StoredState<T extends Partial<StoreState>> = {
   version: number;
