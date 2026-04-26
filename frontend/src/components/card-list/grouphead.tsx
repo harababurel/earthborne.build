@@ -84,7 +84,7 @@ export function GroupLabel(props: GroupLabelProps) {
     );
   }
 
-  if (type === "encounter_set") {
+  if (type === "encounter_set" || type === "path_set") {
     const set = metadata.encounterSets[segment];
     return (
       <span className={className}>
