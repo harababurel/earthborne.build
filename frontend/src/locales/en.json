@@ -129,6 +129,13 @@
       "reset": "Reset",
       "select": "Select",
       "set_as_default": "Set as default",
+      "category": {
+        "background": "Background",
+        "malady": "Malady",
+        "personality": "Personality",
+        "reward": "Reward",
+        "specialty": "Specialty"
+      },
       "skill": {
         "conflict": "Conflict",
         "connection": "Connection",

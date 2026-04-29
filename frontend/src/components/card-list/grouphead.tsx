@@ -64,7 +64,9 @@ export function GroupLabel(props: GroupLabelProps) {
     type === "subtype" ||
     type === "type" ||
     type === "level" ||
-    type === "cost"
+    type === "cost" ||
+    type === "category" ||
+    type === "approach"
   ) {
     return <span>{keyLabel}</span>;
   }
