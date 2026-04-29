@@ -18,11 +18,7 @@ export function resolveDeck(
 ): ResolvedDeck {
   const deckMeta = decodeDeckMeta(deck);
 
-  const { cards, deckSize, deckSizeTotal, charts } = decodeSlots(
-    deps,
-    collator,
-    deck,
-  );
+  const { cards, deckSize, charts } = decodeSlots(deps, collator, deck);
 
   const resolved = {
     ...deck,
@@ -32,7 +28,6 @@ export function resolveDeck(
     shared: !!deps.sharing.decks[deck.id],
     stats: {
       deckSize,
-      deckSizeTotal,
       charts,
     },
   } as ResolvedDeck;
@@ -45,7 +40,7 @@ export function resolveDeckSummary(
   _collator: Intl.Collator,
   deck: Deck,
 ): DeckSummary {
-  const { deckSize, deckSizeTotal } = computeDeckStats(deps.metadata, deck);
+  const deckSize = computeDeckSize(deps.metadata, deck);
 
   return {
     date_creation: deck.date_creation,
@@ -57,28 +52,25 @@ export function resolveDeckSummary(
     tags: deck.tags,
     slots: deck.slots,
     shared: !!deps.sharing.decks[deck.id],
-    stats: { deckSize, deckSizeTotal },
+    stats: { deckSize },
     role_code: deck.role_code,
     aspect_code: deck.aspect_code,
   };
 }
 
-function computeDeckStats(metadata: StoreState["metadata"], deck: Deck) {
+function computeDeckSize(metadata: StoreState["metadata"], deck: Deck) {
   let deckSize = 0;
-  let deckSizeTotal = 0;
 
   for (const [code, quantity] of Object.entries(deck.slots)) {
     const rawCard = metadata.cards[code];
     if (!rawCard) continue;
-
-    deckSizeTotal += quantity;
 
     if (!isSpecialCard(rawCard)) {
       deckSize += quantity;
     }
   }
 
-  return { deckSize, deckSizeTotal };
+  return deckSize;
 }
 
 export function deckTags(deck: Pick<DeckSummary, "tags">, delimiter = " ") {

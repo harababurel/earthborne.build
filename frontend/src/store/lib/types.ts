@@ -52,7 +52,6 @@ export type ResolvedDeck = Deck & {
   shared: boolean;
   stats: {
     deckSize: number;
-    deckSizeTotal: number;
     charts: DeckCharts;
   };
 };

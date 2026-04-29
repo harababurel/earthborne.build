@@ -49,7 +49,7 @@ test.describe("deck view", () => {
     await expect(page.getByTestId("deck-tags")).toBeVisible();
 
     await expect(page.getByTestId("deck-details-deck-size")).toContainText(
-      "Deck size30 (37 total)",
+      "Deck size30",
     );
 
     await expect(page.getByTestId("view-title")).toContainText(
@@ -331,7 +331,7 @@ test.describe("deck view", () => {
     );
 
     await expect(page.getByTestId("deck-details-deck-size")).toContainText(
-      "Deck size30 (37 total)",
+      "Deck size30",
     );
 
     await expect(page.getByTestId("deck-details-xp")).toContainText(

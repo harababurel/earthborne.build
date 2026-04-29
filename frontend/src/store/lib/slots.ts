@@ -18,7 +18,6 @@ export function decodeSlots(
   };
 
   let deckSize = 0;
-  let deckSizeTotal = 0;
 
   const charts: DeckCharts = emptyDeckCharts();
 
@@ -26,7 +25,6 @@ export function decodeSlots(
     const card = resolveCardWithRelations(deps, collator, code, true);
 
     if (card) {
-      deckSizeTotal += quantity;
       cards.slots[code] = card;
 
       if (!isSpecialCard(card.card)) {
@@ -40,7 +38,6 @@ export function decodeSlots(
   return {
     cards,
     deckSize,
-    deckSizeTotal,
     charts,
   };
 }

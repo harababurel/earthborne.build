@@ -15,8 +15,7 @@ export function DeckStats(props: Props) {
     <div className={css["stats"]}>
       <DefaultTooltip tooltip={t("deck.stats.deck_size")}>
         <strong data-testid="deck-summary-size">
-          <i className="icon-card-outline-bold" />× {deck.stats.deckSize} (
-          {deck.stats.deckSizeTotal})
+          <i className="icon-card-outline-bold" />× {deck.stats.deckSize}
         </strong>
       </DefaultTooltip>
     </div>
