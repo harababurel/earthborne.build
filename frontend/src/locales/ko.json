@@ -23,7 +23,8 @@
         "zzorba": "아컴카드 API와 아이콘에 액세스하고, 덱 빌더를 위한 질문과 영감을 얻으세요. 여러분이 없었다면 이 프로젝트는 불가능했을 것입니다."
       },
       "image_credits": {
-        "404": "404 일러스트 (편집)",
+        "404": "404 일러스트",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "arkham_cards_icons": "아컴카드 아이콘 재사용",
         "card_icons": "카드 아이콘",
         "logo": "로고 디자인",

@@ -68,9 +68,21 @@ function About() {
             {t("about.image_credits.earthborne_games")}
           </li>
           <li>
-            {/* TODO: Replace this art with something more appropriate for earthborne.build. */}
             <strong>{t("about.image_credits.404")}:</strong>{" "}
-            {t("about.image_credits.404_credit")}
+            <Trans
+              i18nKey="about.image_credits.404_credit"
+              t={t}
+              components={{
+                artist_url: (
+                  // biome-ignore lint/a11y/useAnchorContent: not relevant here.
+                  <a
+                    href="https://linktr.ee/druakim"
+                    rel="noreferrer"
+                    target="_blank"
+                  />
+                ),
+              }}
+            />
           </li>
           <li>
             <strong>{t("about.image_credits.other")}</strong>:{" "}

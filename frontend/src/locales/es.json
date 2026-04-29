@@ -23,7 +23,8 @@
         "zzorba": "Acceso a la API e iconos de ArkhamCards, ayuda con preguntas e inspiración para el constructor de mazos. Sin ti, este proyecto no habría sido posible."
       },
       "image_credits": {
-        "404": "404 illustration (edit)",
+        "404": "404 illustration",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "arkham_cards_icons": "Iconos reutilizados de ArkhamCards",
         "card_icons": "Iconos de cartas",
         "logo": "Diseño del logo",

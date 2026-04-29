@@ -3,8 +3,8 @@
     "about": {
       "description": "<p>earthborne.build is a fan-made deck builder for <eb>Earthborne Rangers</eb> by Earthborne Games. It is based on <arkham_build_url>arkham.build</arkham_build_url>, created by <felix_url>Felix Spöttel</felix_url>. This app is not produced, endorsed, or supported by, or affiliated with Earthborne Games.</p><p>The source code of this project is available on <github_url>GitHub</github_url>. Feedback and bug reports are welcome via <github_issues_url>GitHub issues</github_issues_url>.</p><p>All artwork and illustrations are the intellectual property of their respective creators.</p>",
       "image_credits": {
-        "404": "404 illustration (edit)",
-        "404_credit": "FFG & 5argon",
+        "404": "404 illustration",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "card_icons": "Card icons",
         "earthborne_games": "Earthborne Games",
         "logo": "Logo design",

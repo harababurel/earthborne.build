@@ -22,7 +22,8 @@
         "zzorba": "Za dostęp do ikon i API ArkhamCards, pomoc z pytaniami i inspiracje do aplikacji. Bez niego ten projekt nie byłby możliwy."
       },
       "image_credits": {
-        "404": "Ilustracja błędu 404 (edycja)",
+        "404": "Ilustracja błędu 404",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "arkham_cards_icons": "Użyte ikony aplikacji ArkhamCards",
         "card_icons": "Ikony kart",
         "logo": "Projekt logo",

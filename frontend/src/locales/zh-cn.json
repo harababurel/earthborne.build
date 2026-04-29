@@ -23,7 +23,8 @@
         "zzorba": "提供ArkhamCards API及图标资源、解答疑问并为卡组构建工具带来灵感。没有你，这个项目不可能实现。"
       },
       "image_credits": {
-        "404": "404 illustration (编辑)",
+        "404": "404 illustration",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "arkham_cards_icons": "复用的ArkhamCards图标",
         "card_icons": "卡牌图标",
         "logo": "Logo设计",

@@ -23,7 +23,8 @@
         "zzorba": "Zugriff auf die ArkhamCards API und Icons, Unterstützung bei Fragen und Inspiration für den Deckbuilder. Ohne dich wäre dieses Projekt nicht möglich gewesen."
       },
       "image_credits": {
-        "404": "404 Illustration (Bearbeitung)",
+        "404": "404 Illustration",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "arkham_cards_icons": "Wiederverwendete Arkham Cards Icons",
         "card_icons": "Offizielle Spielsymbole",
         "logo": "Logo",

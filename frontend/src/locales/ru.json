@@ -22,7 +22,8 @@
         "qa": "QA-тестирование."
       },
       "image_credits": {
-        "404": "404 illustration (edit)",
+        "404": "404 illustration",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "arkham_cards_icons": "Переиспользование иконок ArkhamCards",
         "card_icons": "Иконки карт",
         "logo": "Дизайн логотипа",
