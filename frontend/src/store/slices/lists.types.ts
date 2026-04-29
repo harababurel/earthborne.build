@@ -133,6 +133,7 @@ export type GroupingType =
   | "none"
   | "pack"
   | "path_set"
+  | "set"
   | "type";
 
 export type SortingType =

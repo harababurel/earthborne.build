@@ -1329,6 +1329,7 @@
         "name": "Name",
         "pack": "Pack",
         "position": "Position",
+        "set": "Set",
         "slot": "Slot",
         "subtype": "Untertyp",
         "type": "Kartentyp"

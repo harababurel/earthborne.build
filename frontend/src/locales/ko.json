@@ -1309,6 +1309,7 @@
         "name": "이름",
         "pack": "팩",
         "position": "위치",
+        "set": "세트",
         "slot": "슬롯",
         "subtype": "보조 유형",
         "type": "유형"

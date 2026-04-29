@@ -954,6 +954,7 @@
         "pack": "Pack",
         "path_set": "Path set",
         "position": "Position",
+        "set": "Set",
         "type": "Type"
       },
       "group_by": "Group by",

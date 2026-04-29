@@ -1275,6 +1275,7 @@
         "name": "名称",
         "pack": "拓展包",
         "position": "位置",
+        "set": "系列",
         "slot": "槽位",
         "subtype": "子类型",
         "type": "卡牌类型"

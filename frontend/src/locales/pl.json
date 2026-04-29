@@ -1304,6 +1304,7 @@
         "name": "Nazwa",
         "pack": "Zestaw",
         "position": "Pozycja",
+        "set": "Zestaw",
         "slot": "Strefa",
         "subtype": "Podtyp",
         "type": "Typ"

@@ -17,6 +17,7 @@ const VALID_GROUP = new Set([
   "none",
   "pack",
   "path_set",
+  "set",
   "type",
 ]);
 

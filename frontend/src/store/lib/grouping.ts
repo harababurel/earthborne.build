@@ -1,4 +1,9 @@
-import { APPROACH_ORDER, type Card } from "@earthborne-build/shared";
+import {
+  APPROACH_ORDER,
+  BACKGROUND_TYPES,
+  type Card,
+  SPECIALTY_TYPES,
+} from "@earthborne-build/shared";
 import { displayPackName, shortenPackName } from "@/utils/formatting";
 import i18n from "@/utils/i18n";
 import type { GroupingType } from "../slices/lists.types";
@@ -15,6 +20,7 @@ export const NONE = "none";
 
 export const PLAYER_GROUPING_TYPES: GroupingType[] = [
   "category",
+  "set",
   "type",
   "aspect",
   "approach",
@@ -22,11 +28,7 @@ export const PLAYER_GROUPING_TYPES: GroupingType[] = [
   "pack",
 ];
 
-export const PATH_GROUPING_TYPES: GroupingType[] = [
-  "type",
-  "path_set",
-  "pack",
-];
+export const PATH_GROUPING_TYPES: GroupingType[] = ["type", "path_set", "pack"];
 
 type Key = string | number;
 
@@ -183,6 +185,33 @@ function groupByPathSet(
 
   omitEmptyGroupings(results);
   results.groupings.sort(sortByEncounterSet(metadata, collator));
+
+  return toGroupingResult(results);
+}
+
+function groupBySet(
+  cards: Card[],
+  metadata: Metadata,
+  collator: Intl.Collator,
+) {
+  const results = cards.reduce<Grouping>(
+    (acc, card) => {
+      const code = card.set_code ?? NONE;
+
+      if (!acc.data[code]) {
+        acc.data[code] = [card];
+        acc.groupings.push(code);
+      } else {
+        acc.data[code].push(card);
+      }
+
+      return acc;
+    },
+    { data: {}, groupings: [], type: "set" },
+  );
+
+  omitEmptyGroupings(results);
+  results.groupings.sort(sortBySet(metadata, collator));
 
   return toGroupingResult(results);
 }
@@ -368,6 +397,8 @@ function applyGrouping(
       return groupByCategory(cards);
     case "path_set":
       return groupByPathSet(cards, metadata, collator);
+    case "set":
+      return groupBySet(cards, metadata, collator);
     case "cost":
       return groupByCost(cards);
     case "cycle":
@@ -475,6 +506,15 @@ export function getGroupingKeyLabel(
       return metadata.encounterSets[segment]?.name ?? segment;
     }
 
+    case "set": {
+      if (segment === NONE) return "";
+
+      const key = `common.set.${segment}`;
+      if (i18n.exists(key)) return i18n.t(key);
+
+      return metadata.encounterSets[segment]?.name ?? segment;
+    }
+
     case "cost": {
       if (segment === NONE) return i18n.t("common.cost.none");
 
@@ -510,4 +550,31 @@ export function getGroupingKeyLabel(
   }
 
   return "";
+}
+
+function sortBySet(metadata: Metadata, collator: Intl.Collator) {
+  const order = [
+    ...BACKGROUND_TYPES,
+    ...SPECIALTY_TYPES,
+    "personality",
+    "reward",
+    "malady",
+  ];
+
+  return (a: string, b: string) => {
+    if (a === NONE) return 1;
+    if (b === NONE) return -1;
+
+    const ai = order.indexOf(a as (typeof order)[number]);
+    const bi = order.indexOf(b as (typeof order)[number]);
+
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+
+    return collator.compare(
+      metadata.encounterSets[a]?.name ?? a,
+      metadata.encounterSets[b]?.name ?? b,
+    );
+  };
 }

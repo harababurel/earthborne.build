@@ -1299,6 +1299,7 @@
         "name": "Nombre",
         "pack": "Pack",
         "position": "Posición",
+        "set": "Conjunto",
         "slot": "Espacio",
         "subtype": "Subtipo",
         "type": "Tipo"

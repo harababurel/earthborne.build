@@ -104,6 +104,25 @@ export function GroupLabel(props: GroupLabelProps) {
     );
   }
 
+  if (type === "set") {
+    const set = metadata.encounterSets[segment];
+
+    if (!set?.pack_code) {
+      return <span className={className}>{keyLabel}</span>;
+    }
+
+    return (
+      <span className={className}>
+        <Link
+          className="link-current"
+          href={`/browse/pack/${set.pack_code}?set=${segment}`}
+        >
+          {keyLabel}
+        </Link>
+      </span>
+    );
+  }
+
   if (type === "slot") {
     if (segment === NONE) {
       return <span className={className}>{keyLabel}</span>;

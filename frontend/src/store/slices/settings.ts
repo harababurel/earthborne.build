@@ -16,8 +16,8 @@ import type {
 } from "./settings.types";
 
 export const PLAYER_DEFAULTS: ListConfig = {
-  group: ["category", "type"],
-  sort: ["cost", "name"],
+  group: ["pack", "set"],
+  sort: ["position"],
   viewMode: "compact",
 };
 
