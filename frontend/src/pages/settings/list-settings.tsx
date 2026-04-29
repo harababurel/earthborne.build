@@ -10,9 +10,9 @@ import {
 } from "@/store/lib/grouping";
 import { SORTING_TYPES } from "@/store/lib/sorting";
 import {
+  ALL_DEFAULTS,
   DECK_DEFAULTS,
   DECK_SCANS_DEFAULTS,
-  MIXED_DEFAULTS,
   PATH_DEFAULTS,
   PLAYER_DEFAULTS,
 } from "@/store/slices/settings";
@@ -29,11 +29,11 @@ interface Props extends SettingProps {
 }
 
 function getGroupItemsForList(listKey: keyof SettingsState["lists"]) {
-  if (listKey === "encounter") {
+  if (listKey === "path") {
     return [...PATH_GROUPING_TYPES];
   }
 
-  if (listKey === "mixed") {
+  if (listKey === "all") {
     return Array.from(
       new Set([...PATH_GROUPING_TYPES, ...PLAYER_GROUPING_TYPES]),
     );
@@ -47,7 +47,7 @@ function getSortItemsForList(_listKey: keyof SettingsState["lists"]) {
 }
 
 function getDefaultsForList(listKey: keyof SettingsState["lists"]) {
-  if (listKey === "encounter") {
+  if (listKey === "path") {
     return structuredClone(PATH_DEFAULTS);
   }
 
@@ -59,8 +59,8 @@ function getDefaultsForList(listKey: keyof SettingsState["lists"]) {
     return structuredClone(DECK_SCANS_DEFAULTS);
   }
 
-  if (listKey === "mixed") {
-    return structuredClone(MIXED_DEFAULTS);
+  if (listKey === "all") {
+    return structuredClone(ALL_DEFAULTS);
   }
 
   return structuredClone(PLAYER_DEFAULTS);

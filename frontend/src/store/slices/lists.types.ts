@@ -61,7 +61,7 @@ export type SubtypeFilter = {
 
 export type SelectFilter = string | number | undefined;
 
-export type CardTypeFilter = "" | "player" | "encounter";
+export type CardTypeFilter = "" | "player" | "path";
 
 // Stub — ER has no skill icons; kept for API compatibility.
 export type SkillIconsFilter = {

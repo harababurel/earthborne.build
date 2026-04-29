@@ -301,7 +301,7 @@ test.describe("deck edit", () => {
     await importDeckFromFile(page, "validation/honed_instinct.json", {
       navigate: "edit",
     });
-    await page.getByTestId("card-type-encounter").click();
+    await page.getByTestId("card-type-path").click();
     await page
       .getByTestId("listcard-01117")
       .getByTestId("quantity-increment")
@@ -616,7 +616,7 @@ test.describe("deck edit", () => {
   test("completing Task.", async ({ page }) => {
     await page.goto("/deck/create/01001");
     await page.getByTestId("create-save").click();
-    await page.getByTestId("card-type-encounter").click();
+    await page.getByTestId("card-type-path").click();
     await page.getByTestId("search-input").click();
     await page.getByTestId("search-input").fill("toe the line");
 

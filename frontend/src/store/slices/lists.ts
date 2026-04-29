@@ -977,20 +977,20 @@ function getDisplaySettings(
       };
     }
 
-    case "encounter": {
+    case "path": {
       return {
-        grouping: settings.lists.encounter.group,
-        sorting: settings.lists.encounter.sort,
-        viewMode: settings.lists.encounter.viewMode,
+        grouping: settings.lists.path.group,
+        sorting: settings.lists.path.sort,
+        viewMode: settings.lists.path.viewMode,
         properties: properties(),
       };
     }
 
     default: {
       return {
-        grouping: settings.lists.mixed.group,
-        sorting: settings.lists.mixed.sort,
-        viewMode: settings.lists.mixed.viewMode,
+        grouping: settings.lists.all.group,
+        sorting: settings.lists.all.sort,
+        viewMode: settings.lists.all.viewMode,
         properties: properties(),
       };
     }

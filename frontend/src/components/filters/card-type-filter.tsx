@@ -37,7 +37,7 @@ export function CardTypeFilter(props: FilterProps & { className?: string }) {
   );
 
   useHotkey("alt+p", () => onToggle("player"));
-  useHotkey("alt+c", () => onToggle("encounter"));
+  useHotkey("alt+c", () => onToggle("path"));
 
   if (!filter) return null;
 
@@ -52,14 +52,26 @@ export function CardTypeFilter(props: FilterProps & { className?: string }) {
       type="single"
       value={filter.value}
     >
-      <HotkeyTooltip keybind="alt+p" description={t("common.player_cards")}>
+      <HotkeyTooltip
+        keybind="alt+p"
+        description={t("settings.lists.ranger_cards", {
+          defaultValue: "Ranger cards",
+        })}
+      >
         <ToggleGroupItem data-testid="card-type-player" value="player">
-          <i className="icon-per_ranger" /> {t("common.player_cards_short")}
+          <i className="icon-per_ranger" />{" "}
+          {t("settings.lists.ranger_cards", { defaultValue: "Ranger cards" })}
         </ToggleGroupItem>
       </HotkeyTooltip>
-      <HotkeyTooltip keybind="alt+c" description={t("common.encounter_cards")}>
-        <ToggleGroupItem value="encounter" data-testid="card-type-encounter">
-          <i className="icon-auto_fail" /> {t("common.encounter_cards_short")}
+      <HotkeyTooltip
+        keybind="alt+c"
+        description={t("settings.lists.path_cards", {
+          defaultValue: "Path cards",
+        })}
+      >
+        <ToggleGroupItem value="path" data-testid="card-type-path">
+          <i className="icon-auto_fail" />{" "}
+          {t("settings.lists.path_cards", { defaultValue: "Path cards" })}
         </ToggleGroupItem>
       </HotkeyTooltip>
     </ToggleGroup>

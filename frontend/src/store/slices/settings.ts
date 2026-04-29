@@ -27,9 +27,9 @@ export const PATH_DEFAULTS: ListConfig = {
   viewMode: "compact",
 };
 
-export const MIXED_DEFAULTS: ListConfig = {
-  group: ["type"],
-  sort: ["name"],
+export const ALL_DEFAULTS: ListConfig = {
+  group: ["pack", "path_set"],
+  sort: ["aspect", "name"],
   viewMode: "compact",
 };
 
@@ -47,8 +47,8 @@ export function getInitialListsSetting(): SettingsState["lists"] {
   return {
     deck: structuredClone(DECK_DEFAULTS),
     deckScans: structuredClone(DECK_SCANS_DEFAULTS),
-    encounter: structuredClone(PATH_DEFAULTS),
-    mixed: structuredClone(MIXED_DEFAULTS),
+    all: structuredClone(ALL_DEFAULTS),
+    path: structuredClone(PATH_DEFAULTS),
     player: structuredClone(PLAYER_DEFAULTS),
   };
 }

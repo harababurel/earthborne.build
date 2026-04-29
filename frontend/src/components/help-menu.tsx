@@ -84,8 +84,18 @@ export function HelpMenu() {
               keybind: "alt+2",
               description: t("lists.actions.toggle_filter_menu"),
             },
-            { keybind: "alt+p", description: t("common.player_cards") },
-            { keybind: "alt+c", description: t("common.encounter_cards") },
+            {
+              keybind: "alt+p",
+              description: t("settings.lists.ranger_cards", {
+                defaultValue: "Ranger cards",
+              }),
+            },
+            {
+              keybind: "alt+c",
+              description: t("settings.lists.path_cards", {
+                defaultValue: "Path cards",
+              }),
+            },
             {
               keybind: "alt+a",
               description: t("lists.actions.show_limited_access"),

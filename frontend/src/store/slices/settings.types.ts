@@ -41,8 +41,8 @@ export type SettingsState = {
   fontSize: number;
   hideWeaknessesByDefault: boolean;
   lists: {
-    encounter: ListConfig;
-    mixed: ListConfig;
+    all: ListConfig;
+    path: ListConfig;
     player: ListConfig;
     deck: DecklistConfig;
     deckScans: DecklistConfig;

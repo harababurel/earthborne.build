@@ -31,8 +31,8 @@ import type { ResolvedDeck } from "./types";
  * Misc. card identity filters
  */
 
-// Non-player cards in ER are mapped to the "encounter" card type filter.
-export function filterEncounterCards(card: Card) {
+// Non-ranger cards in ER are path/campaign cards.
+export function filterPathCards(card: Card) {
   return ![
     "gear",
     "attachment",

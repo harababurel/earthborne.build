@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { filterEncounterCards, filterType } from "@/store/lib/filtering";
+import { filterPathCards, filterType } from "@/store/lib/filtering";
 import { makeSortFunction } from "@/store/lib/sorting";
 import {
   selectLocaleSortingCollator,
@@ -22,7 +22,7 @@ export const selectPlayerCardsFilter = createSelector(
   selectLookupTables,
   (_lookupTables) => {
     const playerCardFilter = and([
-      not(filterEncounterCards),
+      not(filterPathCards),
       not(filterType(["role"]) ?? (() => true)),
       (c) => official(c),
     ]);

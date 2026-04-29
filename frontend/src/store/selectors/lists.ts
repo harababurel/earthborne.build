@@ -19,7 +19,6 @@ import {
   filterAspectRequirement,
   filterCost,
   filterDuplicatesFromContext,
-  filterEncounterCards,
   filterEncounterCode,
   filterEquip,
   filterFactions,
@@ -28,6 +27,7 @@ import {
   filterInvestigatorAccess,
   filterOwnership,
   filterPackCode,
+  filterPathCards,
   filterProperties,
   filterSetCode,
   filterTraits,
@@ -421,9 +421,9 @@ const selectBaseListCards = createSelector(
           .value as CardTypeFilter;
 
         if (value === "player") {
-          filters.push(not(filterEncounterCards));
-        } else if (value === "encounter") {
-          filters.push(filterEncounterCards);
+          filters.push(not(filterPathCards));
+        } else if (value === "path") {
+          filters.push(filterPathCards);
         }
       }
     }
@@ -998,7 +998,7 @@ export const selectCardOptions = createSelector(
 
     return Object.values(metadata.cards)
       .filter((card) => {
-        return !filterEncounterCards(card) && card.type_code !== "role";
+        return !filterPathCards(card) && card.type_code !== "role";
       })
       .sort(sortFn);
   },

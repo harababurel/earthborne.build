@@ -59,11 +59,10 @@ ranger actually browses cards and reads a deck.
 Removed entirely from the unions: `slot`, `level`, `subtype`, `faction`,
 `encounter_set`, `cycle` (AH-specific, no ER equivalent).
 
-#### Path lists (encounter context)
+#### Path lists
 
-Internal key stays `encounter`; user-facing label is "Path cards". Internal constant
-renamed from `ENCOUNTER_DEFAULTS` to `PATH_DEFAULTS`. Internal grouping constant
-renamed from `ENCOUNTER_GROUPING_TYPES` to `PATH_GROUPING_TYPES`.
+Internal key is `path`; user-facing label is "Path cards". Internal constant is
+`PATH_DEFAULTS`. Internal grouping constant is `PATH_GROUPING_TYPES`.
 
 | Field         | Group | Sort | Notes                                |
 |---------------|:-----:|:----:|--------------------------------------|
@@ -82,7 +81,7 @@ Union of Player and Path field sets, deduped.
 ```ts
 PLAYER_DEFAULTS   = { group: ["category", "type"],        sort: ["cost", "name"] }
 PATH_DEFAULTS     = { group: ["pack", "path_set"],        sort: ["position"] }
-MIXED_DEFAULTS    = { group: ["type"],                    sort: ["name"] }
+ALL_DEFAULTS      = { group: ["pack", "path_set"],        sort: ["aspect", "name"] }
 DECK_DEFAULTS     = { group: ["category", "type"],        sort: ["cost", "name"] }
 DECK_SCANS_DEF.   = { group: ["category"],                sort: ["type", "name"] }
 ```
@@ -94,15 +93,16 @@ the "Default" option; presets can be reintroduced later on top of the new field 
 
 ### Migration
 
-Store version bumped to 12. Migration `0011-clean-list-sort-fields.ts` strips unknown
-group/sort fields from all persisted list configs, rewrites `encounter_set` → `path_set`,
-and falls back to the new defaults if a config is left empty after stripping.
+Store version bumped to 12 for `0011-clean-list-sort-fields.ts`, which strips
+unknown group/sort fields from all persisted list configs, rewrites
+`encounter_set` → `path_set`, and falls back to the new defaults if a config is
+left empty after stripping.
 
 ## Open questions (resolved)
 
 1. **Approach grouping tiebreaker.** Resolved: `conflict > reason > exploration >
    connection`, matching `APPROACH_ORDER` in shared.
-2. **Rename `encounter` context key to `path`?** Deferred — internal key stays
-   `encounter` to avoid a broader store/persist refactor.
-3. **Keep "All cards" (mixed) as a separate context?** Kept as-is for now.
+2. **Rename `encounter` context key to `path`?** Done.
+3. **Keep "All cards" as a separate context?** Kept as-is for now, with the
+   internal key renamed from `mixed` to `all`.
 4. **Equip sort direction.** Descending (high-equip gear first).

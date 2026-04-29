@@ -1,16 +1,13 @@
 import type { StoreState } from "@/store/slices";
+import type { GroupingType, SortingType } from "@/store/slices/lists.types";
 import {
+  ALL_DEFAULTS,
   DECK_DEFAULTS,
   DECK_SCANS_DEFAULTS,
-  MIXED_DEFAULTS,
   PATH_DEFAULTS,
   PLAYER_DEFAULTS,
 } from "@/store/slices/settings";
-import type {
-  DecklistConfig,
-  ListConfig,
-} from "@/store/slices/settings.types";
-import type { GroupingType, SortingType } from "@/store/slices/lists.types";
+import type { DecklistConfig, ListConfig } from "@/store/slices/settings.types";
 
 const VALID_GROUP = new Set([
   "approach",
@@ -45,10 +42,7 @@ function cleanSort(sort: string[]): SortingType[] {
   return sort.filter((s) => VALID_SORT.has(s)) as SortingType[];
 }
 
-function cleanListConfig(
-  config: ListConfig,
-  defaults: ListConfig,
-): ListConfig {
+function cleanListConfig(config: ListConfig, defaults: ListConfig): ListConfig {
   const group = cleanGroup(config.group ?? []);
   const sort = cleanSort(config.sort ?? []);
   return {
@@ -78,17 +72,14 @@ function migrate(state: Partial<StoreState>, version: number) {
   const lists = (state.settings as StoreState["settings"] | undefined)?.lists;
   if (!lists) return state;
 
+  if (lists.all) {
+    lists.all = cleanListConfig(lists.all as ListConfig, ALL_DEFAULTS);
+  }
   if (lists.player) {
     lists.player = cleanListConfig(lists.player as ListConfig, PLAYER_DEFAULTS);
   }
-  if (lists.encounter) {
-    lists.encounter = cleanListConfig(
-      lists.encounter as ListConfig,
-      PATH_DEFAULTS,
-    );
-  }
-  if (lists.mixed) {
-    lists.mixed = cleanListConfig(lists.mixed as ListConfig, MIXED_DEFAULTS);
+  if (lists.path) {
+    lists.path = cleanListConfig(lists.path as ListConfig, PATH_DEFAULTS);
   }
   if (lists.deck) {
     lists.deck = cleanDecklistConfig(

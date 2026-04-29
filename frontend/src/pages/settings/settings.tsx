@@ -167,21 +167,21 @@ function SettingsInner({
                   <ListSettings
                     listKey="player"
                     title={t("settings.lists.ranger_cards", {
-                      defaultValue: t("common.player_cards"),
+                      defaultValue: "Ranger cards",
                     })}
                     settings={settings}
                     setSettings={setSettings}
                   />
                   <ListSettings
-                    listKey="encounter"
+                    listKey="path"
                     title={t("settings.lists.path_cards", {
-                      defaultValue: t("common.encounter_cards"),
+                      defaultValue: "Path cards",
                     })}
                     settings={settings}
                     setSettings={setSettings}
                   />
                   <ListSettings
-                    listKey="mixed"
+                    listKey="all"
                     title={t("lists.all_cards")}
                     settings={settings}
                     setSettings={setSettings}

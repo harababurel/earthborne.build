@@ -169,7 +169,7 @@ export function isAssetFilter(value: unknown): value is AssetFilter {
 }
 
 export function isCardTypeFilter(value: unknown): value is CardTypeFilter {
-  return value === "player" || value === "encounter" || value === "";
+  return value === "player" || value === "path" || value === "";
 }
 
 export function isCostFilter(value: unknown): value is CostFilter {

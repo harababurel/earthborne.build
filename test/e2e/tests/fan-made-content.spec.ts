@@ -136,7 +136,7 @@ test.describe("fan-made content", () => {
     const ctxPage = await openUrlInNewContext(page, page.url());
     await ctxPage.getByTestId("share-import").click();
     await ctxPage.getByTestId("view-edit").click();
-    await ctxPage.getByTestId("card-type-encounter").click();
+    await ctxPage.getByTestId("card-type-path").click();
     await fillSearch(ctxPage, "The Persian");
 
     await expect(
@@ -163,7 +163,7 @@ test.describe("fan-made content", () => {
     const ctxPage = await openUrlInNewContext(page, page.url());
     await ctxPage.getByTestId("share-import").click();
     await ctxPage.getByTestId("masthead-logo").click();
-    await ctxPage.getByTestId("card-type-encounter").click();
+    await ctxPage.getByTestId("card-type-path").click();
     await fillSearch(ctxPage, "The Persian");
 
     await ctxPage.close();
@@ -301,7 +301,7 @@ async function createDeckWithFanMadeCard(page: Page) {
     .getByTestId("create-choose-investigator")
     .click();
   await page.getByTestId("create-save").click();
-  await page.getByTestId("card-type-encounter").click();
+  await page.getByTestId("card-type-path").click();
   await fillSearch(page, "The Persian");
 
   await page

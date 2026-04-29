@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { and } from "@/utils/fp";
 import { isCardOwned } from "../lib/card-ownership";
-import { filterEncounterCards } from "../lib/filtering";
+import { filterPathCards } from "../lib/filtering";
 import type { StoreState } from "../slices";
 import { selectLookupTables, selectMetadata } from "./shared";
 
@@ -39,7 +39,7 @@ export const selectTotalOwned = createSelector(
       });
 
       if (owned) {
-        if (filterEncounterCards(card)) {
+        if (filterPathCards(card)) {
           ownedEncounterCards += card.quantity || 1;
         } else {
           ownedPlayerCards += card.quantity || 1;
@@ -64,7 +64,7 @@ export const selectCycleCardCounts = createSelector(
 
     for (const card of Object.values(metadata.cards)) {
       const packCode = card.pack_code;
-      const isEncounter = filterEncounterCards(card);
+      const isEncounter = filterPathCards(card);
 
       const pack = metadata.packs[packCode];
       const cycle = metadata.cycles[pack.cycle_code];
