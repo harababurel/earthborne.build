@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "wouter";
 import { Card } from "@/components/card/card";
+import { CardText } from "@/components/card/card-text";
 import { DeckEvolutionBadge } from "@/components/deck-evolution-badge";
+import { AspectIcon } from "@/components/icons/aspect-icon";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +25,7 @@ import {
   selectLookupTables,
   selectMetadata,
 } from "@/store/selectors/shared";
+import { cx } from "@/utils/cx";
 import { useAccentColor } from "@/utils/use-accent-color";
 import css from "./deck-edit.module.css";
 
@@ -66,8 +69,9 @@ function DeckEditSidebar({ deck }: { deck: ResolvedDeck }) {
   const updateName = useStore((state) => state.updateName);
   const saveDeck = useStore((state) => state.saveDeck);
   const discardEdits = useStore((state) => state.discardEdits);
+  const metadata = useStore(selectMetadata);
   const role = useResolvedCard(deck.role_code);
-  const aspect = useResolvedCard(deck.aspect_code);
+  const aspectCard = metadata.cards[deck.aspect_code];
 
   const onSave = useCallback(async () => {
     const toastId = toast.show({
@@ -91,7 +95,49 @@ function DeckEditSidebar({ deck }: { deck: ResolvedDeck }) {
     <aside className={css["sidebar"]}>
       <div className={css["identity"]}>
         {role && <Card resolvedCard={role} size="compact" />}
-        {aspect && <Card resolvedCard={aspect} size="compact" />}
+        <div className={css["aspect-stats"]}>
+          <div className={css["stat-item"]}>
+            <div className={cx(css["aspect-square"], css["awa"])}>
+              <AspectIcon aspect="AWA" className={css["white-icon"]} size="3.75rem" />
+              <div className={css["stat-overlay"]}>
+                <span className={css["stat-value"]}>{aspectCard?.aspect_awareness}</span>
+                <span className={css["stat-label"]}>AWA</span>
+              </div>
+            </div>
+          </div>
+          <div className={css["stat-item"]}>
+            <div className={cx(css["aspect-square"], css["spi"])}>
+              <AspectIcon aspect="SPI" className={css["white-icon"]} size="3.75rem" />
+              <div className={css["stat-overlay"]}>
+                <span className={css["stat-value"]}>{aspectCard?.aspect_spirit}</span>
+                <span className={css["stat-label"]}>SPI</span>
+              </div>
+            </div>
+          </div>
+          <div className={css["stat-item"]}>
+            <div className={cx(css["aspect-square"], css["fit"])}>
+              <AspectIcon aspect="FIT" className={css["white-icon"]} size="3.75rem" />
+              <div className={css["stat-overlay"]}>
+                <span className={css["stat-value"]}>{aspectCard?.aspect_fitness}</span>
+                <span className={css["stat-label"]}>FIT</span>
+              </div>
+            </div>
+          </div>
+          <div className={css["stat-item"]}>
+            <div className={cx(css["aspect-square"], css["foc"])}>
+              <AspectIcon aspect="FOC" className={css["white-icon"]} size="3.75rem" />
+              <div className={css["stat-overlay"]}>
+                <span className={css["stat-value"]}>{aspectCard?.aspect_focus}</span>
+                <span className={css["stat-label"]}>FOC</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <CardText
+          size="full"
+          text={aspectCard?.text ?? undefined}
+          typeCode={aspectCard?.type_code ?? ""}
+        />
       </div>
       <Field full>
         <FieldLabel htmlFor="deck-name">
