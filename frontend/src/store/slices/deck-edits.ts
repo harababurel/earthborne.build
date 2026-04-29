@@ -142,28 +142,38 @@ export const createDeckEditsSlice: StateCreator<
     dehydrate(get(), "edits").catch(console.error);
   },
 
-  swapRewardIntoSlots(deckId, rewardCode, displacedCode) {
+  swapRewardIntoSlots(deckId, rewardCode, displacedCode, quantity = 2) {
     set((state) =>
       setQuantityEdits(state, deckId, {
         rewards: { [rewardCode]: 0 },
-        slots: { [rewardCode]: 2, [displacedCode]: 0 },
-        displaced: { [displacedCode]: 2 },
+        slots: { [rewardCode]: quantity, [displacedCode]: 0 },
+        displaced: { [displacedCode]: quantity },
       }),
     );
     dehydrate(get(), "edits").catch(console.error);
   },
 
-  restoreDisplaced(deckId, displacedCode, outCode) {
+  restoreDisplaced(deckId, displacedCode, outCode, quantity = 2) {
     set((state) =>
       setQuantityEdits(state, deckId, {
         displaced: {
           [displacedCode]: 0,
-          ...(outCode ? { [outCode]: 2 } : {}),
+          ...(outCode ? { [outCode]: quantity } : {}),
         },
         slots: {
-          [displacedCode]: 2,
+          [displacedCode]: quantity,
           ...(outCode ? { [outCode]: 0 } : {}),
         },
+      }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
+  swapPlayerCardIntoSlots(deckId, newCode, displacedCode, quantity) {
+    set((state) =>
+      setQuantityEdits(state, deckId, {
+        slots: { [newCode]: quantity, [displacedCode]: 0 },
+        displaced: { [displacedCode]: quantity },
       }),
     );
     dehydrate(get(), "edits").catch(console.error);

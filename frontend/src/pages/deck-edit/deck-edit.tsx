@@ -6,7 +6,7 @@ import {
   SPECIALTY_PICKS,
 } from "@earthborne-build/shared";
 import { CheckIcon } from "lucide-react";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "wouter";
 import { Card } from "@/components/card/card";
@@ -266,6 +266,7 @@ function DeckEditDeckTab({ deck }: { deck: ResolvedDeck }) {
         required={OUTSIDE_INTEREST_PICKS}
         title={t("deck_edit.sections.outside_interest")}
       />
+      <PlayerCardSwapSection deck={deck} />
       <CampaignPanels deck={deck} />
     </>
   );
@@ -324,9 +325,6 @@ function CampaignPanels({ deck }: { deck: ResolvedDeck }) {
   const maladies = useCardsForSlots(deck.maladies);
   const deckCards = useCardsForSlots(deck.slots);
   const maladyPool = useCampaignPool("malady");
-  const swapRewardIntoSlots = useStore((state) => state.swapRewardIntoSlots);
-  const restoreDisplaced = useStore((state) => state.restoreDisplaced);
-  const removeReward = useStore((state) => state.removeUnlockedReward);
   const addMalady = useStore((state) => state.addMalady);
   const removeMalady = useStore((state) => state.removeMalady);
 
@@ -340,23 +338,11 @@ function CampaignPanels({ deck }: { deck: ResolvedDeck }) {
           <p className={css["empty"]}>{t("deck_edit.rewards.empty")}</p>
         ) : (
           rewards.map((card) => (
-            <ListCard
+            <RewardCardRow
               key={card.card.code}
-              card={card.card}
-              renderCardAfter={() => (
-                <div className={css["row-actions"]}>
-                  <DisplacementPicker
-                    cards={deckCards}
-                    label={t("deck_edit.actions.swap_into_deck")}
-                    onSelect={(code) =>
-                      swapRewardIntoSlots(deck.id, card.card.code, code)
-                    }
-                  />
-                  <Button onClick={() => removeReward(deck.id, card.card.code)}>
-                    {t("deck_edit.actions.remove")}
-                  </Button>
-                </div>
-              )}
+              card={card}
+              deck={deck}
+              deckCards={deckCards}
             />
           ))
         )}
@@ -368,25 +354,11 @@ function CampaignPanels({ deck }: { deck: ResolvedDeck }) {
           <p className={css["empty"]}>{t("deck_edit.displaced.empty")}</p>
         ) : (
           displaced.map((card) => (
-            <ListCard
+            <DisplacedCardRow
               key={card.card.code}
-              card={card.card}
-              renderCardAfter={() => (
-                <div className={css["row-actions"]}>
-                  <DisplacementPicker
-                    cards={deckCards}
-                    includeNone
-                    label={t("deck_edit.actions.restore")}
-                    onSelect={(code) =>
-                      restoreDisplaced(
-                        deck.id,
-                        card.card.code,
-                        code === "__none" ? undefined : code,
-                      )
-                    }
-                  />
-                </div>
-              )}
+              card={card}
+              deck={deck}
+              deckCards={deckCards}
             />
           ))
         )}
@@ -427,6 +399,133 @@ function CampaignPanels({ deck }: { deck: ResolvedDeck }) {
         ))}
       </section>
     </div>
+  );
+}
+
+function RewardCardRow({
+  card,
+  deck,
+  deckCards,
+}: {
+  card: ResolvedCard;
+  deck: ResolvedDeck;
+  deckCards: ResolvedCard[];
+}) {
+  const { t } = useTranslation();
+  const [qty, setQty] = useState<1 | 2>(2);
+  const swapRewardIntoSlots = useStore((state) => state.swapRewardIntoSlots);
+  const removeReward = useStore((state) => state.removeUnlockedReward);
+
+  return (
+    <ListCard
+      card={card.card}
+      renderCardAfter={() => (
+        <div className={css["row-actions"]}>
+          <QuantitySelect value={qty} onChange={setQty} />
+          <DisplacementPicker
+            cards={deckCards}
+            label={t("deck_edit.actions.swap_into_deck")}
+            onSelect={(code) =>
+              swapRewardIntoSlots(deck.id, card.card.code, code, qty)
+            }
+          />
+          <Button onClick={() => removeReward(deck.id, card.card.code)}>
+            {t("deck_edit.actions.remove")}
+          </Button>
+        </div>
+      )}
+    />
+  );
+}
+
+function DisplacedCardRow({
+  card,
+  deck,
+  deckCards,
+}: {
+  card: ResolvedCard;
+  deck: ResolvedDeck;
+  deckCards: ResolvedCard[];
+}) {
+  const { t } = useTranslation();
+  const [qty, setQty] = useState<1 | 2>(2);
+  const restoreDisplaced = useStore((state) => state.restoreDisplaced);
+
+  return (
+    <ListCard
+      card={card.card}
+      renderCardAfter={() => (
+        <div className={css["row-actions"]}>
+          <QuantitySelect value={qty} onChange={setQty} />
+          <DisplacementPicker
+            cards={deckCards}
+            includeNone
+            label={t("deck_edit.actions.restore")}
+            onSelect={(code) =>
+              restoreDisplaced(
+                deck.id,
+                card.card.code,
+                code === "__none" ? undefined : code,
+                qty,
+              )
+            }
+          />
+        </div>
+      )}
+    />
+  );
+}
+
+function PlayerCardSwapSection({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+  const [incomingCode, setIncomingCode] = useState("");
+  const [outgoingCode, setOutgoingCode] = useState("");
+  const [qty, setQty] = useState<1 | 2>(2);
+  const pool = usePlayerCardPool(deck);
+  const deckCards = useCardsForSlots(deck.slots);
+  const swapPlayerCardIntoSlots = useStore(
+    (state) => state.swapPlayerCardIntoSlots,
+  );
+
+  const canSwap = !!incomingCode && !!outgoingCode;
+
+  function handleSwap() {
+    if (!canSwap) return;
+    swapPlayerCardIntoSlots(deck.id, incomingCode, outgoingCode, qty);
+    setIncomingCode("");
+    setOutgoingCode("");
+    setQty(2);
+  }
+
+  return (
+    <section className={css["section"]}>
+      <h2>{t("deck_edit.sections.player_cards")}</h2>
+      <div className={css["swap-form"]}>
+        <select
+          aria-label={t("deck_edit.player_cards.incoming")}
+          onChange={(evt) => setIncomingCode(evt.target.value)}
+          value={incomingCode}
+        >
+          <option value="">{t("deck_edit.player_cards.incoming")}</option>
+          {pool.map((card) => (
+            <option key={card.card.code} value={card.card.code}>
+              {card.card.name}
+            </option>
+          ))}
+        </select>
+        <DisplacementPicker
+          cards={deckCards}
+          controlled
+          label={t("deck_edit.player_cards.outgoing")}
+          onSelect={setOutgoingCode}
+          value={outgoingCode}
+        />
+        <QuantitySelect value={qty} onChange={setQty} />
+        <Button disabled={!canSwap} onClick={handleSwap} variant="primary">
+          {t("deck_edit.actions.swap")}
+        </Button>
+      </div>
+    </section>
   );
 }
 
@@ -551,14 +650,18 @@ function ReplacementPicker({
 
 function DisplacementPicker({
   cards,
+  controlled,
   includeNone,
   label,
   onSelect,
+  value,
 }: {
   cards: ResolvedCard[];
+  controlled?: boolean;
   includeNone?: boolean;
   label: string;
   onSelect: (code: string) => void;
+  value?: string;
 }) {
   const { t } = useTranslation();
 
@@ -567,8 +670,9 @@ function DisplacementPicker({
       aria-label={label}
       onChange={(evt) => {
         onSelect(evt.target.value);
-        evt.target.value = "";
+        if (!controlled) evt.target.value = "";
       }}
+      {...(controlled ? { value: value ?? "" } : {})}
     >
       <option value="">{label}</option>
       {includeNone && <option value="__none">{t("common.none")}</option>}
@@ -577,6 +681,26 @@ function DisplacementPicker({
           {card.card.name}
         </option>
       ))}
+    </select>
+  );
+}
+
+function QuantitySelect({
+  value,
+  onChange,
+}: {
+  value: 1 | 2;
+  onChange: (qty: 1 | 2) => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <select
+      aria-label={t("deck_edit.actions.quantity")}
+      onChange={(evt) => onChange(Number(evt.target.value) as 1 | 2)}
+      value={value}
+    >
+      <option value={1}>1×</option>
+      <option value={2}>2×</option>
     </select>
   );
 }
@@ -622,6 +746,38 @@ function useCardsForSlots(slots: Slots | null | undefined) {
 
 function useCampaignPool(category: "reward" | "malady") {
   return useResolvedPool((card) => card.category === category);
+}
+
+function usePlayerCardPool(deck: ResolvedDeck) {
+  const metadata = useStore(selectMetadata);
+  const aspectCard = metadata.cards[deck.aspect_code];
+
+  return useResolvedPool((card) => {
+    if (
+      card.category !== "personality" &&
+      card.category !== "background" &&
+      card.category !== "specialty"
+    ) {
+      return false;
+    }
+    if ((deck.slots[card.code] ?? 0) > 0) return false;
+    if (
+      !card.aspect_requirement_type ||
+      card.aspect_requirement_value == null
+    ) {
+      return true;
+    }
+    if (!aspectCard) return false;
+    const stat: Record<string, number> = {
+      AWA: aspectCard.aspect_awareness ?? 0,
+      SPI: aspectCard.aspect_spirit ?? 0,
+      FIT: aspectCard.aspect_fitness ?? 0,
+      FOC: aspectCard.aspect_focus ?? 0,
+    };
+    return (
+      (stat[card.aspect_requirement_type] ?? 0) >= card.aspect_requirement_value
+    );
+  });
 }
 
 function useCardPoolForCategory(deck: ResolvedDeck, category: Category) {

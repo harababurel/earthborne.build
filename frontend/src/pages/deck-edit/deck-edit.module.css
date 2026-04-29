@@ -171,6 +171,13 @@
   border-radius: var(--rounded);
 }
 
+.swap-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .card-row {
   display: grid;
   grid-template-columns: 1fr auto;

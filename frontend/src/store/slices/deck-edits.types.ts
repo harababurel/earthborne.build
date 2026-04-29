@@ -58,9 +58,22 @@ export type DeckEditsSlice = {
     deckId: Id,
     rewardCode: string,
     displacedCode: string,
+    quantity?: number,
   ): void;
 
-  restoreDisplaced(deckId: Id, displacedCode: string, outCode?: string): void;
+  restoreDisplaced(
+    deckId: Id,
+    displacedCode: string,
+    outCode?: string,
+    quantity?: number,
+  ): void;
+
+  swapPlayerCardIntoSlots(
+    deckId: Id,
+    newCode: string,
+    displacedCode: string,
+    quantity: number,
+  ): void;
 
   addMalady(deckId: Id, cardCode: string): void;
 

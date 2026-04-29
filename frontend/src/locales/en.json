@@ -533,10 +533,12 @@
         "move_to_main_deck": "Move to deck",
         "quick_discard": "Discard changes (and stay on page)",
         "quick_save_deck": "Save deck (and stay on page)",
+        "quantity": "Quantity",
         "remove": "Remove",
         "replace": "Replace card",
         "restore": "Restore to deck",
         "set_quantity": "Set deck quantity",
+        "swap": "Swap",
         "swap_into_deck": "Swap into deck",
         "unlock": "Unlock"
       },
@@ -643,8 +645,13 @@
         "maladies": "Maladies",
         "outside_interest": "Outside Interest",
         "personality": "Personality",
+        "player_cards": "Swap In Player Card",
         "rewards": "Unlocked Rewards",
         "specialty": "Specialty"
+      },
+      "player_cards": {
+        "incoming": "Card to swap in",
+        "outgoing": "Card to remove"
       },
       "displaced": {
         "empty": "No displaced cards."
