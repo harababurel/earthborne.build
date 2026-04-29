@@ -182,7 +182,7 @@ function SettingsInner({
                   />
                   <ListSettings
                     listKey="all"
-                    title={t("lists.all_cards")}
+                    title={t("settings.lists.other_cards")}
                     settings={settings}
                     setSettings={setSettings}
                   />

@@ -11,7 +11,10 @@ import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provide
 import { useStore } from "@/store";
 import { selectIsInitialized, selectMetadata } from "@/store/selectors/shared";
 import { displayPackName } from "@/utils/formatting";
-import { browseTypeSystemFilter } from "./browse-type-system-filter";
+import {
+  browseTabListCardType,
+  browseTypeSystemFilter,
+} from "./browse-type-system-filter";
 import { BrowseWithFilter } from "./browse-with-filter";
 import { type CardTypeTab, SetTree } from "./set-tree";
 
@@ -38,7 +41,7 @@ export function Browse() {
       addList(
         listKey,
         {
-          card_type: "",
+          card_type: browseTabListCardType(cardTypeTab),
         },
         {
           systemFilter: browseTypeSystemFilter(cardTypeTab),

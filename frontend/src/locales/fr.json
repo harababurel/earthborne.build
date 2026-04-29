@@ -1163,6 +1163,7 @@
       "lists": {
         "deck_view": "Vue de deck",
         "deck_view_scans": "Vue de deck (scans)",
+        "other_cards": "Autres cartes",
         "title": "Listes"
       },
       "locale": {

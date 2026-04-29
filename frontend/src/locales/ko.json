@@ -1439,6 +1439,7 @@
       "lists": {
         "deck_view": "덱 보기",
         "deck_view_scans": "덱 보기 (이미지)",
+        "other_cards": "다른 카드",
         "title": "목록"
       },
       "locale": {

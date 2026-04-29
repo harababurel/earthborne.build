@@ -11,7 +11,10 @@ import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
 import { selectIsInitialized } from "@/store/selectors/shared";
-import { browseTypeSystemFilter } from "./browse/browse-type-system-filter";
+import {
+  browseTabListCardType,
+  browseTypeSystemFilter,
+} from "./browse/browse-type-system-filter";
 import type { CardTypeTab } from "./browse/set-tree";
 
 function Index() {
@@ -30,7 +33,7 @@ function Index() {
   useEffect(() => {
     addList(
       "index",
-      { card_type: "" },
+      { card_type: browseTabListCardType(cardTypeTab) },
       {
         additionalFilters: ["pack", "illustrator"],
         systemFilter: browseTypeSystemFilter(cardTypeTab),

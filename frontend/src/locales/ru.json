@@ -1287,6 +1287,7 @@
       "lists": {
         "deck_view": "Колода",
         "deck_view_scans": "Колода (сканы)",
+        "other_cards": "Другие карты",
         "title": "Списки"
       },
       "locale": {

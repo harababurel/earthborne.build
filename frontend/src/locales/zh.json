@@ -1395,6 +1395,7 @@
       "lists": {
         "deck_view": "卡组视图",
         "deck_view_scans": "卡组视图（卡图）",
+        "other_cards": "其他卡牌",
         "title": "列表"
       },
       "locale": {
