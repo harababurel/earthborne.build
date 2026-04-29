@@ -12,7 +12,10 @@ The backend is a small Node.js service built with Hono. It uses SQLite for stora
 
   ```json
   {
-    "card_count": 260
+    "card_count": 260,
+    "cards_updated_at": "2026-04-29T12:00:00.000Z",
+    "locale": "en",
+    "translation_updated_at": "2026-04-29T12:00:00.000Z"
   }
   ```
 
@@ -105,5 +108,12 @@ The backend reads the following env vars:
 - `NODE_ENV`: `development`, `production`, or `test`
 - `PORT`: HTTP port
 - `SQLITE_PATH`: SQLite file path
+
+Operational scripts also use:
+
+- `CARD_DATA_DIR`: local `rangers-card-data` checkout for `ingest:cards`
+- `DATABASE_URL`: dbmate SQLite URL for migrations
+- `DBMATE_MIGRATIONS_DIR`: migration directory for dbmate
+- `DBMATE_SCHEMA_FILE`: schema dump path for dbmate
 
 See [backend/.env.example](../backend/.env.example) for a complete example.

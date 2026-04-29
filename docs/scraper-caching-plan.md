@@ -1,6 +1,18 @@
-# Scraper Caching — Implementation Plan
+# Scraper Caching
 
-## Audience
+Current status: implemented. The scraper cache lives in `scripts/lib/scraper-cache.mjs`, is used by both Living Valley scraper scripts, and stores raw upstream responses under `.cache/scraper/` by default. The cache directory is gitignored.
+
+Useful flags:
+
+- `--refresh`: ignore existing cache entries, re-fetch, and overwrite.
+- `--offline`: read only from cache and fail on a miss.
+- `--no-cache`: bypass cache reads and writes for one run.
+- `--clear-cache`: delete the cache directory before running.
+- `--cache-dir <path>`: override the default cache location.
+
+The rest of this document is the implementation plan that was used to build the feature.
+
+## Original Audience
 
 This plan is written for an autonomous coding agent (e.g. Gemini CLI) that will execute it from start to finish without further clarification. Read the entire document before writing any code. Where the plan says "do X", it means "do exactly X" — do not improvise the design, but do feel free to improve naming or local style if it fits the surrounding code.
 

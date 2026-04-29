@@ -10,7 +10,7 @@ Backend for `earthborne.build`.
 - Migrations: [dbmate](https://github.com/amacneil/dbmate)
 - Tests: [Vitest](https://vitest.dev/)
 
-The service currently exposes Earthborne Rangers card, pack, fan-made project info, image, health, and version endpoints. It does not include the old `arkham.build` Cloudflare, auth, share, or recommendation APIs.
+The service currently exposes Earthborne Rangers card, pack, card set, fan-made project info, local deck sharing, shared deck search, image, health, and version endpoints. It does not include the old `arkham.build` Cloudflare, auth, remote sync, or recommendation APIs.
 
 ## Commands
 

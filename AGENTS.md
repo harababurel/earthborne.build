@@ -63,7 +63,7 @@ Start with these:
 - [`docs/arkham-residue-audit-2026-04.md`](./docs/arkham-residue-audit-2026-04.md) — current arkham.build residue audit and cleanup status
 - [`docs/rules-reference-retrospective.md`](./docs/rules-reference-retrospective.md) — how the embedded `/rules` reference was built
 - [`docs/card-data-issues.md`](./docs/card-data-issues.md) — known data quirks
-- [`docs/scraper-caching-plan.md`](./docs/scraper-caching-plan.md) — pending plan for caching the Living Valley scrapers
+- [`docs/scraper-caching-plan.md`](./docs/scraper-caching-plan.md) — implemented caching design for the Living Valley scrapers
 
 ## Agent Behavior
 

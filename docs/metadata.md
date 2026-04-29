@@ -16,6 +16,7 @@ The ingestion script reads:
 - `sets.json`
 - `tokens.json`
 - `areas.json`
+- `categories.json`
 - `packs.json`
 - `packs/<pack_id>/<pack_id>.json`
 
@@ -29,6 +30,7 @@ The ingestion script reads:
 - card sets
 - tokens
 - areas
+- card categories
 - packs
 - cards
 
@@ -59,9 +61,9 @@ It models Earthborne Rangers concepts such as:
 - background and specialty classification
 - challenge text fields
 
-## Pack metadata
+## Pack and set metadata
 
-The public API currently exposes pack records only. The frontend maps those records into its existing metadata shape and uses the pack code as a placeholder `cycle_code` for compatibility with inherited UI code.
+The public API exposes pack records through `GET /v2/public/packs` and card set records through `GET /v2/public/sets`. The frontend maps those records into its existing metadata shape for compatibility with inherited UI code.
 
 ## Images
 

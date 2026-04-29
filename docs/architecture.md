@@ -7,7 +7,7 @@
 - React SPA served from `frontend/dist`
 - Local state persisted in IndexedDB
 - Routing handled client-side with `wouter`
-- Card data, pack metadata, and version checks fetched from the backend
+- Card data, pack and set metadata, fan-made project info, shared deck search, and version checks fetched from the backend
 
 The app was adapted from `arkham.build`. Deck sharing is now handled by the local backend (`/v2/public/share`). Some other upstream sync/auth code paths still exist in the frontend but are not backed by any service in this repo.
 
@@ -20,7 +20,7 @@ The Node.js backend in `backend/` is responsible for:
 - public shared deck search and directory
 - serving fan-made project info records
 - serving locally hosted card images from disk
-- reporting the ingested card count via `/version`
+- reporting the ingested card count and data timestamps via `/version`
 
 It is a single Hono service backed by SQLite. There are no separate Cloudflare functions, Postgres services, or background cron services in this repository.
 

@@ -12,7 +12,7 @@ This repository is an `npm` workspace with three packages:
 - `backend/`: Hono-based Node.js API backed by SQLite
 - `shared/`: shared schemas, DTOs, and helpers
 
-The current backend serves Earthborne Rangers card and pack data, local image delivery, and fan-made project metadata. It also provides a public directory of decks shared by users. The frontend still contains some upstream `arkham.build` integration code paths; features such as remote sync and provider auth are not available in a self-hosted deployment.
+The current backend serves Earthborne Rangers card, pack, and card set data, local image delivery, fan-made project metadata, local deck sharing, and a public directory of decks shared by users. The frontend still contains some upstream `arkham.build` integration code paths; features such as remote sync and provider auth are not available in a self-hosted deployment.
 
 ## Requirements
 
@@ -71,5 +71,5 @@ npm run check -w shared
 - [docs/adaptation-plan.md](./docs/adaptation-plan.md): historical notes from the `arkham.build` adaptation
 - [docs/rules-reference-retrospective.md](./docs/rules-reference-retrospective.md): how the embedded `/rules` reference was built
 - [docs/card-data-issues.md](./docs/card-data-issues.md): known card data quirks
-- [docs/scraper-caching-plan.md](./docs/scraper-caching-plan.md): pending plan for scraper response caching
+- [docs/scraper-caching-plan.md](./docs/scraper-caching-plan.md): implemented scraper response caching design
 - [AGENTS.md](./AGENTS.md): onboarding doc for AI agents working in this repo

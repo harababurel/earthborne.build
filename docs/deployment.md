@@ -93,7 +93,6 @@ VITE_API_URL=""
 VITE_API_LEGACY_URL=""
 VITE_CARD_IMAGE_URL="/images"
 VITE_PAGE_NAME="earthborne.build"
-VITE_SHOW_PREVIEW_BANNER="false"
 ```
 
 `VITE_API_LEGACY_URL` is still read by some inherited frontend code. Leaving it empty keeps it same-origin, but it does not add missing legacy endpoints.
@@ -146,5 +145,5 @@ If you mirror images locally, rerun `npm run download:images` after ingesting ne
 
 ## Known limitations
 
-- The local backend does not implement the old `arkham.build` auth, share, or deck sync APIs.
+- The local backend does not implement the old `arkham.build` auth, remote share, or deck sync APIs.
 - The frontend still contains code paths for those flows, so self-hosted deployments should treat them as unsupported unless a separate compatible legacy backend is provided.

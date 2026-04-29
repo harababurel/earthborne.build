@@ -23,6 +23,10 @@ The frontend expects the backend to provide:
 
 - `GET /v2/public/cards`
 - `GET /v2/public/packs`
+- `GET /v2/public/sets`
+- `GET /v2/public/decklists`
+- `POST|GET|PUT|DELETE /v2/public/share`
+- `GET /v2/public/fan-made-project-info`
 - `GET /version`
 - optionally `GET /images/:code`
 
@@ -42,6 +46,7 @@ Additional scripts:
 
 - `npm run analyze`: bundle analyzer
 - `npm run fmt:rules`: format `src/assets/rules.html` (after regenerating it)
+- `npm run schema:fan-made-content`: emit the fan-made content JSON schema
 - `node ../scripts/scrape-reference-sections.mjs` (from repo root): crawl and regenerate `/rules` section assets from the official Living Valley docs
 - `node ../scripts/scrape-rules.mjs` (from repo root): regenerate `src/assets/rules.html` from the official EBR rules glossary
 
@@ -54,8 +59,7 @@ The scrapers cache raw upstream responses under `.cache/scraper/` so that re-run
 - `--no-cache` — bypass the cache for one run (do not read from it, do not write to it).
 - `--clear-cache` — delete the cache directory before running.
 - `--cache-dir <path>` — store the cache somewhere other than `.cache/scraper`.
-- `npm run schema:fan-made-content`: emit the fan-made content JSON schema
 
 ## Notes
 
-This app was adapted from `arkham.build`, and some upstream integration code still exists in the frontend for legacy sync/share/auth flows. Those flows require a compatible legacy backend and are not implemented by the local `backend/` package in this repository.
+This app was adapted from `arkham.build`, and some upstream integration code still exists in the frontend for legacy sync/auth flows. Those flows require a compatible legacy backend and are not implemented by the local `backend/` package in this repository. Deck sharing uses the local backend in this repo.
