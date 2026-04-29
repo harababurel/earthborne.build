@@ -106,7 +106,8 @@
 
 .actions,
 .row-actions,
-.picker-row {
+.picker-row,
+.unlock-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -133,6 +134,41 @@
 .section:first-child {
   border-top: 0;
   padding-top: 0;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.section-count {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.campaign-panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  border-top: 1px solid var(--palette-1);
+  padding-top: 0.75rem;
+}
+
+@media screen and (min-width: 50rem) {
+  .campaign-panels {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.campaign-panel {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--palette-1);
+  border-radius: var(--rounded);
 }
 
 .card-row {

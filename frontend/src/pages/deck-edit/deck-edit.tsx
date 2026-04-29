@@ -1,5 +1,11 @@
 import type { Card as CardT, Slots } from "@earthborne-build/shared";
-import { CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
+import {
+  BACKGROUND_PICKS,
+  OUTSIDE_INTEREST_PICKS,
+  PERSONALITY_PICKS,
+  SPECIALTY_PICKS,
+} from "@earthborne-build/shared";
+import { CheckIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "wouter";
@@ -7,6 +13,7 @@ import { Card } from "@/components/card/card";
 import { CardText } from "@/components/card/card-text";
 import { DeckEvolutionBadge } from "@/components/deck-evolution-badge";
 import { AspectIcon } from "@/components/icons/aspect-icon";
+import { ListCard } from "@/components/list-card/list-card";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -98,36 +105,60 @@ function DeckEditSidebar({ deck }: { deck: ResolvedDeck }) {
         <div className={css["aspect-stats"]}>
           <div className={css["stat-item"]}>
             <div className={cx(css["aspect-square"], css["awa"])}>
-              <AspectIcon aspect="AWA" className={css["white-icon"]} size="3.75rem" />
+              <AspectIcon
+                aspect="AWA"
+                className={css["white-icon"]}
+                size="3.75rem"
+              />
               <div className={css["stat-overlay"]}>
-                <span className={css["stat-value"]}>{aspectCard?.aspect_awareness}</span>
+                <span className={css["stat-value"]}>
+                  {aspectCard?.aspect_awareness}
+                </span>
                 <span className={css["stat-label"]}>AWA</span>
               </div>
             </div>
           </div>
           <div className={css["stat-item"]}>
             <div className={cx(css["aspect-square"], css["spi"])}>
-              <AspectIcon aspect="SPI" className={css["white-icon"]} size="3.75rem" />
+              <AspectIcon
+                aspect="SPI"
+                className={css["white-icon"]}
+                size="3.75rem"
+              />
               <div className={css["stat-overlay"]}>
-                <span className={css["stat-value"]}>{aspectCard?.aspect_spirit}</span>
+                <span className={css["stat-value"]}>
+                  {aspectCard?.aspect_spirit}
+                </span>
                 <span className={css["stat-label"]}>SPI</span>
               </div>
             </div>
           </div>
           <div className={css["stat-item"]}>
             <div className={cx(css["aspect-square"], css["fit"])}>
-              <AspectIcon aspect="FIT" className={css["white-icon"]} size="3.75rem" />
+              <AspectIcon
+                aspect="FIT"
+                className={css["white-icon"]}
+                size="3.75rem"
+              />
               <div className={css["stat-overlay"]}>
-                <span className={css["stat-value"]}>{aspectCard?.aspect_fitness}</span>
+                <span className={css["stat-value"]}>
+                  {aspectCard?.aspect_fitness}
+                </span>
                 <span className={css["stat-label"]}>FIT</span>
               </div>
             </div>
           </div>
           <div className={css["stat-item"]}>
             <div className={cx(css["aspect-square"], css["foc"])}>
-              <AspectIcon aspect="FOC" className={css["white-icon"]} size="3.75rem" />
+              <AspectIcon
+                aspect="FOC"
+                className={css["white-icon"]}
+                size="3.75rem"
+              />
               <div className={css["stat-overlay"]}>
-                <span className={css["stat-value"]}>{aspectCard?.aspect_focus}</span>
+                <span className={css["stat-value"]}>
+                  {aspectCard?.aspect_focus}
+                </span>
                 <span className={css["stat-label"]}>FOC</span>
               </div>
             </div>
@@ -182,16 +213,16 @@ function DeckEditMain({ deck }: { deck: ResolvedDeck }) {
       <Tabs className={css["tabs"]} defaultValue="deck">
         <TabsList>
           <TabsTrigger value="deck">{t("deck_edit.tabs.deck")}</TabsTrigger>
-          <TabsTrigger value="campaign">
-            {t("deck_edit.tabs.campaign")}
+          <TabsTrigger value="unlock_rewards">
+            {t("deck_edit.tabs.unlock_rewards")}
           </TabsTrigger>
           <TabsTrigger value="notes">{t("deck_edit.tabs.notes")}</TabsTrigger>
         </TabsList>
         <TabsContent className={css["tab"]} value="deck">
           <DeckEditDeckTab deck={deck} />
         </TabsContent>
-        <TabsContent className={css["tab"]} value="campaign">
-          <DeckEditCampaignTab deck={deck} />
+        <TabsContent className={css["tab"]} value="unlock_rewards">
+          <DeckEditUnlockRewardsTab deck={deck} />
         </TabsContent>
         <TabsContent className={css["tab"]} value="notes">
           <DeckEditNotesTab deck={deck} />
@@ -211,26 +242,31 @@ function DeckEditDeckTab({ deck }: { deck: ResolvedDeck }) {
         cards={groups.personality}
         category="personality"
         deck={deck}
+        required={PERSONALITY_PICKS}
         title={t("deck_edit.sections.personality")}
       />
       <DeckSection
         cards={groups.background}
         category="background"
         deck={deck}
+        required={BACKGROUND_PICKS}
         title={t("deck_edit.sections.background")}
       />
       <DeckSection
         cards={groups.specialty}
         category="specialty"
         deck={deck}
+        required={SPECIALTY_PICKS}
         title={t("deck_edit.sections.specialty")}
       />
       <DeckSection
         cards={groups.outside}
         category="outside"
         deck={deck}
+        required={OUTSIDE_INTEREST_PICKS}
         title={t("deck_edit.sections.outside_interest")}
       />
+      <CampaignPanels deck={deck} />
     </>
   );
 }
@@ -239,54 +275,239 @@ function DeckSection({
   cards,
   category,
   deck,
+  required,
   title,
 }: {
   cards: ResolvedCard[];
   category: Category;
   deck: ResolvedDeck;
+  required: number;
   title: string;
 }) {
-  const { t } = useTranslation();
   const updateCardQuantity = useStore((state) => state.updateCardQuantity);
   const pool = useCardPoolForCategory(deck, category);
 
   return (
     <section className={css["section"]}>
-      <h2>{title}</h2>
+      <h2 className={css["section-heading"]}>
+        {title}
+        <span className={css["section-count"]}>
+          {cards.length}/{required}
+        </span>
+      </h2>
       {cards.map((card) => (
-        <div className={css["card-row"]} key={card.card.code}>
-          <div>
-            <span className={css["card-name"]}>{card.card.name}</span>
+        <ListCard
+          key={card.card.code}
+          card={card.card}
+          highlightQuantity
+          onChangeCardQuantity={(c, qty, limit) =>
+            updateCardQuantity(deck.id, c.code, qty, limit, "slots", "set")
+          }
+          quantity={deck.slots[card.card.code] ?? 0}
+          renderCardAfter={() => (
             <ReplacementPicker
-              deck={deck}
               currentCode={card.card.code}
+              deck={deck}
               pool={pool}
             />
-          </div>
-          <div className={css["row-actions"]}>
-            <Button
-              iconOnly
-              onClick={() =>
-                updateCardQuantity(deck.id, card.card.code, -1, 2, "slots")
-              }
-              tooltip={t("deck_edit.actions.decrease")}
-            >
-              <MinusIcon />
-            </Button>
-            <span>{deck.slots[card.card.code] ?? 0}</span>
-            <Button
-              iconOnly
-              onClick={() =>
-                updateCardQuantity(deck.id, card.card.code, 1, 2, "slots")
-              }
-              tooltip={t("deck_edit.actions.increase")}
-            >
-              <PlusIcon />
-            </Button>
-          </div>
-        </div>
+          )}
+        />
       ))}
     </section>
+  );
+}
+
+function CampaignPanels({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+  const rewards = useCardsForSlots(deck.rewards);
+  const displaced = useCardsForSlots(deck.displaced);
+  const maladies = useCardsForSlots(deck.maladies);
+  const deckCards = useCardsForSlots(deck.slots);
+  const maladyPool = useCampaignPool("malady");
+  const swapRewardIntoSlots = useStore((state) => state.swapRewardIntoSlots);
+  const restoreDisplaced = useStore((state) => state.restoreDisplaced);
+  const removeReward = useStore((state) => state.removeUnlockedReward);
+  const addMalady = useStore((state) => state.addMalady);
+  const removeMalady = useStore((state) => state.removeMalady);
+
+  if (!rewards.length && !displaced.length && !maladies.length) return null;
+
+  return (
+    <div className={css["campaign-panels"]}>
+      <section className={css["campaign-panel"]}>
+        <h2>{t("deck_edit.sections.rewards")}</h2>
+        {rewards.length === 0 ? (
+          <p className={css["empty"]}>{t("deck_edit.rewards.empty")}</p>
+        ) : (
+          rewards.map((card) => (
+            <ListCard
+              key={card.card.code}
+              card={card.card}
+              renderCardAfter={() => (
+                <div className={css["row-actions"]}>
+                  <DisplacementPicker
+                    cards={deckCards}
+                    label={t("deck_edit.actions.swap_into_deck")}
+                    onSelect={(code) =>
+                      swapRewardIntoSlots(deck.id, card.card.code, code)
+                    }
+                  />
+                  <Button onClick={() => removeReward(deck.id, card.card.code)}>
+                    {t("deck_edit.actions.remove")}
+                  </Button>
+                </div>
+              )}
+            />
+          ))
+        )}
+      </section>
+
+      <section className={css["campaign-panel"]}>
+        <h2>{t("deck_edit.sections.displaced")}</h2>
+        {displaced.length === 0 ? (
+          <p className={css["empty"]}>{t("deck_edit.displaced.empty")}</p>
+        ) : (
+          displaced.map((card) => (
+            <ListCard
+              key={card.card.code}
+              card={card.card}
+              renderCardAfter={() => (
+                <div className={css["row-actions"]}>
+                  <DisplacementPicker
+                    cards={deckCards}
+                    includeNone
+                    label={t("deck_edit.actions.restore")}
+                    onSelect={(code) =>
+                      restoreDisplaced(
+                        deck.id,
+                        card.card.code,
+                        code === "__none" ? undefined : code,
+                      )
+                    }
+                  />
+                </div>
+              )}
+            />
+          ))
+        )}
+      </section>
+
+      <section className={css["campaign-panel"]}>
+        <h2>{t("deck_edit.sections.maladies")}</h2>
+        <select
+          aria-label={t("deck_edit.actions.add_malady")}
+          onChange={(evt) => {
+            if (evt.target.value) addMalady(deck.id, evt.target.value);
+            evt.target.value = "";
+          }}
+        >
+          <option value="">{t("deck_edit.actions.add_malady")}</option>
+          {maladyPool
+            .filter(
+              (card) => !maladies.some((m) => m.card.code === card.card.code),
+            )
+            .map((card) => (
+              <option key={card.card.code} value={card.card.code}>
+                {card.card.name}
+              </option>
+            ))}
+        </select>
+        {maladies.map((card) => (
+          <ListCard
+            key={card.card.code}
+            card={card.card}
+            renderCardAfter={() => (
+              <div className={css["row-actions"]}>
+                <Button onClick={() => removeMalady(deck.id, card.card.code)}>
+                  {t("deck_edit.actions.remove")}
+                </Button>
+              </div>
+            )}
+          />
+        ))}
+      </section>
+    </div>
+  );
+}
+
+function DeckEditUnlockRewardsTab({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+  const rewardPool = useCampaignPool("reward");
+  const unlockReward = useStore((state) => state.unlockReward);
+  const removeReward = useStore((state) => state.removeUnlockedReward);
+
+  return (
+    <section className={css["section"]}>
+      {rewardPool.length === 0 ? (
+        <p className={css["empty"]}>{t("deck_edit.rewards.empty")}</p>
+      ) : (
+        rewardPool.map((card) => {
+          const rewardQty = deck.rewards?.[card.card.code] ?? 0;
+          const slotsQty = deck.slots[card.card.code] ?? 0;
+
+          return (
+            <ListCard
+              key={card.card.code}
+              card={card.card}
+              renderCardAction={() => {
+                if (slotsQty > 0) {
+                  return (
+                    <span className={css["muted"]}>
+                      {t("deck_edit.rewards.in_deck")}
+                    </span>
+                  );
+                }
+                if (rewardQty > 0) {
+                  return (
+                    <div className={css["unlock-actions"]}>
+                      <span className={css["muted"]}>
+                        {t("deck_edit.rewards.unlocked")}
+                      </span>
+                      <Button
+                        onClick={() => removeReward(deck.id, card.card.code)}
+                      >
+                        {t("deck_edit.actions.remove")}
+                      </Button>
+                    </div>
+                  );
+                }
+                return (
+                  <Button
+                    onClick={() => unlockReward(deck.id, card.card.code)}
+                    variant="primary"
+                  >
+                    {t("deck_edit.actions.unlock")}
+                  </Button>
+                );
+              }}
+            />
+          );
+        })
+      )}
+    </section>
+  );
+}
+
+function DeckEditNotesTab({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+  const updateAnnotation = useStore((state) => state.updateAnnotation);
+  const cards = useCardsForSlots(deck.slots);
+
+  return (
+    <div className={css["notes"]}>
+      {cards.map((card) => (
+        <div className={css["note"]} key={card.card.code}>
+          <ListCard card={card.card} omitDetails />
+          <textarea
+            aria-label={t("deck_edit.notes.annotation")}
+            onChange={(evt) =>
+              updateAnnotation(deck.id, card.card.code, evt.target.value)
+            }
+            value={deck.annotations[card.card.code] ?? ""}
+          />
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -302,6 +523,9 @@ function ReplacementPicker({
   const { t } = useTranslation();
   const updateCardQuantity = useStore((state) => state.updateCardQuantity);
 
+  const available = pool.filter((card) => !deck.slots[card.card.code]);
+  if (!available.length) return null;
+
   return (
     <div className={css["picker-row"]}>
       <select
@@ -315,143 +539,13 @@ function ReplacementPicker({
         }}
       >
         <option value="">{t("deck_edit.actions.replace")}</option>
-        {pool
-          .filter((card) => !deck.slots[card.card.code])
-          .map((card) => (
-            <option key={card.card.code} value={card.card.code}>
-              {card.card.name}
-            </option>
-          ))}
+        {available.map((card) => (
+          <option key={card.card.code} value={card.card.code}>
+            {card.card.name}
+          </option>
+        ))}
       </select>
     </div>
-  );
-}
-
-function DeckEditCampaignTab({ deck }: { deck: ResolvedDeck }) {
-  const { t } = useTranslation();
-  const rewards = useCardsForSlots(deck.rewards);
-  const displaced = useCardsForSlots(deck.displaced);
-  const maladies = useCardsForSlots(deck.maladies);
-  const rewardPool = useCampaignPool("reward");
-  const maladyPool = useCampaignPool("malady");
-  const unlockReward = useStore((state) => state.unlockReward);
-  const removeReward = useStore((state) => state.removeUnlockedReward);
-  const addMalady = useStore((state) => state.addMalady);
-  const removeMalady = useStore((state) => state.removeMalady);
-  const swapRewardIntoSlots = useStore((state) => state.swapRewardIntoSlots);
-  const restoreDisplaced = useStore((state) => state.restoreDisplaced);
-  const deckCards = useCardsForSlots(deck.slots);
-
-  const starter = !rewards.length && !displaced.length && !maladies.length;
-
-  return (
-    <>
-      {starter && (
-        <p className={css["empty"]}>{t("deck_edit.campaign.empty")}</p>
-      )}
-      <CampaignSection
-        addLabel={t("deck_edit.actions.add_reward")}
-        cards={rewards}
-        onAdd={(code) => unlockReward(deck.id, code)}
-        pool={rewardPool}
-        title={t("deck.evolution.rewards")}
-      >
-        {(card) => (
-          <>
-            <DisplacementPicker
-              cards={deckCards}
-              label={t("deck_edit.actions.add_to_deck")}
-              onSelect={(code) =>
-                swapRewardIntoSlots(deck.id, card.card.code, code)
-              }
-            />
-            <Button onClick={() => removeReward(deck.id, card.card.code)}>
-              {t("deck_edit.actions.remove")}
-            </Button>
-          </>
-        )}
-      </CampaignSection>
-      <section className={css["section"]}>
-        <h2>{t("deck.evolution.displaced")}</h2>
-        {displaced.map((card) => (
-          <div className={css["card-row"]} key={card.card.code}>
-            <span className={css["card-name"]}>{card.card.name}</span>
-            <DisplacementPicker
-              cards={deckCards}
-              includeNone
-              label={t("deck_edit.actions.restore")}
-              onSelect={(code) =>
-                restoreDisplaced(
-                  deck.id,
-                  card.card.code,
-                  code === "__none" ? undefined : code,
-                )
-              }
-            />
-          </div>
-        ))}
-      </section>
-      <CampaignSection
-        addLabel={t("deck_edit.actions.add_malady")}
-        cards={maladies}
-        onAdd={(code) => addMalady(deck.id, code)}
-        pool={maladyPool}
-        title={t("deck.evolution.maladies")}
-      >
-        {(card) => (
-          <Button onClick={() => removeMalady(deck.id, card.card.code)}>
-            {t("deck_edit.actions.remove")}
-          </Button>
-        )}
-      </CampaignSection>
-    </>
-  );
-}
-
-function CampaignSection({
-  addLabel,
-  cards,
-  children,
-  onAdd,
-  pool,
-  title,
-}: {
-  addLabel: string;
-  cards: ResolvedCard[];
-  children: (card: ResolvedCard) => React.ReactNode;
-  onAdd: (code: string) => void;
-  pool: ResolvedCard[];
-  title: string;
-}) {
-  return (
-    <section className={css["section"]}>
-      <h2>{title}</h2>
-      <select
-        aria-label={addLabel}
-        onChange={(evt) => {
-          if (evt.target.value) onAdd(evt.target.value);
-          evt.target.value = "";
-        }}
-      >
-        <option value="">{addLabel}</option>
-        {pool
-          .filter(
-            (card) =>
-              !cards.some((current) => current.card.code === card.card.code),
-          )
-          .map((card) => (
-            <option key={card.card.code} value={card.card.code}>
-              {card.card.name}
-            </option>
-          ))}
-      </select>
-      {cards.map((card) => (
-        <div className={css["card-row"]} key={card.card.code}>
-          <span className={css["card-name"]}>{card.card.name}</span>
-          <div className={css["row-actions"]}>{children(card)}</div>
-        </div>
-      ))}
-    </section>
   );
 }
 
@@ -484,29 +578,6 @@ function DisplacementPicker({
         </option>
       ))}
     </select>
-  );
-}
-
-function DeckEditNotesTab({ deck }: { deck: ResolvedDeck }) {
-  const { t } = useTranslation();
-  const updateAnnotation = useStore((state) => state.updateAnnotation);
-  const cards = useCardsForSlots(deck.slots);
-
-  return (
-    <div className={css["notes"]}>
-      {cards.map((card) => (
-        <label className={css["note"]} key={card.card.code}>
-          <span className={css["card-name"]}>{card.card.name}</span>
-          <textarea
-            aria-label={t("deck_edit.notes.annotation")}
-            onChange={(evt) =>
-              updateAnnotation(deck.id, card.card.code, evt.target.value)
-            }
-            value={deck.annotations[card.card.code] ?? ""}
-          />
-        </label>
-      ))}
-    </div>
   );
 }
 

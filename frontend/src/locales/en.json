@@ -535,8 +535,10 @@
         "quick_save_deck": "Save deck (and stay on page)",
         "remove": "Remove",
         "replace": "Replace card",
-        "restore": "Restore",
-        "set_quantity": "Set deck quantity"
+        "restore": "Restore to deck",
+        "set_quantity": "Set deck quantity",
+        "swap_into_deck": "Swap into deck",
+        "unlock": "Unlock"
       },
       "campaign": {
         "empty": "This is a starter deck. Add unlocked rewards to begin tracking campaign changes."
@@ -632,13 +634,25 @@
       "tabs": {
         "campaign": "Campaign",
         "deck": "Deck",
-        "notes": "Notes"
+        "notes": "Notes",
+        "unlock_rewards": "Unlock Rewards"
       },
       "sections": {
         "background": "Background",
+        "displaced": "Displaced Cards",
+        "maladies": "Maladies",
         "outside_interest": "Outside Interest",
         "personality": "Personality",
+        "rewards": "Unlocked Rewards",
         "specialty": "Specialty"
+      },
+      "displaced": {
+        "empty": "No displaced cards."
+      },
+      "rewards": {
+        "empty": "No rewards available.",
+        "in_deck": "In Deck",
+        "unlocked": "Unlocked"
       },
       "title": "Edit: {{name}}",
       "validation": {
