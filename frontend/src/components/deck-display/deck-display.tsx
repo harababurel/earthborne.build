@@ -2,11 +2,13 @@ import {
   BookOpenTextIcon,
   ChartAreaIcon,
   FileClockIcon,
+  PencilIcon,
   SquarePenIcon,
 } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "wouter";
 import { useDialogContextChecked } from "@/components/ui/dialog.hooks";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { AppLayout } from "@/layouts/app-layout";
@@ -80,6 +82,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
   const [currentTab, setCurrentTab] = useTabUrlState("deck");
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollState = useRef<Record<string, number>>({});
+  const [, navigate] = useLocation();
 
   const { t } = useTranslation();
   const metadata = useStore(selectMetadata);
@@ -158,6 +161,18 @@ export function DeckDisplay(props: DeckDisplayProps) {
             </DeckTagsContainer>
           </div>
           {headerSlot && <div>{headerSlot}</div>}
+          {origin === "local" && (
+            <div>
+              <Button
+                data-testid="edit-deck"
+                onClick={() => navigate(`/deck/edit/${deck.id}`)}
+                size="sm"
+              >
+                <PencilIcon />
+                {t("deck.actions.edit")}
+              </Button>
+            </div>
+          )}
         </header>
 
         <Dialog>
