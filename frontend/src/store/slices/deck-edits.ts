@@ -143,39 +143,56 @@ export const createDeckEditsSlice: StateCreator<
   },
 
   swapRewardIntoSlots(deckId, rewardCode, displacedCode, quantity = 2) {
-    set((state) =>
-      setQuantityEdits(state, deckId, {
+    set((state) => {
+      const deck = selectResolvedDeckById(state, deckId, true);
+      assert(deck, `Tried to edit deck that does not exist: ${deckId}`);
+      const remainingSlots = Math.max(
+        0,
+        (deck.slots[displacedCode] ?? 0) - quantity,
+      );
+      return setQuantityEdits(state, deckId, {
         rewards: { [rewardCode]: 0 },
-        slots: { [rewardCode]: quantity, [displacedCode]: 0 },
+        slots: { [rewardCode]: quantity, [displacedCode]: remainingSlots },
         displaced: { [displacedCode]: quantity },
-      }),
-    );
+      });
+    });
     dehydrate(get(), "edits").catch(console.error);
   },
 
   restoreDisplaced(deckId, displacedCode, outCode, quantity = 2) {
-    set((state) =>
-      setQuantityEdits(state, deckId, {
+    set((state) => {
+      const deck = selectResolvedDeckById(state, deckId, true);
+      assert(deck, `Tried to edit deck that does not exist: ${deckId}`);
+      const remainingSlots = outCode
+        ? Math.max(0, (deck.slots[outCode] ?? 0) - quantity)
+        : 0;
+      return setQuantityEdits(state, deckId, {
         displaced: {
           [displacedCode]: 0,
           ...(outCode ? { [outCode]: quantity } : {}),
         },
         slots: {
           [displacedCode]: quantity,
-          ...(outCode ? { [outCode]: 0 } : {}),
+          ...(outCode ? { [outCode]: remainingSlots } : {}),
         },
-      }),
-    );
+      });
+    });
     dehydrate(get(), "edits").catch(console.error);
   },
 
   swapPlayerCardIntoSlots(deckId, newCode, displacedCode, quantity) {
-    set((state) =>
-      setQuantityEdits(state, deckId, {
-        slots: { [newCode]: quantity, [displacedCode]: 0 },
+    set((state) => {
+      const deck = selectResolvedDeckById(state, deckId, true);
+      assert(deck, `Tried to edit deck that does not exist: ${deckId}`);
+      const remainingSlots = Math.max(
+        0,
+        (deck.slots[displacedCode] ?? 0) - quantity,
+      );
+      return setQuantityEdits(state, deckId, {
+        slots: { [newCode]: quantity, [displacedCode]: remainingSlots },
         displaced: { [displacedCode]: quantity },
-      }),
-    );
+      });
+    });
     dehydrate(get(), "edits").catch(console.error);
   },
 
