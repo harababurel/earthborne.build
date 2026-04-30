@@ -1,6 +1,7 @@
 import { toChartableData } from "@/store/lib/deck-charts";
 import type { ResolvedDeck } from "@/store/lib/types";
 import { Plane } from "../ui/plane";
+import { ApproachIconsChart } from "./approach-icons-chart";
 import { AspectsChart } from "./aspects-chart";
 import { CostCurveChart } from "./cost-curve-chart";
 import css from "./deck-tools.module.css";
@@ -11,6 +12,9 @@ export default function ChartContainer(props: { deck: ResolvedDeck }) {
 
   return (
     <Plane className={css["charts-wrap"]}>
+      <ApproachIconsChart
+        data={toChartableData(deck.stats.charts.approachIcons)}
+      />
       <CostCurveChart data={toChartableData(deck.stats.charts.costCurve)} />
       <TraitsChart
         data={toChartableData(deck.stats.charts.traits, "value")}
