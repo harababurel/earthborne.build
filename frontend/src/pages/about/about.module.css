@@ -1,4 +1,40 @@
 .about {
   max-width: 72ch;
   margin-inline: auto;
+  padding-block: 1rem 2rem;
+  line-height: 1.65;
+}
+
+.about > * + * {
+  margin-top: 1.25rem;
+}
+
+.about h1 {
+  margin-top: 2rem;
+}
+
+.about h2 {
+  margin-top: 2.5rem;
+}
+
+.about h2 + ul {
+  margin-top: 0.75rem;
+}
+
+.about p {
+  margin: 0;
+}
+
+.about p + p {
+  margin-top: 1rem;
+}
+
+.about ul {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: 1.25rem;
+}
+
+.about li {
+  padding-left: 0.25rem;
 }

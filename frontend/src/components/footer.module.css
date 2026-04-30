@@ -1,6 +1,7 @@
 .footer {
   display: flex;
   justify-content: center;
+  gap: 0.5rem;
   font-size: 0.625em;
   color: var(--palette-three-point-five);
   padding-top: 0.25rem;
