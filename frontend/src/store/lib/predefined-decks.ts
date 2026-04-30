@@ -87,7 +87,7 @@ export function buildStarterDecks(): Deck[] {
       aspect_code: "01255",
       background: "forager",
       specialty: "shaper",
-      tags: "premade",
+      tags: "premade advanced",
       slots: {
         "01031": C,
         "01028": C,
@@ -112,7 +112,7 @@ export function buildStarterDecks(): Deck[] {
       aspect_code: "01249",
       background: "talespinner",
       specialty: "spirit_speaker",
-      tags: "premade",
+      tags: "premade advanced",
       slots: {
         "03059": C,
         "03060": C,
