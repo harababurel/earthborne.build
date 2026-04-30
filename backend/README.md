@@ -52,7 +52,6 @@ Useful files:
 - `src/app.ts`: route registration
 - `src/lib/config.ts`: env schema
 - `src/db/migrations/`: SQLite schema history
-- `config/yaak/`: API request workspace
 
 ## Deployment
 

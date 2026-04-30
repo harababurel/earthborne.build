@@ -34,7 +34,6 @@ Two commits were created and pushed to `main`:
 - `frontend/src/assets/rules.html`
 - `frontend/src/locales/en.json`
 - `frontend/README.md`
-- `docs/adaptation-plan.md`
 
 ## What Changed
 
@@ -139,4 +138,3 @@ The generated HTML assets are intentionally committed. This makes the app self-c
 Campaign Guides is embedded as one lazy-loaded asset and parsed client-side into individual pages. This solves the user experience issue, but it does not split each guide entry into a separate network chunk.
 
 The official source content includes some specialized symbols and occasionally malformed markup. The current sanitizer handles the known cases needed for build/runtime behavior, but avoid running broad HTML formatters across generated assets unless you are prepared to fix source-site markup issues.
-

@@ -95,9 +95,7 @@ Affected docs:
 - `AGENTS.md`
 - `CLAUDE.md`
 - `GEMINI.md`
-- `docs/adaptation-plan.md`
-- `docs/deckbuilding-redesign-plan.md`
-- `docs/deck-create-rules-alignment.md`
+- completed adaptation and redesign plan documents, which have since been removed from the public docs set
 
 ## Validation
 
@@ -112,9 +110,8 @@ The cleanup was validated with:
 These are not considered pending cleanup work by default:
 
 - historical attribution to arkham.build
-- historical notes in `docs/adaptation-plan.md`
 - upstream or generated content under `frontend/src/assets/`
-- comments, snapshots, or historical docs that mention Arkham concepts as part of adaptation history
+- comments or snapshots that mention Arkham concepts as part of adaptation history
 - backend/shared semantic renames that do not affect active Earthborne frontend behavior
 
 ## Remaining Possible Follow-Up
