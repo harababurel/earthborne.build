@@ -10,7 +10,10 @@ import {
   Tooltip,
 } from "recharts";
 import type { ChartableData } from "@/store/lib/deck-charts";
-import { ApproachIcon } from "../icons/approach-icon";
+import {
+  APPROACH_ICON_DATA,
+  ApproachIcon,
+} from "../icons/approach-icon";
 import { chartTheme } from "./chart-theme";
 import { ChartTooltip } from "./chart-tooltip";
 import css from "./deck-tools.module.css";
@@ -82,17 +85,21 @@ function ApproachIconTick(props: {
   const adjustedX = x + dx * offsetFactor;
   const adjustedY = y + dy * offsetFactor;
 
+  const { viewBox, path } = APPROACH_ICON_DATA[approach];
+
   return (
-    <foreignObject
+    <svg
       x={adjustedX - size / 2}
       y={adjustedY - size / 2}
       width={size}
       height={size}
+      viewBox={viewBox}
+      fill="currentColor"
+      aria-hidden="true"
+      style={{ color: "var(--text)" }}
     >
-      <span className={css["approach-icon-label"]}>
-        <ApproachIcon approach={approach} size={size} />
-      </span>
-    </foreignObject>
+      <path d={path} />
+    </svg>
   );
 }
 
