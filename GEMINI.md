@@ -96,7 +96,7 @@ Depending on the machine, `node`, `npm`, and `npx` may be installed as system-le
   ```bash
   eval "$(fnm env)"
   ```
-  If that fails, check for a specific path (for example, on some Google Linux machines it might be at `/usr/local/google/home/sergiup/.local/share/fnm/fnm`).
+  If that fails, check for a specific path (for example, on some machines it might be at `~/.local/share/fnm/fnm`).
 - Always verify that Node is accessible before attempting to run tests or build commands.
 
 ## Testing & Validation
