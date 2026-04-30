@@ -396,10 +396,10 @@
   }
 
   .mountain {
-    background-color: color-mix(in srgb, var(--foc), black 10%);
+    background-color: color-mix(in srgb, var(--foc-dark), black 10%);
 
     & .challenge-icon {
-      background-color: var(--foc);
+      background-color: var(--foc-dark);
     }
   }
 
