@@ -17,8 +17,9 @@ node_modules
 coverage
 dist
 
-# Large binary assets
+# Large binary assets / copyrighted content
 docs/rulebook.pdf
+docs/rulebook.txt
 
 # SQLite database (runtime artifact, populated by ingest:cards)
 *.db
