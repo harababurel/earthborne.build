@@ -67,6 +67,7 @@ type CardRow = {
   category_id: string | null;
   // joined fields
   set_type_id: string | null;
+  subset_size: number | null;
   token_name: string | null;
   token_plural: string | null;
 };
@@ -77,6 +78,11 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
   const rows = await db
     .selectFrom("card")
     .leftJoin("card_set", "card.set_id", "card_set.id")
+    .leftJoin("card_subset", (join) =>
+      join
+        .onRef("card_subset.set_id", "=", "card.set_id")
+        .onRef("card_subset.pack_id", "=", "card.pack_id"),
+    )
     .leftJoin("token", "card.token_id", "token.id")
     .select([
       "card.code",
@@ -85,6 +91,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.set_id",
       "card.set_position",
       "card_set.size as set_size",
+      "card_subset.size as subset_size",
       "card.position",
       "card.quantity",
       "card.deck_limit",
@@ -116,6 +123,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.crest_challenge",
       "card.category_id",
       "card_set.type_id as set_type_id",
+      "card_subset.size as subset_size",
       "token.name as token_name",
       "token.plurals as token_plural",
     ])
@@ -133,6 +141,11 @@ export async function getCardByCode(
   const row = await db
     .selectFrom("card")
     .leftJoin("card_set", "card.set_id", "card_set.id")
+    .leftJoin("card_subset", (join) =>
+      join
+        .onRef("card_subset.set_id", "=", "card.set_id")
+        .onRef("card_subset.pack_id", "=", "card.pack_id"),
+    )
     .leftJoin("token", "card.token_id", "token.id")
     .select([
       "card.code",
@@ -172,6 +185,7 @@ export async function getCardByCode(
       "card.crest_challenge",
       "card.category_id",
       "card_set.type_id as set_type_id",
+      "card_subset.size as subset_size",
       "token.name as token_name",
       "token.plurals as token_plural",
     ])
@@ -277,7 +291,7 @@ function transformCard(row: CardRow): {
     pack_code: row.pack_id,
     set_code: row.set_id,
     set_position: normalizeThreshold(row.set_position),
-    set_size: row.set_size,
+    set_size: row.subset_size ?? row.set_size,
     type_code: row.type_id,
     category,
     text: row.text,

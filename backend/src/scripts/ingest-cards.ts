@@ -97,6 +97,7 @@ async function ingest() {
 
     // Clear existing data in dependency order
     await tx.deleteFrom("card").execute();
+    await tx.deleteFrom("card_subset").execute();
     await tx.deleteFrom("card_set").execute();
     await tx.deleteFrom("set_type").execute();
     await tx.deleteFrom("aspect").execute();
@@ -180,6 +181,22 @@ async function ingest() {
       )
       .execute();
     log("info", `Inserted ${packs.length} packs`);
+
+    const subsets = await readJson<
+      { id: string; set_id: string; pack_id: string; size: number; name?: string; type_id?: string }[]
+    >("subsets.json");
+    if (subsets.length > 0) {
+      await tx
+        .insertInto("card_subset")
+        .values(subsets.map((s) => ({
+          id: s.id,
+          set_id: s.set_id,
+          pack_id: remapPackId({ id: s.pack_id }).id,
+          size: s.size,
+        })))
+        .execute();
+    }
+    log("info", `Inserted ${subsets.length} card subsets`);
 
     // Cards — all JSON files per pack inside packs/{pack_id}/*.json
     const dataDir = CARD_DATA_DIR as string;

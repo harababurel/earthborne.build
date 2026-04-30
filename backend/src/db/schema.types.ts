@@ -92,6 +92,13 @@ export interface Card {
   crest_challenge: string | null;
 }
 
+export interface CardSubset {
+  id: string;
+  set_id: string;
+  pack_id: string;
+  size: number;
+}
+
 export interface FanMadeProjectInfo {
   id: string;
   bucket_path: string;
@@ -118,6 +125,7 @@ export interface DB {
   card_type: CardType;
   set_type: SetType;
   card_set: CardSet;
+  card_subset: CardSubset;
   token: Token;
   area: Area;
   category: Category;

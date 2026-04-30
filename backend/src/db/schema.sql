@@ -81,6 +81,13 @@ CREATE TABLE card (
   mountain_challenge TEXT,
   crest_challenge TEXT
 );
+CREATE TABLE card_subset (
+  id TEXT PRIMARY KEY,
+  set_id TEXT NOT NULL REFERENCES card_set(id),
+  pack_id TEXT NOT NULL REFERENCES pack(id),
+  size INTEGER NOT NULL
+);
+CREATE INDEX idx_card_subset_set_pack ON card_subset(set_id, pack_id);
 CREATE INDEX idx_card_pack_id ON card(pack_id);
 CREATE INDEX idx_card_set_id ON card(set_id);
 CREATE INDEX idx_card_type_id ON card(type_id);
