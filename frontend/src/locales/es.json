@@ -1087,6 +1087,7 @@
     "errors": {
       "404": "Página no encontrada.",
       "500": "Has robado el fallo automático.",
+      "illustration_credit": "Art by <artist_url>Wayne O Connor</artist_url>",
       "500_help": "Revisa la consola del navegador para más detalles.",
       "500_help_2": "Por favor, no intentes solucionar este problema borrando cookies u otros datos locales del navegador (a menos que no te importe perder tus mazos locales).",
       "home": "Volver al inicio",

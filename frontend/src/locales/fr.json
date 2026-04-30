@@ -923,6 +923,7 @@
     "errors": {
       "404": "Page non trouvée.",
       "500": "L’application a tiré un échec automatique.",
+      "illustration_credit": "Art by <artist_url>Wayne O Connor</artist_url>",
       "500_help": "Vérifiez la console du navigateur pour plus de détails.",
       "500_help_2": "Veuillez ne pas essayer de résoudre ce problème en vidant vos cookies ou autres données locales (sauf si vous acceptez de perdre vos decks locaux).",
       "home": "Retour à l’accueil",

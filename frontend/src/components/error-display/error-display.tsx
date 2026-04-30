@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from "react-i18next";
 import { cx } from "@/utils/cx";
 import { useResolvedColorTheme } from "@/utils/use-color-theme";
 import css from "./error-display.module.css";
@@ -25,13 +26,32 @@ export function ErrorDisplay(props: Props) {
 }
 
 export function ErrorImage({ className }: { className?: string }) {
+  const { t } = useTranslation();
   const theme = useResolvedColorTheme();
 
   return (
-    <img
-      className={cx(className, css["error-image"])}
-      src={theme === "dark" ? "/404-dark.png" : "/404.png"}
-      alt="Pokodo"
-    />
+    <figure className={css["error-image-frame"]}>
+      <img
+        className={cx(className, css["error-image"])}
+        src={theme === "dark" ? "/404-dark.png" : "/404.png"}
+        alt="Pokodo"
+      />
+      <figcaption className={css["error-image-credit"]}>
+        <Trans
+          i18nKey="errors.illustration_credit"
+          t={t}
+          components={{
+            artist_url: (
+              // biome-ignore lint/a11y/useAnchorContent: not relevant here.
+              <a
+                href="https://linktr.ee/druakim"
+                rel="noreferrer"
+                target="_blank"
+              />
+            ),
+          }}
+        />
+      </figcaption>
+    </figure>
   );
 }

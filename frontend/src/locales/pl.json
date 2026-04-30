@@ -1098,6 +1098,7 @@
     "errors": {
       "404": "Strona nie została odnaleziona.",
       "500": "Aplikacja wylosowała żeton automatycznej porażki.",
+      "illustration_credit": "Art by <artist_url>Wayne O Connor</artist_url>",
       "500_help": "Aby uzyskać więcej szczegółów, sprawdź konsolę przeglądarki.",
       "500_help_2": "Nie próbuj naprawiać tego problemu poprzez czyszczenie ciasteczek lub innych lokalnych danych przeglądarki (chyba że nie masz nic przeciwko utracie lokalnych talii).",
       "home": "Wróć na stronę główną",

@@ -35,8 +35,32 @@
   font-weight: 400;
 }
 
-.error-image {
+.error-image-frame {
+  position: relative;
   width: 100%;
   max-width: 36rem;
   margin: 0 auto;
+}
+
+.error-image {
+  display: block;
+  width: 100%;
+}
+
+.error-image-credit {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  background: rgb(0 0 0 / 0.62);
+  color: white;
+  font-size: var(--text-xs);
+  line-height: 1.2;
+}
+
+.error-image-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }

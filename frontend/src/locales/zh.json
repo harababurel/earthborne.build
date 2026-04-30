@@ -1069,6 +1069,7 @@
     "errors": {
       "404": "页面未找到。",
       "500": "糟糕，你抽到了大失败。",
+      "illustration_credit": "Art by <artist_url>Wayne O Connor</artist_url>",
       "500_help": "发生了意料之外的内部错误，检查浏览器控制台获取更多详情。",
       "500_help_2": "请不要尝试通过清除Cookie或其他本地浏览器数据来解决此问题（除非你愿意丢失本地卡组）。",
       "home": "返回首页",
