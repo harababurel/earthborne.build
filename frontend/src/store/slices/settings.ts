@@ -62,6 +62,7 @@ export function getInitialSettings(): SettingsState {
     devModeEnabled: false,
     cardShowIcon: true,
     cardShowDetails: true,
+    cardShowCollectionNumber: true,
     cardSize: "standard",
     cardShowThumbnail: true,
     colorScheme: "botanical",
