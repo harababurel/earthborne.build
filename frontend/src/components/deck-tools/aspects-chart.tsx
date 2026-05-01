@@ -5,7 +5,10 @@ import { useTranslation } from "react-i18next";
 import type { PieSectorShapeProps } from "recharts";
 import { Pie, PieChart, Sector, Tooltip } from "recharts";
 import type { ChartableData } from "@/store/lib/deck-charts";
-import { ASPECT_ICON_CLASS } from "../icons/aspect-icon";
+import {
+  ASPECT_ICON_CLASS,
+  ASPECT_ICON_GLYPH_CODE,
+} from "../icons/aspect-icon";
 import { chartTheme } from "./chart-theme";
 import { ChartTooltip } from "./chart-tooltip";
 import css from "./deck-tools.module.css";
@@ -16,7 +19,7 @@ type Props = {
 
 export function AspectsChart({ data }: Props) {
   const { t } = useTranslation();
-  const chartId = useId();
+  const chartId = sanitizeSvgId(useId());
 
   const normalizedData = useMemo(() => {
     return data.filter((tick) => tick.y !== 0);
@@ -53,8 +56,11 @@ export function AspectsChart({ data }: Props) {
 function AspectSector(props: PieSectorShapeProps & { chartId: string }) {
   const { cx = 0, cy = 0, outerRadius = 0, payload, chartId } = props;
   const aspect = payload?.x as AspectKey;
-  const iconClass = ASPECT_ICON_CLASS[aspect] || "core-fit_chakra";
   const clipId = `clip-${chartId}-${aspect}`;
+  const glyph = String.fromCharCode(
+    ASPECT_ICON_GLYPH_CODE[aspect] ?? ASPECT_ICON_GLYPH_CODE.FIT,
+  );
+  const verticalOffset = ASPECT_ICON_VERTICAL_OFFSET[aspect] ?? 0.35;
 
   const fill = aspect
     ? `var(--color-${aspect.toLowerCase()})`
@@ -63,36 +69,43 @@ function AspectSector(props: PieSectorShapeProps & { chartId: string }) {
   return (
     <g>
       <defs>
-        <clipPath id={clipId}>
+        <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
           <Sector {...props} />
         </clipPath>
       </defs>
       <Sector {...props} fill={fill} />
-      <foreignObject
-        x={cx - outerRadius}
-        y={cy - outerRadius}
-        width={outerRadius * 2}
-        height={outerRadius * 2}
+      <g
         clipPath={`url(#${clipId})`}
-        style={{ pointerEvents: "none" }}
+        opacity={0.6}
+        pointerEvents="none"
+        aria-hidden
       >
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "white",
-            opacity: 0.75,
-          }}
+        <text
+          x={cx}
+          y={cy}
+          dy={`${verticalOffset}em`}
+          fill="white"
+          fontFamily="core"
+          fontSize={outerRadius * 1.6}
+          textAnchor="middle"
         >
-          <i className={iconClass} style={{ fontSize: outerRadius * 1.6 }} />
-        </div>
-      </foreignObject>
+          {glyph}
+        </text>
+      </g>
     </g>
   );
 }
+
+function sanitizeSvgId(id: string) {
+  return id.replace(/[^a-zA-Z0-9_-]/g, "");
+}
+
+const ASPECT_ICON_VERTICAL_OFFSET: Record<AspectKey, number> = {
+  AWA: 0.35,
+  FIT: 0.45,
+  FOC: 0.45,
+  SPI: 0.35,
+};
 
 function formatTooltip(t: TFunction, data: Record<string, unknown>) {
   const aspect = data.x as string;

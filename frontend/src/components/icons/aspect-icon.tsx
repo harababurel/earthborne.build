@@ -18,6 +18,14 @@ export const ASPECT_ICON_CLASS: Record<AspectKey, string> = {
   SPI: "core-spi_chakra",
 };
 
+// biome-ignore lint/style/useComponentExportOnlyModules: constant exported alongside component
+export const ASPECT_ICON_GLYPH_CODE: Record<AspectKey, number> = {
+  AWA: 0xe911,
+  FIT: 0xe910,
+  FOC: 0xe90f,
+  SPI: 0xe90e,
+};
+
 type Props = {
   aspect?: string | null;
   className?: string;
