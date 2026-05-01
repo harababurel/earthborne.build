@@ -1,5 +1,10 @@
 import type { StateCreator } from "zustand";
-import { applyDeckEdits, getChangeRecord } from "@/store/lib/deck-edits";
+import {
+  applyDeckEdits,
+  getChangeRecord,
+  hasQuantityEdits,
+  markDeckbuildingStateEvolved,
+} from "@/store/lib/deck-edits";
 import { createDeck } from "@/store/lib/deck-factory";
 import { buildStarterDecks } from "@/store/lib/predefined-decks";
 
@@ -338,6 +343,23 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     const nextDeck = applyDeckEdits(deck, edits, metadata, true, undefined);
     nextDeck.date_update = new Date().toISOString();
+
+    const originalValidation = selectDeckValid(
+      state,
+      resolveDeck(
+        {
+          lookupTables: selectLookupTables(state),
+          metadata,
+          sharing: state.sharing,
+        },
+        selectLocaleSortingCollator(state),
+        deck,
+      ),
+    );
+
+    if (hasQuantityEdits(edits) && originalValidation.valid) {
+      markDeckbuildingStateEvolved(nextDeck);
+    }
 
     const resolved = resolveDeck(
       {

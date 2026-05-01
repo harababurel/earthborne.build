@@ -29,6 +29,7 @@ export type CardWithRelations = ResolvedCard & {
 
 export type DeckMeta = {
   banner_url?: string | null;
+  deckbuilding_state?: "evolved" | null;
   intro_md?: string | null;
 } & {
   [key in `annotation_${string}`]: string | null;

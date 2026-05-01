@@ -4,8 +4,22 @@ import type {
   SpecialtyType,
 } from "@earthborne-build/shared";
 import { describe, expect, it } from "vitest";
-import { validateDeck } from "./deck-validation";
+import type { Metadata } from "../slices/metadata.types";
+import type { Interpreter } from "./buildql/interpreter";
+import {
+  isDeckOptionsError,
+  validateDeck as validateResolvedDeck,
+} from "./deck-validation";
+import type { LookupTables } from "./lookup-tables.types";
 import type { ResolvedDeck } from "./types";
+
+const metadata = {} as Metadata;
+const lookupTables = {} as LookupTables;
+const interpreter = {} as Interpreter;
+
+function validateDeck(deck: ResolvedDeck) {
+  return validateResolvedDeck(deck, metadata, lookupTables, interpreter);
+}
 
 const mockCard = (overrides: Partial<Card>): Card =>
   ({
@@ -70,7 +84,7 @@ describe("Earthborne Rangers Deck Validation", () => {
       stats: { deckSize: 30 },
     } as unknown as ResolvedDeck;
 
-    const result = validateDeck(deck, {} as any, {} as any, {} as any);
+    const result = validateDeck(deck);
     expect(result.valid).toBe(true);
     expect(result.errors).toEqual([]);
   });
@@ -114,12 +128,7 @@ describe("Earthborne Rangers Deck Validation", () => {
       stats: { deckSize: 30 },
     } as unknown as ResolvedDeck;
 
-    const resultValid = validateDeck(
-      deckValid,
-      {} as any,
-      {} as any,
-      {} as any,
-    );
+    const resultValid = validateDeck(deckValid);
     expect(resultValid.valid).toBe(true);
 
     // 2nd Mismatch (Outside Interest) - INVALID
@@ -138,19 +147,58 @@ describe("Earthborne Rangers Deck Validation", () => {
       stats: { deckSize: 32 },
     } as unknown as ResolvedDeck;
 
-    const resultInvalid = validateDeck(
-      deckInvalid,
-      {} as any,
-      {} as any,
-      {} as any,
-    );
+    const resultInvalid = validateDeck(deckInvalid);
     expect(resultInvalid.valid).toBe(false);
     expect(
       resultInvalid.errors.some(
         (e) =>
-          e.type === "INVALID_DECK_OPTION" &&
-          (e as any).details.error.includes("Outside interest picks"),
+          isDeckOptionsError(e) &&
+          e.details.error.includes("Outside interest picks"),
       ),
     ).toBe(true);
+  });
+
+  it("does not enforce starter validation for an evolved deck", () => {
+    const cards: Record<string, { card: Card }> = {};
+    const slots: Record<string, number> = {};
+
+    for (let i = 1; i <= 3; i++) {
+      const code = `p${i}`;
+      cards[code] = { card: personalityCard(code) };
+      slots[code] = 2;
+    }
+
+    for (let i = 1; i <= 5; i++) {
+      const code = `b${i}`;
+      cards[code] = { card: backgroundCard(code, "artisan") };
+      slots[code] = 2;
+    }
+
+    for (let i = 1; i <= 5; i++) {
+      const code = `s${i}`;
+      cards[code] = { card: specialtyCard(code, "shaper") };
+      slots[code] = 2;
+    }
+
+    cards["m1"] = { card: specialtyCard("m1", "explorer") };
+    slots["m1"] = 2;
+
+    const deck: ResolvedDeck = {
+      id: "evolved",
+      name: "Evolved Deck",
+      background: "artisan",
+      specialty: "shaper",
+      meta: JSON.stringify({ deckbuilding_state: "evolved" }),
+      slots,
+      rewards: null,
+      displaced: null,
+      maladies: null,
+      cards: { slots: cards },
+      stats: { deckSize: 28 },
+    } as unknown as ResolvedDeck;
+
+    const result = validateDeck(deck);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toEqual([]);
   });
 });

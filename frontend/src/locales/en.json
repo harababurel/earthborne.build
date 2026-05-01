@@ -378,7 +378,7 @@
       "evolution": {
         "displaced": "Displaced cards",
         "evolved": "Evolved",
-        "evolved_description": "A deck that has played through at least one play session and had alterations made or unlocked rewards.",
+        "evolved_description": "A deck that has left initial construction through campaign play, card changes, maladies, or unlocked rewards.",
         "maladies": "Maladies",
         "rewards": "Unlocked rewards",
         "starter": "Starter",
@@ -543,7 +543,7 @@
         "unlock": "Unlock"
       },
       "campaign": {
-        "empty": "This is a starter deck. Add unlocked rewards to begin tracking campaign changes."
+        "empty": "This is a starter deck. Make a deck change or add unlocked rewards to begin tracking campaign changes."
       },
       "changes_restored": "Unsaved changes were restored.",
       "config": {

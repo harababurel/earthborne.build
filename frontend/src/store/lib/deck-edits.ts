@@ -106,3 +106,16 @@ export function getChangeRecord(
     stats: getChangeStats(prev, next, omitUpgradeStats),
   };
 }
+
+export function hasQuantityEdits(edits: EditState | undefined) {
+  return Object.values(edits?.quantities ?? {}).some(
+    (slotEdits) => Object.keys(slotEdits ?? {}).length > 0,
+  );
+}
+
+export function markDeckbuildingStateEvolved(deck: Deck) {
+  deck.meta = JSON.stringify({
+    ...decodeDeckMeta(deck),
+    deckbuilding_state: "evolved",
+  });
+}

@@ -5,7 +5,7 @@ import { isEvolvedDeck } from "@/utils/deck-utils";
 import css from "./deck-evolution-badge.module.css";
 
 type Props = {
-  deck: Pick<Deck, "rewards" | "displaced" | "maladies">;
+  deck: Pick<Deck, "rewards" | "displaced" | "maladies" | "meta">;
 };
 
 export function DeckEvolutionBadge({ deck }: Props) {

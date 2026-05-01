@@ -11,6 +11,12 @@
 
 The app was adapted from `arkham.build`. Deck sharing is now handled by the local backend (`/v2/public/share`). Some other upstream sync/auth code paths still exist in the frontend but are not backed by any service in this repo.
 
+### Deck validation
+
+Deckbuilding validation is intentionally limited to starter construction. A starter deck must satisfy the Earthborne Rangers construction shape enforced by the creation wizard: exactly 30 cards, valid card copy limits, legal background/specialty access, 4 personality picks, 5 chosen-background picks, 5 chosen-specialty picks, and 1 outside-interest pick.
+
+Once a valid starter deck receives a quantity edit, it is treated as evolved and starter construction validation is no longer enforced. Evolved decks are identified either by campaign state (`rewards`, `displaced`, or `maladies`) or by `meta.deckbuilding_state === "evolved"`. This matches campaign play, where the initial construction rules no longer constrain later deck changes.
+
 ## Backend
 
 The Node.js backend in `backend/` is responsible for:

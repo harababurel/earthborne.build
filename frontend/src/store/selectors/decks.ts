@@ -6,6 +6,7 @@ import {
   applyDeckEdits,
   type ChangeRecord,
   getChangeRecord,
+  hasQuantityEdits,
 } from "../lib/deck-edits";
 import { groupDeckCards } from "../lib/deck-grouping";
 import type { ChangeStats } from "../lib/deck-upgrades";
@@ -96,10 +97,40 @@ export const selectDeckValid = createSelector(
   selectLookupTables,
   selectMetadata,
   selectBuildQlInterpreter,
-  (deck, lookupTables, metadata, buildQlInterpreter) => {
-    return deck
-      ? validateDeck(deck, metadata, lookupTables, buildQlInterpreter)
-      : { valid: false, errors: [] };
+  selectLocaleSortingCollator,
+  (state: StoreState, deck: ResolvedDeck | undefined) =>
+    deck ? state.sharing : undefined,
+  (state: StoreState, deck: ResolvedDeck | undefined) =>
+    deck ? state.data.decks[deck.id] : undefined,
+  (state: StoreState, deck: ResolvedDeck | undefined) =>
+    deck ? state.deckEdits[deck.id] : undefined,
+  (
+    deck,
+    lookupTables,
+    metadata,
+    buildQlInterpreter,
+    collator,
+    sharing,
+    storedDeck,
+    edits,
+  ) => {
+    if (!deck) return { valid: false, errors: [] };
+
+    if (
+      hasQuantityEdits(edits) &&
+      storedDeck &&
+      sharing &&
+      validateDeck(
+        resolveDeck({ metadata, lookupTables, sharing }, collator, storedDeck),
+        metadata,
+        lookupTables,
+        buildQlInterpreter,
+      ).valid
+    ) {
+      return { valid: true, errors: [] };
+    }
+
+    return validateDeck(deck, metadata, lookupTables, buildQlInterpreter);
   },
 );
 

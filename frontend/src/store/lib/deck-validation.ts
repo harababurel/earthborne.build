@@ -8,6 +8,7 @@ import {
   SPECIALTY_PICKS,
 } from "@earthborne-build/shared";
 import { cardLimit } from "@/utils/card-utils";
+import { isEvolvedDeck } from "@/utils/deck-utils";
 import { time, timeEnd } from "@/utils/time";
 import type { Metadata } from "../slices/metadata.types";
 import type { Interpreter } from "./buildql/interpreter";
@@ -163,6 +164,11 @@ export function validateDeck(
 ): DeckValidationResult {
   time("validate_deck");
 
+  if (isEvolvedDeck(deck)) {
+    timeEnd("validate_deck");
+    return validDeck();
+  }
+
   const errors: DeckValidationError[] = [
     ...validateDeckSize(deck),
     ...validateCardLimits(deck),
@@ -172,6 +178,10 @@ export function validateDeck(
 
   timeEnd("validate_deck");
   return { valid: errors.length === 0, errors };
+}
+
+function validDeck(): DeckValidationResult {
+  return { valid: true, errors: [] };
 }
 
 // Total copy count across slots must equal DECK_SIZE (30).
