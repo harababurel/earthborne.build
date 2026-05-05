@@ -56,6 +56,12 @@
     }
   }
 
+  .container.full .card.location {
+    @container (min-width: 33.5rem) {
+      grid-template-columns: 8fr 8fr;
+    }
+  }
+
   .container.full .card.back:not(.back-has-header) {
     @container (min-width: 33.5rem) {
       padding: var(--card-spacing) 0;

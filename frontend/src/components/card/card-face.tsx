@@ -55,6 +55,7 @@ export function CardFace(props: Props) {
       className={cx(
         css["card"],
         isSideways && css["sideways"],
+        card.category_id === "location" && css["location"],
         showImage && css["has-image"],
         css[size],
         className,
