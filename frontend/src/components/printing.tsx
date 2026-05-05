@@ -83,7 +83,7 @@ export function Printing({
         )
       }
       position={card.set_position ?? ""}
-      quantity={card.quantity}
+      quantity={card.quantity ?? undefined}
       showCopyId={showCopyId}
     />
   );

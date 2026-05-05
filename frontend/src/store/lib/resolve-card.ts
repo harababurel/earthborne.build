@@ -122,7 +122,7 @@ export function getRelatedCardQuantity(
 
   return canShowQuantity
     ? cards.reduce<Record<string, number>>((acc, { card }) => {
-        acc[card.code] = card.quantity;
+        acc[card.code] = card.quantity ?? 0;
         return acc;
       }, {})
     : undefined;

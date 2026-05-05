@@ -35,8 +35,8 @@ type CardRow = {
   set_id: string | null;
   set_position: number | string | null;
   set_size: number | null;
-  position: number;
-  quantity: number;
+  position: number | null;
+  quantity: number | null;
   deck_limit: number | null;
   type_id: string;
   aspect_requirement_type: string | null;
@@ -57,6 +57,7 @@ type CardRow = {
   token_count: number | string | null;
   area_id: string | null;
   guide_entry: string | null;
+  back_card_id: string | null;
   illustrator: string | null;
   text: string | null;
   flavor: string | null;
@@ -64,6 +65,8 @@ type CardRow = {
   sun_challenge: string | null;
   mountain_challenge: string | null;
   crest_challenge: string | null;
+  path_deck_assembly: string | null;
+  arrival_setup: string | null;
   category_id: string | null;
   // joined fields
   set_type_id: string | null;
@@ -114,6 +117,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.token_count",
       "card.area_id",
       "card.guide_entry",
+      "card.back_card_id",
       "card.illustrator",
       "card.text",
       "card.flavor",
@@ -121,6 +125,8 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.sun_challenge",
       "card.mountain_challenge",
       "card.crest_challenge",
+      "card.path_deck_assembly",
+      "card.arrival_setup",
       "card.category_id",
       "card_set.type_id as set_type_id",
       "card_subset.size as subset_size",
@@ -128,7 +134,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "token.plurals as token_plural",
     ])
     .orderBy("card.pack_id")
-    .orderBy("card.position")
+    .orderBy("card.code")
     .execute();
 
   return rows.map((r) => transformCard(r as unknown as CardRow));
@@ -176,6 +182,7 @@ export async function getCardByCode(
       "card.token_count",
       "card.area_id",
       "card.guide_entry",
+      "card.back_card_id",
       "card.illustrator",
       "card.text",
       "card.flavor",
@@ -183,6 +190,8 @@ export async function getCardByCode(
       "card.sun_challenge",
       "card.mountain_challenge",
       "card.crest_challenge",
+      "card.path_deck_assembly",
+      "card.arrival_setup",
       "card.category_id",
       "card_set.type_id as set_type_id",
       "card_subset.size as subset_size",
@@ -243,7 +252,7 @@ function transformCard(row: CardRow): {
   aspect_focus: number | null;
   aspect_spirit: number | null;
   campaign_guide_entry: number | null;
-  quantity: number;
+  quantity: number | null;
   deck_limit: number | null;
   keywords: (typeof KEYWORDS)[number][];
   is_unique: boolean;
@@ -251,10 +260,13 @@ function transformCard(row: CardRow): {
   background_type: string | null;
   specialty_type: string | null;
   category_id: string | null;
+  back_card_code: string | null;
   illustrator: string | null;
   challenge_sun: string | null;
   challenge_mountain: string | null;
   challenge_crest: string | null;
+  path_deck_assembly: string | null;
+  arrival_setup: string | null;
 } {
   const { set_id, set_type_id, area_id } = row;
   const keywords = parseKeywords(row.text);
@@ -326,10 +338,13 @@ function transformCard(row: CardRow): {
     background_type,
     specialty_type,
     category_id: row.category_id,
+    back_card_code: row.back_card_id,
     illustrator: row.illustrator,
     challenge_sun: row.sun_challenge,
     challenge_mountain: row.mountain_challenge,
     challenge_crest: row.crest_challenge,
+    path_deck_assembly: row.path_deck_assembly,
+    arrival_setup: row.arrival_setup,
   };
 }
 

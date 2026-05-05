@@ -39,10 +39,11 @@ export const selectTotalOwned = createSelector(
       });
 
       if (owned) {
+        const physicalQuantity = card.quantity ?? 0;
         if (filterPathCards(card)) {
-          ownedEncounterCards += card.quantity || 1;
+          ownedEncounterCards += physicalQuantity;
         } else {
-          ownedPlayerCards += card.quantity || 1;
+          ownedPlayerCards += physicalQuantity;
         }
       }
     }
@@ -72,12 +73,13 @@ export const selectCycleCardCounts = createSelector(
       res.packs[packCode] ??= { player: 0, encounter: 0 };
       res.cycles[cycle.code] ??= { player: 0, encounter: 0 };
 
+      const physicalQuantity = card.quantity ?? 0;
       if (isEncounter) {
-        res.cycles[cycle.code].encounter += card.quantity || 1;
-        res.packs[packCode].encounter += card.quantity || 1;
+        res.cycles[cycle.code].encounter += physicalQuantity;
+        res.packs[packCode].encounter += physicalQuantity;
       } else {
-        res.cycles[cycle.code].player += card.quantity || 1;
-        res.packs[packCode].player += card.quantity || 1;
+        res.cycles[cycle.code].player += physicalQuantity;
+        res.packs[packCode].player += physicalQuantity;
       }
     }
 

@@ -182,18 +182,28 @@ async function ingest() {
       .execute();
     log("info", `Inserted ${packs.length} packs`);
 
-    const subsets = await readJson<
-      { id: string; set_id: string; pack_id: string; size: number; name?: string; type_id?: string }[]
-    >("subsets.json");
+    const subsets =
+      await readJson<
+        {
+          id: string;
+          set_id: string;
+          pack_id: string;
+          size: number;
+          name?: string;
+          type_id?: string;
+        }[]
+      >("subsets.json");
     if (subsets.length > 0) {
       await tx
         .insertInto("card_subset")
-        .values(subsets.map((s) => ({
-          id: s.id,
-          set_id: s.set_id,
-          pack_id: remapPackId({ id: s.pack_id }).id,
-          size: s.size,
-        })))
+        .values(
+          subsets.map((s) => ({
+            id: s.id,
+            set_id: s.set_id,
+            pack_id: remapPackId({ id: s.pack_id }).id,
+            size: s.size,
+          })),
+        )
         .execute();
     }
     log("info", `Inserted ${subsets.length} card subsets`);
@@ -311,12 +321,12 @@ async function ingest() {
 // Raw shape coming out of rangers-card-data JSON files
 interface RawCard {
   id: string;
-  position: number;
-  quantity: number;
+  position?: number;
+  quantity?: number;
   deck_limit?: number;
   category_id?: string;
   set_id?: string;
-  set_position?: number;
+  set_position?: number | string;
   type_id: string;
   aspect_id?: string;
   level?: number;
@@ -336,7 +346,8 @@ interface RawCard {
   token_id?: string;
   token_count?: string | number;
   area_id?: string;
-  guide_entry?: string;
+  guide_entry?: string | number;
+  back_card_id?: string;
   illustrator?: string;
   name: string;
   traits?: string;
@@ -346,6 +357,8 @@ interface RawCard {
   sun_challenge?: string;
   mountain_challenge?: string;
   crest_challenge?: string;
+  path_deck_assembly?: string;
+  arrival_setup?: string;
 }
 
 function normalizeCard(c: RawCard, packId: string) {
@@ -356,8 +369,8 @@ function normalizeCard(c: RawCard, packId: string) {
     category_id: c.category_id ?? null,
     set_id: c.set_id ?? null,
     set_position: c.set_position ?? null,
-    position: c.position,
-    quantity: c.quantity,
+    position: c.position ?? null,
+    quantity: c.quantity ?? null,
     deck_limit: c.deck_limit ?? null,
     type_id: c.type_id,
     aspect_requirement_type: c.aspect_id ?? null,
@@ -378,7 +391,8 @@ function normalizeCard(c: RawCard, packId: string) {
     token_id: c.token_id ?? null,
     token_count: c.token_count ?? null,
     area_id: c.area_id ?? null,
-    guide_entry: c.guide_entry ?? null,
+    guide_entry: c.guide_entry != null ? String(c.guide_entry) : null,
+    back_card_id: c.back_card_id ?? null,
     illustrator: c.illustrator ?? null,
     name: c.name,
     traits: c.traits ?? null,
@@ -388,6 +402,8 @@ function normalizeCard(c: RawCard, packId: string) {
     sun_challenge: c.sun_challenge ?? null,
     mountain_challenge: c.mountain_challenge ?? null,
     crest_challenge: c.crest_challenge ?? null,
+    path_deck_assembly: c.path_deck_assembly ?? null,
+    arrival_setup: c.arrival_setup ?? null,
   };
 }
 

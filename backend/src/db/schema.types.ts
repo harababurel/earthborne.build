@@ -24,7 +24,7 @@ export interface CardType {
 }
 
 export interface SetType {
-  id: string; // background | specialty | terrain
+  id: string; // background | specialty | terrain | location
   name: string;
 }
 
@@ -58,8 +58,8 @@ export interface Card {
   category_id: string | null;
   set_id: string | null;
   set_position: number | string | null;
-  position: number;
-  quantity: number;
+  position: number | null;
+  quantity: number | null;
   deck_limit: number | null;
   type_id: string;
   aspect_requirement_type: string | null;
@@ -81,6 +81,7 @@ export interface Card {
   token_count: number | string | null;
   area_id: string | null;
   guide_entry: string | null;
+  back_card_id: string | null;
   illustrator: string | null;
   name: string;
   traits: string | null;
@@ -90,6 +91,8 @@ export interface Card {
   sun_challenge: string | null;
   mountain_challenge: string | null;
   crest_challenge: string | null;
+  path_deck_assembly: string | null;
+  arrival_setup: string | null;
 }
 
 export interface CardSubset {

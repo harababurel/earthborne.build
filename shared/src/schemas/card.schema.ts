@@ -74,14 +74,19 @@ export const CardSchema = z.object({
 
   // Campaign guide reference
   campaign_guide_entry: z.number().nullish(),
+  back_card_code: z.string().nullish(),
 
   // Challenge effects (text for each of the three challenge icons)
   challenge_crest: z.string().nullish(),
   challenge_mountain: z.string().nullish(),
   challenge_sun: z.string().nullish(),
 
+  // Location card back text
+  path_deck_assembly: z.string().nullish(),
+  arrival_setup: z.string().nullish(),
+
   // Meta
-  quantity: z.number(),
+  quantity: z.number().nullish(),
   deck_limit: z.number().nullish(),
   is_unique: z.boolean().nullish(),
   is_expert: z.boolean().nullish(),
