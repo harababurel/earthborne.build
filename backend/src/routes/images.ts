@@ -16,11 +16,15 @@ router.get("/:code", async (c) => {
   const code = c.req.param("code").replace(/[^0-9a-z]/gi, "");
   if (!code) throw new HTTPException(400, { message: "Invalid card code." });
 
+  const cardCode = code.endsWith("b") ? code.slice(0, -1) : code;
+  if (!cardCode)
+    throw new HTTPException(400, { message: "Invalid card code." });
+
   const card = await c
     .get("db")
     .selectFrom("card")
     .select("pack_id")
-    .where("code", "=", code)
+    .where("code", "=", cardCode)
     .executeTakeFirst();
 
   if (!card)

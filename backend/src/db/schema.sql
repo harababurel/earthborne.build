@@ -98,6 +98,8 @@ CREATE TABLE card (
   text TEXT,
   flavor TEXT,
   image_rect TEXT,
+  back_imagesrc TEXT,
+  back_image_rect TEXT,
   sun_challenge TEXT,
   mountain_challenge TEXT,
   crest_challenge TEXT,
@@ -124,4 +126,5 @@ INSERT INTO "schema_migrations" (version) VALUES
   ('20260423060000'),
   ('20260424000000'),
   ('20260430000000'),
-  ('20260505000000');
+  ('20260505000000'),
+  ('20260505010000');

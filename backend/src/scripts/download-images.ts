@@ -8,14 +8,18 @@
  * Images are fetched sequentially to avoid blasting the rangersdb CDN.
  * Already-downloaded images are skipped (safe to re-run as new cards are released).
  *
- * Not all card types have images on rangersdb — path cards, weather, missions,
- * locations, etc. are expected to be missing. 404s are logged and skipped.
+ * Some cards define custom front/back spritesheet coordinates in
+ * rangers-card-data. Those entries are cropped locally.
  */
 
 import fs from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { log } from "../lib/logger.ts";
+import {
+  inferBackImageSource,
+  loadTtsUniqueBackImageSources,
+} from "./card-image-sources.ts";
 
 const CARD_DATA_DIR = process.env["CARD_DATA_DIR"];
 if (!CARD_DATA_DIR) {
@@ -42,6 +46,8 @@ type RawCard = {
   id: string;
   imagesrc?: string;
   image_rect?: number[];
+  back_imagesrc?: string;
+  back_image_rect?: number[];
 };
 
 type CardEntry = {
@@ -68,100 +74,110 @@ async function run() {
   let failed = 0;
 
   for (const card of cards) {
-    const destDir = path.join(IMAGE_DIR as string, card.packId);
-    const destFile = path.join(destDir, `${card.code}.jpg`);
-
-    // Skip if already downloaded (unless FORCE is enabled)
-    if (!FORCE && (await fileExists(destFile))) {
+    const result = await downloadCardImage(card);
+    if (result === "downloaded") {
+      downloaded++;
+    } else if (result === "skipped") {
       skipped++;
-      continue;
-    }
-
-    const upstreamPackId = getUpstreamPackId(card.packId);
-    const url =
-      card.imagesrc?.startsWith("http")
-        ? card.imagesrc
-        : `${RANGERSDB_IMAGE_BASE}/${upstreamPackId}/${card.code}.jpg`;
-
-    let res: Response;
-    try {
-      res = await fetch(url);
-    } catch (err) {
-      log("warn", `Network error for ${card.code}`, {
-        url,
-        error: (err as Error).message,
-      });
-      failed++;
-      continue;
-    }
-
-    if (res.status === 404) {
-      log(
-        "warn",
-        `Image not found (expected for non-player cards): ${card.code}`,
-        { url },
-      );
+    } else if (result === "missing") {
       missing++;
-      continue;
-    }
-
-    if (!res.ok) {
-      log("warn", `Unexpected HTTP ${res.status} for ${card.code}`, { url });
+    } else {
       failed++;
-      continue;
     }
-
-    const buffer = Buffer.from(await res.arrayBuffer());
-
-    await fs.mkdir(destDir, { recursive: true });
-
-    if (card.image_rect) {
-      try {
-        const [index, cols, rows] = card.image_rect as [number, number, number];
-        const image = sharp(buffer);
-        const { width: totalWidth, height: totalHeight } =
-          await image.metadata();
-
-        if (totalWidth && totalHeight) {
-          const colIndex = index % cols;
-          const rowIndex = Math.floor(index / cols);
-
-          const left = Math.round((colIndex * totalWidth) / cols);
-          const top = Math.round((rowIndex * totalHeight) / rows);
-          const right = Math.round(((colIndex + 1) * totalWidth) / cols);
-          const bottom = Math.round(((rowIndex + 1) * totalHeight) / rows);
-
-          const width = right - left;
-          const height = bottom - top;
-
-          await image
-            .extract({ left, top, width, height })
-            .toFormat("jpeg")
-            .toFile(destFile);
-
-          downloaded++;
-          log("info", `Cropped and saved ${card.code} from spritesheet`);
-          continue;
-        }
-      } catch (err) {
-        log("error", `Failed to crop ${card.code}`, {
-          error: (err as Error).message,
-        });
-        failed++;
-        continue;
-      }
-    }
-
-    await fs.writeFile(destFile, buffer);
-    downloaded++;
-    log("info", `Downloaded ${card.code} (${buffer.length} bytes)`);
   }
 
   log("info", "Done", { downloaded, skipped, missing, failed });
 }
 
+async function downloadCardImage(
+  card: CardEntry,
+): Promise<"downloaded" | "skipped" | "missing" | "failed"> {
+  const destDir = path.join(IMAGE_DIR as string, card.packId);
+  const destFile = path.join(destDir, `${card.code}.jpg`);
+
+  if (!FORCE && (await fileExists(destFile))) return "skipped";
+
+  const upstreamPackId = getUpstreamPackId(card.packId);
+  const url = card.imagesrc?.startsWith("http")
+    ? card.imagesrc
+    : `${RANGERSDB_IMAGE_BASE}/${upstreamPackId}/${card.code}.jpg`;
+
+  let res: Response;
+  try {
+    res = await fetch(url);
+  } catch (err) {
+    log("warn", `Network error for ${card.code}`, {
+      url,
+      error: (err as Error).message,
+    });
+    return "failed";
+  }
+
+  if (res.status === 404) {
+    log("warn", `Image not found: ${card.code}`, { url });
+    return "missing";
+  }
+
+  if (!res.ok) {
+    log("warn", `Unexpected HTTP ${res.status} for ${card.code}`, { url });
+    return "failed";
+  }
+
+  const buffer = Buffer.from(await res.arrayBuffer());
+
+  await fs.mkdir(destDir, { recursive: true });
+
+  if (card.image_rect) {
+    try {
+      await cropSpritesheetImage(buffer, card.image_rect, destFile);
+      log("info", `Cropped and saved ${card.code} from spritesheet`);
+      return "downloaded";
+    } catch (err) {
+      log("error", `Failed to crop ${card.code}`, {
+        error: (err as Error).message,
+      });
+      return "failed";
+    }
+  }
+
+  await fs.writeFile(destFile, buffer);
+  log("info", `Downloaded ${card.code} (${buffer.length} bytes)`);
+  return "downloaded";
+}
+
+async function cropSpritesheetImage(
+  buffer: Buffer,
+  imageRect: number[],
+  destFile: string,
+) {
+  const [index, cols, rows] = imageRect as [number, number, number];
+  const image = sharp(buffer);
+  const { width: totalWidth, height: totalHeight } = await image.metadata();
+
+  if (!totalWidth || !totalHeight) {
+    throw new Error("Spritesheet dimensions are unavailable.");
+  }
+
+  const colIndex = index % cols;
+  const rowIndex = Math.floor(index / cols);
+
+  const left = Math.round((colIndex * totalWidth) / cols);
+  const top = Math.round((rowIndex * totalHeight) / rows);
+  const right = Math.round(((colIndex + 1) * totalWidth) / cols);
+  const bottom = Math.round(((rowIndex + 1) * totalHeight) / rows);
+
+  const width = right - left;
+  const height = bottom - top;
+
+  await image
+    .extract({ left, top, width, height })
+    .toFormat("jpeg")
+    .toFile(destFile);
+}
+
 async function loadCardEntries(dataDir: string): Promise<CardEntry[]> {
   const entries: CardEntry[] = [];
+  const backImageSources = await loadTtsUniqueBackImageSources(dataDir);
   const packDirs = await fs.readdir(path.join(dataDir, "packs"));
 
   for (const packId of packDirs) {
@@ -181,6 +197,19 @@ async function loadCardEntries(dataDir: string): Promise<CardEntry[]> {
         if (c.imagesrc) entry.imagesrc = c.imagesrc;
         if (c.image_rect) entry.image_rect = c.image_rect;
         entries.push(entry);
+
+        const backImageSource = inferBackImageSource(c, backImageSources);
+        if (backImageSource) {
+          const backEntry: CardEntry = {
+            code: `${c.id}b`,
+            packId: remappedPackId,
+          };
+          backEntry.imagesrc = backImageSource.imagesrc;
+          if (backImageSource.image_rect) {
+            backEntry.image_rect = backImageSource.image_rect;
+          }
+          entries.push(backEntry);
+        }
       }
     }
   }

@@ -1,7 +1,11 @@
 import type { Card } from "@earthborne-build/shared";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import { getCardColor, thumbnailUrl } from "@/utils/card-utils";
+import {
+  getCardColor,
+  isLandscapeCard,
+  thumbnailUrl,
+} from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import css from "./card-thumbnail.module.css";
 
@@ -27,6 +31,7 @@ export const CardThumbnail = memo(
         className={cx(
           css["thumbnail"],
           css[card.type_code],
+          isLandscapeCard(card) && css["landscape"],
           colorCls,
           className,
         )}

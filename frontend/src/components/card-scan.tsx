@@ -4,7 +4,13 @@ import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import { selectBackCard } from "@/store/selectors/shared";
-import { cardBackType, cardBackTypeUrl, imageUrl } from "@/utils/card-utils";
+import {
+  cardBackType,
+  cardBackTypeUrl,
+  cardImageUrl,
+  imageUrl,
+  isLandscapeCard,
+} from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import css from "./card-scan.module.css";
 import { Button } from "./ui/button";
@@ -66,11 +72,11 @@ export function CardScanControlled(props: Props) {
 
   const reverseImageCode = backCode;
 
-  const isSideways = false;
+  const isSideways = isLandscapeCard(card);
 
   const reverseSideways = backCard
-    ? false
-    : backType === "card"
+    ? isLandscapeCard(backCard)
+    : backType === "card" || card.back_image_url
       ? isSideways
       : false;
 
@@ -90,7 +96,7 @@ export function CardScanControlled(props: Props) {
       const next = !flipped;
       if (onFlip) onFlip(next, next ? reverseSideways : isSideways);
     },
-    [flipped, reverseSideways, onFlip],
+    [flipped, reverseSideways, onFlip, isSideways],
   );
 
   return (
@@ -125,8 +131,10 @@ export function CardScanControlled(props: Props) {
                 draggable={draggable}
                 hidden={!flipped}
                 lazy={lazy}
-                sideways={isSideways}
-                url={backUrl ? backUrl : imageUrl(reverseImageCode)}
+                sideways={reverseSideways}
+                url={
+                  backUrl ? cardImageUrl(backUrl) : imageUrl(reverseImageCode)
+                }
               />
             ) : (
               <CardScanInner
@@ -134,8 +142,8 @@ export function CardScanControlled(props: Props) {
                 draggable={draggable}
                 hidden={!flipped}
                 lazy={lazy}
-                sideways={false}
-                url={backUrl || cardBackTypeUrl(card)}
+                sideways={reverseSideways}
+                url={backUrl ? cardImageUrl(backUrl) : cardBackTypeUrl(card)}
               />
             )}
           </div>

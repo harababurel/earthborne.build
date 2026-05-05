@@ -10,6 +10,10 @@
     backface-visibility: hidden;
   }
 
+  .thumbnail.landscape {
+    aspect-ratio: 420 / 300;
+  }
+
   .thumbnail img {
     position: absolute;
     top: 0;

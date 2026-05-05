@@ -100,16 +100,16 @@ export const selectBackCard = createSelector(
     const card = metadata.cards[code];
     if (!card) return undefined;
 
-    // ER uses double_sided instead of back_link_id/hidden.
-    if (card.double_sided) {
-      const backCode = Object.keys(
-        lookupTables.relations.fronts[code] ?? {},
-      ).at(0);
+    if (card.back_card_code) return metadata.cards[card.back_card_code];
 
-      return backCode ? metadata.cards[backCode] : undefined;
-    }
+    // Fan-made content may still use double_sided instead of explicit back links.
+    if (!card.double_sided) return undefined;
 
-    return undefined;
+    const backCode = Object.keys(lookupTables.relations.fronts[code] ?? {}).at(
+      0,
+    );
+
+    return backCode ? metadata.cards[backCode] : undefined;
   },
 );
 

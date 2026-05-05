@@ -13,7 +13,10 @@ type Props = {
 export function CardIcon(props: Props) {
   const { card, className } = props;
 
-  if (card.category_id === "path" || card.type_code === "aspect") {
+  if (
+    (card.category_id != null && card.category_id !== "ranger") ||
+    card.type_code === "aspect"
+  ) {
     return null;
   }
 

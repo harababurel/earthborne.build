@@ -14,6 +14,8 @@ function prepareCardFace(card: Card, search: Search) {
   if (search.includeGameText) {
     if (card.traits) needle.push(displayAttribute(card, "traits"));
     if (card.text) needle.push(displayAttribute(card, "text"));
+    if (card.path_deck_assembly) needle.push(card.path_deck_assembly);
+    if (card.arrival_setup) needle.push(card.arrival_setup);
   }
 
   if (search.includeFlavor) {

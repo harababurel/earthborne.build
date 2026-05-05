@@ -29,7 +29,7 @@ export function browseTypeSystemFilter(tab: CardTypeTab): Filter {
         ((card.type_code === "being" || card.type_code === "feature") &&
           card.category == null);
     case "location":
-      return (card: Card) => card.type_code === "location";
+      return (card: Card) => card.category_id === "location";
     case "weather":
       return (card: Card) => card.type_code === "weather";
     case "mission":

@@ -40,6 +40,11 @@ export function CardDetails(props: Props) {
     countNum === 1
       ? tokenName
       : (IRREGULAR_TOKEN_PLURALS[tokenKey] ?? dbPlural ?? `${tokenName}s`);
+  const showPresence =
+    card.presence != null &&
+    card.category_id != null &&
+    card.category_id !== "ranger" &&
+    card.category_id !== "challenge";
 
   return (
     <div className={css["details"]}>
@@ -68,6 +73,13 @@ export function CardDetails(props: Props) {
               )}
             </div>
             <div className={css["token-label"]}>{tokenLabel}</div>
+          </div>
+        )}
+
+        {showPresence && (
+          <div className={css["presence-box"]}>
+            <span>{t("common.presence")}</span>
+            <strong>{card.presence}</strong>
           </div>
         )}
       </div>

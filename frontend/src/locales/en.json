@@ -48,6 +48,14 @@
         "reviews": "Comments"
       }
     },
+    "card": {
+      "location_back": {
+        "arrival_setup": "Arrival Setup",
+        "guide_entry": "{{entry}}",
+        "path_deck_assembly": "Path Deck Assembly",
+        "title": "Location Back"
+      }
+    },
     "card_view": {
       "actions": {
         "faq": "View FAQ",
@@ -119,6 +127,7 @@
       "ok": "OK",
       "pack_one": "pack",
       "pack_other": "packs",
+      "presence": "Presence",
       "packs_new_format": {
         "encounter": "",
         "player": ""

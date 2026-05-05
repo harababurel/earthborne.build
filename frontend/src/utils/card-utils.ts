@@ -40,27 +40,41 @@ export function getCardColor(card: Card, _prop = "color") {
   return "color-neutral";
 }
 
-type CardBackType = "player" | "card";
+type CardBackType = "player" | "path" | "card";
 
 const DEFAULT_PLAYER_CARD_BACK_URL = "/assets/ranger-card-back-art.png";
 const DEFAULT_PATH_CARD_BACK_URL = "/assets/path-card-back-art.png";
 
 export function cardBackType(card: Card): CardBackType {
   if (card.double_sided) return "card";
+  if (card.category_id && card.category_id !== "ranger") return "path";
   return "player";
 }
 
 export function cardBackTypeUrl(card: Card) {
   const type = cardBackType(card);
-  if (type === "player") {
-    if (card.category_id === "path") return DEFAULT_PATH_CARD_BACK_URL;
-    return DEFAULT_PLAYER_CARD_BACK_URL;
-  }
+  if (type === "player") return DEFAULT_PLAYER_CARD_BACK_URL;
+  if (type === "path") return DEFAULT_PATH_CARD_BACK_URL;
   return `${import.meta.env.VITE_CARD_IMAGE_URL}/back_${type}.jpg`;
+}
+
+export function isLandscapeCard(card: Card) {
+  return card.category_id === "location";
 }
 
 export function imageUrl(code: string) {
   return `${import.meta.env.VITE_CARD_IMAGE_URL}/${code}`;
+}
+
+export function cardImageUrl(source: string) {
+  if (source.startsWith("/images/")) {
+    const code = source.split("/").pop();
+    return code ? imageUrl(code) : source;
+  }
+  if (/^(https?:)?\/\//.test(source) || source.startsWith("/")) {
+    return source;
+  }
+  return imageUrl(source);
 }
 
 export function thumbnailUrl(code: string) {

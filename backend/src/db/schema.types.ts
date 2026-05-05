@@ -88,6 +88,8 @@ export interface Card {
   text: string | null;
   flavor: string | null;
   image_rect: string | null;
+  back_imagesrc: string | null;
+  back_image_rect: string | null;
   sun_challenge: string | null;
   mountain_challenge: string | null;
   crest_challenge: string | null;

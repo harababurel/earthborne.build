@@ -71,6 +71,7 @@ function setInLookupTable<T extends string | number>(
 function addCardToLookupTables(tables: LookupTables, card: Card) {
   indexByCodes(tables, card);
   indexByTraits(tables, card);
+  indexByRelations(tables, card);
 }
 
 function indexByCodes(tables: LookupTables, card: Card) {
@@ -82,6 +83,11 @@ function indexByTraits(tables: LookupTables, card: Card) {
   for (const trait of splitMultiValue(card.traits)) {
     setInLookupTable(card.code, tables.traits, trait);
   }
+}
+
+function indexByRelations(tables: LookupTables, card: Card) {
+  if (!card.back_card_code) return;
+  setInLookupTable(card.back_card_code, tables.relations.fronts, card.code);
 }
 
 function addPacksToLookupTables(

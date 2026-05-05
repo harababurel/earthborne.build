@@ -146,6 +146,41 @@
     margin-top: var(--card-spacing);
   }
 
+  .location-back {
+    border-top: 1px solid var(--palette-1);
+    padding-top: var(--card-spacing);
+  }
+
+  .location-back > * + * {
+    margin-top: calc(var(--card-spacing) * 0.75);
+  }
+
+  .location-back h2 {
+    font-size: var(--text-base);
+    font-weight: 700;
+  }
+
+  .location-back h3 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .location-back-text,
+  .location-back-guide {
+    font-size: var(--card-text-size-sm);
+  }
+
+  .location-back-text :global(hr.break) {
+    margin: 0.35rem 0;
+  }
+
+  .location-back-guide {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
   .image {
     grid-area: image;
   }
@@ -528,6 +563,28 @@
     overflow: hidden;
     flex: 0 0 auto;
     margin-top: 0.3rem;
+  }
+
+  .presence-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid var(--palette-1);
+    border-radius: var(--rounded);
+    padding: 0.25rem 0.45rem;
+    background: var(--palette-point-five);
+    line-height: 1;
+  }
+
+  .presence-box span {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .presence-box strong {
+    font-size: var(--text-base);
+    font-weight: 700;
   }
 
   .token-count {

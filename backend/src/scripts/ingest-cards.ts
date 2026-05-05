@@ -15,6 +15,10 @@ import { getDatabase } from "../db/db.ts";
 import type { DB } from "../db/schema.types.ts";
 import { configFromEnv } from "../lib/config.ts";
 import { log } from "../lib/logger.ts";
+import {
+  inferBackImageSource,
+  loadTtsUniqueBackImageSources,
+} from "./card-image-sources.ts";
 
 const CARD_DATA_DIR = process.env["CARD_DATA_DIR"];
 if (!CARD_DATA_DIR) {
@@ -210,6 +214,7 @@ async function ingest() {
 
     // Cards — all JSON files per pack inside packs/{pack_id}/*.json
     const dataDir = CARD_DATA_DIR as string;
+    const backImageSources = await loadTtsUniqueBackImageSources(dataDir);
     const packDirs = await fs.readdir(path.join(dataDir, "packs"));
     const allCardsMap = new Map<string, ReturnType<typeof normalizeCard>>();
 
@@ -227,7 +232,11 @@ async function ingest() {
         const rawCards = await readFile<RawCard[]>(packFile);
 
         for (const c of rawCards) {
-          const normalized = normalizeCard(c, remapPackId({ id: packId }).id);
+          const normalized = normalizeCard(
+            c,
+            remapPackId({ id: packId }).id,
+            backImageSources,
+          );
           allCardsMap.set(normalized.id, normalized);
         }
         log(
@@ -353,6 +362,8 @@ interface RawCard {
   traits?: string;
   text?: string;
   flavor?: string;
+  back_imagesrc?: string;
+  back_image_rect?: number[];
   image_rect?: number[];
   sun_challenge?: string;
   mountain_challenge?: string;
@@ -361,7 +372,13 @@ interface RawCard {
   arrival_setup?: string;
 }
 
-function normalizeCard(c: RawCard, packId: string) {
+function normalizeCard(
+  c: RawCard,
+  packId: string,
+  backImageSources: Awaited<ReturnType<typeof loadTtsUniqueBackImageSources>>,
+) {
+  const backImageSource = inferBackImageSource(c, backImageSources);
+
   return {
     id: c.id,
     code: c.id,
@@ -399,6 +416,11 @@ function normalizeCard(c: RawCard, packId: string) {
     text: c.text ?? null,
     flavor: c.flavor ?? null,
     image_rect: c.image_rect != null ? JSON.stringify(c.image_rect) : null,
+    back_imagesrc: backImageSource?.imagesrc ?? null,
+    back_image_rect:
+      backImageSource?.image_rect != null
+        ? JSON.stringify(backImageSource.image_rect)
+        : null,
     sun_challenge: c.sun_challenge ?? null,
     mountain_challenge: c.mountain_challenge ?? null,
     crest_challenge: c.crest_challenge ?? null,

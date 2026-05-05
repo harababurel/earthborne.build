@@ -24,9 +24,12 @@ export function resolveCardWithRelations<T extends boolean>(
   const encounterSet = card.set_code
     ? deps.metadata.encounterSets[card.set_code]
     : undefined;
+  const backCard = card.back_card_code
+    ? deps.metadata.cards[card.back_card_code]
+    : undefined;
 
   const cardWithRelations: CardWithRelations = {
-    back: undefined,
+    back: backCard ? resolveCardFace(deps, backCard) : undefined,
     card,
     cycle,
     encounterSet,
@@ -56,6 +59,27 @@ export function resolveCardWithRelations<T extends boolean>(
   }
 
   return cardWithRelations;
+}
+
+function resolveCardFace(
+  deps: Pick<StoreState, "metadata"> & { lookupTables: LookupTables },
+  card: NonNullable<StoreState["metadata"]["cards"][string]>,
+): ResolvedCard {
+  const pack = deps.metadata.packs[card.pack_code];
+  const type = deps.metadata.types[card.type_code];
+  const cycle = pack ? deps.metadata.cycles[pack.cycle_code] : undefined;
+  const encounterSet = card.set_code
+    ? deps.metadata.encounterSets[card.set_code]
+    : undefined;
+
+  return {
+    card,
+    cycle,
+    encounterSet,
+    pack,
+    subtype: undefined,
+    type,
+  };
 }
 
 function resolveRelationArray(

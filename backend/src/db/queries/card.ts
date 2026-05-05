@@ -62,6 +62,8 @@ type CardRow = {
   text: string | null;
   flavor: string | null;
   traits: string | null;
+  back_imagesrc: string | null;
+  back_image_rect: string | null;
   sun_challenge: string | null;
   mountain_challenge: string | null;
   crest_challenge: string | null;
@@ -122,6 +124,8 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.text",
       "card.flavor",
       "card.traits",
+      "card.back_imagesrc",
+      "card.back_image_rect",
       "card.sun_challenge",
       "card.mountain_challenge",
       "card.crest_challenge",
@@ -187,6 +191,8 @@ export async function getCardByCode(
       "card.text",
       "card.flavor",
       "card.traits",
+      "card.back_imagesrc",
+      "card.back_image_rect",
       "card.sun_challenge",
       "card.mountain_challenge",
       "card.crest_challenge",
@@ -261,6 +267,7 @@ function transformCard(row: CardRow): {
   specialty_type: string | null;
   category_id: string | null;
   back_card_code: string | null;
+  back_image_url: string | null;
   illustrator: string | null;
   challenge_sun: string | null;
   challenge_mountain: string | null;
@@ -339,6 +346,8 @@ function transformCard(row: CardRow): {
     specialty_type,
     category_id: row.category_id,
     back_card_code: row.back_card_id,
+    back_image_url:
+      row.back_imagesrc || row.back_image_rect ? `${row.code}b` : null,
     illustrator: row.illustrator,
     challenge_sun: row.sun_challenge,
     challenge_mountain: row.mountain_challenge,
