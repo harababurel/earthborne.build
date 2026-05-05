@@ -13,7 +13,7 @@ This project currently supports a simple self-hosted deployment:
 - Node.js `24.x`
 - `nginx`
 - project checkout at `/srv/earthborne.build` or similar
-- local clone of `https://github.com/zzorba/rangers-card-data`
+- local clone of `https://github.com/harababurel/rangers-card-data`
 
 ## 1. Install dependencies
 
@@ -25,7 +25,7 @@ npm ci
 ## 2. Clone card data
 
 ```bash
-git clone https://github.com/zzorba/rangers-card-data /srv/rangers-card-data
+git clone https://github.com/harababurel/rangers-card-data /srv/rangers-card-data
 ```
 
 ## 3. Configure the backend

@@ -6,7 +6,7 @@ This document describes the current Earthborne Rangers data sources and the norm
 
 Card and pack data are ingested from a local checkout of:
 
-- `https://github.com/zzorba/rangers-card-data`
+- `https://github.com/harababurel/rangers-card-data`
 
 The ingestion script reads:
 
@@ -43,7 +43,7 @@ Current normalization performed during ingest:
 - upstream `core` pack id is remapped to `ebr`
 - `short_name`, `type_id`, `size`, and similar optional fields are normalized to `null` when absent
 - duplicate token ids from upstream `tokens.json` are deduplicated before insert
-- array-valued `locations` are stored in SQLite as JSON strings
+- `image_rect` arrays are serialized to JSON strings for SQLite storage
 - booleans are stored as SQLite integer flags where needed
 
 ## Card schema
@@ -59,7 +59,9 @@ It models Earthborne Rangers concepts such as:
 - named tokens
 - area and campaign guide references
 - background and specialty classification
-- challenge text fields
+- challenge text fields (`challenge_sun`, `challenge_mountain`, `challenge_crest`)
+- location card back text (`path_deck_assembly`, `arrival_setup`)
+- flip card cross-references (`back_card_code`, `double_sided`)
 
 ## Pack and set metadata
 

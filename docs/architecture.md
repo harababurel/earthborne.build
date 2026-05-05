@@ -32,7 +32,7 @@ It is a single Hono service backed by SQLite. There are no separate Cloudflare f
 
 ## Data pipeline
 
-Card data is pulled from a local checkout of `zzorba/rangers-card-data` and ingested into SQLite with `backend/src/scripts/ingest-cards.ts`.
+Card data is pulled from a local checkout of `harababurel/rangers-card-data` and ingested into SQLite with `backend/src/scripts/ingest-cards.ts`.
 
 Optional local image hosting is handled separately:
 
