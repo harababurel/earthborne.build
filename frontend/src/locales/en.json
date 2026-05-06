@@ -53,7 +53,7 @@
         "arrival_setup": "Arrival Setup",
         "guide_entry": "{{entry}}",
         "path_deck_assembly": "Path Deck Assembly",
-        "title": "Location Back"
+        "title": "{{name}} (back)"
       }
     },
     "card_view": {

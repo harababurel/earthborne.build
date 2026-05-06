@@ -21,7 +21,7 @@ export function LocationBackFace(props: Props) {
   const backCard = useMemo(() => {
     return {
       ...card,
-      name: t("card.location_back.title"),
+      name: t("card.location_back.title", { name: card.name }),
       flavor: "",
       text: "",
       traits: "",
