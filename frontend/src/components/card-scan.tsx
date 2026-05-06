@@ -119,7 +119,7 @@ export function CardScanControlled(props: Props) {
           draggable={draggable}
           lazy={lazy}
           sideways={isSideways}
-          url={frontUrl ? frontUrl : imageUrl(imageCode)}
+          url={frontUrl ? cardImageUrl(frontUrl) : imageUrl(imageCode)}
         />
       </div>
       {!preventFlip && (

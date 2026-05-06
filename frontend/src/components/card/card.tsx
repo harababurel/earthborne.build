@@ -9,6 +9,8 @@ import css from "./card.module.css";
 import { CardBack } from "./card-back";
 import { CardContainer } from "./card-container";
 import { CardFace } from "./card-face";
+import { LocationBackFace } from "./location-back";
+import { hasLocationBack } from "./location-back.helpers";
 
 type Props = {
   canToggleBackside?: boolean;
@@ -75,6 +77,8 @@ export function Card(props: Props) {
     backNode = <CardBack card={card} size={size} />;
   } else if (back) {
     backNode = <CardFace resolvedCard={back} size={size} />;
+  } else if (hasLocationBack(card)) {
+    backNode = <LocationBackFace card={card} size={size} />;
   }
 
   const backToggle = !!backNode && canToggleBackside && (

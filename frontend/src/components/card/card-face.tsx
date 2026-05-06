@@ -11,7 +11,6 @@ import { CardHeader } from "./card-header";
 import { CardIcons } from "./card-icons";
 import { CardMeta } from "./card-meta";
 import { CardText } from "./card-text";
-import { LocationBack } from "./location-back";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
@@ -84,7 +83,6 @@ export function CardFace(props: Props) {
           text={displayAttribute(card, "text")}
           typeCode={card.type_code}
         />
-        <LocationBack card={card} size={size} />
         <CardMeta
           linked={size !== "tooltip"}
           onPrintingSelect={onPrintingSelect}

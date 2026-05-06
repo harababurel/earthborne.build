@@ -1,30 +1,74 @@
 import type { Card } from "@earthborne-build/shared";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { parseCardTextHtml } from "@/utils/card-utils";
+import { cx } from "@/utils/cx";
+import { CardScan } from "../card-scan";
+import { CardThumbnail } from "../card-thumbnail";
 import css from "./card.module.css";
+import { CardHeader } from "./card-header";
+import { hasLocationBack } from "./location-back.helpers";
 
 type Props = {
   card: Card;
   size: "compact" | "tooltip" | "full";
 };
 
-export function LocationBack(props: Props) {
+export function LocationBackFace(props: Props) {
   const { card, size } = props;
   const { t } = useTranslation();
 
-  if (size === "tooltip" || card.category_id !== "location") return null;
+  const backCard = useMemo(() => {
+    return {
+      ...card,
+      name: t("card.location_back.title"),
+      flavor: "",
+      text: "",
+      traits: "",
+    };
+  }, [card, t]);
 
-  const hasBackText = !!(
-    card.path_deck_assembly ||
-    card.arrival_setup ||
-    card.campaign_guide_entry
+  if (!hasLocationBack(card)) return null;
+
+  const showImage = !!card.back_image_url;
+
+  return (
+    <article
+      className={cx(
+        css["card"],
+        css["back"],
+        css["back-has-header"],
+        css["location"],
+        showImage && css["has-image"],
+        css[size],
+      )}
+      data-testid="card-location-back"
+    >
+      <CardHeader card={backCard} />
+
+      <div className={css["content"]}>
+        <LocationBackContent card={card} />
+      </div>
+
+      {showImage && (
+        <div className={css["image"]}>
+          {size === "full" ? (
+            <CardScan card={card} suffix="b" preventFlip />
+          ) : (
+            <CardThumbnail card={card} suffix="b" />
+          )}
+        </div>
+      )}
+    </article>
   );
+}
 
-  if (!hasBackText) return null;
+function LocationBackContent(props: { card: Card }) {
+  const { card } = props;
+  const { t } = useTranslation();
 
   return (
     <section className={css["location-back"]}>
-      <h2>{t("card.location_back.title")}</h2>
       {card.path_deck_assembly && (
         <LocationBackEntry
           label={t("card.location_back.path_deck_assembly")}
@@ -57,7 +101,9 @@ function LocationBackEntry(props: { label: string; text: string }) {
         <p
           // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML is from trusted card data.
           dangerouslySetInnerHTML={{
-            __html: parseCardTextHtml(props.text, { bullets: true }),
+            __html: parseCardTextHtml(props.text, {
+              bullets: true,
+            }),
           }}
         />
       </div>
