@@ -41,11 +41,7 @@ export function CardDetails(props: Props) {
     countNum === 1
       ? tokenName
       : (IRREGULAR_TOKEN_PLURALS[tokenKey] ?? dbPlural ?? `${tokenName}s`);
-  const showPresence =
-    card.presence != null &&
-    card.category_id != null &&
-    card.category_id !== "ranger" &&
-    card.category_id !== "challenge";
+  const showPresence = card.presence != null;
 
   return (
     <div className={css["details"]}>
