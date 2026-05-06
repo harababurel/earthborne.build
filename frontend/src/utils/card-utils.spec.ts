@@ -15,6 +15,9 @@ describe("parseCardTextHtml", () => {
       '<span class="core-progress"></span>',
     );
     expect(parseCardTextHtml("[sun]")).toBe('<span class="core-sun"></span>');
+    expect(parseCardTextHtml("[aspiration]")).toBe(
+      '<span class="core-aspiration"></span>',
+    );
   });
 
   it("maps stat tokens to bold colored text", () => {

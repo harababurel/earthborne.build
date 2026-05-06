@@ -20,6 +20,7 @@ const ER_CORE_FONT_TOKENS = new Set([
   "sun",
   "crest",
   "mountain",
+  "aspiration",
   "conditional",
 ]);
 

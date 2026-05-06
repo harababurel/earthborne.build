@@ -91,6 +91,9 @@
 .core-mountain_pass:before {
   content: "\e913";
 }
+.core-aspiration:before {
+  content: "\e913";
+}
 .core-woods:before {
   content: "\e914";
 }
