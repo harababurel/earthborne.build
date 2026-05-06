@@ -68,7 +68,22 @@ function LocationBackContent(props: { card: Card }) {
   const { t } = useTranslation();
 
   return (
-    <section className={css["location-back"]}>
+    <section
+      className={cx(
+        css["location-back"],
+        card.campaign_guide_entry != null && css["location-back-has-guide"],
+      )}
+    >
+      {card.campaign_guide_entry != null && (
+        <p className={css["location-back-guide"]}>
+          <span className={css["location-back-guide-label"]}>
+            <span className="core-guide" />
+            {t("card.location_back.guide_entry", {
+              entry: card.campaign_guide_entry,
+            })}
+          </span>
+        </p>
+      )}
       {card.path_deck_assembly && (
         <LocationBackEntry
           label={t("card.location_back.path_deck_assembly")}
@@ -80,14 +95,6 @@ function LocationBackContent(props: { card: Card }) {
           label={t("card.location_back.arrival_setup")}
           text={card.arrival_setup}
         />
-      )}
-      {card.campaign_guide_entry != null && (
-        <p className={css["location-back-guide"]}>
-          <span className="core-guide" />
-          {t("card.location_back.guide_entry", {
-            entry: card.campaign_guide_entry,
-          })}
-        </p>
       )}
     </section>
   );
