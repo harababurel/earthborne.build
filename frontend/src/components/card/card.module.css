@@ -659,7 +659,7 @@
     background-color: var(--fit);
   }
   .token-box.color-foc {
-    background-color: var(--foc);
+    background-color: var(--color-foc);
   }
   .token-box.color-spi {
     background-color: var(--spi);
