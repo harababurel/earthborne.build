@@ -24,6 +24,7 @@
 .presence {
   background-color: #4e2342;
   color: #6f3a62;
+  font-size: calc(1.5 * var(--card-text-size, var(--text-sm)));
 }
 
 .icon-base {

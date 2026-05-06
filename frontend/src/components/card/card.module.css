@@ -334,8 +334,17 @@
     font-size: var(--card-text-size);
   }
 
-  .icons > * + * {
-    margin-top: var(--card-spacing);
+  .icons {
+    display: flex;
+    align-items: center;
+    gap: var(--card-spacing);
+  }
+
+  .auxiliary-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
   }
 
   .icons-skills {
@@ -609,7 +618,6 @@
     line-height: 1;
     overflow: hidden;
     flex: 0 0 auto;
-    margin-top: 0.3rem;
   }
 
   .token-count {
