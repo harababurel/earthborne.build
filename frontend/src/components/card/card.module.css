@@ -399,6 +399,18 @@
       1px 1px 0 white;
   }
 
+  .text :global(.card-flavor-text),
+  .location-back-text :global(.card-flavor-text) {
+    color: var(--text-neutral);
+    font-style: italic;
+  }
+
+  .challenge-text :global(.card-flavor-text) {
+    color: inherit;
+    font-style: italic;
+    font-weight: 400;
+  }
+
   .text img {
     display: inline-block;
   }
@@ -474,6 +486,7 @@
 
   .challenge-text {
     flex: 1 1 auto;
+    font-weight: 500;
   }
 
   .challenge-text p {
@@ -496,6 +509,7 @@
   .flavor {
     font-size: var(--card-text-size-sm);
     max-width: 60ch;
+    color: var(--text-neutral);
     font-style: italic;
     text-align: left;
   }

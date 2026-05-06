@@ -44,6 +44,12 @@ describe("parseCardTextHtml", () => {
     );
   });
 
+  it("maps inline flavor tags to a styled span", () => {
+    expect(parseCardTextHtml("<f>the vaulted walkways to</f>")).toBe(
+      '<span class="card-flavor-text">the vaulted walkways to</span>',
+    );
+  });
+
   it("replaces newlines with hr.break by default", () => {
     expect(parseCardTextHtml("line 1\nline 2")).toBe(
       "line 1<hr class='break'>line 2",
