@@ -95,6 +95,8 @@ export function parseCardTextHtml(
   }
 
   parsed = parsed
+    .replaceAll("<e>", '<span class="card-notable-event">')
+    .replaceAll("</e>", "</span>")
     .replaceAll(/\[\[(.*?)\]\]/g, "<b><em>$1</em></b>")
     .replaceAll(/(\\?)\[((?:\w|_)+?)\]/g, (match, esc, token: string) => {
       if (esc === "\\") {

@@ -383,6 +383,22 @@
     font-weight: 700;
   }
 
+  .text :global(.card-notable-event),
+  .challenge-text :global(.card-notable-event) {
+    font-weight: 700;
+    -webkit-text-stroke: 0.035em white;
+    paint-order: stroke fill;
+    text-shadow:
+      -1px -1px 0 white,
+      0 -1px 0 white,
+      1px -1px 0 white,
+      -1px 0 0 white,
+      1px 0 0 white,
+      -1px 1px 0 white,
+      0 1px 0 white,
+      1px 1px 0 white;
+  }
+
   .text img {
     display: inline-block;
   }

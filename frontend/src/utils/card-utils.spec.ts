@@ -38,6 +38,12 @@ describe("parseCardTextHtml", () => {
     expect(parseCardTextHtml("[[text]]")).toBe("<b><em>text</em></b>");
   });
 
+  it("maps notable event tags to a styled span", () => {
+    expect(parseCardTextHtml("<e>CHIMNEY IS SETTLED</e>")).toBe(
+      '<span class="card-notable-event">CHIMNEY IS SETTLED</span>',
+    );
+  });
+
   it("replaces newlines with hr.break by default", () => {
     expect(parseCardTextHtml("line 1\nline 2")).toBe(
       "line 1<hr class='break'>line 2",
