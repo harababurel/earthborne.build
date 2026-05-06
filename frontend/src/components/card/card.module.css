@@ -378,6 +378,17 @@
     max-width: 60ch;
   }
 
+  .text :global(hr.break),
+  .challenge-text :global(hr.break),
+  .location-back-text :global(hr.break),
+  .flavor :global(hr.break) {
+    border-bottom-color: color-mix(
+      in srgb,
+      var(--palette-2) 70%,
+      var(--text-neutral) 30%
+    );
+  }
+
   .text b {
     color: var(--palette-6);
     font-weight: 700;
