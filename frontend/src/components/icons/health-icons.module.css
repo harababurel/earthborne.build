@@ -1,5 +1,6 @@
 .health,
-.sanity {
+.sanity,
+.presence {
   position: relative;
   display: flex;
   align-items: center;
@@ -20,9 +21,22 @@
   color: #6dacad; /* normal blue/teal for progress */
 }
 
+.presence {
+  background-color: #4e2342;
+  color: #6f3a62;
+}
+
 .icon-base {
   position: relative;
   font-size: calc(1.5 * var(--card-text-size, var(--text-sm)));
+  z-index: 2;
+}
+
+.presence-icon {
+  position: relative;
+  width: calc(1.65 * var(--card-text-size, var(--text-sm)));
+  height: calc(1.65 * var(--card-text-size, var(--text-sm)));
+  fill: currentColor;
   z-index: 2;
 }
 

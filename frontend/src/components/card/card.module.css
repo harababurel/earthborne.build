@@ -612,28 +612,6 @@
     margin-top: 0.3rem;
   }
 
-  .presence-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    border: 1px solid var(--palette-1);
-    border-radius: var(--rounded);
-    padding: 0.25rem 0.45rem;
-    background: var(--palette-point-five);
-    line-height: 1;
-  }
-
-  .presence-box span {
-    font-size: var(--text-2xs);
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  .presence-box strong {
-    font-size: var(--text-base);
-    font-weight: 700;
-  }
-
   .token-count {
     height: 75%;
     display: flex;

@@ -7,6 +7,7 @@ import {
   numericalStr,
 } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
+import { PresenceIcon } from "../icons/health-icons";
 import css from "./card.module.css";
 
 type Props = {
@@ -77,10 +78,7 @@ export function CardDetails(props: Props) {
         )}
 
         {showPresence && (
-          <div className={css["presence-box"]}>
-            <span>{t("common.presence")}</span>
-            <strong>{card.presence}</strong>
-          </div>
+          <PresenceIcon label={t("common.presence")} presence={card.presence} />
         )}
       </div>
     </div>
