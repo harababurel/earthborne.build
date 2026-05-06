@@ -99,6 +99,7 @@ export function parseCardTextHtml(
     .replaceAll("</e>", "</span>")
     .replaceAll("<f>", '<span class="card-flavor-text">')
     .replaceAll("</f>", "</span>")
+    .replaceAll(/<hr\s*\/?>/g, "<hr class='break'>")
     .replaceAll(/\[\[(.*?)\]\]/g, "<b><em>$1</em></b>")
     .replaceAll(/(\\?)\[((?:\w|_)+?)\]/g, (match, esc, token: string) => {
       if (esc === "\\") {
@@ -121,7 +122,7 @@ export function parseCardTextHtml(
     });
 
   if (opts?.newLines !== "skip") {
-    parsed = parsed.replaceAll("\n", "<hr class='break'>");
+    parsed = parsed.replaceAll(/\r?\n/g, "<br>");
   }
 
   return parsed;

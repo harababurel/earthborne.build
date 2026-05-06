@@ -50,8 +50,12 @@ describe("parseCardTextHtml", () => {
     );
   });
 
-  it("replaces newlines with hr.break by default", () => {
-    expect(parseCardTextHtml("line 1\nline 2")).toBe(
+  it("maps newlines to line breaks", () => {
+    expect(parseCardTextHtml("line 1\nline 2")).toBe("line 1<br>line 2");
+  });
+
+  it("maps explicit hr tags to styled separators", () => {
+    expect(parseCardTextHtml("line 1<hr>line 2")).toBe(
       "line 1<hr class='break'>line 2",
     );
   });
