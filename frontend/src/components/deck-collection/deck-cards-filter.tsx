@@ -40,11 +40,7 @@ export function DeckCardsFilter({ containerClass }: Props) {
     const playerCardFilter = and([not(filterType(["role"]) ?? (() => true))]);
 
     const cards = Object.values(metadata.cards).filter(playerCardFilter);
-    const sortFn = makeSortFunction(
-      ["name", "position"],
-      metadata,
-      collator,
-    );
+    const sortFn = makeSortFunction(["name", "position"], metadata, collator);
     return cards.sort(sortFn);
   }, [metadata, collator]);
 

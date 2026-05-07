@@ -10,10 +10,7 @@ import {
   Tooltip,
 } from "recharts";
 import type { ChartableData } from "@/store/lib/deck-charts";
-import {
-  APPROACH_ICON_DATA,
-  ApproachIcon,
-} from "../icons/approach-icon";
+import { APPROACH_ICON_DATA, ApproachIcon } from "../icons/approach-icon";
 import { chartTheme } from "./chart-theme";
 import { ChartTooltip } from "./chart-tooltip";
 import css from "./deck-tools.module.css";

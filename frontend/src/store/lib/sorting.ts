@@ -112,8 +112,12 @@ function dominantApproach(card: Card): string {
 function sortByApproach(a: Card, b: Card) {
   const aApproach = dominantApproach(a);
   const bApproach = dominantApproach(b);
-  const ai = APPROACH_ORDER.indexOf(aApproach as (typeof APPROACH_ORDER)[number]);
-  const bi = APPROACH_ORDER.indexOf(bApproach as (typeof APPROACH_ORDER)[number]);
+  const ai = APPROACH_ORDER.indexOf(
+    aApproach as (typeof APPROACH_ORDER)[number],
+  );
+  const bi = APPROACH_ORDER.indexOf(
+    bApproach as (typeof APPROACH_ORDER)[number],
+  );
   if (ai === -1 && bi === -1) return 0;
   if (ai === -1) return 1;
   if (bi === -1) return -1;
