@@ -1359,6 +1359,11 @@
       "title": "Wyniki wyszukiwania"
     },
     "settings": {
+      "app": {
+        "built": "Zbudowano",
+        "title": "Aplikacja",
+        "version": "Wersja"
+      },
       "backup": {
         "confirm": "Jesteś pewien, że chcesz przywrócić tą kopię zapasową? Wszelkie istniejące dane zostaną nadpisane.",
         "create": "Stwórz kopię zapasową",

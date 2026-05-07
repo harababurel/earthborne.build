@@ -16,6 +16,7 @@ import { useStore } from "@/store";
 import type { ColorScheme, SettingsState } from "@/store/slices/settings.types";
 import { useColorThemeManager } from "@/utils/use-color-theme";
 import { useGoBack } from "@/utils/use-go-back";
+import { AppBuild } from "./app-build";
 import { BackupRestore } from "./backup-restore";
 import { CardDataSync } from "./card-data-sync";
 import { CardDisplaySettings } from "./card-display";
@@ -122,6 +123,9 @@ function SettingsInner({
           <div className={css["row"]}>
             <Section title={t("settings.card_data.title")}>
               <CardDataSync showDetails />
+            </Section>
+            <Section title={t("settings.app.title")}>
+              <AppBuild />
             </Section>
           </div>
           <Tabs value={tab} onValueChange={onTabChange}>

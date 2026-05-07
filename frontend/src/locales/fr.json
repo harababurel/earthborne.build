@@ -1106,6 +1106,11 @@
       "title": "La saison des prévisualisations est arrivée !"
     },
     "settings": {
+      "app": {
+        "built": "Compilé",
+        "title": "App",
+        "version": "Version"
+      },
       "backup": {
         "confirm": "Êtes-vous sûr de vouloir restaurer cette sauvegarde ? Toutes les données existantes seront écrasées.",
         "create": "Créer une sauvegarde",

@@ -1323,6 +1323,11 @@
       "title": "规则参考"
     },
     "settings": {
+      "app": {
+        "built": "构建时间",
+        "title": "应用",
+        "version": "版本"
+      },
       "backup": {
         "confirm": "确定要恢复此备份吗？所有现有数据将被覆盖。",
         "create": "创建备份",

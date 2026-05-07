@@ -1,0 +1,37 @@
+.build {
+  font-family: var(--font-family-ui);
+  font-size: var(--text-sm);
+}
+
+.build > * + * {
+  margin-top: 0.25rem;
+}
+
+.build p {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.muted {
+  opacity: 0.75;
+}
+
+.commit {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--palette-point-five);
+  border-radius: 999px;
+  padding: 0 0.375rem;
+  background: var(--palette-point-five);
+  color: inherit;
+  font-family: monospace;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+a.commit:hover {
+  text-decoration: underline;
+}

@@ -1388,6 +1388,11 @@
       "title": "Ergebnisse"
     },
     "settings": {
+      "app": {
+        "built": "Gebaut",
+        "title": "App",
+        "version": "Version"
+      },
       "backup": {
         "confirm": "Bist du sicher, dass du diese Sicherung wiederherstellen möchtest? Alle aktuellen Daten werden überschrieben.",
         "create": "Sicherung erstellen",
