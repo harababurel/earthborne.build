@@ -651,7 +651,7 @@
     height: calc(2.2 * var(--card-text-size, var(--text-sm)));
     line-height: 1;
     overflow: hidden;
-    border-radius: var(--rounded);
+    border: 1.2px solid #d2ae7b;
     flex: 0 0 auto;
   }
 

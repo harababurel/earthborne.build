@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
-  border-radius: var(--rounded);
+  border: 1.2px solid #d2ae7b;
   width: calc(2.2 * var(--card-text-size, var(--text-sm)));
   height: calc(2.2 * var(--card-text-size, var(--text-sm)));
 }
@@ -29,8 +29,9 @@
 
 .icon-base {
   position: relative;
-  font-size: calc(1.5 * var(--card-text-size, var(--text-sm)));
+  font-size: calc(2.15 * var(--card-text-size, var(--text-sm)));
   z-index: 2;
+  transform: translateY(0.08em);
 }
 
 .presence-icon {
