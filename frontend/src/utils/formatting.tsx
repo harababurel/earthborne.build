@@ -31,6 +31,17 @@ export const formatDateTime = createSelector(
     }),
 );
 
+export function formatDataVersionTimestamp(
+  date: string | number,
+  now = new Date(),
+  locale = navigator.language,
+) {
+  const parsed = parseDateAsUtc(date);
+  if (!parsed) return date.toString();
+
+  return `${formatUtcDateTime(parsed)} (${formatRelativeTime(parsed, now, locale)})`;
+}
+
 export function formatRelationTitle(id: string) {
   return i18next.t(`common.relations.${id}`);
 }
@@ -70,4 +81,64 @@ export function formatDeckOptionString(str: string | undefined) {
 
 export function dataLanguage() {
   return LOCALES[i18n.language]?.value;
+}
+
+function formatUtcDateTime(date: Date) {
+  const datePart = [
+    date.getUTCFullYear(),
+    padDatePart(date.getUTCMonth() + 1),
+    padDatePart(date.getUTCDate()),
+  ].join("-");
+  const timePart = [
+    padDatePart(date.getUTCHours()),
+    padDatePart(date.getUTCMinutes()),
+    padDatePart(date.getUTCSeconds()),
+  ].join(":");
+
+  return `${datePart} ${timePart} UTC`;
+}
+
+function formatRelativeTime(date: Date, now: Date, locale: string) {
+  const diffMs = date.getTime() - now.getTime();
+  const absMs = Math.abs(diffMs);
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "always" });
+  const [unit, unitMs] = relativeTimeUnit(absMs);
+  const direction = diffMs < 0 ? -1 : 1;
+  const value = direction * Math.max(1, Math.round(absMs / unitMs));
+
+  return formatter.format(value, unit);
+}
+
+function relativeTimeUnit(ms: number): [Intl.RelativeTimeFormatUnit, number] {
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const week = 7 * day;
+  const month = 30 * day;
+  const year = 365 * day;
+
+  if (ms < minute) return ["second", 1000];
+  if (ms < hour) return ["minute", minute];
+  if (ms < day) return ["hour", hour];
+  if (ms < week) return ["day", day];
+  if (ms < month) return ["week", week];
+  if (ms < year) return ["month", month];
+
+  return ["year", year];
+}
+
+function parseDateAsUtc(date: string | number) {
+  if (typeof date === "number") {
+    const parsed = new Date(date);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  const hasTimezone = /(?:z|[+-]\d{2}:?\d{2})$/i.test(date);
+  const parsed = new Date(hasTimezone ? date : `${date}Z`);
+
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function padDatePart(value: number) {
+  return value.toString().padStart(2, "0");
 }

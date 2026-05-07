@@ -5,6 +5,7 @@ import { Field } from "@/components/ui/field";
 import { useStore } from "@/store";
 import { queryDataVersion } from "@/store/services/queries";
 import { cx } from "@/utils/cx";
+import { formatDataVersionTimestamp } from "@/utils/formatting";
 import css from "./card-data-sync.module.css";
 
 type Props = {
@@ -62,7 +63,7 @@ export function CardDataSync(props: Props) {
       {showDetails && dataVersion && (
         <dl className={css["info"]}>
           <dt>{t("settings.card_data.data_version")}:</dt>
-          <dd>{dataVersion.cards_updated_at.split(".")[0]}</dd>
+          <dd>{formatDataVersionTimestamp(dataVersion.cards_updated_at)}</dd>
           <dt>{t("settings.card_data.card_count")}:</dt>
           <dd>{dataVersion.card_count}</dd>
           <dt>{t("settings.card_data.locale")}:</dt>
