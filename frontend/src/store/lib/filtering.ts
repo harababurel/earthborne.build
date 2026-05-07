@@ -289,7 +289,7 @@ export function filterIllustrator(
 }
 
 /**
- * Properties — only `unique` is applicable in ER; others are AH-specific stubs.
+ * Properties — parsed from the opening property block of card text.
  */
 export function filterProperties(
   filterState: PropertiesFilter,
@@ -298,27 +298,15 @@ export function filterProperties(
 ): Filter | undefined {
   const filters: Filter[] = [];
 
-  if (filterState.unique) {
-    filters.push((card: Card) => !!card.is_unique);
-  }
+  for (const [property, enabled] of Object.entries(filterState)) {
+    if (!enabled) continue;
 
-  if (filterState.expert) {
-    filters.push((card: Card) => !!card.is_expert);
-  }
-
-  for (const keyword of [
-    "ambush",
-    "conduit",
-    "disconnected",
-    "fatiguing",
-    "friendly",
-    "manifestation",
-    "obstacle",
-    "persistent",
-    "setup",
-  ] as const) {
-    if (filterState[keyword]) {
-      filters.push((card: Card) => card.keywords?.includes(keyword) ?? false);
+    if (property === "unique") {
+      filters.push((card: Card) => !!card.is_unique);
+    } else if (property === "expert") {
+      filters.push((card: Card) => !!card.is_expert);
+    } else {
+      filters.push((card: Card) => card.keywords?.includes(property) ?? false);
     }
   }
 

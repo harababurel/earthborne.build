@@ -38,19 +38,7 @@ export type OwnershipFilter = "unowned" | "owned" | "all";
 
 export type FanMadeContentFilter = "fan-made" | "official" | "all";
 
-export type PropertiesFilter = {
-  ambush: boolean;
-  conduit: boolean;
-  disconnected: boolean;
-  expert: boolean;
-  fatiguing: boolean;
-  friendly: boolean;
-  manifestation: boolean;
-  obstacle: boolean;
-  persistent: boolean;
-  setup: boolean;
-  unique: boolean;
-};
+export type PropertiesFilter = Record<string, boolean>;
 
 // Stub — ER has no subtype/weakness system; kept for API compatibility.
 export type SubtypeFilter = {

@@ -4,7 +4,6 @@ import {
   BACKGROUND_TYPES,
   CARD_CATEGORY_IDS,
   CARD_TYPE_ORDER,
-  KEYWORDS,
   RANGER_CARD_CATEGORY,
   SPECIALTY_TYPES,
 } from "../lib/constants.ts";
@@ -32,7 +31,7 @@ export const CardSchema = z.object({
   text: z.string().nullish(),
   flavor: z.string().nullish(),
   traits: z.string().nullish(),
-  keywords: z.array(z.enum(KEYWORDS)).nullish(),
+  keywords: z.array(z.string()).nullish(),
 
   // Costs and requirements
   energy_cost: z.number().nullish(),

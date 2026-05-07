@@ -231,7 +231,7 @@ export function isPropertiesFilter(value: unknown): value is PropertiesFilter {
   return (
     typeof value === "object" &&
     value != null &&
-    "unique" in value &&
+    !Array.isArray(value) &&
     Object.values(value).every((v) => typeof v === "boolean")
   );
 }

@@ -38,21 +38,29 @@ describe("parseKeywords", () => {
       parseKeywords(
         "Persistent. Unique. Spirit.<hr><b>Exhaust:</b> Discard up to 3[progress].",
       ),
-    ).toEqual(["persistent", "unique"]);
+    ).toEqual(["persistent", "unique", "spirit"]);
   });
 
-  it("parses known keywords when the property block contains untracked properties", () => {
+  it("does not parse mixed property and rules text blocks", () => {
     expect(
       parseKeywords(
         "Unique. Objective (6 hunches: [aspiration]).<hr>This gear does not ready during the refresh phase.",
       ),
-    ).toEqual(["unique"]);
+    ).toEqual([]);
   });
 
   it("does not parse keyword mentions from rules text", () => {
     expect(
       parseKeywords(
         "<b>Response:</b> After a being with the unique keyword is cleared, draw 1 card.",
+      ),
+    ).toEqual([]);
+  });
+
+  it("does not parse sentence starts from the first rules block", () => {
+    expect(
+      parseKeywords(
+        "Choose a Ranger. During their turn, they may exhaust a conduit.",
       ),
     ).toEqual([]);
   });

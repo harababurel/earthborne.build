@@ -762,21 +762,7 @@ function makeFilterValue(
     case "properties": {
       return makeFilterObject(
         type,
-        isPropertiesFilter(initialValue)
-          ? initialValue
-          : {
-              ambush: false,
-              conduit: false,
-              disconnected: false,
-              expert: false,
-              fatiguing: false,
-              friendly: false,
-              manifestation: false,
-              obstacle: false,
-              persistent: false,
-              setup: false,
-              unique: false,
-            },
+        isPropertiesFilter(initialValue) ? initialValue : {},
         true,
         locked,
       );
@@ -879,22 +865,6 @@ function cardsFilters({
   return Array.from(new Set(filters));
 }
 
-function properties() {
-  return [
-    "ambush",
-    "conduit",
-    "disconnected",
-    "expert",
-    "fatiguing",
-    "friendly",
-    "manifestation",
-    "obstacle",
-    "persistent",
-    "setup",
-    "unique",
-  ];
-}
-
 export function makeLists(
   settings: SettingsState,
   metadata: Metadata,
@@ -973,7 +943,6 @@ function getDisplaySettings(
         grouping: settings.lists.player.group,
         sorting: settings.lists.player.sort,
         viewMode: settings.lists.player.viewMode,
-        properties: properties(),
       };
     }
 
@@ -982,7 +951,6 @@ function getDisplaySettings(
         grouping: settings.lists.path.group,
         sorting: settings.lists.path.sort,
         viewMode: settings.lists.path.viewMode,
-        properties: properties(),
       };
     }
 
@@ -991,7 +959,6 @@ function getDisplaySettings(
         grouping: settings.lists.all.group,
         sorting: settings.lists.all.sort,
         viewMode: settings.lists.all.viewMode,
-        properties: properties(),
       };
     }
   }

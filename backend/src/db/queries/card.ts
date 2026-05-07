@@ -15,19 +15,6 @@ const SINGLETON_CATEGORY: Record<string, "personality" | "reward" | "malady"> =
     malady: "malady",
   };
 
-const KEYWORDS = [
-  "ambush",
-  "conduit",
-  "disconnected",
-  "fatiguing",
-  "friendly",
-  "manifestation",
-  "obstacle",
-  "persistent",
-  "setup",
-  "unique",
-] as const;
-
 type CardRow = {
   code: string;
   name: string;
@@ -260,7 +247,7 @@ function transformCard(row: CardRow): {
   campaign_guide_entry: number | null;
   quantity: number | null;
   deck_limit: number | null;
-  keywords: (typeof KEYWORDS)[number][];
+  keywords: string[];
   is_unique: boolean;
   is_expert: boolean;
   background_type: string | null;
@@ -357,9 +344,7 @@ function transformCard(row: CardRow): {
   };
 }
 
-export function parseKeywords(
-  text: string | null,
-): (typeof KEYWORDS)[number][] {
+export function parseKeywords(text: string | null): string[] {
   if (!text) return [];
 
   // Keywords appear in the opening property block. Card data separates that
@@ -370,25 +355,14 @@ export function parseKeywords(
     .replace(/<[^>]+>/g, "")
     .trim();
 
-  const found = new Set<(typeof KEYWORDS)[number]>();
-
-  for (const segment of stripped.split(".")) {
-    const match = segment.trim().match(/^([A-Z][a-z]+)(?:\s+\d+)?(?:\s|$|\()/);
-    if (!match) continue;
-
-    const keyword = match[1]?.toLowerCase();
-    if (isKeyword(keyword)) {
-      found.add(keyword);
-    }
+  if (!/^[A-Z][a-z]+(?: \d+)?\.(?: [A-Z][a-z]+(?: \d+)?\.)*$/.test(stripped)) {
+    return [];
   }
 
-  return KEYWORDS.filter((keyword) => found.has(keyword));
-}
-
-function isKeyword(
-  value: string | undefined,
-): value is (typeof KEYWORDS)[number] {
-  return KEYWORDS.some((keyword) => keyword === value);
+  return stripped
+    .split(".")
+    .map((segment) => segment.trim().split(" ")[0]?.toLowerCase())
+    .filter((keyword): keyword is string => !!keyword);
 }
 
 function hasTrait(traits: string | null, trait: string): boolean {

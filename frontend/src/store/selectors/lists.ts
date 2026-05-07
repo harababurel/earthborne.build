@@ -1195,25 +1195,40 @@ export const selectLimitedPoolPacks = createSelector(
 
 export const selectPropertyOptions = createSelector(
   selectActiveList,
+  selectMetadata,
   selectLocaleSortingCollator, // HACK: trigger re-evaluation on locale change
-  (list) => {
+  (list, metadata, collator) => {
     if (!list) return [];
-    const t = i18n.t;
-    return [
-      { key: "ambush", label: t("common.keywords.ambush") },
-      { key: "conduit", label: t("common.keywords.conduit") },
-      { key: "disconnected", label: t("common.keywords.disconnected") },
-      { key: "expert", label: t("common.expert") },
-      { key: "fatiguing", label: t("common.keywords.fatiguing") },
-      { key: "friendly", label: t("common.keywords.friendly") },
-      { key: "manifestation", label: t("common.keywords.manifestation") },
-      { key: "obstacle", label: t("common.keywords.obstacle") },
-      { key: "persistent", label: t("common.keywords.persistent") },
-      { key: "setup", label: t("common.keywords.setup") },
-      { key: "unique", label: t("common.unique") },
-    ].filter((p) => list.display.properties?.includes(p.key));
+
+    const keys = new Set<string>();
+
+    for (const card of Object.values(metadata.cards)) {
+      if (card.is_unique) keys.add("unique");
+      if (card.is_expert) keys.add("expert");
+
+      for (const keyword of card.keywords ?? []) {
+        keys.add(keyword);
+      }
+    }
+
+    return Array.from(keys)
+      .map((key) => ({ key, label: displayPropertyLabel(key) }))
+      .sort((a, b) => collator.compare(a.label, b.label));
   },
 );
+
+function displayPropertyLabel(key: string) {
+  if (key === "expert") return i18n.t("common.expert");
+  if (key === "unique") return i18n.t("common.unique");
+
+  const keywordKey = `common.keywords.${key}`;
+  if (i18n.exists(keywordKey)) return i18n.t(keywordKey);
+
+  return key
+    .split(/[_-]/)
+    .map((part) => capitalize(part))
+    .join(" ");
+}
 
 /**
  * Sanity

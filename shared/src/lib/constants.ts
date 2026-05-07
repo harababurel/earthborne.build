@@ -125,7 +125,8 @@ export const TERRAIN_TYPES = [
 
 export type TerrainType = (typeof TERRAIN_TYPES)[number];
 
-// Keywords that appear on cards.
+// Known keywords that appear on official cards. Card data may include newer
+// keywords before this list is updated; schemas and filters accept strings.
 export const KEYWORDS = [
   "ambush",
   "conduit",
@@ -139,7 +140,7 @@ export const KEYWORDS = [
   "unique",
 ] as const;
 
-export type Keyword = (typeof KEYWORDS)[number];
+export type Keyword = string;
 
 // Challenge icons on challenge cards.
 export const CHALLENGE_ICONS = ["crest", "mountain", "sun"] as const;

@@ -7,7 +7,6 @@ import {
   selectPropertyOptions,
 } from "@/store/selectors/lists";
 import { isPropertiesFilterObject } from "@/store/slices/lists.type-guards";
-import type { PropertiesFilter as PropertiesFilterType } from "@/store/slices/lists.types";
 import { assert } from "@/utils/assert";
 import { Checkbox } from "../ui/checkbox";
 import { CheckboxGroup } from "../ui/checkboxgroup";
@@ -33,7 +32,7 @@ export function PropertiesFilter({ id }: FilterProps) {
   const properties = useStore(selectPropertyOptions);
 
   const onPropertyChange = useCallback(
-    (key: keyof PropertiesFilterType, value: boolean) => {
+    (key: string, value: boolean) => {
       onChange({
         [key]: value,
       });
@@ -62,14 +61,12 @@ export function PropertiesFilter({ id }: FilterProps) {
         {properties.map(({ key, label }) => (
           <Checkbox
             disabled={locked}
-            checked={filter.value[key as keyof PropertiesFilterType]}
+            checked={filter.value[key] ?? false}
             data-key={key}
             id={`property-${key}`}
             key={key}
             label={renderProperty(key, label)}
-            onCheckedChange={(val) =>
-              onPropertyChange(key as keyof PropertiesFilterType, !!val)
-            }
+            onCheckedChange={(val) => onPropertyChange(key, !!val)}
           />
         ))}
       </CheckboxGroup>
