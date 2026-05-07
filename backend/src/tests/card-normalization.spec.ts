@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeThreshold } from "../db/queries/card.ts";
+import { normalizeThreshold, parseKeywords } from "../db/queries/card.ts";
 
 describe("normalizeThreshold", () => {
   it("should return null for null", () => {
@@ -29,5 +29,31 @@ describe("normalizeThreshold", () => {
   it("should preserve non-numeric strings", () => {
     expect(normalizeThreshold("3-5")).toBe("3-5");
     expect(normalizeThreshold("X")).toBe("X");
+  });
+});
+
+describe("parseKeywords", () => {
+  it("parses keywords before an HTML rules separator", () => {
+    expect(
+      parseKeywords(
+        "Persistent. Unique. Spirit.<hr><b>Exhaust:</b> Discard up to 3[progress].",
+      ),
+    ).toEqual(["persistent", "unique"]);
+  });
+
+  it("parses known keywords when the property block contains untracked properties", () => {
+    expect(
+      parseKeywords(
+        "Unique. Objective (6 hunches: [aspiration]).<hr>This gear does not ready during the refresh phase.",
+      ),
+    ).toEqual(["unique"]);
+  });
+
+  it("does not parse keyword mentions from rules text", () => {
+    expect(
+      parseKeywords(
+        "<b>Response:</b> After a being with the unique keyword is cleared, draw 1 card.",
+      ),
+    ).toEqual([]);
   });
 });

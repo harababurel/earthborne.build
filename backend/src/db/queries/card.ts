@@ -357,26 +357,38 @@ function transformCard(row: CardRow): {
   };
 }
 
-function parseKeywords(text: string | null): (typeof KEYWORDS)[number][] {
+export function parseKeywords(
+  text: string | null,
+): (typeof KEYWORDS)[number][] {
   if (!text) return [];
 
-  // Keywords appear on the first line as "Word. Word." or "Word N" segments —
-  // single capitalized words separated by ". ", with an optional trailing
-  // period and optional numeric value (e.g. "Fatiguing 2"). Validate this
-  // structure before scanning so rules text that merely mentions a keyword
-  // word does not produce false positives.
-  const firstLine = text.split("\n")[0] ?? "";
-  const stripped = firstLine
+  // Keywords appear in the opening property block. Card data separates that
+  // block from rules text with HTML, usually <hr>, rather than only newlines.
+  const firstBlock = text.split(/<hr\b[^>]*>|\n/i)[0] ?? "";
+  const stripped = firstBlock
     .replace(/<f>.*?<\/f>/gs, "")
     .replace(/<[^>]+>/g, "")
     .trim();
 
-  if (!/^[A-Z][a-z]+( \d+)?(\. [A-Z][a-z]+( \d+)?)*\.?$/.test(stripped)) {
-    return [];
+  const found = new Set<(typeof KEYWORDS)[number]>();
+
+  for (const segment of stripped.split(".")) {
+    const match = segment.trim().match(/^([A-Z][a-z]+)(?:\s+\d+)?(?:\s|$|\()/);
+    if (!match) continue;
+
+    const keyword = match[1]?.toLowerCase();
+    if (isKeyword(keyword)) {
+      found.add(keyword);
+    }
   }
 
-  const normalized = stripped.toLowerCase();
-  return KEYWORDS.filter((keyword) => normalized.includes(keyword));
+  return KEYWORDS.filter((keyword) => found.has(keyword));
+}
+
+function isKeyword(
+  value: string | undefined,
+): value is (typeof KEYWORDS)[number] {
+  return KEYWORDS.some((keyword) => keyword === value);
 }
 
 function hasTrait(traits: string | null, trait: string): boolean {
