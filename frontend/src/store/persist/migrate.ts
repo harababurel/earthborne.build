@@ -10,6 +10,7 @@ import v8Tov9 from "./migrations/0008-clear-metadata-for-er";
 import v9Tov10 from "./migrations/0009-rename-investigator-list";
 import v10Tov11 from "./migrations/0010-remove-role-list";
 import v11Tov12 from "./migrations/0011-clean-list-sort-fields";
+import v12Tov13 from "./migrations/0012-default-other-cards-sort";
 
 export function migrate(
   persisted: Partial<StoreState>,
@@ -70,6 +71,11 @@ export function migrate(
   if (version < 12) {
     console.debug("[persist] migrate store: ", 12);
     v11Tov12(state, version);
+  }
+
+  if (version < 13) {
+    console.debug("[persist] migrate store: ", 13);
+    v12Tov13(state, version);
   }
 
   return state;

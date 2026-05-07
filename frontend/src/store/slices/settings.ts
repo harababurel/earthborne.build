@@ -29,7 +29,7 @@ export const PATH_DEFAULTS: ListConfig = {
 
 export const ALL_DEFAULTS: ListConfig = {
   group: ["pack", "path_set"],
-  sort: ["aspect", "name"],
+  sort: ["position"],
   viewMode: "compact",
 };
 
