@@ -41,6 +41,14 @@
   z-index: 2;
 }
 
+.progress-icon {
+  position: relative;
+  width: calc(2.5 * var(--card-text-size, var(--text-sm)));
+  height: calc(2.5 * var(--card-text-size, var(--text-sm)));
+  fill: currentColor;
+  z-index: 2;
+}
+
 .icon-background {
   display: none;
 }

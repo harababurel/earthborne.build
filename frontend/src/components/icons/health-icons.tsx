@@ -84,10 +84,16 @@ export function SanityIcon({
 
   return (
     <div className={css["sanity"]} data-testid="sanity" data-value={sanity}>
-      {hideCost && (
-        <i className={cx(css["icon-background"], "core-progress")} />
-      )}
-      <i className={cx(css["icon-base"], "core-progress")} />
+      <svg
+        aria-hidden="true"
+        className={css["progress-icon"]}
+        viewBox="0 0 64 64"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M32 6 18 27h28L32 6Z" />
+        <path d="M32 18 13 43h38L32 18Z" />
+        <path d="M32 31 8 59h48L32 31Z" />
+      </svg>
       {!hideCost && (
         <div className={css["icon-cost-wrapper"]}>
           {isRanger ? (
