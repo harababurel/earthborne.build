@@ -273,7 +273,7 @@ export function HelpMenu() {
             </Link>
             <DropdownButton
               as="a"
-              href="https://github.com/harababurel/earthborne.build/releases"
+              href="https://github.com/harababurel/earthborne.build/commits/main/"
               target="_blank"
               rel="noopener noreferrer"
             >
