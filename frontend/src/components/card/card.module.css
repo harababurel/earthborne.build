@@ -702,6 +702,6 @@
     color: white;
   }
   .token-box.color-neutral {
-    background-color: var(--palette-3);
+    background-color: #ae5512;
   }
 }
