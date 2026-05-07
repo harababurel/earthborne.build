@@ -703,6 +703,13 @@
     color: white;
   }
   .token-box.color-neutral {
-    background-color: #ae5512;
+    background-color: #ddcdaf;
+  }
+  .token-box.color-neutral .token-count {
+    color: #c46a1f;
+    border-bottom-color: rgba(196, 106, 31, 0.35);
+  }
+  .token-box.color-neutral .token-label {
+    color: #c46a1f;
   }
 }
