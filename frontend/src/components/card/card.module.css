@@ -648,9 +648,10 @@
     display: flex;
     flex-direction: column;
     width: 2.6rem;
-    height: 2.1rem;
+    height: calc(2.2 * var(--card-text-size, var(--text-sm)));
     line-height: 1;
     overflow: hidden;
+    border-radius: var(--rounded);
     flex: 0 0 auto;
   }
 
