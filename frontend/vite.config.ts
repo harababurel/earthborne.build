@@ -7,7 +7,7 @@ import { bundleStats } from "rollup-plugin-bundle-stats";
 import { defineConfig } from "vite";
 
 process.env.VITE_APP_BUILD ||= getAppBuild();
-process.env.VITE_APP_BUILD_TIME ||= new Date().toISOString();
+process.env.VITE_APP_BUILD_TIME ||= getAppBuildTime(process.env.VITE_APP_BUILD);
 process.env.VITE_APP_BUILD_URL ||= getAppBuildUrl(process.env.VITE_APP_BUILD);
 
 // https://vitejs.dev/config/
@@ -72,6 +72,18 @@ function getAppBuild(): string {
     }).trim();
   } catch {
     return "development";
+  }
+}
+
+function getAppBuildTime(build: string | undefined): string {
+  const ref = build && build !== "development" ? build : "HEAD";
+
+  try {
+    return execFileSync("git", ["show", "-s", "--format=%cI", ref], {
+      encoding: "utf8",
+    }).trim();
+  } catch {
+    return new Date().toISOString();
   }
 }
 
