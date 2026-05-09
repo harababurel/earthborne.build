@@ -556,6 +556,12 @@
         "swap_into_deck": "Swap into deck",
         "unlock": "Unlock"
       },
+      "available_cards": {
+        "category_filter": "Category",
+        "empty": "No cards found.",
+        "max_copies": "Already at 2 copies",
+        "title": "Available cards"
+      },
       "campaign": {
         "empty": "This is a starter deck. Make a deck change or add unlocked rewards to begin tracking campaign changes."
       },

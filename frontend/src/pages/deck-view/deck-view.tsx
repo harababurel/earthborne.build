@@ -25,7 +25,7 @@ function DeckView() {
     // TECH DEBT: This should be handled by the views that mount a list.
     //            Requires persisting list state to the URL.
     setActiveList(undefined);
-  });
+  }, [setActiveList]);
 
   if (hasDeck && type === "deck") {
     return <LocalDeckView id={id} />;

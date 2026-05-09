@@ -1,31 +1,44 @@
 import {
+  ASPECT_ORDER,
+  CARD_TYPE_ORDER,
+  type Card,
+} from "@earthborne-build/shared";
+import {
   BookOpenTextIcon,
   ChartAreaIcon,
   CheckIcon,
   FileClockIcon,
   PencilIcon,
+  PlusIcon,
   SquarePenIcon,
   Undo2Icon,
   XIcon,
 } from "lucide-react";
 import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDialogContextChecked } from "@/components/ui/dialog.hooks";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { SearchInput } from "@/components/ui/search-input";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
+import { isCardOwned } from "@/store/lib/card-ownership";
 import type { DeckValidationResult } from "@/store/lib/deck-validation";
 import { resolveCardWithRelations } from "@/store/lib/resolve-card";
 import { deckTags } from "@/store/lib/resolve-deck";
+import { applySearch } from "@/store/lib/searching";
 import type { ResolvedCard, ResolvedDeck } from "@/store/lib/types";
 import type { History } from "@/store/selectors/decks";
 import {
+  selectCollection,
   selectLocaleSortingCollator,
   selectLookupTables,
   selectMetadata,
 } from "@/store/selectors/shared";
+import type { Search } from "@/store/slices/lists.types";
 import { cx } from "@/utils/cx";
+import { isEvolvedDeck } from "@/utils/deck-utils";
+import { displayPackName } from "@/utils/formatting";
 import { useAccentColor } from "@/utils/use-accent-color";
 import DeckDescription from "../deck-description";
 import {
@@ -41,6 +54,7 @@ import { DecklistValidation } from "../decklist/decklist-validation";
 import { FolderTag } from "../folders/folder-tag";
 import { ListCard } from "../list-card/list-card";
 import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 import { Collapsible, CollapsibleContent } from "../ui/collapsible";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import {
@@ -52,6 +66,8 @@ import {
 } from "../ui/modal";
 import { Plane } from "../ui/plane";
 import { QuantityOutput } from "../ui/quantity-output";
+import { Scroller } from "../ui/scroller";
+import { Select } from "../ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useTabUrlState } from "../ui/tabs.hooks";
 import { useToast } from "../ui/toast.hooks";
@@ -157,7 +173,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
   return (
     <AppLayout title={deck ? deck.name : ""}>
       <main
-        className={cx(css["main"], css[origin])}
+        className={cx(css["main"], css[origin], canEdit && css["editing"])}
         style={cssVariables}
         data-testid="deck-display"
       >
@@ -196,6 +212,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
               <DeckTags tags={deckTags(deck, type === "deck" ? " " : ", ")} />
             </DeckTagsContainer>
           </div>
+          {canEdit && <DeckEditSummary deck={deck} />}
           {headerSlot && <div>{headerSlot}</div>}
           {origin === "local" && (
             <DeckEditActions
@@ -208,16 +225,18 @@ export function DeckDisplay(props: DeckDisplayProps) {
           )}
         </header>
 
-        <Dialog>
-          <Sidebar
-            className={css["sidebar"]}
-            deck={deck}
-            history={history}
-            innerClassName={css["sidebar-inner"]}
-            origin={origin}
-            type={type}
-          />
-        </Dialog>
+        {!canEdit && (
+          <Dialog>
+            <Sidebar
+              className={css["sidebar"]}
+              deck={deck}
+              history={history}
+              innerClassName={css["sidebar-inner"]}
+              origin={origin}
+              type={type}
+            />
+          </Dialog>
+        )}
 
         <div className={css["content"]}>
           <Tabs
@@ -274,13 +293,21 @@ export function DeckDisplay(props: DeckDisplayProps) {
               )}
             </TabsList>
             <TabsContent className={css["tab"]} value="deck">
-              <div className={css["tab-content"]}>
-                <DecklistValidation
-                  defaultOpen={validation.errors.length < 3}
-                  validation={validation}
-                />
-                <Decklist canEdit={canEdit} deck={deck} />
-                <DeckCampaignSections canEdit={canEdit} deck={deck} />
+              <div
+                className={cx(
+                  css["tab-content"],
+                  canEdit && css["edit-workspace"],
+                )}
+              >
+                <div className={css["edit-deck-column"]}>
+                  <DecklistValidation
+                    defaultOpen={validation.errors.length < 3}
+                    validation={validation}
+                  />
+                  <Decklist canEdit={canEdit} deck={deck} />
+                  <DeckCampaignSections canEdit={canEdit} deck={deck} />
+                </div>
+                {canEdit && <AvailableCardsPanel deck={deck} />}
               </div>
             </TabsContent>
             <TabsContent className={css["tab"]} value="tools">
@@ -303,6 +330,330 @@ export function DeckDisplay(props: DeckDisplayProps) {
         </div>
       </main>
     </AppLayout>
+  );
+}
+
+function DeckEditSummary({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+  const metadata = useStore(selectMetadata);
+  const roleCard = metadata.cards[deck.role_code];
+  const aspectCard = metadata.cards[deck.aspect_code];
+
+  return (
+    <Plane className={css["edit-summary"]} size="sm">
+      <div className={css["edit-summary-item"]}>
+        <span>{t("deck_create.steps.role")}</span>
+        <strong>{roleCard?.name}</strong>
+      </div>
+      <div className={css["edit-summary-item"]}>
+        <span>{t("deck_create.steps.aspect")}</span>
+        <strong>{aspectCard?.name}</strong>
+      </div>
+      <div className={css["edit-summary-item"]}>
+        <span>{t("deck_create.steps.background")}</span>
+        <strong>{t(`common.set.${deck.background}`)}</strong>
+      </div>
+      <div className={css["edit-summary-item"]}>
+        <span>{t("deck_create.steps.specialty")}</span>
+        <strong>{t(`common.set.${deck.specialty}`)}</strong>
+      </div>
+      <div className={css["edit-summary-item"]}>
+        <span>{t("deck.evolution.status")}</span>
+        <strong>
+          {t(`deck.evolution.${isEvolvedDeck(deck) ? "evolved" : "starter"}`)}
+        </strong>
+      </div>
+    </Plane>
+  );
+}
+
+type AvailableCardFilters = {
+  aspects: string[];
+  categories: string[];
+  pack: string;
+  types: string[];
+};
+
+function AvailableCardsPanel({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<AvailableCardFilters>({
+    aspects: [],
+    categories: [],
+    pack: "",
+    types: [],
+  });
+  const metadata = useStore(selectMetadata);
+  const lookupTables = useStore(selectLookupTables);
+  const collection = useStore(selectCollection);
+  const collator = useStore(selectLocaleSortingCollator);
+  const settings = useStore((state) => state.settings);
+  const updateCardQuantity = useStore((state) => state.updateCardQuantity);
+
+  const baseCards = useMemo(
+    () =>
+      Object.values(metadata.cards)
+        .filter(filterAddableRangerCard)
+        .filter((card) =>
+          isCardOwned({
+            card,
+            metadata,
+            lookupTables,
+            collection,
+            showAllCards: settings.showAllCards,
+          }),
+        )
+        .sort((a, b) => collator.compare(a.name, b.name)),
+    [collator, collection, lookupTables, metadata, settings.showAllCards],
+  );
+
+  const filterOptions = useMemo(
+    () => makeAvailableCardFilterOptions(baseCards, metadata, collator),
+    [baseCards, collator, metadata],
+  );
+
+  const availableCards = useMemo(() => {
+    const searchConfig: Search = {
+      buildQlError: undefined,
+      buildQlSearch: undefined,
+      includeBacks: false,
+      includeFlavor: false,
+      includeGameText: true,
+      includeName: true,
+      mode: "simple",
+      value: search,
+    };
+
+    const cards = baseCards.filter((card) => {
+      if (
+        filters.categories.length &&
+        (!card.category || !filters.categories.includes(card.category))
+      ) {
+        return false;
+      }
+      if (filters.types.length && !filters.types.includes(card.type_code)) {
+        return false;
+      }
+      if (
+        filters.aspects.length &&
+        (!card.aspect_requirement_type ||
+          !filters.aspects.includes(card.aspect_requirement_type))
+      ) {
+        return false;
+      }
+      if (filters.pack && card.pack_code !== filters.pack) {
+        return false;
+      }
+      return true;
+    });
+
+    return applySearch(searchConfig, cards, metadata);
+  }, [baseCards, filters, metadata, search]);
+
+  const getListCardProps = useCallback(
+    (card: Card) => {
+      const quantity = deck.slots[card.code] ?? 0;
+      const disabled = quantity >= 2;
+
+      return {
+        disabled,
+        quantity,
+      };
+    },
+    [deck.slots],
+  );
+
+  const resetFilters = useCallback(() => {
+    setFilters({ aspects: [], categories: [], pack: "", types: [] });
+  }, []);
+
+  return (
+    <>
+      <Plane className={css["available-cards-panel"]}>
+        <h2>{t("deck_edit.available_cards.title")}</h2>
+        <SearchInput
+          id={`available-card-search-${deck.id}`}
+          label={t("lists.search.placeholder")}
+          onValueChange={setSearch}
+          placeholder={t("lists.search.placeholder")}
+          value={search}
+        />
+        <div className={css["available-card-count"]}>
+          {t("lists.nav.card_count", { count: availableCards.length })}
+        </div>
+        <Scroller className={css["available-card-list"]} type="always">
+          <div className={css["available-card-list-inner"]}>
+            {availableCards.length ? (
+              availableCards.map((card) => {
+                const { disabled, quantity } = getListCardProps(card);
+
+                return (
+                  <ListCard
+                    card={card}
+                    key={card.code}
+                    renderCardAction={() => (
+                      <div className={css["available-card-actions"]}>
+                        <Button
+                          aria-label={t("deck_edit.actions.add_to_deck")}
+                          data-testid="add-card-to-deck"
+                          disabled={disabled}
+                          iconOnly
+                          onClick={() =>
+                            updateCardQuantity(
+                              deck.id,
+                              card.code,
+                              1,
+                              2,
+                              "slots",
+                            )
+                          }
+                          size="sm"
+                          tooltip={
+                            disabled
+                              ? t("deck_edit.available_cards.max_copies")
+                              : t("deck_edit.actions.add_to_deck")
+                          }
+                          variant={disabled ? "bare" : "primary"}
+                        >
+                          <PlusIcon />
+                        </Button>
+                        <QuantityOutput value={quantity} />
+                      </div>
+                    )}
+                    size="sm"
+                  />
+                );
+              })
+            ) : (
+              <p className={css["empty-campaign-section"]}>
+                {t("deck_edit.available_cards.empty")}
+              </p>
+            )}
+          </div>
+        </Scroller>
+      </Plane>
+      <AvailableCardsFilters
+        filters={filters}
+        onChange={setFilters}
+        onReset={resetFilters}
+        options={filterOptions}
+      />
+    </>
+  );
+}
+
+type AvailableCardFilterOptions = {
+  aspects: string[];
+  categories: string[];
+  packs: { label: string; value: string }[];
+  types: string[];
+};
+
+function AvailableCardsFilters({
+  filters,
+  onChange,
+  onReset,
+  options,
+}: {
+  filters: AvailableCardFilters;
+  onChange: (filters: AvailableCardFilters) => void;
+  onReset: () => void;
+  options: AvailableCardFilterOptions;
+}) {
+  const { t } = useTranslation();
+
+  const setListValue = useCallback(
+    (
+      key: "aspects" | "categories" | "types",
+      value: string,
+      checked: boolean,
+    ) => {
+      const current = filters[key];
+      onChange({
+        ...filters,
+        [key]: checked
+          ? Array.from(new Set([...current, value]))
+          : current.filter((item) => item !== value),
+      });
+    },
+    [filters, onChange],
+  );
+
+  return (
+    <Plane className={css["available-cards-filters"]}>
+      <div className={css["available-cards-filters-header"]}>
+        <h2>{t("filters.title")}</h2>
+        <Button onClick={onReset} size="sm" variant="bare">
+          {t("common.reset")}
+        </Button>
+      </div>
+
+      <fieldset className={css["filter-group"]}>
+        <legend>{t("filters.pack.title")}</legend>
+        <Select
+          emptyLabel={t("filters.all")}
+          onChange={(evt) => onChange({ ...filters, pack: evt.target.value })}
+          options={options.packs}
+          value={filters.pack}
+        />
+      </fieldset>
+
+      <CheckboxFilterGroup
+        title={t("filters.type.title")}
+        values={options.types}
+        selected={filters.types}
+        onChange={(value, checked) => setListValue("types", value, checked)}
+        renderLabel={(value) => t(`common.type.${value}`)}
+      />
+
+      <CheckboxFilterGroup
+        title={t("deck_edit.available_cards.category_filter")}
+        values={options.categories}
+        selected={filters.categories}
+        onChange={(value, checked) =>
+          setListValue("categories", value, checked)
+        }
+        renderLabel={(value) => t(`common.category.${value}`)}
+      />
+
+      <CheckboxFilterGroup
+        title={t("filters.aspect_requirement.title")}
+        values={options.aspects}
+        selected={filters.aspects}
+        onChange={(value, checked) => setListValue("aspects", value, checked)}
+        renderLabel={(value) => value}
+      />
+    </Plane>
+  );
+}
+
+function CheckboxFilterGroup({
+  onChange,
+  renderLabel,
+  selected,
+  title,
+  values,
+}: {
+  onChange: (value: string, checked: boolean) => void;
+  renderLabel: (value: string) => React.ReactNode;
+  selected: string[];
+  title: React.ReactNode;
+  values: string[];
+}) {
+  return (
+    <fieldset className={css["filter-group"]}>
+      <legend>{title}</legend>
+      <div className={css["filter-options"]}>
+        {values.map((value) => (
+          <Checkbox
+            checked={selected.includes(value)}
+            key={value}
+            label={renderLabel(value)}
+            onCheckedChange={(checked) => onChange(value, checked)}
+          />
+        ))}
+      </div>
+    </fieldset>
   );
 }
 
@@ -613,6 +964,60 @@ function useResolvedSlotCards(slots: ResolvedDeck["rewards"]) {
     )
     .filter((card): card is ResolvedCard => !!card)
     .sort((a, b) => collator.compare(a.card.name, b.card.name));
+}
+
+function filterAddableRangerCard(card: Card) {
+  return (
+    card.category != null &&
+    card.category !== "reward" &&
+    card.category !== "malady"
+  );
+}
+
+function makeAvailableCardFilterOptions(
+  cards: Card[],
+  metadata: ReturnType<typeof selectMetadata>,
+  collator: Intl.Collator,
+): AvailableCardFilterOptions {
+  const categories = Array.from(
+    new Set(
+      cards
+        .map((card) => card.category)
+        .filter((value): value is NonNullable<Card["category"]> => !!value),
+    ),
+  ).sort((a, b) => collator.compare(a, b));
+
+  const types = Array.from(new Set(cards.map((card) => card.type_code))).sort(
+    (a, b) =>
+      CARD_TYPE_ORDER.indexOf(a as (typeof CARD_TYPE_ORDER)[number]) -
+      CARD_TYPE_ORDER.indexOf(b as (typeof CARD_TYPE_ORDER)[number]),
+  );
+
+  const aspects = Array.from(
+    new Set(
+      cards
+        .map((card) => card.aspect_requirement_type)
+        .filter(
+          (value): value is NonNullable<Card["aspect_requirement_type"]> =>
+            !!value,
+        ),
+    ),
+  ).sort(
+    (a, b) =>
+      ASPECT_ORDER.indexOf(a as (typeof ASPECT_ORDER)[number]) -
+      ASPECT_ORDER.indexOf(b as (typeof ASPECT_ORDER)[number]),
+  );
+
+  const packs = Array.from(new Set(cards.map((card) => card.pack_code)))
+    .map((code) => metadata.packs[code])
+    .filter((pack) => !!pack)
+    .sort((a, b) => a.position - b.position)
+    .map((pack) => ({
+      label: displayPackName(pack),
+      value: pack.code,
+    }));
+
+  return { aspects, categories, packs, types };
 }
 
 function useRewardCards(deck: ResolvedDeck) {

@@ -20,6 +20,20 @@
   }
 }
 
+.main.editing {
+  grid-template-areas:
+    "header"
+    "decklist";
+  grid-template-rows: min-content min-content;
+
+  @media screen and (min-width: 52rem) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "decklist";
+  }
+}
+
 .sidebar {
   grid-area: sidebar;
 }
@@ -46,6 +60,26 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.375rem;
+}
+
+.edit-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.edit-summary-item {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.edit-summary-item span {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+.edit-summary-item strong {
+  font-size: var(--text-sm);
 }
 
 .content {
@@ -80,6 +114,101 @@
 
 .tab-content > * + * {
   margin-top: 0.375rem;
+}
+
+.edit-workspace {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.edit-workspace > * + * {
+  margin-top: 0;
+}
+
+.edit-deck-column {
+  min-width: 0;
+}
+
+.edit-deck-column > * + * {
+  margin-top: 0.375rem;
+}
+
+.available-cards-panel {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 32rem;
+  min-width: 0;
+}
+
+.available-cards-panel h2 {
+  margin-top: 0;
+}
+
+.available-cards-filters {
+  min-width: 0;
+}
+
+.available-cards-filters h2 {
+  margin: 0;
+}
+
+.available-cards-filters-header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.filter-group {
+  border: 0;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.filter-group legend {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  margin-bottom: 0.375rem;
+}
+
+.filter-options {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.available-card-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 0.375rem;
+}
+
+.available-card-list-inner {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.available-card-count {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  margin-top: 0.375rem;
+}
+
+@media screen and (min-width: 76rem) {
+  .edit-workspace {
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 30rem) minmax(
+        15rem,
+        18rem
+      );
+  }
+
+  .available-cards-panel,
+  .available-cards-filters {
+    max-height: calc(100vh - 1rem);
+    position: sticky;
+    top: 0.5rem;
+  }
 }
 
 .name-modal-trigger {
@@ -143,6 +272,12 @@
 }
 
 .displaced-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.available-card-actions {
   display: flex;
   align-items: center;
   gap: 0.25rem;
