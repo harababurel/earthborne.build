@@ -39,7 +39,9 @@ import { DeckTools } from "../deck-tools/deck-tools";
 import { Decklist } from "../decklist/decklist";
 import { DecklistValidation } from "../decklist/decklist-validation";
 import { FolderTag } from "../folders/folder-tag";
+import { ListCard } from "../list-card/list-card";
 import { Button } from "../ui/button";
+import { Collapsible, CollapsibleContent } from "../ui/collapsible";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import {
   DefaultModalContent,
@@ -278,7 +280,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
                   validation={validation}
                 />
                 <Decklist canEdit={canEdit} deck={deck} />
-                <DeckCampaignSections deck={deck} />
+                <DeckCampaignSections canEdit={canEdit} deck={deck} />
               </div>
             </TabsContent>
             <TabsContent className={css["tab"]} value="tools">
@@ -304,23 +306,149 @@ export function DeckDisplay(props: DeckDisplayProps) {
   );
 }
 
-function DeckCampaignSections({ deck }: { deck: ResolvedDeck }) {
+function DeckCampaignSections({
+  canEdit,
+  deck,
+}: {
+  canEdit: boolean;
+  deck: ResolvedDeck;
+}) {
   const { t } = useTranslation();
-  const rewards = useResolvedSlotCards(deck.rewards);
   const displaced = useResolvedSlotCards(deck.displaced);
   const maladies = useResolvedSlotCards(deck.maladies);
+  const rewards = useRewardCards(deck);
 
-  if (!rewards.length && !displaced.length && !maladies.length) return null;
+  if (!rewards.total && !displaced.length && !maladies.length) return null;
 
   return (
     <Plane>
-      <CampaignSection title={t("deck.evolution.rewards")} cards={rewards} />
+      <RewardsSection
+        canEdit={canEdit}
+        deck={deck}
+        locked={rewards.locked}
+        lockedTitle={t("deck.rewards.locked")}
+        title={t("deck.rewards.title")}
+        unlockedTitle={t("deck.rewards.unlocked")}
+        unlocked={rewards.unlocked}
+      />
       <CampaignSection
         title={t("deck.evolution.displaced")}
         cards={displaced}
       />
       <CampaignSection title={t("deck.evolution.maladies")} cards={maladies} />
     </Plane>
+  );
+}
+
+function RewardsSection({
+  canEdit,
+  deck,
+  locked,
+  lockedTitle,
+  title,
+  unlocked,
+  unlockedTitle,
+}: {
+  canEdit: boolean;
+  deck: ResolvedDeck;
+  locked: ResolvedCard[];
+  lockedTitle: string;
+  title: string;
+  unlocked: ResolvedCard[];
+  unlockedTitle: string;
+}) {
+  const { t } = useTranslation();
+  const unlockReward = useStore((state) => state.unlockReward);
+  const removeReward = useStore((state) => state.removeUnlockedReward);
+
+  if (!locked.length && !unlocked.length) return null;
+
+  const renderRewardAction = (card: ResolvedCard) => {
+    if (!canEdit) return undefined;
+
+    const rewardQty = deck.rewards?.[card.card.code] ?? 0;
+    const slotsQty = deck.slots[card.card.code] ?? 0;
+    const displacedQty = deck.displaced?.[card.card.code] ?? 0;
+
+    return () => {
+      if (slotsQty > 0 || displacedQty > 0) {
+        return (
+          <span className={css["muted"]}>{t("deck_edit.rewards.in_deck")}</span>
+        );
+      }
+      if (rewardQty > 0) {
+        return (
+          <div className={css["reward-actions"]}>
+            <Button onClick={() => removeReward(deck.id, card.card.code)}>
+              {t("deck_edit.actions.remove")}
+            </Button>
+          </div>
+        );
+      }
+      return (
+        <Button
+          onClick={() => unlockReward(deck.id, card.card.code)}
+          variant="primary"
+        >
+          {t("deck_edit.actions.unlock")}
+        </Button>
+      );
+    };
+  };
+
+  return (
+    <section className={css["campaign-section"]}>
+      <h2>{title}</h2>
+      <div className={css["reward-list"]}>
+        <Collapsible
+          className={css["unlocked-rewards"]}
+          defaultOpen
+          omitBorder
+          omitPadding
+          title={`${unlockedTitle} (${unlocked.length})`}
+          triggerClassName={css["reward-subtitle"]}
+        >
+          <CollapsibleContent className={css["reward-section-content"]}>
+            {unlocked.length ? (
+              unlocked.map((card) => (
+                <ListCard
+                  card={card.card}
+                  key={card.card.code}
+                  omitBorders
+                  omitThumbnail
+                  renderCardAction={renderRewardAction(card)}
+                  size="sm"
+                />
+              ))
+            ) : (
+              <p className={css["empty-rewards"]}>{t("common.none")}</p>
+            )}
+          </CollapsibleContent>
+        </Collapsible>
+        <hr className={css["reward-separator"]} />
+        <Collapsible
+          className={css["locked-rewards"]}
+          omitBorder
+          omitPadding
+          title={`${lockedTitle} (${locked.length})`}
+          triggerClassName={css["reward-subtitle"]}
+        >
+          <CollapsibleContent className={css["reward-section-content"]}>
+            {locked.map((card) => (
+              <ListCard
+                card={card.card}
+                className={!canEdit ? css["locked-reward"] : undefined}
+                key={card.card.code}
+                omitBorders
+                omitThumbnail
+                renderCardAction={renderRewardAction(card)}
+                size="sm"
+              />
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
+    </section>
   );
 }
 
@@ -414,6 +542,50 @@ function useResolvedSlotCards(slots: ResolvedDeck["rewards"]) {
     )
     .filter((card): card is ResolvedCard => !!card)
     .sort((a, b) => collator.compare(a.card.name, b.card.name));
+}
+
+function useRewardCards(deck: ResolvedDeck) {
+  const metadata = useStore(selectMetadata);
+  const lookupTables = useStore(selectLookupTables);
+  const collator = useStore(selectLocaleSortingCollator);
+
+  const cards = Object.values(metadata.cards)
+    .filter((card) => card.category === "reward")
+    .sort((a, b) => collator.compare(a.name, b.name))
+    .map((card) =>
+      resolveCardWithRelations(
+        { metadata, lookupTables },
+        collator,
+        card.code,
+        true,
+      ),
+    )
+    .filter((card): card is ResolvedCard => !!card);
+
+  const unlocked = [];
+  const locked = [];
+
+  for (const card of cards) {
+    if (isRewardUnlocked(deck, card.card.code)) {
+      unlocked.push(card);
+    } else {
+      locked.push(card);
+    }
+  }
+
+  return {
+    locked,
+    total: cards.length,
+    unlocked,
+  };
+}
+
+function isRewardUnlocked(deck: ResolvedDeck, code: string) {
+  return (
+    (deck.rewards?.[code] ?? 0) > 0 ||
+    (deck.slots?.[code] ?? 0) > 0 ||
+    (deck.displaced?.[code] ?? 0) > 0
+  );
 }
 
 type TitleEditModalProps = {

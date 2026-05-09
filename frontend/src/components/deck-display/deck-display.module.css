@@ -122,3 +122,49 @@
 .campaign-section h2 {
   margin-top: 0;
 }
+
+.reward-list {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.reward-subtitle {
+  font-size: var(--text-sm);
+  margin: 0.25rem 0;
+}
+
+.locked-rewards,
+.unlocked-rewards {
+  min-width: 0;
+}
+
+.reward-section-content {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.empty-rewards {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.reward-separator {
+  border: 0;
+  border-top: 1px solid var(--palette-point-five);
+  margin: 0.5rem 0;
+}
+
+.locked-reward {
+  opacity: 0.55;
+}
+
+.reward-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  align-items: center;
+}
+
+.muted {
+  color: var(--text-muted);
+}

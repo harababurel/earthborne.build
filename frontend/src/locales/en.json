@@ -363,6 +363,11 @@
       "cards": "Deck cards",
       "id": "Deck id",
       "limited_slots": "Limited slots",
+      "rewards": {
+        "locked": "Locked",
+        "title": "Rewards",
+        "unlocked": "Unlocked"
+      },
       "stats": {
         "deck_size": "Deck size",
         "ignored_one": "{{count}} copy does not count towards deck size.",
