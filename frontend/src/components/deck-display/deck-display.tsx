@@ -28,7 +28,6 @@ import {
 import { cx } from "@/utils/cx";
 import { useAccentColor } from "@/utils/use-accent-color";
 import DeckDescription from "../deck-description";
-import { DeckEvolutionBadge } from "../deck-evolution-badge";
 import {
   DeckTags,
   DeckTagsContainer,
@@ -195,7 +194,6 @@ export function DeckDisplay(props: DeckDisplayProps) {
               <LimitedCardPoolTag deck={deck} />
               <SealedDeckTag deck={deck} />
               <DeckTags tags={deckTags(deck, type === "deck" ? " " : ", ")} />
-              <DeckEvolutionBadge deck={deck} />
             </DeckTagsContainer>
           </div>
           {headerSlot && <div>{headerSlot}</div>}
