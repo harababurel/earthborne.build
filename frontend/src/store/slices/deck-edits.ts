@@ -60,7 +60,17 @@ export const createDeckEditsSlice: StateCreator<
   },
   updateCardQuantity(deckId, code, quantity, limit, tab, mode = "increment") {
     set((state) =>
-      getCardQuantityUpdate(state, deckId, code, quantity, limit, tab, mode),
+      getCardQuantityUpdate(
+        state,
+        deckId,
+        code,
+        quantity,
+        limit,
+        tab,
+        mode,
+        "user",
+        true,
+      ),
     );
     dehydrate(get(), "edits").catch(console.error);
   },
@@ -163,16 +173,25 @@ export const createDeckEditsSlice: StateCreator<
     set((state) => {
       const deck = selectResolvedDeckById(state, deckId, true);
       assert(deck, `Tried to edit deck that does not exist: ${deckId}`);
+      const restoreQuantity = Math.min(
+        quantity,
+        deck.displaced?.[displacedCode] ?? 0,
+      );
       const remainingSlots = outCode
-        ? Math.max(0, (deck.slots[outCode] ?? 0) - quantity)
+        ? Math.max(0, (deck.slots[outCode] ?? 0) - restoreQuantity)
         : 0;
       return setQuantityEdits(state, deckId, {
         displaced: {
-          [displacedCode]: 0,
-          ...(outCode ? { [outCode]: quantity } : {}),
+          [displacedCode]: Math.max(
+            0,
+            (deck.displaced?.[displacedCode] ?? 0) - restoreQuantity,
+          ),
+          ...(outCode
+            ? { [outCode]: (deck.displaced?.[outCode] ?? 0) + restoreQuantity }
+            : {}),
         },
         slots: {
-          [displacedCode]: quantity,
+          [displacedCode]: (deck.slots[displacedCode] ?? 0) + restoreQuantity,
           ...(outCode ? { [outCode]: remainingSlots } : {}),
         },
       });
@@ -256,6 +275,7 @@ function getCardQuantityUpdate(
   tab?: Slot,
   mode: "increment" | "set" = "increment",
   type: "system" | "user" = "user",
+  trackDisplaced = false,
 ) {
   const edits = currentEdits(state, deckId);
 
@@ -283,6 +303,10 @@ function getCardQuantityUpdate(
             ...edits.quantities?.[slot],
             [code]: newValue,
           },
+          ...(displacedQuantityUpdate(state, deck, code, current, newValue, {
+            slot,
+            trackDisplaced,
+          }) ?? {}),
         },
         type,
       },
@@ -290,6 +314,32 @@ function getCardQuantityUpdate(
   };
 
   return nextState;
+}
+
+function displacedQuantityUpdate(
+  state: StoreState,
+  deck: NonNullable<ReturnType<typeof selectResolvedDeckById>>,
+  code: string,
+  previousValue: number,
+  nextValue: number,
+  options: {
+    slot: Slot;
+    trackDisplaced: boolean;
+  },
+) {
+  if (!options.trackDisplaced) return undefined;
+  if (options.slot !== "slots") return undefined;
+  if (state.metadata.cards[code]?.category === "reward") return undefined;
+
+  const removedQuantity = previousValue - nextValue;
+  if (removedQuantity <= 0) return undefined;
+
+  return {
+    displaced: {
+      ...currentEdits(state, deck.id).quantities?.displaced,
+      [code]: (deck.displaced?.[code] ?? 0) + removedQuantity,
+    },
+  };
 }
 
 function setQuantityEdits(

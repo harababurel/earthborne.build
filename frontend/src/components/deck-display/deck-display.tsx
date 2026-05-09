@@ -5,6 +5,7 @@ import {
   FileClockIcon,
   PencilIcon,
   SquarePenIcon,
+  Undo2Icon,
   XIcon,
 } from "lucide-react";
 import type React from "react";
@@ -51,6 +52,7 @@ import {
   ModalInner,
 } from "../ui/modal";
 import { Plane } from "../ui/plane";
+import { QuantityOutput } from "../ui/quantity-output";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useTabUrlState } from "../ui/tabs.hooks";
 import { useToast } from "../ui/toast.hooks";
@@ -336,9 +338,12 @@ function DeckCampaignSections({
         </Plane>
         <Plane className={css["campaign-panel"]}>
           <CampaignSection
+            canEdit={canEdit}
+            deck={deck}
             title={t("deck_edit.sections.displaced")}
             cards={displaced}
             emptyText={t("deck_edit.displaced.empty")}
+            quantities={deck.displaced}
             showEmpty
           />
         </Plane>
@@ -348,6 +353,7 @@ function DeckCampaignSections({
           <CampaignSection
             title={t("deck.evolution.maladies")}
             cards={maladies}
+            quantities={deck.maladies}
           />
         </Plane>
       )}
@@ -466,16 +472,25 @@ function RewardsSection({
 }
 
 function CampaignSection({
+  canEdit,
   cards,
+  deck,
   emptyText,
+  quantities,
   showEmpty,
   title,
 }: {
+  canEdit?: boolean;
   cards: ResolvedCard[];
+  deck?: ResolvedDeck;
   emptyText?: string;
+  quantities?: ResolvedDeck["displaced"];
   showEmpty?: boolean;
   title: string;
 }) {
+  const { t } = useTranslation();
+  const restoreDisplaced = useStore((state) => state.restoreDisplaced);
+
   if (!cards.length && !showEmpty) return null;
 
   return (
@@ -488,6 +503,38 @@ function CampaignSection({
               card={card.card}
               key={card.card.code}
               omitBorders
+              quantity={
+                canEdit && deck ? undefined : quantities?.[card.card.code]
+              }
+              renderCardAction={
+                canEdit && deck
+                  ? () => (
+                      <div className={css["displaced-card-actions"]}>
+                        <Button
+                          aria-label={t("deck_edit.actions.move_to_main_deck")}
+                          data-testid="restore-displaced-card"
+                          disabled={(quantities?.[card.card.code] ?? 0) <= 0}
+                          iconOnly
+                          onClick={() =>
+                            restoreDisplaced(
+                              deck.id,
+                              card.card.code,
+                              undefined,
+                              1,
+                            )
+                          }
+                          size="sm"
+                          tooltip={t("deck_edit.actions.move_to_main_deck")}
+                        >
+                          <Undo2Icon />
+                        </Button>
+                        <QuantityOutput
+                          value={quantities?.[card.card.code] ?? 0}
+                        />
+                      </div>
+                    )
+                  : undefined
+              }
               size="sm"
             />
           ))

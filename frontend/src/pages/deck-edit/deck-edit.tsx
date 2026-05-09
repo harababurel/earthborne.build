@@ -1,5 +1,5 @@
 import type { Card as CardT, Slots } from "@earthborne-build/shared";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, Undo2Icon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "wouter";
@@ -10,6 +10,7 @@ import { AspectIcon } from "@/components/icons/aspect-icon";
 import { ListCard } from "@/components/list-card/list-card";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { QuantityOutput } from "@/components/ui/quantity-output";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/toast.hooks";
 import { AppLayout } from "@/layouts/app-layout";
@@ -396,10 +397,30 @@ function DisplacedCardRow({
   const { t } = useTranslation();
   const [qty, setQty] = useState<1 | 2>(2);
   const restoreDisplaced = useStore((state) => state.restoreDisplaced);
+  const displacedQty = deck.displaced?.[card.card.code] ?? 0;
 
   return (
     <ListCard
       card={card.card}
+      renderCardAction={() => (
+        <div className={css["displaced-quantity-actions"]}>
+          <QuantityOutput value={displacedQty} />
+          <Button
+            aria-label={t("deck_edit.actions.move_to_main_deck")}
+            data-testid="restore-displaced-card"
+            disabled={displacedQty <= 0}
+            iconOnly
+            onClick={() =>
+              restoreDisplaced(deck.id, card.card.code, undefined, 1)
+            }
+            size="sm"
+            tooltip={t("deck_edit.actions.move_to_main_deck")}
+            variant="secondary"
+          >
+            <Undo2Icon />
+          </Button>
+        </div>
+      )}
       renderCardAfter={() => (
         <div className={css["row-actions"]}>
           <QuantitySelect value={qty} onChange={setQty} />

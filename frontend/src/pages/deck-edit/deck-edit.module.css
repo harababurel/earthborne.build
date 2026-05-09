@@ -113,6 +113,12 @@
   align-items: center;
 }
 
+.displaced-quantity-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .tabs {
   min-width: 0;
 }

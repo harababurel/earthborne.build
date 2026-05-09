@@ -60,6 +60,52 @@ describe("deck-view slice", () => {
       expect(resolved?.slots["01000"]).toEqual(0);
     });
 
+    it("adds a removed card copy to displaced cards", () => {
+      const state = store.getState();
+
+      state.updateCardQuantity("deck-id", "03037", -1, 2, "slots", "increment");
+
+      const resolved = selectResolvedDeckById(
+        store.getState(),
+        "deck-id",
+        true,
+      );
+
+      expect(resolved?.slots["03037"]).toEqual(1);
+      expect(resolved?.displaced?.["03037"]).toEqual(1);
+    });
+
+    it("adds all removed card copies to displaced cards", () => {
+      const state = store.getState();
+
+      state.updateCardQuantity("deck-id", "03037", 0, 2, "slots", "set");
+
+      const resolved = selectResolvedDeckById(
+        store.getState(),
+        "deck-id",
+        true,
+      );
+
+      expect(resolved?.slots["03037"]).toEqual(0);
+      expect(resolved?.displaced?.["03037"]).toEqual(2);
+    });
+
+    it("restores one displaced card copy to the deck", () => {
+      const state = store.getState();
+
+      state.updateCardQuantity("deck-id", "03037", 0, 2, "slots", "set");
+      state.restoreDisplaced("deck-id", "03037", undefined, 1);
+
+      const resolved = selectResolvedDeckById(
+        store.getState(),
+        "deck-id",
+        true,
+      );
+
+      expect(resolved?.slots["03037"]).toEqual(1);
+      expect(resolved?.displaced?.["03037"]).toEqual(1);
+    });
+
     it("sets the quantity of a card", () => {
       const state = store.getState();
       state.updateCardQuantity("deck-id", "01000", 5, 5, "slots", "set");

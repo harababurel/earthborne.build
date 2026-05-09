@@ -142,6 +142,12 @@
   gap: 0.125rem;
 }
 
+.displaced-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .empty-campaign-section {
   color: var(--text-muted);
   margin: 0;
