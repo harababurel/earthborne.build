@@ -321,20 +321,24 @@ function DeckCampaignSections({
   if (!rewards.total && !displaced.length && !maladies.length) return null;
 
   return (
-    <Plane>
-      <RewardsSection
-        canEdit={canEdit}
-        deck={deck}
-        locked={rewards.locked}
-        lockedTitle={t("deck.rewards.locked")}
-        title={t("deck.rewards.title")}
-        unlockedTitle={t("deck.rewards.unlocked")}
-        unlocked={rewards.unlocked}
-      />
-      <CampaignSection
-        title={t("deck.evolution.displaced")}
-        cards={displaced}
-      />
+    <Plane className={css["campaign-sections"]}>
+      <div className={css["campaign-columns"]}>
+        <RewardsSection
+          canEdit={canEdit}
+          deck={deck}
+          locked={rewards.locked}
+          lockedTitle={t("deck.rewards.locked")}
+          title={t("deck.rewards.title")}
+          unlockedTitle={t("deck.rewards.unlocked")}
+          unlocked={rewards.unlocked}
+        />
+        <CampaignSection
+          title={t("deck_edit.sections.displaced")}
+          cards={displaced}
+          emptyText={t("deck_edit.displaced.empty")}
+          showEmpty
+        />
+      </div>
       <CampaignSection title={t("deck.evolution.maladies")} cards={maladies} />
     </Plane>
   );
@@ -452,21 +456,34 @@ function RewardsSection({
 
 function CampaignSection({
   cards,
+  emptyText,
+  showEmpty,
   title,
 }: {
   cards: ResolvedCard[];
+  emptyText?: string;
+  showEmpty?: boolean;
   title: string;
 }) {
-  if (!cards.length) return null;
+  if (!cards.length && !showEmpty) return null;
 
   return (
     <section className={css["campaign-section"]}>
       <h2>{title}</h2>
-      <ul>
-        {cards.map((card) => (
-          <li key={card.card.code}>{card.card.name}</li>
-        ))}
-      </ul>
+      <div className={css["campaign-card-list"]}>
+        {cards.length ? (
+          cards.map((card) => (
+            <ListCard
+              card={card.card}
+              key={card.card.code}
+              omitBorders
+              size="sm"
+            />
+          ))
+        ) : (
+          <p className={css["empty-campaign-section"]}>{emptyText}</p>
+        )}
+      </div>
     </section>
   );
 }

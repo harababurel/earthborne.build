@@ -115,12 +115,32 @@
   top: 0.125rem;
 }
 
-.campaign-section + .campaign-section {
-  margin-top: 1rem;
+.campaign-sections {
+  display: grid;
+  gap: 1rem;
+}
+
+.campaign-columns {
+  display: grid;
+  gap: 1rem;
+
+  @media screen and (min-width: 52rem) {
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  }
 }
 
 .campaign-section h2 {
   margin-top: 0;
+}
+
+.campaign-card-list {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.empty-campaign-section {
+  color: var(--text-muted);
+  margin: 0;
 }
 
 .reward-list {
