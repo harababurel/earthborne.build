@@ -415,7 +415,6 @@ function RewardsSection({
                   card={card.card}
                   key={card.card.code}
                   omitBorders
-                  omitThumbnail
                   renderCardAction={renderRewardAction(card)}
                   size="sm"
                 />
@@ -440,7 +439,6 @@ function RewardsSection({
                 className={!canEdit ? css["locked-reward"] : undefined}
                 key={card.card.code}
                 omitBorders
-                omitThumbnail
                 renderCardAction={renderRewardAction(card)}
                 size="sm"
               />
