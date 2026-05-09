@@ -1,10 +1,4 @@
 import type { Card as CardT, Slots } from "@earthborne-build/shared";
-import {
-  BACKGROUND_PICKS,
-  OUTSIDE_INTEREST_PICKS,
-  PERSONALITY_PICKS,
-  SPECIALTY_PICKS,
-} from "@earthborne-build/shared";
 import { CheckIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,7 +15,9 @@ import { useToast } from "@/components/ui/toast.hooks";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
 import type { DeckValidationError } from "@/store/lib/deck-validation";
+import { getGroupedCards } from "@/store/lib/grouping";
 import { resolveCardWithRelations } from "@/store/lib/resolve-card";
+import { makeSortFunction } from "@/store/lib/sorting";
 import type { ResolvedCard, ResolvedDeck } from "@/store/lib/types";
 import {
   selectDeckValid,
@@ -35,8 +31,6 @@ import {
 import { cx } from "@/utils/cx";
 import { useAccentColor } from "@/utils/use-accent-color";
 import css from "./deck-edit.module.css";
-
-type Category = "personality" | "background" | "specialty" | "outside";
 
 function DeckEdit() {
   const { id } = useParams<{ id: string }>();
@@ -233,85 +227,37 @@ function DeckEditMain({ deck }: { deck: ResolvedDeck }) {
 }
 
 function DeckEditDeckTab({ deck }: { deck: ResolvedDeck }) {
-  const { t } = useTranslation();
-  const groups = useMemo(() => groupDeckCardsForEdit(deck), [deck]);
+  const cards = useDeckCardsForEdit(deck);
 
   return (
     <>
-      <DeckSection
-        cards={groups.personality}
-        category="personality"
-        deck={deck}
-        required={PERSONALITY_PICKS}
-        title={t("deck_edit.sections.personality")}
-      />
-      <DeckSection
-        cards={groups.background}
-        category="background"
-        deck={deck}
-        required={BACKGROUND_PICKS}
-        title={t("deck_edit.sections.background")}
-      />
-      <DeckSection
-        cards={groups.specialty}
-        category="specialty"
-        deck={deck}
-        required={SPECIALTY_PICKS}
-        title={t("deck_edit.sections.specialty")}
-      />
-      <DeckSection
-        cards={groups.outside}
-        category="outside"
-        deck={deck}
-        required={OUTSIDE_INTEREST_PICKS}
-        title={t("deck_edit.sections.outside_interest")}
-      />
+      <DeckCardsList cards={cards} deck={deck} />
       <PlayerCardSwapSection deck={deck} />
       <CampaignPanels deck={deck} />
     </>
   );
 }
 
-function DeckSection({
+function DeckCardsList({
   cards,
-  category,
   deck,
-  required,
-  title,
 }: {
   cards: ResolvedCard[];
-  category: Category;
   deck: ResolvedDeck;
-  required: number;
-  title: string;
 }) {
   const updateCardQuantity = useStore((state) => state.updateCardQuantity);
-  const pool = useCardPoolForCategory(deck, category);
 
   return (
     <section className={css["section"]}>
-      <h2 className={css["section-heading"]}>
-        {title}
-        <span className={css["section-count"]}>
-          {cards.length}/{required}
-        </span>
-      </h2>
       {cards.map((card) => (
         <ListCard
           key={card.card.code}
           card={card.card}
           highlightQuantity
           onChangeCardQuantity={(c, qty, limit) =>
-            updateCardQuantity(deck.id, c.code, qty, limit, "slots", "set")
+            updateCardQuantity(deck.id, c.code, qty, limit, "slots")
           }
           quantity={deck.slots[card.card.code] ?? 0}
-          renderCardAfter={() => (
-            <ReplacementPicker
-              currentCode={card.card.code}
-              deck={deck}
-              pool={pool}
-            />
-          )}
         />
       ))}
     </section>
@@ -610,44 +556,6 @@ function DeckEditNotesTab({ deck }: { deck: ResolvedDeck }) {
   );
 }
 
-function ReplacementPicker({
-  currentCode,
-  deck,
-  pool,
-}: {
-  currentCode: string;
-  deck: ResolvedDeck;
-  pool: ResolvedCard[];
-}) {
-  const { t } = useTranslation();
-  const updateCardQuantity = useStore((state) => state.updateCardQuantity);
-
-  const available = pool.filter((card) => !deck.slots[card.card.code]);
-  if (!available.length) return null;
-
-  return (
-    <div className={css["picker-row"]}>
-      <select
-        aria-label={t("deck_edit.actions.replace")}
-        onChange={(evt) => {
-          const nextCode = evt.target.value;
-          if (!nextCode) return;
-          updateCardQuantity(deck.id, currentCode, 0, 2, "slots", "set");
-          updateCardQuantity(deck.id, nextCode, 2, 2, "slots", "set");
-          evt.target.value = "";
-        }}
-      >
-        <option value="">{t("deck_edit.actions.replace")}</option>
-        {available.map((card) => (
-          <option key={card.card.code} value={card.card.code}>
-            {card.card.name}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
 function DisplacementPicker({
   cards,
   controlled,
@@ -744,6 +652,45 @@ function useCardsForSlots(slots: Slots | null | undefined) {
   );
 }
 
+function useDeckCardsForEdit(deck: ResolvedDeck) {
+  const metadata = useStore(selectMetadata);
+  const collator = useStore(selectLocaleSortingCollator);
+  const listConfig = useStore((state) => state.settings.lists.player);
+
+  return useMemo(() => {
+    const resolvedCards = Object.keys(deck.slots)
+      .map((code) => deck.cards.slots[code])
+      .filter((card): card is ResolvedCard => !!card);
+
+    const groupedCards = getGroupedCards(
+      listConfig.group,
+      resolvedCards.map((card) => card.card),
+      makeSortFunction(listConfig.sort, metadata, collator),
+      metadata,
+      collator,
+    );
+
+    const cardIndex = new Map(resolvedCards.map((card) => [card.card, card]));
+    const orderedCards = groupedCards.data
+      .flatMap((group) => group.cards)
+      .map((card) => cardIndex.get(card))
+      .filter((card): card is ResolvedCard => !!card);
+    const orderedSet = new Set(orderedCards);
+
+    return [
+      ...orderedCards,
+      ...resolvedCards.filter((card) => !orderedSet.has(card)),
+    ];
+  }, [
+    collator,
+    deck.cards.slots,
+    deck.slots,
+    listConfig.group,
+    listConfig.sort,
+    metadata,
+  ]);
+}
+
 function useCampaignPool(category: "reward" | "malady") {
   return useResolvedPool((card) => card.category === category);
 }
@@ -780,27 +727,6 @@ function usePlayerCardPool(deck: ResolvedDeck) {
   });
 }
 
-function useCardPoolForCategory(deck: ResolvedDeck, category: Category) {
-  return useResolvedPool((card) => {
-    if (category === "personality") return card.category === "personality";
-    if (category === "background") {
-      return card.background_type === deck.background;
-    }
-    if (category === "specialty") {
-      return card.specialty_type === deck.specialty;
-    }
-    if (category === "outside") {
-      return (
-        (card.category === "background" &&
-          card.background_type !== deck.background) ||
-        (card.category === "specialty" &&
-          card.specialty_type !== deck.specialty)
-      );
-    }
-    return false;
-  });
-}
-
 function useResolvedPool(predicate: (card: CardT) => boolean) {
   const metadata = useStore(selectMetadata);
   const lookupTables = useStore(selectLookupTables);
@@ -822,35 +748,6 @@ function useResolvedPool(predicate: (card: CardT) => boolean) {
         .filter((card): card is ResolvedCard => !!card),
     [collator, lookupTables, metadata, predicate],
   );
-}
-
-function groupDeckCardsForEdit(
-  deck: ResolvedDeck,
-): Record<Category, ResolvedCard[]> {
-  const groups: Record<Category, ResolvedCard[]> = {
-    personality: [],
-    background: [],
-    specialty: [],
-    outside: [],
-  };
-
-  for (const [code, quantity] of Object.entries(deck.slots)) {
-    if (!quantity) continue;
-    const card = deck.cards.slots[code];
-    if (!card) continue;
-
-    if (card.card.category === "personality") {
-      groups.personality.push(card);
-    } else if (card.card.background_type === deck.background) {
-      groups.background.push(card);
-    } else if (card.card.specialty_type === deck.specialty) {
-      groups.specialty.push(card);
-    } else {
-      groups.outside.push(card);
-    }
-  }
-
-  return groups;
 }
 
 function formatValidation(error: DeckValidationError) {

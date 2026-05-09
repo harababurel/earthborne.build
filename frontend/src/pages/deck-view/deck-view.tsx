@@ -1,5 +1,5 @@
 import type { Id } from "@earthborne-build/shared";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "wouter";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import {
@@ -36,33 +36,72 @@ function DeckView() {
 
 function LocalDeckView({ id }: { id: Id }) {
   const history: History = [];
+  const [isEditing, setIsEditing] = useState(false);
 
   const resolvedDeck = useStore((state) =>
-    selectResolvedDeckById(state, id, false),
+    selectResolvedDeckById(state, id, isEditing),
   );
+  const createEdit = useStore((state) => state.createEdit);
+  const discardEdits = useStore((state) => state.discardEdits);
+  const hasEdit = useStore((state) => !!state.deckEdits[id]);
+  const saveDeck = useStore((state) => state.saveDeck);
+
+  const startEditing = useCallback(() => {
+    if (!hasEdit) createEdit(id, {});
+    setIsEditing(true);
+  }, [createEdit, hasEdit, id]);
+
+  const saveEditing = useCallback(async () => {
+    await saveDeck(id);
+    setIsEditing(false);
+  }, [id, saveDeck]);
+
+  const discardEditing = useCallback(() => {
+    discardEdits(id);
+    setIsEditing(false);
+  }, [discardEdits, id]);
+
   if (!resolvedDeck) return null;
 
-  return <DeckViewInner origin="local" deck={resolvedDeck} history={history} />;
+  return (
+    <DeckViewInner
+      canEdit={isEditing}
+      deck={resolvedDeck}
+      history={history}
+      onDiscardEdit={discardEditing}
+      onSaveEdit={saveEditing}
+      onStartEdit={startEditing}
+      origin="local"
+    />
+  );
 }
 
 function DeckViewInner({
+  canEdit,
   origin,
   deck,
   headerSlot,
   history,
+  onDiscardEdit,
+  onSaveEdit,
+  onStartEdit,
   type,
 }: Omit<DeckDisplayProps, "validation">) {
   const validation = useStore((state) => selectDeckValid(state, deck));
 
   return (
-    <ResolvedDeckProvider resolvedDeck={deck}>
+    <ResolvedDeckProvider canEdit={canEdit} resolvedDeck={deck}>
       <CardModalProvider>
         <DeckDisplay
+          canEdit={canEdit}
           key={deck.id}
           origin={origin}
           deck={deck}
           headerSlot={headerSlot}
           history={history}
+          onDiscardEdit={onDiscardEdit}
+          onSaveEdit={onSaveEdit}
+          onStartEdit={onStartEdit}
           validation={validation}
           type={type}
         />

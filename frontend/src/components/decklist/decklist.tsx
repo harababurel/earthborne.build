@@ -31,15 +31,17 @@ import { DecklistGroup } from "./decklist-groups";
 import { DecklistSection } from "./decklist-section";
 
 type Props = {
+  canEdit?: boolean;
   className?: string;
   deck: ResolvedDeck;
 };
 
 export function Decklist(props: Props) {
-  const { className, deck } = props;
+  const { canEdit = false, className, deck } = props;
   const { t } = useTranslation();
 
   const settings = useStore((state) => state.settings);
+  const updateCardQuantity = useStore((state) => state.updateCardQuantity);
 
   const [viewMode, setViewMode] = useTabUrlState<ViewMode>(
     "compact",
@@ -92,8 +94,14 @@ export function Decklist(props: Props) {
   );
 
   const getListCardProps = useCallback(
-    () => ({ renderCardExtra }),
-    [renderCardExtra],
+    () => ({
+      onChangeCardQuantity: canEdit
+        ? (card: Card, quantity: number, limit: number) =>
+            updateCardQuantity(deck.id, card.code, quantity, limit, "slots")
+        : undefined,
+      renderCardExtra,
+    }),
+    [canEdit, deck.id, renderCardExtra, updateCardQuantity],
   );
 
   const onSetViewMode = useCallback(

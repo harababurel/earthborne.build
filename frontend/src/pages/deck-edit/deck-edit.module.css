@@ -106,7 +106,6 @@
 
 .actions,
 .row-actions,
-.picker-row,
 .unlock-actions {
   display: flex;
   flex-wrap: wrap;
@@ -134,18 +133,6 @@
 .section:first-child {
   border-top: 0;
   padding-top: 0;
-}
-
-.section-heading {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.section-count {
-  font-size: var(--text-sm);
-  font-weight: 400;
-  color: var(--text-muted);
 }
 
 .campaign-panels {

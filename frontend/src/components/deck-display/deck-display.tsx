@@ -1,14 +1,15 @@
 import {
   BookOpenTextIcon,
   ChartAreaIcon,
+  CheckIcon,
   FileClockIcon,
   PencilIcon,
   SquarePenIcon,
+  XIcon,
 } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "wouter";
 import { useDialogContextChecked } from "@/components/ui/dialog.hooks";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { AppLayout } from "@/layouts/app-layout";
@@ -61,30 +62,39 @@ import type { DeckOrigin } from "./types";
 export type DeckDisplayType = "deck" | "decklist";
 
 export type DeckDisplayProps = {
+  canEdit?: boolean;
   deck: ResolvedDeck;
   origin: DeckOrigin;
   headerSlot?: React.ReactNode;
   history?: History;
+  onDiscardEdit?: () => void;
+  onSaveEdit?: () => Promise<void>;
+  onStartEdit?: () => void;
   type?: DeckDisplayType;
   validation: DeckValidationResult;
 };
 
 export function DeckDisplay(props: DeckDisplayProps) {
   const {
+    canEdit = false,
     deck,
     headerSlot,
     history,
+    onDiscardEdit,
+    onSaveEdit,
+    onStartEdit,
     origin,
     type = "deck",
     validation,
   } = props;
 
   const [currentTab, setCurrentTab] = useTabUrlState("deck");
+  const [saving, setSaving] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollState = useRef<Record<string, number>>({});
-  const [, navigate] = useLocation();
 
   const { t } = useTranslation();
+  const toast = useToast();
   const metadata = useStore(selectMetadata);
   const roleCard = metadata.cards[deck.role_code];
   const cssVariables = useAccentColor(roleCard);
@@ -110,6 +120,30 @@ export function DeckDisplay(props: DeckDisplayProps) {
       }
     });
   }, [currentTab]);
+
+  const saveInlineEdits = useCallback(async () => {
+    if (!onSaveEdit) return;
+
+    setSaving(true);
+    const toastId = toast.show({
+      children: t("deck_edit.save_loading"),
+      variant: "loading",
+    });
+
+    try {
+      await onSaveEdit();
+    } catch (err) {
+      toast.show({
+        children: t("deck_edit.save_error", {
+          error: (err as Error).message,
+        }),
+        variant: "error",
+      });
+    } finally {
+      toast.dismiss(toastId);
+      setSaving(false);
+    }
+  }, [onSaveEdit, t, toast]);
 
   const titleNode = (
     <h1 className={css["title"]} data-testid="view-title">
@@ -162,16 +196,13 @@ export function DeckDisplay(props: DeckDisplayProps) {
           </div>
           {headerSlot && <div>{headerSlot}</div>}
           {origin === "local" && (
-            <div>
-              <Button
-                data-testid="edit-deck"
-                onClick={() => navigate(`/deck/edit/${deck.id}`)}
-                size="sm"
-              >
-                <PencilIcon />
-                {t("deck.actions.edit")}
-              </Button>
-            </div>
+            <DeckEditActions
+              canEdit={canEdit}
+              disabled={saving}
+              onDiscardEdit={onDiscardEdit}
+              onSaveEdit={saveInlineEdits}
+              onStartEdit={onStartEdit}
+            />
           )}
         </header>
 
@@ -246,7 +277,7 @@ export function DeckDisplay(props: DeckDisplayProps) {
                   defaultOpen={validation.errors.length < 3}
                   validation={validation}
                 />
-                <Decklist deck={deck} />
+                <Decklist canEdit={canEdit} deck={deck} />
                 <DeckCampaignSections deck={deck} />
               </div>
             </TabsContent>
@@ -311,6 +342,58 @@ function CampaignSection({
         ))}
       </ul>
     </section>
+  );
+}
+
+function DeckEditActions({
+  canEdit,
+  disabled,
+  onDiscardEdit,
+  onSaveEdit,
+  onStartEdit,
+}: {
+  canEdit: boolean;
+  disabled: boolean;
+  onDiscardEdit?: () => void;
+  onSaveEdit: () => void;
+  onStartEdit?: () => void;
+}) {
+  const { t } = useTranslation();
+
+  if (canEdit) {
+    return (
+      <div className={css["edit-actions"]}>
+        <Button
+          data-testid="save-deck"
+          disabled={disabled}
+          onClick={onSaveEdit}
+          size="sm"
+          variant="primary"
+        >
+          <CheckIcon />
+          {t("deck_edit.save_short")}
+        </Button>
+        <Button
+          data-testid="discard-edits"
+          disabled={disabled}
+          onClick={onDiscardEdit}
+          size="sm"
+          variant="bare"
+        >
+          <XIcon />
+          {t("deck_edit.discard")}
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={css["edit-actions"]}>
+      <Button data-testid="edit-deck" onClick={onStartEdit} size="sm">
+        <PencilIcon />
+        {t("deck.actions.edit")}
+      </Button>
+    </div>
   );
 }
 
