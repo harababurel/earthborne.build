@@ -129,6 +129,10 @@
   }
 }
 
+.campaign-panel {
+  min-width: 0;
+}
+
 .campaign-section h2 {
   margin-top: 0;
 }

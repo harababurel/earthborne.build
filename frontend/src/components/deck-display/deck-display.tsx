@@ -321,26 +321,37 @@ function DeckCampaignSections({
   if (!rewards.total && !displaced.length && !maladies.length) return null;
 
   return (
-    <Plane className={css["campaign-sections"]}>
+    <div className={css["campaign-sections"]}>
       <div className={css["campaign-columns"]}>
-        <RewardsSection
-          canEdit={canEdit}
-          deck={deck}
-          locked={rewards.locked}
-          lockedTitle={t("deck.rewards.locked")}
-          title={t("deck.rewards.title")}
-          unlockedTitle={t("deck.rewards.unlocked")}
-          unlocked={rewards.unlocked}
-        />
-        <CampaignSection
-          title={t("deck_edit.sections.displaced")}
-          cards={displaced}
-          emptyText={t("deck_edit.displaced.empty")}
-          showEmpty
-        />
+        <Plane className={css["campaign-panel"]}>
+          <RewardsSection
+            canEdit={canEdit}
+            deck={deck}
+            locked={rewards.locked}
+            lockedTitle={t("deck.rewards.locked")}
+            title={t("deck.rewards.title")}
+            unlockedTitle={t("deck.rewards.unlocked")}
+            unlocked={rewards.unlocked}
+          />
+        </Plane>
+        <Plane className={css["campaign-panel"]}>
+          <CampaignSection
+            title={t("deck_edit.sections.displaced")}
+            cards={displaced}
+            emptyText={t("deck_edit.displaced.empty")}
+            showEmpty
+          />
+        </Plane>
       </div>
-      <CampaignSection title={t("deck.evolution.maladies")} cards={maladies} />
-    </Plane>
+      {maladies.length > 0 && (
+        <Plane className={css["campaign-panel"]}>
+          <CampaignSection
+            title={t("deck.evolution.maladies")}
+            cards={maladies}
+          />
+        </Plane>
+      )}
+    </div>
   );
 }
 
