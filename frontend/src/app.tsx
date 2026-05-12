@@ -15,8 +15,6 @@ const Index = lazy(() => import("./pages/index"));
 
 const BrowseRoutes = lazy(() => import("./pages/browse/index"));
 
-const DeckEdit = lazy(() => import("./pages/deck-edit/deck-edit"));
-
 const DeckCreate = lazy(() => import("./pages/deck-create/deck-create"));
 
 const DeckView = lazy(() => import("./pages/deck-view/deck-view"));
@@ -97,7 +95,7 @@ function AppInner() {
               <Route component={DeckCreate} path="/deck/create" />
               <Route component={DeckView} path="/:type/view/:id" />
               <Route component={DeckView} path="/:type/view/:id/:slug" />
-              <Route component={DeckEdit} nest path="/deck/edit/:id" />
+              <Route component={DeckView} path="/deck/edit/:id" />
               <Route component={Settings} path="/settings" />
               <Route component={About} path="/about" />
               <Route component={Share} path="/share/:id" />
