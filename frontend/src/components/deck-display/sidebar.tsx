@@ -183,6 +183,14 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
               </div>
               <div className={css["identity-item"]}>
                 <span className={css["identity-label"]}>
+                  {t("deck.stats.deck_size")}
+                </span>
+                <span className={css["identity-value"]}>
+                  {deck.stats.deckSize}
+                </span>
+              </div>
+              <div className={css["identity-item"]}>
+                <span className={css["identity-label"]}>
                   {t("deck_create.steps.background")}
                 </span>
                 <span className={css["identity-value"]}>

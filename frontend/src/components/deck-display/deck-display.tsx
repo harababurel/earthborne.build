@@ -831,6 +831,7 @@ function CampaignSection({
 }) {
   const { t } = useTranslation();
   const restoreDisplaced = useStore((state) => state.restoreDisplaced);
+  const removeDisplaced = useStore((state) => state.removeDisplaced);
 
   if (!cards.length && !showEmpty) return null;
 
@@ -868,6 +869,20 @@ function CampaignSection({
                           tooltip={t("deck_edit.actions.move_to_main_deck")}
                         >
                           <Undo2Icon />
+                        </Button>
+                        <Button
+                          aria-label={t("deck_edit.actions.remove")}
+                          data-testid="remove-displaced-card"
+                          disabled={(quantities?.[card.card.code] ?? 0) <= 0}
+                          iconOnly
+                          onClick={() =>
+                            removeDisplaced(deck.id, card.card.code)
+                          }
+                          size="sm"
+                          tooltip={t("deck_edit.actions.remove")}
+                          variant="bare"
+                        >
+                          <XIcon />
                         </Button>
                         <QuantityOutput
                           value={quantities?.[card.card.code] ?? 0}

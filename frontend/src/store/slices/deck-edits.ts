@@ -199,6 +199,13 @@ export const createDeckEditsSlice: StateCreator<
     dehydrate(get(), "edits").catch(console.error);
   },
 
+  removeDisplaced(deckId, displacedCode) {
+    set((state) =>
+      setQuantityEdits(state, deckId, { displaced: { [displacedCode]: 0 } }),
+    );
+    dehydrate(get(), "edits").catch(console.error);
+  },
+
   swapPlayerCardIntoSlots(deckId, newCode, displacedCode, quantity) {
     set((state) => {
       const deck = selectResolvedDeckById(state, deckId, true);

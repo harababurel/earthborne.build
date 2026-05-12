@@ -106,6 +106,22 @@ describe("deck-view slice", () => {
       expect(resolved?.displaced?.["03037"]).toEqual(1);
     });
 
+    it("removes a displaced card without restoring it to the deck", () => {
+      const state = store.getState();
+
+      state.updateCardQuantity("deck-id", "03037", 0, 2, "slots", "set");
+      state.removeDisplaced("deck-id", "03037");
+
+      const resolved = selectResolvedDeckById(
+        store.getState(),
+        "deck-id",
+        true,
+      );
+
+      expect(resolved?.slots["03037"]).toEqual(0);
+      expect(resolved?.displaced?.["03037"]).toEqual(0);
+    });
+
     it("sets the quantity of a card", () => {
       const state = store.getState();
       state.updateCardQuantity("deck-id", "01000", 5, 5, "slots", "set");

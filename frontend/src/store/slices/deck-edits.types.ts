@@ -68,6 +68,8 @@ export type DeckEditsSlice = {
     quantity?: number,
   ): void;
 
+  removeDisplaced(deckId: Id, displacedCode: string): void;
+
   swapPlayerCardIntoSlots(
     deckId: Id,
     newCode: string,
