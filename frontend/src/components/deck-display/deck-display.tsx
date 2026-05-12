@@ -9,7 +9,6 @@ import {
   CheckIcon,
   FileClockIcon,
   PencilIcon,
-  PlusIcon,
   SquarePenIcon,
   Undo2Icon,
   XIcon,
@@ -65,6 +64,7 @@ import {
   ModalInner,
 } from "../ui/modal";
 import { Plane } from "../ui/plane";
+import { QuantityInput } from "../ui/quantity-input";
 import { QuantityOutput } from "../ui/quantity-output";
 import { Scroller } from "../ui/scroller";
 import { Select } from "../ui/select";
@@ -453,10 +453,8 @@ function AvailableCardsPanel({ deck }: { deck: ResolvedDeck }) {
   const getListCardProps = useCallback(
     (card: Card) => {
       const quantity = deck.slots[card.code] ?? 0;
-      const disabled = quantity >= 2;
 
       return {
-        disabled,
         quantity,
       };
     },
@@ -485,7 +483,7 @@ function AvailableCardsPanel({ deck }: { deck: ResolvedDeck }) {
           <div className={css["available-card-list-inner"]}>
             {availableCards.length ? (
               availableCards.map((card) => {
-                const { disabled, quantity } = getListCardProps(card);
+                const { quantity } = getListCardProps(card);
 
                 return (
                   <ListCard
@@ -493,31 +491,21 @@ function AvailableCardsPanel({ deck }: { deck: ResolvedDeck }) {
                     key={card.code}
                     renderCardAction={() => (
                       <div className={css["available-card-actions"]}>
-                        <Button
-                          aria-label={t("deck_edit.actions.add_to_deck")}
-                          data-testid="add-card-to-deck"
-                          disabled={disabled}
-                          iconOnly
-                          onClick={() =>
+                        <QuantityInput
+                          highlightValue
+                          limit={2}
+                          onValueChange={(quantity, limit) =>
                             updateCardQuantity(
                               deck.id,
                               card.code,
-                              1,
-                              2,
+                              quantity,
+                              limit,
                               "slots",
                             )
                           }
-                          size="sm"
-                          tooltip={
-                            disabled
-                              ? t("deck_edit.available_cards.max_copies")
-                              : t("deck_edit.actions.add_to_deck")
-                          }
-                          variant={disabled ? "bare" : "primary"}
-                        >
-                          <PlusIcon />
-                        </Button>
-                        <QuantityOutput value={quantity} />
+                          tabIndex={-1}
+                          value={quantity}
+                        />
                       </div>
                     )}
                     size="sm"
