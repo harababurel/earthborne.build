@@ -347,7 +347,7 @@ function DeckEditSummary({ deck }: { deck: ResolvedDeck }) {
       </div>
       <div className={css["edit-summary-item"]}>
         <span>{t("deck_create.steps.aspect")}</span>
-        <strong>{aspectCard?.name}</strong>
+        <strong>{formatAspectSummaryName(aspectCard?.name)}</strong>
       </div>
       <div className={css["edit-summary-item"]}>
         <span>{t("deck_create.steps.background")}</span>
@@ -365,6 +365,10 @@ function DeckEditSummary({ deck }: { deck: ResolvedDeck }) {
       </div>
     </Plane>
   );
+}
+
+function formatAspectSummaryName(name: string | undefined) {
+  return name?.replace(/^(\d{4})\saspect$/i, "$1");
 }
 
 type AvailableCardFilters = {
