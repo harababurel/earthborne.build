@@ -997,6 +997,7 @@ function useResolvedSlotCards(slots: ResolvedDeck["rewards"]) {
 function filterAddableRangerCard(card: Card) {
   return (
     card.category != null &&
+    card.type_code !== "role" &&
     card.category !== "reward" &&
     card.category !== "malady"
   );
