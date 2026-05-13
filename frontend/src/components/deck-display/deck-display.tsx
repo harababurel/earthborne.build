@@ -363,6 +363,10 @@ function DeckEditSummary({ deck }: { deck: ResolvedDeck }) {
           {t(`deck.evolution.${isEvolvedDeck(deck) ? "evolved" : "starter"}`)}
         </strong>
       </div>
+      <div className={css["edit-summary-item"]}>
+        <span>{t("deck.stats.deck_size")}</span>
+        <strong>{deck.stats.deckSize}</strong>
+      </div>
     </Plane>
   );
 }
@@ -722,10 +726,11 @@ function RewardsSection({
   const { t } = useTranslation();
   const unlockReward = useStore((state) => state.unlockReward);
   const removeReward = useStore((state) => state.removeUnlockedReward);
+  const updateCardQuantity = useStore((state) => state.updateCardQuantity);
 
   if (!locked.length && !unlocked.length) return null;
 
-  const renderRewardAction = (card: ResolvedCard) => {
+  const renderUnlockedRewardAction = (card: ResolvedCard) => {
     if (!canEdit) return undefined;
 
     const rewardQty = deck.rewards?.[card.card.code] ?? 0;
@@ -733,29 +738,28 @@ function RewardsSection({
     const displacedQty = deck.displaced?.[card.card.code] ?? 0;
 
     return () => {
-      if (slotsQty > 0 || displacedQty > 0) {
-        return (
-          <span className={css["muted"]}>{t("deck_edit.rewards.in_deck")}</span>
-        );
-      }
-      if (rewardQty > 0) {
-        return (
-          <div className={css["reward-actions"]}>
-            <Button onClick={() => removeReward(deck.id, card.card.code)}>
-              {t("deck_edit.actions.remove")}
-            </Button>
-          </div>
-        );
+      if (slotsQty > 0 || displacedQty > 0 || rewardQty <= 0) {
+        return null;
       }
       return (
-        <Button
-          onClick={() => unlockReward(deck.id, card.card.code)}
-          variant="primary"
-        >
-          {t("deck_edit.actions.unlock")}
+        <Button onClick={() => removeReward(deck.id, card.card.code)} size="sm">
+          {t("deck_edit.actions.remove")}
         </Button>
       );
     };
+  };
+
+  const renderLockedRewardAction = (card: ResolvedCard) => {
+    if (!canEdit) return undefined;
+
+    return () => (
+      <Button
+        onClick={() => unlockReward(deck.id, card.card.code)}
+        variant="primary"
+      >
+        {t("deck_edit.actions.unlock")}
+      </Button>
+    );
   };
 
   return (
@@ -777,7 +781,24 @@ function RewardsSection({
                   card={card.card}
                   key={card.card.code}
                   omitBorders
-                  renderCardAction={renderRewardAction(card)}
+                  onChangeCardQuantity={
+                    canEdit
+                      ? (c, qty, limit) =>
+                          updateCardQuantity(
+                            deck.id,
+                            c.code,
+                            qty,
+                            limit,
+                            "slots",
+                          )
+                      : undefined
+                  }
+                  quantity={
+                    canEdit ? (deck.slots[card.card.code] ?? 0) : undefined
+                  }
+                  renderCardAction={
+                    canEdit ? renderUnlockedRewardAction(card) : undefined
+                  }
                   size="sm"
                 />
               ))
@@ -801,7 +822,7 @@ function RewardsSection({
                 className={!canEdit ? css["locked-reward"] : undefined}
                 key={card.card.code}
                 omitBorders
-                renderCardAction={renderRewardAction(card)}
+                renderCardAction={renderLockedRewardAction(card)}
                 size="sm"
               />
             ))}
