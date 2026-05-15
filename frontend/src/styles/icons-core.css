@@ -73,6 +73,15 @@
 .core-mountain:before {
   content: "\e90d";
 }
+.core-buck {
+  width: 1em;
+  height: 1em;
+}
+.core-buck svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
 .core-spi_chakra:before {
   content: "\e90e";
 }

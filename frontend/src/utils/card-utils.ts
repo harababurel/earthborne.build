@@ -6,7 +6,9 @@ import { assert } from "./assert";
 
 const ER_STAT_TOKENS = new Set(["FIT", "AWA", "FOC", "SPI"]);
 
-// Tokens that map directly to a class in the "core" icon font from rangersdb.
+const ER_INLINE_SVG_TOKENS = new Set(["buck"]);
+
+// Tokens that map directly to a class in the core Earthborne icon set.
 const ER_CORE_FONT_TOKENS = new Set([
   "conflict",
   "connection",
@@ -23,6 +25,14 @@ const ER_CORE_FONT_TOKENS = new Set([
   "aspiration",
   "conditional",
 ]);
+
+const BUCK_ICON_HTML = [
+  '<span class="core-buck">',
+  '<svg aria-hidden="true" focusable="false" viewBox="0 0 64 64">',
+  '<path fill="currentColor" d="M32 6.5c1.7 0 3.2.9 4.1 2.4l22 38.2c1.8 3.2-.5 7.2-4.1 7.2H10c-3.7 0-5.9-4-4.1-7.2l22-38.2c.9-1.5 2.4-2.4 4.1-2.4Z"/>',
+  "</svg>",
+  "</span>",
+].join("");
 
 export function splitMultiValue(s: string | null | undefined) {
   if (!s) return [];
@@ -108,6 +118,9 @@ export function parseCardTextHtml(
       }
 
       const t = token === "right_arrow" ? "conditional" : token;
+      if (ER_INLINE_SVG_TOKENS.has(t)) {
+        return BUCK_ICON_HTML;
+      }
       if (ER_CORE_FONT_TOKENS.has(t)) {
         return `<span class="core-${t}"></span>`;
       }

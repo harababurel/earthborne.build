@@ -20,6 +20,12 @@ describe("parseCardTextHtml", () => {
     );
   });
 
+  it("maps [buck] to an inline Earthborne icon", () => {
+    expect(parseCardTextHtml("[buck]")).toContain('<span class="core-buck">');
+    expect(parseCardTextHtml("[buck]")).toContain("<svg");
+    expect(parseCardTextHtml("[buck]")).toContain('fill="currentColor"');
+  });
+
   it("maps stat tokens to bold colored text", () => {
     expect(parseCardTextHtml("[FIT]")).toBe('<b class="color-FIT">FIT</b>');
     expect(parseCardTextHtml("[SPI]")).toBe('<b class="color-SPI">SPI</b>');
