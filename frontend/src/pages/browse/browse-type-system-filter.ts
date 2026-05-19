@@ -24,10 +24,7 @@ export function browseTypeSystemFilter(tab: CardTypeTab): Filter {
     case "ranger":
       return (card: Card) => card.category != null;
     case "path":
-      return (card: Card) =>
-        card.type_code === "path" ||
-        ((card.type_code === "being" || card.type_code === "feature") &&
-          card.category == null);
+      return (card: Card) => card.category_id === "path";
     case "location":
       return (card: Card) => card.category_id === "location";
     case "weather":

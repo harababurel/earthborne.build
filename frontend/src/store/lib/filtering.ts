@@ -33,14 +33,7 @@ import type { ResolvedDeck } from "./types";
 
 // Non-ranger cards in ER are path/campaign cards.
 export function filterPathCards(card: Card) {
-  return ![
-    "gear",
-    "attachment",
-    "moment",
-    "role",
-    "aspect",
-    "attribute",
-  ].includes(card.type_code);
+  return card.category_id !== "ranger";
 }
 
 export function filterOfficial(card: Card) {
