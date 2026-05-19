@@ -40,6 +40,7 @@ export function CardIcons(props: Props) {
       : (IRREGULAR_TOKEN_PLURALS[tokenKey] ?? dbPlural ?? `${tokenName}s`);
   const showToken = countVal != null && tokenName;
   const showPresence = card.presence != null;
+  const showGuide = card.campaign_guide_entry != null;
 
   return (
     <div className={cx(css["icons"], className)}>
@@ -47,8 +48,24 @@ export function CardIcons(props: Props) {
         health={card.harm_threshold}
         sanity={card.progress_threshold}
       />
-      {(showToken || showPresence) && (
+      {(showToken || showPresence || showGuide) && (
         <div className={css["auxiliary-icons"]}>
+          {showGuide && (
+            <div
+              className={cx(
+                css["token-box"],
+                css["guide-box"],
+                css[aspectColorClass],
+              )}
+            >
+              <div className={css["guide-icon"]}>
+                <i className="core-guide" />
+              </div>
+              <div className={css["guide-value"]}>
+                {card.campaign_guide_entry}
+              </div>
+            </div>
+          )}
           {showToken && (
             <div className={cx(css["token-box"], css[aspectColorClass])}>
               <div className={css["token-count"]}>

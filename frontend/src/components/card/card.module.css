@@ -712,4 +712,44 @@
   .token-box.color-neutral .token-label {
     color: #c46a1f;
   }
+
+  .token-box.guide-box {
+    width: calc(2.2 * var(--card-text-size, var(--text-sm)));
+    height: calc(2.2 * var(--card-text-size, var(--text-sm)));
+    justify-content: center;
+    align-items: center;
+    gap: 0.05rem;
+    padding-top: 1.5px;
+  }
+
+  .guide-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    line-height: 1;
+  }
+
+  .guide-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+    line-height: 1;
+  }
+
+  .token-box.color-spi .guide-icon {
+    color: white;
+  }
+
+  .token-box.color-neutral .guide-icon {
+    color: #c46a1f;
+  }
+
+  .token-box.color-neutral .guide-value {
+    color: #c46a1f;
+  }
 }
