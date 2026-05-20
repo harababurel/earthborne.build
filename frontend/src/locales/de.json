@@ -665,7 +665,8 @@
         "treachery": "Verrat",
         "role": "Ermittler",
         "role_one": "Ermittler",
-        "role_other": "Ermittler"
+        "role_other": "Ermittler",
+        "weather": "Wetter"
       },
       "undo": "Rückgängig",
       "unique": "Einzigartig",

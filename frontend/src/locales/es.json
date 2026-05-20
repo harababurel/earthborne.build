@@ -649,7 +649,8 @@
         "treachery": "Traición",
         "role": "Investigador",
         "role_one": "Investigador",
-        "role_other": "Investigadores"
+        "role_other": "Investigadores",
+        "weather": "Clima"
       },
       "undo": "Deshacer",
       "unique": "Única",

@@ -661,7 +661,8 @@
         "treachery": "음모",
         "role": "조사자",
         "role_one": "조사자",
-        "role_other": "조사자"
+        "role_other": "조사자",
+        "weather": "날씨"
       },
       "undo": "되돌리기",
       "unique": "고유",

@@ -586,7 +586,8 @@
         "treachery": "Traîtrise",
         "role": "Investigateur",
         "role_one": "Investigateur",
-        "role_other": "Investigateurs"
+        "role_other": "Investigateurs",
+        "weather": "Météo"
       },
       "undo": "Annuler",
       "unique": "Unique",

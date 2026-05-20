@@ -665,7 +665,8 @@
         "treachery": "诡计",
         "role": "调查员",
         "role_one": "调查员",
-        "role_other": "调查员"
+        "role_other": "调查员",
+        "weather": "天气"
       },
       "undo": "撤销",
       "unique": "独特",

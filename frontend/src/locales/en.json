@@ -268,7 +268,8 @@
         "role": "Ranger",
         "role_one": "Ranger",
         "role_other": "Rangers",
-        "stat": "Stat"
+        "stat": "Stat",
+        "weather": "Weather"
       },
       "undo": "Undo",
       "unique": "Unique",

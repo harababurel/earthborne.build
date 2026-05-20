@@ -658,7 +658,8 @@
         "treachery": "Podstęp",
         "role": "Badacz",
         "role_one": "Badacz",
-        "role_other": "Badaczy"
+        "role_other": "Badaczy",
+        "weather": "Pogoda"
       },
       "undo": "Anuluj",
       "unique": "Unikatowa",
