@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import type { CardWithRelations, ResolvedCard } from "@/store/lib/types";
 import { selectPrintingsForCard } from "@/store/selectors/shared";
+import { cardIllustrator } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { Printing } from "../printing";
 import { Button } from "../ui/button";
@@ -34,8 +35,9 @@ export function CardMeta(props: Props) {
   const showCopyId = useStore(
     (state) => state.settings.devModeEnabled && size !== "tooltip",
   );
+  const useMiniRoleArt = useStore((state) => state.settings.useMiniRoleArt);
 
-  const illustrator = resolvedCard.card.illustrator;
+  const illustrator = cardIllustrator(resolvedCard.card, useMiniRoleArt);
 
   return (
     <footer className={cx(css["meta"], css[size])}>

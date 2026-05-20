@@ -1,7 +1,9 @@
 import type { Card } from "@earthborne-build/shared";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
+import { useStore } from "@/store";
 import {
+  cardFrontImageUrl,
   getCardColor,
   isLandscapeCard,
   thumbnailUrl,
@@ -21,10 +23,14 @@ export const CardThumbnail = memo(
   (props: Props) => {
     const { card, className, suffix } = props;
     const { t } = useTranslation();
+    const useMiniRoleArt = useStore((state) => state.settings.useMiniRoleArt);
 
     const colorCls = getCardColor(card);
 
     const imageCode = `${card.code}${suffix ?? ""}`;
+    const src = suffix
+      ? thumbnailUrl(imageCode)
+      : cardFrontImageUrl(card, useMiniRoleArt);
 
     return (
       <div
@@ -39,12 +45,12 @@ export const CardThumbnail = memo(
         data-testid="card-thumbnail"
         data-component="card-thumbnail"
       >
-        <img
-          alt={t("card_view.thumbnail", { code: card.code })}
-          src={thumbnailUrl(imageCode)}
-        />
+        <img alt={t("card_view.thumbnail", { code: card.code })} src={src} />
       </div>
     );
   },
-  (prev, next) => prev.card.code === next.card.code,
+  (prev, next) =>
+    prev.card.code === next.card.code &&
+    prev.card.alt_image_url === next.card.alt_image_url &&
+    prev.suffix === next.suffix,
 );

@@ -7,6 +7,7 @@ import { selectBackCard } from "@/store/selectors/shared";
 import {
   cardBackType,
   cardBackTypeUrl,
+  cardFrontImageUrl,
   cardImageUrl,
   imageUrl,
   isLandscapeCard,
@@ -58,6 +59,7 @@ export function CardScanControlled(props: Props) {
   const { t } = useTranslation();
   const scanRef = useRef<HTMLDivElement>(null);
 
+  const useMiniRoleArt = useStore((state) => state.settings.useMiniRoleArt);
   const backCard = useStore((state) => selectBackCard(state, card.code));
   const backType = backCard ? "card" : cardBackType(card);
 
@@ -81,7 +83,12 @@ export function CardScanControlled(props: Props) {
       : false;
 
   // Fan-made content uses card urls for sides, these take precedence.
-  const frontUrl = suffix === "b" ? card.back_image_url : card.image_url;
+  const frontImageSrc =
+    suffix === "b"
+      ? card.back_image_url
+        ? cardImageUrl(card.back_image_url)
+        : imageUrl(imageCode)
+      : cardFrontImageUrl(card, useMiniRoleArt);
   const backUrl = backCard
     ? backCard.image_url
     : suffix === "b"
@@ -119,7 +126,7 @@ export function CardScanControlled(props: Props) {
           draggable={draggable}
           lazy={lazy}
           sideways={isSideways}
-          url={frontUrl ? cardImageUrl(frontUrl) : imageUrl(imageCode)}
+          url={frontImageSrc}
         />
       </div>
       {!preventFlip && (

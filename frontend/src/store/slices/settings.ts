@@ -65,6 +65,7 @@ export function getInitialSettings(): SettingsState {
     cardShowCollectionNumber: true,
     cardSize: "standard",
     cardShowThumbnail: true,
+    useMiniRoleArt: false,
     colorScheme: "botanical",
     collection: {},
     flags: {},

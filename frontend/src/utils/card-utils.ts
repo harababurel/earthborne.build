@@ -88,6 +88,37 @@ export function cardImageUrl(source: string) {
   return imageUrl(source);
 }
 
+export function cardFrontImageSource(card: Card, useMiniRoleArt: boolean) {
+  if (
+    useMiniRoleArt &&
+    card.type_code === "role" &&
+    card.category_id === "ranger" &&
+    card.alt_image_url
+  ) {
+    return card.alt_image_url;
+  }
+
+  return card.image_url ?? card.code;
+}
+
+export function cardFrontImageUrl(card: Card, useMiniRoleArt: boolean) {
+  return cardImageUrl(cardFrontImageSource(card, useMiniRoleArt));
+}
+
+export function cardIllustrator(card: Card, useMiniRoleArt: boolean) {
+  if (
+    useMiniRoleArt &&
+    card.type_code === "role" &&
+    card.category_id === "ranger" &&
+    card.alt_image_url &&
+    card.alt_illustrator
+  ) {
+    return card.alt_illustrator;
+  }
+
+  return card.illustrator;
+}
+
 export function thumbnailUrl(code: string) {
   return `${import.meta.env.VITE_CARD_IMAGE_URL}/${code}`;
 }

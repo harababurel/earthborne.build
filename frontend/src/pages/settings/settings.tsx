@@ -25,6 +25,7 @@ import { DevModeSetting } from "./dev-mode";
 import { FontSizeSetting } from "./font-size";
 import { ListSettings } from "./list-settings";
 import { LocaleSetting } from "./locale-setting";
+import { MiniRoleArtSetting } from "./mini-role-art-setting";
 import { Section } from "./section";
 import css from "./settings.module.css";
 import { ShowAllCardsSetting } from "./show-all-cards";
@@ -158,6 +159,10 @@ function SettingsInner({
                   setSettings={setSettings}
                 />
                 <CardDisplaySettings
+                  settings={settings}
+                  setSettings={setSettings}
+                />
+                <MiniRoleArtSetting
                   settings={settings}
                   setSettings={setSettings}
                 />

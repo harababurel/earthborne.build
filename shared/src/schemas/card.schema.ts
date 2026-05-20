@@ -91,6 +91,8 @@ export const CardSchema = z.object({
   is_expert: z.boolean().nullish(),
   illustrator: z.string().nullish(),
   image_url: z.string().nullish(),
+  alt_image_url: z.string().nullish(),
+  alt_illustrator: z.string().nullish(),
   back_image_url: z.string().nullish(),
   double_sided: z.boolean().nullish(),
 });

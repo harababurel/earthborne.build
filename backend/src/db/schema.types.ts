@@ -88,6 +88,9 @@ export interface Card {
   text: string | null;
   flavor: string | null;
   image_rect: string | null;
+  alt_imagesrc: string | null;
+  alt_image_rect: string | null;
+  alt_illustrator: string | null;
   back_imagesrc: string | null;
   back_image_rect: string | null;
   sun_challenge: string | null;

@@ -33,6 +33,7 @@ export type SettingsState = {
   cardShowThumbnail: boolean;
   cardSize: "sm" | "standard";
   cardSkillIconsDisplay: "simple" | "as_printed";
+  useMiniRoleArt: boolean;
   colorScheme: ColorScheme;
   collection: Record<string, boolean>;
   defaultStorageProvider: StorageProvider;

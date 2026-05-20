@@ -1,5 +1,10 @@
+import type { Card } from "@earthborne-build/shared";
 import { describe, expect, it } from "vitest";
-import { parseCardTextHtml } from "./card-utils";
+import {
+  cardFrontImageSource,
+  cardIllustrator,
+  parseCardTextHtml,
+} from "./card-utils";
 
 describe("parseCardTextHtml", () => {
   it("maps [right_arrow] to core-conditional span", () => {
@@ -69,3 +74,60 @@ describe("parseCardTextHtml", () => {
     );
   });
 });
+
+describe("cardFrontImageSource", () => {
+  it("uses standard art when mini role art is disabled", () => {
+    expect(cardFrontImageSource(miniRoleCard(), false)).toBe("01037");
+  });
+
+  it("uses alternate art for ranger role cards when mini role art is enabled", () => {
+    expect(cardFrontImageSource(miniRoleCard(), true)).toBe("01037a");
+  });
+
+  it("does not use alternate art for non-role cards", () => {
+    expect(
+      cardFrontImageSource(
+        {
+          ...miniRoleCard(),
+          code: "01039",
+          type_code: "gear",
+        },
+        true,
+      ),
+    ).toBe("01039");
+  });
+
+  it("falls back to standard art when no alternate art is present", () => {
+    expect(
+      cardFrontImageSource(
+        {
+          ...miniRoleCard(),
+          alt_image_url: null,
+        },
+        true,
+      ),
+    ).toBe("01037");
+  });
+});
+
+describe("cardIllustrator", () => {
+  it("uses alternate illustrator only when alternate role art is active", () => {
+    const card = miniRoleCard();
+
+    expect(cardIllustrator(card, false)).toBe("Standard Artist");
+    expect(cardIllustrator(card, true)).toBe("Alt Artist");
+  });
+});
+
+function miniRoleCard(): Card {
+  return {
+    code: "01037",
+    name: "Undaunted Seeker",
+    pack_code: "ebr",
+    type_code: "role",
+    category_id: "ranger",
+    illustrator: "Standard Artist",
+    alt_image_url: "01037a",
+    alt_illustrator: "Alt Artist",
+  } as Card;
+}

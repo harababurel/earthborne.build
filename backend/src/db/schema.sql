@@ -98,6 +98,9 @@ CREATE TABLE card (
   text TEXT,
   flavor TEXT,
   image_rect TEXT,
+  alt_imagesrc TEXT,
+  alt_image_rect TEXT,
+  alt_illustrator TEXT,
   back_imagesrc TEXT,
   back_image_rect TEXT,
   sun_challenge TEXT,
@@ -127,4 +130,5 @@ INSERT INTO "schema_migrations" (version) VALUES
   ('20260424000000'),
   ('20260430000000'),
   ('20260505000000'),
-  ('20260505010000');
+  ('20260505010000'),
+  ('20260520000000');

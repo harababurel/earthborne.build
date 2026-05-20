@@ -365,6 +365,9 @@ interface RawCard {
   back_imagesrc?: string;
   back_image_rect?: number[];
   image_rect?: number[];
+  alt_imagesrc?: string;
+  alt_image_rect?: number[];
+  alt_illustrator?: string;
   sun_challenge?: string;
   mountain_challenge?: string;
   crest_challenge?: string;
@@ -416,6 +419,10 @@ function normalizeCard(
     text: c.text ?? null,
     flavor: c.flavor ?? null,
     image_rect: c.image_rect != null ? JSON.stringify(c.image_rect) : null,
+    alt_imagesrc: c.alt_imagesrc ?? null,
+    alt_image_rect:
+      c.alt_image_rect != null ? JSON.stringify(c.alt_image_rect) : null,
+    alt_illustrator: c.alt_illustrator ?? null,
     back_imagesrc: backImageSource?.imagesrc ?? null,
     back_image_rect:
       backImageSource?.image_rect != null

@@ -46,6 +46,8 @@ type RawCard = {
   id: string;
   imagesrc?: string;
   image_rect?: number[];
+  alt_imagesrc?: string;
+  alt_image_rect?: number[];
   back_imagesrc?: string;
   back_image_rect?: number[];
 };
@@ -197,6 +199,16 @@ async function loadCardEntries(dataDir: string): Promise<CardEntry[]> {
         if (c.imagesrc) entry.imagesrc = c.imagesrc;
         if (c.image_rect) entry.image_rect = c.image_rect;
         entries.push(entry);
+
+        if (c.alt_imagesrc || c.alt_image_rect) {
+          const altEntry: CardEntry = {
+            code: `${c.id}a`,
+            packId: remappedPackId,
+          };
+          if (c.alt_imagesrc) altEntry.imagesrc = c.alt_imagesrc;
+          if (c.alt_image_rect) altEntry.image_rect = c.alt_image_rect;
+          entries.push(altEntry);
+        }
 
         const backImageSource = inferBackImageSource(c, backImageSources);
         if (backImageSource) {

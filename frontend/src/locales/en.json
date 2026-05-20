@@ -1100,6 +1100,8 @@
         "card_size_standard": "Standard",
         "font_size": "Font size",
         "font_size_preview": "The rangers ventured deeper into the wilderness, each step carrying them further from the familiar world they had left behind, guided only by their skills and the bonds they had forged.",
+        "mini_role_art": "Use mini role art",
+        "mini_role_art_help": "When this is checked, ranger role cards with alternate mini art will display that art instead of the standard card art.",
         "show_card_modal_popular_decks": "Show popular decks in card modals",
         "show_card_modal_popular_decks_help": "When this is checked, popular decks containing the card will be shown in the card modal.",
         "sort_ignore_punctuation": "Sort ignores punctuation",
