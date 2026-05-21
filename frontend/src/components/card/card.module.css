@@ -508,6 +508,11 @@
     font-weight: 400;
   }
 
+  .text :global(.card-objective-text .card-flavor-text),
+  .challenge-text :global(.card-objective-text .card-flavor-text) {
+    color: inherit;
+  }
+
   .text :global(.card-location-row) {
     display: grid;
     grid-template-columns: repeat(var(--location-cols), 1fr);
