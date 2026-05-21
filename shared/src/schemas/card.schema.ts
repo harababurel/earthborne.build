@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  APPROACH_ORDER,
   ASPECT_ORDER,
   BACKGROUND_TYPES,
   CARD_CATEGORY_IDS,
@@ -47,6 +48,7 @@ export const CardSchema = z.object({
   approach_reason: z.number().nullish(),
   approach_exploration: z.number().nullish(),
   approach_connection: z.number().nullish(),
+  approach_icons: z.array(z.enum(APPROACH_ORDER)).nullish(),
 
   // Thresholds (path cards, beings, features, locations)
   presence: z.number().nullish(),

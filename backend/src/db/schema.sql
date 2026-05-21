@@ -84,6 +84,7 @@ CREATE TABLE card (
   approach_reason INTEGER,
   approach_exploration INTEGER,
   approach_connection INTEGER,
+  approach_icons TEXT,
   aspect_awareness INTEGER,
   aspect_fitness INTEGER,
   aspect_focus INTEGER,
@@ -131,4 +132,5 @@ INSERT INTO "schema_migrations" (version) VALUES
   ('20260430000000'),
   ('20260505000000'),
   ('20260505010000'),
-  ('20260520000000');
+  ('20260520000000'),
+  ('20260521000000');

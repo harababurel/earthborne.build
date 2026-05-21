@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import { APPROACH_ORDER, type ApproachKey } from "@earthborne-build/shared";
 import type { Database } from "../db.ts";
 
 // Area IDs from rangers-card-data map to frontend enum values.
@@ -37,6 +38,7 @@ type CardRow = {
   approach_reason: number | null;
   approach_exploration: number | null;
   approach_connection: number | null;
+  approach_icons: string | null;
   aspect_awareness: number | null;
   aspect_fitness: number | null;
   aspect_focus: number | null;
@@ -102,6 +104,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.approach_reason",
       "card.approach_exploration",
       "card.approach_connection",
+      "card.approach_icons",
       "card.aspect_awareness",
       "card.aspect_fitness",
       "card.aspect_focus",
@@ -172,6 +175,7 @@ export async function getCardByCode(
       "card.approach_reason",
       "card.approach_exploration",
       "card.approach_connection",
+      "card.approach_icons",
       "card.aspect_awareness",
       "card.aspect_fitness",
       "card.aspect_focus",
@@ -242,6 +246,7 @@ function transformCard(row: CardRow): {
   approach_reason: number | null;
   approach_exploration: number | null;
   approach_connection: number | null;
+  approach_icons: ApproachKey[] | null;
   presence: number | null;
   harm_threshold: string | number | null;
   progress_threshold: string | number | null;
@@ -323,6 +328,7 @@ function transformCard(row: CardRow): {
     approach_reason: row.approach_reason,
     approach_exploration: row.approach_exploration,
     approach_connection: row.approach_connection,
+    approach_icons: parseApproachIcons(row.approach_icons),
     presence: row.presence,
     harm_threshold: normalizeThreshold(row.harm),
     progress_threshold: normalizeThreshold(row.progress),
@@ -356,6 +362,27 @@ function transformCard(row: CardRow): {
     path_deck_assembly: row.path_deck_assembly,
     arrival_setup: row.arrival_setup,
   };
+}
+
+function parseApproachIcons(value: string | null): ApproachKey[] | null {
+  if (value == null) return null;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(value);
+  } catch {
+    return null;
+  }
+
+  if (!Array.isArray(parsed)) return null;
+
+  const validApproaches = new Set<string>(APPROACH_ORDER);
+  const icons = parsed.filter(
+    (approach): approach is ApproachKey =>
+      typeof approach === "string" && validApproaches.has(approach),
+  );
+
+  return icons.length === parsed.length ? icons : null;
 }
 
 export function parseKeywords(text: string | null): string[] {

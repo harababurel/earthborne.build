@@ -39,6 +39,7 @@ export {
 } from "./dtos/sealed-deck-response.schema.ts";
 
 export {
+  cardApproachIconOrder,
   cardApproachIcons,
   cardAspectRequirement,
   cardEnergyCost,

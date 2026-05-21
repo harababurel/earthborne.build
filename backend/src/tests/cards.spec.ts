@@ -19,7 +19,7 @@ describe("GET /v2/public/cards/:code", () => {
     expect(res.status).toBe(404);
   });
 
-  test("returns alternate image metadata when present", async ({
+  test("returns alternate image and approach icon metadata when present", async ({
     dependencies,
   }) => {
     await dependencies.db
@@ -51,6 +51,9 @@ describe("GET /v2/public/cards/:code", () => {
         category_id: "ranger",
         type_id: "role",
         name: "Undaunted Seeker",
+        approach_conflict: 1,
+        approach_reason: 1,
+        approach_icons: '["reason","conflict"]',
         alt_imagesrc: "https://example.invalid/sheet.jpg",
         alt_image_rect: "[29,10,7]",
         alt_illustrator: "Mini Ranger Artist",
@@ -62,9 +65,11 @@ describe("GET /v2/public/cards/:code", () => {
     const body = (await res.json()) as {
       alt_image_url: string | null;
       alt_illustrator: string | null;
+      approach_icons: string[] | null;
     };
 
     expect(body.alt_image_url).toBe("01037a");
     expect(body.alt_illustrator).toBe("Mini Ranger Artist");
+    expect(body.approach_icons).toEqual(["reason", "conflict"]);
   });
 });

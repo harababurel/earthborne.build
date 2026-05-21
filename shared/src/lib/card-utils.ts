@@ -1,5 +1,9 @@
 import type { Card } from "../schemas/card.schema.ts";
-import type { ApproachKey, AspectKey } from "./constants.ts";
+import {
+  APPROACH_ORDER,
+  type ApproachKey,
+  type AspectKey,
+} from "./constants.ts";
 
 export function cardEnergyCost(card: Card): number {
   return card.energy_cost ?? 0;
@@ -26,4 +30,13 @@ export function cardApproachIcons(
   if (card.approach_exploration) icons.exploration = card.approach_exploration;
   if (card.approach_connection) icons.connection = card.approach_connection;
   return icons;
+}
+
+export function cardApproachIconOrder(card: Card): ApproachKey[] {
+  if (card.approach_icons?.length) return card.approach_icons;
+
+  const icons = cardApproachIcons(card);
+  return APPROACH_ORDER.flatMap((approach) =>
+    Array.from({ length: icons[approach] ?? 0 }, () => approach),
+  );
 }

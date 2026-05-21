@@ -10,6 +10,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import type { ApproachKey } from "@earthborne-build/shared";
 import { sql, type Transaction } from "kysely";
 import { getDatabase } from "../db/db.ts";
 import type { DB } from "../db/schema.types.ts";
@@ -348,6 +349,7 @@ interface RawCard {
   approach_reason?: number;
   approach_exploration?: number;
   approach_connection?: number;
+  approach_icons?: ApproachKey[];
   awareness?: number;
   fitness?: number;
   focus?: number;
@@ -404,6 +406,8 @@ function normalizeCard(
     approach_reason: c.approach_reason ?? null,
     approach_exploration: c.approach_exploration ?? null,
     approach_connection: c.approach_connection ?? null,
+    approach_icons:
+      c.approach_icons != null ? JSON.stringify(c.approach_icons) : null,
     aspect_awareness: c.awareness ?? null,
     aspect_fitness: c.fitness ?? null,
     aspect_focus: c.focus ?? null,
