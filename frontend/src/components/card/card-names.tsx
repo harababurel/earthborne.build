@@ -27,7 +27,6 @@ export function CardNames(props: Props) {
         className={css["name-inner"]}
         card={card}
         cardLevelDisplay={settings.cardLevelDisplay}
-        cardShowCollectionNumber={settings.cardShowCollectionNumber}
       >
         {card.is_unique && (
           <span className={css["unique"]}>
