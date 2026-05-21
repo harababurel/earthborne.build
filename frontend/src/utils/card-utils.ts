@@ -1,5 +1,6 @@
 import type { Card } from "@earthborne-build/shared";
 import type { TFunction } from "i18next";
+import { locationSymbolUrls } from "@/assets/symbols";
 import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import { assert } from "./assert";
@@ -172,13 +173,7 @@ export function parseCardTextHtml(
   parsed = parsed.replace(/(<l>[^<]*<\/l>)+/g, (group) => {
     const items = [...group.matchAll(/<l>([^<]*)<\/l>/g)].map((m) => m[1]);
     const cells = items
-      .map((content) => {
-        const formatted = content.replace(
-          /(^|\s)(\S)/g,
-          '$1<span class="card-location-initial">$2</span>',
-        );
-        return `<span class="card-location-cell">${formatted}</span>`;
-      })
+      .map((content) => formatLocationCellHtml(content))
       .join("");
     return `<span class="card-location-row" style="--location-cols: ${items.length}">${cells}</span>`;
   });
@@ -194,6 +189,20 @@ export function parseCardTextHtml(
   }
 
   return parsed;
+}
+
+function formatLocationCellHtml(content: string) {
+  const formatted = content.replace(
+    /(^|\s)(\S)/g,
+    '$1<span class="card-location-initial">$2</span>',
+  );
+  const symbolUrl =
+    locationSymbolUrls[content as keyof typeof locationSymbolUrls];
+  const symbol = symbolUrl
+    ? `<img class="card-location-symbol" src="${symbolUrl}" alt="" aria-hidden="true" loading="lazy">`
+    : "";
+
+  return `<span class="card-location-cell">${symbol}<span class="card-location-name">${formatted}</span></span>`;
 }
 
 export function parseCustomizationTextHtml(customizationText: string) {

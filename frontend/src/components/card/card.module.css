@@ -528,7 +528,17 @@
   }
 
   .text :global(.card-location-cell) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.25em;
     padding: 0 0.25em;
+  }
+
+  .text :global(.card-location-symbol) {
+    width: min(4em, 65%);
+    height: auto;
   }
 
   .text :global(.card-location-initial) {

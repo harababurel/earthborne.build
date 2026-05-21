@@ -81,6 +81,19 @@ describe("parseCardTextHtml", () => {
       "line 1<hr class='break'>line 2",
     );
   });
+
+  it("renders known location symbols above location names", () => {
+    const result = parseCardTextHtml("<l>Atrox Mountain</l><l>Unknown</l>");
+
+    expect(result).toContain('class="card-location-symbol"');
+    expect(result).toContain("atrox-mountain.svg");
+    expect(result.indexOf('class="card-location-symbol"')).toBeLessThan(
+      result.indexOf('class="card-location-name"'),
+    );
+    expect(result).toContain(
+      '<span class="card-location-cell"><span class="card-location-name"><span class="card-location-initial">U</span>nknown</span></span>',
+    );
+  });
 });
 
 describe("cardFrontImageSource", () => {
