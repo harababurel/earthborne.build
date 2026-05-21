@@ -64,9 +64,20 @@ import theUndergroveUrl from "./locations/the-undergrove.svg";
 import theVerdantSphereUrl from "./locations/the-verdant-sphere.svg";
 import watchersRockUrl from "./locations/watchers-rock.svg";
 import whiteSkyUrl from "./locations/white-sky.svg";
+import ancientRuinsTerrainUrl from "./path-terrain/ancient-ruins.svg";
+import caveSystemUrl from "./path-terrain/cave-system.svg";
+import deepRootsUrl from "./path-terrain/deep-roots.svg";
+import floodedRuinsUrl from "./path-terrain/flooded-ruins.svg";
+import fungalForestUrl from "./path-terrain/fungal-forest.svg";
+import grasslandUrl from "./path-terrain/grassland.svg";
 import lakeshoreUrl from "./path-terrain/lakeshore.svg";
 import mountainPassUrl from "./path-terrain/mountain-pass.svg";
+import nimbusTerrainUrl from "./path-terrain/nimbus.svg";
 import oldGrowthUrl from "./path-terrain/old-growth.svg";
+import ravineUrl from "./path-terrain/ravine.svg";
+import riverUrl from "./path-terrain/river.svg";
+import swampUrl from "./path-terrain/swamp.svg";
+import thoroughfareUrl from "./path-terrain/thoroughfare.svg";
 import woodsUrl from "./path-terrain/woods.svg";
 
 export const locationSymbolUrls = {
@@ -139,9 +150,20 @@ export const locationSymbolUrls = {
 } as const;
 
 export const pathTerrainSymbolUrls = {
+  "Ancient Ruins": ancientRuinsTerrainUrl,
+  "Cave System": caveSystemUrl,
+  "Deep Roots": deepRootsUrl,
+  "Flooded Ruins": floodedRuinsUrl,
+  "Fungal Forest": fungalForestUrl,
+  Grassland: grasslandUrl,
   Lakeshore: lakeshoreUrl,
   "Mountain Pass": mountainPassUrl,
+  Nimbus: nimbusTerrainUrl,
   "Old-growth": oldGrowthUrl,
+  Ravine: ravineUrl,
+  River: riverUrl,
+  Swamp: swampUrl,
+  Thoroughfare: thoroughfareUrl,
   Woods: woodsUrl,
 } as const;
 
