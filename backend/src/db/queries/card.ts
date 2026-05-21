@@ -4,8 +4,8 @@ import type { Database } from "../db.ts";
 
 // Area IDs from rangers-card-data map to frontend enum values.
 const AREA_MAP: Record<string, "within_reach" | "along_the_way"> = {
-  reach: "within_reach",
-  along: "along_the_way",
+  within_reach: "within_reach",
+  along_the_way: "along_the_way",
 };
 
 // card_set.id values that map to specific ranger deck categories.
