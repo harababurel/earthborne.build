@@ -1,6 +1,9 @@
 import type { Card } from "@earthborne-build/shared";
 import type { TFunction } from "i18next";
-import { locationSymbolUrls } from "@/assets/symbols";
+import {
+  locationSymbolUrls,
+  locationSymbolUrlsByNormalizedName,
+} from "@/assets/symbols";
 import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import { assert } from "./assert";
@@ -197,7 +200,8 @@ function formatLocationCellHtml(content: string) {
     '$1<span class="card-location-initial">$2</span>',
   );
   const symbolUrl =
-    locationSymbolUrls[content as keyof typeof locationSymbolUrls];
+    locationSymbolUrls[content as keyof typeof locationSymbolUrls] ??
+    locationSymbolUrlsByNormalizedName[content.toLowerCase()];
   const symbol = symbolUrl
     ? `<img class="card-location-symbol" src="${symbolUrl}" alt="" aria-hidden="true" loading="lazy">`
     : "";

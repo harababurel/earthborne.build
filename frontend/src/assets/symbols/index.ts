@@ -85,3 +85,18 @@ export const pathTerrainSymbolUrls = {
 
 export type LocationSymbolName = keyof typeof locationSymbolUrls;
 export type PathTerrainSymbolName = keyof typeof pathTerrainSymbolUrls;
+
+// Normalized map for case-insensitive lookup with optional "The " prefix.
+export const locationSymbolUrlsByNormalizedName: Record<string, string> =
+  Object.fromEntries(
+    Object.entries(locationSymbolUrls).flatMap(([name, url]) => {
+      const lower = name.toLowerCase();
+      const withoutThe = lower.startsWith("the ") ? lower.slice(4) : null;
+      return withoutThe
+        ? [
+            [lower, url],
+            [withoutThe, url],
+          ]
+        : [[lower, url]];
+    }),
+  );
