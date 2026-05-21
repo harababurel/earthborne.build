@@ -1,5 +1,8 @@
 import type { Card } from "@earthborne-build/shared";
-import { locationSymbolUrlsByNormalizedName } from "@/assets/symbols";
+import {
+  locationSymbolUrlsByNormalizedName,
+  pathCardSymbolUrlBySetCode,
+} from "@/assets/symbols";
 import { getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import css from "./card-icon.module.css";
@@ -25,10 +28,19 @@ export function CardIcon(props: Props) {
     );
   }
 
-  if (
-    (card.category_id != null && card.category_id !== "ranger") ||
-    card.type_code === "aspect"
-  ) {
+  if (card.category_id != null && card.category_id !== "ranger") {
+    const symbolUrl = card.set_code
+      ? pathCardSymbolUrlBySetCode[card.set_code]
+      : undefined;
+    if (!symbolUrl) return null;
+    return (
+      <div className={cx(css["icon_location"], className)}>
+        <img src={symbolUrl} alt="" aria-hidden />
+      </div>
+    );
+  }
+
+  if (card.type_code === "aspect") {
     return null;
   }
 

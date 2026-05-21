@@ -170,6 +170,40 @@ export const pathTerrainSymbolUrls = {
 export type LocationSymbolName = keyof typeof locationSymbolUrls;
 export type PathTerrainSymbolName = keyof typeof pathTerrainSymbolUrls;
 
+// Maps card.set_code values to a symbol URL for display on path cards.
+// Terrain sets → path terrain SVG; pivotal-location sets → location SVG.
+export const pathCardSymbolUrlBySetCode: Record<string, string> = {
+  // path terrain sets
+  ancient_ruins: ancientRuinsTerrainUrl,
+  cave_system: caveSystemUrl,
+  deep_roots: deepRootsUrl,
+  flooded_ruins: floodedRuinsUrl,
+  fungal_forest: fungalForestUrl,
+  grassland: grasslandUrl,
+  lakeshore: lakeshoreUrl,
+  mountain_pass: mountainPassUrl,
+  old_growth: oldGrowthUrl,
+  ravine: ravineUrl,
+  river: riverUrl,
+  swamp: swampUrl,
+  woods: woodsUrl,
+  // pivotal-location sets (use the matching location SVG)
+  arboretum_of_memory: arboretumOfMemoryUrl,
+  branch: branchUrl,
+  fractured_wall: theFracturedWallUrl,
+  lone_tree_station: loneTreeStationUrl,
+  marsh_of_rebirth: marshOfRebirthUrl,
+  meadow: meadowUrl,
+  mycelial_conclave: mycelialConclaveUrl,
+  northern_outpost: northernOutpostUrl,
+  spire: spireUrl,
+  the_cage: theCageUrl,
+  the_chimney: theChimneyUrl,
+  tumbledown: theTumbledownUrl,
+  verdant_sphere: theVerdantSphereUrl,
+  white_sky: whiteSkyUrl,
+};
+
 // Normalized map for case-insensitive lookup with optional "The " prefix.
 export const locationSymbolUrlsByNormalizedName: Record<string, string> =
   Object.fromEntries(
