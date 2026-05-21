@@ -1,9 +1,15 @@
 import type { Card } from "@earthborne-build/shared";
-import { IRREGULAR_TOKEN_PLURALS } from "@earthborne-build/shared";
+import {
+  APPROACH_ORDER,
+  type ApproachKey,
+  cardApproachIcons,
+  IRREGULAR_TOKEN_PLURALS,
+} from "@earthborne-build/shared";
 import { useTranslation } from "react-i18next";
 import { getCardColor, numericalStr } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardHealth } from "../card-health";
+import { ApproachIcon } from "../icons/approach-icon";
 import { PresenceIcon } from "../icons/health-icons";
 
 import css from "./card.module.css";
@@ -18,6 +24,8 @@ export function CardIcons(props: Props) {
   const { t } = useTranslation();
 
   const aspectColorClass = getCardColor(card).toLowerCase();
+
+  const approachIcons = cardApproachIcons(card);
 
   const countVal = card.token_count;
   const countIsPerRanger =
@@ -44,6 +52,23 @@ export function CardIcons(props: Props) {
 
   return (
     <div className={cx(css["icons"], className)}>
+      <div className={css["approach-icons"]}>
+        {APPROACH_ORDER.filter((a) => approachIcons[a]).map((approach) => {
+          const count = approachIcons[approach] ?? 0;
+          return Array.from(
+            { length: count },
+            (_, i) => `${approach}-${i}`,
+          ).map((key) => (
+            <div
+              key={key}
+              className={css["approach-icon-box"]}
+              title={t(`common.skill.${approach}`)}
+            >
+              <ApproachIcon approach={approach as ApproachKey} />
+            </div>
+          ));
+        })}
+      </div>
       <CardHealth
         health={card.harm_threshold}
         sanity={card.progress_threshold}

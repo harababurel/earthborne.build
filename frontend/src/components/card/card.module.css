@@ -374,6 +374,24 @@
     gap: var(--card-spacing);
   }
 
+  .approach-icons {
+    display: flex;
+    gap: 2px;
+  }
+
+  .approach-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(2.2 * var(--card-text-size, var(--text-sm)));
+    height: calc(2.2 * var(--card-text-size, var(--text-sm)));
+    font-size: calc(1.9 * var(--card-text-size, var(--text-sm)));
+    border: 1.2px solid #d2ae7b;
+    background-color: #5a6472;
+    color: #e8ecf0;
+    flex: 0 0 auto;
+  }
+
   .auxiliary-icons {
     display: flex;
     align-items: center;
