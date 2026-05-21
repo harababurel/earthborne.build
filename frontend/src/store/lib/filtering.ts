@@ -36,6 +36,11 @@ export function filterPathCards(card: Card) {
   return card.category_id !== "ranger";
 }
 
+// "Ranger cards" excludes aspect cards, which have their own dedicated section.
+export function filterRangerCards(card: Card) {
+  return card.category_id === "ranger" && card.type_code !== "aspect";
+}
+
 export function filterOfficial(card: Card) {
   return official(card);
 }

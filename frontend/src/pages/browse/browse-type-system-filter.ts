@@ -1,4 +1,5 @@
 import type { Card } from "@earthborne-build/shared";
+import { filterRangerCards } from "@/store/lib/filtering";
 import type { CardTypeFilter } from "@/store/slices/lists.types";
 import type { Filter } from "@/utils/fp";
 import type { CardTypeTab } from "./set-tree";
@@ -22,7 +23,7 @@ export function browseTabListCardType(tab: CardTypeTab): CardTypeFilter {
 export function browseTypeSystemFilter(tab: CardTypeTab): Filter {
   switch (tab) {
     case "ranger":
-      return (card: Card) => card.category_id === "ranger";
+      return filterRangerCards;
     case "path":
       return (card: Card) => card.category_id === "path";
     case "location":

@@ -9,7 +9,7 @@ import {
 import { resolveLimitedPoolPacks } from "@/utils/environments";
 import { capitalize, displayPackName } from "@/utils/formatting";
 import type { Filter } from "@/utils/fp";
-import { and, not, or } from "@/utils/fp";
+import { and, or } from "@/utils/fp";
 import i18n from "@/utils/i18n";
 import { isEmpty } from "@/utils/is-empty";
 import { time, timeEnd } from "@/utils/time";
@@ -29,6 +29,7 @@ import {
   filterPackCode,
   filterPathCards,
   filterProperties,
+  filterRangerCards,
   filterSetCode,
   filterTraits,
   filterType,
@@ -421,7 +422,7 @@ const selectBaseListCards = createSelector(
           .value as CardTypeFilter;
 
         if (value === "player") {
-          filters.push(not(filterPathCards));
+          filters.push(filterRangerCards);
         } else if (value === "path") {
           filters.push(filterPathCards);
         }
@@ -998,7 +999,7 @@ export const selectCardOptions = createSelector(
 
     return Object.values(metadata.cards)
       .filter((card) => {
-        return !filterPathCards(card) && card.type_code !== "role";
+        return filterRangerCards(card) && card.type_code !== "role";
       })
       .sort(sortFn);
   },
