@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function CardEquipLoad({ card }: Props) {
-  if (card.type_code !== "gear" || card.equip_value == null) return null;
+  if (card.equip_value == null) return null;
   const equipValue = card.equip_value;
   const colorCls = getCardColor(card);
   return (
