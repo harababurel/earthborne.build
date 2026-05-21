@@ -1,5 +1,6 @@
 import type { Card } from "@earthborne-build/shared";
 import { useTranslation } from "react-i18next";
+import { CardEquipLoad } from "@/components/card-equip-load";
 import { displayAttribute } from "@/utils/card-utils";
 import css from "./card.module.css";
 
@@ -26,6 +27,7 @@ export function CardDetails(props: Props) {
           </p>
         )}
       </div>
+      <CardEquipLoad card={card} />
     </div>
   );
 }

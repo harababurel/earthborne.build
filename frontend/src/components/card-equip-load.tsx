@@ -13,14 +13,11 @@ export function CardEquipLoad({ card }: Props) {
   const equipValue = card.equip_value;
   const colorCls = getCardColor(card);
   return (
-    <div className={css["equip-load"]}>
+    <div className={cx(css["equip-load"], colorCls)}>
       {Array.from({ length: MAX_EQUIP_VALUE }, (_, i) => (
         <span
           key={`equip-${i + 1}`}
-          className={cx(
-            css["equip-square"],
-            i < equipValue && cx(css["filled"], colorCls),
-          )}
+          className={cx(css["equip-square"], i < equipValue && css["filled"])}
         />
       ))}
     </div>
