@@ -167,6 +167,8 @@ function sanitize(article, sourcePath) {
     el.remove();
   }
 
+  normalizeMalformedStrongParagraphs(article);
+
   // Absolutize image src and keep only src + alt
   for (const img of article.querySelectorAll("img")) {
     const src = img.getAttribute("src") ?? "";
@@ -276,32 +278,9 @@ function sanitize(article, sourcePath) {
     el.replaceWith(...el.childNodes);
   }
 
+  replaceRichText(article);
+
   let content = article.innerHTML;
-
-  // Replace Living Valley PUA icon characters with core font spans.
-  // Codepoints identified by cross-referencing the scraped text context with
-  // the EBR game symbols and our icons-core.css definitions.
-  content = content
-    .replaceAll("\ue010", '<span class="core-reason"></span>')
-    .replaceAll("\ue011", '<span class="core-conflict"></span>')
-    .replaceAll("\ue012", '<span class="core-connection"></span>')
-    .replaceAll("\ue013", '<span class="core-exploration"></span>')
-    .replaceAll("\ue015", '<span class="core-harm"></span>')
-    .replaceAll("\ue016", '<span class="core-progress"></span>')
-    .replaceAll("\ue017", '<span class="core-crest"></span>')
-    .replaceAll("\ue018", '<span class="core-mountain"></span>')
-    .replaceAll("\ue019", '<span class="core-sun"></span>')
-    .replaceAll("\ue01a", '<span class="core-reshuffle"></span>')
-    .replaceAll("\ue01b", '<span class="core-conditional"></span>')
-    .replaceAll("\ue01c", '<span class="core-guide"></span>')
-    .replaceAll("\ue01d", '<span class="core-per_ranger"></span>');
-
-  // Color EBR stat keywords using the same classes as card text.
-  content = content
-    .replace(/\bAwareness\b/g, '<b class="color-AWA">Awareness</b>')
-    .replace(/\bFitness\b/g, '<b class="color-FIT">Fitness</b>')
-    .replace(/\bFocus\b/g, '<b class="color-FOC">Focus</b>')
-    .replace(/\bSpirit\b/g, '<b class="color-SPI">Spirit</b>');
 
   // Heading normalization (shift down 2 levels; h1 already removed, page title uses h3)
   content = content
@@ -335,6 +314,102 @@ function sanitize(article, sourcePath) {
   content = content.replace(/\n{3,}/g, "\n\n").trim();
 
   return content;
+}
+
+function normalizeMalformedStrongParagraphs(article) {
+  const outerParagraphs = new Set();
+
+  for (const p of article.querySelectorAll("p")) {
+    const strong = p.parentNode;
+    const outer = strong?.parentNode;
+    if (strong?.tagName === "STRONG" && outer?.tagName === "P") {
+      outerParagraphs.add(outer);
+    }
+  }
+
+  for (const outer of outerParagraphs) {
+    const replacements = [];
+
+    for (const child of outer.childNodes) {
+      if (child.tagName !== "STRONG") {
+        if (child.nodeType !== 3 || child.rawText.trim()) {
+          replacements.push(child.toString());
+        }
+        continue;
+      }
+
+      for (const strongChild of child.childNodes) {
+        if (strongChild.tagName === "P") {
+          replacements.push(`<p><strong>${strongChild.innerHTML}</strong></p>`);
+        } else if (strongChild.nodeType !== 3 || strongChild.rawText.trim()) {
+          replacements.push(
+            `<p><strong>${strongChild.toString()}</strong></p>`,
+          );
+        }
+      }
+    }
+
+    if (!replacements.length) continue;
+    outer.replaceWith(...parseHtml(replacements.join("")).childNodes);
+  }
+}
+
+function replaceRichText(root) {
+  for (const textNode of collectTextNodes(root)) {
+    const html = replaceTextMarkup(textNode.rawText);
+    if (html === textNode.rawText) continue;
+
+    const parent = textNode.parentNode;
+    const index = parent?.childNodes.indexOf(textNode);
+    if (!parent || index === undefined || index < 0) continue;
+
+    const replacements = parseHtml(html).childNodes;
+    parent.childNodes.splice(index, 1, ...replacements);
+    for (const node of replacements) {
+      node.parentNode = parent;
+    }
+  }
+}
+
+function collectTextNodes(root) {
+  const nodes = [];
+
+  function visit(node) {
+    if (node.nodeType === 3) {
+      nodes.push(node);
+      return;
+    }
+
+    for (const child of node.childNodes ?? []) {
+      visit(child);
+    }
+  }
+
+  visit(root);
+  return nodes;
+}
+
+function replaceTextMarkup(text) {
+  // Codepoints identified by cross-referencing scraped text context with
+  // EBR game symbols and our icons-core.css definitions.
+  return text
+    .replaceAll("\ue010", '<span class="core-reason"></span>')
+    .replaceAll("\ue011", '<span class="core-conflict"></span>')
+    .replaceAll("\ue012", '<span class="core-connection"></span>')
+    .replaceAll("\ue013", '<span class="core-exploration"></span>')
+    .replaceAll("\ue015", '<span class="core-harm"></span>')
+    .replaceAll("\ue016", '<span class="core-progress"></span>')
+    .replaceAll("\ue017", '<span class="core-crest"></span>')
+    .replaceAll("\ue018", '<span class="core-mountain"></span>')
+    .replaceAll("\ue019", '<span class="core-sun"></span>')
+    .replaceAll("\ue01a", '<span class="core-reshuffle"></span>')
+    .replaceAll("\ue01b", '<span class="core-conditional"></span>')
+    .replaceAll("\ue01c", '<span class="core-guide"></span>')
+    .replaceAll("\ue01d", '<span class="core-per_ranger"></span>')
+    .replace(/\bAwareness\b/g, '<b class="color-AWA">Awareness</b>')
+    .replace(/\bFitness\b/g, '<b class="color-FIT">Fitness</b>')
+    .replace(/\bFocus\b/g, '<b class="color-FOC">Focus</b>')
+    .replace(/\bSpirit\b/g, '<b class="color-SPI">Spirit</b>');
 }
 
 function toAbsoluteUrl(url, sourcePath) {
