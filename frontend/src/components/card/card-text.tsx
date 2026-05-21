@@ -36,10 +36,13 @@ export function CardText(props: Props) {
   const textNode = !!text && (
     <div className={css["text"]} data-testid="card-text">
       {text && (
-        <p
+        <div
           // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML is from trusted source.
           dangerouslySetInnerHTML={{
-            __html: parseCardTextHtml(text, { bullets: true }),
+            __html: parseCardTextHtml(text, {
+              bullets: true,
+              splitParagraphs: true,
+            }),
           }}
         />
       )}
@@ -62,10 +65,13 @@ export function CardText(props: Props) {
         <i className={`core-${type}`} />
       </div>
       <div className={css["challenge-text"]}>
-        <p
+        <div
           // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML is from trusted source.
           dangerouslySetInnerHTML={{
-            __html: parseCardTextHtml(text, { bullets: true }),
+            __html: parseCardTextHtml(text, {
+              bullets: true,
+              splitParagraphs: true,
+            }),
           }}
         />
       </div>

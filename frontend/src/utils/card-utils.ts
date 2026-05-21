@@ -128,6 +128,7 @@ export function parseCardTextHtml(
   opts?: {
     bullets?: boolean;
     newLines?: "replace" | "skip";
+    splitParagraphs?: boolean;
   },
 ) {
   let parsed = cardText;
@@ -182,7 +183,13 @@ export function parseCardTextHtml(
     return `<span class="card-location-row" style="--location-cols: ${items.length}">${cells}</span>`;
   });
 
-  if (opts?.newLines !== "skip") {
+  if (opts?.splitParagraphs) {
+    parsed = parsed
+      .split(/\r?\n/)
+      .map((line) => (/^<hr/.test(line.trim()) ? line : `<p>${line}</p>`))
+      .join("")
+      .replaceAll("<p></p>", "");
+  } else if (opts?.newLines !== "skip") {
     parsed = parsed.replaceAll(/\r?\n/g, "<br>");
   }
 
