@@ -473,6 +473,7 @@
     border-radius: var(--rounded);
     background: var(--color-awa);
     color: white;
+    font-weight: 400;
     line-height: 1.35;
     overflow-wrap: break-word;
     vertical-align: baseline;
@@ -481,6 +482,7 @@
   .text :global(.card-objective-text) b,
   .challenge-text :global(.card-objective-text) b {
     color: inherit;
+    font-weight: 400;
   }
 
   .text img {
