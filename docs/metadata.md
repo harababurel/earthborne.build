@@ -76,3 +76,12 @@ Card image metadata is not stored separately. Image serving works by:
 3. serving the local file through `GET /images/:code`
 
 See [docs/api.md](./api.md) and [docs/deployment.md](./deployment.md) for operational details.
+
+## Location and path terrain symbols
+
+Location and path terrain SVG symbols used by the frontend live under `frontend/src/assets/symbols/`.
+
+- `locations/` contains extracted location symbols keyed by location name in `frontend/src/assets/symbols/index.ts`
+- `path-terrain/` contains extracted path terrain symbols keyed by terrain name in the same registry
+
+These symbols are static frontend assets. They are not currently ingested from `rangers-card-data` or served by the backend.
