@@ -14,15 +14,27 @@ export function HealthIcon({
     typeof health === "string" ? health.replace(/\[per_ranger\]/g, "") : health;
   const isPerRanger =
     typeof health === "string" && health.includes("[per_ranger]");
+  const isSlashThreshold = value === "/";
 
   return (
-    <div className={css["health"]} data-testid="health" data-value={health}>
+    <div
+      className={cx(css["health"], isSlashThreshold && css["health-slash"])}
+      data-testid="health"
+      data-value={health}
+    >
       {hideCost && <i className={cx(css["icon-background"], "core-harm")} />}
       <i className={cx(css["icon-base"], "core-harm")} />
       {!hideCost && (
         <div className={css["icon-cost-wrapper"]}>
           <span className={css["icon-content"]}>
-            <span className={css["icon-cost"]}>{value}</span>
+            <span
+              className={cx(
+                css["icon-cost"],
+                isSlashThreshold && css["icon-cost-slash"],
+              )}
+            >
+              {value}
+            </span>
             {isPerRanger && (
               <i className={cx(css["icon-per-ranger"], "core-per_ranger")} />
             )}

@@ -16,6 +16,11 @@
   color: #8b151c; /* dark red */
 }
 
+.health-slash {
+  background-color: #7f1118;
+  color: #5f0c12;
+}
+
 .sanity {
   background-color: #579dab; /* dark blue/teal */
   color: #6dacad; /* normal blue/teal for progress */
@@ -60,6 +65,13 @@
   font-weight: 600;
   font-family: "Hypatia Sans Pro", sans-serif;
   line-height: 1;
+}
+
+.icon-cost-slash {
+  display: inline-block;
+  font-weight: 800;
+  transform: translateX(-0.05em) skew(-22deg) scaleX(0.82);
+  transform-origin: center;
 }
 
 .icon-content {
