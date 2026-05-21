@@ -155,7 +155,7 @@ export function ListLayout(props: Props) {
         onClick={onContentClick}
       >
         {children({
-          slotLeft: !sidebarOpen && (
+          slotLeft: (
             <HotkeyTooltip
               keybind="alt+1"
               description={t("lists.actions.toggle_sidebar")}
@@ -170,7 +170,7 @@ export function ListLayout(props: Props) {
               </Button>
             </HotkeyTooltip>
           ),
-          slotRight: !!filters && !filtersOpen && (
+          slotRight: !!filters && (
             <HotkeyTooltip
               keybind="alt+2"
               description={t("lists.actions.toggle_filters")}
