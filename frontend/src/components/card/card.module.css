@@ -493,8 +493,8 @@
     font-weight: 700;
     letter-spacing: 0.06em;
     text-align: center;
-    border-top: 2px solid var(--exploration);
-    border-bottom: 2px solid var(--exploration);
+    border-top: 2px solid color-mix(in srgb, var(--exploration), black 25%);
+    border-bottom: 2px solid color-mix(in srgb, var(--exploration), black 25%);
     padding: 0.4em 0;
     margin: 0.35em 0;
   }
