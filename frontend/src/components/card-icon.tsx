@@ -1,4 +1,5 @@
 import type { Card } from "@earthborne-build/shared";
+import { locationSymbolUrlsByNormalizedName } from "@/assets/symbols";
 import { getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import css from "./card-icon.module.css";
@@ -12,6 +13,17 @@ type Props = {
 
 export function CardIcon(props: Props) {
   const { card, className } = props;
+
+  if (card.category_id === "location") {
+    const symbolUrl =
+      locationSymbolUrlsByNormalizedName[card.name.toLowerCase()];
+    if (!symbolUrl) return null;
+    return (
+      <div className={cx(css["icon_location"], className)}>
+        <img src={symbolUrl} alt="" aria-hidden />
+      </div>
+    );
+  }
 
   if (
     (card.category_id != null && card.category_id !== "ranger") ||

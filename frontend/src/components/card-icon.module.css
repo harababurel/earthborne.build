@@ -11,6 +11,16 @@
   height: 1em;
 }
 
+.icon_location {
+  width: 1em;
+  height: 1em;
+
+  & > img {
+    width: 100%;
+    height: auto;
+  }
+}
+
 .icon-level {
   position: absolute;
   top: 0;

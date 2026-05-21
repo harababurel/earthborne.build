@@ -1,26 +1,53 @@
-import archeologicalOutpostUrl from "./locations/archeological-outpost.svg";
+import ancestorsGroveUrl from "./locations/ancestors-grove.svg";
+import arborMistsUrl from "./locations/arbor-mists.svg";
+import arboretumOfMemoryUrl from "./locations/arboretum-of-memory.svg";
+import archeologicalOutpostUrl from "./locations/archaeological-outpost.svg";
 import atroxMountainUrl from "./locations/atrox-mountain.svg";
 import biologicalOutpostUrl from "./locations/biological-outpost.svg";
 import boulderFieldUrl from "./locations/boulder-field.svg";
 import bowlOfTheSunUrl from "./locations/bowl-of-the-sun.svg";
 import branchUrl from "./locations/branch.svg";
+import branchingArteryUrl from "./locations/branching-artery.svg";
+import carbonforgedMazeUrl from "./locations/carbonforged-maze.svg";
+import ceruleanCurtainUrl from "./locations/cerulean-curtain.svg";
 import crossroadsStationUrl from "./locations/crossroads-station.svg";
+import crystalBasinUrl from "./locations/crystal-basin.svg";
+import desertOfEndlessNightUrl from "./locations/desert-of-endless-night.svg";
+import drenchingChamberUrl from "./locations/drenching-chamber.svg";
 import goldenShoreUrl from "./locations/golden-shore.svg";
 import greenbriarKnollUrl from "./locations/greenbriar-knoll.svg";
 import headwatersStationUrl from "./locations/headwaters-station.svg";
+import invertedForestUrl from "./locations/inverted-forest.svg";
 import kobosMarketUrl from "./locations/kobos-market.svg";
+import loneTreeStationUrl from "./locations/lone-tree-station.svg";
 import marshOfRebirthUrl from "./locations/marsh-of-rebirth.svg";
 import meadowUrl from "./locations/meadow.svg";
 import michaelsBogUrl from "./locations/michaels-bog.svg";
 import moundOfTheNavigatorUrl from "./locations/mound-of-the-navigator.svg";
 import mountNimUrl from "./locations/mount-nim.svg";
+import mycelialConclaveUrl from "./locations/mycelial-conclave.svg";
+import nimbusFacilityUrl from "./locations/nimbus-facility.svg";
 import northernOutpostUrl from "./locations/northern-outpost.svg";
+import oasisOfSunlightUrl from "./locations/oasis-of-sunlight.svg";
+import orlinsVaultUrl from "./locations/orlins-vault.svg";
 import ringsOfTheMoonUrl from "./locations/rings-of-the-moon.svg";
+import scuttlerNetworkUrl from "./locations/scuttler-network.svg";
+import sentinelPeakUrl from "./locations/sentinel-peak.svg";
+import severedArteryUrl from "./locations/severed-artery.svg";
+import silentDormitoriesUrl from "./locations/silent-dormitories.svg";
+import silverfinDocksUrl from "./locations/silverfin-docks.svg";
 import spireUrl from "./locations/spire.svg";
+import spireCrossingUrl from "./locations/spire-crossing.svg";
 import stoneweaverBridgeUrl from "./locations/stoneweaver-bridge.svg";
 import sunkenOutpostUrl from "./locations/sunken-outpost.svg";
+import talpidsSqueezeUrl from "./locations/talpids-squeeze.svg";
+import terminalArteryUrl from "./locations/terminal-artery.svg";
+import terraLodgeUrl from "./locations/terra-lodge.svg";
 import terravoreUrl from "./locations/terravore.svg";
 import theAlluvialRuinsUrl from "./locations/the-alluvial-ruins.svg";
+import theCageUrl from "./locations/the-cage.svg";
+import theChimneyUrl from "./locations/the-chimney.svg";
+import theCisternUrl from "./locations/the-cistern.svg";
 import theConcordantZigguratsUrl from "./locations/the-concordant-ziggurats.svg";
 import theCypressCitadelUrl from "./locations/the-cypress-citadel.svg";
 import theFracturedWallUrl from "./locations/the-fractured-wall.svg";
@@ -28,9 +55,13 @@ import theFrowningGateUrl from "./locations/the-frowning-gate.svg";
 import theFurrowUrl from "./locations/the-furrow.svg";
 import theGreenbridgeUrl from "./locations/the-greenbridge.svg";
 import theHighBasinUrl from "./locations/the-high-basin.svg";
+import theOtherwoodsUrl from "./locations/the-otherwoods.svg";
 import thePhilosophersGardenUrl from "./locations/the-philosophers-garden.svg";
 import thePlummetUrl from "./locations/the-plummet.svg";
+import theRootwayUrl from "./locations/the-rootway.svg";
 import theTumbledownUrl from "./locations/the-tumbledown.svg";
+import theUndergroveUrl from "./locations/the-undergrove.svg";
+import theVerdantSphereUrl from "./locations/the-verdant-sphere.svg";
 import watchersRockUrl from "./locations/watchers-rock.svg";
 import whiteSkyUrl from "./locations/white-sky.svg";
 import lakeshoreUrl from "./path-terrain/lakeshore.svg";
@@ -39,29 +70,56 @@ import oldGrowthUrl from "./path-terrain/old-growth.svg";
 import woodsUrl from "./path-terrain/woods.svg";
 
 export const locationSymbolUrls = {
-  "Archeological Outpost": archeologicalOutpostUrl,
+  "Ancestor's Grove": ancestorsGroveUrl,
+  "Arbor Mists": arborMistsUrl,
+  "Arboretum of Memory": arboretumOfMemoryUrl,
+  "Archaeological Outpost": archeologicalOutpostUrl,
   "Atrox Mountain": atroxMountainUrl,
   "Biological Outpost": biologicalOutpostUrl,
   "Boulder Field": boulderFieldUrl,
   "Bowl of the Sun": bowlOfTheSunUrl,
   Branch: branchUrl,
+  "Branching Artery": branchingArteryUrl,
+  "Carbonforged Maze": carbonforgedMazeUrl,
+  "Cerulean Curtain": ceruleanCurtainUrl,
   "Crossroads Station": crossroadsStationUrl,
+  "Crystal Basin": crystalBasinUrl,
+  "Desert of Endless Night": desertOfEndlessNightUrl,
+  "Drenching Chamber": drenchingChamberUrl,
   "Golden Shore": goldenShoreUrl,
   "Greenbriar Knoll": greenbriarKnollUrl,
   "Headwaters Station": headwatersStationUrl,
+  "Inverted Forest": invertedForestUrl,
   "Kobo's Market": kobosMarketUrl,
+  "Lone Tree Station": loneTreeStationUrl,
   "Marsh of Rebirth": marshOfRebirthUrl,
   Meadow: meadowUrl,
   "Michael's Bog": michaelsBogUrl,
   "Mound of the Navigator": moundOfTheNavigatorUrl,
   "Mount Nim": mountNimUrl,
+  "Mycelial Conclave": mycelialConclaveUrl,
+  "Nimbus Facility": nimbusFacilityUrl,
   "Northern Outpost": northernOutpostUrl,
+  "Oasis of Sunlight": oasisOfSunlightUrl,
+  "Orlin's Vault": orlinsVaultUrl,
   "Rings of the Moon": ringsOfTheMoonUrl,
+  "Scuttler Network": scuttlerNetworkUrl,
+  "Sentinel Peak": sentinelPeakUrl,
+  "Severed Artery": severedArteryUrl,
+  "Silent Dormitories": silentDormitoriesUrl,
+  "Silverfin Docks": silverfinDocksUrl,
   Spire: spireUrl,
+  "Spire Crossing": spireCrossingUrl,
   "Stoneweaver Bridge": stoneweaverBridgeUrl,
   "Sunken Outpost": sunkenOutpostUrl,
+  "Talpid's Squeeze": talpidsSqueezeUrl,
+  "Terra Lodge": terraLodgeUrl,
   Terravore: terravoreUrl,
+  "Terminal Artery": terminalArteryUrl,
   "The Alluvial Ruins": theAlluvialRuinsUrl,
+  "The Cage": theCageUrl,
+  "The Chimney": theChimneyUrl,
+  "The Cistern": theCisternUrl,
   "The Concordant Ziggurats": theConcordantZigguratsUrl,
   "The Cypress Citadel": theCypressCitadelUrl,
   "The Fractured Wall": theFracturedWallUrl,
@@ -69,9 +127,13 @@ export const locationSymbolUrls = {
   "The Furrow": theFurrowUrl,
   "The Greenbridge": theGreenbridgeUrl,
   "The High Basin": theHighBasinUrl,
+  "The Otherwoods": theOtherwoodsUrl,
   "The Philosopher's Garden": thePhilosophersGardenUrl,
   "The Plummet": thePlummetUrl,
+  "The Rootway": theRootwayUrl,
   "The Tumbledown": theTumbledownUrl,
+  "The Undergrove": theUndergroveUrl,
+  "The Verdant Sphere": theVerdantSphereUrl,
   "Watcher's Rock": watchersRockUrl,
   "White Sky": whiteSkyUrl,
 } as const;
