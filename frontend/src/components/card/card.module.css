@@ -465,6 +465,24 @@
     font-weight: 400;
   }
 
+  .text :global(.card-objective-text),
+  .challenge-text :global(.card-objective-text) {
+    display: inline-block;
+    max-width: 100%;
+    padding: 0.28em 0.55em 0.18em;
+    border-radius: var(--rounded);
+    background: var(--color-awa);
+    color: white;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+    vertical-align: baseline;
+  }
+
+  .text :global(.card-objective-text) b,
+  .challenge-text :global(.card-objective-text) b {
+    color: inherit;
+  }
+
   .text img {
     display: inline-block;
   }

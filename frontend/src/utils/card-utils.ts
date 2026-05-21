@@ -141,6 +141,8 @@ export function parseCardTextHtml(
     .replaceAll("</e>", "</span>")
     .replaceAll("<f>", '<span class="card-flavor-text">')
     .replaceAll("</f>", "</span>")
+    .replaceAll("<o>", '<span class="card-objective-text">')
+    .replaceAll("</o>", "</span>")
     .replaceAll(/<hr\s*\/?>/g, "<hr class='break'>")
     .replaceAll(/\[\[(.*?)\]\]/g, "<b><em>$1</em></b>")
     .replaceAll(/(\\?)\[((?:\w|_)+?)\]/g, (match, esc, token: string) => {

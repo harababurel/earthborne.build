@@ -64,6 +64,14 @@ describe("parseCardTextHtml", () => {
     );
   });
 
+  it("maps objective tags to a styled span", () => {
+    expect(
+      parseCardTextHtml("<o><b>Have 0 biscuits:</b> [guide] 1.02</o>"),
+    ).toBe(
+      '<span class="card-objective-text"><b>Have 0 biscuits:</b> <span class="core-guide"></span> 1.02</span>',
+    );
+  });
+
   it("maps newlines to line breaks", () => {
     expect(parseCardTextHtml("line 1\nline 2")).toBe("line 1<br>line 2");
   });
