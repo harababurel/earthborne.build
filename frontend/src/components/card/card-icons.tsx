@@ -51,17 +51,19 @@ export function CardIcons(props: Props) {
 
   return (
     <div className={cx(css["icons"], className)}>
-      <div className={css["approach-icons"]}>
-        {approachIconOrder.map(({ approach, key }) => (
-          <div
-            key={key}
-            className={css["approach-icon-box"]}
-            title={t(`common.skill.${approach}`)}
-          >
-            <ApproachIcon approach={approach} />
-          </div>
-        ))}
-      </div>
+      {approachIconOrder.length > 0 && (
+        <div className={css["approach-icons"]}>
+          {approachIconOrder.map(({ approach, key }) => (
+            <div
+              key={key}
+              className={css["approach-icon-box"]}
+              title={t(`common.skill.${approach}`)}
+            >
+              <ApproachIcon approach={approach} />
+            </div>
+          ))}
+        </div>
+      )}
       <CardHealth
         health={card.harm_threshold}
         sanity={card.progress_threshold}
