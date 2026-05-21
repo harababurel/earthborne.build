@@ -22,7 +22,7 @@ export function browseTabListCardType(tab: CardTypeTab): CardTypeFilter {
 export function browseTypeSystemFilter(tab: CardTypeTab): Filter {
   switch (tab) {
     case "ranger":
-      return (card: Card) => card.category != null;
+      return (card: Card) => card.category_id === "ranger";
     case "path":
       return (card: Card) => card.category_id === "path";
     case "location":
