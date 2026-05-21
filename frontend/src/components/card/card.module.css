@@ -485,6 +485,24 @@
     font-weight: 400;
   }
 
+  .text :global(.card-location-row) {
+    display: grid;
+    grid-template-columns: repeat(var(--location-cols), 1fr);
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-align: center;
+  }
+
+  .text :global(.card-location-cell) {
+    padding: 0 0.25em;
+  }
+
+  .text :global(.card-location-initial) {
+    font-size: 1.2em;
+  }
+
   .text img {
     display: inline-block;
   }
