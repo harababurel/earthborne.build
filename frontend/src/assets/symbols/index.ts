@@ -66,6 +66,7 @@ import theVerdantSphereUrl from "./locations/the-verdant-sphere.svg";
 import watchersRockUrl from "./locations/watchers-rock.svg";
 import whiteSkyUrl from "./locations/white-sky.svg";
 import ancientRuinsTerrainUrl from "./path-terrain/ancient-ruins.svg";
+import arcologyUrl from "./path-terrain/arcology.svg";
 import caveSystemUrl from "./path-terrain/cave-system.svg";
 import deepRootsUrl from "./path-terrain/deep-roots.svg";
 import floodedRuinsUrl from "./path-terrain/flooded-ruins.svg";
@@ -153,6 +154,8 @@ export const locationSymbolUrls = {
 
 export const pathTerrainSymbolUrls = {
   "Ancient Ruins": ancientRuinsTerrainUrl,
+  Arcology: arcologyUrl,
+  Artery: severedArteryUrl,
   "Cave System": caveSystemUrl,
   "Deep Roots": deepRootsUrl,
   "Flooded Ruins": floodedRuinsUrl,
@@ -177,6 +180,8 @@ export type PathTerrainSymbolName = keyof typeof pathTerrainSymbolUrls;
 export const pathCardSymbolUrlBySetCode: Record<string, string> = {
   // path terrain sets
   ancient_ruins: ancientRuinsTerrainUrl,
+  arcology: arcologyUrl,
+  artery: severedArteryUrl,
   cave_system: caveSystemUrl,
   deep_roots: deepRootsUrl,
   flooded_ruins: floodedRuinsUrl,
