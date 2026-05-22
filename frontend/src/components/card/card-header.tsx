@@ -22,7 +22,12 @@ export function CardHeader(props: Props) {
   return (
     <header className={cx(css["header"], colorCls, className)}>
       <div className={cx(css["header-row"], css["header-titles"])}>
-        <CardIcon card={card} className={css["header-icon"]} inverted />
+        <CardIcon
+          card={card}
+          className={css["header-icon"]}
+          inverted
+          showSpawn
+        />
         <CardNames card={card} titleLinks={titleLinks} />
       </div>
       {(slotHeaderActions || showClassIcons) && (

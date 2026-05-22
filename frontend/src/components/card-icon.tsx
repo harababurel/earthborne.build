@@ -12,6 +12,7 @@ type Props = {
   card: Card;
   className?: string;
   inverted?: boolean;
+  showSpawn?: boolean;
 };
 
 function SpawnIndicator({ area }: { area: "within_reach" | "along_the_way" }) {
@@ -29,7 +30,7 @@ function SpawnIndicator({ area }: { area: "within_reach" | "along_the_way" }) {
 }
 
 export function CardIcon(props: Props) {
-  const { card, className } = props;
+  const { card, className, showSpawn } = props;
 
   if (card.category_id === "location") {
     const symbolUrl =
@@ -39,12 +40,12 @@ export function CardIcon(props: Props) {
       <div
         className={cx(
           css["icon_location"],
-          card.area && css["icon_with_spawn"],
+          showSpawn && card.area && css["icon_with_spawn"],
           className,
         )}
       >
         <img src={symbolUrl} alt="" aria-hidden />
-        {card.area && <SpawnIndicator area={card.area} />}
+        {showSpawn && card.area && <SpawnIndicator area={card.area} />}
       </div>
     );
   }
@@ -58,12 +59,12 @@ export function CardIcon(props: Props) {
       <div
         className={cx(
           css["icon_location"],
-          card.area && css["icon_with_spawn"],
+          showSpawn && card.area && css["icon_with_spawn"],
           className,
         )}
       >
         <img src={symbolUrl} alt="" aria-hidden />
-        {card.area && <SpawnIndicator area={card.area} />}
+        {showSpawn && card.area && <SpawnIndicator area={card.area} />}
       </div>
     );
   }
