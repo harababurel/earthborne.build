@@ -14,6 +14,7 @@ import crossroadsStationUrl from "./locations/crossroads-station.svg";
 import crystalBasinUrl from "./locations/crystal-basin.svg";
 import desertOfEndlessNightUrl from "./locations/desert-of-endless-night.svg";
 import drenchingChamberUrl from "./locations/drenching-chamber.svg";
+import generalUrl from "./locations/general.svg";
 import goldenShoreUrl from "./locations/golden-shore.svg";
 import greenbriarKnollUrl from "./locations/greenbriar-knoll.svg";
 import headwatersStationUrl from "./locations/headwaters-station.svg";
@@ -187,6 +188,8 @@ export const pathCardSymbolUrlBySetCode: Record<string, string> = {
   river: riverUrl,
   swamp: swampUrl,
   woods: woodsUrl,
+  // general set
+  general: generalUrl,
   // pivotal-location sets (use the matching location SVG)
   arboretum_of_memory: arboretumOfMemoryUrl,
   branch: branchUrl,
