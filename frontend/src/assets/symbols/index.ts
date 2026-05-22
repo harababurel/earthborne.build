@@ -78,6 +78,7 @@ import oldGrowthUrl from "./path-terrain/old-growth.svg";
 import ravineUrl from "./path-terrain/ravine.svg";
 import riverUrl from "./path-terrain/river.svg";
 import swampUrl from "./path-terrain/swamp.svg";
+import theValleyUrl from "./path-terrain/the-valley.svg";
 import thoroughfareUrl from "./path-terrain/thoroughfare.svg";
 import woodsUrl from "./path-terrain/woods.svg";
 
@@ -190,6 +191,8 @@ export const pathCardSymbolUrlBySetCode: Record<string, string> = {
   woods: woodsUrl,
   // general set
   general: generalUrl,
+  // the valley set
+  the_valley: theValleyUrl,
   // pivotal-location sets (use the matching location SVG)
   arboretum_of_memory: arboretumOfMemoryUrl,
   branch: branchUrl,
