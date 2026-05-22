@@ -6,6 +6,7 @@ import { useLogoUrl } from "@/utils/use-color-theme";
 import { HelpMenu } from "./help-menu";
 import { LocaleQuickSwitch } from "./locale-quick-switch";
 import css from "./masthead.module.css";
+import { ThemeQuickSwitch } from "./theme-quick-switch";
 import { Button } from "./ui/button";
 
 type Props = {
@@ -51,6 +52,7 @@ export function Masthead(props: Props) {
         {location !== "/settings" && (
           <>
             {!hideLocaleSwitch && <LocaleQuickSwitch />}
+            <ThemeQuickSwitch />
             {!hideSettings && (
               <Link asChild href="~/settings">
                 <Button
