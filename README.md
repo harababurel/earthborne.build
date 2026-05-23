@@ -18,7 +18,7 @@ The current backend serves Earthborne Rangers card, pack, and card set data, loc
 
 - Node.js `24.x`
 - `npm`
-- A local clone of `https://github.com/zzorba/rangers-card-data` for card ingestion
+- A local clone of `https://github.com/harababurel/rangers-card-data` for card ingestion
 
 ## Common commands
 

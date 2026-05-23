@@ -63,3 +63,5 @@ The scrapers cache raw upstream responses under `.cache/scraper/` so that re-run
 ## Notes
 
 This app was adapted from `arkham.build`, and some upstream integration code still exists in the frontend for legacy sync/auth flows. Those flows require a compatible legacy backend and are not implemented by the local `backend/` package in this repository. Deck sharing uses the local backend in this repo.
+
+The `/debug` route renders the registered static SVG symbol assets. It is useful for checking location, path terrain, General, and The Valley symbols after updating `src/assets/symbols/`.

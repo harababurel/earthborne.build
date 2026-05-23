@@ -83,5 +83,7 @@ Location and path terrain SVG symbols used by the frontend live under `frontend/
 
 - `locations/` contains extracted location symbols keyed by location name in `frontend/src/assets/symbols/index.ts`
 - `path-terrain/` contains extracted path terrain symbols keyed by terrain name in the same registry
+- `pathCardSymbolUrlBySetCode` maps path-card `set_code` values to either path terrain symbols or pivotal location symbols
+- the General and The Valley set symbols are stored alongside these static SVG assets because they are rendered through the same card-symbol path
 
-These symbols are static frontend assets. They are not currently ingested from `rangers-card-data` or served by the backend.
+These symbols are static frontend assets. They are not currently ingested from `rangers-card-data` or served by the backend. The frontend `/debug` page renders the registered symbol sets for quick visual inspection after adding or adjusting SVGs.
