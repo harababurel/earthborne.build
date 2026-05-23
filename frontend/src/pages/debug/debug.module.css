@@ -1,0 +1,40 @@
+.debug {
+  padding-block: 1rem 2rem;
+}
+
+.debug h1 {
+  margin: 0;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.section h2 {
+  margin: 0 0 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.5rem;
+}
+
+.symbol-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--palette-1);
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.symbol {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}

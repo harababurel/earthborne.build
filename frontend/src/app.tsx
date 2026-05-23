@@ -39,6 +39,8 @@ const BrowseDecklists = lazy(
 
 const Rules = lazy(() => import("./pages/rules-reference/rules-reference"));
 
+const Debug = lazy(() => import("./pages/debug/debug"));
+
 function App() {
   return (
     <Providers>
@@ -102,6 +104,7 @@ function AppInner() {
               <Route component={CollectionStats} path="/collection-stats" />
               <Route component={BrowseDecklists} path="/decklists" />
               <Route component={Rules} path="/rules" />
+              <Route component={Debug} path="/debug" />
               <Route path="*">
                 <ErrorStatus statusCode={404} />
               </Route>

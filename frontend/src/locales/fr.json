@@ -729,6 +729,13 @@
       },
       "title": "Decks"
     },
+    "debug": {
+      "symbols": {
+        "locations": "Lieux",
+        "path_terrain": "Terrain de chemin"
+      },
+      "title": "Débogage SVG"
+    },
     "deck_create": {
       "default_name": {
         "guardian": "Les Aventures de {{name}}",

@@ -451,6 +451,13 @@
       },
       "title": "Decks"
     },
+    "debug": {
+      "symbols": {
+        "locations": "Locations",
+        "path_terrain": "Path terrain"
+      },
+      "title": "SVG Debug"
+    },
     "deck_create": {
       "default_name": {
         "": "{{name}}'s Deck",
