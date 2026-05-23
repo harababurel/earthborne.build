@@ -72,6 +72,12 @@ describe("parseCardTextHtml", () => {
     );
   });
 
+  it("supports line breaks inside objective tags when splitting paragraphs", () => {
+    expect(
+      parseCardTextHtml("<o>line 1\nline 2</o>", { splitParagraphs: true }),
+    ).toBe('<p><span class="card-objective-text">line 1<br>line 2</span></p>');
+  });
+
   it("maps newlines to line breaks", () => {
     expect(parseCardTextHtml("line 1\nline 2")).toBe("line 1<br>line 2");
   });

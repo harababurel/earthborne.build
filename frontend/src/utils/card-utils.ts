@@ -38,6 +38,8 @@ const BUCK_ICON_HTML = [
   "</span>",
 ].join("");
 
+const OBJECTIVE_LINE_BREAK = "\u0000OBJECTIVE_LINE_BREAK\u0000";
+
 export function splitMultiValue(s: string | null | undefined) {
   if (!s) return [];
   return s.split(/[./]/).reduce<string[]>((acc, curr) => {
@@ -141,6 +143,10 @@ export function parseCardTextHtml(
     parsed = parsed.replaceAll(/^\s?(-|–)/gm, `<i class="icon-bullet"></i>`);
   }
 
+  if (opts?.splitParagraphs) {
+    parsed = preserveObjectiveLineBreaks(parsed);
+  }
+
   parsed = parsed
     .replaceAll("<e>", '<span class="card-notable-event">')
     .replaceAll("</e>", "</span>")
@@ -186,12 +192,19 @@ export function parseCardTextHtml(
       .split(/\r?\n/)
       .map((line) => (/^<hr/.test(line.trim()) ? line : `<p>${line}</p>`))
       .join("")
-      .replaceAll("<p></p>", "");
+      .replaceAll("<p></p>", "")
+      .replaceAll(OBJECTIVE_LINE_BREAK, "<br>");
   } else if (opts?.newLines !== "skip") {
     parsed = parsed.replaceAll(/\r?\n/g, "<br>");
   }
 
   return parsed;
+}
+
+function preserveObjectiveLineBreaks(content: string) {
+  return content.replace(/<o>([\s\S]*?)<\/o>/g, (match) =>
+    match.replaceAll(/\r?\n/g, OBJECTIVE_LINE_BREAK),
+  );
 }
 
 function formatLocationCellHtml(content: string) {
