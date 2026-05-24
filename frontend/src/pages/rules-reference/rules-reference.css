@@ -274,6 +274,57 @@ html[data-theme="light"] .toc a {
   line-height: 1.6;
 }
 
+.rules-guide-highlight {
+  margin-block: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--blue);
+  border-radius: 0 var(--rounded) var(--rounded) 0;
+  background: color-mix(in srgb, var(--blue) 12%, var(--palette-point-five));
+}
+
+p.rules-guide-highlight {
+  margin-block: 1.5rem;
+}
+
+.rules-guide-highlight > :last-child,
+.rules-guide-clear > :last-child {
+  margin-bottom: 0;
+}
+
+.rules-guide-highlight > p,
+.rules-guide-clear > p {
+  margin-bottom: 0.35rem;
+}
+
+.rules-guide-highlight > ul,
+.rules-guide-clear > ul {
+  margin-block: 0.35rem 0;
+  padding-left: 1.35rem;
+}
+
+.rules-guide-highlight li,
+.rules-guide-clear li {
+  padding-left: 0.2rem;
+}
+
+.rules-guide-clear {
+  margin-block: 1.25rem;
+}
+
+.rules-guide-key {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.rules-page p.rules-guide-objective {
+  margin-block: 1.25rem;
+  color: var(--blue);
+  font-size: var(--text-xl);
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
 .rules-page h5,
 .rules-page h6 {
   font-size: var(--text-2xl);

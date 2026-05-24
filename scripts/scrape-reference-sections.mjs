@@ -225,13 +225,15 @@ function sanitize(article, sourcePath) {
     }
   }
 
+  preserveCampaignGuideHighlights(article);
+
   for (const h of article.querySelectorAll("h5, h6")) {
     if (h.textContent.includes("READ THE ENTRY")) {
       h.setAttribute("class", "rules-conditional");
     }
   }
 
-  // Strip attributes (preserve href on anchors, src/alt on images, class="admonition" on blockquotes)
+  // Strip attributes (preserve href on anchors, src/alt on images, and known content classes)
   for (const el of article.querySelectorAll("*")) {
     if (el.tagName === "IMG") continue;
 
@@ -264,6 +266,19 @@ function sanitize(article, sourcePath) {
       el.getAttribute("class") === "rules-conditional"
     )
       keepClass = true;
+    if (
+      (el.tagName === "DIV" || el.tagName === "P") &&
+      (el.getAttribute("class") === "rules-guide-highlight" ||
+        el.getAttribute("class") === "rules-guide-clear")
+    )
+      keepClass = true;
+    if (
+      el.tagName === "P" &&
+      el.getAttribute("class") === "rules-guide-objective"
+    )
+      keepClass = true;
+    if (el.tagName === "SPAN" && el.getAttribute("class") === "rules-guide-key")
+      keepClass = true;
 
     for (const key of Object.keys(el.attributes)) {
       if (key === "id") continue;
@@ -277,11 +292,17 @@ function sanitize(article, sourcePath) {
     if (!a.text.trim() && !a.querySelector("img")) a.remove();
   }
 
-  // Unwrap spans, then divs (reverse = children before parents)
+  // Unwrap non-semantic spans, then divs (reverse = children before parents)
   for (const el of [...article.querySelectorAll("span")].reverse()) {
+    if (el.getAttribute("class") === "rules-guide-key") continue;
     el.replaceWith(...el.childNodes);
   }
   for (const el of [...article.querySelectorAll("div")].reverse()) {
+    if (
+      el.getAttribute("class") === "rules-guide-highlight" ||
+      el.getAttribute("class") === "rules-guide-clear"
+    )
+      continue;
     el.replaceWith(...el.childNodes);
   }
 
@@ -304,6 +325,14 @@ function sanitize(article, sourcePath) {
     .replace(/<\/h2>/g, "</h4>");
 
   // Fix malformed nesting (safety net for edge cases)
+  content = content.replace(
+    /<p><em><p class="rules-guide-objective">([\s\S]*?)<\/p><\/em><\/p>/g,
+    '<p class="rules-guide-objective">$1</p>',
+  );
+  content = content.replace(
+    /<p><em><p class="rules-guide-objective">([\s\S]*?)<\/em><\/p>/g,
+    '<p class="rules-guide-objective">$1</p>',
+  );
   content = content.replace(/<p><em><p>/g, "<p><em>");
   content = content.replace(/<\/p><\/em><\/p>/g, "</em></p>");
   content = content.replace(/<p><p><strong>/g, "<p><strong>");
@@ -321,6 +350,23 @@ function sanitize(article, sourcePath) {
   content = content.replace(/\n{3,}/g, "\n\n").trim();
 
   return content;
+}
+
+function preserveCampaignGuideHighlights(article) {
+  for (const el of article.querySelectorAll(".blue_highlight")) {
+    el.setAttribute("class", "rules-guide-highlight");
+  }
+
+  for (const el of article.querySelectorAll(".clear_highlight")) {
+    el.setAttribute("class", "rules-guide-clear");
+  }
+
+  for (const el of article.querySelectorAll(".blue_text")) {
+    el.setAttribute(
+      "class",
+      el.tagName === "P" ? "rules-guide-objective" : "rules-guide-key",
+    );
+  }
 }
 
 function normalizeMalformedStrongParagraphs(article) {
