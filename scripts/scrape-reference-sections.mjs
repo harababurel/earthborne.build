@@ -459,6 +459,7 @@ function replaceTextMarkup(text) {
     .replaceAll("\ue01b", '<span class="core-conditional"></span>')
     .replaceAll("\ue01c", '<span class="core-guide"></span>')
     .replaceAll("\ue01d", '<span class="core-per_ranger"></span>')
+    .replaceAll("\ue01e", '<span class="core-ranger"></span>')
     .replace(/\bAwareness\b/g, '<b class="color-AWA">Awareness</b>')
     .replace(/\bFitness\b/g, '<b class="color-FIT">Fitness</b>')
     .replace(/\bFocus\b/g, '<b class="color-FOC">Focus</b>')
@@ -477,12 +478,60 @@ function toAbsoluteUrl(url, sourcePath) {
   }
 }
 
-function rewriteInternalLinks(html, pageIds) {
-  return html.replace(/href="([^"]+)"/g, (_, href) => {
+function rewriteInternalLinks(html, pageIds, pageId) {
+  const root = parseHtml(html);
+  const localAnchors = namespaceLocalAnchors(root, pageId);
+
+  for (const a of root.querySelectorAll("a[href]")) {
+    const href = a.getAttribute("href") ?? "";
+
+    if (href.startsWith("#")) {
+      const target = localAnchors.get(href.slice(1));
+      if (target) a.setAttribute("href", `#${target}`);
+      continue;
+    }
+
     const path = normalizePath(href);
-    if (path && pageIds.has(path)) return `href="#${pageIds.get(path)}"`;
-    return `href="${href}"`;
-  });
+    const targetPageId = path ? pageIds.get(path) : null;
+    if (!targetPageId) continue;
+
+    const hash = new URL(href, BASE).hash.slice(1);
+    a.setAttribute(
+      "href",
+      `#${hash ? `${targetPageId}-${hash}` : targetPageId}`,
+    );
+  }
+
+  return root.innerHTML;
+}
+
+function namespaceLocalAnchors(root, pageId) {
+  const localAnchors = new Map();
+  const usedIds = new Set();
+
+  for (const el of root.querySelectorAll("[id]")) {
+    const id = el.getAttribute("id");
+    if (!id) continue;
+
+    const namespacedId = uniqueId(`${pageId}-${id}`, usedIds);
+    el.setAttribute("id", namespacedId);
+    localAnchors.set(id, namespacedId);
+  }
+
+  return localAnchors;
+}
+
+function uniqueId(id, usedIds) {
+  let candidate = id;
+  let index = 2;
+
+  while (usedIds.has(candidate)) {
+    candidate = `${id}-${index}`;
+    index++;
+  }
+
+  usedIds.add(candidate);
+  return candidate;
 }
 
 function buildToc(section, pages, navTree) {
@@ -690,7 +739,7 @@ function buildRules(section, pages) {
   const pageIds = new Map(pages.map((page) => [page.path, page.id]));
   const content = pages
     .map((page) => {
-      const body = rewriteInternalLinks(page.body, pageIds);
+      const body = rewriteInternalLinks(page.body, pageIds, page.id);
       return `  <div class="rules-page" data-page-id="${page.id}">
     <h3 id="${page.id}">${replacePuaHtml(escapeHtml(page.title))}</h3>
 ${body}
@@ -838,6 +887,7 @@ function replacePuaHtml(str) {
     .replaceAll("\ue01b", '<span class="core-conditional"></span>')
     .replaceAll("\ue01c", '<span class="core-guide"></span>')
     .replaceAll("\ue01d", '<span class="core-per_ranger"></span>')
+    .replaceAll("\ue01e", '<span class="core-ranger"></span>')
     .replaceAll("\u25b2", '<span class="core-progress"></span>')
     .replaceAll("\u2731", '<span class="core-harm"></span>');
 }

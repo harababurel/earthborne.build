@@ -314,6 +314,8 @@ function parseReferenceContent(html: string): ReferenceContent {
 
     if (!id) continue;
 
+    normalizeRuleOptions(page);
+
     pages.set(id, {
       html: page.outerHTML,
       id,
@@ -361,6 +363,38 @@ function buildPageList(toc: string, pages: Map<string, ReferencePage>) {
   }
 
   return orderedPages;
+}
+
+function normalizeRuleOptions(page: Element) {
+  for (const option of page.querySelectorAll(".rules-option")) {
+    if (option.querySelector(".rules-option-label")) continue;
+
+    const firstChild = [...option.childNodes].find(
+      (node) => node.nodeType !== Node.TEXT_NODE || node.textContent?.trim(),
+    );
+
+    if (firstChild instanceof HTMLElement && firstChild.tagName === "STRONG") {
+      firstChild.classList.add("rules-option-label");
+      continue;
+    }
+
+    if (!(firstChild instanceof Text)) continue;
+
+    const label = getOptionLabel(firstChild.textContent ?? "");
+    if (!label) continue;
+
+    const span = document.createElement("span");
+    span.className = "rules-option-label";
+    span.textContent = label;
+
+    firstChild.textContent = firstChild.textContent?.slice(label.length) ?? "";
+    option.insertBefore(span, firstChild);
+  }
+}
+
+function getOptionLabel(text: string) {
+  const match = text.match(/^\s*[A-Z]\)\s.*?[.!?:](?=\s|$)/);
+  return match?.[0] ?? (/^\s*[A-Z]\)\s/.test(text) ? text.trimEnd() : null);
 }
 
 function splitLegacyPages(container: HTMLElement) {

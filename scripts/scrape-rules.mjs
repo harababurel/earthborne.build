@@ -292,7 +292,8 @@ function extractContent(html, letter, slug) {
     .replaceAll("\ue01a", '<span class="core-reshuffle"></span>')
     .replaceAll("\ue01b", '<span class="core-conditional"></span>')
     .replaceAll("\ue01c", '<span class="core-guide"></span>')
-    .replaceAll("\ue01d", '<span class="core-per_ranger"></span>');
+    .replaceAll("\ue01d", '<span class="core-per_ranger"></span>')
+    .replaceAll("\ue01e", '<span class="core-ranger"></span>');
 
   // Color EBR stat keywords using the same classes as card text.
   content = content

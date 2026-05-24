@@ -1,9 +1,13 @@
-.rules {
+.rules,
+.rules-container,
+.toc-container {
   --red: var(--nord-11);
   --blue: var(--theme-accent-dark);
 }
 
-html[data-theme="light"] {
+html[data-theme="light"] .rules,
+html[data-theme="light"] .rules-container,
+html[data-theme="light"] .toc-container {
   --blue: var(--theme-accent-light);
 }
 
@@ -379,8 +383,13 @@ html[data-theme="dark"] .rules-page h6[id^="if-you"] {
 }
 
 .rules-option {
-  color: var(--red);
-  font-weight: bold;
+  color: var(--text);
+  font-weight: inherit;
+}
+
+.rules-option-label {
+  color: var(--red, var(--nord-11));
+  font-weight: 700;
 }
 
 .rules-pagination {
