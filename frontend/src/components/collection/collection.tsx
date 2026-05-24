@@ -30,7 +30,7 @@ const BGG_LINKS: Record<string, string> = {
   sib: "https://boardgamegeek.com/boardgame/457239/earthborne-rangers-spire-in-bloom-valley-expansion",
   sos: "https://boardgamegeek.com/boardgameexpansion/466595/earthborne-rangers-shadow-of-the-storm-expansion",
   sotv: "https://boardgamegeek.com/boardgame/400328/earthborne-rangers-stewards-of-the-valley",
-  motp: "https://boardgamegeek.com/boardgameexpansion/412737/earthborne-rangers-moments-on-the-path",
+  mop: "https://boardgamegeek.com/boardgameexpansion/412737/earthborne-rangers-moments-on-the-path",
   mitv: "https://boardgamegeek.com/boardgame/457240/earthborne-rangers-moments-in-the-valley",
 };
 
@@ -40,8 +40,12 @@ const FALLBACK_PACK_NAMES: Record<string, string> = {
   sib: "Spire in Bloom",
   sos: "Shadow of the Storm",
   sotv: "Stewards of the Valley",
-  motp: "Moments on the Path",
+  mop: "Moments on the Path",
   mitv: "Moments in the Valley",
+};
+
+const PACK_BANNER_CODES: Record<string, string> = {
+  mop: "motp",
 };
 
 // Temporarily hide unreleased/repeat expansions until they are fully available
@@ -71,7 +75,7 @@ const COLLECTION_GROUPS: CollectionGroup[] = [
   {
     id: "path",
     titleKey: "settings.collection.groups.path",
-    packCodes: ["motp", "mitv"],
+    packCodes: ["mop", "mitv"],
   },
 ];
 
@@ -119,7 +123,7 @@ export function CollectionSettings(props: Props) {
     "sib",
     "sos",
     "sotv",
-    "motp",
+    "mop",
     "mitv",
   ]);
 
@@ -173,7 +177,7 @@ export function CollectionSettings(props: Props) {
                     bannerAlt={`${displayPackName(pack)} backdrop`}
                     bannerUrl={
                       packsWithBanners.has(pack.code)
-                        ? `/assets/cycles/${pack.code}.avif`
+                        ? `/assets/cycles/${PACK_BANNER_CODES[pack.code] ?? pack.code}.avif`
                         : undefined
                     }
                     bannerMobileUrl={
