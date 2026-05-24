@@ -463,7 +463,7 @@ function replaceTextMarkup(text) {
     .replace(/\bAwareness\b/g, '<b class="color-AWA">Awareness</b>')
     .replace(/\bFitness\b/g, '<b class="color-FIT">Fitness</b>')
     .replace(/\bFocus\b/g, '<b class="color-FOC">Focus</b>')
-    .replace(/\bSpirit\b/g, '<b class="color-SPI">Spirit</b>');
+    .replace(/\bSpirit(?!\s+Speaker)\b/g, '<b class="color-SPI">Spirit</b>');
 }
 
 function toAbsoluteUrl(url, sourcePath) {
