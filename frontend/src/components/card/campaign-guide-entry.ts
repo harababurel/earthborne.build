@@ -14,7 +14,10 @@ const entryIndex = campaignGuideEntryIndex as CampaignGuideEntryIndex;
 export function getCampaignGuideEntryHref(
   card: Pick<Card, "campaign_guide_entry" | "pack_code">,
 ) {
-  const entry = card.campaign_guide_entry?.trim();
+  const entry =
+    card.campaign_guide_entry == null
+      ? null
+      : String(card.campaign_guide_entry).trim();
   if (!entry) return null;
 
   const pageIds = entryIndex.entries[entry];
