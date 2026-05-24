@@ -74,7 +74,7 @@ export const CardSchema = z.object({
   specialty_type: z.enum(SPECIALTY_TYPES).nullish(),
 
   // Campaign guide reference
-  campaign_guide_entry: z.number().nullish(),
+  campaign_guide_entry: z.string().nullish(),
   back_card_code: z.string().nullish(),
 
   // Challenge effects (text for each of the three challenge icons)

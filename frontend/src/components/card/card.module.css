@@ -219,6 +219,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a.location-back-guide-label:hover,
+  a.location-back-guide-label:focus-visible {
+    text-decoration: underline;
   }
 
   .image {
@@ -801,6 +808,16 @@
     align-items: center;
     gap: 0.05rem;
     padding-top: 1.5px;
+  }
+
+  a.token-box.guide-box {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a.token-box.guide-box:hover,
+  a.token-box.guide-box:focus-visible {
+    filter: brightness(1.08);
   }
 
   .guide-icon {

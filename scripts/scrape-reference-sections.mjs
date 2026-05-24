@@ -24,8 +24,15 @@ const OUTPUT_DIR = join(
   "src",
   "assets",
 );
+const CAMPAIGN_GUIDE_ENTRY_INDEX_OUTPUT = "campaign-guide-entry-index.json";
 const CONCURRENCY = 6;
 const FETCH_TIMEOUT_MS = 15_000;
+const PACK_CODE_BY_CAMPAIGN_GUIDE = {
+  legacy_of_the_ancestors: "loa",
+  lure_of_the_valley: "ebr",
+  shadow_of_the_storm: "sos",
+  spire_in_bloom: "sib",
+};
 
 const SECTIONS = [
   {
@@ -652,6 +659,47 @@ ${content}
 </div>`;
 }
 
+function buildCampaignGuideEntryIndex(pages) {
+  const entries = {};
+
+  for (const page of pages) {
+    const entry = extractCampaignGuideEntry(page);
+    if (!entry) continue;
+    const packCode = extractPackCode(page);
+    if (!packCode) continue;
+
+    entries[entry] = {
+      ...entries[entry],
+      [packCode]: page.id,
+    };
+  }
+
+  return {
+    entries: Object.fromEntries(
+      Object.entries(entries).sort(([a], [b]) =>
+        a.localeCompare(b, "en", { numeric: true }),
+      ),
+    ),
+  };
+}
+
+function extractCampaignGuideEntry(page) {
+  const { path, title } = page;
+  const exactEntry = title.match(/^(\d+\.\d+)(?:\s|$)/);
+  if (exactEntry) return exactEntry[1];
+
+  const namedEntry = title.match(/^(\d+)\.\s+\S/);
+  if (namedEntry) return namedEntry[1];
+
+  const pathEntry = path.match(/\/(\d+)_(\d+)$/);
+  return pathEntry ? `${pathEntry[1]}.${pathEntry[2]}` : null;
+}
+
+function extractPackCode(page) {
+  const campaign = page.path.match(/^\/docs\/campaign_guides\/([^/]+)/)?.[1];
+  return campaign ? PACK_CODE_BY_CAMPAIGN_GUIDE[campaign] : null;
+}
+
 function normalizePath(href) {
   if (!href) return null;
   const url = new URL(href, BASE);
@@ -778,6 +826,15 @@ async function main() {
     const path = join(OUTPUT_DIR, section.output);
     writeFileSync(path, output, "utf8");
     console.log(`Wrote ${pages.length} pages to ${path}`);
+
+    if (section.output === "campaign-guides.html") {
+      const indexPath = join(OUTPUT_DIR, CAMPAIGN_GUIDE_ENTRY_INDEX_OUTPUT);
+      const index = buildCampaignGuideEntryIndex(pages);
+      writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`, "utf8");
+      console.log(
+        `Wrote ${Object.keys(index.entries).length} campaign guide entry links to ${indexPath}`,
+      );
+    }
   }
 
   const s = cache.stats();

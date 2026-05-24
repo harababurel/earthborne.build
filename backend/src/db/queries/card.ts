@@ -258,7 +258,7 @@ function transformCard(row: CardRow): {
   aspect_fitness: number | null;
   aspect_focus: number | null;
   aspect_spirit: number | null;
-  campaign_guide_entry: number | null;
+  campaign_guide_entry: string | null;
   quantity: number | null;
   deck_limit: number | null;
   keywords: string[];
@@ -340,7 +340,7 @@ function transformCard(row: CardRow): {
     aspect_fitness: row.aspect_fitness,
     aspect_focus: row.aspect_focus,
     aspect_spirit: row.aspect_spirit,
-    campaign_guide_entry: row.guide_entry ? Number(row.guide_entry) : null,
+    campaign_guide_entry: row.guide_entry,
     quantity: row.quantity,
     deck_limit: row.deck_limit,
     keywords,

@@ -10,6 +10,7 @@ import { cx } from "@/utils/cx";
 import { CardHealth } from "../card-health";
 import { ApproachIcon } from "../icons/approach-icon";
 import { PresenceIcon } from "../icons/health-icons";
+import { getCampaignGuideEntryHref } from "./campaign-guide-entry";
 
 import css from "./card.module.css";
 
@@ -48,6 +49,13 @@ export function CardIcons(props: Props) {
   const showToken = countVal != null && tokenName;
   const showPresence = card.presence != null;
   const showGuide = card.campaign_guide_entry != null;
+  const guideHref = getCampaignGuideEntryHref(card);
+  const guideLabel =
+    card.campaign_guide_entry != null
+      ? t("card.campaign_guide_entry_link", {
+          entry: card.campaign_guide_entry,
+        })
+      : undefined;
 
   return (
     <div className={cx(css["icons"], className)}>
@@ -70,22 +78,41 @@ export function CardIcons(props: Props) {
       />
       {(showToken || showPresence || showGuide) && (
         <div className={css["auxiliary-icons"]}>
-          {showGuide && (
-            <div
-              className={cx(
-                css["token-box"],
-                css["guide-box"],
-                css[aspectColorClass],
-              )}
-            >
-              <div className={css["guide-icon"]}>
-                <i className="core-guide" />
+          {showGuide &&
+            (guideHref ? (
+              <a
+                aria-label={guideLabel}
+                className={cx(
+                  css["token-box"],
+                  css["guide-box"],
+                  css[aspectColorClass],
+                )}
+                href={guideHref}
+                title={guideLabel}
+              >
+                <div className={css["guide-icon"]}>
+                  <i className="core-guide" />
+                </div>
+                <div className={css["guide-value"]}>
+                  {card.campaign_guide_entry}
+                </div>
+              </a>
+            ) : (
+              <div
+                className={cx(
+                  css["token-box"],
+                  css["guide-box"],
+                  css[aspectColorClass],
+                )}
+              >
+                <div className={css["guide-icon"]}>
+                  <i className="core-guide" />
+                </div>
+                <div className={css["guide-value"]}>
+                  {card.campaign_guide_entry}
+                </div>
               </div>
-              <div className={css["guide-value"]}>
-                {card.campaign_guide_entry}
-              </div>
-            </div>
-          )}
+            ))}
           {showToken && (
             <div className={cx(css["token-box"], css[aspectColorClass])}>
               <div className={css["token-count"]}>

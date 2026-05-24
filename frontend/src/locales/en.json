@@ -49,6 +49,7 @@
       }
     },
     "card": {
+      "campaign_guide_entry_link": "Open campaign guide entry {{entry}}",
       "location_back": {
         "arrival_setup": "Arrival Setup",
         "guide_entry": "{{entry}}",
