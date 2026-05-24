@@ -45,6 +45,7 @@ type ReferencePage = {
 
 type ReferenceContent = {
   defaultPageId: string | null;
+  pageList: ReferencePage[];
   pages: Map<string, ReferencePage>;
   toc: string;
   elements: Map<string, string>;
@@ -81,10 +82,7 @@ function RulesReference() {
     [reference.toc, search],
   );
 
-  const pageList = useMemo(
-    () => Array.from(reference.pages.values()),
-    [reference.pages],
-  );
+  const pageList = reference.pageList;
   const activePageIndex = activePage
     ? pageList.findIndex((p) => p.id === activePage.id)
     : -1;
@@ -327,12 +325,42 @@ function parseReferenceContent(html: string): ReferenceContent {
     }
   }
 
+  const pageList = buildPageList(toc, pages);
+
   return {
     defaultPageId: pages.keys().next().value ?? null,
+    pageList,
     pages,
     toc,
     elements,
   };
+}
+
+function buildPageList(toc: string, pages: Map<string, ReferencePage>) {
+  const container = document.createElement("div");
+  container.innerHTML = toc;
+
+  const orderedPages: ReferencePage[] = [];
+  const seen = new Set<string>();
+
+  for (const link of container.querySelectorAll("a[href^='#']")) {
+    const id = link.getAttribute("href")?.slice(1);
+    const page = id ? pages.get(id) : undefined;
+
+    if (!page || seen.has(page.id)) continue;
+
+    orderedPages.push(page);
+    seen.add(page.id);
+  }
+
+  for (const page of pages.values()) {
+    if (seen.has(page.id)) continue;
+
+    orderedPages.push(page);
+    seen.add(page.id);
+  }
+
+  return orderedPages;
 }
 
 function splitLegacyPages(container: HTMLElement) {
