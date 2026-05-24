@@ -86,6 +86,7 @@ export function CollectionSettings(props: Props) {
   const metadata = useStore((state) => state.metadata);
 
   const canEdit = !!setSettings;
+  const canEditPacks = canEdit && !settings.showAllCards;
 
   const onCheckPack = useCallback(
     (packCode: string, val: boolean) => {
@@ -185,22 +186,31 @@ export function CollectionSettings(props: Props) {
                         ? `/assets/cycles/${pack.code}_mobile.avif`
                         : undefined
                     }
+                    classNames={{
+                      container: settings.showAllCards
+                        ? css["cycle-card-disabled"]
+                        : undefined,
+                    }}
                     htmlFor={
-                      canEdit ? `collection-pack-${pack.code}` : undefined
+                      canEditPacks ? `collection-pack-${pack.code}` : undefined
                     }
                     title={
                       <label
-                        htmlFor={`collection-pack-${pack.code}`}
+                        htmlFor={
+                          canEditPacks
+                            ? `collection-pack-${pack.code}`
+                            : undefined
+                        }
                         className={css["cycle-header-container"]}
                         style={{
                           alignItems: "center",
                           justifyContent: "flex-start",
                           gap: "0.75rem",
-                          cursor: canEdit ? "pointer" : "default",
+                          cursor: canEditPacks ? "pointer" : "default",
                         }}
                       >
                         <Checkbox
-                          disabled={!canEdit}
+                          disabled={!canEditPacks}
                           checked={!!settings.collection[pack.code]}
                           id={`collection-pack-${pack.code}`}
                           name={pack.code}
