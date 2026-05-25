@@ -340,7 +340,8 @@ function transformCard(row: CardRow): {
     aspect_fitness: row.aspect_fitness,
     aspect_focus: row.aspect_focus,
     aspect_spirit: row.aspect_spirit,
-    campaign_guide_entry: row.guide_entry,
+    campaign_guide_entry:
+      row.guide_entry == null ? null : String(row.guide_entry),
     quantity: row.quantity,
     deck_limit: row.deck_limit,
     keywords,
