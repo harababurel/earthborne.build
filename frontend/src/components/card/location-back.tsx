@@ -5,7 +5,7 @@ import { parseCardTextHtml } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardScan } from "../card-scan";
 import { CardThumbnail } from "../card-thumbnail";
-import { getCampaignGuideEntryHref } from "./campaign-guide-entry";
+import { CampaignGuideEntryLink } from "./campaign-guide-entry-link";
 import css from "./card.module.css";
 import { CardHeader } from "./card-header";
 import { hasLocationBack } from "./location-back.helpers";
@@ -67,7 +67,6 @@ export function LocationBackFace(props: Props) {
 function LocationBackContent(props: { card: Card }) {
   const { card } = props;
   const { t } = useTranslation();
-  const guideHref = getCampaignGuideEntryHref(card);
   const guideLabel =
     card.campaign_guide_entry != null
       ? t("card.campaign_guide_entry_link", {
@@ -84,26 +83,22 @@ function LocationBackContent(props: { card: Card }) {
     >
       {card.campaign_guide_entry != null && (
         <p className={css["location-back-guide"]}>
-          {guideHref ? (
-            <a
-              aria-label={guideLabel}
-              className={css["location-back-guide-label"]}
-              href={guideHref}
-              title={guideLabel}
-            >
-              <span className="core-guide" />
-              {t("card.location_back.guide_entry", {
-                entry: card.campaign_guide_entry,
-              })}
-            </a>
-          ) : (
-            <span className={css["location-back-guide-label"]}>
-              <span className="core-guide" />
-              {t("card.location_back.guide_entry", {
-                entry: card.campaign_guide_entry,
-              })}
-            </span>
-          )}
+          <CampaignGuideEntryLink
+            card={card}
+            choiceClassName={cx(
+              css["token-box"],
+              css["guide-box"],
+              css["color-neutral"],
+            )}
+            className={css["location-back-guide-label"]}
+            label={guideLabel}
+            title={guideLabel}
+          >
+            <span className="core-guide" />
+            {t("card.location_back.guide_entry", {
+              entry: card.campaign_guide_entry,
+            })}
+          </CampaignGuideEntryLink>
         </p>
       )}
       {card.path_deck_assembly && (
