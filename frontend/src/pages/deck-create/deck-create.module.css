@@ -225,6 +225,27 @@
   align-items: start;
 }
 
+.aspect-pack-groups {
+  display: grid;
+  gap: 1rem;
+}
+
+.aspect-pack-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.aspect-pack-title {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.aspect-card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
 .selectable-card {
   display: block;
   padding: 0;
@@ -248,6 +269,26 @@
 
 .selectable-card.selected {
   border-color: var(--accent);
+}
+
+.aspect-option {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  min-height: 100%;
+  padding: 0.75rem;
+  background: var(--palette-point-five);
+  border-color: var(--palette-1);
+}
+
+.aspect-option:hover,
+.aspect-option:focus-visible {
+  border-color: var(--accent);
+}
+
+.aspect-option:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .card-scan-tooltip {

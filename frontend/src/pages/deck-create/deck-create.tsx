@@ -54,6 +54,7 @@ import {
 } from "@/store/selectors/deck-create";
 import type { DeckCreateStep } from "@/store/slices/deck-create.types";
 import { cx } from "@/utils/cx";
+import { displayPackName } from "@/utils/formatting";
 import { and, type Filter } from "@/utils/fp";
 import { useAccentColor } from "@/utils/use-accent-color";
 import { useHotkey } from "@/utils/use-hotkey";
@@ -196,20 +197,95 @@ function DeckCreateStepAspect() {
   const deckCreate = useStore(selectDeckCreateChecked);
   const cards = useStore(selectDeckCreateAspectCards);
   const setAspect = useStore((state) => state.deckCreateSetAspect);
+  const groups = groupAspectCardsByPack(cards);
 
   return (
     <PickerStep title={t("deck_create.aspect.title")}>
-      <CardGrid>
-        {cards.map((card) => (
-          <SelectableCard
-            key={card.card.code}
-            card={card}
-            onSelect={() => setAspect(card.card.code)}
-            selected={deckCreate.aspectCode === card.card.code}
-          />
+      <div className={css["aspect-pack-groups"]}>
+        {groups.map((group) => (
+          <section className={css["aspect-pack-group"]} key={group.packCode}>
+            <h2 className={css["aspect-pack-title"]}>{group.packName}</h2>
+            <CardGrid className={css["aspect-card-grid"]}>
+              {group.cards.map((card) => (
+                <SelectableAspectCard
+                  key={card.card.code}
+                  card={card}
+                  onSelect={() => setAspect(card.card.code)}
+                  selected={deckCreate.aspectCode === card.card.code}
+                />
+              ))}
+            </CardGrid>
+          </section>
         ))}
-      </CardGrid>
+      </div>
     </PickerStep>
+  );
+}
+
+function SelectableAspectCard({
+  card,
+  onSelect,
+  selected,
+}: {
+  card: ResolvedCard;
+  onSelect: () => void;
+  selected: boolean;
+}) {
+  return (
+    <button
+      aria-label={card.card.name}
+      className={cx(
+        css["selectable-card"],
+        css["aspect-option"],
+        selected && css["selected"],
+      )}
+      onClick={onSelect}
+      type="button"
+    >
+      <div className={deckSidebarCss["aspect-stats"]}>
+        <AspectStat aspect="AWA" value={card.card.aspect_awareness} />
+        <AspectStat aspect="SPI" value={card.card.aspect_spirit} />
+        <AspectStat aspect="FIT" value={card.card.aspect_fitness} />
+        <AspectStat aspect="FOC" value={card.card.aspect_focus} />
+      </div>
+      <CardText
+        size="full"
+        text={card.card.text ?? undefined}
+        typeCode={card.card.type_code ?? ""}
+      />
+    </button>
+  );
+}
+
+function groupAspectCardsByPack(cards: ResolvedCard[]) {
+  const groups = new Map<
+    string,
+    {
+      cards: ResolvedCard[];
+      packCode: string;
+      packName: string;
+      position: number;
+    }
+  >();
+
+  for (const card of cards) {
+    const packCode = card.pack?.code ?? card.card.pack_code;
+    const group = groups.get(packCode);
+
+    if (group) {
+      group.cards.push(card);
+    } else {
+      groups.set(packCode, {
+        cards: [card],
+        packCode,
+        packName: card.pack ? displayPackName(card.pack) : packCode,
+        position: card.pack?.position ?? Number.MAX_SAFE_INTEGER,
+      });
+    }
+  }
+
+  return Array.from(groups.values()).sort(
+    (a, b) => a.position - b.position || a.packName.localeCompare(b.packName),
   );
 }
 
@@ -633,8 +709,14 @@ function PickerStep({
   );
 }
 
-function CardGrid({ children }: { children: React.ReactNode }) {
-  return <div className={css["card-grid"]}>{children}</div>;
+function CardGrid({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <div className={cx(css["card-grid"], className)}>{children}</div>;
 }
 
 function SelectableCard({
