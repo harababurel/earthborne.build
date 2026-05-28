@@ -1,6 +1,10 @@
 import { useTranslation } from "react-i18next";
 import type { CardTypeTab } from "@/pages/browse/set-tree";
-import { Select } from "../ui/select";
+import {
+  RadioButtonGroup,
+  RadioButtonGroupItem,
+} from "../ui/radio-button-group";
+import css from "./er-card-type-filter.module.css";
 
 type Props = {
   value: CardTypeTab;
@@ -21,18 +25,17 @@ const CARD_TYPES: CardTypeTab[] = [
 export function ErCardTypeFilter({ value, onValueChange }: Props) {
   const { t } = useTranslation();
 
-  const options = CARD_TYPES.map((tab) => ({
-    value: tab,
-    label: t(`browse.tabs.${tab}`),
-  }));
-
   return (
-    <Select
-      aria-label={t("filters.type.title")}
-      required
-      options={options}
+    <RadioButtonGroup
+      className={css["card-type-filter"]}
       value={value}
-      onChange={(e) => onValueChange(e.target.value as CardTypeTab)}
-    />
+      onValueChange={onValueChange}
+    >
+      {CARD_TYPES.map((tab) => (
+        <RadioButtonGroupItem key={tab} value={tab} size="small">
+          {t(`browse.tabs.${tab}`)}
+        </RadioButtonGroupItem>
+      ))}
+    </RadioButtonGroup>
   );
 }

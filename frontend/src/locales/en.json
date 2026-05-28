@@ -31,8 +31,8 @@
     "browse": {
       "title": "Browse cards",
       "tabs": {
-        "ranger": "Ranger cards",
-        "path": "Path cards",
+        "ranger": "Ranger",
+        "path": "Path",
         "location": "Locations",
         "weather": "Weather",
         "mission": "Missions",
