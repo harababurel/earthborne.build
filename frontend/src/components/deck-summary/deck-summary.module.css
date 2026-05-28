@@ -172,7 +172,7 @@
   }
 }
 
-@media (pointer: fine) {
+@media (any-pointer: fine) {
   .summary.interactive {
     &:hover {
       & .quick-actions {
