@@ -19,6 +19,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
+import { AspectStats } from "@/components/aspect-stats";
 import { Card } from "@/components/card/card";
 import { CardText } from "@/components/card/card-text";
 import { CardListContainer } from "@/components/card-list/card-list-container";
@@ -29,7 +30,6 @@ import { CollapseSidebarButton } from "@/components/collapse-sidebar-button";
 import deckSidebarCss from "@/components/deck-display/sidebar.module.css";
 import { Filters } from "@/components/filters/filters";
 import { Footer } from "@/components/footer";
-import { AspectIcon } from "@/components/icons/aspect-icon";
 import { Masthead } from "@/components/masthead";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -242,12 +242,7 @@ function SelectableAspectCard({
       onClick={onSelect}
       type="button"
     >
-      <div className={deckSidebarCss["aspect-stats"]}>
-        <AspectStat aspect="AWA" value={card.card.aspect_awareness} />
-        <AspectStat aspect="SPI" value={card.card.aspect_spirit} />
-        <AspectStat aspect="FIT" value={card.card.aspect_fitness} />
-        <AspectStat aspect="FOC" value={card.card.aspect_focus} />
-      </div>
+      <AspectStats aspectCard={card.card} />
       <CardText
         size="full"
         text={card.card.text ?? undefined}
@@ -919,12 +914,7 @@ function DeckCreateReviewIdentity({
               {t("deck_create.steps.aspect")}
             </h2>
             <div className={deckSidebarCss["card-info"]}>
-              <div className={deckSidebarCss["aspect-stats"]}>
-                <AspectStat aspect="AWA" value={aspect?.aspect_awareness} />
-                <AspectStat aspect="SPI" value={aspect?.aspect_spirit} />
-                <AspectStat aspect="FIT" value={aspect?.aspect_fitness} />
-                <AspectStat aspect="FOC" value={aspect?.aspect_focus} />
-              </div>
+              <AspectStats aspectCard={aspect} />
               <CardText
                 size="full"
                 text={aspect?.text ?? undefined}
@@ -1015,35 +1005,6 @@ function DeckCreateReviewIdentity({
         </Plane>
       </div>
     </aside>
-  );
-}
-
-function AspectStat({
-  aspect,
-  value,
-}: {
-  aspect: AspectKey;
-  value: number | null | undefined;
-}) {
-  return (
-    <div className={deckSidebarCss["stat-item"]}>
-      <div
-        className={cx(
-          deckSidebarCss["aspect-square"],
-          deckSidebarCss[aspect.toLowerCase()],
-        )}
-      >
-        <AspectIcon
-          aspect={aspect}
-          className={deckSidebarCss["white-icon"]}
-          size="3.75rem"
-        />
-        <div className={deckSidebarCss["stat-overlay"]}>
-          <span className={deckSidebarCss["stat-value"]}>{value}</span>
-          <span className={deckSidebarCss["stat-label"]}>{aspect}</span>
-        </div>
-      </div>
-    </div>
   );
 }
 
