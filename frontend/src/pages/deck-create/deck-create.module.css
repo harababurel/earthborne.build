@@ -258,28 +258,56 @@
   box-shadow: var(--shadow-lg);
 }
 
-.identity {
+.review-display {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  min-width: 0;
+
+  @media screen and (min-width: 75rem) {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+
+  &.review-display-filters-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-.review-card-link {
-  color: var(--accent);
-  text-decoration: none;
+.review-layout {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+
+  @media screen and (min-width: 64rem) {
+    grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  }
 }
 
-.review-card-link:hover {
-  text-decoration: underline;
+.review-identity {
+  min-width: 0;
+
+  @media screen and (min-width: 64rem) {
+    position: sticky;
+    top: 0.75rem;
+  }
 }
 
-.review-group {
-  border-top: 1px solid var(--palette-1);
-  padding-top: 0.75rem;
+.review-list-panel,
+.review-filters {
+  min-height: 32rem;
+  height: min(48rem, calc(100dvh - 12rem));
+  min-width: 0;
 }
 
-.review-group ul {
-  columns: 2 16rem;
+.review-list-panel {
+  overflow: hidden;
+}
+
+.review-filters {
+  position: relative;
+  border: 1px solid var(--palette-1);
+  border-radius: var(--rounded);
+  overflow: hidden;
 }
 
 .step-instructions {

@@ -4,29 +4,44 @@ import {
   BACKGROUND_PICKS,
   BACKGROUND_TYPES,
   type Card as CardT,
+  DECK_CARD_COPIES,
   OUTSIDE_INTEREST_PICKS,
   PERSONALITY_PICKS,
   SPECIALTY_PICKS,
   SPECIALTY_TYPES,
 } from "@earthborne-build/shared";
 import type { TFunction } from "i18next";
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  FilterIcon,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Card } from "@/components/card/card";
+import { CardText } from "@/components/card/card-text";
+import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { CardScan } from "@/components/card-scan";
 import { PortaledCardTooltip } from "@/components/card-tooltip/card-tooltip-portaled";
+import { CollapseSidebarButton } from "@/components/collapse-sidebar-button";
+import deckSidebarCss from "@/components/deck-display/sidebar.module.css";
+import { Filters } from "@/components/filters/filters";
 import { Footer } from "@/components/footer";
+import { AspectIcon } from "@/components/icons/aspect-icon";
 import { Masthead } from "@/components/masthead";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { HotkeyTooltip } from "@/components/ui/hotkey";
+import { Plane } from "@/components/ui/plane";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast.hooks";
 import { DefaultTooltip } from "@/components/ui/tooltip";
 import { useRestingTooltip } from "@/components/ui/tooltip.hooks";
 import { useStore } from "@/store";
+import { filterRangerCards } from "@/store/lib/filtering";
 import type { ResolvedCard } from "@/store/lib/types";
 import {
   selectDeckCreateAspectCards,
@@ -40,7 +55,9 @@ import {
 } from "@/store/selectors/deck-create";
 import type { DeckCreateStep } from "@/store/slices/deck-create.types";
 import { cx } from "@/utils/cx";
+import { and, type Filter } from "@/utils/fp";
 import { useAccentColor } from "@/utils/use-accent-color";
+import { useHotkey } from "@/utils/use-hotkey";
 import css from "./deck-create.module.css";
 
 const steps: DeckCreateStep[] = [
@@ -69,6 +86,29 @@ function DeckCreate() {
       <DeckCreateInner />
     </CardModalProvider>
   ) : null;
+}
+
+export function DeckCreateReviewDebug() {
+  const deckCreate = useStore((state) => state.deckCreate);
+  const destroy = useStore((state) => state.resetCreate);
+  const initialize = useStore((state) => state.initCreate);
+
+  useEffect(() => {
+    initialize();
+    return () => destroy();
+  }, [destroy, initialize]);
+
+  return deckCreate ? (
+    <CardModalProvider>
+      <DeckCreateReviewDebugInner />
+    </CardModalProvider>
+  ) : null;
+}
+
+function DeckCreateReviewDebugInner() {
+  useSeedReviewDebugDeck();
+
+  return <DeckCreateInner />;
 }
 
 function DeckCreateInner() {
@@ -492,34 +532,39 @@ function DeckCreateStepReview() {
   const aspect = aspectCards.find(
     (card) => card.card.code === deckCreate.aspectCode,
   );
+  const sections = [
+    {
+      cards: personality,
+      slots: deckCreate.personalitySlots,
+    },
+    {
+      cards: background,
+      slots: deckCreate.backgroundSlots,
+    },
+    {
+      cards: specialty,
+      slots: deckCreate.specialtySlots,
+    },
+    {
+      cards: outside,
+      slots: deckCreate.outsideInterestSlots,
+    },
+  ];
 
   return (
     <section className={css["wizard-step"]}>
       <h1>{t("deck_create.review.title")}</h1>
-      <div className={css["identity"]}>
-        {role && <Card resolvedCard={role} size="compact" />}
-        {aspect && <Card resolvedCard={aspect} size="compact" />}
+      <div className={css["review-layout"]}>
+        <DeckCreateReviewIdentity
+          aspect={aspect?.card}
+          background={deckCreate.background}
+          deckSize={reviewDeckSize(sections)}
+          outsideInterest={selectedOutsideInterest(outside, deckCreate)}
+          role={role?.card}
+          specialty={deckCreate.specialty}
+        />
+        <ReviewCardsDisplay sections={sections} />
       </div>
-      <ReviewGroup
-        cards={personality}
-        slots={deckCreate.personalitySlots}
-        title={t("deck_create.steps.personality")}
-      />
-      <ReviewGroup
-        cards={background}
-        slots={deckCreate.backgroundSlots}
-        title={t("deck_create.steps.background")}
-      />
-      <ReviewGroup
-        cards={specialty}
-        slots={deckCreate.specialtySlots}
-        title={t("deck_create.steps.specialty")}
-      />
-      <ReviewGroup
-        cards={outside}
-        slots={deckCreate.outsideInterestSlots}
-        title={t("deck_create.steps.outside_interest")}
-      />
     </section>
   );
 }
@@ -755,61 +800,461 @@ function getAspectValue(card: CardT, aspect: AspectKey) {
   }
 }
 
-function ReviewGroup({
-  cards,
-  slots,
-  title,
-}: {
+type ReviewSection = {
   cards: ResolvedCard[];
   slots: Record<string, number>;
-  title: string;
+};
+
+const reviewListKey = "deck-create-review";
+
+function DeckCreateReviewIdentity({
+  aspect,
+  background,
+  deckSize,
+  outsideInterest,
+  role,
+  specialty,
+}: {
+  aspect: CardT | undefined;
+  background: string | undefined;
+  deckSize: number;
+  outsideInterest: CardT | undefined;
+  role: CardT | undefined;
+  specialty: string | undefined;
 }) {
+  const { t } = useTranslation();
+  const { refs, referenceProps, isMounted, floatingStyles, transitionStyles } =
+    useRestingTooltip();
+  const cssVariables = useAccentColor(role);
+
   return (
-    <section className={css["review-group"]}>
-      <h2>{title}</h2>
-      <ul>
-        {cards
-          .filter((card) => slots[card.card.code] > 0)
-          .map((card) => (
-            <li key={card.card.code}>
-              {slots[card.card.code]}x <ReviewCardLink card={card} />
-            </li>
-          ))}
-      </ul>
-    </section>
+    <aside
+      className={cx(css["review-identity"], deckSidebarCss["container"])}
+      style={cssVariables}
+    >
+      <div className={deckSidebarCss["sidebar-inner"]}>
+        <Plane className={deckSidebarCss["section"]}>
+          <h2 className={deckSidebarCss["section-title"]}>
+            {t("deck_create.steps.role")}
+          </h2>
+          <div className={deckSidebarCss["card-info"]}>
+            <h3 className={deckSidebarCss["card-name"]}>{role?.name}</h3>
+            {role && (
+              <CardScan
+                card={role}
+                className={deckSidebarCss["card-scan"]}
+                hideFlipButton
+                lazy
+              />
+            )}
+            <CardText
+              size="full"
+              text={role?.text ?? undefined}
+              typeCode={role?.type_code ?? ""}
+            />
+          </div>
+        </Plane>
+
+        <Plane className={deckSidebarCss["combined-section"]}>
+          <div className={deckSidebarCss["column"]}>
+            <h2 className={deckSidebarCss["section-title"]}>
+              {t("deck_create.steps.aspect")}
+            </h2>
+            <div className={deckSidebarCss["card-info"]}>
+              <div className={deckSidebarCss["aspect-stats"]}>
+                <AspectStat aspect="AWA" value={aspect?.aspect_awareness} />
+                <AspectStat aspect="SPI" value={aspect?.aspect_spirit} />
+                <AspectStat aspect="FIT" value={aspect?.aspect_fitness} />
+                <AspectStat aspect="FOC" value={aspect?.aspect_focus} />
+              </div>
+              <CardText
+                size="full"
+                text={aspect?.text ?? undefined}
+                typeCode={aspect?.type_code ?? ""}
+              />
+            </div>
+          </div>
+
+          <div className={deckSidebarCss["divider"]} />
+
+          <div className={deckSidebarCss["column"]}>
+            <h2 className={deckSidebarCss["section-title"]}>
+              {t("deck_create.steps.review")}
+            </h2>
+            <div className={deckSidebarCss["identity-info"]}>
+              <div className={deckSidebarCss["identity-item"]}>
+                <span className={deckSidebarCss["identity-label"]}>
+                  {t("deck.evolution.status")}
+                </span>
+                <span className={deckSidebarCss["identity-value"]}>
+                  <DefaultTooltip
+                    tooltip={t("deck.evolution.starter_description")}
+                  >
+                    <span className={deckSidebarCss["status-value"]}>
+                      {t("deck.evolution.starter")}
+                    </span>
+                  </DefaultTooltip>
+                </span>
+              </div>
+              <div className={deckSidebarCss["identity-item"]}>
+                <span className={deckSidebarCss["identity-label"]}>
+                  {t("deck.stats.deck_size")}
+                </span>
+                <span className={deckSidebarCss["identity-value"]}>
+                  {deckSize}
+                </span>
+              </div>
+              {background && (
+                <ReviewIdentitySet
+                  label={t("deck_create.steps.background")}
+                  tooltip={t(
+                    `deck_create.background_type_description.${background}`,
+                  )}
+                  value={t(`common.set.${background}`)}
+                />
+              )}
+              {specialty && (
+                <ReviewIdentitySet
+                  label={t("deck_create.steps.specialty")}
+                  tooltip={t(
+                    `deck_create.specialty_type_description.${specialty}`,
+                  )}
+                  value={t(`common.set.${specialty}`)}
+                />
+              )}
+              {outsideInterest && (
+                <div className={deckSidebarCss["identity-item"]}>
+                  <span className={deckSidebarCss["identity-label"]}>
+                    {t("deck_create.steps.outside_interest")}
+                  </span>
+                  <span className={deckSidebarCss["identity-value"]}>
+                    <Link
+                      {...referenceProps}
+                      className={deckSidebarCss["card-link"]}
+                      href={`/card/${outsideInterest.code}`}
+                      ref={refs.setReference}
+                      style={{
+                        color: outsideInterest.aspect_requirement_type
+                          ? `var(--color-${outsideInterest.aspect_requirement_type.toLowerCase()})`
+                          : undefined,
+                      }}
+                    >
+                      {outsideInterest.name}
+                    </Link>
+                    {isMounted && (
+                      <PortaledCardTooltip
+                        card={outsideInterest}
+                        ref={refs.setFloating}
+                        floatingStyles={floatingStyles}
+                        transitionStyles={transitionStyles}
+                      />
+                    )}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </Plane>
+      </div>
+    </aside>
   );
 }
 
-function ReviewCardLink({ card }: { card: ResolvedCard }) {
-  const { refs, referenceProps, isMounted, floatingStyles, transitionStyles } =
-    useRestingTooltip();
+function AspectStat({
+  aspect,
+  value,
+}: {
+  aspect: AspectKey;
+  value: number | null | undefined;
+}) {
+  return (
+    <div className={deckSidebarCss["stat-item"]}>
+      <div
+        className={cx(
+          deckSidebarCss["aspect-square"],
+          deckSidebarCss[aspect.toLowerCase()],
+        )}
+      >
+        <AspectIcon
+          aspect={aspect}
+          className={deckSidebarCss["white-icon"]}
+          size="3.75rem"
+        />
+        <div className={deckSidebarCss["stat-overlay"]}>
+          <span className={deckSidebarCss["stat-value"]}>{value}</span>
+          <span className={deckSidebarCss["stat-label"]}>{aspect}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewIdentitySet({
+  label,
+  tooltip,
+  value,
+}: {
+  label: string;
+  tooltip: string;
+  value: string;
+}) {
+  return (
+    <div className={deckSidebarCss["identity-item"]}>
+      <span className={deckSidebarCss["identity-label"]}>{label}</span>
+      <span className={deckSidebarCss["identity-value"]}>
+        <DefaultTooltip tooltip={tooltip}>
+          <span className={deckSidebarCss["status-value"]}>{value}</span>
+        </DefaultTooltip>
+      </span>
+    </div>
+  );
+}
+
+function ReviewCardsDisplay({ sections }: { sections: ReviewSection[] }) {
+  const { t } = useTranslation();
+  const [filtersOpen, setFiltersOpen] = useState(true);
+  const allCards = sections.flatMap(({ cards, slots }) =>
+    cards.filter((card) => slots[card.card.code] > 0),
+  );
+  const allSlots = sections.reduce<Record<string, number>>((acc, section) => {
+    for (const [code, quantity] of Object.entries(section.slots)) {
+      acc[code] = quantity;
+    }
+    return acc;
+  }, {});
+
+  useDeckCreateReviewList(allCards.map((card) => card.card.code));
+  const activeList = useStore((state) => state.activeList);
+
+  const toggleFilters = useCallback(() => {
+    setFiltersOpen((open) => !open);
+  }, []);
+
+  const closeFilters = useCallback(() => {
+    setFiltersOpen(false);
+  }, []);
+
+  useHotkey("alt+2", toggleFilters);
+
+  if (allCards.length === 0) return null;
+  if (activeList !== reviewListKey) return null;
 
   return (
-    <>
-      <a
-        {...referenceProps}
-        className={css["review-card-link"]}
-        href={`/card/${card.card.code}`}
-        ref={refs.setReference}
-        rel="noreferrer"
-        target="_blank"
-      >
-        {card.card.name}
-      </a>
-      {isMounted && (
-        <PortaledCardTooltip
-          card={card.card}
-          ref={refs.setFloating}
-          floatingStyles={floatingStyles}
-          transitionStyles={transitionStyles}
-        />
+    <div
+      className={cx(
+        css["review-display"],
+        !filtersOpen && css["review-display-filters-collapsed"],
       )}
-    </>
+    >
+      <div className={css["review-list-panel"]}>
+        <CardListContainer
+          hideFooter
+          quantities={allSlots}
+          slotRight={
+            <HotkeyTooltip
+              keybind="alt+2"
+              description={t("lists.actions.toggle_filters")}
+            >
+              <Button onClick={toggleFilters} iconOnly size="lg">
+                <FilterIcon />
+              </Button>
+            </HotkeyTooltip>
+          }
+        />
+      </div>
+      {filtersOpen && (
+        <div className={css["review-filters"]}>
+          <CollapseSidebarButton
+            hotkey="alt+2"
+            hotkeyLabel={t("lists.actions.toggle_filters")}
+            onClick={closeFilters}
+            orientation="right"
+          />
+          <Filters targetDeck={undefined} />
+        </div>
+      )}
+    </div>
   );
+}
+
+function useDeckCreateReviewList(cardCodes: string[]) {
+  const addList = useStore((state) => state.addList);
+  const removeList = useStore((state) => state.removeList);
+  const setActiveList = useStore((state) => state.setActiveList);
+  const cardCodeKey = useMemo(
+    () => [...cardCodes].sort().join("|"),
+    [cardCodes],
+  );
+
+  useEffect(() => {
+    const codes = new Set(cardCodeKey ? cardCodeKey.split("|") : []);
+    const selectedCardsFilter: Filter = (card) => codes.has(card.code);
+
+    addList(
+      reviewListKey,
+      { card_type: "player" },
+      {
+        additionalFilters: ["pack", "illustrator"],
+        systemFilter: and([filterRangerCards, selectedCardsFilter]),
+      },
+    );
+    setActiveList(reviewListKey);
+
+    return () => {
+      if (useStore.getState().activeList === reviewListKey) {
+        setActiveList(undefined);
+      }
+      removeList(reviewListKey);
+    };
+  }, [addList, cardCodeKey, removeList, setActiveList]);
 }
 
 function selectedCount(slots: Record<string, number>) {
   return Object.values(slots).filter((quantity) => quantity > 0).length;
+}
+
+function reviewDeckSize(sections: ReviewSection[]) {
+  return sections.reduce(
+    (total, section) =>
+      total +
+      Object.values(section.slots).reduce(
+        (sectionTotal, quantity) => sectionTotal + quantity,
+        0,
+      ),
+    0,
+  );
+}
+
+function selectedOutsideInterest(
+  outsideCards: ResolvedCard[],
+  deckCreate: ReturnType<typeof selectDeckCreateChecked>,
+) {
+  return outsideCards.find(
+    (card) => deckCreate.outsideInterestSlots[card.card.code],
+  )?.card;
+}
+
+function useSeedReviewDebugDeck() {
+  const deckCreate = useStore(selectDeckCreateChecked);
+  const aspectCards = useStore(selectDeckCreateAspectCards);
+  const personalityCards = useStore(selectDeckCreatePersonalityCards);
+  const outsideCards = useStore(selectDeckCreateOutsideInterestCards);
+  const setName = useStore((state) => state.deckCreateSetName);
+  const setAspect = useStore((state) => state.deckCreateSetAspect);
+  const setBackground = useStore((state) => state.deckCreateSetBackground);
+  const setSpecialty = useStore((state) => state.deckCreateSetSpecialty);
+  const setRole = useStore((state) => state.deckCreateSetRole);
+  const setStep = useStore((state) => state.deckCreateSetStep);
+
+  const seed = useMemo(() => {
+    const aspect = aspectCards[0];
+    if (!aspect) return;
+
+    const background = BACKGROUND_TYPES.map((type) => ({
+      type,
+      cards: outsideCards.filter((card) => card.card.background_type === type),
+    })).find(({ cards }) => cards.length >= BACKGROUND_PICKS);
+
+    const specialty = SPECIALTY_TYPES.map((type) => ({
+      type,
+      cards: outsideCards.filter(
+        (card) =>
+          card.card.specialty_type === type && card.card.type_code !== "role",
+      ),
+      roles: outsideCards.filter(
+        (card) =>
+          card.card.specialty_type === type && card.card.type_code === "role",
+      ),
+    })).find(
+      ({ cards, roles }) => cards.length >= SPECIALTY_PICKS && roles.length > 0,
+    );
+
+    if (!background || !specialty) return;
+
+    const personalitySlots = ASPECT_ORDER.reduce<Record<string, number>>(
+      (slots, aspectKey) => {
+        const card = personalityCards.find(
+          (candidate) =>
+            candidate.card.aspect_requirement_type === aspectKey &&
+            !slots[candidate.card.code],
+        );
+        if (card) slots[card.card.code] = DECK_CARD_COPIES;
+        return slots;
+      },
+      {},
+    );
+
+    if (selectedCount(personalitySlots) !== PERSONALITY_PICKS) return;
+
+    const backgroundSlots = Object.fromEntries(
+      background.cards
+        .slice(0, BACKGROUND_PICKS)
+        .map((card) => [card.card.code, DECK_CARD_COPIES]),
+    );
+    const specialtySlots = Object.fromEntries(
+      specialty.cards
+        .slice(0, SPECIALTY_PICKS)
+        .map((card) => [card.card.code, DECK_CARD_COPIES]),
+    );
+    const used = new Set([
+      ...Object.keys(backgroundSlots),
+      ...Object.keys(specialtySlots),
+    ]);
+    const outsideInterest = outsideCards.find(
+      (card) =>
+        !used.has(card.card.code) &&
+        card.card.type_code !== "role" &&
+        card.card.category !== "personality",
+    );
+
+    if (!outsideInterest) return;
+
+    return {
+      aspectCode: aspect.card.code,
+      background: background.type,
+      backgroundSlots,
+      outsideInterestSlots: {
+        [outsideInterest.card.code]: DECK_CARD_COPIES,
+      },
+      personalitySlots,
+      roleCode: specialty.roles[0].card.code,
+      specialty: specialty.type,
+      specialtySlots,
+    };
+  }, [aspectCards, outsideCards, personalityCards]);
+
+  useEffect(() => {
+    if (!seed || deckCreate.step === "review") return;
+
+    setName("Debug Review Ranger");
+    setAspect(seed.aspectCode);
+    setBackground(seed.background);
+    setSpecialty(seed.specialty);
+    setRole(seed.roleCode);
+
+    useStore.setState((state) => ({
+      deckCreate: state.deckCreate
+        ? {
+            ...state.deckCreate,
+            backgroundSlots: seed.backgroundSlots,
+            outsideInterestSlots: seed.outsideInterestSlots,
+            personalitySlots: seed.personalitySlots,
+            specialtySlots: seed.specialtySlots,
+          }
+        : state.deckCreate,
+    }));
+
+    setStep("review");
+  }, [
+    deckCreate.step,
+    seed,
+    setAspect,
+    setBackground,
+    setName,
+    setRole,
+    setSpecialty,
+    setStep,
+  ]);
 }
 
 function canAdvance(deckCreate: ReturnType<typeof selectDeckCreateChecked>) {

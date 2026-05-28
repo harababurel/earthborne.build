@@ -19,6 +19,7 @@ import { CardSearch } from "./card-search";
 import type { CardListProps } from "./types";
 
 interface Props extends CardListProps {
+  hideFooter?: boolean;
   ref?: React.Ref<HTMLDivElement>;
   topContent?: React.ReactNode;
 }
@@ -29,6 +30,7 @@ export function CardListContainer(props: Props) {
     slotLeft,
     slotRight,
     targetDeck,
+    hideFooter,
     topContent,
     ref,
     ...rest
@@ -147,7 +149,7 @@ export function CardListContainer(props: Props) {
               )}
           </>
         )}
-        <Footer className={css["footer"]} />
+        {!hideFooter && <Footer className={css["footer"]} />}
       </div>
     </CenterLayout>
   );
