@@ -13,6 +13,7 @@ export function mapTabToSlot(tab: string): Slot {
 export type EditState = {
   description_md?: string | null;
   role_code?: string;
+  aspect_code?: string;
   name?: string | null;
   quantities?: {
     slots?: Record<string, number>;
@@ -49,6 +50,8 @@ export type DeckEditsSlice = {
   ): void;
 
   updateInvestigatorCode(deckId: Id, code: string): void;
+
+  updateAspectCode(deckId: Id, code: string): void;
 
   unlockReward(deckId: Id, cardCode: string): void;
 

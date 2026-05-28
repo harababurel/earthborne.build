@@ -27,6 +27,7 @@ import { resolveCardWithRelations } from "@/store/lib/resolve-card";
 import { deckTags } from "@/store/lib/resolve-deck";
 import { applySearch } from "@/store/lib/searching";
 import type { ResolvedCard, ResolvedDeck } from "@/store/lib/types";
+import { selectDeckCreateAspectCards } from "@/store/selectors/deck-create";
 import type { History } from "@/store/selectors/decks";
 import {
   selectCollection,
@@ -335,19 +336,47 @@ export function DeckDisplay(props: DeckDisplayProps) {
 
 function DeckEditSummary({ deck }: { deck: ResolvedDeck }) {
   const { t } = useTranslation();
-  const metadata = useStore(selectMetadata);
-  const roleCard = metadata.cards[deck.role_code];
-  const aspectCard = metadata.cards[deck.aspect_code];
+  const { cards } = useStore(selectMetadata);
+  const roleOptions = useMemo(
+    () =>
+      Object.values(cards)
+        .filter((card) => card.type_code === "role")
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((card) => ({ label: card.name, value: card.code })),
+    [cards],
+  );
+  const aspectCards = useStore(selectDeckCreateAspectCards);
+  const updateInvestigatorCode = useStore(
+    (state) => state.updateInvestigatorCode,
+  );
+  const updateAspectCode = useStore((state) => state.updateAspectCode);
+
+  const aspectOptions = aspectCards.map((c) => ({
+    label: c.card.name,
+    value: c.card.code,
+  }));
 
   return (
     <Plane className={css["edit-summary"]} size="sm">
       <div className={css["edit-summary-item"]}>
         <span>{t("deck_create.steps.role")}</span>
-        <strong>{roleCard?.name}</strong>
+        <Select
+          options={roleOptions}
+          required
+          value={deck.role_code}
+          variant="compressed"
+          onChange={(e) => updateInvestigatorCode(deck.id, e.target.value)}
+        />
       </div>
       <div className={css["edit-summary-item"]}>
         <span>{t("deck_create.steps.aspect")}</span>
-        <strong>{formatAspectSummaryName(aspectCard?.name)}</strong>
+        <Select
+          options={aspectOptions}
+          required
+          value={deck.aspect_code}
+          variant="compressed"
+          onChange={(e) => updateAspectCode(deck.id, e.target.value)}
+        />
       </div>
       <div className={css["edit-summary-item"]}>
         <span>{t("deck_create.steps.background")}</span>
@@ -369,10 +398,6 @@ function DeckEditSummary({ deck }: { deck: ResolvedDeck }) {
       </div>
     </Plane>
   );
-}
-
-function formatAspectSummaryName(name: string | undefined) {
-  return name?.replace(/^(\d{4})\saspect$/i, "$1");
 }
 
 type AvailableCardFilters = {

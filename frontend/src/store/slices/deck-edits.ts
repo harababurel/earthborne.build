@@ -58,6 +58,20 @@ export const createDeckEditsSlice: StateCreator<
 
     dehydrate(get(), "edits").catch(console.error);
   },
+  updateAspectCode(deckId, code) {
+    set((state) => ({
+      deckEdits: {
+        ...state.deckEdits,
+        [deckId]: {
+          ...currentEdits(state, deckId),
+          aspect_code: code,
+          type: "user" as const,
+        },
+      },
+    }));
+
+    dehydrate(get(), "edits").catch(console.error);
+  },
   updateCardQuantity(deckId, code, quantity, limit, tab, mode = "increment") {
     set((state) =>
       getCardQuantityUpdate(

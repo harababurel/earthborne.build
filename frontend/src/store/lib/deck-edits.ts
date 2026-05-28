@@ -36,6 +36,10 @@ export function applyDeckEdits(
     deck.role_code = edits.role_code;
   }
 
+  if (edits.aspect_code) {
+    deck.aspect_code = edits.aspect_code;
+  }
+
   if (edits.description_md != null) {
     deck.description_md = edits.description_md;
   }
