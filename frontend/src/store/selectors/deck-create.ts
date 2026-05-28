@@ -91,6 +91,7 @@ export const selectDeckCreateOutsideInterestCards = createSelector(
   (metadata, lookupTables, collator) =>
     resolveCards({ metadata, lookupTables }, collator, (card) => {
       if (card.is_expert) return false;
+      if (card.type_code === "role") return false;
       return card.category === "background" || card.category === "specialty";
     }),
 );
