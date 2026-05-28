@@ -204,7 +204,7 @@ function DeckCreateStepAspect() {
       <div className={css["aspect-pack-groups"]}>
         {groups.map((group) => (
           <section className={css["aspect-pack-group"]} key={group.packCode}>
-            <h2 className={css["aspect-pack-title"]}>{group.packName}</h2>
+            <h2 className={css["section-delimiter"]}>{group.packName}</h2>
             <CardGrid className={css["aspect-card-grid"]}>
               {group.cards.map((card) => (
                 <SelectableAspectCard
@@ -472,7 +472,7 @@ function DeckCreateStepPersonality() {
         );
         return (
           <div key={aspect} className={css["personality-section"]}>
-            <h2 className={css["personality-section-title"]}>
+            <h2 className={css["section-delimiter"]}>
               {t(`common.factions.${aspect.toLowerCase()}`)}
             </h2>
             <CardGrid>

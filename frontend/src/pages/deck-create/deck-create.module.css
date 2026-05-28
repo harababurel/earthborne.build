@@ -235,11 +235,23 @@
   gap: 0.5rem;
 }
 
-.aspect-pack-title {
+.section-delimiter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
   margin: 0;
   color: var(--text-muted);
-  font-size: var(--text-base);
+  font-size: 0.875rem;
   font-weight: 700;
+  text-align: center;
+}
+
+.section-delimiter::before,
+.section-delimiter::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--palette-1);
 }
 
 .aspect-card-grid {
@@ -362,15 +374,6 @@
 .personality-section {
   display: grid;
   gap: 0.5rem;
-}
-
-.personality-section-title {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--accent);
 }
 
 .role-preview {
