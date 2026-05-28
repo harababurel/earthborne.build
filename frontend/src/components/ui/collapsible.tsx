@@ -11,14 +11,13 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { cx } from "@/utils/cx";
-import { Button } from "./button";
 import css from "./collapsible.module.css";
+import { DefaultTooltip } from "./tooltip";
 
 type CollapsibleContextValue = {
   open: boolean;
   onToggle: () => void;
   contentId: string;
-  triggerId: string;
 };
 
 const CollapsibleContext = createContext<CollapsibleContextValue | null>(null);
@@ -52,7 +51,6 @@ export function Root({
 
   const id = useId();
   const contentId = `collapsible-content-${id}`;
-  const triggerId = `collapsible-trigger-${id}`;
 
   const onToggle = useCallback(() => {
     if (!isControlled) setUncontrolledOpen((prev) => !prev);
@@ -60,8 +58,8 @@ export function Root({
   }, [open, isControlled, onOpenChange]);
 
   const contextValue = useMemo(
-    () => ({ open, onToggle, contentId, triggerId }),
-    [open, onToggle, contentId, triggerId],
+    () => ({ open, onToggle, contentId }),
+    [open, onToggle, contentId],
   );
 
   return (
@@ -78,24 +76,28 @@ export function Root({
 }
 
 type TriggerProps = {
+  "aria-label"?: string;
   asChild?: boolean;
   children: React.ReactNode;
 };
 
-export function Trigger({ asChild, children }: TriggerProps) {
-  const { open, onToggle, contentId, triggerId } = useCollapsibleContext();
+export function Trigger({
+  "aria-label": ariaLabel,
+  asChild,
+  children,
+}: TriggerProps) {
+  const { open, onToggle, contentId } = useCollapsibleContext();
 
   if (asChild && isValidElement(children)) {
     const child = children as React.ReactElement<
       React.HTMLAttributes<HTMLElement>
     >;
-
     const childOnClick = child.props.onClick;
 
     return cloneElement(child, {
-      id: triggerId,
-      "aria-expanded": open,
       "aria-controls": contentId,
+      "aria-expanded": open,
+      "aria-label": ariaLabel,
       onClick: (e: React.MouseEvent<HTMLElement>) => {
         onToggle();
         childOnClick?.(e);
@@ -105,9 +107,9 @@ export function Trigger({ asChild, children }: TriggerProps) {
 
   return (
     <button
-      id={triggerId}
       aria-controls={contentId}
       aria-expanded={open}
+      aria-label={ariaLabel}
       onClick={onToggle}
       type="button"
     >
@@ -183,27 +185,29 @@ export function Collapsible(props: CollapsibleProps) {
       onOpenChange={onOpenChange}
       open={open}
     >
-      <Trigger asChild>
-        <div
-          className={cx(
-            css["trigger"],
-            triggerReversed && css["reversed"],
-            triggerClassName,
-          )}
-          data-testid="collapsible-trigger"
-        >
-          {header || (
-            <div className={css["header"]}>
-              <h4>{title}</h4>
-              <div className={css["sub"]}>{sub}</div>
-            </div>
-          )}
-          <div className={css["actions"]}>
-            {actions}
-            <CollapsibleToggleButton controlledOpen={open} />
-          </div>
+      <div
+        className={cx(
+          css["trigger"],
+          triggerReversed && css["reversed"],
+          triggerClassName,
+        )}
+        data-testid="collapsible-trigger"
+      >
+        <div className={css["trigger-label"]}>
+          <Trigger>
+            {header || (
+              <span className={css["header"]}>
+                <span className={css["title"]}>{title}</span>
+                <span className={css["sub"]}>{sub}</span>
+              </span>
+            )}
+          </Trigger>
         </div>
-      </Trigger>
+        <div className={css["actions"]}>
+          {actions}
+          <CollapsibleToggleButton controlledOpen={open} />
+        </div>
+      </div>
       {children}
     </Root>
   );
@@ -227,9 +231,11 @@ function CollapsibleToggleButton({
         : t("ui.collapsible.expand");
 
   return (
-    <Button iconOnly variant="bare" tooltip={tooltip}>
-      {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-    </Button>
+    <DefaultTooltip tooltip={tooltip}>
+      <Trigger aria-label={tooltip}>
+        {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+      </Trigger>
+    </DefaultTooltip>
   );
 }
 

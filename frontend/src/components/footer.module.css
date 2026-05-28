@@ -14,5 +14,6 @@
 }
 
 .footer a {
+  color: var(--palette-4);
   text-decoration-style: dashed;
 }

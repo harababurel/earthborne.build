@@ -126,7 +126,7 @@ export function cardIllustrator(card: Card, useMiniRoleArt: boolean) {
 }
 
 export function thumbnailUrl(code: string) {
-  return `${import.meta.env.VITE_CARD_IMAGE_URL}/${code}`;
+  return `${import.meta.env.VITE_CARD_IMAGE_URL}/${code}?variant=thumb`;
 }
 
 export function parseCardTextHtml(

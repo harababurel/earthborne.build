@@ -9,7 +9,7 @@ function getDependencies() {
   const db = getDatabase(":memory:");
   const config = configFromEnv();
   const app = appFactory(config, db);
-  return { app, db };
+  return { app, config, db };
 }
 
 export const test = base.extend<{

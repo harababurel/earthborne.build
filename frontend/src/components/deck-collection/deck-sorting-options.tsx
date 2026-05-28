@@ -70,6 +70,7 @@ export function DeckSortingOptions(props: Props) {
       <div className={css["options-input"]}>
         <ArrowDownNarrowWideIcon />
         <Select
+          aria-label={t("lists.sort_by")}
           emptyLabel="Sort by"
           variant="compressed"
           data-testid="deck-sorting-options"

@@ -6,7 +6,7 @@
   src: url("../assets/fonts/core.woff") format("woff");
   font-weight: normal;
   font-style: normal;
-  font-display: block;
+  font-display: swap;
 }
 
 [class^="core-"],

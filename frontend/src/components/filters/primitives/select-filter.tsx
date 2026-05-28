@@ -44,6 +44,7 @@ export function SelectFilter<T, V extends number | string | undefined>(
       title={title}
     >
       <select
+        aria-label={title}
         disabled={locked}
         onChange={onValueChange}
         data-testid={`filter-${title}-input`}

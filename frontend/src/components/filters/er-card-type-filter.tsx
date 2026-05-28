@@ -28,6 +28,7 @@ export function ErCardTypeFilter({ value, onValueChange }: Props) {
 
   return (
     <Select
+      aria-label={t("filters.type.title")}
       required
       options={options}
       value={value}

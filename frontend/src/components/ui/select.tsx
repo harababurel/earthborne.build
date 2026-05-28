@@ -16,8 +16,11 @@ export interface Props extends React.ComponentProps<"select"> {
 
 export function Select(props: Props) {
   const { emptyLabel, options, required, className, variant, ...rest } = props;
+  const ariaLabel = rest["aria-label"] ?? emptyLabel;
+
   return (
     <select
+      aria-label={ariaLabel}
       className={cx(css["select"], variant && css[variant], className)}
       {...rest}
     >

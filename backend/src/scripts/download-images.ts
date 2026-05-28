@@ -35,6 +35,8 @@ if (!IMAGE_DIR) {
 
 const FORCE = !!process.env["FORCE"];
 const RANGERSDB_IMAGE_BASE = "https://static.rangersdb.com/img/card";
+const THUMBNAIL_WIDTH = 128;
+const THUMBNAIL_QUALITY = 75;
 const UPSTREAM_PACK_IDS: Record<string, string> = {
   ebr: "core",
 };
@@ -97,7 +99,17 @@ async function downloadCardImage(
   const destDir = path.join(IMAGE_DIR as string, card.packId);
   const destFile = path.join(destDir, `${card.code}.jpg`);
 
-  if (!FORCE && (await fileExists(destFile))) return "skipped";
+  if (!FORCE && (await fileExists(destFile))) {
+    try {
+      await ensureThumbnail(card, destFile);
+      return "skipped";
+    } catch (err) {
+      log("error", `Failed to generate thumbnail for ${card.code}`, {
+        error: (err as Error).message,
+      });
+      return "failed";
+    }
+  }
 
   const upstreamPackId = getUpstreamPackId(card.packId);
   const url = card.imagesrc?.startsWith("http")
@@ -132,6 +144,7 @@ async function downloadCardImage(
   if (card.image_rect) {
     try {
       await cropSpritesheetImage(buffer, card.image_rect, destFile);
+      await ensureThumbnail(card, destFile);
       log("info", `Cropped and saved ${card.code} from spritesheet`);
       return "downloaded";
     } catch (err) {
@@ -143,8 +156,22 @@ async function downloadCardImage(
   }
 
   await fs.writeFile(destFile, buffer);
+  await ensureThumbnail(card, destFile);
   log("info", `Downloaded ${card.code} (${buffer.length} bytes)`);
   return "downloaded";
+}
+
+async function ensureThumbnail(card: CardEntry, sourceFile: string) {
+  const thumbDir = path.join(IMAGE_DIR as string, card.packId, "thumbs");
+  const thumbFile = path.join(thumbDir, `${card.code}.webp`);
+
+  if (!FORCE && (await fileExists(thumbFile))) return;
+
+  await fs.mkdir(thumbDir, { recursive: true });
+  await sharp(sourceFile)
+    .resize({ width: THUMBNAIL_WIDTH, withoutEnlargement: true })
+    .webp({ quality: THUMBNAIL_QUALITY })
+    .toFile(thumbFile);
 }
 
 async function cropSpritesheetImage(

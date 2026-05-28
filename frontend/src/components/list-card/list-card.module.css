@@ -342,4 +342,9 @@
     padding: 0.15em 0.45em;
     border-radius: var(--rounded);
   }
+
+  .AWA .requirement,
+  .SPI .requirement {
+    color: #101510;
+  }
 }

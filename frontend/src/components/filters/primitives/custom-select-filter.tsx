@@ -31,6 +31,7 @@ export function CustomSelectFilter(props: Props) {
       title={title}
     >
       <CustomSelect
+        aria-label={title}
         disabled={locked}
         menuClassName={css["menu"]}
         data-testid={`filter-${title}-input`}

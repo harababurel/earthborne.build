@@ -53,12 +53,12 @@ export function OwnershipPartitionedCardList(props: Props) {
           omitPadding
           triggerClassName={css["unowned-trigger"]}
           title={
-            <div className={css["unowned-title"]}>
+            <span className={css["unowned-title"]}>
               <FileWarningIcon />
               {t("common.non_collection_cards", {
                 count: unowned.length,
               })}
-            </div>
+            </span>
           }
         >
           <CollapsibleContent>{unowned.map(cardRenderer)}</CollapsibleContent>

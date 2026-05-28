@@ -38,12 +38,12 @@ export function DecklistValidation(props: Props) {
       data-testid="decklist-validation"
       defaultOpen={defaultOpen}
       title={
-        <div className={css["decklist-validation-header"]}>
+        <span className={css["decklist-validation-header"]}>
           <InfoIcon />
-          <p className={css["decklist-validation-text"]}>
+          <span className={css["decklist-validation-text"]}>
             {t("deck.validation.invalid")}
-          </p>
-        </div>
+          </span>
+        </span>
       }
     >
       <CollapsibleContent>

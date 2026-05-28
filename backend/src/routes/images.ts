@@ -30,20 +30,36 @@ router.get("/:code", async (c) => {
   if (!card)
     throw new HTTPException(404, { message: `Card '${code}' not found.` });
 
-  const filePath = path.join(config.IMAGE_DIR, card.pack_id, `${code}.jpg`);
+  const variant = c.req.query("variant");
+  if (variant && variant !== "thumb") {
+    throw new HTTPException(400, { message: "Unsupported image variant." });
+  }
+
+  const filePath =
+    variant === "thumb"
+      ? path.join(config.IMAGE_DIR, card.pack_id, "thumbs", `${code}.webp`)
+      : path.join(config.IMAGE_DIR, card.pack_id, `${code}.jpg`);
 
   let data: Buffer;
   try {
     data = await fs.readFile(filePath);
   } catch {
     throw new HTTPException(404, {
-      message: `Image for '${code}' not found on disk.`,
+      message:
+        variant === "thumb"
+          ? `Thumbnail for '${code}' not found on disk.`
+          : `Image for '${code}' not found on disk.`,
     });
   }
 
-  c.header("Content-Type", "image/jpeg");
+  c.header("Content-Type", variant === "thumb" ? "image/webp" : "image/jpeg");
   c.header("Cache-Control", "public, max-age=31536000, immutable");
-  return c.body(data.buffer as ArrayBuffer);
+  const body = data.buffer.slice(
+    data.byteOffset,
+    data.byteOffset + data.length,
+  ) as ArrayBuffer;
+
+  return c.body(body);
 });
 
 export default router;

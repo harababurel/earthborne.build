@@ -112,6 +112,7 @@ export function CardListNav(props: Props) {
       <div className={css["nav-row"]}>
         {data && (
           <Select
+            aria-label={t("lists.nav.jump_to")}
             className={css["nav-jump"]}
             emptyLabel={t("lists.nav.jump_to")}
             onChange={onSelectGroup}

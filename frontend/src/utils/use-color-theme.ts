@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import logoBotanical from "@/assets/logo/logo-botanical.png";
-import logoClay from "@/assets/logo/logo-clay.png";
-import logoNord from "@/assets/logo/logo-nord.png";
+import logoBotanical from "@/assets/logo/logo-botanical-128.webp";
+import logoClay from "@/assets/logo/logo-clay-128.webp";
+import logoNord from "@/assets/logo/logo-nord-128.webp";
 import i18n from "@/utils/i18n";
 import { useMedia } from "./use-media";
 

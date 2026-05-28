@@ -146,7 +146,7 @@ export function ListLayout(props: Props) {
         )}
         {sidebar}
       </div>
-      <div
+      <main
         className={cx(
           css["content"],
           (floatingSidebar || !sidebarOpen) && css["collapsed-sidebar"],
@@ -186,7 +186,7 @@ export function ListLayout(props: Props) {
             </HotkeyTooltip>
           ),
         })}
-      </div>
+      </main>
       {filters && (
         <nav
           className={cx(css["filters"], floatingFilters && css["floating"])}

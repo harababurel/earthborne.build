@@ -26,6 +26,7 @@ export type Item = {
 };
 
 type Props<T extends Item> = {
+  "aria-label"?: string;
   className?: string;
   disabled?: boolean;
   id?: string;
@@ -56,6 +57,7 @@ export function CustomSelect<T extends Item>(props: Props<T>) {
     value,
     variant,
   } = props;
+  const ariaLabel = props["aria-label"];
 
   const [open, setOpen] = useState(!!initialOpen);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -121,6 +123,7 @@ export function CustomSelect<T extends Item>(props: Props<T>) {
     >
       <button
         {...getReferenceProps()}
+        aria-label={ariaLabel}
         className={css["control"]}
         data-testid="custom-select-control"
         disabled={disabled}

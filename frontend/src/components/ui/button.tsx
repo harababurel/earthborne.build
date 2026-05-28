@@ -33,11 +33,16 @@ export function Button<T extends "a" | "button" | "summary" | "label">(
   } = props;
   // biome-ignore lint/suspicious/noExplicitAny: safe.
   const Element: any = disabled ? "button" : (as ?? "button");
+  const ariaLabel =
+    iconOnly && tooltip && typeof tooltip === "string" && !rest["aria-label"]
+      ? tooltip
+      : rest["aria-label"];
 
   return (
     <DefaultTooltip tooltip={tooltip}>
       <Element
         {...rest}
+        aria-label={ariaLabel}
         className={cx(
           css["button"],
           variant && css[variant],
