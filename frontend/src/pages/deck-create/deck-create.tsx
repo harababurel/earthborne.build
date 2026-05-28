@@ -4,7 +4,6 @@ import {
   BACKGROUND_PICKS,
   BACKGROUND_TYPES,
   type Card as CardT,
-  DECK_CARD_COPIES,
   OUTSIDE_INTEREST_PICKS,
   PERSONALITY_PICKS,
   SPECIALTY_PICKS,
@@ -86,29 +85,6 @@ function DeckCreate() {
       <DeckCreateInner />
     </CardModalProvider>
   ) : null;
-}
-
-export function DeckCreateReviewDebug() {
-  const deckCreate = useStore((state) => state.deckCreate);
-  const destroy = useStore((state) => state.resetCreate);
-  const initialize = useStore((state) => state.initCreate);
-
-  useEffect(() => {
-    initialize();
-    return () => destroy();
-  }, [destroy, initialize]);
-
-  return deckCreate ? (
-    <CardModalProvider>
-      <DeckCreateReviewDebugInner />
-    </CardModalProvider>
-  ) : null;
-}
-
-function DeckCreateReviewDebugInner() {
-  useSeedReviewDebugDeck();
-
-  return <DeckCreateInner />;
 }
 
 function DeckCreateInner() {
@@ -1132,129 +1108,6 @@ function selectedOutsideInterest(
   return outsideCards.find(
     (card) => deckCreate.outsideInterestSlots[card.card.code],
   )?.card;
-}
-
-function useSeedReviewDebugDeck() {
-  const deckCreate = useStore(selectDeckCreateChecked);
-  const aspectCards = useStore(selectDeckCreateAspectCards);
-  const personalityCards = useStore(selectDeckCreatePersonalityCards);
-  const outsideCards = useStore(selectDeckCreateOutsideInterestCards);
-  const setName = useStore((state) => state.deckCreateSetName);
-  const setAspect = useStore((state) => state.deckCreateSetAspect);
-  const setBackground = useStore((state) => state.deckCreateSetBackground);
-  const setSpecialty = useStore((state) => state.deckCreateSetSpecialty);
-  const setRole = useStore((state) => state.deckCreateSetRole);
-  const setStep = useStore((state) => state.deckCreateSetStep);
-
-  const seed = useMemo(() => {
-    const aspect = aspectCards[0];
-    if (!aspect) return;
-
-    const background = BACKGROUND_TYPES.map((type) => ({
-      type,
-      cards: outsideCards.filter((card) => card.card.background_type === type),
-    })).find(({ cards }) => cards.length >= BACKGROUND_PICKS);
-
-    const specialty = SPECIALTY_TYPES.map((type) => ({
-      type,
-      cards: outsideCards.filter(
-        (card) =>
-          card.card.specialty_type === type && card.card.type_code !== "role",
-      ),
-      roles: outsideCards.filter(
-        (card) =>
-          card.card.specialty_type === type && card.card.type_code === "role",
-      ),
-    })).find(
-      ({ cards, roles }) => cards.length >= SPECIALTY_PICKS && roles.length > 0,
-    );
-
-    if (!background || !specialty) return;
-
-    const personalitySlots = ASPECT_ORDER.reduce<Record<string, number>>(
-      (slots, aspectKey) => {
-        const card = personalityCards.find(
-          (candidate) =>
-            candidate.card.aspect_requirement_type === aspectKey &&
-            !slots[candidate.card.code],
-        );
-        if (card) slots[card.card.code] = DECK_CARD_COPIES;
-        return slots;
-      },
-      {},
-    );
-
-    if (selectedCount(personalitySlots) !== PERSONALITY_PICKS) return;
-
-    const backgroundSlots = Object.fromEntries(
-      background.cards
-        .slice(0, BACKGROUND_PICKS)
-        .map((card) => [card.card.code, DECK_CARD_COPIES]),
-    );
-    const specialtySlots = Object.fromEntries(
-      specialty.cards
-        .slice(0, SPECIALTY_PICKS)
-        .map((card) => [card.card.code, DECK_CARD_COPIES]),
-    );
-    const used = new Set([
-      ...Object.keys(backgroundSlots),
-      ...Object.keys(specialtySlots),
-    ]);
-    const outsideInterest = outsideCards.find(
-      (card) =>
-        !used.has(card.card.code) &&
-        card.card.type_code !== "role" &&
-        card.card.category !== "personality",
-    );
-
-    if (!outsideInterest) return;
-
-    return {
-      aspectCode: aspect.card.code,
-      background: background.type,
-      backgroundSlots,
-      outsideInterestSlots: {
-        [outsideInterest.card.code]: DECK_CARD_COPIES,
-      },
-      personalitySlots,
-      roleCode: specialty.roles[0].card.code,
-      specialty: specialty.type,
-      specialtySlots,
-    };
-  }, [aspectCards, outsideCards, personalityCards]);
-
-  useEffect(() => {
-    if (!seed || deckCreate.step === "review") return;
-
-    setName("Debug Review Ranger");
-    setAspect(seed.aspectCode);
-    setBackground(seed.background);
-    setSpecialty(seed.specialty);
-    setRole(seed.roleCode);
-
-    useStore.setState((state) => ({
-      deckCreate: state.deckCreate
-        ? {
-            ...state.deckCreate,
-            backgroundSlots: seed.backgroundSlots,
-            outsideInterestSlots: seed.outsideInterestSlots,
-            personalitySlots: seed.personalitySlots,
-            specialtySlots: seed.specialtySlots,
-          }
-        : state.deckCreate,
-    }));
-
-    setStep("review");
-  }, [
-    deckCreate.step,
-    seed,
-    setAspect,
-    setBackground,
-    setName,
-    setRole,
-    setSpecialty,
-    setStep,
-  ]);
 }
 
 function canAdvance(deckCreate: ReturnType<typeof selectDeckCreateChecked>) {

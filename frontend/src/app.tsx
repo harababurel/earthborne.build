@@ -17,12 +17,6 @@ const BrowseRoutes = lazy(() => import("./pages/browse/index"));
 
 const DeckCreate = lazy(() => import("./pages/deck-create/deck-create"));
 
-const DeckCreateReviewDebug = lazy(() =>
-  import("./pages/deck-create/deck-create").then((module) => ({
-    default: module.DeckCreateReviewDebug,
-  })),
-);
-
 const DeckView = lazy(() => import("./pages/deck-view/deck-view"));
 
 const Settings = lazy(() => import("./pages/settings/settings"));
@@ -101,10 +95,6 @@ function AppInner() {
               <Route component={Search} path="/search" />
               <Route component={CardView} path="/card/:code" />
               <Route component={DeckCreate} path="/deck/create" />
-              <Route
-                component={DeckCreateReviewDebug}
-                path="/debug/deck-create-review"
-              />
               <Route component={DeckView} path="/:type/view/:id" />
               <Route component={DeckView} path="/:type/view/:id/:slug" />
               <Route component={DeckView} path="/deck/edit/:id" />
