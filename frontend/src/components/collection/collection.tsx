@@ -178,7 +178,7 @@ export function CollectionSettings(props: Props) {
                     bannerAlt={`${displayPackName(pack)} backdrop`}
                     bannerUrl={
                       packsWithBanners.has(pack.code)
-                        ? `/assets/cycles/${PACK_BANNER_CODES[pack.code] ?? pack.code}.avif`
+                        ? `/assets/packs/${PACK_BANNER_CODES[pack.code] ?? pack.code}.avif`
                         : undefined
                     }
                     classNames={{
