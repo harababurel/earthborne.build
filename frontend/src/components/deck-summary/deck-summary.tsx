@@ -37,6 +37,7 @@ type DeckSummaryProps = {
   deck: DeckSummaryType;
   elevation?: "normal" | "elevated";
   interactive?: boolean;
+  omitProviderTag?: boolean;
   showThumbnail?: boolean;
   showShadow?: boolean;
   size?: "sm";
@@ -51,6 +52,7 @@ export function DeckSummary(props: DeckSummaryProps) {
     deck,
     elevation,
     interactive,
+    omitProviderTag,
     showShadow,
     showThumbnail,
     size,
@@ -115,7 +117,7 @@ export function DeckSummary(props: DeckSummaryProps) {
       <div className={css["meta"]}>
         {children}
         <DeckTagsContainer>
-          <ProviderTag deck={deck} />
+          {!omitProviderTag && <ProviderTag deck={deck} />}
           <FolderTag deckId={deck.id} />
           <LimitedCardPoolTag deck={deck} omitLegacy />
           <SealedDeckTag deck={deck} />

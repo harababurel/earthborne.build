@@ -1,16 +1,26 @@
-import type { DecklistSearchResult } from "@earthborne-build/shared";
+import type { Deck, DecklistSearchResult } from "@earthborne-build/shared";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { LoaderCircleIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { HeartIcon, LoaderCircleIcon } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useSearchParams } from "wouter";
+import { useSearchParams } from "wouter";
+import { AspectStats } from "@/components/aspect-stats";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
+import { DeckSummary } from "@/components/deck-summary/deck-summary";
+import { Decklist } from "@/components/decklist/decklist";
+import { ResolvedDeckProvider } from "@/components/resolved-deck-context-provider";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Head } from "@/components/ui/head";
 import { Loader } from "@/components/ui/loader";
 import { Pagination } from "@/components/ui/pagination";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
-import { selectMetadata } from "@/store/selectors/shared";
+import { resolveDeck } from "@/store/lib/resolve-deck";
+import {
+  selectLocaleSortingCollator,
+  selectLookupTables,
+  selectMetadata,
+} from "@/store/selectors/shared";
 import {
   type DecklistsFiltersState,
   deckSearchQuery,
@@ -153,44 +163,94 @@ function BrowseDecklists() {
 function DecklistResultItem({ result }: { result: DecklistSearchResult }) {
   const { t } = useTranslation();
   const metadata = useStore(selectMetadata);
+  const lookupTables = useStore(selectLookupTables);
+  const sharing = useStore((state) => state.sharing);
+  const collator = useStore(selectLocaleSortingCollator);
 
-  const roleCard = result.role_code
-    ? metadata.cards[result.role_code]
+  const aspectCard = result.aspect_code
+    ? metadata.cards[result.aspect_code]
     : undefined;
 
+  const resolved = useMemo(
+    () =>
+      resolveDeck({ metadata, lookupTables, sharing }, collator, {
+        ...result,
+        meta: "",
+        date_update: result.date_update ?? "",
+        description_md: result.description_md ?? "",
+        tags: result.tags ?? "",
+      } as Deck),
+    [result, metadata, lookupTables, sharing, collator],
+  );
+
   return (
-    <div
-      className={css["result-item"]}
-      style={{
-        padding: "1rem",
-        border: "1px solid var(--border-color)",
-        marginBottom: "1rem",
-        borderRadius: "4px",
-      }}
+    <DeckSummary
+      deck={resolved}
+      interactive
+      omitProviderTag
+      showThumbnail
+      type="decklist"
     >
-      <h3 style={{ margin: "0 0 0.5rem 0" }}>
-        <Link href={`/decklist/view/${result.id}`}>
-          {result.name || t("deck.untitled_deck")}
-        </Link>
-      </h3>
-      <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-muted)" }}>
-        <strong>{t("common.type.role")}:</strong>{" "}
-        {roleCard ? roleCard.name : result.role_code || "-"} &nbsp;|&nbsp;
-        <strong>{t("deck.aspect")}:</strong>{" "}
-        {result.aspect_code
-          ? t(`common.factions.${result.aspect_code.toLowerCase()}`)
-          : "-"}{" "}
-        &nbsp;|&nbsp;
-        <strong>{t("deck.background")}:</strong>{" "}
-        {result.background ? t(`common.set.${result.background}`) : "-"}{" "}
-        &nbsp;|&nbsp;
-        <strong>{t("deck.specialty")}:</strong>{" "}
-        {result.specialty ? t(`common.set.${result.specialty}`) : "-"}
-        <br />
-        <strong>{t("common.date")}:</strong>{" "}
-        {new Date(result.date_creation).toLocaleDateString()}
-      </p>
-    </div>
+      <div className={css["result-meta"]}>
+        <AspectStats aspectCard={aspectCard} size="sm" />
+        <dl className={css["result-identity"]}>
+          {result.background && (
+            <div className={css["result-identity-item"]}>
+              <dt className={css["result-identity-label"]}>
+                {t("deck.background")}
+              </dt>
+              <dd className={css["result-identity-value"]}>
+                {t(`common.set.${result.background}`)}
+              </dd>
+            </div>
+          )}
+          {result.specialty && (
+            <div className={css["result-identity-item"]}>
+              <dt className={css["result-identity-label"]}>
+                {t("deck.specialty")}
+              </dt>
+              <dd className={css["result-identity-value"]}>
+                {t(`common.set.${result.specialty}`)}
+              </dd>
+            </div>
+          )}
+          <div className={css["result-identity-item"]}>
+            <dt className={css["result-identity-label"]}>{t("common.date")}</dt>
+            <dd className={css["result-identity-value"]}>
+              {new Date(result.date_creation).toLocaleDateString("en-CA")}
+            </dd>
+          </div>
+          {result.like_count > 0 && (
+            <div className={css["result-identity-item"]}>
+              <dt className={css["result-identity-label"]}>
+                {t("decklists.browse.likes")}
+              </dt>
+              <dd className={css["result-identity-value"]}>
+                <HeartIcon size={12} />
+                {result.like_count}
+              </dd>
+            </div>
+          )}
+        </dl>
+      </div>
+      <Collapsible
+        className={css["result-decklist"]}
+        omitPadding
+        omitBorder
+        title={
+          <span className={css["result-decklist-title"]}>
+            <i className="icon-deck" />
+            {t("deck.cards")}
+          </span>
+        }
+      >
+        <CollapsibleContent className={css["result-decklist-content"]}>
+          <ResolvedDeckProvider resolvedDeck={resolved}>
+            <Decklist deck={resolved} />
+          </ResolvedDeckProvider>
+        </CollapsibleContent>
+      </Collapsible>
+    </DeckSummary>
   );
 }
 

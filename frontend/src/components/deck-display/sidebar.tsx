@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
+import { AspectStats } from "@/components/aspect-stats";
 import { CardText } from "@/components/card/card-text";
 import { CardScan } from "@/components/card-scan";
 import { PortaledCardTooltip } from "@/components/card-tooltip/card-tooltip-portaled";
-import { AspectIcon } from "@/components/icons/aspect-icon";
 import { Plane } from "@/components/ui/plane";
 import { DefaultTooltip } from "@/components/ui/tooltip";
 import { useRestingTooltip } from "@/components/ui/tooltip.hooks";
@@ -82,68 +82,7 @@ export default function Sidebar({ className, deck, innerClassName }: Props) {
               {t("deck_create.steps.aspect")}
             </h2>
             <div className={css["card-info"]}>
-              <div className={css["aspect-stats"]}>
-                <div className={css["stat-item"]}>
-                  <div className={cx(css["aspect-square"], css["awa"])}>
-                    <AspectIcon
-                      aspect="AWA"
-                      className={css["white-icon"]}
-                      size="3.75rem"
-                    />
-                    <div className={css["stat-overlay"]}>
-                      <span className={css["stat-value"]}>
-                        {aspectCard?.aspect_awareness}
-                      </span>
-                      <span className={css["stat-label"]}>AWA</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={css["stat-item"]}>
-                  <div className={cx(css["aspect-square"], css["spi"])}>
-                    <AspectIcon
-                      aspect="SPI"
-                      className={css["white-icon"]}
-                      size="3.75rem"
-                    />
-                    <div className={css["stat-overlay"]}>
-                      <span className={css["stat-value"]}>
-                        {aspectCard?.aspect_spirit}
-                      </span>
-                      <span className={css["stat-label"]}>SPI</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={css["stat-item"]}>
-                  <div className={cx(css["aspect-square"], css["fit"])}>
-                    <AspectIcon
-                      aspect="FIT"
-                      className={css["white-icon"]}
-                      size="3.75rem"
-                    />
-                    <div className={css["stat-overlay"]}>
-                      <span className={css["stat-value"]}>
-                        {aspectCard?.aspect_fitness}
-                      </span>
-                      <span className={css["stat-label"]}>FIT</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={css["stat-item"]}>
-                  <div className={cx(css["aspect-square"], css["foc"])}>
-                    <AspectIcon
-                      aspect="FOC"
-                      className={css["white-icon"]}
-                      size="3.75rem"
-                    />
-                    <div className={css["stat-overlay"]}>
-                      <span className={css["stat-value"]}>
-                        {aspectCard?.aspect_focus}
-                      </span>
-                      <span className={css["stat-label"]}>FOC</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <AspectStats aspectCard={aspectCard} />
               <CardText
                 size="full"
                 text={aspectCard?.text ?? undefined}
