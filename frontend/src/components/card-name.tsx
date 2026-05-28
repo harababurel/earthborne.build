@@ -66,6 +66,8 @@ function CardPackDetail(props: { card: Card; invert?: boolean }) {
     </a>
   );
 
+  if (!setDisplay && !card.set_position) return null;
+
   return (
     <span className={cx(css["pack-detail"], invert && css["invert"])}>
       {setDisplay && <small>{setLink || setDisplay}</small>}
