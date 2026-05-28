@@ -358,6 +358,8 @@
         "edit_short": "Edit",
         "export_json": "Export JSON",
         "export_text": "Export text",
+        "make_private": "Make Private",
+        "make_public": "Make Public",
         "unarchive": "Unarchive deck"
       },
       "annotation": "Annotation",

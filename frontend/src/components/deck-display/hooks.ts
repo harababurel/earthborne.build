@@ -120,6 +120,33 @@ export function useExportText() {
   );
 }
 
+export function useToggleShare(deckId: Id) {
+  const toast = useToast();
+  const { t } = useTranslation();
+  const createShare = useStore((state) => state.createShare);
+  const deleteShare = useStore((state) => state.deleteShare);
+  const isShared = useStore((state) => !!state.sharing.decks[deckId]);
+
+  const toggle = useCallback(async () => {
+    try {
+      if (isShared) {
+        await deleteShare(String(deckId));
+      } else {
+        await createShare(String(deckId));
+      }
+    } catch (err) {
+      toast.show({
+        children: isShared
+          ? t("share.delete_failed", { error: (err as Error)?.message })
+          : t("share.create_failed", { error: (err as Error)?.message }),
+        variant: "error",
+      });
+    }
+  }, [isShared, deckId, createShare, deleteShare, toast, t]);
+
+  return { isShared, toggle };
+}
+
 export function useChangeArchiveStatus(deckId: Id) {
   const addDeckToArchive = useStore((state) => state.addDeckToArchive);
   const removeDeckFromFolder = useStore((state) => state.removeDeckFromFolder);

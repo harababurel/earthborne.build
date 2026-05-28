@@ -4,6 +4,8 @@ import {
   ArchiveRestoreIcon,
   CircleAlertIcon,
   CopyIcon,
+  GlobeIcon,
+  LockIcon,
   PencilIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -18,7 +20,7 @@ import { selectMetadata } from "@/store/selectors/shared";
 import { displayAttribute, getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
 import { CardThumbnail } from "../card-thumbnail";
-import { useChangeArchiveStatus } from "../deck-display/hooks";
+import { useChangeArchiveStatus, useToggleShare } from "../deck-display/hooks";
 import { DeckStats } from "../deck-stats";
 import {
   DeckTags,
@@ -165,6 +167,7 @@ export function DeckSummaryQuickActions(props: DeckSummaryQuickActionsProps) {
   );
 
   const { isArchived, toggleArchived } = useChangeArchiveStatus(deck.id);
+  const { isShared, toggle: toggleShare } = useToggleShare(deck.id);
 
   const onArchive = useCallback(
     (evt: React.MouseEvent) => {
@@ -172,6 +175,14 @@ export function DeckSummaryQuickActions(props: DeckSummaryQuickActionsProps) {
       toggleArchived();
     },
     [toggleArchived],
+  );
+
+  const onToggleShare = useCallback(
+    (evt: React.MouseEvent) => {
+      cancelEvent(evt);
+      toggleShare();
+    },
+    [toggleShare],
   );
 
   return (
@@ -193,6 +204,18 @@ export function DeckSummaryQuickActions(props: DeckSummaryQuickActionsProps) {
         }
       >
         {isArchived ? <ArchiveRestoreIcon /> : <ArchiveIcon />}
+      </Button>
+      <Button
+        className={css["quick-action"]}
+        iconOnly
+        onClick={onToggleShare}
+        tooltip={
+          isShared
+            ? t("deck.actions.make_private")
+            : t("deck.actions.make_public")
+        }
+      >
+        {isShared ? <LockIcon /> : <GlobeIcon />}
       </Button>
       <Button
         className={css["quick-action"]}
