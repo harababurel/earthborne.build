@@ -634,7 +634,7 @@ function DeckCreateNavigation() {
 
     try {
       const id = await createDeck();
-      navigate(`/deck/edit/${id}`, { replace: true });
+      navigate(`/deck/view/${id}`, { replace: true });
     } catch (err) {
       toast.show({
         children: t("deck_create.error", { error: (err as Error).message }),
