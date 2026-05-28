@@ -4,7 +4,6 @@ import css from "./media-card.module.css";
 type Props = {
   bannerAlt?: string;
   bannerUrl?: string | null;
-  bannerMobileUrl?: string | null;
   children: React.ReactNode;
   headerSlot?: React.ReactNode;
   footerSlot?: React.ReactNode;
@@ -22,7 +21,6 @@ export function MediaCard(props: Props) {
   const {
     bannerAlt,
     bannerUrl,
-    bannerMobileUrl,
     children,
     classNames,
     footerSlot,
@@ -33,9 +31,6 @@ export function MediaCard(props: Props) {
 
   const renderBanner = (src: string) => (
     <picture className={css["backdrop"]}>
-      {bannerMobileUrl && (
-        <source media="(max-width: 768px)" srcSet={bannerMobileUrl} />
-      )}
       <img
         alt={bannerAlt}
         className={css["backdrop"]}

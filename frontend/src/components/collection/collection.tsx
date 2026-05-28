@@ -181,11 +181,6 @@ export function CollectionSettings(props: Props) {
                         ? `/assets/cycles/${PACK_BANNER_CODES[pack.code] ?? pack.code}.avif`
                         : undefined
                     }
-                    bannerMobileUrl={
-                      pack.code === "sos" || pack.code === "sotv"
-                        ? `/assets/cycles/${pack.code}_mobile.avif`
-                        : undefined
-                    }
                     classNames={{
                       container: settings.showAllCards
                         ? css["cycle-card-disabled"]
