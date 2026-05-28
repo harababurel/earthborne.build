@@ -14,6 +14,8 @@ import type { FilterProps } from "./filters.types";
 import { FilterContainer } from "./primitives/filter-container";
 import { useFilter } from "./primitives/filter-hooks";
 
+const SLIDER_MIN = -1;
+
 export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
   const { t } = useTranslation();
   const filter = useStore((state) => selectActiveListFilter(state, id));
@@ -32,6 +34,7 @@ export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
   );
 
   const { onReset, onChange, onOpenChange, locked } = useFilter(id);
+  const sliderMax = Number.isFinite(max) ? Math.max(max, SLIDER_MIN) : 0;
 
   const onValueCommit = useCallback(
     (val: number[]) => {
@@ -44,20 +47,25 @@ export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
 
   const onToggleOpen = useCallback(
     (val: boolean) => {
-      if (val && !filter.value.range) {
+      const range = sanitizeCostRange(
+        filter.value.range,
+        SLIDER_MIN,
+        sliderMax,
+      );
+
+      if (val && !rangesEqual(filter.value.range, range)) {
         onChange({
-          range: [-1, max],
+          range,
         });
       }
       onOpenChange(val);
     },
-    [max, filter.value.range, onOpenChange, onChange],
+    [filter.value.range, sliderMax, onOpenChange, onChange],
   );
 
-  const rangeValue = useMemo(
-    () => (filter.value.range as [number, number]) ?? [min, max],
-    [filter.value.range, min, max],
-  );
+  const rangeValue = useMemo(() => {
+    return sanitizeCostRange(filter.value.range, min, sliderMax);
+  }, [filter.value.range, min, sliderMax]);
 
   return (
     <FilterContainer
@@ -74,12 +82,36 @@ export function CostFilter({ id, resolvedDeck, targetDeck }: FilterProps) {
         data-testid="filters-cost-range"
         id="cost-select"
         label={t("filters.cost.title")}
-        max={max}
-        min={-1}
+        max={sliderMax}
+        min={SLIDER_MIN}
         onValueCommit={onValueCommit}
         renderLabel={costToString}
         value={rangeValue}
       />
     </FilterContainer>
   );
+}
+
+function sanitizeCostRange(
+  value: [number, number] | undefined,
+  min: number,
+  max: number,
+): [number, number] {
+  const fallbackMin = Number.isFinite(min) ? Math.max(min, SLIDER_MIN) : 0;
+  const fallback: [number, number] = [fallbackMin, max];
+
+  if (!value || !value.every(Number.isFinite)) return fallback;
+
+  const lower = clamp(value[0], SLIDER_MIN, max);
+  const upper = clamp(value[1], SLIDER_MIN, max);
+
+  return lower <= upper ? [lower, upper] : fallback;
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function rangesEqual(a: [number, number] | undefined, b: [number, number]) {
+  return a?.[0] === b[0] && a[1] === b[1];
 }

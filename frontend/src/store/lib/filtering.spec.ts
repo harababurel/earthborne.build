@@ -9,7 +9,36 @@ import {
 } from "../selectors/shared";
 import type { StoreState } from "../slices";
 import type { InvestigatorAccessConfig } from "./filtering";
-import { filterInvestigatorAccess, filterOwnership } from "./filtering";
+import {
+  filterInvestigatorAccess,
+  filterOwnership,
+  filterRangerCards,
+} from "./filtering";
+
+describe("filter: ranger cards", () => {
+  it("excludes role and aspect cards from the ranger card section", () => {
+    expect(
+      filterRangerCards({
+        category_id: "ranger",
+        type_code: "gear",
+      } as any),
+    ).toBe(true);
+
+    expect(
+      filterRangerCards({
+        category_id: "ranger",
+        type_code: "role",
+      } as any),
+    ).toBe(false);
+
+    expect(
+      filterRangerCards({
+        category_id: "ranger",
+        type_code: "aspect",
+      } as any),
+    ).toBe(false);
+  });
+});
 
 describe("filter: investigator access", () => {
   let store: StoreApi<StoreState>;

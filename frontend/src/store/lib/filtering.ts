@@ -36,9 +36,13 @@ export function filterPathCards(card: Card) {
   return card.category_id !== "ranger";
 }
 
-// "Ranger cards" excludes aspect cards, which have their own dedicated section.
+// "Ranger cards" excludes setup cards, which have their own dedicated sections.
 export function filterRangerCards(card: Card) {
-  return card.category_id === "ranger" && card.type_code !== "aspect";
+  return (
+    card.category_id === "ranger" &&
+    card.type_code !== "aspect" &&
+    card.type_code !== "role"
+  );
 }
 
 export function filterOfficial(card: Card) {
@@ -134,17 +138,18 @@ function partition<T>(a: T[], predicate: (t: T) => boolean): [T[], T[]] {
  * Cost — uses ER energy_cost field.
  */
 function filterEvenCost(card: Card) {
-  return card.energy_cost != null && card.energy_cost % 2 === 0;
+  return typeof card.energy_cost === "number" && card.energy_cost % 2 === 0;
 }
 
 function filterOddCost(card: Card) {
-  return card.energy_cost != null && card.energy_cost % 2 !== 0;
+  return typeof card.energy_cost === "number" && card.energy_cost % 2 !== 0;
 }
 
 function filterCostRange(value: [number, number]) {
   const [min, max] = value;
   return (card: Card) => {
     if (card.energy_cost == null) return min <= -1;
+    if (typeof card.energy_cost !== "number") return false;
     return card.energy_cost >= Math.max(min, 0) && card.energy_cost <= max;
   };
 }

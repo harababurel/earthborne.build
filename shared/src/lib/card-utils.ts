@@ -6,7 +6,7 @@ import {
 } from "./constants.ts";
 
 export function cardEnergyCost(card: Card): number {
-  return card.energy_cost ?? 0;
+  return typeof card.energy_cost === "number" ? card.energy_cost : 0;
 }
 
 export function cardAspectRequirement(

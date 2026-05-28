@@ -86,8 +86,8 @@ function sortByCycle(metadata: Metadata) {
 }
 
 function sortByCost(a: Card, b: Card) {
-  const aCost = a.energy_cost ?? -1;
-  const bCost = b.energy_cost ?? -1;
+  const aCost = typeof a.energy_cost === "number" ? a.energy_cost : -1;
+  const bCost = typeof b.energy_cost === "number" ? b.energy_cost : -1;
   return aCost - bCost;
 }
 

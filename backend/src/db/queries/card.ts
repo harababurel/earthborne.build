@@ -29,7 +29,7 @@ type CardRow = {
   type_id: string;
   aspect_requirement_type: string | null;
   aspect_requirement_value: number | null;
-  energy_cost: number | null;
+  energy_cost: number | string | null;
   equip: number | null;
   presence: number | null;
   harm: string | number | null;
@@ -237,7 +237,7 @@ function transformCard(row: CardRow): {
   text: string | null;
   flavor: string | null;
   traits: string | null;
-  energy_cost: number | null;
+  energy_cost: number | string | null;
   energy_aspect: string | null;
   aspect_requirement_type: string | null;
   aspect_requirement_value: number | null;

@@ -675,7 +675,7 @@ export const selectListFilterProperties = createSelector(
           illustrators.add(card.illustrator);
         }
 
-        if (card.energy_cost != null) {
+        if (typeof card.energy_cost === "number") {
           cost.min = Math.min(cost.min, Math.max(card.energy_cost, 0));
           cost.max = Math.max(cost.max, Math.max(card.energy_cost, 0));
         }
@@ -724,7 +724,7 @@ export const selectListFilterProperties = createSelector(
           : aspectRequirement,
       aspectRequirements,
       cardTypes,
-      cost,
+      cost: cost.min === Number.MAX_SAFE_INTEGER ? { min: 0, max: 0 } : cost,
       encounterSets,
       equip: equip.min === Number.MAX_SAFE_INTEGER ? { min: 0, max: 0 } : equip,
       factions,

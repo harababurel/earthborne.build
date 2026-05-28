@@ -35,7 +35,7 @@ export const CardSchema = z.object({
   keywords: z.array(z.string()).nullish(),
 
   // Costs and requirements
-  energy_cost: z.number().nullish(),
+  energy_cost: z.union([z.number(), z.string()]).nullish(),
   energy_aspect: z.enum(ASPECT_ORDER).nullish(),
   aspect_requirement_type: z.enum(ASPECT_ORDER).nullish(),
   aspect_requirement_value: z.number().nullish(),

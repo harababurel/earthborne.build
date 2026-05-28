@@ -209,7 +209,7 @@ export function isRangeFilter(value: unknown): value is [number, number] {
   return (
     Array.isArray(value) &&
     value.length === 2 &&
-    value.every((v) => typeof v === "number")
+    value.every((v) => typeof v === "number" && Number.isFinite(v))
   );
 }
 
