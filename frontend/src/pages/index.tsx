@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
@@ -29,18 +29,28 @@ function Index() {
   const isInitalized = useStore(selectIsInitialized);
   const addList = useStore((state) => state.addList);
   const setActiveList = useStore((state) => state.setActiveList);
+  const setSystemFilter = useStore((state) => state.setSystemFilter);
+
+  // Create the list once with the homepage's filter set, then only swap the
+  // system filter when the card type changes so user filters are preserved.
+  const didInitList = useRef(false);
 
   useEffect(() => {
-    addList(
-      "index",
-      { card_type: browseTabListCardType(cardTypeTab) },
-      {
-        additionalFilters: ["pack", "illustrator"],
-        systemFilter: browseTypeSystemFilter(cardTypeTab),
-      },
-    );
+    if (!didInitList.current) {
+      didInitList.current = true;
+      addList(
+        "index",
+        { card_type: browseTabListCardType(cardTypeTab) },
+        {
+          additionalFilters: ["pack", "illustrator"],
+          systemFilter: browseTypeSystemFilter(cardTypeTab),
+        },
+      );
+    } else {
+      setSystemFilter("index", browseTypeSystemFilter(cardTypeTab));
+    }
     setActiveList("index");
-  }, [cardTypeTab, addList, setActiveList]);
+  }, [cardTypeTab, addList, setActiveList, setSystemFilter]);
 
   if (!isInitalized || !activeListId?.startsWith("index")) return null;
 
