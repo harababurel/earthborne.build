@@ -193,6 +193,7 @@ export type ListsSlice = {
   ): void;
 
   removeList(key: string): void;
+  setSystemFilter(key: string, filter: Filter): void;
 
   setFiltersEnabled(value: boolean): void;
   setListViewMode(value: ViewMode): void;

@@ -28,9 +28,9 @@ export function Browse() {
 
   const addList = useStore((state) => state.addList);
   const setActiveList = useStore((state) => state.setActiveList);
-  const removeList = useStore((state) => state.removeList);
+  const setSystemFilter = useStore((state) => state.setSystemFilter);
 
-  const listKey = `browse-${cardTypeTab}`;
+  const listKey = "browse";
 
   const activeList = useStore((state) => state.lists[listKey]);
   const hasList = useStore((state) => !!state.lists[listKey]);
@@ -47,28 +47,18 @@ export function Browse() {
           systemFilter: browseTypeSystemFilter(cardTypeTab),
         },
       );
+    } else {
+      setSystemFilter(listKey, browseTypeSystemFilter(cardTypeTab));
     }
 
     setActiveList(listKey);
-  }, [cardTypeTab, addList, hasList, listKey, setActiveList]);
+  }, [cardTypeTab, addList, hasList, setActiveList, setSystemFilter]);
 
   useEffect(() => {
     return () => {
-      for (const tab of [
-        "ranger",
-        "path",
-        "location",
-        "weather",
-        "mission",
-        "role",
-        "aspect",
-        "challenge",
-      ] as CardTypeTab[]) {
-        removeList(`browse-${tab}`);
-      }
       setActiveList(undefined);
     };
-  }, [removeList, setActiveList]);
+  }, [setActiveList]);
 
   if (!activeList || !isInitalized) {
     return null;

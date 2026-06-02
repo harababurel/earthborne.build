@@ -70,7 +70,6 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
       const initialValues = mergeInitialValues(
         list.initialState.filterValues,
         state.settings,
-        state.metadata,
       );
 
       return {
@@ -540,11 +539,7 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
     set((state) => {
       const lists = { ...state.lists };
 
-      const values = mergeInitialValues(
-        initialValues ?? {},
-        state.settings,
-        state.metadata,
-      );
+      const values = mergeInitialValues(initialValues ?? {}, state.settings);
 
       const display = {
         ...getDisplaySettings(values, state.settings),
@@ -586,6 +581,22 @@ export const createListsSlice: StateCreator<StoreState, [], [], ListsSlice> = (
       const lists = { ...state.lists };
       delete lists[key];
       return { lists };
+    });
+  },
+
+  setSystemFilter(key, filter) {
+    set((state) => {
+      const list = state.lists[key];
+      if (!list) return state;
+      return {
+        lists: {
+          ...state.lists,
+          [key]: {
+            ...list,
+            systemFilter: and([...SYSTEM_FILTERS, filter]),
+          },
+        },
+      };
     });
   },
 });
@@ -867,14 +878,10 @@ function cardsFilters({
 
 export function makeLists(
   settings: SettingsState,
-  metadata: Metadata,
+  _metadata: Metadata,
   _initialValues?: Partial<Record<FilterKey, unknown>>,
 ) {
-  const initialValues = mergeInitialValues(
-    _initialValues ?? {},
-    settings,
-    metadata,
-  );
+  const initialValues = mergeInitialValues(_initialValues ?? {}, settings);
 
   const systemFilters = [...SYSTEM_FILTERS];
 
@@ -908,25 +915,12 @@ export function makeLists(
 function mergeInitialValues(
   initialValues: Partial<Record<FilterKey, unknown>>,
   settings: SettingsState,
-  metadata: Metadata,
 ) {
   return {
     ...initialValues,
     card_type: initialValues.card_type ?? "player",
     ownership: initialValues.ownership ?? getInitialOwnershipFilter(settings),
-    pack: initialValues.pack ?? getInitialPackFilter(settings, metadata),
   };
-}
-
-function getInitialPackFilter(
-  settings: SettingsState,
-  metadata: Metadata,
-): string[] {
-  if (settings.showAllCards) return [];
-
-  return Object.keys(metadata.packs).filter(
-    (code) => settings.collection[code],
-  );
 }
 
 function getInitialOwnershipFilter(_settings: SettingsState): OwnershipFilter {
