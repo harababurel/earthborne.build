@@ -4,6 +4,7 @@ import {
   locationSymbolUrls,
   locationSymbolUrlsByNormalizedName,
 } from "@/assets/symbols";
+import { getCampaignGuideEntryHrefById } from "@/components/card/campaign-guide-entry";
 import type { Cycle } from "@/store/schemas/cycle.schema";
 import type { Pack } from "@/store/schemas/pack.schema";
 import { assert } from "./assert";
@@ -139,6 +140,7 @@ export function parseCardTextHtml(
   opts?: {
     bullets?: boolean;
     newLines?: "replace" | "skip";
+    packCode?: string;
     splitParagraphs?: boolean;
   },
 ) {
@@ -151,6 +153,8 @@ export function parseCardTextHtml(
   if (opts?.splitParagraphs) {
     parsed = preserveObjectiveLineBreaks(parsed);
   }
+
+  parsed = linkCampaignGuideEntries(parsed, opts?.packCode);
 
   parsed = parsed
     .replaceAll("<e>", '<span class="card-notable-event">')
@@ -204,6 +208,23 @@ export function parseCardTextHtml(
   }
 
   return parsed;
+}
+
+// Turns an inline `[guide] <id>` reference into a link to its campaign guide
+// entry. Unresolved ids and escaped `\[guide]` tokens are left untouched so the
+// generic token pass renders them as a plain icon.
+function linkCampaignGuideEntries(content: string, packCode?: string) {
+  return content.replace(
+    /(\\?)\[guide\]\s?(\d+(?:\.\d+)?[A-Za-z]?)/g,
+    (match, esc: string, entry: string) => {
+      if (esc === "\\") return match;
+
+      const href = getCampaignGuideEntryHrefById(entry, packCode);
+      if (!href) return match;
+
+      return `<a class="card-guide-link" href="${href}"><span class="core-guide"></span> ${entry}</a>`;
+    },
+  );
 }
 
 function preserveObjectiveLineBreaks(content: string) {

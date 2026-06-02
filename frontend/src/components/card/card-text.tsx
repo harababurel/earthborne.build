@@ -11,6 +11,7 @@ type Props = {
   challengeSun?: string | null;
   errataDate?: string | null;
   flavor?: string;
+  packCode?: string;
   size: "full" | "compact" | "tooltip";
   text?: string;
   typeCode: string;
@@ -24,6 +25,7 @@ export function CardText(props: Props) {
     challengeSun,
     errataDate,
     flavor,
+    packCode,
     size,
     text,
     typeCode,
@@ -41,6 +43,7 @@ export function CardText(props: Props) {
           dangerouslySetInnerHTML={{
             __html: parseCardTextHtml(text, {
               bullets: true,
+              packCode,
               splitParagraphs: true,
             }),
           }}
@@ -70,6 +73,7 @@ export function CardText(props: Props) {
           dangerouslySetInnerHTML={{
             __html: parseCardTextHtml(text, {
               bullets: true,
+              packCode,
               splitParagraphs: true,
             }),
           }}

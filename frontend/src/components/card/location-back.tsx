@@ -104,12 +104,14 @@ function LocationBackContent(props: { card: Card }) {
       {card.path_deck_assembly && (
         <LocationBackEntry
           label={t("card.location_back.path_deck_assembly")}
+          packCode={card.pack_code}
           text={card.path_deck_assembly}
         />
       )}
       {card.arrival_setup && (
         <LocationBackEntry
           label={t("card.location_back.arrival_setup")}
+          packCode={card.pack_code}
           text={card.arrival_setup}
         />
       )}
@@ -117,7 +119,11 @@ function LocationBackContent(props: { card: Card }) {
   );
 }
 
-function LocationBackEntry(props: { label: string; text: string }) {
+function LocationBackEntry(props: {
+  label: string;
+  packCode?: string;
+  text: string;
+}) {
   return (
     <div className={css["location-back-entry"]}>
       <h3>{props.label}</h3>
@@ -127,6 +133,7 @@ function LocationBackEntry(props: { label: string; text: string }) {
           dangerouslySetInnerHTML={{
             __html: parseCardTextHtml(props.text, {
               bullets: true,
+              packCode: props.packCode,
             }),
           }}
         />

@@ -79,6 +79,7 @@ export function CardFace(props: Props) {
           challengeMountain={card.challenge_mountain}
           challengeSun={card.challenge_sun}
           flavor={displayAttribute(card, "flavor")}
+          packCode={card.pack_code}
           size={size}
           text={displayAttribute(card, "text")}
           typeCode={card.type_code}

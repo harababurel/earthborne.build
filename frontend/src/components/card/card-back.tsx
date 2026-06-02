@@ -68,6 +68,7 @@ export function CardBack(props: Props) {
       <div className={css["content"]}>
         <CardText
           flavor={displayAttribute(card, "flavor")}
+          packCode={card.pack_code}
           size={size}
           text={displayAttribute(card, "text")}
           typeCode={card.type_code}

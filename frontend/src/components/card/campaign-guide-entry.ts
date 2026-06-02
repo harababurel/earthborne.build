@@ -36,11 +36,31 @@ export function getCampaignGuideEntryChoices(
   if (!pageIds) return [];
 
   return Object.entries(pageIds).map(([packCode, pageId]) => ({
-    href: `/rules?tab=campaign-guides#${pageId}`,
+    href: campaignGuideEntryHref(pageId),
     label: formatCampaignGuideEntryChoiceLabel(entry, packCode, pageIds),
     packCode,
     pageId,
   }));
+}
+
+// Resolves an inline `[guide] <id>` reference from card text to a single href.
+// Prefers the page in the given pack, falling back to the base game (`ebr`).
+// Letter-suffixed sub-entries (e.g. `1.211A`) resolve to their parent (`1.211`).
+export function getCampaignGuideEntryHrefById(
+  entry: string,
+  preferredPackCode?: string,
+): string | null {
+  const pageIds =
+    entryIndex.entries[entry] ??
+    entryIndex.entries[entry.replace(/[A-Za-z]+$/, "")];
+  if (!pageIds) return null;
+
+  const pageId =
+    (preferredPackCode && pageIds[preferredPackCode]) ??
+    pageIds.ebr ??
+    Object.values(pageIds)[0];
+
+  return pageId ? campaignGuideEntryHref(pageId) : null;
 }
 
 export function getCampaignGuideEntry(
@@ -52,6 +72,10 @@ export function getCampaignGuideEntry(
       : String(card.campaign_guide_entry).trim();
 
   return entry || "";
+}
+
+function campaignGuideEntryHref(pageId: string) {
+  return `/rules?tab=campaign-guides#${pageId}`;
 }
 
 function formatCampaignGuideEntryChoiceLabel(

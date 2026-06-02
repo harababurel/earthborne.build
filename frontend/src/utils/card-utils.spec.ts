@@ -72,8 +72,40 @@ describe("parseCardTextHtml", () => {
     expect(
       parseCardTextHtml("<o><b>Have 0 biscuits:</b> [guide] 1.02</o>"),
     ).toBe(
-      '<span class="card-objective-text"><b>Have 0 biscuits:</b> <span class="core-guide"></span> 1.02</span>',
+      '<span class="card-objective-text"><b>Have 0 biscuits:</b> <a class="card-guide-link" href="/rules?tab=campaign-guides#doc-campaign-guides-lure-of-the-valley-missions-1-02"><span class="core-guide"></span> 1.02</a></span>',
     );
+  });
+
+  it("links inline guide references to their campaign guide entry", () => {
+    expect(parseCardTextHtml("See [guide] 3 for details.")).toBe(
+      'See <a class="card-guide-link" href="/rules?tab=campaign-guides#doc-campaign-guides-lure-of-the-valley-white-sky"><span class="core-guide"></span> 3</a> for details.',
+    );
+  });
+
+  it("resolves letter-suffixed guide references to their parent entry", () => {
+    expect(parseCardTextHtml("[guide] 9.2")).toBe(
+      '<a class="card-guide-link" href="/rules?tab=campaign-guides#doc-campaign-guides-lure-of-the-valley-marsh-of-rebirth-9-2"><span class="core-guide"></span> 9.2</a>',
+    );
+  });
+
+  it("prefers the card's own pack over the base game for shared entries", () => {
+    expect(parseCardTextHtml("[guide] 44", { packCode: "loa" })).toBe(
+      '<a class="card-guide-link" href="/rules?tab=campaign-guides#doc-campaign-guides-legacy-of-the-ancestors-kordo-ranger-veteran"><span class="core-guide"></span> 44</a>',
+    );
+
+    expect(parseCardTextHtml("[guide] 44")).toBe(
+      '<a class="card-guide-link" href="/rules?tab=campaign-guides#doc-campaign-guides-lure-of-the-valley-kordo-ranger-veteran"><span class="core-guide"></span> 44</a>',
+    );
+  });
+
+  it("leaves unresolved guide references as a plain icon", () => {
+    expect(parseCardTextHtml("[guide] 99999")).toBe(
+      '<span class="core-guide"></span> 99999',
+    );
+  });
+
+  it("does not link escaped guide tokens", () => {
+    expect(parseCardTextHtml("\\[guide] 3")).toBe("[guide] 3");
   });
 
   it("supports line breaks inside objective tags when splitting paragraphs", () => {
