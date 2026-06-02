@@ -557,6 +557,12 @@
     opacity: 0.78;
   }
 
+  .text :global(.card-choice-text),
+  .challenge-text :global(.card-choice-text) {
+    color: var(--color-fit);
+    font-weight: 700;
+  }
+
   .text :global(.card-objective-text),
   .challenge-text :global(.card-objective-text) {
     display: inline-block;
