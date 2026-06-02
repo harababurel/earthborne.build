@@ -184,6 +184,7 @@ export const pathCardSymbolUrlBySetCode: Record<string, string> = {
   ancient_ruins: ancientRuinsTerrainUrl,
   arcology: arcologyUrl,
   artery: severedArteryUrl,
+  brookside: brooksideUrl,
   cave_system: caveSystemUrl,
   deep_roots: deepRootsUrl,
   flooded_ruins: floodedRuinsUrl,
@@ -194,7 +195,10 @@ export const pathCardSymbolUrlBySetCode: Record<string, string> = {
   old_growth: oldGrowthUrl,
   ravine: ravineUrl,
   river: riverUrl,
+  silverfin_docks: silverfinDocksUrl,
+  spire_crossing: spireCrossingUrl,
   swamp: swampUrl,
+  thoroughfare: thoroughfareUrl,
   woods: woodsUrl,
   // general set
   general: generalUrl,
