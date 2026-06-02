@@ -8,6 +8,7 @@ import boulderFieldUrl from "./locations/boulder-field.svg";
 import bowlOfTheSunUrl from "./locations/bowl-of-the-sun.svg";
 import branchUrl from "./locations/branch.svg";
 import branchingArteryUrl from "./locations/branching-artery.svg";
+import brooksideUrl from "./locations/brookside.svg";
 import carbonforgedMazeUrl from "./locations/carbonforged-maze.svg";
 import ceruleanCurtainUrl from "./locations/cerulean-curtain.svg";
 import crossroadsStationUrl from "./locations/crossroads-station.svg";
@@ -94,6 +95,7 @@ export const locationSymbolUrls = {
   "Bowl of the Sun": bowlOfTheSunUrl,
   Branch: branchUrl,
   "Branching Artery": branchingArteryUrl,
+  Brookside: brooksideUrl,
   "Carbonforged Maze": carbonforgedMazeUrl,
   "Cerulean Curtain": ceruleanCurtainUrl,
   "Crossroads Station": crossroadsStationUrl,
