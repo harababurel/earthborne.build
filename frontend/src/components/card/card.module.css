@@ -607,17 +607,22 @@
   }
 
   .challenge {
+    position: relative;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
     font-family: var(--font-family-content);
     font-size: var(--card-text-size, var(--text-sm));
     text-align: left;
     padding: 0.4rem 0.6rem;
     color: white;
+    overflow: hidden;
+    min-height: calc(2.85em + 0.8rem);
   }
 
   .challenge-icon {
+    position: relative;
+    z-index: 0;
     flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
@@ -626,17 +631,28 @@
     height: 1.9em;
     border-radius: 50%;
     color: white;
-    font-size: 1.5em;
-    margin-top: 0.1em;
+    font-size: 1.35em;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 
     & i {
       font-size: 1.45em;
     }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 0.11em;
+      height: 100em;
+      background-color: inherit;
+      z-index: -1;
+    }
   }
 
   .sun {
-    background-color: color-mix(in srgb, var(--spi), black 5%);
+    background-color: color-mix(in srgb, var(--spi), black 15%);
 
     & .challenge-icon {
       background-color: var(--spi);
@@ -648,7 +664,7 @@
   }
 
   .mountain {
-    background-color: color-mix(in srgb, var(--foc-dark), black 10%);
+    background-color: color-mix(in srgb, var(--foc-dark), black 30%);
 
     & .challenge-icon {
       background-color: var(--foc-dark);
@@ -656,7 +672,7 @@
   }
 
   .crest {
-    background-color: color-mix(in srgb, var(--fit), black 10%);
+    background-color: color-mix(in srgb, var(--fit), black 30%);
 
     & .challenge-icon {
       background-color: var(--fit);
