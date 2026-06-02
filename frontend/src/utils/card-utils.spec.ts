@@ -36,12 +36,16 @@ describe("parseCardTextHtml", () => {
     expect(parseCardTextHtml("[SPI]")).toBe('<b class="color-SPI">SPI</b>');
   });
 
-  it("maps other tokens to icon- i tags", () => {
+  it("maps known legacy icon tokens to icon- i tags", () => {
     expect(parseCardTextHtml("[action]")).toBe('<i class="icon-action"></i>');
   });
 
   it("handles numeric values in brackets as literal text", () => {
     expect(parseCardTextHtml("Repair [2]")).toBe("Repair [2]");
+  });
+
+  it("handles unknown values in brackets as literal text", () => {
+    expect(parseCardTextHtml("Mend [X]")).toBe("Mend [X]");
   });
 
   it("handles escaped brackets", () => {

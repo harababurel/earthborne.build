@@ -12,6 +12,8 @@ const ER_STAT_TOKENS = new Set(["FIT", "AWA", "FOC", "SPI"]);
 
 const ER_INLINE_SVG_TOKENS = new Set(["buck"]);
 
+const LEGACY_ICON_TOKENS = new Set(["action", "reaction", "free"]);
+
 // Tokens that map directly to a class in the core Earthborne icon set.
 const ER_CORE_FONT_TOKENS = new Set([
   "conflict",
@@ -175,11 +177,11 @@ export function parseCardTextHtml(
         return `<b class="color-${t}">${t}</b>`;
       }
 
-      if (/^\d+$/.test(token)) {
-        return match;
+      if (LEGACY_ICON_TOKENS.has(t)) {
+        return `<i class="icon-${t}"></i>`;
       }
 
-      return `<i class="icon-${token}"></i>`;
+      return match;
     });
 
   parsed = parsed.replace(/(<l>[^<]*<\/l>)+/g, (group) => {
