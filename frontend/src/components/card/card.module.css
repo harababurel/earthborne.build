@@ -686,10 +686,12 @@
   }
 
   .sun {
-    background-color: color-mix(in srgb, var(--spi), black 15%);
+    background-color: color-mix(in srgb, var(--spi), #c2410c 25%);
 
     & .challenge-icon {
-      background-color: var(--spi);
+      background-color: oklch(
+        from color-mix(in srgb, var(--spi), #c2410c 25%) calc(l + 0.1) c h
+      );
 
       & i {
         transform: translateY(0.07em);
