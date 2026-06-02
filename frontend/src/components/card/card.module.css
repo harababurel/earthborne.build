@@ -477,6 +477,21 @@
     font-weight: 700;
   }
 
+  .text
+    :global(
+      :where(.core-conflict, .core-connection, .core-reason, .core-exploration)
+    ),
+  .challenge-text
+    :global(
+      :where(.core-conflict, .core-connection, .core-reason, .core-exploration)
+    ),
+  .location-back-text
+    :global(
+      :where(.core-conflict, .core-connection, .core-reason, .core-exploration)
+    ) {
+    font-size: 1.35em;
+  }
+
   .text :global(.card-notable-event),
   .challenge-text :global(.card-notable-event) {
     font-weight: 700;
