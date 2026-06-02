@@ -512,12 +512,15 @@
   .location-back-text :global(.card-flavor-text) {
     color: var(--text-neutral);
     font-style: italic;
+    font-weight: 300;
+    opacity: 0.78;
   }
 
   .challenge-text :global(.card-flavor-text) {
     color: inherit;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 300;
+    opacity: 0.78;
   }
 
   .text :global(.card-objective-text),
