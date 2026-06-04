@@ -1039,11 +1039,86 @@
       "search_placeholder": "Search reference...",
       "loading": "Loading reference...",
       "sections": {
+        "achievements": "Achievements",
         "campaign-guides": "Campaign Guides",
         "faq": "FAQ",
         "one-day-missions": "One-Day Missions",
         "rules-glossary": "Rules Glossary",
         "updates": "Updates"
+      },
+      "achievements": {
+        "clear": "Clear completed",
+        "empty": "No achievements match your search.",
+        "lock": "Lock",
+        "progress": "{{completed}} of {{total}} completed",
+        "unlock": "Unlock",
+        "unlock_to_edit": "Unlock achievements to edit",
+        "items": {
+          "unplanned-reunion": {
+            "title": "Unplanned Reunion",
+            "description": "Have Dace and Aell in play at the same time."
+          },
+          "electric-slide": {
+            "title": "Electric Slide",
+            "description": "Complete the campaign using the Electric Fog weather every day."
+          },
+          "no-stone-left-unturned": {
+            "title": "No Stone Left Unturned",
+            "description": "Have every path card in the deck in play at the same time."
+          },
+          "the-pentaverate": {
+            "title": "The Pentaverate",
+            "description": "Have five humans within reach of one Ranger at the same time."
+          },
+          "ship-of-theseus": {
+            "title": "Ship of Theseus",
+            "description": "Replace every card in your deck with a reward card."
+          },
+          "hard-pass": {
+            "title": "Hard Pass",
+            "description": "Finish the campaign without completing a single story mission."
+          },
+          "noodling": {
+            "title": "Noodling",
+            "description": "Catch a fish in the Black Mud."
+          },
+          "shes-a-natural": {
+            "title": "She’s A Natural!",
+            "description": "Have Quisi cause a Cloudhive swarm to be discarded."
+          },
+          "big-tech": {
+            "title": "Big Tech",
+            "description": "Discard a gear with 10 or more tokens on it using Moment of Desperation."
+          },
+          "howd-that-get-in-there": {
+            "title": "How’d That Get in There?",
+            "description": "Add a card without the printed flora trait to Hy’s soup."
+          },
+          "pro-gamer": {
+            "title": "Pro Gamer",
+            "description": "Pet Oru 3<per_ranger/> or more times during a single round."
+          },
+          "enough-already": {
+            "title": "Enough Already!",
+            "description": "Play the same moment 10 times in one day."
+          },
+          "unlimited-power": {
+            "title": "Unlimited Power!",
+            "description": "Have 7 or more energy in a single aspect."
+          },
+          "people-person": {
+            "title": "People Person",
+            "description": "Clear three or more humans with the same test."
+          },
+          "log-flume": {
+            "title": "Log Flume",
+            "description": "Travel from White Sky to Tumbledown in a single day."
+          },
+          "all-out-of-options": {
+            "title": "All Out of Options",
+            "description": "Have only four cards remaining in the challenge deck."
+          }
+        }
       },
       "title": "Rules & Reference",
       "toc": "Table of contents"

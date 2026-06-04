@@ -150,6 +150,151 @@ html[data-theme="light"] .toc a {
   outline: none;
 }
 
+.achievements {
+  max-width: 72ch;
+  margin-inline: auto;
+}
+
+.achievements-header {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--palette-2);
+}
+
+.achievements-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.achievements-header h1 {
+  font-family: var(--font-family-card-title);
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.achievements-header p,
+.achievements-toc p {
+  color: var(--palette-5);
+  margin: 0;
+}
+
+.achievements-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.achievement {
+  position: relative;
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  align-items: center;
+  gap: 0.25rem;
+  scroll-margin-top: 1rem;
+  border: 1px solid var(--palette-2);
+  border-radius: var(--rounded);
+  background: var(--palette-point-five);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+
+  @media screen and (min-width: 42rem) {
+    grid-template-columns: 8.5rem 1fr;
+  }
+}
+
+.achievement.completed {
+  border-color: color-mix(in srgb, var(--blue) 55%, var(--palette-2));
+  background: color-mix(in srgb, var(--blue) 8%, var(--palette-point-five));
+}
+
+.achievement.locked .achievement-check {
+  opacity: 0.88;
+}
+
+.achievement-badge {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  padding: 0.5rem;
+}
+
+.achievement-check {
+  --checkbox-size: 1.25rem;
+
+  align-items: flex-start;
+  padding: 1rem 1rem 1rem 0.25rem;
+}
+
+.achievement-check svg {
+  width: 1em;
+  height: 1em;
+}
+
+.achievement-check strong,
+.achievement-description {
+  display: block;
+}
+
+.achievement-check strong {
+  margin-bottom: 0.25rem;
+  font-size: var(--text-lg);
+}
+
+.achievement-description {
+  color: var(--palette-5);
+  font-family: var(--font-family-content);
+  font-size: var(--text-base);
+  line-height: 1.5;
+}
+
+.achievement-description .core-per_ranger {
+  display: inline-block;
+  color: var(--blue);
+  font-size: 1.05em;
+  vertical-align: -0.1em;
+}
+
+.achievement-locked {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--palette-2);
+  border-radius: 999px;
+  background: var(--palette-point-five);
+  color: var(--palette-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.achievement-locked svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.achievements-toc a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.achievements-toc svg {
+  width: 1em;
+  height: 1em;
+  color: var(--blue);
+}
+
 .rules {
   max-width: 80ch;
   margin-inline: auto;

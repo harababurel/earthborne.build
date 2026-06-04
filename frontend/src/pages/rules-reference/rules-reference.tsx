@@ -1,13 +1,18 @@
 /** biome-ignore-all lint/security/noDangerouslySetInnerHtml: trusted content. */
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
+import { Checkbox } from "@/components/ui/checkbox";
 import { AppLayout } from "@/layouts/app-layout";
+import { useStore } from "@/store";
 import { parseCardTextHtml } from "@/utils/card-utils";
 import "./rules-reference.css";
 import {
+  AwardIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
   ListIcon,
+  LockIcon,
+  UnlockIcon,
   XIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -20,8 +25,14 @@ import { cx } from "@/utils/cx";
 import { fuzzyMatch, prepareNeedle } from "@/utils/fuzzy";
 import { useGoBack } from "@/utils/use-go-back";
 import { useHotkey } from "@/utils/use-hotkey";
+import {
+  ACHIEVEMENT_BADGES,
+  ACHIEVEMENTS,
+  type AchievementId,
+} from "./achievements";
 
 const REFERENCE_SECTIONS = [
+  { value: "achievements", load: undefined },
   {
     value: "campaign-guides",
     load: () => import("@/assets/campaign-guides.html?raw"),
@@ -100,12 +111,18 @@ function RulesReference() {
     (value: string) => {
       setSearch("");
       setTocOpen(false);
+      setSelectedPageId("");
       setSection(value);
     },
     [setSection],
   );
 
   useEffect(() => {
+    if (!activeSection.load) {
+      setHtml("");
+      return;
+    }
+
     let active = true;
     setHtml("");
 
@@ -222,12 +239,16 @@ function RulesReference() {
           </nav>
 
           <Scroller className="toc-inner">
-            <div
-              key={section}
-              dangerouslySetInnerHTML={{
-                __html: parseCardTextHtml(toc, { newLines: "skip" }),
-              }}
-            />
+            {activeSection.value === "achievements" ? (
+              <AchievementsToc search={search} />
+            ) : (
+              <div
+                key={section}
+                dangerouslySetInnerHTML={{
+                  __html: parseCardTextHtml(toc, { newLines: "skip" }),
+                }}
+              />
+            )}
           </Scroller>
         </div>
         <div className="rules-container">
@@ -247,7 +268,10 @@ function RulesReference() {
                 key={item.value}
                 value={item.value}
               >
-                {item.value === activeSection.value && html && activePage ? (
+                {item.value === "achievements" &&
+                item.value === activeSection.value ? (
+                  <AchievementsPanel search={search} />
+                ) : item.value === activeSection.value && html && activePage ? (
                   <div
                     data-section={activeSection.value}
                     key={`${activeSectionValue}-${activePage.id}`}
@@ -294,6 +318,183 @@ function RulesReference() {
       </div>
     </AppLayout>
   );
+}
+
+function AchievementsToc({ search }: { search: string }) {
+  const { t } = useTranslation();
+  const completed = useStore((state) => state.achievements.completed);
+  const filteredAchievements = useFilteredAchievements(search);
+  const completedCount = ACHIEVEMENTS.filter((id) => completed[id]).length;
+
+  return (
+    <div className="toc achievements-toc">
+      <p>
+        {t("rules.achievements.progress", {
+          completed: completedCount,
+          total: ACHIEVEMENTS.length,
+        })}
+      </p>
+      <ul>
+        {filteredAchievements.map((id) => (
+          <li key={id}>
+            <a href={`#achievement-${id}`}>
+              {completed[id] ? <AwardIcon /> : null}
+              {t(`rules.achievements.items.${id}.title`)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function AchievementsPanel({ search }: { search: string }) {
+  const { t } = useTranslation();
+  const completed = useStore((state) => state.achievements.completed);
+  const toggleAchievement = useStore((state) => state.toggleAchievement);
+  const clearAchievements = useStore((state) => state.clearAchievements);
+  const [locked, setLocked] = useState(true);
+  const filteredAchievements = useFilteredAchievements(search);
+  const completedCount = ACHIEVEMENTS.filter((id) => completed[id]).length;
+
+  return (
+    <section className="achievements">
+      <header className="achievements-header">
+        <div>
+          <h1>{t("rules.sections.achievements")}</h1>
+          <p>
+            {t("rules.achievements.progress", {
+              completed: completedCount,
+              total: ACHIEVEMENTS.length,
+            })}
+          </p>
+        </div>
+        <Button
+          onClick={() => setLocked((prev) => !prev)}
+          size="sm"
+          type="button"
+        >
+          {locked ? <LockIcon /> : <UnlockIcon />}
+          {locked
+            ? t("rules.achievements.unlock")
+            : t("rules.achievements.lock")}
+        </Button>
+      </header>
+
+      {!locked && (
+        <div className="achievements-actions">
+          <Button
+            disabled={completedCount === 0}
+            onClick={clearAchievements}
+            size="sm"
+            type="button"
+          >
+            {t("rules.achievements.clear")}
+          </Button>
+        </div>
+      )}
+
+      {filteredAchievements.length ? (
+        <div className="achievements-list">
+          {filteredAchievements.map((id) => (
+            <AchievementItem
+              completed={!!completed[id]}
+              id={id}
+              locked={locked}
+              key={id}
+              onToggle={toggleAchievement}
+            />
+          ))}
+        </div>
+      ) : (
+        <p>{t("rules.achievements.empty")}</p>
+      )}
+    </section>
+  );
+}
+
+function AchievementItem({
+  completed,
+  id,
+  locked,
+  onToggle,
+}: {
+  completed: boolean;
+  id: AchievementId;
+  locked: boolean;
+  onToggle: (id: AchievementId) => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <article
+      className={cx(
+        "achievement",
+        completed && "completed",
+        locked && "locked",
+      )}
+      id={`achievement-${id}`}
+    >
+      <img
+        alt={t(`rules.achievements.items.${id}.title`)}
+        className="achievement-badge"
+        loading="lazy"
+        src={ACHIEVEMENT_BADGES[id]}
+      />
+      {locked && (
+        <span
+          className="achievement-locked"
+          title={t("rules.achievements.unlock_to_edit")}
+        >
+          <LockIcon />
+          <span className="sr-only">
+            {t("rules.achievements.unlock_to_edit")}
+          </span>
+        </span>
+      )}
+      <Checkbox
+        checked={completed}
+        className="achievement-check"
+        disabled={locked}
+        label={
+          <span>
+            <strong>{t(`rules.achievements.items.${id}.title`)}</strong>
+            <span className="achievement-description">
+              <Trans
+                components={{
+                  per_ranger: <span className="core-per_ranger" />,
+                }}
+                i18nKey={`rules.achievements.items.${id}.description`}
+                t={t}
+              />
+            </span>
+          </span>
+        }
+        onCheckedChange={() => onToggle(id)}
+      />
+    </article>
+  );
+}
+
+function useFilteredAchievements(search: string) {
+  const { t } = useTranslation();
+
+  return useMemo(() => {
+    if (search.length <= 2) return ACHIEVEMENTS;
+
+    const needle = prepareNeedle(search);
+    if (!needle) return ACHIEVEMENTS;
+
+    return ACHIEVEMENTS.filter((id) =>
+      fuzzyMatch(
+        [
+          t(`rules.achievements.items.${id}.title`).toLowerCase(),
+          t(`rules.achievements.items.${id}.description`).toLowerCase(),
+        ],
+        needle,
+      ),
+    );
+  }, [search, t]);
 }
 
 function parseReferenceContent(html: string): ReferenceContent {

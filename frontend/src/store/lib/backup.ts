@@ -24,7 +24,11 @@ export async function restoreBackup(
 ): Promise<StoreState> {
   const file = JSON.parse(await buffer.text());
   assert(validateBackup(file), "Invalid backup file.");
-  return { ...state, ...migrate(file.data, file.version) };
+  return {
+    ...state,
+    achievements: { completed: {} },
+    ...migrate(file.data, file.version),
+  };
 }
 
 function validateBackup(x: unknown): x is Backup {

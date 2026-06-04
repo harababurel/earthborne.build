@@ -1,3 +1,4 @@
+import type { AchievementsSlice } from "./achievements.types";
 import type { AppSlice } from "./app.types";
 import type { DataSlice } from "./data.types";
 import type { DeckCollectionSlice } from "./deck-collection.types";
@@ -11,6 +12,7 @@ import type { SharingSlice } from "./sharing.types";
 import type { UISlice } from "./ui.types";
 
 export type StoreState = AppSlice &
+  AchievementsSlice &
   MetadataSlice &
   ListsSlice &
   UISlice &
