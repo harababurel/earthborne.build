@@ -21,6 +21,7 @@ import { Scroller } from "@/components/ui/scroller";
 import { SearchInput } from "@/components/ui/search-input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTabUrlState } from "@/components/ui/tabs.hooks";
+import type { AchievementCompletion } from "@/store/slices/achievements.types";
 import { cx } from "@/utils/cx";
 import { fuzzyMatch, prepareNeedle } from "@/utils/fuzzy";
 import { useGoBack } from "@/utils/use-go-back";
@@ -352,7 +353,7 @@ function AchievementsPanel({ search }: { search: string }) {
   const { t } = useTranslation();
   const completed = useStore((state) => state.achievements.completed);
   const toggleAchievement = useStore((state) => state.toggleAchievement);
-  const clearAchievements = useStore((state) => state.clearAchievements);
+  const setAchievementDate = useStore((state) => state.setAchievementDate);
   const [locked, setLocked] = useState(true);
   const filteredAchievements = useFilteredAchievements(search);
   const completedCount = ACHIEVEMENTS.filter((id) => completed[id]).length;
@@ -381,27 +382,16 @@ function AchievementsPanel({ search }: { search: string }) {
         </Button>
       </header>
 
-      {!locked && (
-        <div className="achievements-actions">
-          <Button
-            disabled={completedCount === 0}
-            onClick={clearAchievements}
-            size="sm"
-            type="button"
-          >
-            {t("rules.achievements.clear")}
-          </Button>
-        </div>
-      )}
-
       {filteredAchievements.length ? (
         <div className="achievements-list">
           {filteredAchievements.map((id) => (
             <AchievementItem
               completed={!!completed[id]}
+              completion={completionValue(completed[id])}
               id={id}
               locked={locked}
               key={id}
+              onDateChange={setAchievementDate}
               onToggle={toggleAchievement}
             />
           ))}
@@ -415,16 +405,21 @@ function AchievementsPanel({ search }: { search: string }) {
 
 function AchievementItem({
   completed,
+  completion,
   id,
   locked,
+  onDateChange,
   onToggle,
 }: {
   completed: boolean;
+  completion: AchievementCompletion | undefined;
   id: AchievementId;
   locked: boolean;
+  onDateChange: (id: AchievementId, date: string) => void;
   onToggle: (id: AchievementId) => void;
 }) {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const date = completion?.date ?? "";
 
   return (
     <article
@@ -441,16 +436,34 @@ function AchievementItem({
         loading="lazy"
         src={ACHIEVEMENT_BADGES[id]}
       />
-      {locked && (
+      {!completed && (
         <span
-          className="achievement-locked"
-          title={t("rules.achievements.unlock_to_edit")}
+          className={cx(
+            "achievement-lock-state",
+            locked ? "locked" : "unlocked",
+          )}
+          title={
+            locked
+              ? t("rules.achievements.unlock_to_edit")
+              : t("rules.achievements.unlocked_to_edit")
+          }
         >
-          <LockIcon />
+          {locked ? <LockIcon /> : <UnlockIcon />}
           <span className="sr-only">
-            {t("rules.achievements.unlock_to_edit")}
+            {locked
+              ? t("rules.achievements.unlock_to_edit")
+              : t("rules.achievements.unlocked_to_edit")}
           </span>
         </span>
+      )}
+      {completed && (
+        <AchievementDate
+          date={date}
+          id={id}
+          locale={i18n.language}
+          locked={locked}
+          onDateChange={onDateChange}
+        />
       )}
       <Checkbox
         checked={completed}
@@ -474,6 +487,59 @@ function AchievementItem({
       />
     </article>
   );
+}
+
+function AchievementDate({
+  date,
+  id,
+  locale,
+  locked,
+  onDateChange,
+}: {
+  date: string;
+  id: AchievementId;
+  locale: string;
+  locked: boolean;
+  onDateChange: (id: AchievementId, date: string) => void;
+}) {
+  const { t } = useTranslation();
+
+  if (!locked) {
+    return (
+      <label className="achievement-date-field">
+        <span className="sr-only">{t("rules.achievements.date_label")}</span>
+        <input
+          aria-label={t("rules.achievements.date_label")}
+          onChange={(evt) => onDateChange(id, evt.target.value)}
+          type="date"
+          value={date}
+        />
+      </label>
+    );
+  }
+
+  return (
+    <time className="achievement-date" dateTime={date || undefined}>
+      {date
+        ? t("rules.achievements.achieved_on", {
+            date: formatAchievementDate(date, locale),
+          })
+        : t("rules.achievements.date_missing")}
+    </time>
+  );
+}
+
+function completionValue(
+  completion: AchievementCompletion | boolean | undefined,
+) {
+  return typeof completion === "object" ? completion : undefined;
+}
+
+function formatAchievementDate(date: string, locale: string) {
+  const value = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(value.getTime())) return date;
+
+  return new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(value);
 }
 
 function useFilteredAchievements(search: string) {

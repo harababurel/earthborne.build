@@ -1047,12 +1047,15 @@
         "updates": "Updates"
       },
       "achievements": {
-        "clear": "Clear completed",
+        "achieved_on": "{{date}}",
+        "date_label": "Achievement date",
+        "date_missing": "Date not set",
         "empty": "No achievements match your search.",
         "lock": "Lock",
-        "progress": "{{completed}} of {{total}} completed",
+        "progress": "{{completed}} / {{total}} badges earned",
         "unlock": "Unlock",
         "unlock_to_edit": "Unlock achievements to edit",
+        "unlocked_to_edit": "Achievements are unlocked",
         "items": {
           "unplanned-reunion": {
             "title": "Unplanned Reunion",

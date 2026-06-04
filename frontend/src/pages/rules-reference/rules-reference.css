@@ -166,12 +166,6 @@ html[data-theme="light"] .toc a {
   border-bottom: 1px solid var(--palette-2);
 }
 
-.achievements-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-}
-
 .achievements-header h1 {
   font-family: var(--font-family-card-title);
   font-size: 2.5rem;
@@ -202,7 +196,8 @@ html[data-theme="light"] .toc a {
   box-shadow: var(--shadow-sm);
   transition:
     border-color 0.2s ease,
-    background-color 0.2s ease;
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   @media screen and (min-width: 42rem) {
     grid-template-columns: 8.5rem 1fr;
@@ -212,6 +207,7 @@ html[data-theme="light"] .toc a {
 .achievement.completed {
   border-color: color-mix(in srgb, var(--blue) 55%, var(--palette-2));
   background: color-mix(in srgb, var(--blue) 8%, var(--palette-point-five));
+  box-shadow: var(--shadow);
 }
 
 .achievement.locked .achievement-check {
@@ -224,6 +220,19 @@ html[data-theme="light"] .toc a {
   aspect-ratio: 1;
   object-fit: contain;
   padding: 0.5rem;
+  filter: grayscale(0.25) saturate(0.8);
+  opacity: 0.72;
+  transform: scale(0.98);
+  transition:
+    filter 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.achievement.completed .achievement-badge {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.06);
 }
 
 .achievement-check {
@@ -262,7 +271,7 @@ html[data-theme="light"] .toc a {
   vertical-align: -0.1em;
 }
 
-.achievement-locked {
+.achievement-lock-state {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -274,13 +283,57 @@ html[data-theme="light"] .toc a {
   border: 1px solid var(--palette-2);
   border-radius: 999px;
   background: var(--palette-point-five);
-  color: var(--palette-5);
   box-shadow: var(--shadow-sm);
 }
 
-.achievement-locked svg {
+.achievement-lock-state.locked {
+  color: var(--palette-5);
+}
+
+.achievement-lock-state.unlocked {
+  border-color: color-mix(in srgb, var(--blue) 35%, var(--palette-2));
+  color: var(--blue);
+}
+
+.achievement-date,
+.achievement-date-field {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.achievement-date {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding-inline: 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--blue) 55%, var(--palette-2));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--blue) 16%, var(--palette-point-five));
+  color: var(--blue);
+  font-family: var(--font-family-ui);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.achievement-lock-state svg {
   width: 1rem;
   height: 1rem;
+}
+
+.achievement-date-field input {
+  width: 9.5rem;
+  min-height: 1.75rem;
+  padding-inline: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--blue) 45%, var(--palette-2));
+  border-radius: 999px;
+  background: var(--palette-point-five);
+  color: var(--blue);
+  font-family: var(--font-family-ui);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
 }
 
 .achievements-toc a {
