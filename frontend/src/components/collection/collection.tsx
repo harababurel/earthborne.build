@@ -31,7 +31,7 @@ const BGG_LINKS: Record<string, string> = {
   sos: "https://boardgamegeek.com/boardgameexpansion/466595/earthborne-rangers-shadow-of-the-storm-expansion",
   sotv: "https://boardgamegeek.com/boardgame/400328/earthborne-rangers-stewards-of-the-valley",
   mop: "https://boardgamegeek.com/boardgameexpansion/412737/earthborne-rangers-moments-on-the-path",
-  mitv: "https://boardgamegeek.com/boardgame/457240/earthborne-rangers-moments-in-the-valley",
+  miv: "https://boardgamegeek.com/boardgame/457240/earthborne-rangers-moments-in-the-valley",
 };
 
 const FALLBACK_PACK_NAMES: Record<string, string> = {
@@ -41,7 +41,7 @@ const FALLBACK_PACK_NAMES: Record<string, string> = {
   sos: "Shadow of the Storm",
   sotv: "Stewards of the Valley",
   mop: "Moments on the Path",
-  mitv: "Moments in the Valley",
+  miv: "Moments in the Valley",
 };
 
 const PACK_BANNER_CODES: Record<string, string> = {
@@ -75,7 +75,7 @@ const COLLECTION_GROUPS: CollectionGroup[] = [
   {
     id: "path",
     titleKey: "settings.collection.groups.path",
-    packCodes: ["mop", "mitv"],
+    packCodes: ["mop", "miv"],
   },
 ];
 
@@ -125,7 +125,7 @@ export function CollectionSettings(props: Props) {
     "sos",
     "sotv",
     "mop",
-    "mitv",
+    "miv",
   ]);
 
   return (
