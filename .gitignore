@@ -12,6 +12,7 @@ node_modules
 !.vscode/extensions.json
 
 .codex
+.antigravitycli
 .wrangler
 .cache/
 coverage
