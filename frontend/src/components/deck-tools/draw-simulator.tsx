@@ -7,7 +7,7 @@ import {
   Undo2Icon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
 import { cx } from "@/utils/cx";
@@ -76,7 +76,7 @@ export function DrawSimulator(props: Props) {
             aria-label={t("draw_simulator.help_label")}
             iconOnly
             size="xs"
-            tooltip={<DrawSimulatorHelp />}
+            tooltip={<DrawSimulatorHelp t={t} />}
             variant="bare"
           >
             <InfoIcon />
@@ -219,17 +219,18 @@ export function DrawSimulator(props: Props) {
   );
 }
 
-function DrawSimulatorHelp() {
-  const { t } = useTranslation();
+type TranslationFn = ReturnType<typeof useTranslation>["t"];
 
+function DrawSimulatorHelp(props: { t: TranslationFn }) {
+  const { t } = props;
   return (
-    <Trans
-      components={{
-        card: <LingeringInjuryLink />,
-      }}
-      i18nKey="draw_simulator.help"
-      t={t}
-    />
+    <>
+      {t("draw_simulator.help_prefix")}
+      <LingeringInjuryLink>
+        {t("draw_simulator.lingering_injury")}
+      </LingeringInjuryLink>
+      {t("draw_simulator.help_suffix")}
+    </>
   );
 }
 
