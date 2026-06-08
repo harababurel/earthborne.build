@@ -4,7 +4,7 @@ import path from "node:path";
 import react from "@vitejs/plugin-react";
 import autoprefixer from "autoprefixer";
 import { bundleStats } from "rollup-plugin-bundle-stats";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 
 process.env.VITE_APP_BUILD ||= getAppBuild();
 process.env.VITE_APP_BUILD_TIME ||= getAppBuildTime(process.env.VITE_APP_BUILD);
@@ -27,6 +27,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    esToolkitCompatEsm(),
     react(),
     bundleStats({
       baseline: true,
@@ -64,6 +65,37 @@ export default defineConfig({
     },
   },
 });
+
+// recharts imports es-toolkit via deep paths (e.g. `es-toolkit/compat/get`),
+// whose package export only ships a CommonJS shim — there is no `import`
+// condition for the `./compat/*` subpath. Rolldown's CJS->ESM interop then
+// miscompiles es-toolkit's internal require cycle into self-referential
+// `var x = x()`, which throws "x is not a function" at runtime in production
+// builds (dev is unaffected because it is not bundled this way). Redirect those
+// deep imports to es-toolkit's ESM barrel, which Rolldown handles correctly and
+// still tree-shakes down to the used functions.
+function esToolkitCompatEsm(): Plugin {
+  const prefix = "es-toolkit/compat/";
+  const virtual = "\0es-toolkit-compat:";
+  return {
+    name: "es-toolkit-compat-esm",
+    enforce: "pre",
+    resolveId(id) {
+      if (id.startsWith(prefix)) {
+        const name = id.slice(prefix.length);
+        if (name && !name.includes("/")) return virtual + name;
+      }
+      return null;
+    },
+    load(id) {
+      if (id.startsWith(virtual)) {
+        const name = id.slice(virtual.length);
+        return `export { ${name} as default, ${name} } from "es-toolkit/compat";`;
+      }
+      return null;
+    },
+  };
+}
 
 function getAppBuild(): string {
   try {
