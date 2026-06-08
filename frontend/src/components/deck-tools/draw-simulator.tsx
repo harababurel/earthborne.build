@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useStore } from "@/store";
 import type { ResolvedDeck } from "@/store/lib/types";
 import { cx } from "@/utils/cx";
 import { CardScan } from "../card-scan";
@@ -223,37 +222,7 @@ type TranslationFn = ReturnType<typeof useTranslation>["t"];
 
 function DrawSimulatorHelp(props: { t: TranslationFn }) {
   const { t } = props;
-  return (
-    <>
-      {t("draw_simulator.help_prefix")}
-      <LingeringInjuryLink>
-        {t("draw_simulator.lingering_injury")}
-      </LingeringInjuryLink>
-      {t("draw_simulator.help_suffix")}
-    </>
-  );
-}
-
-function LingeringInjuryLink(props: { children?: React.ReactNode }) {
-  const card = useStore((state) => state.metadata.cards["01240"]);
-  const { refs, referenceProps, isMounted, floatingStyles, transitionStyles } =
-    useRestingTooltip({ delay: 350 });
-
-  return (
-    <>
-      <a {...referenceProps} href="/card/01240" ref={refs.setReference}>
-        {props.children}
-      </a>
-      {card && isMounted && (
-        <PortaledCardTooltip
-          card={card}
-          floatingStyles={floatingStyles}
-          ref={refs.setFloating}
-          transitionStyles={transitionStyles}
-        />
-      )}
-    </>
-  );
+  return <>{t("draw_simulator.help")}</>;
 }
 
 type DrawSimulatorCardProps = {
