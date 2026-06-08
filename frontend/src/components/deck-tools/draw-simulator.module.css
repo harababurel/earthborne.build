@@ -1,4 +1,6 @@
 .container {
+  --card-width: 9rem;
+
   will-change: contents;
   user-select: none;
 }
@@ -30,10 +32,52 @@
   gap: 0.25rem;
 }
 
+.setup-field {
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+  max-width: 28rem;
+  font-size: var(--text-sm);
+}
+
+.setup-field span {
+  font-weight: 700;
+}
+
+.setup-field select {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.size-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  font-size: var(--text-sm);
+}
+
+.size-actions span {
+  margin-right: 0.25rem;
+}
+
+.empty {
+  color: var(--text);
+  font-size: var(--text-sm);
+}
+
+.section > * + * {
+  margin-top: 0.5rem;
+}
+
+.section h3 {
+  font-size: var(--text-base);
+}
+
 .drawn {
-  --cols: 5;
+  --cols: 6;
   --gap: 0.5rem;
-  --card-width: 9rem;
 
   display: grid;
   list-style: none;
@@ -51,6 +95,10 @@
 .card-toggle {
   display: block;
   width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 
   &:focus-visible {
     position: relative;
@@ -68,6 +116,10 @@
       z-index: 1;
     }
   }
+}
+
+.card-toggle:disabled {
+  cursor: default;
 }
 
 .selected img {
