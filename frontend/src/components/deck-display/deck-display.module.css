@@ -262,6 +262,29 @@
   min-width: 0;
 }
 
+.campaign-reward-sync {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--palette-2);
+  border-radius: var(--rounded);
+  font-size: var(--text-sm);
+}
+
+.campaign-reward-sync ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+.campaign-reward-sync li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .campaign-section h2 {
   margin-top: 0;
 }

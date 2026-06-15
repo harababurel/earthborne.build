@@ -22,6 +22,7 @@ describe("data slice", () => {
           "1": [],
           "4": [],
         },
+        campaigns: {},
         folders: {},
         deckFolders: {},
       },
@@ -53,6 +54,7 @@ describe("data slice", () => {
         history: {
           "1": [],
         },
+        campaigns: {},
         folders: {},
         deckFolders: {},
       },

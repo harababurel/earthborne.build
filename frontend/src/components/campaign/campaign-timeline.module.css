@@ -1,0 +1,147 @@
+.scroller {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--day-count), 2.5rem);
+  grid-template-rows: auto auto auto;
+  row-gap: 0.25rem;
+  align-items: end;
+  min-width: min-content;
+}
+
+.guide-marker {
+  grid-row: 1;
+  grid-column: var(--col);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.625rem;
+  color: var(--text-fainter);
+  line-height: 1;
+}
+
+.guide-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.guide-entries {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.0625rem;
+}
+
+.guide-entry {
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.guide-entry {
+  color: var(--nord-accent, var(--palette-6));
+  cursor: pointer;
+}
+
+a.guide-entry:hover {
+  text-decoration: underline;
+}
+
+.day {
+  grid-row: 2;
+  grid-column: var(--col);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Room for the current-day outline (+offset) so it never crowds the number. */
+  gap: 0.375rem;
+  padding: 0.25rem 0.125rem;
+  background: none;
+  border: none;
+  border-radius: var(--rounded);
+  cursor: pointer;
+  color: inherit;
+  transition:
+    background-color 0.12s ease,
+    transform 0.12s ease;
+}
+
+/* Clickable affordance: highlight the cell and lift the moon on hover/focus. */
+.day:hover,
+.day:focus-visible {
+  background-color: var(--palette-2);
+  outline: none;
+}
+
+.day:hover .moon,
+.day:focus-visible .moon {
+  transform: scale(1.12);
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.25));
+}
+
+.moon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease;
+}
+
+.day.current .moon {
+  outline: 2px solid var(--nord-accent, var(--palette-6));
+  outline-offset: 1px;
+}
+
+.day-number {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.day.current .day-number {
+  font-weight: 700;
+}
+
+.day.past {
+  opacity: 0.55;
+}
+
+.weather {
+  grid-row: 3;
+  grid-column: var(--col-start) / span var(--col-span);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0.25rem;
+  text-align: center;
+  font-size: 0.6875rem;
+  color: var(--text-fainter);
+  line-height: 1.2;
+}
+
+/* Bracket spanning the weather's day range: a bottom line with short end ticks
+   pointing up toward the days. Fixed height + top-aligned so it never shifts
+   when the name wraps. */
+.bracket {
+  width: 100%;
+  height: 0.3125rem;
+  margin: 0 0.125rem 0.25rem;
+  border: 1.5px solid var(--palette-3);
+  border-top: none;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.weather-name {
+  display: block;
+}
+
+.weather-underground {
+  display: block;
+  font-style: italic;
+  opacity: 0.8;
+}

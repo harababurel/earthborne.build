@@ -1,0 +1,1574 @@
+{
+  "cycles": [
+    {
+      "id": "core"
+    },
+    {
+      "id": "loa"
+    }
+  ],
+  "expansions": [
+    {
+      "id": "sib",
+      "cycles": ["core"]
+    },
+    {
+      "id": "sos",
+      "cycles": ["core"]
+    }
+  ],
+  "pathTypes": [
+    {
+      "id": "old_growth",
+      "color": "#924030",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "mountain_pass",
+      "color": "#1b211e",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "woods",
+      "color": "#46932b",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "lakeshore",
+      "color": "#3f4f6b",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "grassland",
+      "color": "#d08e10",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "ravine",
+      "color": "#67666b",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "swamp",
+      "color": "#7a3d63",
+      "cycles": ["core"]
+    },
+    {
+      "id": "river",
+      "color": "#5996aa",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "ancient_ruins",
+      "color": "#95a094",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "flooded_ruins",
+      "color": "#73a5be",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "deep_roots",
+      "color": "#7eae4f",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "fungal_forest",
+      "color": "#9a5f87",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "cave_system",
+      "color": "#c06d25",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "thoroughfare",
+      "color": "#49674b",
+      "cycles": ["core"]
+    },
+    {
+      "id": "nimbus",
+      "color": "#a5a4c4",
+      "cycles": ["core"]
+    }
+  ],
+  "locations": [
+    {
+      "id": "atrox_mountain",
+      "type": "trail",
+      "cycles": ["core"],
+      "background": true
+    },
+    {
+      "id": "northern_outpost",
+      "type": "location",
+      "cycles": ["core"]
+    },
+    {
+      "id": "lone_tree_station",
+      "type": "location",
+      "cycles": ["core", "loa"],
+      "background": true
+    },
+    {
+      "id": "white_sky",
+      "type": "location",
+      "cycles": ["core"]
+    },
+    {
+      "id": "golden_shore",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "mount_nim",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "ancestors_grove",
+      "type": "trail",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "kobos_market",
+      "type": "trail",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "boulder_field",
+      "type": "trail",
+      "cycles": ["core", "loa"],
+      "background": true
+    },
+    {
+      "id": "the_fractured_wall",
+      "type": "location",
+      "cycles": ["core"]
+    },
+    {
+      "id": "the_philosophers_garden",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "the_high_basin",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "branch",
+      "type": "location",
+      "cycles": ["core"]
+    },
+    {
+      "id": "spire",
+      "type": "location",
+      "cycles": ["core", "loa"],
+      "background": true
+    },
+    {
+      "id": "crossroads_station",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "the_furrow",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "biologists_outpost",
+      "type": "trail",
+      "cycles": ["core"],
+      "background": true
+    },
+    {
+      "id": "terravore",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "mound_of_the_navigator",
+      "type": "trail",
+      "cycles": ["core"],
+      "background": true
+    },
+    {
+      "id": "the_greenbridge",
+      "type": "trail",
+      "cycles": ["core"],
+      "background": true
+    },
+    {
+      "id": "michaels_bog",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "the_cypress_citadel",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "marsh_of_rebirth",
+      "type": "location",
+      "cycles": ["core"]
+    },
+    {
+      "id": "sunken_outpost",
+      "type": "trail",
+      "cycles": ["core"],
+      "background": true
+    },
+    {
+      "id": "the_frowning_gate",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "bowl_of_the_sun",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "the_alluvial_ruins",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "the_tumbledown",
+      "type": "location",
+      "cycles": ["core"]
+    },
+    {
+      "id": "watchers_rock",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "archeological_outpost",
+      "type": "trail",
+      "cycles": ["core"],
+      "background": true
+    },
+    {
+      "id": "rings_of_the_moon",
+      "type": "trail",
+      "cycles": ["core"]
+    },
+    {
+      "id": "the_concordant_ziggurats",
+      "type": "trail",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "meadow",
+      "type": "location",
+      "cycles": ["core"]
+    },
+    {
+      "id": "stoneweaver_bridge",
+      "type": "trail",
+      "cycles": ["core"],
+      "background": true
+    },
+    {
+      "id": "greenbriar_knoll",
+      "type": "trail",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "the_plummet",
+      "type": "trail",
+      "cycles": ["core", "loa"]
+    },
+    {
+      "id": "headwaters_station",
+      "type": "trail",
+      "cycles": ["core", "loa"],
+      "background": true
+    },
+    {
+      "id": "the_chimney",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "oasis_of_sunlight",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "scuttler_network",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "drenching_chamber",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "desert_of_endless_night",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "orlins_vault",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "severed_artery",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "branching_artery",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "terminal_artery",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "silent_dormitories",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "cerulean_curtain",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "mycelial_conclave",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "carbonforged_maze",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "the_cistern",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "inverted_forest",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "the_verdant_sphere",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "the_rootway",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "arboretum_of_memory",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "talpids_squeeze",
+      "type": "trail",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "the_cage",
+      "type": "location",
+      "cycles": ["loa"]
+    },
+    {
+      "id": "spire_crossing",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "brookside",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "silverfin_docks",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "terra_lodge",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "the_otherwoods",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "crystal_basin",
+      "type": "trail",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "sentinel_peak",
+      "type": "trail",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "nimbus_facility",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "arbor_mists",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "id": "the_undergrove",
+      "type": "location",
+      "cycles": ["core"],
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "locA": "greenbriar_knoll",
+      "locB": "the_concordant_ziggurats",
+      "path": "grassland",
+      "cycles": ["loa"]
+    },
+    {
+      "locA": "spire",
+      "locB": "the_chimney",
+      "path": "none"
+    },
+    {
+      "locA": "the_chimney",
+      "locB": "oasis_of_sunlight",
+      "path": "flooded_ruins"
+    },
+    {
+      "locA": "oasis_of_sunlight",
+      "locB": "scuttler_network",
+      "path": "cave_system"
+    },
+    {
+      "locA": "scuttler_network",
+      "locB": "orlins_vault",
+      "path": "fungal_forest"
+    },
+    {
+      "locA": "the_chimney",
+      "locB": "orlins_vault",
+      "path": "ancient_ruins"
+    },
+    {
+      "locA": "the_chimney",
+      "locB": "desert_of_endless_night",
+      "path": "flooded_ruins"
+    },
+    {
+      "locA": "orlins_vault",
+      "locB": "desert_of_endless_night",
+      "path": "cave_system"
+    },
+    {
+      "locA": "desert_of_endless_night",
+      "locB": "drenching_chamber",
+      "path": "cave_system"
+    },
+    {
+      "locA": "the_chimney",
+      "locB": "drenching_chamber",
+      "path": "fungal_forest"
+    },
+    {
+      "locA": "scuttler_network",
+      "locB": "terminal_artery",
+      "path": "flooded_ruins",
+      "restriction": "flooded_passage"
+    },
+    {
+      "locA": "orlins_vault",
+      "locB": "branching_artery",
+      "path": "ancient_ruins",
+      "restriction": "locked_passage"
+    },
+    {
+      "locA": "drenching_chamber",
+      "locB": "severed_artery",
+      "path": "flooded_ruins",
+      "restriction": "flooded_passage"
+    },
+    {
+      "locA": "branching_artery",
+      "locB": "terminal_artery",
+      "path": "ancient_ruins"
+    },
+    {
+      "locA": "branching_artery",
+      "locB": "severed_artery",
+      "path": "ancient_ruins"
+    },
+    {
+      "locA": "terminal_artery",
+      "locB": "mycelial_conclave",
+      "path": "fungal_forest"
+    },
+    {
+      "locA": "branching_artery",
+      "locB": "mycelial_conclave",
+      "path": "fungal_forest"
+    },
+    {
+      "locA": "branching_artery",
+      "locB": "silent_dormitories",
+      "path": "deep_roots"
+    },
+    {
+      "locA": "severed_artery",
+      "locB": "silent_dormitories",
+      "path": "ancient_ruins"
+    },
+    {
+      "locA": "severed_artery",
+      "locB": "cerulean_curtain",
+      "path": "cave_system"
+    },
+    {
+      "locA": "terminal_artery",
+      "locB": "carbonforged_maze",
+      "path": "flooded_ruins",
+      "restriction": "locked_passage"
+    },
+    {
+      "locA": "cerulean_curtain",
+      "locB": "the_cistern",
+      "path": "flooded_ruins",
+      "restriction": "overgrown_passage"
+    },
+    {
+      "locA": "carbonforged_maze",
+      "locB": "arboretum_of_memory",
+      "path": "cave_system"
+    },
+    {
+      "locA": "carbonforged_maze",
+      "locB": "talpids_squeeze",
+      "path": "fungal_forest"
+    },
+    {
+      "locA": "arboretum_of_memory",
+      "locB": "talpids_squeeze",
+      "path": "flooded_ruins"
+    },
+    {
+      "locA": "the_cistern",
+      "locB": "the_verdant_sphere",
+      "path": "deep_roots"
+    },
+    {
+      "locA": "the_verdant_sphere",
+      "locB": "inverted_forest",
+      "path": "deep_roots"
+    },
+    {
+      "locA": "the_cistern",
+      "locB": "inverted_forest",
+      "path": "cave_system"
+    },
+    {
+      "locA": "inverted_forest",
+      "locB": "the_rootway",
+      "path": "fungal_forest"
+    },
+    {
+      "locA": "the_verdant_sphere",
+      "locB": "the_rootway",
+      "path": "deep_roots"
+    },
+    {
+      "locA": "talpids_squeeze",
+      "locB": "the_cage",
+      "path": "ancient_ruins",
+      "restriction": "overgrown_passage"
+    },
+    {
+      "locA": "the_rootway",
+      "locB": "the_cage",
+      "path": "ancient_ruins",
+      "restriction": "locked_passage"
+    },
+    {
+      "locA": "atrox_mountain",
+      "locB": "northern_outpost",
+      "path": "woods"
+    },
+    {
+      "locA": "atrox_mountain",
+      "locB": "golden_shore",
+      "path": "lakeshore"
+    },
+    {
+      "locA": "atrox_mountain",
+      "locB": "lone_tree_station",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "golden_shore",
+      "locB": "northern_outpost",
+      "path": "woods"
+    },
+    {
+      "locA": "golden_shore",
+      "locB": "mount_nim",
+      "path": "lakeshore"
+    },
+    {
+      "locA": "northern_outpost",
+      "locB": "mount_nim",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "white_sky",
+      "locB": "mount_nim",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "white_sky",
+      "locB": "lone_tree_station",
+      "path": "lakeshore"
+    },
+    {
+      "locA": "white_sky",
+      "locB": "boulder_field",
+      "path": "woods"
+    },
+    {
+      "locA": "lone_tree_station",
+      "locB": "boulder_field",
+      "path": "woods"
+    },
+    {
+      "locA": "lone_tree_station",
+      "locB": "ancestors_grove",
+      "path": "old_growth"
+    },
+    {
+      "locA": "ancestors_grove",
+      "locB": "boulder_field",
+      "path": "woods"
+    },
+    {
+      "locA": "kobos_market",
+      "locB": "boulder_field",
+      "path": "grassland",
+      "cycles": ["loa", "core"]
+    },
+    {
+      "locA": "kobos_market",
+      "locB": "boulder_field",
+      "path": "old_growth",
+      "cycles": []
+    },
+    {
+      "locA": "kobos_market",
+      "locB": "ancestors_grove",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "the_plummet",
+      "locB": "ancestors_grove",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "the_plummet",
+      "locB": "kobos_market",
+      "path": "lakeshore"
+    },
+    {
+      "locA": "the_plummet",
+      "locB": "the_concordant_ziggurats",
+      "path": "ravine"
+    },
+    {
+      "locA": "headwaters_station",
+      "locB": "the_concordant_ziggurats",
+      "path": "river"
+    },
+    {
+      "locA": "meadow",
+      "locB": "the_concordant_ziggurats",
+      "path": "grassland"
+    },
+    {
+      "locA": "meadow",
+      "locB": "greenbriar_knoll",
+      "path": "grassland"
+    },
+    {
+      "locA": "meadow",
+      "locB": "stoneweaver_bridge",
+      "path": "grassland"
+    },
+    {
+      "locA": "meadow",
+      "locB": "rings_of_the_moon",
+      "path": "ravine"
+    },
+    {
+      "locA": "the_concordant_ziggurats",
+      "locB": "rings_of_the_moon",
+      "path": "river"
+    },
+    {
+      "locA": "the_concordant_ziggurats",
+      "locB": "archeological_outpost",
+      "path": "grassland"
+    },
+    {
+      "locA": "rings_of_the_moon",
+      "locB": "archeological_outpost",
+      "path": "ravine"
+    },
+    {
+      "locA": "rings_of_the_moon",
+      "locB": "the_alluvial_ruins",
+      "path": "river"
+    },
+    {
+      "locA": "archeological_outpost",
+      "locB": "the_alluvial_ruins",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "archeological_outpost",
+      "locB": "watchers_rock",
+      "path": "ravine"
+    },
+    {
+      "locA": "the_tumbledown",
+      "locB": "watchers_rock",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "kobos_market",
+      "locB": "spire",
+      "path": "lakeshore",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "remove"
+        }
+      ]
+    },
+    {
+      "locA": "white_sky",
+      "locB": "spire",
+      "path": "river",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "remove"
+        }
+      ]
+    },
+    {
+      "locA": "the_philosophers_garden",
+      "locB": "spire",
+      "path": "old_growth",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "remove"
+        }
+      ]
+    },
+    {
+      "locA": "the_philosophers_garden",
+      "locB": "the_fractured_wall",
+      "path": "woods"
+    },
+    {
+      "locA": "mount_nim",
+      "locB": "the_fractured_wall",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "the_high_basin",
+      "locB": "the_fractured_wall",
+      "path": "lakeshore"
+    },
+    {
+      "locA": "the_furrow",
+      "locB": "the_fractured_wall",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "the_high_basin",
+      "locB": "the_furrow",
+      "path": "lakeshore"
+    },
+    {
+      "locA": "the_high_basin",
+      "locB": "branch",
+      "path": "old_growth"
+    },
+    {
+      "locA": "the_philosophers_garden",
+      "locB": "branch",
+      "path": "old_growth"
+    },
+    {
+      "locA": "crossroads_station",
+      "locB": "branch",
+      "path": "old_growth"
+    },
+    {
+      "locA": "crossroads_station",
+      "locB": "spire",
+      "path": "grassland",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "remove"
+        }
+      ]
+    },
+    {
+      "locA": "terravore",
+      "locB": "the_furrow",
+      "path": "ravine"
+    },
+    {
+      "locA": "crossroads_station",
+      "locB": "biologists_outpost",
+      "path": "old_growth"
+    },
+    {
+      "locA": "the_high_basin",
+      "locB": "biologists_outpost",
+      "path": "river"
+    },
+    {
+      "locA": "stoneweaver_bridge",
+      "locB": "biologists_outpost",
+      "path": "river"
+    },
+    {
+      "locA": "stoneweaver_bridge",
+      "locB": "spire",
+      "path": "river",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "remove"
+        }
+      ]
+    },
+    {
+      "locA": "stoneweaver_bridge",
+      "locB": "greenbriar_knoll",
+      "path": "ravine"
+    },
+    {
+      "locA": "spire",
+      "locB": "greenbriar_knoll",
+      "path": "woods",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "remove"
+        }
+      ]
+    },
+    {
+      "locA": "biologists_outpost",
+      "locB": "mound_of_the_navigator",
+      "path": "woods"
+    },
+    {
+      "locA": "terravore",
+      "locB": "mound_of_the_navigator",
+      "path": "old_growth"
+    },
+    {
+      "locA": "stoneweaver_bridge",
+      "locB": "mound_of_the_navigator",
+      "path": "ravine"
+    },
+    {
+      "locA": "the_greenbridge",
+      "locB": "mound_of_the_navigator",
+      "path": "swamp"
+    },
+    {
+      "locA": "the_greenbridge",
+      "locB": "sunken_outpost",
+      "path": "swamp"
+    },
+    {
+      "locA": "michaels_bog",
+      "locB": "sunken_outpost",
+      "path": "swamp"
+    },
+    {
+      "locA": "michaels_bog",
+      "locB": "the_cypress_citadel",
+      "path": "swamp"
+    },
+    {
+      "locA": "michaels_bog",
+      "locB": "the_frowning_gate",
+      "path": "swamp"
+    },
+    {
+      "locA": "sunken_outpost",
+      "locB": "the_frowning_gate",
+      "path": "swamp"
+    },
+    {
+      "locA": "the_alluvial_ruins",
+      "locB": "the_frowning_gate",
+      "path": "ravine"
+    },
+    {
+      "locA": "bowl_of_the_sun",
+      "locB": "the_frowning_gate",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "the_alluvial_ruins",
+      "locB": "stoneweaver_bridge",
+      "path": "river"
+    },
+    {
+      "locA": "the_alluvial_ruins",
+      "locB": "bowl_of_the_sun",
+      "path": "ravine"
+    },
+    {
+      "locA": "the_tumbledown",
+      "locB": "bowl_of_the_sun",
+      "path": "mountain_pass"
+    },
+    {
+      "locA": "the_tumbledown",
+      "locB": "the_alluvial_ruins",
+      "path": "river"
+    },
+    {
+      "locA": "kobos_market",
+      "locB": "spire_crossing",
+      "path": "lakeshore",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "white_sky",
+      "locB": "spire_crossing",
+      "path": "river",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "the_philosophers_garden",
+      "locB": "brookside",
+      "path": "old_growth",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "crossroads_station",
+      "locB": "brookside",
+      "path": "grassland",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "greenbriar_knoll",
+      "locB": "silverfin_docks",
+      "path": "woods",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "stoneweaver_bridge",
+      "locB": "silverfin_docks",
+      "path": "river",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "spire_crossing",
+      "locB": "spire",
+      "path": "thoroughfare",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "spire_crossing",
+      "locB": "silverfin_docks",
+      "path": "river",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "spire_crossing",
+      "locB": "brookside",
+      "path": "thoroughfare",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "spire",
+      "locB": "brookside",
+      "path": "thoroughfare",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "silverfin_docks",
+      "locB": "brookside",
+      "path": "thoroughfare",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "spire",
+      "locB": "silverfin_docks",
+      "path": "thoroughfare",
+      "expansionConditions": [
+        {
+          "expansion": "sib",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "northern_outpost",
+      "locB": "terra_lodge",
+      "path": "old_growth",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "the_otherwoods",
+      "locB": "terra_lodge",
+      "path": "old_growth",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "crystal_basin",
+      "locB": "the_otherwoods",
+      "path": "woods",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "crystal_basin",
+      "locB": "atrox_mountains",
+      "path": "ravine",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "crystal_basin",
+      "locB": "sentinal_peak",
+      "path": "mountain_pass",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "terra_lodge",
+      "locB": "sentinal_peak",
+      "path": "mountain_pass",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "nimbus_facility",
+      "locB": "arbor_mists",
+      "path": "nimbus",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    },
+    {
+      "locA": "arbor_mists",
+      "locB": "the_undergrove",
+      "path": "nimbus",
+      "expansionConditions": [
+        {
+          "expansion": "sos",
+          "action": "add"
+        }
+      ]
+    }
+  ],
+  "weather": {
+    "core": [
+      {
+        "start": 1,
+        "end": 3,
+        "valley_id": "a_perfect_day"
+      },
+      {
+        "start": 4,
+        "end": 7,
+        "valley_id": "downpour"
+      },
+      {
+        "start": 8,
+        "end": 9,
+        "valley_id": "a_perfect_day"
+      },
+      {
+        "start": 10,
+        "end": 12,
+        "valley_id": "downpour"
+      },
+      {
+        "start": 13,
+        "end": 14,
+        "valley_id": "howling_wind"
+      },
+      {
+        "start": 15,
+        "end": 17,
+        "valley_id": "downpour"
+      },
+      {
+        "start": 18,
+        "end": 20,
+        "valley_id": "howling_wind"
+      },
+      {
+        "start": 21,
+        "end": 22,
+        "valley_id": "a_perfect_day"
+      },
+      {
+        "start": 23,
+        "end": 25,
+        "valley_id": "downpour"
+      },
+      {
+        "start": 26,
+        "end": 28,
+        "valley_id": "howling_wind"
+      },
+      {
+        "start": 29,
+        "end": 30,
+        "valley_id": "a_perfect_day"
+      }
+    ],
+    "coreExtended": [
+      {
+        "start": 31,
+        "end": 33,
+        "valley_id": "downpour"
+      },
+      {
+        "start": 34,
+        "end": 35,
+        "valley_id": "a_perfect_day"
+      },
+      {
+        "start": 36,
+        "end": 39,
+        "valley_id": "howling_wind"
+      },
+      {
+        "start": 40,
+        "end": 42,
+        "valley_id": "downpour"
+      },
+      {
+        "start": 43,
+        "end": 45,
+        "valley_id": "a_perfect_day"
+      }
+    ],
+    "loa": [
+      {
+        "start": 1,
+        "end": 3,
+        "valley_id": "downpour",
+        "underground_id": "enveloping_silence"
+      },
+      {
+        "start": 4,
+        "end": 6,
+        "valley_id": "a_perfect_day",
+        "underground_id": "glitterain"
+      },
+      {
+        "start": 7,
+        "end": 8,
+        "valley_id": "howling_wind",
+        "underground_id": "shimmering_runoff"
+      },
+      {
+        "start": 9,
+        "end": 12,
+        "valley_id": "downpour",
+        "underground_id": "enveloping_silence"
+      },
+      {
+        "start": 13,
+        "end": 15,
+        "valley_id": "a_perfect_day",
+        "underground_id": "glitterain"
+      },
+      {
+        "start": 16,
+        "end": 18,
+        "valley_id": "downpour",
+        "underground_id": "enveloping_silence"
+      },
+      {
+        "start": 19,
+        "end": 21,
+        "valley_id": "a_perfect_day",
+        "underground_id": "glitterain"
+      },
+      {
+        "start": 22,
+        "end": 23,
+        "valley_id": "howling_wind",
+        "underground_id": "shimmering_runoff"
+      },
+      {
+        "start": 24,
+        "end": 27,
+        "valley_id": "downpour",
+        "underground_id": "enveloping_silence"
+      },
+      {
+        "start": 28,
+        "end": 30,
+        "valley_id": "a_perfect_day",
+        "underground_id": "glitterain"
+      }
+    ]
+  },
+  "maxDay": {
+    "core": 30,
+    "coreExtended": 45,
+    "loa": 30
+  },
+  "moonPaths": {
+    "1": "M15.977,4.315c-0.193,0 -0.381,0.019 -0.571,0.029 6.185,0.301 11.113,5.395 11.113,11.656 0,6.26 -4.928,11.356 -11.113,11.656 0.19,0.009 0.378,0.029 0.571,0.029 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "2": "M15.977,4.315c-0.285,0 -0.566,0.022 -0.848,0.043 5.477,0.436 9.8,5.475 9.8,11.643s-4.323,11.207 -9.8,11.643c0.282,0.019 0.562,0.043 0.848,0.043 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "3": "M15.977,4.315c-0.303,0 -0.598,0.022 -0.894,0.045 4.851,0.458 8.677,5.489 8.677,11.641s-3.826,11.181 -8.677,11.639c0.296,0.022 0.591,0.046 0.894,0.046 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "4": "M15.976,4.315c-0.484,0 -0.957,0.039 -1.426,0.096 4.224,0.704 7.499,5.619 7.499,11.59 0,5.969 -3.275,10.885 -7.499,11.59 0.468,0.056 0.942,0.096 1.426,0.096 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "5": "M17.15,4.374c1.694,2.304 2.838,6.643 2.838,11.626s-1.144,9.321 -2.838,11.626c5.903,-0.588 10.511,-5.568 10.511,-11.626 0,-6.056 -4.609,-11.038 -10.511,-11.626z",
+    "6": "M15.976,4.315v23.371c6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "7": "M15.976,4.315v23.371c6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "8": "M15.976,4.315c-1.055,0 -2.072,0.152 -3.044,0.415 -1.544,2.385 -2.566,6.52 -2.566,11.232 0,4.774 1.051,8.954 2.627,11.323 0.954,0.251 1.95,0.4 2.983,0.4 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "9": "M15.976,4.315c-0.935,0 -1.838,0.121 -2.709,0.328 -1.969,1.935 -3.347,6.306 -3.347,11.4 0,5 1.33,9.301 3.243,11.287 0.903,0.224 1.841,0.356 2.814,0.356 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "10": "M15.975,4.315c-1.788,0 -3.473,0.414 -4.99,1.13 -1.303,2.472 -2.142,6.296 -2.142,10.598 0,4.232 0.81,8.005 2.079,10.48 1.53,0.737 3.239,1.162 5.053,1.162 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "11": "M15.975,4.315c-2.116,0 -4.094,0.571 -5.807,1.554 -1.099,2.473 -1.797,6.109 -1.797,10.174 0,4.002 0.679,7.586 1.749,10.058 1.723,1.002 3.718,1.585 5.855,1.585 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "12": "M15.975,4.315c-2.368,0 -4.568,0.709 -6.409,1.92 -1.097,2.287 -1.803,5.826 -1.803,9.809 0,3.908 0.679,7.395 1.74,9.684 1.853,1.236 4.077,1.959 6.472,1.959 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "13": "M27.66,16c0,6.453 -5.232,11.685 -11.685,11.685s-11.685,-5.232 -11.685,-11.685c0,-6.453 5.232,-11.685 11.685,-11.685s11.685,5.232 11.685,11.685z",
+    "14": "M27.66,16c0,6.453 -5.232,11.685 -11.685,11.685s-11.685,-5.232 -11.685,-11.685c0,-6.453 5.232,-11.685 11.685,-11.685s11.685,5.232 11.685,11.685z",
+    "15": "M15.975,27.685c2.368,0 4.568,-0.709 6.409,-1.92 1.097,-2.287 1.803,-5.826 1.803,-9.809 0,-3.908 -0.679,-7.395 -1.74,-9.684 -1.853,-1.236 -4.077,-1.959 -6.472,-1.959 -6.453,0 -11.685,5.232 -11.685,11.685 0,6.455 5.232,11.685 11.685,11.685z",
+    "16": "M15.974,27.685c2.116,0 4.094,-0.571 5.807,-1.554 1.099,-2.475 1.797,-6.109 1.797,-10.174 0,-4.002 -0.679,-7.586 -1.749,-10.058 -1.723,-1.002 -3.718,-1.585 -5.855,-1.585 -6.453,0 -11.685,5.232 -11.685,11.685s5.232,11.685 11.685,11.685z",
+    "17": "M15.974,27.685c1.788,0 3.474,-0.414 4.99,-1.13 1.303,-2.472 2.142,-6.296 2.142,-10.598 0,-4.232 -0.81,-8.005 -2.079,-10.48 -1.53,-0.737 -3.239,-1.162 -5.053,-1.162 -6.453,0 -11.685,5.232 -11.685,11.685s5.232,11.685 11.685,11.685z",
+    "18": "M15.974,27.685c0.933,0 1.838,-0.121 2.709,-0.328 1.969,-1.935 3.345,-6.308 3.345,-11.4 0,-5 -1.328,-9.301 -3.241,-11.287 -0.903,-0.224 -1.841,-0.356 -2.814,-0.356 -6.453,0 -11.685,5.232 -11.685,11.685s5.232,11.685 11.685,11.685z",
+    "19": "M15.974,27.685c1.055,0 2.072,-0.152 3.044,-0.415 1.544,-2.385 2.566,-6.52 2.566,-11.232 0,-4.774 -1.05,-8.954 -2.627,-11.323 -0.954,-0.253 -1.95,-0.4 -2.983,-0.4 -6.453,0 -11.685,5.232 -11.685,11.685s5.232,11.685 11.685,11.685z",
+    "20": "M15.974,27.685v-23.371c-6.453,0 -11.685,5.232 -11.685,11.685s5.232,11.685 11.685,11.685z",
+    "21": "M15.974,27.685v-23.371c-6.453,0 -11.685,5.232 -11.685,11.685s5.232,11.685 11.685,11.685z",
+    "22": "M14.799,27.626c-1.692,-2.304 -2.838,-6.643 -2.838,-11.626s1.145,-9.321 2.838,-11.626c-5.903,0.588 -10.511,5.568 -10.511,11.626 0,6.056 4.609,11.038 10.511,11.626z",
+    "23": "M15.974,27.685c0.484,0 0.957,-0.038 1.426,-0.096 -4.226,-0.704 -7.499,-5.62 -7.499,-11.59s3.274,-10.884 7.499,-11.59c-0.468,-0.056 -0.942,-0.096 -1.426,-0.096 -6.453,0 -11.685,5.232 -11.685,11.685 0,6.455 5.232,11.685 11.685,11.685z",
+    "24": "M15.973,27.685c0.303,0 0.598,-0.022 0.894,-0.045 -4.853,-0.458 -8.677,-5.489 -8.677,-11.641 0,-6.15 3.824,-11.181 8.677,-11.639 -0.296,-0.022 -0.591,-0.046 -0.894,-0.046 -6.453,0 -11.685,5.232 -11.685,11.685 0,6.455 5.232,11.685 11.685,11.685z",
+    "25": "M15.973,27.685c0.285,0 0.566,-0.022 0.848,-0.043 -5.477,-0.436 -9.798,-5.475 -9.798,-11.643s4.321,-11.207 9.798,-11.643c-0.282,-0.019 -0.562,-0.043 -0.848,-0.043 -6.453,0 -11.685,5.232 -11.685,11.685 0,6.455 5.232,11.685 11.685,11.685z",
+    "26": "M15.973,27.685c0.193,0 0.381,-0.019 0.571,-0.029 -6.185,-0.299 -11.113,-5.395 -11.113,-11.656 0,-6.26 4.928,-11.356 11.113,-11.656 -0.19,-0.009 -0.378,-0.029 -0.571,-0.029 -6.453,0 -11.685,5.232 -11.685,11.685 0,6.455 5.232,11.685 11.685,11.685z",
+    "27": "M15.973,27.685c0.193,0 0.381,-0.019 0.571,-0.029 -6.185,-0.299 -11.113,-5.395 -11.113,-11.656 0,-6.26 4.928,-11.356 11.113,-11.656 -0.19,-0.009 -0.378,-0.029 -0.571,-0.029 -6.453,0 -11.685,5.232 -11.685,11.685 0,6.455 5.232,11.685 11.685,11.685z",
+    "28": "",
+    "29": "",
+    "30": "M15.972,4.315c-0.193,0 -0.381,0.019 -0.573,0.029 6.186,0.301 11.115,5.395 11.115,11.656 0,6.26 -4.928,11.356 -11.115,11.656 0.191,0.009 0.38,0.029 0.573,0.029 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "31": "M15.977,4.315c-0.193,0 -0.381,0.019 -0.571,0.029 6.185,0.301 11.113,5.395 11.113,11.656 0,6.26 -4.928,11.356 -11.113,11.656 0.19,0.009 0.378,0.029 0.571,0.029 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "32": "M15.977,4.315c-0.285,0 -0.566,0.022 -0.848,0.043 5.477,0.436 9.8,5.475 9.8,11.643s-4.323,11.207 -9.8,11.643c0.282,0.019 0.562,0.043 0.848,0.043 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "33": "M15.977,4.315c-0.303,0 -0.598,0.022 -0.894,0.045 4.851,0.458 8.677,5.489 8.677,11.641s-3.826,11.181 -8.677,11.639c0.296,0.022 0.591,0.046 0.894,0.046 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "34": "M15.976,4.315c-0.484,0 -0.957,0.039 -1.426,0.096 4.224,0.704 7.499,5.619 7.499,11.59 0,5.969 -3.275,10.885 -7.499,11.59 0.468,0.056 0.942,0.096 1.426,0.096 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "35": "M17.15,4.374c1.694,2.304 2.838,6.643 2.838,11.626s-1.144,9.321 -2.838,11.626c5.903,-0.588 10.511,-5.568 10.511,-11.626 0,-6.056 -4.609,-11.038 -10.511,-11.626z",
+    "36": "M15.976,4.315v23.371c6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "37": "M15.976,4.315v23.371c6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "38": "M15.976,4.315c-1.055,0 -2.072,0.152 -3.044,0.415 -1.544,2.385 -2.566,6.52 -2.566,11.232 0,4.774 1.051,8.954 2.627,11.323 0.954,0.251 1.95,0.4 2.983,0.4 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "39": "M15.976,4.315c-0.935,0 -1.838,0.121 -2.709,0.328 -1.969,1.935 -3.347,6.306 -3.347,11.4 0,5 1.33,9.301 3.243,11.287 0.903,0.224 1.841,0.356 2.814,0.356 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "40": "M15.975,4.315c-1.788,0 -3.473,0.414 -4.99,1.13 -1.303,2.472 -2.142,6.296 -2.142,10.598 0,4.232 0.81,8.005 2.079,10.48 1.53,0.737 3.239,1.162 5.053,1.162 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "41": "M15.975,4.315c-2.116,0 -4.094,0.571 -5.807,1.554 -1.099,2.473 -1.797,6.109 -1.797,10.174 0,4.002 0.679,7.586 1.749,10.058 1.723,1.002 3.718,1.585 5.855,1.585 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "42": "M15.975,4.315c-2.368,0 -4.568,0.709 -6.409,1.92 -1.097,2.287 -1.803,5.826 -1.803,9.809 0,3.908 0.679,7.395 1.74,9.684 1.853,1.236 4.077,1.959 6.472,1.959 6.453,0 11.685,-5.232 11.685,-11.685 0,-6.455 -5.232,-11.685 -11.685,-11.685z",
+    "43": "M27.66,16c0,6.453 -5.232,11.685 -11.685,11.685s-11.685,-5.232 -11.685,-11.685c0,-6.453 5.232,-11.685 11.685,-11.685s11.685,5.232 11.685,11.685z",
+    "44": "M27.66,16c0,6.453 -5.232,11.685 -11.685,11.685s-11.685,-5.232 -11.685,-11.685c0,-6.453 5.232,-11.685 11.685,-11.685s11.685,5.232 11.685,11.685z",
+    "45": "M15.975,27.685c2.368,0 4.568,-0.709 6.409,-1.92 1.097,-2.287 1.803,-5.826 1.803,-9.809 0,-3.908 -0.679,-7.395 -1.74,-9.684 -1.853,-1.236 -4.077,-1.959 -6.472,-1.959 -6.453,0 -11.685,5.232 -11.685,11.685 0,6.455 5.232,11.685 11.685,11.685z"
+  },
+  "pathCards": [
+    {
+      "code": "01322_tala_the_red_exile",
+      "action": "moved",
+      "set_id": "the_valley",
+      "set_type": "location",
+      "destination": "the_tumbledown"
+    },
+    {
+      "code": "04018_olyv_aspirant_ranger",
+      "action": "moved",
+      "set_id": "lone_tree_station",
+      "set_type": "location",
+      "destination": "the_valley"
+    },
+    {
+      "code": "01326_umbra",
+      "action": "removed",
+      "set_id": "the_valley",
+      "set_type": "location"
+    },
+    {
+      "code": "01327_quiet",
+      "action": "removed",
+      "set_id": "the_valley",
+      "set_type": "location"
+    },
+    {
+      "code": "01328_ol_bloody_clicker",
+      "action": "removed",
+      "set_id": "the_valley",
+      "set_type": "location"
+    },
+    {
+      "code": "01368_aell_ambitious_shaper",
+      "action": "removed",
+      "set_id": "marsh_of_rebirth",
+      "set_type": "location"
+    },
+    {
+      "code": "04019_deadfall",
+      "action": "removed",
+      "set_id": "the_valley",
+      "set_type": "location"
+    },
+    {
+      "code": "03308_lost_lutrinal",
+      "action": "removed",
+      "set_id": "the_chimney",
+      "set_type": "location"
+    },
+    {
+      "code": "03340_crimson_guardian",
+      "action": "removed",
+      "set_id": "the_arcology",
+      "set_type": "location"
+    },
+    {
+      "code": "03322_archivist_spirit",
+      "action": "removed",
+      "set_id": "arboretum_of_memory",
+      "set_type": "location"
+    },
+    {
+      "code": "03337_wandered_spirit",
+      "action": "removed",
+      "set_id": "the_arcology",
+      "set_type": "location"
+    },
+    {
+      "code": "01265_caustic_mulcher",
+      "action": "removed",
+      "set_id": "woods",
+      "set_type": "path"
+    },
+    {
+      "code": "03314_wild_scuttlebus",
+      "action": "removed",
+      "set_id": "artery",
+      "set_type": "location"
+    },
+    {
+      "code": "03316_gardener_spirit",
+      "action": "removed",
+      "set_id": "mycelial_conclave",
+      "set_type": "location"
+    },
+    {
+      "code": "01371_kasende_expert_hunter",
+      "action": "removed",
+      "set_id": "the_tumbledown",
+      "set_type": "location"
+    }
+  ],
+  "guideEntries": {
+    "fixed": {
+      "core": {
+        "1": ["1"],
+        "3": ["94.1"],
+        "4": ["1.04"]
+      },
+      "loa": {
+        "1": ["1"],
+        "4": ["199.2"]
+      }
+    },
+    "expansionStarting": {
+      "sib": [
+        {
+          "day": 8,
+          "guides": ["216.1"]
+        }
+      ],
+      "sos": [
+        {
+          "day": 24,
+          "guides": ["246.1"]
+        }
+      ]
+    }
+  }
+}

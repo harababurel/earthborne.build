@@ -1,4 +1,4 @@
-import type { Deck, Id } from "@earthborne-build/shared";
+import type { Campaign, Deck, Id } from "@earthborne-build/shared";
 import type { ChangeRecord } from "../lib/deck-edits";
 
 type UndoEntry = {
@@ -16,6 +16,7 @@ export type Folder = {
 
 type DataState = {
   decks: Record<string, Deck>;
+  campaigns: Record<string, Campaign>;
   folders: Record<string, Folder>;
   deckFolders: Record<Id, string>;
   history: {

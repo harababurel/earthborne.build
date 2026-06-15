@@ -1,6 +1,7 @@
 import {
   BookTextIcon,
   EllipsisIcon,
+  MapIcon,
   PlusIcon,
   Trash2Icon,
   UploadIcon,
@@ -108,6 +109,12 @@ export function DeckCollection() {
             <Button as="a" data-testid="collection-deck-guides" size="sm">
               <BookTextIcon />
               {t("decklists.browse.title")}
+            </Button>
+          </Link>
+          <Link to="/campaigns" asChild>
+            <Button as="a" data-testid="collection-campaigns" size="sm">
+              <MapIcon />
+              {t("campaign.title")}
             </Button>
           </Link>
           <Popover onOpenChange={setPopoverOpen} open={popoverOpen}>

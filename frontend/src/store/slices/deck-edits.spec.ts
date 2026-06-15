@@ -30,6 +30,7 @@ describe("deck-view slice", () => {
           history: {
             "deck-id": [],
           },
+          campaigns: {},
           folders: {},
           deckFolders: {},
         },

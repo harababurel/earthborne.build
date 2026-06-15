@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const idSchema = z.union([z.number(), z.string()]);
+export const idSchema = z.union([z.number(), z.string()]);
 export type Id = z.infer<typeof idSchema>;
 
 export const SlotsSchema = z.record(z.string(), z.number());
