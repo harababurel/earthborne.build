@@ -1,9 +1,12 @@
 import type { Campaign } from "@earthborne-build/shared";
 import { CalendarClockIcon, FootprintsIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useStore } from "@/store";
+import { selectLocationCardsByName } from "@/store/selectors/campaigns";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Plane } from "../ui/plane";
+import { CardHoverName } from "./card-hover-name";
 import css from "./current-position-card.module.css";
 import { LocationGlyph, TerrainGlyph } from "./glyphs";
 import { RecordedJourneyModal } from "./modals/recorded-journey-modal";
@@ -11,6 +14,7 @@ import { TravelModal } from "./modals/travel-modal";
 
 export function CurrentPositionCard({ campaign }: { campaign: Campaign }) {
   const { t } = useTranslation();
+  const locationCardsByName = useStore(selectLocationCardsByName);
 
   const locationName = campaign.current_location
     ? t(`campaign.data.locations.${campaign.current_location}`)
@@ -25,7 +29,11 @@ export function CurrentPositionCard({ campaign }: { campaign: Campaign }) {
         {locationName ? (
           <>
             <LocationGlyph name={locationName} />
-            <span className={css["name"]}>{locationName}</span>
+            <CardHoverName
+              card={locationCardsByName[locationName]}
+              className={css["name"]}
+              label={locationName}
+            />
           </>
         ) : (
           <span className={css["sub"]}>

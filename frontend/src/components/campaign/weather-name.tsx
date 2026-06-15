@@ -1,10 +1,7 @@
-import { PortaledCardTooltip } from "@/components/card-tooltip/card-tooltip-portaled";
-import { useRestingTooltip } from "@/components/ui/tooltip.hooks";
 import { useStore } from "@/store";
 import { WEATHER_CARD_CODES } from "@/store/lib/campaign/data";
 import { selectMetadata } from "@/store/selectors/shared";
-import { cx } from "@/utils/cx";
-import css from "./weather-name.module.css";
+import { CardHoverName } from "./card-hover-name";
 
 // A weather band label that previews its weather card on hover.
 export function WeatherName({
@@ -20,28 +17,6 @@ export function WeatherName({
   const card = useStore((state) =>
     code ? selectMetadata(state).cards[code] : undefined,
   );
-  const { refs, referenceProps, isMounted, floatingStyles, transitionStyles } =
-    useRestingTooltip();
 
-  if (!card) return <span className={className}>{label}</span>;
-
-  return (
-    <>
-      <span
-        className={cx(css["name"], className)}
-        ref={refs.setReference}
-        {...referenceProps}
-      >
-        {label}
-      </span>
-      {isMounted && (
-        <PortaledCardTooltip
-          card={card}
-          floatingStyles={floatingStyles}
-          ref={refs.setFloating}
-          transitionStyles={transitionStyles}
-        />
-      )}
-    </>
-  );
+  return <CardHoverName card={card} className={className} label={label} />;
 }
