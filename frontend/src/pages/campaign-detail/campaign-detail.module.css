@@ -28,11 +28,14 @@
 }
 
 .cycle-pill {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  padding: 0.3125rem 0.75rem;
   border-radius: var(--rounded);
-  background: var(--palette-6);
-  color: var(--palette-0);
+  background: var(--palette-1);
+  border: 1px solid var(--palette-2);
+  color: var(--text);
   font-size: var(--text-sm);
   font-weight: 700;
 }
@@ -59,6 +62,11 @@
 
 .main {
   min-width: 0;
+}
+
+/* Breathing room between the tab strip and the active tab's content. */
+.main [role="tabpanel"] {
+  margin-top: 1.25rem;
 }
 
 @media (max-width: 52rem) {

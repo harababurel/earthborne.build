@@ -131,6 +131,17 @@
   }
 }
 
+.sidebar-toggle-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.toggle-active,
+.toggle-active:not([disabled]):hover {
+  color: var(--palette-6);
+  background: var(--palette-2);
+}
+
 .content {
   grid-area: content;
   contain: size layout style;

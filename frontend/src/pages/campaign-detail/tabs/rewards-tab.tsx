@@ -1,15 +1,20 @@
 import type { Campaign } from "@earthborne-build/shared";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ListCard } from "@/components/list-card/list-card";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store";
-import { selectMetadata } from "@/store/selectors/shared";
+import {
+  selectLocaleSortingCollator,
+  selectMetadata,
+} from "@/store/selectors/shared";
 import { displayAttribute } from "@/utils/card-utils";
 import css from "./tabs.module.css";
 
 export function RewardsTab({ campaign }: { campaign: Campaign }) {
   const { t } = useTranslation();
   const metadata = useStore(selectMetadata);
+  const collator = useStore(selectLocaleSortingCollator);
   const updateCampaign = useStore((state) => state.updateCampaign);
 
   const [query, setQuery] = useState("");
@@ -18,19 +23,15 @@ export function RewardsTab({ campaign }: { campaign: Campaign }) {
     () =>
       Object.values(metadata.cards)
         .filter((card) => card.category === "reward")
-        .map((card) => ({
-          code: card.code,
-          name: displayAttribute(card, "name"),
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    [metadata],
+        .sort((a, b) => collator.compare(a.name, b.name)),
+    [metadata, collator],
   );
 
   const unlocked = new Set(campaign.rewards);
 
   const filtered = query
     ? rewardCards.filter((c) =>
-        c.name.toLowerCase().includes(query.toLowerCase()),
+        displayAttribute(c, "name").toLowerCase().includes(query.toLowerCase()),
       )
     : rewardCards;
 
@@ -50,25 +51,31 @@ export function RewardsTab({ campaign }: { campaign: Campaign }) {
         placeholder={t("campaign.rewards.search_placeholder")}
         value={query}
       />
-      <div className={css["card-grid"]}>
+      <ol className={css["card-grid"]}>
         {filtered.map((card) => {
           const isUnlocked = unlocked.has(card.code);
           return (
-            <div className={css["item"]} key={card.code}>
-              <span className={css["item-main"]}>{card.name}</span>
-              <Button
-                onClick={() => toggle(card.code)}
-                size="sm"
-                variant={isUnlocked ? "bare" : "primary"}
-              >
-                {isUnlocked
-                  ? t("campaign.rewards.remove")
-                  : t("campaign.rewards.unlock")}
-              </Button>
-            </div>
+            <ListCard
+              as="li"
+              card={card}
+              key={card.code}
+              omitBorders
+              renderCardAction={() => (
+                <Button
+                  onClick={() => toggle(card.code)}
+                  size="sm"
+                  variant={isUnlocked ? "bare" : "primary"}
+                >
+                  {isUnlocked
+                    ? t("campaign.rewards.remove")
+                    : t("campaign.rewards.unlock")}
+                </Button>
+              )}
+              size="sm"
+            />
           );
         })}
-      </div>
+      </ol>
     </div>
   );
 }

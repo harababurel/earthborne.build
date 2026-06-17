@@ -1,0 +1,128 @@
+.container {
+  display: flex;
+  height: 100%;
+  flex-flow: column nowrap;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  padding-inline: 0.75rem;
+}
+
+.title {
+  font-size: var(--text-base);
+  font-family: var(--font-family-ui);
+}
+
+.cta {
+  padding-inline: 0.625rem;
+
+  & > * {
+    width: 100%;
+  }
+}
+
+.scroller {
+  flex: 1 1 auto;
+  padding-inline: 0.625rem;
+  padding-bottom: 0.75rem;
+  overflow-y: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.625rem;
+  border: 1px solid var(--palette-2);
+  border-radius: var(--rounded);
+  padding: 0.5rem 0.625rem;
+}
+
+.item-glyph {
+  display: flex;
+  align-items: center;
+  font-size: var(--icon-lg);
+}
+
+.item-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  min-width: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+
+.name {
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+}
+
+.cycle-pill {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  padding: 0.1875rem 0.5rem;
+  border-radius: var(--rounded);
+  background: var(--palette-1);
+  border: 1px solid var(--palette-2);
+  color: var(--text);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.placeholder-container {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder {
+  text-align: center;
+  color: var(--palette-three-point-five);
+}
+
+.placeholder > i {
+  font-size: var(--icon-xl);
+  margin-inline: auto;
+}
+
+.placeholder-caption {
+  font-size: var(--text-lg);
+}

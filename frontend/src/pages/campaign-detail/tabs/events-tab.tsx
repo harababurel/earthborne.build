@@ -1,9 +1,10 @@
 import type { Campaign, NotableEvent } from "@earthborne-build/shared";
-import { Trash2Icon } from "lucide-react";
+import { CheckIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store";
+import { cx } from "@/utils/cx";
 import css from "./tabs.module.css";
 
 export function EventsTab({ campaign }: { campaign: Campaign }) {
@@ -36,6 +37,7 @@ export function EventsTab({ campaign }: { campaign: Campaign }) {
         <input
           className={css["input"]}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && onAdd()}
           placeholder={t("campaign.events.placeholder")}
           value={text}
         />
@@ -43,30 +45,46 @@ export function EventsTab({ campaign }: { campaign: Campaign }) {
       </div>
 
       {campaign.events.length ? (
-        <ul className={css["list"]}>
-          {campaign.events.map((entry, index) => (
-            <li className={css["item"]} key={`${entry.event}-${index}`}>
-              <button
-                type="button"
-                className={css["item-main"]}
-                onClick={() => toggle(index)}
-              >
-                <span
-                  className={entry.crossed_out ? css["crossed"] : undefined}
+        <ul className={css["event-list"]}>
+          {campaign.events.map((entry, index) => {
+            const resolved = !!entry.crossed_out;
+            return (
+              <li className={css["event-item"]} key={`${entry.event}-${index}`}>
+                <button
+                  aria-pressed={resolved}
+                  className={css["event-toggle"]}
+                  onClick={() => toggle(index)}
+                  type="button"
                 >
-                  {entry.event}
-                </span>
-              </button>
-              <Button
-                iconOnly
-                onClick={() => remove(index)}
-                tooltip={t("campaign.actions.delete")}
-                variant="bare"
-              >
-                <Trash2Icon />
-              </Button>
-            </li>
-          ))}
+                  <span
+                    className={cx(
+                      css["event-check"],
+                      resolved && css["event-checked"],
+                    )}
+                  >
+                    {resolved && <CheckIcon />}
+                  </span>
+                  <span
+                    className={cx(
+                      css["event-text"],
+                      resolved && css["crossed"],
+                    )}
+                  >
+                    {entry.event}
+                  </span>
+                </button>
+                <Button
+                  className={css["event-delete"]}
+                  iconOnly
+                  onClick={() => remove(index)}
+                  tooltip={t("campaign.actions.delete")}
+                  variant="bare"
+                >
+                  <Trash2Icon />
+                </Button>
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <p className={css["empty"]}>{t("campaign.events.none")}</p>

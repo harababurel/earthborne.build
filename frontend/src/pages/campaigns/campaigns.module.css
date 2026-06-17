@@ -54,11 +54,14 @@
 }
 
 .cycle-pill {
-  display: inline-block;
-  padding: 0.125rem 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  padding: 0.25rem 0.625rem;
   border-radius: var(--rounded);
-  background: var(--palette-6);
-  color: var(--palette-0);
+  background: var(--palette-1);
+  border: 1px solid var(--palette-2);
+  color: var(--text);
   font-size: var(--text-sm);
   font-weight: 700;
 }

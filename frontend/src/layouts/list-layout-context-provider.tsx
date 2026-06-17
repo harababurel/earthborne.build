@@ -15,14 +15,18 @@ export function ListLayoutContextProvider({
     !window.matchMedia(MQ_FLOATING_FILTERS).matches,
   );
 
+  const [sidebarSection, setSidebarSection] = useState("");
+
   const contextValue = useMemo(
     () => ({
       sidebarOpen,
       filtersOpen,
+      sidebarSection,
       setSidebarOpen,
       setFiltersOpen,
+      setSidebarSection,
     }),
-    [sidebarOpen, filtersOpen],
+    [sidebarOpen, filtersOpen, sidebarSection],
   );
 
   return <ListLayoutContext value={contextValue}>{children}</ListLayoutContext>;
