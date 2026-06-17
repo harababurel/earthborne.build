@@ -28,6 +28,7 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
   const [day, setDay] = useState(String(campaign.day));
   const [selected, setSelected] = useState("");
   const [customName, setCustomName] = useState("");
+  const [subject, setSubject] = useState("");
 
   // Mission cards for this campaign's packs, deduped by name (lowest set_position).
   const missionOptions = useMemo(() => {
@@ -54,6 +55,7 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
 
   const onAdd = async () => {
     const dayNum = Number(day) || campaign.day;
+    const trimmedSubject = subject.trim();
     let mission: MissionEntry | null = null;
     if (selected === CUSTOM) {
       const name = customName.trim();
@@ -72,6 +74,7 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
       }
     }
     if (!mission) return;
+    if (trimmedSubject) mission.subject = trimmedSubject;
     await updateCampaign(campaign.id, {
       missions: [...campaign.missions, mission],
     });
@@ -84,6 +87,7 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
       <ModalInner size="26rem">
         <ModalActions />
         <DefaultModalContent
+          mainClassName={css["main-spaced"]}
           title={t("campaign.missions.add")}
           footer={
             <Button onClick={onAdd} variant="primary">
@@ -93,18 +97,18 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
         >
           <div className={css["body"]}>
             <div className={css["field"]}>
-              <span className={css["sub"]}>{t("common.date")}</span>
+              <span className={css["sub"]}>{t("campaign.missions.day")}</span>
               <input
                 className={css["input"]}
-                inputMode="numeric"
+                min={1}
                 onChange={(e) => setDay(e.target.value)}
+                step={1}
+                type="number"
                 value={day}
               />
             </div>
             <div className={css["field"]}>
-              <span className={css["sub"]}>
-                {t("campaign.missions.select_placeholder")}
-              </span>
+              <span className={css["sub"]}>{t("campaign.missions.name")}</span>
               <Select
                 emptyLabel={t("campaign.missions.select_placeholder")}
                 onChange={(e) => setSelected(e.target.value)}
@@ -120,6 +124,17 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
                 value={customName}
               />
             )}
+            <div className={css["field"]}>
+              <span className={css["sub"]}>
+                {t("campaign.missions.subject")}
+              </span>
+              <input
+                className={css["input"]}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder={t("campaign.missions.subject_placeholder")}
+                value={subject}
+              />
+            </div>
           </div>
         </DefaultModalContent>
       </ModalInner>

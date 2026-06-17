@@ -72,7 +72,7 @@ describe("campaign content data", () => {
 });
 
 describe("travel", () => {
-  it("advances a day and records history", () => {
+  it("moves without advancing the day and records history", () => {
     const campaign = makeCampaign({
       current_location: "spire",
       cycle_id: "loa",
@@ -84,9 +84,21 @@ describe("travel", () => {
       to: adj[0].id,
       path_terrain: adj[0].path,
     });
-    expect(patch.day).toBe(2);
+    expect(patch.day).toBe(1);
     expect(patch.current_location).toBe(adj[0].id);
     expect(patch.history).toHaveLength(1);
+  });
+
+  it("advances the day when the travel ends the day", () => {
+    const campaign = makeCampaign({
+      current_location: "spire",
+      cycle_id: "loa",
+    });
+    const adj = adjacentLocations(campaign);
+
+    const patch = applyTravel(campaign, { to: adj[0].id, camped: true });
+    expect(patch.day).toBe(2);
+    expect(patch.current_location).toBe(adj[0].id);
   });
 
   it("undoes the most recent travel", () => {

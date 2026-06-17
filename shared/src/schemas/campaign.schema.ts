@@ -12,6 +12,8 @@ export const MissionEntrySchema = z.object({
   name: z.string(),
   // Card code of the chosen mission card (for thumbnail + canonical identity).
   card_code: z.string().nullish(),
+  // Free-text instance of the mission, e.g. "Quisi Vos" for "Helping Hand".
+  subject: z.string().nullish(),
   progress: z.number().nullish(),
   completed: z.boolean().nullish(),
   checks: z.array(z.boolean()).nullish(),

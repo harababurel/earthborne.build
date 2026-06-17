@@ -19,6 +19,29 @@
   list-style: none;
 }
 
+.party-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.party-item {
+  position: relative;
+}
+
+.party-unlink {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  z-index: 3;
+}
+
+.empty {
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+}
+
 .item {
   display: flex;
   align-items: center;

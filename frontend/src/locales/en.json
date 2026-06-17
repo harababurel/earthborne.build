@@ -1316,11 +1316,14 @@
       "missions": {
         "add": "Add mission",
         "name": "Mission",
+        "day": "Day",
         "progress": "Progress",
         "none": "No missions tracked yet.",
         "custom": "Custom mission",
         "select_placeholder": "Select a mission...",
         "name_placeholder": "Mission name",
+        "subject": "Subject",
+        "subject_placeholder": "Subject for missions like Helping Hand or Lure",
         "completed": "Completed"
       },
       "rewards": {
@@ -1359,9 +1362,12 @@
         "record": "Record guide entry"
       },
       "party": {
-        "help": "Link the ranger decks playing this campaign.",
-        "link_deck": "Link a deck",
-        "link_placeholder": "Select a deck...",
+        "title": "Rangers",
+        "add": "Add ranger",
+        "picker_title": "Add a ranger",
+        "picker_search": "Search decks...",
+        "picker_empty": "No decks available to link.",
+        "picker_none": "You have no decks yet.",
         "unlink": "Unlink",
         "none": "No decks linked yet."
       },
@@ -1408,9 +1414,9 @@
           "the_frowning_gate": "The Frowning Gate",
           "bowl_of_the_sun": "Bowl of the Sun",
           "the_alluvial_ruins": "The Alluvial Ruins",
-          "the_tumbledown": "The Tumbledown",
+          "the_tumbledown": "Tumbledown",
           "watchers_rock": "Watcher's Rock",
-          "archeological_outpost": "Archeological Outpost",
+          "archeological_outpost": "Archaeological Outpost",
           "rings_of_the_moon": "Rings of the Moon",
           "the_concordant_ziggurats": "The Concordant Ziggurats",
           "meadow": "Meadow",
@@ -1504,10 +1510,10 @@
         "select_location": "Select a location...",
         "terrain": "Path terrain",
         "terrain_none": "Direct (no terrain)",
-        "camp": "Camp",
-        "camp_note": "Camping ends the day and lets earned rewards be swapped into decks (on the deck page).",
+        "camp": "End the day",
+        "camp_note": "Ending the day lets earned rewards be swapped into decks (on the deck page).",
         "travel": "Travel",
-        "travel_camp": "Travel & Camp"
+        "travel_camp": "Travel & end day"
       },
       "end_day": {
         "title": "End the day",

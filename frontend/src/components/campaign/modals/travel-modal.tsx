@@ -10,6 +10,7 @@ import {
 import { adjacentLocations } from "@/store/lib/campaign/travel";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
+import { CustomSelect } from "../../ui/custom-select";
 import { useDialogContextChecked } from "../../ui/dialog.hooks";
 import {
   DefaultModalContent,
@@ -18,8 +19,7 @@ import {
   ModalBackdrop,
   ModalInner,
 } from "../../ui/modal";
-import { Select } from "../../ui/select";
-import { LocationGlyph } from "../glyphs";
+import { LocationGlyph, TerrainGlyph } from "../glyphs";
 import css from "./modals.module.css";
 
 export function TravelModal({ campaign }: { campaign: Campaign }) {
@@ -38,36 +38,24 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
     [campaign],
   );
 
-  const locationOptions = useMemo(() => {
+  const locationItems = useMemo(() => {
     const ids = showAll ? Object.keys(allLocations) : adjacent.map((c) => c.id);
-    return ids
+    const items = ids
       .filter((id) => id !== campaign.current_location)
-      .map((id) => {
-        const edge = adjacent.find((c) => c.id === id);
-        const terrainLabel =
-          edge && edge.path !== "none"
-            ? t(`campaign.data.terrain.${edge.path}`)
-            : undefined;
-        return {
-          value: id,
-          label: terrainLabel
-            ? `${t(`campaign.data.locations.${id}`)} — ${terrainLabel}`
-            : t(`campaign.data.locations.${id}`),
-        };
-      })
+      .map((id) => ({ value: id, label: t(`campaign.data.locations.${id}`) }))
       .sort((a, b) => a.label.localeCompare(b.label));
+    return [
+      { value: "", label: t("campaign.travel.select_location") },
+      ...items,
+    ];
   }, [showAll, allLocations, adjacent, campaign.current_location, t]);
 
-  const terrainOptions = useMemo(
-    () =>
-      getPathTypes(campaign.cycle_id)
-        .map((p) => ({
-          value: p.id,
-          label: t(`campaign.data.terrain.${p.id}`),
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label)),
-    [campaign.cycle_id, t],
-  );
+  const terrainItems = useMemo(() => {
+    const items = getPathTypes(campaign.cycle_id)
+      .map((p) => ({ value: p.id, label: t(`campaign.data.terrain.${p.id}`) }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+    return [{ value: "", label: t("campaign.travel.terrain_none") }, ...items];
+  }, [campaign.cycle_id, t]);
 
   const onSelectDestination = (id: string) => {
     setDestination(id);
@@ -94,9 +82,14 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
       <ModalInner size="32rem">
         <ModalActions />
         <DefaultModalContent
+          mainClassName={css["main-spaced"]}
           title={t("campaign.travel.departing", { location: currentName })}
           footer={
-            <Button onClick={onTravel} variant="primary">
+            <Button
+              className={css["travel-button"]}
+              onClick={onTravel}
+              variant="primary"
+            >
               {camp ? <MoonIcon /> : <FootprintsIcon />}
               {camp
                 ? t("campaign.travel.travel_camp")
@@ -123,20 +116,34 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
               <span className={css["sub"]}>
                 {t("campaign.travel.connecting_location")}
               </span>
-              <Select
-                emptyLabel={t("campaign.travel.select_location")}
-                onChange={(e) => onSelectDestination(e.target.value)}
-                options={locationOptions}
+              <CustomSelect
+                aria-label={t("campaign.travel.select_location")}
+                items={locationItems}
+                menuClassName={css["travel-menu"]}
+                onValueChange={onSelectDestination}
+                renderItem={(item) => (
+                  <span className={css["option-row"]}>
+                    {item?.value && <LocationGlyph name={item.label} />}
+                    {item?.label ?? t("campaign.travel.select_location")}
+                  </span>
+                )}
                 value={destination}
               />
             </div>
 
             <div className={css["field"]}>
               <span className={css["sub"]}>{t("campaign.travel.terrain")}</span>
-              <Select
-                emptyLabel={t("campaign.travel.terrain_none")}
-                onChange={(e) => setTerrain(e.target.value)}
-                options={terrainOptions}
+              <CustomSelect
+                aria-label={t("campaign.travel.terrain")}
+                items={terrainItems}
+                menuClassName={css["travel-menu"]}
+                onValueChange={setTerrain}
+                renderItem={(item) => (
+                  <span className={css["option-row"]}>
+                    {item?.value && <TerrainGlyph terrain={item.value} />}
+                    {item?.label ?? t("campaign.travel.terrain_none")}
+                  </span>
+                )}
                 value={terrain}
               />
             </div>

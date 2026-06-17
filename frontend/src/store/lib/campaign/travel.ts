@@ -26,15 +26,16 @@ export type TravelInput = {
   camped?: boolean;
 };
 
-// Pure transition: advance one day, append a journey-history entry, optionally
-// move to a destination. Terrain is whatever the caller passes (defaulted from
-// the chosen edge in the UI but freely overridable). Returns the `updateCampaign`
-// patch.
+// Pure transition: append a journey-history entry and optionally move to a
+// destination. The day advances only when the move ends the day (`camped`);
+// plain travel stays on the same day. Terrain is whatever the caller passes
+// (defaulted from the chosen edge in the UI but freely overridable). Returns the
+// `updateCampaign` patch.
 export function applyTravel(
   campaign: Campaign,
   input: TravelInput,
 ): Partial<Campaign> {
-  const day = campaign.day + 1;
+  const day = input.camped ? campaign.day + 1 : campaign.day;
   const location = input.to ?? campaign.current_location ?? null;
   const entry: HistoryEntry = {
     day,

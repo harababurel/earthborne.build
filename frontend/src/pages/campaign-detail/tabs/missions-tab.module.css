@@ -4,28 +4,68 @@
   gap: 1rem;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
+.mission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
 }
 
-.table th {
-  text-align: left;
+.mission-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.mission-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0 0.125rem 0.25rem;
   font-size: var(--text-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-fainter);
   font-weight: 600;
-  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
 }
 
-.table td {
-  padding: 0.5rem;
-  border-top: 1px solid var(--palette-2);
-  vertical-align: middle;
+/* Shared column tracks so the header lines up with each mission row. */
+.col-day {
+  flex-shrink: 0;
+  width: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.col-mission {
+  flex: 1;
+  min-width: 0;
+}
+
+.col-subject {
+  flex-shrink: 0;
+  width: 9rem;
+}
+
+.col-progress {
+  flex-shrink: 0;
+  width: 5rem;
+}
+
+.col-actions {
+  flex-shrink: 0;
+  width: 2.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.completed-row {
+  opacity: 0.55;
 }
 
 .day-chip {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -38,23 +78,22 @@
   font-size: var(--text-sm);
 }
 
-.mission-name {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.mission-card {
+  flex: 1;
+  min-width: 0;
 }
 
-.thumbnail {
-  width: 3rem;
-  height: 2rem;
-  border-radius: var(--rounded);
-  overflow: hidden;
-  flex-shrink: 0;
+.custom-name {
+  flex: 1;
+  min-width: 0;
 }
 
-.completed {
-  text-decoration: line-through;
+.subject {
   color: var(--text-fainter);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .diamonds {

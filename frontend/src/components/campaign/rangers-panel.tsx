@@ -1,65 +1,68 @@
 import type { Campaign } from "@earthborne-build/shared";
-import { PlusIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { UserPlusIcon } from "lucide-react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
+import { selectLocalDeckSummaries } from "@/store/selectors/decks";
+import { DeckSummary } from "../deck-summary/deck-summary";
 import { Button } from "../ui/button";
-import { Select } from "../ui/select";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { AddRangerModal } from "./modals/add-ranger-modal";
 import css from "./rail.module.css";
 
 export function RangersPanel({ campaign }: { campaign: Campaign }) {
   const { t } = useTranslation();
-  const decks = useStore((state) => state.data.decks);
-  const linkDeck = useStore((state) => state.linkDeckToCampaign);
+  const summaries = useStore(selectLocalDeckSummaries);
   const unlinkDeck = useStore((state) => state.unlinkDeckFromCampaign);
-  const [selected, setSelected] = useState("");
 
-  const linkedIds = new Set(campaign.deck_ids.map(String));
-  const options = useMemo(
-    () =>
-      Object.values(decks)
-        .filter((deck) => !linkedIds.has(String(deck.id)))
-        .map((deck) => ({ value: String(deck.id), label: deck.name }))
-        .sort((a, b) => a.label.localeCompare(b.label)),
-    [decks, linkedIds],
+  const summariesById = useMemo(
+    () => new Map(summaries.map((deck) => [String(deck.id), deck])),
+    [summaries],
   );
-
-  const onLink = () => {
-    if (!selected) return;
-    linkDeck(campaign.id, selected);
-    setSelected("");
-  };
 
   return (
     <section className={css["panel"]}>
-      <h3 className={css["title"]}>{t("campaign.tabs.party")}</h3>
-      {campaign.deck_ids.length > 0 && (
-        <ul className={css["list"]}>
-          {campaign.deck_ids.map((deckId) => (
-            <li className={css["item"]} key={deckId}>
-              <span>{decks[deckId]?.name ?? String(deckId)}</span>
-              <Button
-                onClick={() => unlinkDeck(campaign.id, deckId)}
-                size="sm"
-                variant="bare"
-              >
-                {t("campaign.party.unlink")}
-              </Button>
-            </li>
-          ))}
+      <h3 className={css["title"]}>{t("campaign.party.title")}</h3>
+
+      {campaign.deck_ids.length > 0 ? (
+        <ul className={css["party-list"]}>
+          {campaign.deck_ids.map((deckId) => {
+            const deck = summariesById.get(String(deckId));
+            if (!deck) return null;
+            return (
+              <li className={css["party-item"]} key={deckId}>
+                <DeckSummary
+                  deck={deck}
+                  showThumbnail
+                  size="sm"
+                  validation={deck.problem}
+                />
+                <Button
+                  className={css["party-unlink"]}
+                  onClick={() => unlinkDeck(campaign.id, deckId)}
+                  size="sm"
+                  variant="bare"
+                >
+                  {t("campaign.party.unlink")}
+                </Button>
+              </li>
+            );
+          })}
         </ul>
+      ) : (
+        <p className={css["empty"]}>{t("campaign.party.none")}</p>
       )}
-      <div className={css["add-row"]}>
-        <Select
-          emptyLabel={t("campaign.party.link_placeholder")}
-          onChange={(e) => setSelected(e.target.value)}
-          options={options}
-          value={selected}
-        />
-        <Button disabled={!selected} onClick={onLink} size="sm">
-          <PlusIcon />
-        </Button>
-      </div>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button size="sm" variant="bare">
+            <UserPlusIcon /> {t("campaign.party.add")}
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <AddRangerModal campaign={campaign} />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

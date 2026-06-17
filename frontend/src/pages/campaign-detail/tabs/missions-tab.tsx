@@ -2,7 +2,7 @@ import type { Campaign, MissionEntry } from "@earthborne-build/shared";
 import { DiamondIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AddMissionModal } from "@/components/campaign/modals/add-mission-modal";
-import { CardThumbnail } from "@/components/card-thumbnail";
+import { ListCard } from "@/components/list-card/list-card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useStore } from "@/store";
@@ -46,77 +46,81 @@ export function MissionsTab({ campaign }: { campaign: Campaign }) {
       </Dialog>
 
       {campaign.missions.length ? (
-        <table className={css["table"]}>
-          <thead>
-            <tr>
-              <th>{t("common.date")}</th>
-              <th>{t("campaign.missions.name")}</th>
-              <th>{t("campaign.missions.progress")}</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {campaign.missions.map((mission, index) => {
-              const card = mission.card_code
-                ? metadata.cards[mission.card_code]
-                : undefined;
-              const checks = mission.checks ?? [false, false, false];
-              return (
-                <tr key={`${mission.name}-${index}`}>
-                  <td>
-                    <span className={css["day-chip"]}>{mission.day}</span>
-                  </td>
-                  <td>
-                    <div className={css["mission-name"]}>
-                      {card && (
-                        <CardThumbnail
-                          card={card}
-                          className={css["thumbnail"]}
-                        />
-                      )}
-                      <span
-                        className={
-                          mission.completed ? css["completed"] : undefined
-                        }
-                      >
-                        {mission.name}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className={css["diamonds"]}>
-                      {checks.map((checked, ci) => (
-                        <button
-                          // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length progress boxes.
-                          key={ci}
-                          aria-label={t("campaign.missions.progress")}
-                          className={cx(
-                            css["diamond"],
-                            checked && css["filled"],
-                          )}
-                          onClick={() => toggleCheck(index, ci)}
-                          type="button"
-                        >
-                          <DiamondIcon />
-                        </button>
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <Button
-                      iconOnly
-                      onClick={() => remove(index)}
-                      tooltip={t("campaign.actions.delete")}
-                      variant="bare"
+        <ul className={css["mission-list"]}>
+          <li className={css["mission-header"]}>
+            <span className={css["col-day"]}>{t("campaign.missions.day")}</span>
+            <span className={css["col-mission"]}>
+              {t("campaign.missions.name")}
+            </span>
+            <span className={css["col-subject"]}>
+              {t("campaign.missions.subject")}
+            </span>
+            <span className={css["col-progress"]}>
+              {t("campaign.missions.progress")}
+            </span>
+            <span className={css["col-actions"]} />
+          </li>
+          {campaign.missions.map((mission, index) => {
+            const card = mission.card_code
+              ? metadata.cards[mission.card_code]
+              : undefined;
+            const checks = mission.checks ?? [false, false, false];
+            return (
+              <li
+                className={cx(
+                  css["mission-row"],
+                  mission.completed && css["completed-row"],
+                )}
+                key={`${mission.name}-${index}`}
+              >
+                <span className={css["col-day"]}>
+                  <span className={css["day-chip"]}>{mission.day}</span>
+                </span>
+
+                {card ? (
+                  <ListCard
+                    card={card}
+                    className={css["mission-card"]}
+                    omitBorders
+                    size="sm"
+                  />
+                ) : (
+                  <span className={css["custom-name"]}>{mission.name}</span>
+                )}
+
+                <span className={cx(css["col-subject"], css["subject"])}>
+                  {mission.subject}
+                </span>
+
+                <div className={cx(css["col-progress"], css["diamonds"])}>
+                  {checks.map((checked, ci) => (
+                    <button
+                      // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length progress boxes.
+                      key={ci}
+                      aria-label={t("campaign.missions.progress")}
+                      className={cx(css["diamond"], checked && css["filled"])}
+                      onClick={() => toggleCheck(index, ci)}
+                      type="button"
                     >
-                      <Trash2Icon />
-                    </Button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                      <DiamondIcon />
+                    </button>
+                  ))}
+                </div>
+
+                <span className={css["col-actions"]}>
+                  <Button
+                    iconOnly
+                    onClick={() => remove(index)}
+                    tooltip={t("campaign.actions.delete")}
+                    variant="bare"
+                  >
+                    <Trash2Icon />
+                  </Button>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
       ) : (
         <p className={css["empty"]}>{t("campaign.missions.none")}</p>
       )}
