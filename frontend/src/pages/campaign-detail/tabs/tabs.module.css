@@ -21,6 +21,39 @@
   color: inherit;
 }
 
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  align-items: flex-start;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  max-width: 22rem;
+}
+
+.field-label {
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+}
+
+.fate-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.or {
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+}
+
 .list {
   display: flex;
   flex-direction: column;
@@ -47,6 +80,13 @@
 .meta {
   color: var(--text-fainter);
   font-size: var(--text-sm);
+}
+
+.fate {
+  flex-shrink: 0;
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+  font-variant-caps: small-caps;
 }
 
 .crossed {

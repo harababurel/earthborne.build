@@ -1336,9 +1336,12 @@
         "help": "Rewards unlocked here become available to every linked deck."
       },
       "removed": {
-        "add": "Add removed card",
+        "card": "Card",
         "select_placeholder": "Select a card...",
-        "moved": "Moved",
+        "fate_remove": "Remove from game",
+        "fate_move": "Move to",
+        "or": "or",
+        "destination_placeholder": "Destination set, e.g. the Valley",
         "removed": "Removed",
         "moved_to": "Moved to {{destination}}",
         "none": "No cards removed or moved yet."

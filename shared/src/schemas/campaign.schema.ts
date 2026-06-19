@@ -50,6 +50,10 @@ export type HistoryEntry = z.infer<typeof HistoryEntrySchema>;
 export const RemovedEntrySchema = z.object({
   set_id: z.string().nullish(),
   name: z.string(),
+  // "removed" = taken out of the game; "moved" = relocated to `destination`
+  // (a set's display name). Absent is treated as "removed" for older entries.
+  action: z.enum(["removed", "moved"]).nullish(),
+  destination: z.string().nullish(),
 });
 export type RemovedEntry = z.infer<typeof RemovedEntrySchema>;
 

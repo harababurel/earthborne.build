@@ -49,9 +49,9 @@ export function moonPathForDay(day: number): string {
   return content.moonPaths[String(day)] ?? content.moonPaths["30"] ?? "";
 }
 
-// Card-data pack ids whose missions belong to this campaign (core=ebr + active
-// valley expansions; loa=loa). Drives the metadata-sourced mission picker.
-export function campaignMissionPacks(
+// Card-data pack ids that belong to this campaign (core=ebr + active valley
+// expansions; loa=loa). Scopes the metadata-sourced mission and path pickers.
+export function campaignPacks(
   campaign: Pick<Campaign, "cycle_id" | "expansions">,
 ): string[] {
   if (campaign.cycle_id === "loa") return ["loa"];

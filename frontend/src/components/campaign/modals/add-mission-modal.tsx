@@ -2,7 +2,7 @@ import type { Campaign, MissionEntry } from "@earthborne-build/shared";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
-import { campaignMissionPacks } from "@/store/lib/campaign/data";
+import { campaignPacks } from "@/store/lib/campaign/data";
 import { selectMetadata } from "@/store/selectors/shared";
 import { displayAttribute } from "@/utils/card-utils";
 import { Button } from "../../ui/button";
@@ -32,7 +32,7 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
 
   // Mission cards for this campaign's packs, deduped by name (lowest set_position).
   const missionOptions = useMemo(() => {
-    const packs = campaignMissionPacks(campaign);
+    const packs = campaignPacks(campaign);
     const byName = new Map<string, { code: string; pos: number }>();
     for (const card of Object.values(metadata.cards)) {
       if (card.type_code !== "mission") continue;
