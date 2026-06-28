@@ -1265,6 +1265,8 @@
       "subtitle": "Track your journey through the valley.",
       "new": "New campaign",
       "empty": "You haven't started any campaigns yet.",
+      "search_placeholder": "Search campaigns...",
+      "no_results": "No campaigns match your search.",
       "back": "Back to campaigns",
       "cycle_label": "Campaign",
       "day_label": "Day {{day}}",
