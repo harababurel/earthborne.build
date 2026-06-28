@@ -85,15 +85,10 @@ Start with these:
 
 ## Environment Setup & Node Resolution
 
-Depending on the machine, `node`, `npm`, and `npx` may be installed as system-level packages (e.g., via `pacman` or `brew`) or managed via `fnm` (Fast Node Manager).
+On this host, `node`, `npm`, and `npx` are installed as system packages (in `/usr/bin`) and are on `PATH` by default. Run them directly — do **not** prefix commands with `eval "$(fnm env)"`; `fnm` is not installed here.
 
-- If you encounter "command not found" errors for `npm`, `npx`, or `node`, it is likely because `fnm` is used but not initialized in the current shell session.
-- To resolve this, check if `fnm` is available and initialize it before running Node commands:
-  ```bash
-  eval "$(fnm env)"
-  ```
-  If that fails, check for a specific path (for example, on some machines it might be at `~/.local/share/fnm/fnm`).
-- Always verify that Node is accessible before attempting to run tests or build commands.
+- Only if you actually hit a "command not found" error for `npm`/`npx`/`node` should you investigate. Some machines manage Node via `fnm` (Fast Node Manager), in which case initialize it first with `eval "$(fnm env)"` — but treat this as a fallback for that error, not a routine prefix.
+- The Bash tool's working directory already persists at the repo root, so do **not** `cd` into the project directory unless a command genuinely needs a different directory.
 
 ## Testing & Validation
 
