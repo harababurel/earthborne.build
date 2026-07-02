@@ -3,6 +3,7 @@ import { devtools } from "zustand/middleware";
 import type { StoreState } from "./slices";
 import { createAchievementsSlice } from "./slices/achievements";
 import { createAppSlice } from "./slices/app";
+import { createCampaignsSlice } from "./slices/campaigns";
 import { createDataSlice } from "./slices/data";
 import { createDeckCollectionSlice } from "./slices/deck-collection";
 import { createDeckCreateSlice } from "./slices/deck-create";
@@ -19,6 +20,7 @@ const stateCreator = (...args: [any, any, any]) => ({
   ...createAppSlice(...args),
   ...createAchievementsSlice(...args),
   ...createDataSlice(...args),
+  ...createCampaignsSlice(...args),
   ...createMetadataSlice(...args),
   ...createListsSlice(...args),
   ...createSettingsSlice(...args),

@@ -1,5 +1,6 @@
 import type { AchievementsSlice } from "./achievements.types";
 import type { AppSlice } from "./app.types";
+import type { CampaignsSlice } from "./campaigns.types";
 import type { DataSlice } from "./data.types";
 import type { DeckCollectionSlice } from "./deck-collection.types";
 import type { DeckCreateSlice } from "./deck-create.types";
@@ -18,6 +19,7 @@ export type StoreState = AppSlice &
   UISlice &
   SettingsSlice &
   DataSlice &
+  CampaignsSlice &
   DeckEditsSlice &
   DeckCreateSlice &
   DeckCollectionSlice &

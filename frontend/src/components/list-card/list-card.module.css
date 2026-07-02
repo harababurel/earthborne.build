@@ -112,6 +112,8 @@
   .name {
     display: flex;
     flex-flow: row wrap;
+    align-items: baseline;
+    column-gap: 0.1875rem;
   }
 
   .name :where(a, button, .name-static),

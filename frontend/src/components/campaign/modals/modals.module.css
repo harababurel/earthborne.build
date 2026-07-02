@@ -1,0 +1,136 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--palette-2);
+  border-radius: var(--rounded);
+  background: var(--palette-1);
+  color: inherit;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sub {
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+}
+
+.note {
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+}
+
+.guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  list-style: none;
+}
+
+.guide-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.picker-empty {
+  color: var(--text-fainter);
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  white-space: nowrap;
+}
+
+.option-restriction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-fainter);
+  font-size: var(--text-xs);
+}
+
+/* Widen the dropdown so location/terrain names fit on one line. Doubled class
+   keeps it above the shared .menu width without touching the global select. */
+.travel-menu.travel-menu {
+  width: max-content;
+  min-width: 16rem;
+  max-width: min(28rem, 85vw);
+}
+
+/* Extra separation between the last body control and the footer action. */
+.main-spaced {
+  margin-bottom: 0.75rem;
+}
+
+/* A travel action in the app's themed accent rather than the generic blue. */
+.travel-button {
+  --accent-color-dark: var(--color-link);
+  --accent-color: color-mix(
+    in srgb,
+    var(--color-link) 82%,
+    var(--color-inverted)
+  );
+  --accent-color-contrast: var(--color-inverted);
+}
+
+.picker-item {
+  position: relative;
+}
+
+.picker-add {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  z-index: 3;
+}

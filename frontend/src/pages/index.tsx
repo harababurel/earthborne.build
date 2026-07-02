@@ -1,5 +1,7 @@
+import { MapIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { CampaignCollection } from "@/components/campaign/campaign-collection";
 import { CardListContainer } from "@/components/card-list/card-list-container";
 import { CardModalProvider } from "@/components/card-modal/card-modal-provider";
 import { DeckCollection } from "@/components/deck-collection/deck-collection";
@@ -10,6 +12,7 @@ import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
+import { selectCampaigns } from "@/store/selectors/campaigns";
 import { selectIsInitialized } from "@/store/selectors/shared";
 import {
   browseTabListCardType,
@@ -24,6 +27,8 @@ function Index() {
     "ranger",
     "type",
   );
+
+  const campaigns = useStore(selectCampaigns);
 
   const activeListId = useStore((state) => state.activeList);
   const isInitalized = useStore(selectIsInitialized);
@@ -67,7 +72,21 @@ function Index() {
               />
             </Filters>
           }
-          sidebar={<DeckCollection />}
+          sidebarSections={[
+            {
+              id: "decks",
+              icon: <i className="icon-deck" />,
+              title: t("deck_collection.title"),
+              content: <DeckCollection />,
+            },
+            {
+              id: "campaigns",
+              icon: <MapIcon />,
+              title: t("campaign.title"),
+              content: <CampaignCollection />,
+              badge: campaigns.length === 0,
+            },
+          ]}
           sidebarWidthMax="var(--sidebar-width-one-col)"
         >
           {(props) => <CardListContainer {...props} />}

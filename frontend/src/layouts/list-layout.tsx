@@ -14,6 +14,15 @@ import { useMedia } from "@/utils/use-media";
 import css from "./list-layout.module.css";
 import { useListLayoutContext } from "./list-layout-context";
 
+type SidebarSection = {
+  id: string;
+  icon: React.ReactNode;
+  title: string;
+  content: React.ReactNode;
+  /** Shows a small dot on the toggle to draw attention to a new section. */
+  badge?: boolean;
+};
+
 type Props = {
   children: (props: {
     slotRight?: React.ReactNode;
@@ -24,7 +33,13 @@ type Props = {
   hideSidebarCollapse?: boolean;
   mastheadContent?: React.ReactNode;
   noFade?: boolean;
-  sidebar: React.ReactNode;
+  sidebar?: React.ReactNode;
+  /**
+   * Optional switchable sidebar sections. When provided, the central toggle
+   * becomes one icon per section (a segmented switch) and the sidebar renders
+   * the active section's content instead of `sidebar`.
+   */
+  sidebarSections?: SidebarSection[];
   sidebarWidthMax: string;
 };
 
@@ -37,13 +52,30 @@ export function ListLayout(props: Props) {
     mastheadContent,
     noFade,
     sidebar,
+    sidebarSections,
     sidebarWidthMax,
   } = props;
 
   const { t } = useTranslation();
 
-  const { filtersOpen, sidebarOpen, setFiltersOpen, setSidebarOpen } =
-    useListLayoutContext();
+  const {
+    filtersOpen,
+    sidebarOpen,
+    sidebarSection,
+    setFiltersOpen,
+    setSidebarOpen,
+    setSidebarSection,
+  } = useListLayoutContext();
+
+  // Resolve the active section, falling back to the first one when the stored
+  // id is empty or stale (e.g. on first render or when sections change).
+  const activeSectionId =
+    sidebarSections?.find((s) => s.id === sidebarSection)?.id ??
+    sidebarSections?.[0]?.id;
+
+  const sidebarContent = sidebarSections
+    ? sidebarSections.find((s) => s.id === activeSectionId)?.content
+    : sidebar;
 
   const floatingSidebar = useMedia(MQ_FLOATING_SIDEBAR);
   const floatingFilters = useMedia(MQ_FLOATING_FILTERS);
@@ -105,6 +137,20 @@ export function ListLayout(props: Props) {
     setFiltersOpen((open) => !open);
   }, [setFiltersOpen]);
 
+  // A section icon toggles the sidebar shut when it's already the open section,
+  // otherwise it opens the sidebar onto that section.
+  const selectSection = useCallback(
+    (id: string) => {
+      if (sidebarOpen && activeSectionId === id) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarSection(id);
+        setSidebarOpen(true);
+      }
+    },
+    [sidebarOpen, activeSectionId, setSidebarOpen, setSidebarSection],
+  );
+
   const closeSidebar = useCallback(() => {
     setSidebarOpen(false);
   }, [setSidebarOpen]);
@@ -144,7 +190,7 @@ export function ListLayout(props: Props) {
             orientation="left"
           />
         )}
-        {sidebar}
+        {sidebarContent}
       </div>
       <main
         className={cx(
@@ -155,7 +201,33 @@ export function ListLayout(props: Props) {
         onClick={onContentClick}
       >
         {children({
-          slotLeft: (
+          slotLeft: sidebarSections ? (
+            <div className={css["sidebar-toggle-group"]}>
+              {sidebarSections.map((section) => {
+                const active = sidebarOpen && activeSectionId === section.id;
+                return (
+                  <div className={css["toggle-wrapper"]} key={section.id}>
+                    <Button
+                      className={cx(active && css["toggle-active"])}
+                      onClick={() => selectSection(section.id)}
+                      iconOnly
+                      size="lg"
+                      tooltip={section.title}
+                      aria-pressed={active}
+                    >
+                      {section.icon}
+                    </Button>
+                    {section.badge && (
+                      <span
+                        className={css["toggle-badge"]}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
             <HotkeyTooltip
               keybind="alt+1"
               description={t("lists.actions.toggle_sidebar")}

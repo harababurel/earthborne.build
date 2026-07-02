@@ -73,6 +73,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useTabUrlState } from "../ui/tabs.hooks";
 import { useToast } from "../ui/toast.hooks";
 import { DefaultTooltip } from "../ui/tooltip";
+import { CampaignRewardSync } from "./campaign-reward-sync";
 import css from "./deck-display.module.css";
 import { DeckHistory } from "./deck-history/deck-history";
 import { DecklistPopover } from "./decklist-popover";
@@ -696,6 +697,7 @@ function DeckCampaignSections({
     <div className={css["campaign-sections"]}>
       <div className={css["campaign-columns"]}>
         <Plane className={css["campaign-panel"]}>
+          <CampaignRewardSync canEdit={canEdit} deck={deck} />
           <RewardsSection
             canEdit={canEdit}
             deck={deck}

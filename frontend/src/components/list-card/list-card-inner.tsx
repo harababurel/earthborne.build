@@ -22,7 +22,7 @@ import { CardText } from "../card/card-text";
 import { CardEquipLoad } from "../card-equip-load";
 import { CardHealth } from "../card-health";
 import { CardIcon } from "../card-icon";
-import { CardName } from "../card-name";
+import { CardName, CardPackDetail } from "../card-name";
 import { CardThumbnail } from "../card-thumbnail";
 import { ApproachIcon } from "../icons/approach-icon";
 import { MulticlassIcons } from "../icons/multiclass-icons";
@@ -218,10 +218,11 @@ export function ListCardInner(props: Props) {
                           ? "dots"
                           : (cardLevelDisplay ?? "icon-only")
                       }
-                      cardShowCollectionNumber={cardShowCollectionNumber}
                       cardShowUniqueIcon={cardShowUniqueIcon}
                     />
                   </ListCardLink>
+                  {/* Outside the title link: it contains a link itself. */}
+                  {cardShowCollectionNumber && <CardPackDetail card={card} />}
                 </h4>
 
                 {ownedCount === false && (

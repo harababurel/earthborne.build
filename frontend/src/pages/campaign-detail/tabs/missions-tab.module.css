@@ -1,0 +1,139 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.mission-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.mission-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0 0.125rem 0.25rem;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-fainter);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Shared column tracks so the header lines up with each mission row. */
+.col-day {
+  flex-shrink: 0;
+  width: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.col-mission {
+  flex: 1;
+  min-width: 0;
+}
+
+.col-subject {
+  flex-shrink: 0;
+  width: 9rem;
+}
+
+.col-progress {
+  flex-shrink: 0;
+  width: 5rem;
+}
+
+.col-actions {
+  flex-shrink: 0;
+  width: 6.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.completed-row {
+  opacity: 0.55;
+}
+
+.completed-row .custom-name,
+.completed-row .subject {
+  text-decoration: line-through;
+}
+
+.complete-toggle-active {
+  color: var(--nord-accent, var(--palette-6));
+}
+
+.day-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 0.375rem;
+  border: 1px solid var(--palette-3);
+  border-radius: var(--rounded);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+}
+
+.mission-card {
+  flex: 1;
+  min-width: 0;
+}
+
+.custom-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.subject {
+  color: var(--text-fainter);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.diamonds {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.diamond {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-fainter);
+  padding: 0;
+  line-height: 0;
+}
+
+.diamond svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+}
+
+.diamond.filled {
+  color: var(--nord-accent, var(--palette-6));
+}
+
+.diamond.filled svg {
+  fill: currentColor;
+}
+
+.empty {
+  color: var(--text-fainter);
+  padding: 1rem 0;
+}

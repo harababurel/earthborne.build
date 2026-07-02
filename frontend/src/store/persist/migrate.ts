@@ -11,6 +11,8 @@ import v9Tov10 from "./migrations/0009-rename-investigator-list";
 import v10Tov11 from "./migrations/0010-remove-role-list";
 import v11Tov12 from "./migrations/0011-clean-list-sort-fields";
 import v12Tov13 from "./migrations/0012-default-other-cards-sort";
+import v13Tov14 from "./migrations/0013-add-campaigns";
+import v14Tov15 from "./migrations/0014-campaign-travel-days";
 
 export function migrate(
   persisted: Partial<StoreState>,
@@ -76,6 +78,16 @@ export function migrate(
   if (version < 13) {
     console.debug("[persist] migrate store: ", 13);
     v12Tov13(state, version);
+  }
+
+  if (version < 14) {
+    console.debug("[persist] migrate store: ", 14);
+    v13Tov14(state, version);
+  }
+
+  if (version < 15) {
+    console.debug("[persist] migrate store: ", 15);
+    v14Tov15(state, version);
   }
 
   return state;

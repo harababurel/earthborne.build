@@ -16,6 +16,7 @@ function getInitialDataState() {
   return {
     data: {
       decks: {},
+      campaigns: {},
       history: {},
       folders: {},
       deckFolders: {},

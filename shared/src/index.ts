@@ -83,7 +83,19 @@ export {
   decodeSearch,
   encodeSearch,
 } from "./lib/search-params.ts";
-
+export {
+  type CalendarEntry,
+  type Campaign,
+  type CampaignCycle,
+  CampaignCycleSchema,
+  type CampaignNote,
+  CampaignSchema,
+  type HistoryEntry,
+  isCampaign,
+  type MissionEntry,
+  type NotableEvent,
+  type RemovedEntry,
+} from "./schemas/campaign.schema.ts";
 export {
   type AspectCard,
   type Card,
@@ -96,6 +108,7 @@ export {
   type DeckProblem,
   DeckSchema,
   type Id,
+  idSchema,
   isDeck,
   type Slots,
   SlotsSchema,

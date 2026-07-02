@@ -1,0 +1,14 @@
+.moon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.disc {
+  fill: var(--palette-2);
+  stroke: var(--text-fainter);
+  stroke-width: 1;
+}
+
+.phase {
+  fill: var(--text);
+}

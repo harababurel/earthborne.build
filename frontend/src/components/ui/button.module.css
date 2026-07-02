@@ -10,6 +10,9 @@
     border: 1px solid var(--palette-2);
     font-family: var(--font-family-ui);
     font-size: inherit;
+    /* Match the body line-height so anchor and native <button> elements render
+       at the same height (the global reset only sets line-height on <button>). */
+    line-height: 1.45;
     user-select: none;
     cursor: pointer;
     align-items: center;

@@ -19,6 +19,12 @@ const DeckCreate = lazy(() => import("./pages/deck-create/deck-create"));
 
 const DeckView = lazy(() => import("./pages/deck-view/deck-view"));
 
+const Campaigns = lazy(() => import("./pages/campaigns/campaigns"));
+
+const CampaignDetail = lazy(
+  () => import("./pages/campaign-detail/campaign-detail"),
+);
+
 const Settings = lazy(() => import("./pages/settings/settings"));
 
 const CardView = lazy(() => import("./pages/card-view/card-view"));
@@ -95,6 +101,9 @@ function AppInner() {
               <Route component={Search} path="/search" />
               <Route component={CardView} path="/card/:code" />
               <Route component={DeckCreate} path="/deck/create" />
+              <Route component={Campaigns} path="/campaigns" />
+              <Route component={CampaignDetail} path="/campaign/edit/:id" />
+              <Route component={CampaignDetail} path="/campaign/view/:id" />
               <Route component={DeckView} path="/:type/view/:id" />
               <Route component={DeckView} path="/:type/view/:id/:slug" />
               <Route component={DeckView} path="/deck/edit/:id" />

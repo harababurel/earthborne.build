@@ -46,7 +46,9 @@ export function CardName(props: Props) {
   );
 }
 
-function CardPackDetail(props: { card: Card; invert?: boolean }) {
+// Exported so list rows can render it as a sibling of the card-title link:
+// the pack detail contains its own link, and anchors cannot nest.
+export function CardPackDetail(props: { card: Card; invert?: boolean }) {
   const { card, invert } = props;
 
   const metadata = useStore(selectMetadata);
