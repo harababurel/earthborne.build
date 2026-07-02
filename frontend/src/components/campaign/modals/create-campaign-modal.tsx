@@ -49,10 +49,14 @@ export function CreateCampaignModal() {
     [cycle],
   );
 
-  const toggleExpansion = (id: string, checked: boolean) =>
-    setExpansions((prev) =>
-      checked ? [...prev, id] : prev.filter((e) => e !== id),
-    );
+  const toggleExpansion = (id: string, checked: boolean) => {
+    const next = checked
+      ? [...expansions, id]
+      : expansions.filter((e) => e !== id);
+
+    setExpansions(next);
+    if (!next.length) setSetupEvents(false);
+  };
 
   const onCreate = async () => {
     const id = await createCampaign({
@@ -85,6 +89,7 @@ export function CreateCampaignModal() {
       <ModalInner size="28rem">
         <ModalActions />
         <DefaultModalContent
+          mainClassName={css["main-spaced"]}
           title={t("campaign.create.title")}
           footer={
             <Button onClick={onCreate} variant="primary">

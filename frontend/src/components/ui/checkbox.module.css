@@ -21,6 +21,7 @@
 .input {
   appearance: none;
   cursor: pointer;
+
   &:disabled {
     cursor: not-allowed;
   }
@@ -53,6 +54,12 @@
   }
 }
 
+.input:disabled + .box {
+  background: var(--palette-0);
+  border-color: var(--palette-2);
+  opacity: 0.65;
+}
+
 .checkbox:hover .input:not(:disabled):not(:checked) + .box {
   background-color: var(--palette-2);
 }
@@ -71,4 +78,9 @@
   font-family: var(--font-family-ui);
   font-size: var(--text-sm);
   cursor: pointer;
+}
+
+.checkbox:has(.input:disabled) .label {
+  color: var(--text-fainter);
+  cursor: not-allowed;
 }
