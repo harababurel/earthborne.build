@@ -12,8 +12,8 @@ import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
+import { selectCampaigns } from "@/store/selectors/campaigns";
 import { selectIsInitialized } from "@/store/selectors/shared";
-import { useCampaignTrackerBadge } from "@/utils/use-campaign-tracker-badge";
 import {
   browseTabListCardType,
   browseTypeSystemFilter,
@@ -28,8 +28,7 @@ function Index() {
     "type",
   );
 
-  const { showBadge: showCampaignBadge, markSeen: markCampaignTrackerSeen } =
-    useCampaignTrackerBadge();
+  const campaigns = useStore(selectCampaigns);
 
   const activeListId = useStore((state) => state.activeList);
   const isInitalized = useStore(selectIsInitialized);
@@ -85,8 +84,7 @@ function Index() {
               icon: <MapIcon />,
               title: t("campaign.title"),
               content: <CampaignCollection />,
-              badge: showCampaignBadge,
-              onSelect: markCampaignTrackerSeen,
+              badge: campaigns.length === 0,
             },
           ]}
           sidebarWidthMax="var(--sidebar-width-one-col)"

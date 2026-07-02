@@ -21,7 +21,6 @@ type SidebarSection = {
   content: React.ReactNode;
   /** Shows a small dot on the toggle to draw attention to a new section. */
   badge?: boolean;
-  onSelect?: () => void;
 };
 
 type Props = {
@@ -210,10 +209,7 @@ export function ListLayout(props: Props) {
                   <div className={css["toggle-wrapper"]} key={section.id}>
                     <Button
                       className={cx(active && css["toggle-active"])}
-                      onClick={() => {
-                        selectSection(section.id);
-                        section.onSelect?.();
-                      }}
+                      onClick={() => selectSection(section.id)}
                       iconOnly
                       size="lg"
                       tooltip={section.title}
