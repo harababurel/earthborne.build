@@ -241,7 +241,8 @@
   color: var(--palette-three-point-five);
 }
 
-.placeholder > i {
+.placeholder > i,
+.placeholder > svg {
   font-size: var(--icon-xl);
   margin-inline: auto;
 }
