@@ -136,6 +136,23 @@
   gap: 0.25rem;
 }
 
+.toggle-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.toggle-badge {
+  position: absolute;
+  top: -0.0625rem;
+  right: -0.0625rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-link);
+  border: 1px solid var(--palette-0);
+  pointer-events: none;
+}
+
 .toggle-active,
 .toggle-active:not([disabled]):hover {
   color: var(--palette-6);

@@ -13,6 +13,7 @@ import { ListLayout } from "@/layouts/list-layout";
 import { ListLayoutContextProvider } from "@/layouts/list-layout-context-provider";
 import { useStore } from "@/store";
 import { selectIsInitialized } from "@/store/selectors/shared";
+import { useCampaignTrackerBadge } from "@/utils/use-campaign-tracker-badge";
 import {
   browseTabListCardType,
   browseTypeSystemFilter,
@@ -26,6 +27,9 @@ function Index() {
     "ranger",
     "type",
   );
+
+  const { showBadge: showCampaignBadge, markSeen: markCampaignTrackerSeen } =
+    useCampaignTrackerBadge();
 
   const activeListId = useStore((state) => state.activeList);
   const isInitalized = useStore(selectIsInitialized);
@@ -81,6 +85,8 @@ function Index() {
               icon: <MapIcon />,
               title: t("campaign.title"),
               content: <CampaignCollection />,
+              badge: showCampaignBadge,
+              onSelect: markCampaignTrackerSeen,
             },
           ]}
           sidebarWidthMax="var(--sidebar-width-one-col)"

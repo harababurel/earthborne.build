@@ -19,6 +19,9 @@ type SidebarSection = {
   icon: React.ReactNode;
   title: string;
   content: React.ReactNode;
+  /** Shows a small dot on the toggle to draw attention to a new section. */
+  badge?: boolean;
+  onSelect?: () => void;
 };
 
 type Props = {
@@ -204,17 +207,27 @@ export function ListLayout(props: Props) {
               {sidebarSections.map((section) => {
                 const active = sidebarOpen && activeSectionId === section.id;
                 return (
-                  <Button
-                    key={section.id}
-                    className={cx(active && css["toggle-active"])}
-                    onClick={() => selectSection(section.id)}
-                    iconOnly
-                    size="lg"
-                    tooltip={section.title}
-                    aria-pressed={active}
-                  >
-                    {section.icon}
-                  </Button>
+                  <div className={css["toggle-wrapper"]} key={section.id}>
+                    <Button
+                      className={cx(active && css["toggle-active"])}
+                      onClick={() => {
+                        selectSection(section.id);
+                        section.onSelect?.();
+                      }}
+                      iconOnly
+                      size="lg"
+                      tooltip={section.title}
+                      aria-pressed={active}
+                    >
+                      {section.icon}
+                    </Button>
+                    {section.badge && (
+                      <span
+                        className={css["toggle-badge"]}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
                 );
               })}
             </div>
