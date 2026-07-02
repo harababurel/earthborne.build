@@ -113,6 +113,10 @@
   margin-bottom: 0.75rem;
 }
 
+.center-action {
+  margin-inline: auto;
+}
+
 /* A travel action in the app's themed accent rather than the generic blue. */
 .travel-button {
   --accent-color-dark: var(--color-link);

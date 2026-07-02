@@ -34,9 +34,14 @@ export function EndDayModal({ campaign }: { campaign: Campaign }) {
       <ModalInner size="28rem">
         <ModalActions />
         <DefaultModalContent
+          mainClassName={css["main-spaced"]}
           title={t("campaign.end_day.title")}
           footer={
-            <Button onClick={onEndDay} variant="primary">
+            <Button
+              className={css["center-action"]}
+              onClick={onEndDay}
+              variant="primary"
+            >
               <MoonIcon /> {t("campaign.end_day.confirm")}
             </Button>
           }
