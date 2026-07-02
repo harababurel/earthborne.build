@@ -147,10 +147,40 @@
   right: -0.0625rem;
   width: 0.5rem;
   height: 0.5rem;
-  border-radius: 50%;
-  background: var(--color-link);
-  border: 1px solid var(--palette-0);
   pointer-events: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-link);
+    opacity: 0.75;
+    animation: toggle-badge-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-link);
+    border: 1px solid var(--palette-0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+    }
+  }
+}
+
+@keyframes toggle-badge-ping {
+  75%,
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
 }
 
 .toggle-active,
