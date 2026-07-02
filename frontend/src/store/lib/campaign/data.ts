@@ -5,7 +5,6 @@ import type {
   ExpansionDef,
   ExpansionMapCondition,
   MapLocation,
-  PathCardDefinition,
   PathTypeDef,
   WeatherEntry,
 } from "./types";
@@ -27,10 +26,6 @@ export function getPathTypes(cycle: string): PathTypeDef[] {
 
 export function getPathType(id: string): PathTypeDef | undefined {
   return content.pathTypes.find((p) => p.id === id);
-}
-
-export function getPathCards(): PathCardDefinition[] {
-  return content.pathCards;
 }
 
 // Weather id (valley_id / underground_id) → its card code, for hover previews.

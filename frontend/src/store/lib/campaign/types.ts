@@ -53,18 +53,6 @@ export type WeatherEntry = {
   underground_id?: string;
 };
 
-export type PathCardAction = "moved" | "removed";
-export type PathCardSetType = "location" | "path";
-
-export type PathCardDefinition = {
-  code: string;
-  action: PathCardAction;
-  set_id: string;
-  set_type: PathCardSetType;
-  destination?: string;
-  prerequisite?: string;
-};
-
 export type ExpansionDef = {
   id: string;
   cycles: string[];
@@ -89,6 +77,5 @@ export type CampaignContent = {
   maxDay: { core: number; coreExtended: number; loa: number };
   // Per-day moon-phase SVG path data (viewBox 0 0 32 32); "" = new moon.
   moonPaths: Record<string, string>;
-  pathCards: PathCardDefinition[];
   guideEntries: GuideEntries;
 };

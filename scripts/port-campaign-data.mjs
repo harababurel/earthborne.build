@@ -1,5 +1,5 @@
 // One-off porting script: lifts Earthborne Rangers campaign content (valley map,
-// path types, connections, missions, path cards, weather, guide entries) from the
+// path types, connections, missions, weather, guide entries) from the
 // rangers-db predecessor into earthborne.build's data format.
 //
 // Strategy: the rangers-db data is regular object/array literals. We slice each
@@ -22,7 +22,6 @@ const RDB = resolve(REPO, "../rangers-db/frontend/src");
 const RC_DRAWABLE = resolve(REPO, "../RangersCards/app/src/main/res/drawable");
 
 const hooks = readFileSync(resolve(RDB, "lib/hooks.ts"), "utf8");
-const pathCardsSrc = readFileSync(resolve(RDB, "lib/pathCards.ts"), "utf8");
 
 // --- enum shims (mirror rangers-db types/types.ts) ---
 const Path = {
@@ -169,24 +168,6 @@ for (let day = 1; day <= 30; day++) moonPaths[day] = readMoonPath(day);
 for (let day = 31; day <= 45; day++)
   moonPaths[day] = moonPaths[((day - 1) % 30) + 1];
 
-// --- path cards (removed / moved) ---
-const rawPathCards = evalArray(
-  sliceArray(pathCardsSrc, "export const PATH_CARDS: PathCardDefinition[] = "),
-);
-const pathCardNames = {};
-const pathCards = rawPathCards.map((p) => {
-  pathCardNames[p.code] = p.name.en;
-  const out = {
-    code: p.code,
-    action: p.action,
-    set_id: p.set_id,
-    set_type: p.set_type,
-  };
-  if (p.destination) out.destination = p.destination;
-  if (p.prerequisite) out.prerequisite = p.prerequisite;
-  return out;
-});
-
 // --- weather (hand-transcribed from Campaign.tsx useWeather; ids drive i18n) ---
 const weatherNames = {
   a_perfect_day: "A Perfect Day",
@@ -283,7 +264,6 @@ const data = {
   weather,
   maxDay,
   moonPaths,
-  pathCards,
   guideEntries,
 };
 mkdirSync(dirname(dataPath), { recursive: true });
@@ -317,13 +297,11 @@ en.translation.campaign.data = {
   locations: locationNames,
   terrain: terrainNames,
   weather: weatherNames,
-  path_cards: pathCardNames,
   restrictions: restrictionNames,
 };
 writeFileSync(enPath, `${JSON.stringify(en, null, 2)}\n`);
 
 console.info(
   `Ported: ${locations.length} locations, ${connections.length} connections, ` +
-    `${pathTypes.length} terrains, ${Object.keys(moonPaths).length} moon days, ` +
-    `${pathCards.length} path cards.`,
+    `${pathTypes.length} terrains, ${Object.keys(moonPaths).length} moon days.`,
 );
