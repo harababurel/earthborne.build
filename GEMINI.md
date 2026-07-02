@@ -68,6 +68,17 @@ Start with these:
 - When given a plan document to execute, follow it as written; do not invent extra scope.
 - **Never run a dev instance of the app** (`npm run dev`, vite, the backend server, etc.). The user always runs it themselves; their dev instance is exposed at `dev.harababurel.com`. If you need to see the running app, use that URL — do not start, restart, or `pkill` server processes.
 
+## Visual inspection with Playwright
+
+- Do not start a local dev server. Use the user-run instance at `https://dev.harababurel.com`.
+- For app-state-specific UI bugs, prefer restoring a user-provided exported backup through Settings -> Backup restore. This exercises the real app restore flow and avoids manually seeding IndexedDB/local state.
+- Playwright browser contexts are isolated and will not see the user's normal browser storage. If a campaign/deck exists only in the user's browser, ask for an exported backup.
+- Save screenshots/crops to `/tmp` and report the paths.
+- If Playwright's managed Chromium path is missing or mismatched, check `~/.cache/ms-playwright` and launch an installed browser with `executablePath`.
+- Browser launches may need sandbox escalation on this host. If Chromium/Firefox hangs or crashes under the command sandbox, rerun the same script with escalation.
+- Avoid `waitUntil: "networkidle"` for this app when it causes hangs; prefer `domcontentloaded` plus explicit locator waits.
+- For Safari/iPad issues, Playwright WebKit with an iPad device profile is the closest local approximation, but real iPad Safari may still differ.
+
 ## Code style (inherited from arkham.build)
 
 - Newspaper style: public/primary functions at the top of the file, private/utility functions at the bottom.
