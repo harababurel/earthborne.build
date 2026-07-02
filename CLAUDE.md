@@ -66,6 +66,7 @@ Start with these:
 - Keep answers short and concise.
 - Don't start implementing, designing, or modifying code unless explicitly asked to.
 - When given a plan document to execute, follow it as written; do not invent extra scope.
+- **Never run a dev instance of the app** (`npm run dev`, vite, the backend server, etc.). The user always runs it themselves; their dev instance is exposed at `dev.harababurel.com`. If you need to see the running app, use that URL — do not start, restart, or `pkill` server processes.
 
 ## Code style (inherited from arkham.build)
 
