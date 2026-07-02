@@ -37,6 +37,14 @@
   z-index: 3;
 }
 
+.party-missing {
+  display: block;
+  color: var(--text-fainter);
+  font-style: italic;
+  font-size: var(--text-sm);
+  padding: 0.5rem 0.5rem 2.25rem;
+}
+
 .empty {
   color: var(--text-fainter);
   font-size: var(--text-sm);

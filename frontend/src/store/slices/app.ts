@@ -243,12 +243,28 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       delete history[id];
       delete undoHistory[id];
 
+      // Unlink the deleted deck (and its history) from any campaign party.
+      const deletedIds = new Set([id, ...historyEntries].map(String));
+      const campaigns = { ...prev.data.campaigns };
+      for (const campaign of Object.values(campaigns)) {
+        if (!campaign.deck_ids.some((did) => deletedIds.has(String(did)))) {
+          continue;
+        }
+        campaigns[campaign.id] = {
+          ...campaign,
+          deck_ids: campaign.deck_ids.filter(
+            (did) => !deletedIds.has(String(did)),
+          ),
+        };
+      }
+
       return {
         data: {
           ...prev.data,
           decks,
           history,
           undoHistory,
+          campaigns,
         },
         deckEdits,
       };
@@ -270,11 +286,18 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
         delete undoHistory[id];
       }
 
+      const campaigns = { ...state.data.campaigns };
+      for (const campaign of Object.values(campaigns)) {
+        if (!campaign.deck_ids.length) continue;
+        campaigns[campaign.id] = { ...campaign, deck_ids: [] };
+      }
+
       return {
         data: {
           ...state.data,
           decks,
           history,
+          campaigns,
         },
       };
     });

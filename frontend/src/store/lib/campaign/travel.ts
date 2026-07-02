@@ -1,6 +1,6 @@
 import type { Campaign, HistoryEntry } from "@earthborne-build/shared";
-import { getMapLocationsForCampaign, getWeather } from "./data";
-import type { LocationConnection, WeatherEntry } from "./types";
+import { getMapLocationsForCampaign } from "./data";
+import type { LocationConnection } from "./types";
 
 // Locations reachable from the campaign's current location (deduped by neighbour).
 export function adjacentLocations(campaign: Campaign): LocationConnection[] {
@@ -27,70 +27,71 @@ export type TravelInput = {
 };
 
 // Pure transition: append a journey-history entry and optionally move to a
-// destination. The day advances only when the move ends the day (`camped`);
-// plain travel stays on the same day. Terrain is whatever the caller passes
-// (defaulted from the chosen edge in the UI but freely overridable). Returns the
-// `updateCampaign` patch.
+// destination. Entries record the day the travel happened; camping then
+// advances the campaign to the next day (mirrors the physical tracker and
+// rangers-db). When staying in place the current terrain is kept unless the
+// caller overrides it — next-day setup builds the path deck from the terrain
+// you were traveling on.
 export function applyTravel(
   campaign: Campaign,
   input: TravelInput,
 ): Partial<Campaign> {
-  const day = input.camped ? campaign.day + 1 : campaign.day;
   const location = input.to ?? campaign.current_location ?? null;
+  const terrain = input.to
+    ? (input.path_terrain ?? null)
+    : (input.path_terrain ?? campaign.current_path_terrain ?? null);
   const entry: HistoryEntry = {
-    day,
+    day: campaign.day,
     location,
-    path_terrain: input.path_terrain ?? null,
+    path_terrain: terrain,
     camped: input.camped ?? false,
   };
 
   return {
-    day,
+    day: input.camped ? campaign.day + 1 : campaign.day,
     current_location: location,
-    current_path_terrain: input.path_terrain ?? null,
+    current_path_terrain: terrain,
     history: [...campaign.history, entry],
   };
 }
 
-// End the day in place: advance the day with no movement, recorded as an
-// undoable history entry.
+// End the day in place: advance the day with no movement. Not recorded in the
+// journey history (mirrors rangers-db); the terrain you were traveling on is
+// kept — a forced day-end doesn't erase it and next-day setup still needs it.
 export function applyEndDay(campaign: Campaign): Partial<Campaign> {
-  const day = campaign.day + 1;
-  const entry: HistoryEntry = {
-    day,
-    location: campaign.current_location ?? null,
-    path_terrain: null,
-    camped: false,
-  };
-  return {
-    day,
-    current_path_terrain: null,
-    history: [...campaign.history, entry],
-  };
+  return { day: campaign.day + 1 };
 }
 
-// Revert the most recent travel, restoring day/location/terrain from the prior
-// history entry (or the campaign start if none remain).
+// The campaign day after a history entry resolved (camping ends the day).
+function dayAfter(entry: HistoryEntry): number {
+  return entry.day + (entry.camped ? 1 : 0);
+}
+
+export function canUndo(campaign: Campaign): boolean {
+  return campaign.history.length > 0 || campaign.day > 1;
+}
+
+// Revert the most recent action. Days ended after the last travel are undone
+// first (day counter only); then the last travel is popped, restoring
+// day/location/terrain from the prior entry or the campaign start.
 export function undoTravel(campaign: Campaign): Partial<Campaign> {
-  if (campaign.history.length === 0) return {};
+  const last = campaign.history[campaign.history.length - 1];
+
+  // End-days sit "on top of" the last travel entry (or the campaign start).
+  const dayAfterLastTravel = last ? dayAfter(last) : 1;
+  if (campaign.day > dayAfterLastTravel) {
+    return { day: campaign.day - 1 };
+  }
+
+  if (!last) return {};
 
   const history = campaign.history.slice(0, -1);
   const prev = history[history.length - 1];
 
   return {
     history,
-    day: prev?.day ?? 1,
-    current_location: prev?.location ?? null,
+    day: last.day,
+    current_location: prev?.location ?? campaign.start_location ?? null,
     current_path_terrain: prev?.path_terrain ?? null,
   };
-}
-
-export function weatherForDay(
-  cycle: string,
-  day: number,
-  extended: boolean,
-): WeatherEntry | undefined {
-  return getWeather(cycle, extended).find(
-    (w) => w.start <= day && w.end >= day,
-  );
 }

@@ -93,6 +93,13 @@ export const createCampaignsSlice: StateCreator<
     assert(campaign, `Campaign ${campaignId} does not exist.`);
     if (campaign.deck_ids.includes(deckId)) return;
 
+    // A deck belongs to at most one campaign — unlink it everywhere else.
+    for (const other of Object.values(get().data.campaigns)) {
+      if (other.id !== campaignId && other.deck_ids.includes(deckId)) {
+        await get().unlinkDeckFromCampaign(other.id, deckId);
+      }
+    }
+
     await get().updateCampaign(campaignId, {
       deck_ids: [...campaign.deck_ids, deckId],
     });

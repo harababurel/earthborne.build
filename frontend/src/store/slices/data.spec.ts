@@ -41,6 +41,21 @@ describe("data slice", () => {
       expect(state.data.history["4"]).toBeUndefined();
       expect(state.data.decks["1"]).toBeDefined();
     });
+
+    it("unlinks the deck from campaigns", async () => {
+      store.setState(mockState);
+      const campaignId = await store
+        .getState()
+        .createCampaign({ name: "Party", cycle_id: "core" });
+      await store.getState().linkDeckToCampaign(campaignId, "1");
+      await store.getState().linkDeckToCampaign(campaignId, "4");
+
+      await store.getState().deleteDeck("4");
+
+      expect(store.getState().data.campaigns[campaignId].deck_ids).toEqual([
+        "1",
+      ]);
+    });
   });
 
   describe("actions.duplicateDeck", () => {

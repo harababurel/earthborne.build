@@ -28,15 +28,21 @@ export function RangersPanel({ campaign }: { campaign: Campaign }) {
         <ul className={css["party-list"]}>
           {campaign.deck_ids.map((deckId) => {
             const deck = summariesById.get(String(deckId));
-            if (!deck) return null;
             return (
               <li className={css["party-item"]} key={deckId}>
-                <DeckSummary
-                  deck={deck}
-                  showThumbnail
-                  size="sm"
-                  validation={deck.problem}
-                />
+                {deck ? (
+                  <DeckSummary
+                    deck={deck}
+                    showThumbnail
+                    size="sm"
+                    validation={deck.problem}
+                  />
+                ) : (
+                  // Stale link (deck was deleted) — still offer the unlink.
+                  <span className={css["party-missing"]}>
+                    {t("campaign.party.missing_deck")}
+                  </span>
+                )}
                 <Button
                   className={css["party-unlink"]}
                   onClick={() => unlinkDeck(campaign.id, deckId)}

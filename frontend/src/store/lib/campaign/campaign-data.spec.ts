@@ -10,9 +10,10 @@ import {
 } from "./data";
 import {
   adjacentLocations,
+  applyEndDay,
   applyTravel,
+  canUndo,
   undoTravel,
-  weatherForDay,
 } from "./travel";
 
 function makeCampaign(overrides = {}) {
@@ -89,7 +90,7 @@ describe("travel", () => {
     expect(patch.history).toHaveLength(1);
   });
 
-  it("advances the day when the travel ends the day", () => {
+  it("records camped travel on the day it happened, then advances", () => {
     const campaign = makeCampaign({
       current_location: "spire",
       cycle_id: "loa",
@@ -99,22 +100,110 @@ describe("travel", () => {
     const patch = applyTravel(campaign, { to: adj[0].id, camped: true });
     expect(patch.day).toBe(2);
     expect(patch.current_location).toBe(adj[0].id);
+    expect(patch.history?.at(-1)).toMatchObject({
+      day: 1,
+      location: adj[0].id,
+      camped: true,
+    });
   });
 
-  it("undoes the most recent travel", () => {
-    let campaign = makeCampaign({ current_location: "spire", cycle_id: "loa" });
+  it("keeps the current terrain when camping in place", () => {
+    const campaign = makeCampaign({
+      current_location: "spire",
+      current_path_terrain: "cave_system",
+      cycle_id: "loa",
+    });
+
+    const patch = applyTravel(campaign, { camped: true });
+    expect(patch.current_location).toBe("spire");
+    expect(patch.current_path_terrain).toBe("cave_system");
+    expect(patch.day).toBe(2);
+  });
+
+  it("ends the day without touching history or terrain", () => {
+    const campaign = makeCampaign({
+      current_location: "spire",
+      current_path_terrain: "cave_system",
+      cycle_id: "loa",
+      day: 3,
+    });
+
+    const patch = applyEndDay(campaign);
+    expect(patch).toEqual({ day: 4 });
+  });
+
+  it("undoes the most recent travel, restoring the start location", () => {
+    let campaign = makeCampaign({
+      start_location: "spire",
+      current_location: "spire",
+      cycle_id: "loa",
+    });
     const adj = adjacentLocations(campaign);
     campaign = { ...campaign, ...applyTravel(campaign, { to: adj[0].id }) };
 
     const patch = undoTravel(campaign);
     expect(patch.history).toHaveLength(0);
     expect(patch.day).toBe(1);
-    expect(patch.current_location).toBeNull();
+    expect(patch.current_location).toBe("spire");
   });
 
-  it("resolves weather by day", () => {
-    expect(weatherForDay("core", 1, false)?.valley_id).toBe("a_perfect_day");
-    expect(weatherForDay("core", 5, false)?.valley_id).toBe("downpour");
+  it("undoes end-days before undoing the last travel", () => {
+    let campaign = makeCampaign({
+      start_location: "spire",
+      current_location: "spire",
+      cycle_id: "loa",
+    });
+    const adj = adjacentLocations(campaign);
+    campaign = {
+      ...campaign,
+      ...applyTravel(campaign, { to: adj[0].id, path_terrain: adj[0].path }),
+    };
+    campaign = { ...campaign, ...applyEndDay(campaign) };
+    expect(campaign.day).toBe(2);
+
+    // First undo reverts the end-day only.
+    campaign = { ...campaign, ...undoTravel(campaign) };
+    expect(campaign.day).toBe(1);
+    expect(campaign.history).toHaveLength(1);
+    expect(campaign.current_location).toBe(adj[0].id);
+
+    // Second undo reverts the travel itself.
+    campaign = { ...campaign, ...undoTravel(campaign) };
+    expect(campaign.history).toHaveLength(0);
+    expect(campaign.current_location).toBe("spire");
+    expect(campaign.current_path_terrain).toBeNull();
+    expect(campaign.day).toBe(1);
+  });
+
+  it("restores the pre-travel day when undoing a camped travel", () => {
+    let campaign = makeCampaign({
+      start_location: "spire",
+      current_location: "spire",
+      cycle_id: "loa",
+    });
+    const adj = adjacentLocations(campaign);
+    campaign = {
+      ...campaign,
+      ...applyTravel(campaign, { to: adj[0].id, camped: true }),
+    };
+    expect(campaign.day).toBe(2);
+
+    campaign = { ...campaign, ...undoTravel(campaign) };
+    expect(campaign.day).toBe(1);
+    expect(campaign.current_location).toBe("spire");
+  });
+
+  it("reports when there is anything to undo", () => {
+    const fresh = makeCampaign({ current_location: "spire", cycle_id: "loa" });
+    expect(canUndo(fresh)).toBe(false);
+    expect(canUndo({ ...fresh, day: 2 })).toBe(true);
+    expect(undoTravel(fresh)).toEqual({});
+
+    const traveled = { ...fresh, ...applyTravel(fresh, { to: "the_chimney" }) };
+    expect(canUndo(traveled)).toBe(true);
+  });
+
+  it("provides extended weather", () => {
     expect(getWeather("core", true).length).toBeGreaterThan(
       getWeather("core", false).length,
     );

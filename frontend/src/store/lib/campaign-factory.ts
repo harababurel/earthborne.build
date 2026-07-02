@@ -16,6 +16,7 @@ export function createCampaign(values: Payload): Campaign {
     expansions: [],
     extended_calendar: false,
     day: 1,
+    start_location: values.current_location ?? null,
     current_location: null,
     current_path_terrain: null,
     history: [],
@@ -41,9 +42,11 @@ export function cloneCampaign(campaign: Campaign): Campaign {
     name: `(Copy) ${campaign.name}`,
     date_creation: now,
     date_update: now,
-    // A clone is a fresh, unlinked campaign — drop chaining and shared copies.
+    // A clone is a fresh, unlinked campaign — drop chaining and the party
+    // (a deck belongs to at most one campaign).
     previous_campaign_id: null,
     next_campaign_id: null,
+    deck_ids: [],
   };
 }
 

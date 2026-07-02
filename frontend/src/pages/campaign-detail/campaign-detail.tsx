@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
+import { canUndo } from "@/store/lib/campaign/travel";
 import { selectCampaign } from "@/store/selectors/campaigns";
 import { ErrorStatus } from "../errors/404";
 import css from "./campaign-detail.module.css";
@@ -84,7 +85,7 @@ function CampaignDetail() {
             </Dialog>
 
             <Button
-              disabled={!campaign.history.length}
+              disabled={!canUndo(campaign)}
               onClick={() => undoTravel(campaign.id)}
               size="sm"
               variant="bare"

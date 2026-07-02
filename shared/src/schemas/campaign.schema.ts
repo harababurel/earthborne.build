@@ -68,6 +68,8 @@ export const CampaignSchema = z.object({
   extended_calendar: z.boolean().default(false),
 
   day: z.number().default(1),
+  // Where the campaign began; undoing the first travel restores this.
+  start_location: z.string().nullish(),
   current_location: z.string().nullish(),
   current_path_terrain: z.string().nullish(),
 
