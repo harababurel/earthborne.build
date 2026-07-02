@@ -1314,6 +1314,7 @@
         "undo": "Undo last travel",
         "history": "Journey log",
         "history_empty": "No travel recorded yet.",
+        "no_travel": "No travel",
         "day": "Day {{day}}"
       },
       "missions": {

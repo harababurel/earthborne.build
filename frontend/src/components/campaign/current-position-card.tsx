@@ -1,5 +1,5 @@
 import type { Campaign } from "@earthborne-build/shared";
-import { CalendarClockIcon, FootprintsIcon } from "lucide-react";
+import { FootprintsIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import { selectLocationCardsByName } from "@/store/selectors/campaigns";
@@ -9,7 +9,6 @@ import { Plane } from "../ui/plane";
 import { CardHoverName } from "./card-hover-name";
 import css from "./current-position-card.module.css";
 import { LocationGlyph, TerrainGlyph } from "./glyphs";
-import { RecordedJourneyModal } from "./modals/recorded-journey-modal";
 import { TravelModal } from "./modals/travel-modal";
 
 export function CurrentPositionCard({ campaign }: { campaign: Campaign }) {
@@ -63,17 +62,6 @@ export function CurrentPositionCard({ campaign }: { campaign: Campaign }) {
           </DialogTrigger>
           <DialogContent>
             <TravelModal campaign={campaign} />
-          </DialogContent>
-        </Dialog>
-
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button size="sm" variant="bare">
-              <CalendarClockIcon /> {t("campaign.journey.history")}
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <RecordedJourneyModal campaign={campaign} />
           </DialogContent>
         </Dialog>
       </div>

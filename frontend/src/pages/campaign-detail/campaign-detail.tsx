@@ -28,11 +28,12 @@ import { selectCampaign } from "@/store/selectors/campaigns";
 import { ErrorStatus } from "../errors/404";
 import css from "./campaign-detail.module.css";
 import { EventsTab } from "./tabs/events-tab";
+import { JourneyTab } from "./tabs/journey-tab";
 import { MissionsTab } from "./tabs/missions-tab";
 import { RemovedTab } from "./tabs/removed-tab";
 import { RewardsTab } from "./tabs/rewards-tab";
 
-const TABS = ["missions", "rewards", "events", "removed"] as const;
+const TABS = ["missions", "rewards", "events", "removed", "journey"] as const;
 
 function CampaignDetail() {
   const { t } = useTranslation();
@@ -136,7 +137,9 @@ function CampaignDetail() {
               <TabsList>
                 {TABS.map((key) => (
                   <TabsTrigger key={key} onTabChange={setTab} value={key}>
-                    {t(`campaign.tabs.${key}`)}
+                    {key === "journey"
+                      ? t("campaign.journey.history")
+                      : t(`campaign.tabs.${key}`)}
                   </TabsTrigger>
                 ))}
               </TabsList>
@@ -151,6 +154,9 @@ function CampaignDetail() {
               </TabsContent>
               <TabsContent value="removed">
                 <RemovedTab campaign={campaign} />
+              </TabsContent>
+              <TabsContent value="journey">
+                <JourneyTab campaign={campaign} />
               </TabsContent>
             </Tabs>
           </section>
