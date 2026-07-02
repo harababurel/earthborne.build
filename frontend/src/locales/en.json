@@ -1328,6 +1328,8 @@
         "subject": "Subject",
         "subject_placeholder": "Subject for missions like Helping Hand or Lure",
         "completed": "Completed",
+        "hide_completed": "Hide completed",
+        "none_visible": "No active missions.",
         "delete_confirm": "Delete this mission? Its progress will be lost.",
         "edit": "Edit mission",
         "save": "Save mission",
