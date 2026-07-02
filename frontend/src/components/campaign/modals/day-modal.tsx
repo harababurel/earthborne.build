@@ -40,6 +40,7 @@ export function DayModal({
   };
 
   const onRemove = (guide: string) => {
+    if (!confirm(t("campaign.actions.delete_entry_confirm"))) return;
     const others = campaign.calendar.filter((c) => c.day !== day);
     const next = guides.filter((g) => g !== guide);
     setCalendar(next.length ? [...others, { day, guides: next }] : others);

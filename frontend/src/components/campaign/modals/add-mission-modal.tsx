@@ -19,16 +19,33 @@ import css from "./modals.module.css";
 
 const CUSTOM = "__custom__";
 
-export function AddMissionModal({ campaign }: { campaign: Campaign }) {
+// Adds a mission, or edits `campaign.missions[editIndex]` in place when
+// `editIndex` is set (progress/completed state is preserved on edit).
+export function AddMissionModal({
+  campaign,
+  editIndex,
+}: {
+  campaign: Campaign;
+  editIndex?: number;
+}) {
   const { t } = useTranslation();
   const { setOpen } = useDialogContextChecked();
   const metadata = useStore(selectMetadata);
   const updateCampaign = useStore((state) => state.updateCampaign);
 
-  const [day, setDay] = useState(String(campaign.day));
-  const [selected, setSelected] = useState("");
-  const [customName, setCustomName] = useState("");
-  const [subject, setSubject] = useState("");
+  const editing = editIndex != null ? campaign.missions[editIndex] : undefined;
+
+  const [day, setDay] = useState(String(editing?.day ?? campaign.day));
+  const [selected, setSelected] = useState(() => {
+    if (!editing) return "";
+    return editing.card_code && metadata.cards[editing.card_code]
+      ? editing.card_code
+      : CUSTOM;
+  });
+  const [customName, setCustomName] = useState(
+    editing && !editing.card_code ? editing.name : "",
+  );
+  const [subject, setSubject] = useState(editing?.subject ?? "");
 
   // Mission cards for this campaign's packs, deduped by name (lowest set_position).
   const missionOptions = useMemo(() => {
@@ -44,6 +61,15 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
         byName.set(name, { code: card.code, pos });
       }
     }
+    // Keep the edited mission selectable even if it isn't the representative
+    // copy of its name.
+    if (editing?.card_code && metadata.cards[editing.card_code]) {
+      const card = metadata.cards[editing.card_code];
+      byName.set(displayAttribute(card, "name"), {
+        code: card.code,
+        pos: Number(card.set_position ?? 0),
+      });
+    }
     const options = [...byName.entries()]
       .map(([name, { code }]) => ({ value: code, label: name }))
       .sort((a, b) => a.label.localeCompare(b.label));
@@ -51,16 +77,21 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
       ...options,
       { value: CUSTOM, label: t("campaign.missions.custom") },
     ];
-  }, [campaign, metadata, t]);
+  }, [campaign, metadata, t, editing]);
 
-  const onAdd = async () => {
-    const dayNum = Number(day) || campaign.day;
+  const onSubmit = async () => {
+    const dayNum = Math.max(1, Math.round(Number(day)) || campaign.day);
     const trimmedSubject = subject.trim();
     let mission: MissionEntry | null = null;
     if (selected === CUSTOM) {
       const name = customName.trim();
       if (name) {
-        mission = { day: dayNum, name, checks: [false, false, false] };
+        mission = {
+          day: dayNum,
+          name,
+          checks: editing?.checks ?? [false, false, false],
+          completed: editing?.completed,
+        };
       }
     } else if (selected) {
       const card = metadata.cards[selected];
@@ -69,17 +100,24 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
           day: dayNum,
           name: displayAttribute(card, "name"),
           card_code: card.code,
-          checks: [false, false, false],
+          checks: editing?.checks ?? [false, false, false],
+          completed: editing?.completed,
         };
       }
     }
     if (!mission) return;
     if (trimmedSubject) mission.subject = trimmedSubject;
-    await updateCampaign(campaign.id, {
-      missions: [...campaign.missions, mission],
-    });
+
+    const missions = editing
+      ? campaign.missions.map((m, i) => (i === editIndex ? mission : m))
+      : [...campaign.missions, mission];
+    await updateCampaign(campaign.id, { missions });
     setOpen(false);
   };
+
+  const title = editing
+    ? t("campaign.missions.edit")
+    : t("campaign.missions.add");
 
   return (
     <Modal>
@@ -88,10 +126,12 @@ export function AddMissionModal({ campaign }: { campaign: Campaign }) {
         <ModalActions />
         <DefaultModalContent
           mainClassName={css["main-spaced"]}
-          title={t("campaign.missions.add")}
+          title={title}
           footer={
-            <Button onClick={onAdd} variant="primary">
-              {t("campaign.missions.add")}
+            <Button onClick={onSubmit} variant="primary">
+              {editing
+                ? t("campaign.missions.save")
+                : t("campaign.missions.add")}
             </Button>
           }
         >

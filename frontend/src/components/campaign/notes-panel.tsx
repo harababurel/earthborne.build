@@ -33,8 +33,10 @@ export function NotesPanel({ campaign }: { campaign: Campaign }) {
       ),
     );
 
-  const remove = (index: number) =>
+  const remove = (index: number) => {
+    if (!confirm(t("campaign.actions.delete_entry_confirm"))) return;
     setNotes(campaign.notes.filter((_, i) => i !== index));
+  };
 
   return (
     <section className={css["panel"]}>

@@ -55,13 +55,22 @@
 
 .col-actions {
   flex-shrink: 0;
-  width: 2.25rem;
+  width: 6.75rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .completed-row {
   opacity: 0.55;
+}
+
+.completed-row .custom-name,
+.completed-row .subject {
+  text-decoration: line-through;
+}
+
+.complete-toggle-active {
+  color: var(--nord-accent, var(--palette-6));
 }
 
 .day-chip {

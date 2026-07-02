@@ -28,8 +28,10 @@ export function EventsTab({ campaign }: { campaign: Campaign }) {
       ),
     );
 
-  const remove = (index: number) =>
+  const remove = (index: number) => {
+    if (!confirm(t("campaign.actions.delete_entry_confirm"))) return;
     setEvents(campaign.events.filter((_, i) => i !== index));
+  };
 
   return (
     <div className={css["section"]}>

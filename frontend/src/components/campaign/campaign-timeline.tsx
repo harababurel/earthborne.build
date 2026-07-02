@@ -1,6 +1,6 @@
 import type { Campaign } from "@earthborne-build/shared";
 import { BookOpenIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { getCampaignGuideEntryHrefById } from "@/components/card/campaign-guide-entry";
 import { getMaxDay, getWeather } from "@/store/lib/campaign/data";
@@ -34,6 +34,17 @@ export function CampaignTimeline({
   }, [campaign.calendar]);
 
   const days = Array.from({ length: maxDay }, (_, i) => i + 1);
+
+  // Keep the current day in view — a mid-campaign tracker would otherwise
+  // always open scrolled to day 1.
+  const currentDayRef = useRef<HTMLButtonElement>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-center when the day changes.
+  useEffect(() => {
+    currentDayRef.current?.scrollIntoView({
+      inline: "center",
+      block: "nearest",
+    });
+  }, [campaign.day]);
 
   return (
     <div className={css["scroller"]}>
@@ -78,6 +89,7 @@ export function CampaignTimeline({
             )}
             key={`d-${day}`}
             onClick={() => onSelectDay(day)}
+            ref={day === campaign.day ? currentDayRef : undefined}
             style={{ "--col": day } as React.CSSProperties}
             title={t("campaign.journey.day", { day })}
           >

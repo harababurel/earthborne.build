@@ -1,3 +1,4 @@
+import { LockIcon, SproutIcon, WavesIcon } from "lucide-react";
 import {
   locationSymbolUrlsByNormalizedName,
   pathTerrainSymbolUrls,
@@ -35,6 +36,30 @@ export function TerrainGlyph({
   const url = key ? pathTerrainSymbolUrls[key] : undefined;
   if (!url) return null;
   return <img alt="" className={cx(css["glyph"], className)} src={url} />;
+}
+
+// Connection restrictions (see `campaign.data.restrictions`) have no official
+// symbol assets, so use evocative icon stand-ins.
+const RESTRICTION_ICONS: Record<string, React.ComponentType> = {
+  flooded_passage: WavesIcon,
+  locked_passage: LockIcon,
+  overgrown_passage: SproutIcon,
+};
+
+export function RestrictionGlyph({
+  restriction,
+  className,
+}: {
+  restriction: string;
+  className?: string;
+}) {
+  const Icon = RESTRICTION_ICONS[restriction];
+  if (!Icon) return null;
+  return (
+    <span className={cx(css["glyph-icon"], className)}>
+      <Icon />
+    </span>
+  );
 }
 
 // Location glyphs are keyed by normalized English name; only "background"

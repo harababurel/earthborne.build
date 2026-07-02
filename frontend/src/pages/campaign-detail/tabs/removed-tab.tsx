@@ -54,8 +54,10 @@ export function RemovedTab({ campaign }: { campaign: Campaign }) {
     setDestination("");
   };
 
-  const remove = (index: number) =>
+  const remove = (index: number) => {
+    if (!confirm(t("campaign.actions.delete_entry_confirm"))) return;
     setRemoved(campaign.removed.filter((_, i) => i !== index));
+  };
 
   return (
     <div className={css["section"]}>

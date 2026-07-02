@@ -19,8 +19,14 @@ import {
   ModalBackdrop,
   ModalInner,
 } from "../../ui/modal";
-import { LocationGlyph, TerrainGlyph } from "../glyphs";
+import { LocationGlyph, RestrictionGlyph, TerrainGlyph } from "../glyphs";
 import css from "./modals.module.css";
+
+type LocationItem = {
+  value: string;
+  label: string;
+  restriction?: string;
+};
 
 export function TravelModal({ campaign }: { campaign: Campaign }) {
   const { t } = useTranslation();
@@ -39,10 +45,17 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
   );
 
   const locationItems = useMemo(() => {
+    const restrictions = new Map(
+      adjacent.filter((c) => c.restriction).map((c) => [c.id, c.restriction]),
+    );
     const ids = showAll ? Object.keys(allLocations) : adjacent.map((c) => c.id);
-    const items = ids
+    const items: LocationItem[] = ids
       .filter((id) => id !== campaign.current_location)
-      .map((id) => ({ value: id, label: t(`campaign.data.locations.${id}`) }))
+      .map((id) => ({
+        value: id,
+        label: t(`campaign.data.locations.${id}`),
+        restriction: restrictions.get(id) ?? undefined,
+      }))
       .sort((a, b) => a.label.localeCompare(b.label));
     return [
       { value: "", label: t("campaign.travel.select_location") },
@@ -63,7 +76,11 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
     setTerrain(edge && edge.path !== "none" ? edge.path : "");
   };
 
+  // Without a destination the only meaningful action is camping in place.
+  const canTravel = !!destination || camp;
+
   const onTravel = async () => {
+    if (!canTravel) return;
     await travel(campaign.id, {
       to: destination || null,
       path_terrain: terrain || null,
@@ -87,6 +104,7 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
           footer={
             <Button
               className={css["travel-button"]}
+              disabled={!canTravel}
               onClick={onTravel}
               variant="primary"
             >
@@ -125,6 +143,12 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
                   <span className={css["option-row"]}>
                     {item?.value && <LocationGlyph name={item.label} />}
                     {item?.label ?? t("campaign.travel.select_location")}
+                    {item?.restriction && (
+                      <span className={css["option-restriction"]}>
+                        <RestrictionGlyph restriction={item.restriction} />
+                        {t(`campaign.data.restrictions.${item.restriction}`)}
+                      </span>
+                    )}
                   </span>
                 )}
                 value={destination}
@@ -154,7 +178,11 @@ export function TravelModal({ campaign }: { campaign: Campaign }) {
               onCheckedChange={setCamp}
             />
             {camp && (
-              <p className={css["note"]}>{t("campaign.travel.camp_note")}</p>
+              <p className={css["note"]}>
+                {destination
+                  ? t("campaign.travel.camp_note")
+                  : t("campaign.travel.camp_in_place_note")}
+              </p>
             )}
           </div>
         </DefaultModalContent>

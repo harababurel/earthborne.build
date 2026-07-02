@@ -92,6 +92,14 @@
   white-space: nowrap;
 }
 
+.option-restriction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-fainter);
+  font-size: var(--text-xs);
+}
+
 /* Widen the dropdown so location/terrain names fit on one line. Doubled class
    keeps it above the shared .menu width without touching the global select. */
 .travel-menu.travel-menu {

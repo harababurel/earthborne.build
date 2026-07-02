@@ -1274,7 +1274,8 @@
         "open": "Open",
         "duplicate": "Duplicate",
         "delete": "Delete",
-        "delete_confirm": "Delete this campaign? This cannot be undone."
+        "delete_confirm": "Delete this campaign? This cannot be undone.",
+        "delete_entry_confirm": "Delete this entry?"
       },
       "create": {
         "title": "New campaign",
@@ -1326,7 +1327,12 @@
         "name_placeholder": "Mission name",
         "subject": "Subject",
         "subject_placeholder": "Subject for missions like Helping Hand or Lure",
-        "completed": "Completed"
+        "completed": "Completed",
+        "delete_confirm": "Delete this mission? Its progress will be lost.",
+        "edit": "Edit mission",
+        "save": "Save mission",
+        "complete": "Mark completed",
+        "reopen": "Mark not completed"
       },
       "rewards": {
         "search_placeholder": "Search reward cards...",
@@ -1374,7 +1380,8 @@
         "picker_empty": "No decks available to link.",
         "picker_none": "You have no decks yet.",
         "unlink": "Unlink",
-        "none": "No decks linked yet."
+        "none": "No decks linked yet.",
+        "missing_deck": "Deleted deck"
       },
       "settings": {
         "name": "Campaign name",
@@ -1485,23 +1492,6 @@
           "glitterain": "Glitterain",
           "shimmering_runoff": "Shimmering Runoff"
         },
-        "path_cards": {
-          "01322_tala_the_red_exile": "Tala the Red, Exile",
-          "04018_olyv_aspirant_ranger": "Olyv, Ranger Aspirant",
-          "01326_umbra": "Umbra",
-          "01327_quiet": "Quiet",
-          "01328_ol_bloody_clicker": "Ol' Bloody Clicker",
-          "01368_aell_ambitious_shaper": "Aell, Ambitious Shaper",
-          "04019_deadfall": "Deadfall",
-          "03308_lost_lutrinal": "Lost Lutrinal",
-          "03340_crimson_guardian": "Crimson Guardian",
-          "03322_archivist_spirit": "Archivist Spirit",
-          "03337_wandered_spirit": "Wandered Spirit",
-          "01265_caustic_mulcher": "Caustic Mulcher",
-          "03314_wild_scuttlebus": "Wild Scuttlebus",
-          "03316_gardener_spirit": "Gardener Spirit",
-          "01371_kasende_expert_hunter": "Kasende, Expert Hunter"
-        },
         "restrictions": {
           "flooded_passage": "Flooded Passage",
           "locked_passage": "Locked Passage",
@@ -1518,7 +1508,8 @@
         "camp": "End the day",
         "camp_note": "Ending the day lets earned rewards be swapped into decks (on the deck page).",
         "travel": "Travel",
-        "travel_camp": "Travel & end day"
+        "travel_camp": "Travel & end day",
+        "camp_in_place_note": "No destination selected: the day ends at the current location."
       },
       "end_day": {
         "title": "End the day",

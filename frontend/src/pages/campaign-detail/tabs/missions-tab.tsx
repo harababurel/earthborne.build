@@ -1,5 +1,12 @@
 import type { Campaign, MissionEntry } from "@earthborne-build/shared";
-import { DiamondIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import {
+  CheckIcon,
+  DiamondIcon,
+  PencilIcon,
+  PlusIcon,
+  Trash2Icon,
+} from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AddMissionModal } from "@/components/campaign/modals/add-mission-modal";
 import { ListCard } from "@/components/list-card/list-card";
@@ -14,6 +21,7 @@ export function MissionsTab({ campaign }: { campaign: Campaign }) {
   const { t } = useTranslation();
   const metadata = useStore(selectMetadata);
   const updateCampaign = useStore((state) => state.updateCampaign);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const setMissions = (missions: MissionEntry[]) =>
     updateCampaign(campaign.id, { missions });
@@ -24,13 +32,22 @@ export function MissionsTab({ campaign }: { campaign: Campaign }) {
         if (i !== index) return m;
         const checks = [...(m.checks ?? [false, false, false])];
         checks[checkIndex] = !checks[checkIndex];
-        return { ...m, checks, completed: checks.every(Boolean) };
+        return { ...m, checks };
       }),
     );
   };
 
-  const remove = (index: number) =>
+  const toggleCompleted = (index: number) =>
+    setMissions(
+      campaign.missions.map((m, i) =>
+        i === index ? { ...m, completed: !m.completed } : m,
+      ),
+    );
+
+  const remove = (index: number) => {
+    if (!confirm(t("campaign.missions.delete_confirm"))) return;
     setMissions(campaign.missions.filter((_, i) => i !== index));
+  };
 
   return (
     <div className={css["section"]}>
@@ -42,6 +59,17 @@ export function MissionsTab({ campaign }: { campaign: Campaign }) {
         </DialogTrigger>
         <DialogContent>
           <AddMissionModal campaign={campaign} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={editIndex != null}
+        onOpenChange={(open) => !open && setEditIndex(null)}
+      >
+        <DialogContent>
+          {editIndex != null && (
+            <AddMissionModal campaign={campaign} editIndex={editIndex} />
+          )}
         </DialogContent>
       </Dialog>
 
@@ -65,11 +93,12 @@ export function MissionsTab({ campaign }: { campaign: Campaign }) {
               ? metadata.cards[mission.card_code]
               : undefined;
             const checks = mission.checks ?? [false, false, false];
+            const completed = !!mission.completed;
             return (
               <li
                 className={cx(
                   css["mission-row"],
-                  mission.completed && css["completed-row"],
+                  completed && css["completed-row"],
                 )}
                 key={`${mission.name}-${index}`}
               >
@@ -108,6 +137,31 @@ export function MissionsTab({ campaign }: { campaign: Campaign }) {
                 </div>
 
                 <span className={css["col-actions"]}>
+                  <Button
+                    aria-pressed={completed}
+                    className={cx(
+                      css["complete-toggle"],
+                      completed && css["complete-toggle-active"],
+                    )}
+                    iconOnly
+                    onClick={() => toggleCompleted(index)}
+                    tooltip={
+                      completed
+                        ? t("campaign.missions.reopen")
+                        : t("campaign.missions.complete")
+                    }
+                    variant="bare"
+                  >
+                    <CheckIcon />
+                  </Button>
+                  <Button
+                    iconOnly
+                    onClick={() => setEditIndex(index)}
+                    tooltip={t("campaign.missions.edit")}
+                    variant="bare"
+                  >
+                    <PencilIcon />
+                  </Button>
                   <Button
                     iconOnly
                     onClick={() => remove(index)}

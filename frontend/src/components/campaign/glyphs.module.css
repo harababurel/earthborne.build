@@ -4,3 +4,14 @@
   object-fit: contain;
   flex-shrink: 0;
 }
+
+.glyph-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.glyph-icon svg {
+  width: 1em;
+  height: 1em;
+}
