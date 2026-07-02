@@ -6,7 +6,7 @@ import {
   PlusIcon,
   Trash2Icon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AddMissionModal } from "@/components/campaign/modals/add-mission-modal";
 import { ListCard } from "@/components/list-card/list-card";
@@ -18,12 +18,20 @@ import { selectMetadata } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import css from "./missions-tab.module.css";
 
+const HIDE_COMPLETED_STORAGE_KEY = "campaign.missions.hideCompleted";
+
 export function MissionsTab({ campaign }: { campaign: Campaign }) {
   const { t } = useTranslation();
   const metadata = useStore(selectMetadata);
   const updateCampaign = useStore((state) => state.updateCampaign);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [hideCompleted, setHideCompleted] = useState(false);
+  const [hideCompleted, setHideCompleted] = useState(
+    readHideCompletedPreference,
+  );
+
+  useEffect(() => {
+    writeHideCompletedPreference(hideCompleted);
+  }, [hideCompleted]);
 
   const visibleMissions = campaign.missions
     .map((mission, index) => ({ index, mission }))
@@ -200,4 +208,27 @@ export function MissionsTab({ campaign }: { campaign: Campaign }) {
       )}
     </div>
   );
+}
+
+function readHideCompletedPreference() {
+  if (typeof window === "undefined") return false;
+
+  try {
+    return window.localStorage.getItem(HIDE_COMPLETED_STORAGE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function writeHideCompletedPreference(hideCompleted: boolean) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.setItem(
+      HIDE_COMPLETED_STORAGE_KEY,
+      String(hideCompleted),
+    );
+  } catch {
+    // Ignore storage failures so the in-memory toggle still works.
+  }
 }
