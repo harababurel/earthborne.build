@@ -55,6 +55,26 @@ Note: `biologists_outpost` is "Biologie-Stützpunkt" per the printed card; the o
 - Use-token names missing from the card data and guessed: Riss (crack), Lektion (lesson), Haken (piton), Scheibe (slice), Sprühstoß (spray).
 - General native-speaker pass for tone/grammar; check tight layouts (buttons, tabs, filter chips) for German text overflow.
 
+## Unofficial terms with no source to check against
+
+App-specific terms (mostly deckbuilder concepts, not game terms) that were freely translated — a reviewer should judge them on their own merits:
+
+- "Multi-Aspekt" (multi-aspect), "Kartenzugriff" (card access), "Begrenzter Zugriff" (limited access)
+- "Verdrängte Karten" (displaced cards), "Weiterentwickelt" / "Startdeck" (deck evolution states)
+- "Reiseprotokoll" (journey log), "Verbindungsort" (connecting location), "Gruppe" (party tab), "Gegenstand" (mission subject)
+- "Ziehsimulator" (draw simulator), "Freigabe" (public share), "Platz" (slot filter; "Asset" filter left in English — both likely arkham.build residue)
+- Default deck names (`deck_create.default_name`): "{{name}} beobachtet", "{{name}} auf Wanderschaft", "{{name}} plant voraus", "{{name}}s Berufung" — invented flavor
+- The font-size preview sentence and the 10 background/specialty descriptions translate earthborne.build's own (unofficial) English flavor text
+
+## Trust level of the community card data
+
+Trait and use-token translations came from `rangers-card-data` `i18n/de/*.po`. They appear to be transcriptions of printed German cards and everything cross-checkable against the official PDFs matched, but the data contains at least one confirmed error ("Tech / Weapon" mapped to "Fähigkeit / Hilfe"), so spot-check token names against physical cards where possible — especially the non-obvious ones: Route (hunch), Wissen (marker), Hinweis (sensor), Pause (session), Flimmer (shift), Formung (strain), Ernte (vittle), Drohne (remote), Memopix (inkrill).
+
+## Style decisions for the reviewer
+
+- The app addresses the user with informal **du**; campaign/achievement texts use **ihr**, matching how the official material addresses the group. `campaign.subtitle` ("Verfolge eure Reise durch das Tal.") deliberately mixes both in one sentence.
+- "Die Konkordanten Zikkurats" is capitalized; the LoA guide writes "Die konkordanten Zikkurats" (lowercase adjective).
+
 ## Known gaps outside `de.json`
 
 - Card-list rows show trait lines from card data (English) — card data localization is stage 2.
