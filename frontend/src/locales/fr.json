@@ -1,6 +1,17 @@
 {
   "translation": {
     "about": {
+      "description": "<p><strong>earthborne.build</strong> is a fan-made deck builder for <eb>Earthborne Rangers</eb> by Earthborne Games. It is based on <arkham_build_url>arkham.build</arkham_build_url>, created by <felix_url>Felix Spöttel</felix_url>. This app is not produced, endorsed, or supported by, or affiliated with Earthborne Games.</p><p>The source code of this project is available on <github_url>GitHub</github_url>. Feedback and bug reports are welcome via <github_issues_url>GitHub issues</github_issues_url>.</p><p>All artwork and illustrations are the intellectual property of their respective creators.</p>",
+      "image_credits": {
+        "404": "404 illustration",
+        "404_credit": "<artist_url>Wayne O Connor</artist_url>",
+        "card_icons": "Card icons",
+        "earthborne_games": "Earthborne Games",
+        "logo": "Logo design",
+        "other": "Other icons",
+        "other_credit": "lucide.dev",
+        "title": "Image / Icon credits"
+      },
       "title": "À propos"
     },
     "app": {
@@ -18,10 +29,291 @@
       "eligible": "Éligible pour {{name}}"
     },
     "browse": {
+      "tabs": {
+        "aspect": "Aspects",
+        "challenge": "Challenges",
+        "location": "Locations",
+        "mission": "Missions",
+        "path": "Path",
+        "ranger": "Ranger",
+        "role": "Roles",
+        "weather": "Weather"
+      },
       "title": "Parcourir les cartes"
+    },
+    "campaign": {
+      "actions": {
+        "delete": "Delete",
+        "delete_confirm": "Delete this campaign? This cannot be undone.",
+        "delete_entry_confirm": "Delete this entry?",
+        "duplicate": "Duplicate",
+        "open": "Open"
+      },
+      "back": "Back to campaigns",
+      "calendar": {
+        "add": "Add guide entry",
+        "guides": "Guide entries",
+        "guides_placeholder": "Entry numbers, comma separated",
+        "none": "No calendar entries yet.",
+        "recommended": "Recommended: day {{day}}",
+        "record": "Record guide entry"
+      },
+      "create": {
+        "cycle": "Campaign",
+        "default_name": "New Campaign",
+        "expansions": "Valley expansions",
+        "expansions_help": "Optional valley campaigns to fold into Lure of the Valley.",
+        "name": "Campaign name",
+        "name_placeholder": "Name your campaign",
+        "setup_events": "Setup recommended expansion events?",
+        "starting_location": "Starting location",
+        "starting_location_placeholder": "Select a location...",
+        "submit": "Create campaign",
+        "title": "New campaign"
+      },
+      "cycle_label": "Campaign",
+      "data": {
+        "cycles": {
+          "core": "Lure of the Valley",
+          "loa": "Legacy of the Ancestors"
+        },
+        "expansions": {
+          "sib": "Spire in Bloom",
+          "sos": "Shadow of the Storm"
+        },
+        "locations": {
+          "ancestors_grove": "Ancestor's Grove",
+          "arbor_mists": "Arbor Mists",
+          "arboretum_of_memory": "Arboretum of Memory",
+          "archeological_outpost": "Archaeological Outpost",
+          "atrox_mountain": "Atrox Mountain",
+          "biologists_outpost": "Biological Outpost",
+          "boulder_field": "Boulder Field",
+          "bowl_of_the_sun": "Bowl of the Sun",
+          "branch": "Branch",
+          "branching_artery": "Branching Artery",
+          "brookside": "Brookside",
+          "carbonforged_maze": "Carbonforged Maze",
+          "cerulean_curtain": "Cerulean Curtain",
+          "crossroads_station": "Crossroads Station",
+          "crystal_basin": "Crystal Basin",
+          "desert_of_endless_night": "Desert of Endless Night",
+          "drenching_chamber": "Drenching Chamber",
+          "golden_shore": "Golden Shore",
+          "greenbriar_knoll": "Greenbriar Knoll",
+          "headwaters_station": "Headwaters Station",
+          "inverted_forest": "Inverted Forest",
+          "kobos_market": "Kobo's Market",
+          "lone_tree_station": "Lone Tree Station",
+          "marsh_of_rebirth": "Marsh of Rebirth",
+          "meadow": "Meadow",
+          "michaels_bog": "Michael's Bog",
+          "mound_of_the_navigator": "Mound of the Navigator",
+          "mount_nim": "Mount Nim",
+          "mycelial_conclave": "Mycelial Conclave",
+          "nimbus_facility": "Nimbus Facility",
+          "northern_outpost": "Northern Outpost",
+          "oasis_of_sunlight": "Oasis of Sunlight",
+          "orlins_vault": "Orlin's Vault",
+          "rings_of_the_moon": "Rings of the Moon",
+          "scuttler_network": "Scuttler Network",
+          "sentinel_peak": "Sentinel Peak",
+          "severed_artery": "Severed Artery",
+          "silent_dormitories": "Silent Dormitories",
+          "silverfin_docks": "Silverfin Docks",
+          "spire": "Spire",
+          "spire_crossing": "Spire Crossing",
+          "stoneweaver_bridge": "Stoneweaver Bridge",
+          "sunken_outpost": "Sunken Outpost",
+          "talpids_squeeze": "Talpid's Squeeze",
+          "terminal_artery": "Terminal Artery",
+          "terra_lodge": "Terra Lodge",
+          "terravore": "Terravore",
+          "the_alluvial_ruins": "The Alluvial Ruins",
+          "the_cage": "The Cage",
+          "the_chimney": "The Chimney",
+          "the_cistern": "The Cistern",
+          "the_concordant_ziggurats": "The Concordant Ziggurats",
+          "the_cypress_citadel": "The Cypress Citadel",
+          "the_fractured_wall": "The Fractured Wall",
+          "the_frowning_gate": "The Frowning Gate",
+          "the_furrow": "The Furrow",
+          "the_greenbridge": "The Greenbridge",
+          "the_high_basin": "The High Basin",
+          "the_otherwoods": "The Otherwoods",
+          "the_philosophers_garden": "The Philosopher's Garden",
+          "the_plummet": "The Plummet",
+          "the_rootway": "The Rootway",
+          "the_tumbledown": "Tumbledown",
+          "the_undergrove": "The Undergrove",
+          "the_verdant_sphere": "The Verdant Sphere",
+          "watchers_rock": "Watcher's Rock",
+          "white_sky": "White Sky"
+        },
+        "restrictions": {
+          "flooded_passage": "Flooded Passage",
+          "locked_passage": "Locked Passage",
+          "overgrown_passage": "Overgrown Passage"
+        },
+        "terrain": {
+          "ancient_ruins": "Ancient Ruins",
+          "cave_system": "Cave System",
+          "deep_roots": "Deep Roots",
+          "flooded_ruins": "Flooded Ruins",
+          "fungal_forest": "Fungal Forest",
+          "grassland": "Grassland",
+          "lakeshore": "Lakeshore",
+          "mountain_pass": "Mountain Pass",
+          "nimbus": "Nimbus",
+          "old_growth": "Old-growth",
+          "ravine": "Ravine",
+          "river": "River",
+          "swamp": "Swamp",
+          "thoroughfare": "Thoroughfare",
+          "woods": "Woods"
+        },
+        "weather": {
+          "a_perfect_day": "A Perfect Day",
+          "downpour": "Downpour",
+          "enveloping_silence": "Enveloping Silence",
+          "glitterain": "Glitterain",
+          "howling_wind": "Howling Winds",
+          "shimmering_runoff": "Shimmering Runoff"
+        }
+      },
+      "day_label": "Day {{day}}",
+      "empty": "You haven't started any campaigns yet.",
+      "end_day": {
+        "confirm": "End the day",
+        "guidance": "Use this if a ranger is too fatigued or injured, or when instructed by the guide or a mission. To camp while travelling, use Travel instead.",
+        "summary": "This will end day {{day}}.",
+        "title": "End the day"
+      },
+      "events": {
+        "add": "Add event",
+        "none": "No events recorded yet.",
+        "placeholder": "Describe the event"
+      },
+      "journey": {
+        "camped": "Camped overnight",
+        "current_location": "Current location",
+        "day": "Day {{day}}",
+        "end_day": "End day",
+        "history": "Journey log",
+        "history_empty": "No travel recorded yet.",
+        "no_location": "Not yet on the map",
+        "no_travel": "No travel",
+        "terrain": "Path terrain",
+        "terrain_none": "Direct (no terrain)",
+        "travel": "Travel",
+        "travel_to": "Travel to",
+        "undo": "Undo last travel",
+        "weather": "Weather"
+      },
+      "missions": {
+        "add": "Add mission",
+        "complete": "Mark completed",
+        "completed": "Completed",
+        "custom": "Custom mission",
+        "day": "Day",
+        "delete_confirm": "Delete this mission? Its progress will be lost.",
+        "edit": "Edit mission",
+        "hide_completed": "Hide completed",
+        "name": "Mission",
+        "name_placeholder": "Mission name",
+        "none": "No missions tracked yet.",
+        "none_visible": "No active missions.",
+        "progress": "Progress",
+        "reopen": "Mark not completed",
+        "save": "Save mission",
+        "select_placeholder": "Select a mission...",
+        "subject": "Subject",
+        "subject_placeholder": "Subject for missions like Helping Hand or Lure"
+      },
+      "new": "New campaign",
+      "no_results": "No campaigns match your search.",
+      "notes": {
+        "add": "Add note",
+        "none": "No notes yet.",
+        "placeholder": "Write a note"
+      },
+      "party": {
+        "add": "Add ranger",
+        "missing_deck": "Deleted deck",
+        "none": "No decks linked yet.",
+        "picker_empty": "No decks available to link.",
+        "picker_none": "You have no decks yet.",
+        "picker_search": "Search decks...",
+        "picker_title": "Add a ranger",
+        "title": "Rangers",
+        "unlink": "Unlink"
+      },
+      "removed": {
+        "card": "Card",
+        "destination_placeholder": "Destination set, e.g. the Valley",
+        "fate_move": "Move to",
+        "fate_remove": "Remove from game",
+        "moved_to": "Moved to {{destination}}",
+        "none": "No cards removed or moved yet.",
+        "or": "or",
+        "removed": "Removed",
+        "select_placeholder": "Select a card..."
+      },
+      "rewards": {
+        "available": "All rewards",
+        "help": "Rewards unlocked here become available to every linked deck.",
+        "in_pool": "Unlocked rewards",
+        "none": "No rewards unlocked yet.",
+        "remove": "Remove",
+        "search_placeholder": "Search reward cards...",
+        "unlock": "Unlock"
+      },
+      "search_placeholder": "Search campaigns...",
+      "settings": {
+        "delete": "Delete campaign",
+        "expansions": "Valley expansions",
+        "extend_calendar": "Extend calendar (days 31+)",
+        "name": "Campaign name"
+      },
+      "subtitle": "Track your journey through the valley.",
+      "tabs": {
+        "calendar": "Calendar",
+        "events": "Notable Events",
+        "journey": "Journey",
+        "missions": "Missions",
+        "notes": "Notes",
+        "party": "Party",
+        "removed": "Removed cards",
+        "rewards": "Rewards",
+        "settings": "Settings"
+      },
+      "title": "Campaigns",
+      "travel": {
+        "camp": "End the day",
+        "camp_in_place_note": "No destination selected: the day ends at the current location.",
+        "camp_note": "Ending the day lets earned rewards be swapped into decks (on the deck page).",
+        "connecting_location": "Connecting location",
+        "departing": "Departing {{location}}",
+        "select_location": "Select a location...",
+        "show_all": "Show all locations",
+        "terrain": "Path terrain",
+        "terrain_none": "Direct (no terrain)",
+        "travel": "Travel",
+        "travel_camp": "Travel & end day"
+      }
+    },
+    "card": {
+      "campaign_guide_entry_link": "Open campaign guide entry {{entry}}",
+      "location_back": {
+        "arrival_setup": "Arrival Setup",
+        "guide_entry": "{{entry}}",
+        "path_deck_assembly": "Path Deck Assembly",
+        "title": "{{name}} (back)"
+      }
     },
     "card_modal": {
       "actions": {
+        "complete_task": "Complete task",
         "open_card_page": "Page de la carte",
         "reviews": "Commentaires"
       }
@@ -31,11 +323,13 @@
         "faq": "Voir FAQ",
         "open_on_rangersdb": "Ouvrir sur RangersDB",
         "reviews": "Voir les commentaires",
+        "show_original_image": "Show original card image",
         "usable_by": "Cartes utilisables par : {{prefix}}{{name}}",
         "usable_by_interpolated": "Cartes utilisables par : <tooltip>{{name}}</tooltip>",
         "view_backside": "Voir le verso",
         "who_can_take": "Qui peut prendre cette carte ?"
       },
+      "errata_notice": "Errata ({{date}})",
       "faq": {
         "empty": "Aucune entrée FAQ trouvée.",
         "error": "Echec de chargement des entrées FAQ.",
@@ -46,6 +340,7 @@
       "section_actions": "Actions",
       "section_deckbuilding": "Construction de deck",
       "section_faq": "FAQ",
+      "section_printings": "Printings",
       "thumbnail": "Miniature de {{code}}"
     },
     "choose_investigator": {
@@ -60,105 +355,55 @@
       "tooltip_count_player": "Nombre total de cartes Joueur dans {{type}}"
     },
     "common": {
-      "actions": {
-        "draw": "Piocher",
-        "engage": "Engager",
-        "evade": "Échapper",
-        "fight": "Combattre",
-        "investigate": "Enquêter",
-        "move": "Se déplacer",
-        "parley": "Discuter",
-        "resign": "Abandonner"
-      },
+      "any": "Any",
       "back": "Retour",
       "cancel": "Annuler",
+      "card_back": "{{name}} - Back",
       "card_one": "carte",
       "card_other": "cartes",
+      "category": {
+        "background": "Background",
+        "malady": "Malady",
+        "personality": "Personality",
+        "reward": "Reward",
+        "specialty": "Specialty"
+      },
       "clear": "Effacer",
-      "clue_one": "Indice",
-      "clue_other": "Indices",
       "cost": {
         "none": "Aucun coût",
         "value": "Coût {{cost}}",
         "x": "Coût X"
       },
-      "customizable": "Personnalisable",
-      "customizations": "Personnalisations",
       "cycle_one": "cycle",
       "cycle_other": "cycles",
-      "deck_options": {
-        "Atleast constraint violated.": "La contrainte « Au moins » est violée.",
-        "Blessed": "Béni",
-        "Blessed and Cursed": "Béni et Maudit",
-        "Class Choice": "Choix de classe",
-        "Cursed": "Maudit",
-        "Deck Size": "Taille du deck",
-        "Deck must have at least 10 skill cards.": "Le deck doit comporter au moins 10 cartes Compétence.",
-        "Fortune": "Chance",
-        "Gambit": "Stratagème",
-        "Improvised": "Improvisé",
-        "No permanents except story and signature permanents": "Aucun permanent, sauf les permanents Histoire et Signature",
-        "Secondary Class": "Classe secondaire",
-        "Too many off-class cards for Versatile.": "Trop de cartes hors-classe pour Versatile.",
-        "Too many off-class cards.": "Trop de cartes hors-classe.",
-        "Trait Choice": "Choix de trait",
-        "You cannot have assets that take up an ally slot.": "Vous ne pouvez pas inclure de soutiens occupant un emplacement Allié.",
-        "You cannot have more than 15 level 0-1 Guardian and/or Survivor cards": "Vous ne pouvez pas inclure plus de 15 cartes Gardien et/ou Survivant de niveau 0-1.",
-        "You cannot have more than 15 level 0-1 Seeker and/or Mystic cards": "Vous ne pouvez pas inclure plus de 15 cartes Chercheur et/ou Mystique de niveau 0-1.",
-        "You cannot have more than 5 Guardian and/or Mystic cards": "Vous ne pouvez pas inclure plus de 5 cartes Gardien et/ou Mystique.",
-        "You cannot have more than 5 Mystic cards.": "Vous ne pouvez pas inclure plus de 5 cartes Mystique.",
-        "You cannot have more than 5 Rogue cards.": "Vous ne pouvez pas inclure plus de 5 cartes Truand.",
-        "You cannot have more than 5 Seeker and/or Survivor cards": "Vous ne pouvez pas inclure plus de 5 cartes Chercheur et/ou Survivant.",
-        "You cannot have more than 5 Survivor cards.": "Vous ne pouvez pas inclure plus de 5 cartes Survivant.",
-        "You cannot have more than 5 cards that are not Guardian or Neutral": "Vous ne pouvez pas inclure plus de 5 cartes qui ne soient pas Gardien ou Neutre.",
-        "You cannot have more than 5 cards that are not Mystic or Neutral": "Vous ne pouvez pas inclure plus de 5 cartes qui ne soient pas Mystique ou Neutre.",
-        "You cannot have more than 5 cards that are not Rogue or Neutral": "Vous ne pouvez pas inclure plus de 5 cartes qui ne soient pas Truand ou Neutre.",
-        "You cannot have more than 5 cards that are not Seeker or Neutral": "Vous ne pouvez pas inclure plus de 5 cartes qui ne soient pas Chercheur ou Neutre.",
-        "You cannot have more than 5 cards that are not Survivor or Neutral": "Vous ne pouvez pas inclure plus de 5 cartes qui ne soient pas Survivant ou Neutre.",
-        "You cannot have more than 5 level 0 Guardian cards": "Vous ne pouvez pas inclure plus de 5 cartes Gardien de niveau 0.",
-        "You cannot have more than 5 level 0 Mystic cards": "Vous ne pouvez pas inclure plus de 5 cartes Mystique de niveau 0.",
-        "You cannot have more than 5 level 0 Rogue cards": "Vous ne pouvez pas inclure plus de 5 cartes Truand de niveau 0.",
-        "You cannot have more than 5 level 0 Seeker cards": "Vous ne pouvez pas inclure plus de 5 cartes Chercheur de niveau 0.",
-        "You cannot have more than 5 level 0 Survivor cards": "Vous ne pouvez pas inclure plus de 5 cartes Survivant de niveau 0.",
-        "You cannot have more than one Covenant in your deck.": "Vous ne pouvez pas inclure plus d’un Traité dans votre deck.",
-        "You must have at least 7 cards from 3 different factions": "Vous devez inclure au moins 7 cartes provenant de 3 factions différentes.",
-        "You must have at least 7 cards from each class": "Vous devez inclure au moins 7 cartes de chaque classe."
-      },
+      "date": "Date",
       "decks": {
-        "extraSlots": "Deck supplémentaire",
-        "extraSlots_short": "Supplémentaire",
         "slots": "Deck"
       },
-      "doom": "Fatalité",
-      "encounter_cards": "Cartes de campagne",
-      "encounter_cards_short": "Campagne",
-      "exceptional": "Exceptionnel",
-      "exile": "Bannir",
-      "exiled": "Bannie",
-      "exiled_cards": "Cartes bannies",
+      "expert": "Expert",
       "factions": {
-        "guardian": "Gardien",
+        "awa": "AWA",
+        "fit": "FIT",
+        "foc": "FOC",
         "multiclass": "Multi-classe",
-        "mystic": "Mystique",
-        "mythos": "Mythe",
-        "neutral": "Neutre",
-        "rogue": "Truand",
-        "seeker": "Chercheur",
-        "survivor": "Survivant"
+        "spi": "SPI"
       },
-      "fast": "Rapide",
-      "icon_one": "icône de compétence",
-      "icon_other": "icônes de compétence",
-      "level": {
-        "base": "Niveau 0 / Nul",
-        "none": "Aucun niveau",
-        "upgrades": "Améliorations",
-        "value": "Niveau {{level}}"
+      "keywords": {
+        "ambush": "Ambush",
+        "conduit": "Conduit",
+        "disconnected": "Disconnected",
+        "fatiguing": "Fatiguing",
+        "friendly": "Friendly",
+        "manifestation": "Manifestation",
+        "obstacle": "Obstacle",
+        "persistent": "Persistent",
+        "setup": "Setup"
       },
       "more_actions": "Plus d’actions",
+      "next": "Next",
       "no_entries": "Aucune entrée",
+      "non_collection_cards": "{{count}} non-collection cards",
       "none": "Aucun",
-      "nonexceptional": "Non-exceptionnel",
       "ok": "OK",
       "pack_one": "paquet",
       "pack_other": "paquets",
@@ -166,503 +411,252 @@
         "encounter": "Extension de campagne",
         "player": "Extension d’investigateur"
       },
-      "parallel": "Parallèle",
-      "permanent": "Permanent",
-      "player_cards": "Cartes Joueur",
-      "player_cards_short": "Joueur",
+      "presence": "Presence",
       "relations": {
-        "advanced": "Signatures avancées",
-        "base": "Investigateur de base",
-        "bonded": "Cartes liées",
-        "bound": "Cartes liées",
-        "extra": "Cartes spéciales",
-        "level": "Autres niveaux",
-        "otherSignatures": "Autres signatures",
-        "otherVersions": "Autres versions",
-        "parallel": "Investigateur parallèle",
-        "parallelCards": "Cartes parallèles",
-        "replacement": "Remplacements",
-        "requiredCards": "Signatures",
-        "restrictedTo": "Restreint à",
-        "specialist": "Spécialiste",
-        "specialist_investigators": "Investigateurs spécialistes"
+        "otherVersions": "Autres versions"
       },
       "reset": "Réinitialiser",
-      "seal": "Sceller",
-      "shroud": "Valeur occulte",
+      "select": "Select",
+      "set": {
+        "artificer": "Artificer",
+        "artisan": "Artisan",
+        "branch": "Branch",
+        "conciliator": "Conciliator",
+        "explorer": "Explorer",
+        "forager": "Forager",
+        "fractured_wall": "Fractured Wall",
+        "general": "General",
+        "grassland": "Grassland",
+        "lakeshore": "Lakeshore",
+        "lone_tree_station": "Lone Tree Station",
+        "malady": "Malady",
+        "marsh_of_rebirth": "Marsh of Rebirth",
+        "meadow": "Meadow",
+        "mountain_pass": "Mountain Pass",
+        "northern_outpost": "Northern Outpost",
+        "old_growth": "Old-Growth",
+        "personality": "Personality",
+        "ravine": "Ravine",
+        "reward": "Reward",
+        "river": "River",
+        "shaper": "Shaper",
+        "shepherd": "Shepherd",
+        "spire": "Spire",
+        "spirit_speaker": "Spirit Speaker",
+        "swamp": "Swamp",
+        "talespinner": "Talespinner",
+        "the_valley": "The Valley",
+        "traveler": "Traveler",
+        "tumbledown": "Tumbledown",
+        "valley": "Valley",
+        "white_sky": "White Sky",
+        "woods": "Woods"
+      },
+      "set_as_default": "Set as default",
       "skill": {
-        "agility": "Agilité",
-        "combat": "Combat",
-        "intellect": "Intelligence",
-        "title": "Compétence",
-        "wild": "libre",
-        "willpower": "Volonté"
+        "conflict": "Conflict",
+        "connection": "Connection",
+        "exploration": "Exploration",
+        "reason": "Reason",
+        "title": "Compétence"
       },
-      "slot": {
-        "accessory": "Accessoire",
-        "ally": "Allié",
-        "arcane": "Arcane",
-        "arcane x2": "Arcane x2",
-        "body": "Corps",
-        "hand": "Main",
-        "hand x2": "Main x2",
-        "none": "Pas d’emplacement",
-        "tarot": "Tarot"
-      },
-      "specialist": "Spécialiste",
-      "subtype": {
-        "basicweakness": "Faiblesse de base",
-        "none": "Pas de sous-type",
-        "weakness": "Faiblesse"
-      },
-      "symbols": {
-        "action": "Déclenchement d'Action",
-        "agility": "Agilité",
-        "auto_fail": "Échec Automatique",
-        "bless": "Béni",
-        "combat": "Lutte",
-        "cultist": "Cultiste",
-        "curse": "Maudit",
-        "elder_sign": "Signe des Anciens",
-        "elder_thing": "Chose Très Ancienne",
-        "free": "Déclenchement Gratuit",
-        "frost": "Gel",
-        "guardian": "Gardien",
-        "intellect": "Intelligence",
-        "mystic": "Mystique",
-        "per_ranger": "Par investigateur",
-        "reaction": "Déclenchement en Réaction",
-        "rogue": "Truand",
-        "seeker": "Chercheur",
-        "skull": "Crâne",
-        "survivor": "Survivant",
-        "tablet": "Tablette",
-        "wild": "Libre",
-        "willpower": "Volonté"
-      },
+      "sort_asc": "Sort ascending",
+      "sort_desc": "Sort descending",
+      "tags": "Tags",
       "total": "total",
       "trait_one": "Trait",
       "trait_other": "Traits",
       "traits": {
-        "???": "???",
-        "Abandoned": "Abandonné",
-        "Abomination": "Abomination",
-        "Abyss": "Abîme",
-        "Act 1": "Acte 1",
-        "Act 2": "Acte 2",
-        "Agency": "Agence",
-        "Alexandria": "Alexandrie",
-        "Allied": "Associé",
-        "Ally": "Allié",
-        "Altered": "Altéré",
-        "Ancient": "Antique",
-        "Ancient One": "Grand Ancien",
-        "Arkham": "Arkham",
-        "Arkham Asylum": "Asile d'Arkham",
-        "Armor": "Armure",
-        "Artist": "Artiste",
-        "Assistant": "Assistant",
-        "Attack": "Attaque",
-        "Augury": "Augure",
-        "Avatar": "Avatar",
-        "Basement": "Sous-sol",
-        "Bayou": "Bayou",
-        "Bazaar": "Bazar",
-        "Believer": "Croyant",
-        "Blessed": "Béni",
-        "Blight": "Décrépitude",
-        "Blunder": "Bévue",
-        "Boat": "Bateau",
-        "Bog": "Marais",
-        "Bold": "Audacieux",
-        "Boon": "Avantage",
-        "Bridge": "Pont",
-        "Broken": "Interrompu",
-        "Brotherhood": "Fraternité",
-        "Buenos Aires": "Buenos Aires",
-        "Byakhee": "Byakhee",
-        "Bystander": "Passant",
-        "Cairo": "Le Caire",
-        "Campsite": "Campement",
-        "Carnevale": "Carnaval",
-        "Cart": "Wagonnet",
-        "Casino": "Casino",
-        "Cave": "Grotte",
-        "Central": "Central",
-        "Charm": "Charme",
-        "Chosen": "Élu",
-        "Circle": "Cercle",
-        "City": "Ville",
-        "Civic": "Municipal",
-        "Clairvoyant": "Clairvoyant",
+        "Aid": "Aid",
+        "Book": "Book",
+        "Book / Tech": "Book / Tech",
         "Clothing": "Vêtement",
-        "Clover Club": "Club du Trèfle",
-        "Coastal": "Côtier",
-        "Colour": "Couleur",
-        "Composure": "Aplomb",
-        "Condition": "Condition",
-        "Connection": "Relation",
-        "Conspirator": "Conspirateur",
-        "Construct": "Construction",
-        "Corruption": "Corruption",
-        "Coterie": "Coterie",
-        "Covenant": "Traité",
-        "Creature": "Créature",
-        "Crew": "Équipe",
-        "Crime Scene": "Scène de Crime",
-        "Criminal": "Criminel",
-        "Cultist": "Cultiste",
-        "Curse": "Malédiction",
-        "Cursed": "Maudit",
-        "Dark": "Sombre",
-        "Dark Young": "Sombre Rejeton",
-        "Deep One": "Profond",
-        "Depths": "Profondeurs",
-        "Desert": "Désert",
-        "Desperate": "Désespéré",
-        "Detective": "Détective",
-        "Developed": "Développé",
-        "Dhole": "Dhole",
-        "Dilemma": "Dilemme",
-        "Distortion": "Distortion",
-        "Dormant": "En Sommeil",
-        "Double": "Double",
-        "Dreamer": "Rêveur",
-        "Dreamlands": "Contrées du Rêve",
-        "Drifter": "Vagabond",
-        "Dunwich": "Dunwich",
-        "Eidolon": "Eidolon",
-        "Elder Thing": "Chose Très Ancienne",
-        "Eldritch": "Surnaturel",
-        "Elite": "Élite",
-        "Emissary": "Émissaire",
-        "Endtimes": "Fin des Temps",
-        "Entrepreneur": "Entrepreneur",
-        "Evidence": "Preuve",
-        "Exhibit": "Exposition",
-        "Expedition": "Expédition",
-        "Expert": "Expert",
-        "Extradimensional": "Extradimensionnel",
-        "Extraterrestrial": "Extraterrestre",
-        "Eztli": "Eztli",
-        "Falcon Point": "Pointe du Faucon",
-        "Familiar": "Familier",
-        "Farm": "Ferme",
-        "Fated": "Condamné",
-        "Favor": "Faveur",
-        "Field": "Champ",
-        "Firearm": "Arme à feu",
-        "Flaw": "Défaut",
-        "Flora": "Flore",
-        "Footwear": "Paire de chaussures",
-        "Forbidden": "Interdit",
-        "Forest": "Forêt",
-        "Forgotten": "Oublié",
-        "Fortune": "Chance",
-        "Future": "Futur",
-        "Gambit": "Stratagème",
-        "Game": "Jeu",
-        "Geist": "Geist",
-        "Ghast": "Ghast",
-        "Ghoul": "Goule",
-        "Glacier": "Glacier",
-        "Government": "Gouvernement",
-        "Grant": "Subvention",
-        "Graveyard": "Cimetière",
-        "Ground Floor": "Rez-de-chaussée",
-        "Guest": "Invité",
-        "Gug": "Gug",
-        "Hall": "Hall",
-        "Hardship": "Adversité",
-        "Haunted": "Hanté",
-        "Havana": "La Havane",
-        "Hazard": "Risque",
-        "Hemlock Vale": "Hemlock Vale",
-        "Hex": "Sortilège",
-        "Hideout": "Cachette",
-        "Historical Society": "Société des Historiens",
-        "Humanoid": "Humanoïde",
-        "Hunter": "Chasseur",
-        "Hybrid": "Hybride",
-        "Illicit": "Illicite",
-        "Improvised": "Improvisé",
-        "Inconspicuous": "Discret",
-        "Injury": "Blessure",
+        "Clothing / Aid": "Clothing / Aid",
+        "Clothing / Tech": "Clothing / Tech",
+        "Companion / Avian": "Companion / Avian",
+        "Companion / Mammal": "Companion / Mammal",
+        "Companion / Mammal / Expert": "Companion / Mammal / Expert",
+        "Conduit / Expert": "Conduit / Expert",
+        "Experience": "Experience",
+        "Experience / Aid": "Experience / Aid",
+        "Experience / Expert": "Experience / Expert",
+        "Experience / Nature": "Experience / Nature",
+        "Experience / Weapon": "Experience / Weapon",
+        "Food": "Food",
+        "Food / Aid": "Food / Aid",
         "Innate": "Inné",
-        "Innocent": "Innocent",
-        "Innsmouth": "Innsmouth",
-        "Insect": "Insecte",
-        "Insight": "Perspicacité",
-        "Instrument": "Instrument",
-        "Island": "Île",
-        "Istanbul": "Istanbul",
-        "Item": "Objet",
-        "Job": "Boulot",
-        "Jungle": "Jungle",
-        "Kadath": "Kadath",
-        "Key": "Clé",
-        "Kingsport": "Kingsport",
-        "Kuala Lumpur": "Kuala Lumpur",
-        "Lair": "Tanière",
-        "Lantern Club": "Club de la Lanterne",
-        "Lead": "Piste",
-        "Leader": "Leader",
-        "Leng": "Leng",
-        "Lit": "Allumé",
-        "Locus Site": "Site d'un Locus",
-        "Lodge": "Loge",
-        "London": "Londres",
-        "Machination": "Machination",
-        "Madness": "Folie",
-        "Mainland": "Terre Ferme",
-        "Manifold": "Réplique",
-        "Manor": "Manoir",
-        "Marrakesh": "Marrakech",
-        "Mask": "Masque",
-        "Medic": "Médecin",
-        "Melee": "Corps-à-corps",
-        "Mexico City": "Mexico",
-        "Mi-Go": "Mi-Go",
-        "Midtown": "Centre-Ville",
-        "Mirage": "Mirage",
-        "Misfortune": "Malchance",
-        "Miskatonic": "Miskatonic",
-        "Mnar": "Mnar",
-        "Monster": "Monstre",
-        "Montréal": "Montréal",
-        "Mountain": "Montagne",
-        "Mountains": "Montagnes",
-        "Mutated": "Muté",
-        "Mystery": "Mystère",
-        "New Orleans": "La Nouvelle-Orléans",
-        "New York City": "New York",
-        "Nightgaunt": "Maigre Bête de la Nuit",
-        "Obstacle": "Obstacle",
-        "Occult": "Occulte",
-        "Ocean": "Océan",
-        "Omen": "Présage",
-        "Ooth-Nargai": "Ooth-Nargai",
-        "Ooze": "Mucus",
-        "Oozified": "Muqueux",
-        "Oriab": "Oriab",
-        "Otherworld": "Autre Monde",
-        "Outsider": "Ceux d'Ailleurs",
-        "Pact": "Pacte",
-        "Paradox": "Paradoxe",
-        "Paris": "Paris",
-        "Part 1": "Partie 1",
-        "Passageway": "Passage",
-        "Past": "Passé",
-        "Patron": "Mécène",
-        "Performer": "Interprète",
-        "Plot": "Complot",
-        "Pnakotus": "Pnakotus",
-        "Poison": "Poison",
-        "Police": "Police",
-        "Port": "Port",
-        "Portal": "Portail",
-        "Possessed": "Possédé",
-        "Power": "Pouvoir",
-        "Practiced": "Entraîné",
-        "Present": "Présent",
-        "Present-Day": "Contemporain",
-        "Prison": "Prison",
-        "Private": "Privé",
-        "Providence": "Providence",
-        "Public": "Public",
-        "Rail": "Voie Ferrée",
-        "Ranged": "À distance",
-        "Relic": "Relique",
-        "Reporter": "Reporter",
-        "Research": "Recherche",
-        "Resident": "Habitant",
-        "Resolute": "Déterminé",
-        "Restricted": "Restreint",
-        "Return": "Renouveau",
-        "Risen": "Ressuscité",
-        "Ritual": "Rituel",
-        "Ritual Site": "Site du Rituel",
-        "Rival": "Rival",
-        "River": "Fleuve",
-        "Riverside": "Berges",
-        "Road": "Route",
-        "Role": "Rôle",
-        "Room": "Pièce",
-        "Rot": "Pourriture",
-        "Ruins": "Ruines",
-        "Salem": "Salem",
-        "Sanctum": "Sanctuaire",
-        "Scheme": "Manigance",
-        "Scholar": "Érudit",
-        "Science": "Science",
-        "Scientist": "Scientifique",
-        "Scion": "Progéniture",
-        "Script": "Inscription",
-        "Second Floor": "Premier Étage",
-        "Sentinel Hill": "Colline de la Sentinelle",
-        "Serpent": "Serpent",
-        "Service": "Service",
-        "Servitor": "Serviteur",
-        "Shantak": "Shantak",
-        "Shattered": "Dévasté",
-        "Ship": "Navire",
-        "Shoggoth": "Shoggoth",
-        "Silver Twilight": "Crépuscule d'Argent",
-        "Skai": "Skai",
-        "Socialite": "Mondain",
-        "Song": "Chant",
-        "Sorcerer": "Sorcier",
-        "Spectral": "Spectral",
-        "Spell": "Sort",
-        "Spider": "Araignée",
-        "Spirit": "Esprit",
-        "St Mary's": "St. Mary",
-        "Stable": "Stable",
-        "Staff": "Employé",
-        "Station": "Gare",
-        "Steps": "Marches",
-        "Summon": "Invocation",
-        "Sunken": "Englouti",
-        "Supply": "Ravitaillement",
-        "Surface": "Surface",
-        "Suspect": "Suspect",
-        "Syndicate": "Syndicat",
-        "Synergy": "Synergie",
-        "Tactic": "Tactique",
-        "Talent": "Talent",
-        "Tarot": "Tarot",
-        "Task": "Tâche",
-        "Temple": "Temple",
-        "Tenochtitlán": "Tenochtitlán",
-        "Tentacle": "Tentacule",
-        "Terror": "Terreur",
-        "Third Floor": "Deuxième Étage",
-        "Tindalos": "Tindalos",
-        "Tome": "Livre",
+        "Malady": "Malady",
+        "Manifestation": "Manifestation",
+        "Manifestation / Nature": "Manifestation / Nature",
+        "Manifestation / Weapon": "Manifestation / Weapon",
+        "Mod": "Mod",
+        "Mod / Expert": "Mod / Expert",
+        "Mod / Tech": "Mod / Tech",
+        "Nature": "Nature",
+        "Otherworldly": "Otherworldly",
+        "Skill": "Skill",
+        "Skill / Aid": "Skill / Aid",
+        "Skill / Expert": "Skill / Expert",
+        "Skill / Weapon": "Skill / Weapon",
+        "Tech": "Tech",
+        "Tech / Aid": "Tech / Aid",
+        "Tech / Estian": "Tech / Estian",
+        "Tech / Expert": "Tech / Expert",
+        "Tech / Tool": "Tech / Tool",
+        "Tech / Weapon": "Tech / Weapon",
         "Tool": "Outil",
-        "Tower": "Tour",
-        "Town": "Ville",
-        "Train": "Train",
-        "Trap": "Piège",
-        "Trick": "Ruse",
-        "Unbroken": "Ininterrompu",
-        "Uncharted": "Inexploré",
-        "Unhallowed": "Non Consacré",
-        "Unlit": "Éteint",
-        "Unpracticed": "Inexpérimenté",
-        "Unstable": "Instable",
-        "Upgrade": "Amélioration",
-        "Vale": "Vallée",
+        "Tool / Aid": "Tool / Aid",
+        "Tool / Food": "Tool / Food",
+        "Tool / Tech": "Tool / Tech",
+        "Tool / Tech / Weapon": "Tool / Tech / Weapon",
+        "Tool / Weapon": "Tool / Weapon",
+        "Trail": "Trail",
+        "Underground": "Underground",
         "Vehicle": "Véhicule",
-        "Venice": "Venise",
-        "Veteran": "Vétéran",
-        "Void": "Néant",
-        "Warden": "Veilleur",
-        "Wastes": "Dévastations",
-        "Wayfarer": "Voyageur",
         "Weapon": "Arme",
-        "Wilderness": "Contrée Sauvage",
-        "Witch": "Ensorceleur",
-        "Witch House": "Maison de la Sorcière",
-        "Woods": "Bois",
-        "Y'ha-nthlei": "Y'ha-nthlei",
-        "Yithian": "Yithien",
-        "Yoth": "Yoth",
-        "Yuggoth": "Yuggoth",
-        "Zoog": "Zoog"
+        "Wisdom": "Wisdom"
       },
       "type": {
-        "act": "Acte",
-        "agenda": "Agenda",
-        "asset": "Soutien",
-        "enemy": "Ennemi",
-        "enemy_location": "Ennemi-Lieu",
-        "event": "Événement",
-        "key": "Clé",
+        "aspect": "Aspect",
+        "attachment": "Attachment",
+        "attribute": "Attribute",
+        "being": "Being",
+        "challenge": "Challenge",
+        "feature": "Feature",
+        "gear": "Gear",
         "location": "Lieu",
-        "scenario": "Scénario",
-        "skill": "Compétence",
-        "story": "Histoire",
-        "treachery": "Traîtrise",
+        "malady": "Malady",
+        "mission": "Mission",
+        "moment": "Moment",
         "role": "Investigateur",
         "role_one": "Investigateur",
         "role_other": "Investigateurs",
+        "stat": "Stat",
         "weather": "Météo"
       },
       "undo": "Annuler",
       "unique": "Unique",
+      "update_default_settings": "Update default settings",
       "uses": {
-        "aether": "Éther",
-        "ammo": "Munitions",
-        "bounties": "Primes",
-        "brilliance": "Luminescences",
-        "charges": "Charges",
-        "durability": "Durabilités",
-        "evidence": "Preuves",
-        "inspiration": "Inspirations",
-        "keys": "Clefs",
-        "leylines": "Lignes Ley",
-        "offerings": "Offrandes",
-        "portents": "Présages",
-        "resources": "Ressources",
-        "secrets": "Secrets",
-        "shell": "Obus",
-        "supplies": "Provisions",
-        "tickets": "Tickets",
-        "time": "Temps",
-        "tries": "Tentatives",
-        "truths": "Vérités",
-        "whistles": "Sifflets",
-        "wishes": "Souhaits"
+        "alarm": "Alarm",
+        "beat": "Beat",
+        "bite": "Bite",
+        "buffer": "Buffer",
+        "call": "Call",
+        "cell": "Cell",
+        "charge": "Charge",
+        "crack": "Crack",
+        "dart": "Dart",
+        "deed": "Deed",
+        "dollop": "Dollop",
+        "drop": "Drop",
+        "echo": "Echo",
+        "entry": "Entry",
+        "essay": "Essay",
+        "fiber": "Fiber",
+        "filter": "Filter",
+        "flash": "Flash",
+        "form": "Form",
+        "gleam": "Gleam",
+        "glint": "Glint",
+        "graph": "Graph",
+        "herb": "Herb",
+        "hum": "Hum",
+        "hunch": "Hunch",
+        "inkrill": "Inkrill",
+        "insight": "Insight",
+        "journey": "Journey",
+        "length": "Length",
+        "lesson": "Lesson",
+        "marker": "Marker",
+        "melody": "Melody",
+        "morsel": "Morsel",
+        "needle": "Needle",
+        "piton": "Piton",
+        "pocket": "Pocket",
+        "profile": "Profile",
+        "puff": "Puff",
+        "pulse": "Pulse",
+        "rake": "Rake",
+        "reading": "Reading",
+        "record": "Record",
+        "remote": "Remote",
+        "sensor": "Sensor",
+        "session": "Session",
+        "shift": "Shift",
+        "sip": "Sip",
+        "sketch": "Sketch",
+        "slice": "Slice",
+        "snare": "Snare",
+        "song": "Song",
+        "spray": "Spray",
+        "story": "Story",
+        "strain": "Strain",
+        "stride": "Stride",
+        "strum": "Strum",
+        "track": "Track",
+        "tune": "Tune",
+        "vault": "Vault",
+        "vision": "Vision",
+        "vittle": "Vittle",
+        "xp": "XP"
+      }
+    },
+    "debug": {
+      "symbols": {
+        "locations": "Lieux",
+        "path_terrain": "Terrain de chemin"
       },
-      "victory": "Victoire",
-      "xp": "XP"
+      "title": "Débogage SVG"
     },
     "deck": {
       "actions": {
+        "archive": "Archive deck",
         "copy_id": "Copier l’ID du deck",
         "create": "Créer un deck",
         "delete": "Supprimer le deck",
-        "delete_upgrade": "Supprimer l’amélioration",
         "duplicate": "Dupliquer le deck",
         "duplicate_short": "Dupliquer",
         "edit": "Modifier le deck",
         "edit_short": "Modifier",
         "export_json": "Exporter le JSON",
         "export_text": "Exporter le texte",
-        "upgrade": "Améliorer le deck",
-        "upgrade_short": "Améliorer"
+        "make_private": "Make Private",
+        "make_public": "Make Public",
+        "unarchive": "Unarchive deck"
       },
       "annotation": "Annotation",
       "annotation_tooltip": "Cette carte a une annotation",
-      "attachments": {
-        "Bewitching": "Faire du Charme",
-        "Eldritch Brand": "Marque Surnaturelle",
-        "Hunch deck": "Deck Intuition",
-        "Stick to the Plan": "S'en Tenir au Plan",
-        "Market deck": "Deck Marché"
+      "aspect": "Aspect",
+      "attachments": {},
+      "background": "Background",
+      "cards": "Deck cards",
+      "evolution": {
+        "displaced": "Displaced cards",
+        "evolved": "Evolved",
+        "evolved_description": "A deck that has left initial construction through campaign play, card changes, maladies, or unlocked rewards.",
+        "maladies": "Maladies",
+        "rewards": "Unlocked rewards",
+        "starter": "Starter",
+        "starter_description": "Freshly constructed, usually for the beginning of a campaign.",
+        "status": "Deck status"
       },
-      "customization_sheet": "Feuille de personnalisation pour {{name}}",
       "id": "ID du deck",
-      "latest_upgrade": {
-        "add_to_deck": "Ajouter au deck actuel",
-        "no_changes": "Aucun changement.",
-        "summary": "{{xpSpent}} de {{xp}} XP dépensés",
-        "title": "Dernière amélioration"
-      },
-      "limited_decks": {
-        "Secondary Class": "Classe secondaire",
-        "Versatile": "Versatile"
-      },
       "limited_slots": "Emplacements limités",
+      "name": "Deck Name",
+      "rewards": {
+        "from_campaign": "Available from campaign “{{name}}”",
+        "locked": "Locked",
+        "title": "Rewards",
+        "unlock_from_campaign": "Unlock",
+        "unlocked": "Unlocked"
+      },
+      "specialty": "Specialty",
       "stats": {
         "deck_size": "Taille du deck",
         "ignored_one": "{{count}} exemplaire ne compte pas dans la limite de deck.",
         "ignored_other": "{{count}} exemplaires ne comptent pas dans la limite de deck.",
-        "unowned": "Indisponible : {{count}} sur {{total}} cartes",
-        "xp_available_help": "XP gagné avec la dernière amélioration.",
-        "xp_required": "XP requis",
-        "xp_required_help": "Montant d’XP requis pour construire ce deck depuis le début."
+        "unowned": "Indisponible : {{count}} sur {{total}} cartes"
       },
       "tags": {
         "limited_pool": "Pool limité",
@@ -674,9 +668,6 @@
         "delete_confirm": "Voulez-vous vraiment supprimer ce deck ?",
         "delete_error": "Échec de la suppression du deck : {{error}}",
         "delete_loading": "Suppression du deck...",
-        "delete_upgrade_confirm": "Voulez-vous vraiment supprimer cette amélioration ?",
-        "delete_upgrade_error": "Échec de la suppression de l’amélioration : {{error}}",
-        "delete_upgrade_loading": "Suppression de l’amélioration...",
         "duplicate_error": "Échec de la duplication du deck : {{error}}",
         "export_error": "Échec de l’exportation du deck : {{error}}",
         "upload_error": "Échec du téléversement du deck vers {{provider}} : {{error}}",
@@ -684,15 +675,20 @@
       },
       "tools": {
         "cards": "Cartes",
+        "count": "Count",
         "factions": "Factions",
+        "factions_tooltip": "{{count}} {{faction}} {{cards}}",
         "loading": "Chargement des outils du deck...",
         "resource_cost": "Coût en ressources",
         "resource_cost_tooltip": "{{count}} {{cards}} avec un coût de {{cost}}",
         "resource_costs": "Coûts en ressources",
         "skill_icons": "Icônes de compétence",
+        "skill_icons_tooltip": "{{count}} {{skill}} {{icons}}",
         "title": "Outils de deck"
       },
+      "untitled_deck": "Untitled Deck",
       "validation": {
+        "card_not_in_limited_pool": "The following cards are not part of this deck's card pool:",
         "forbidden_cards": "Le deck contient des cartes interdites (non autorisées par l’investigateur) :",
         "invalid": "Le deck n’est pas valide.",
         "invalid_card_count": "Le deck contient un nombre invalide d’exemplaires pour les cartes suivantes :",
@@ -703,6 +699,7 @@
       }
     },
     "deck_collection": {
+      "archive": "Archive",
       "collection_empty": "Collection vide",
       "count": "{{count}} decks",
       "count_hidden": " ({{count}} masqués)",
@@ -712,6 +709,7 @@
       "delete_all_error": "Échec de la suppression des decks locaux : {{error}}",
       "delete_all_loading": "Suppression des decks locaux...",
       "import": "Importer",
+      "import_help": "Enter a public deck ID or URL to import. The deck will be <strong>copied</strong>; history will not be imported.",
       "import_json": "Importer depuis des fichiers JSON",
       "more_filters": "Plus de filtres",
       "search_placeholder": "Rechercher dans les decks...",
@@ -719,9 +717,7 @@
         "alphabetical_asc": "Alphabétique (A → Z)",
         "alphabetical_desc": "Alphabétique (Z → A)",
         "date_created": "Créés récemment",
-        "date_updated": "Mis à jour récemment",
-        "xp_asc": "Moins d’XP dépensé",
-        "xp_desc": "Plus d’XP dépensé"
+        "date_updated": "Mis à jour récemment"
       },
       "tags_filter": {
         "placeholder": "Sélectionner des tags...",
@@ -729,80 +725,144 @@
       },
       "title": "Decks"
     },
-    "debug": {
-      "symbols": {
-        "locations": "Lieux",
-        "path_terrain": "Terrain de chemin"
-      },
-      "title": "Débogage SVG"
-    },
     "deck_create": {
+      "aspect": {
+        "title": "Choose aspect"
+      },
+      "background": {
+        "title": "Choose background"
+      },
+      "background_type": {
+        "artisan": "Artisan",
+        "forager": "Forager",
+        "shepherd": "Shepherd",
+        "talespinner": "Talespinner",
+        "traveler": "Traveler"
+      },
+      "background_type_description": {
+        "artisan": "Artisans are skilled craftspeople who work with tools and support equipped gear, both their own and other Rangers'.",
+        "forager": "Foragers know the Valley's plants deeply. Their cards key off flora and can use it as a resource in ways other backgrounds cannot.",
+        "shepherd": "Shepherds tend ironwool flocks and have a natural affinity for animals. Their cards often affect beings and help pacify predators without violence.",
+        "talespinner": "Talespinners study story, song, and spoken tradition. Their cards soothe fatigue, manipulate the fatigue stack, and support Rangers with tale moments.",
+        "traveler": "Travelers are at home on the Valley's footpaths. Their cards primarily revolve around making the most of moment cards."
+      },
+      "card_disabled": {
+        "aspect_requirement": "You have {{actual}} {{aspect}}, but this card requires {{required}}.",
+        "background_limit": "You have already selected {{count}} / {{target}} background cards.",
+        "specialty_limit": "You have already selected {{count}} / {{target}} specialty cards."
+      },
       "default_name": {
-        "guardian": "Les Aventures de {{name}}",
-        "mystic": "Les Mystères de {{name}}",
-        "neutral": "{{name}} sait tout faire",
-        "rogue": "Le Coup de {{name}}",
-        "seeker": "{{name}} enquête",
-        "survivor": "{{name}} sur la route"
+        "": "{{name}}'s Deck",
+        "awa": "{{name}} Observes",
+        "fit": "{{name}} on the Trail",
+        "foc": "{{name}} Plans Ahead",
+        "spi": "{{name}}'s Calling"
       },
       "error": "Échec de la création du deck : {{error}}",
-      "help_advanced": "<p>Les cartes signature portant la mention « Avancée » sont des versions plus puissantes des cartes signature d’un investigateur (celles listées sous « Exigences de Deck »). Vous pouvez, à tout moment de la campagne (y compris à la création du deck), choisir d’inclure ces cartes aavncées <strong>à la place</strong> des cartes signature normales.</p>",
-      "help_replacements": "<p>Les cartes signature portant la mention « remplacement » peuvent remplacer les cartes signature listées sous « Exigences de Deck ». Cela remplit toujours l’exigence, et le deck demeure valide pour jouer.</p><p>Si vous optez pour ce remplacement en pleine campagne, vous ne pourrez plus ensuite repasser aux cartes signature d’origine pour cette campagne.</p><p>Vous pouvez également inclure ces cartes « Remplacement » en plus des cartes signature.</p>",
       "loading": "Création du deck...",
-      "random_basic_weakness": "Faiblesse basique aléatoire",
-      "sealed_deck": {
-        "error": "Échec de la récupération du deck scellé : {{error}}",
-        "loading": "Récupération du deck scellé..."
-      }
+      "name": {
+        "title": "Name ranger"
+      },
+      "outside_interest": {
+        "title": "Choose outside interest"
+      },
+      "personality": {
+        "instructions": "Choose one card from each aspect. Each chosen card will be added to your deck in two copies.",
+        "title": "Choose personality cards"
+      },
+      "review": {
+        "title": "Review deck"
+      },
+      "role": {
+        "title": "Choose role"
+      },
+      "search": "Search cards",
+      "specialty": {
+        "role_preview": "Your role will be chosen from:",
+        "title": "Choose specialty cards"
+      },
+      "specialty_type": {
+        "artificer": "Artificer",
+        "conciliator": "Conciliator",
+        "explorer": "Explorer",
+        "shaper": "Shaper",
+        "spirit_speaker": "Spirit Speaker"
+      },
+      "specialty_type_description": {
+        "artificer": "Artificers are inventors who work with tech and gear. Their cards help Rangers find, play, and enhance equipment.",
+        "conciliator": "Conciliators resolve conflict through presence and de-escalation. Their cards pacify beings, protect Rangers, and support aid efforts.",
+        "explorer": "Explorers push into unknown terrain. Their cards improve tests, navigate path cards, and keep Rangers moving through the Valley.",
+        "shaper": "Shapers are attuned to the Valley's ancient forces. Their cards interact with conduits, manipulate manifestations, and read the challenge ahead.",
+        "spirit_speaker": "Spirit Speakers commune with the Valley's unseen spirits. Their cards channel spiritspeak and build deep connections with the land."
+      },
+      "steps": {
+        "aspect": "Aspect",
+        "background": "Background",
+        "name": "Name",
+        "outside_interest": "Outside Interest",
+        "personality": "Personality",
+        "review": "Deck Info",
+        "role": "Role",
+        "specialty": "Specialty"
+      },
+      "title": "Create {{name}} deck"
     },
     "deck_edit": {
       "actions": {
+        "add_malady": "Add malady",
+        "add_reward": "Add reward",
+        "add_to_deck": "Add to deck",
+        "add_to_notes": "Add to notes",
         "cycle_decks": "Basculer les listes de deck",
+        "decrease": "Decrease quantity",
         "decrement_quantity": "Diminuer la quantité du deck",
-        "decrement_side_quantity": "Diminuer la quantité du deck annexe",
-        "draw_random_basic_weakness": "Tirer une faiblesse basique aléatoire",
-        "draw_random_basic_weakness_success": "<strong>{{name}}</strong> est votre faiblesse basique aléatoire.",
         "edit_annotation": "Modifier l’annotation",
+        "increase": "Increase quantity",
         "increment_quantity": "Augmenter la quantité du deck",
-        "increment_side_quantity": "Augmenter la quantité du deck annexe",
         "move_to_main_deck": "Déplacer vers le deck principal",
+        "quantity": "Quantity",
         "quick_discard": "Ignorer les modifications (rester sur la page)",
         "quick_save_deck": "Enregistrer le deck (rester sur la page)",
-        "quick_upgrade": "Améliorer {{name}}",
+        "remove": "Remove",
+        "replace": "Replace card",
+        "restore": "Restore to deck",
         "set_quantity": "Définir la quantité dans le deck",
-        "set_side_quantity": "Définir la quantité dans le deck annexe"
+        "swap": "Swap",
+        "swap_into_deck": "Swap into deck",
+        "unlock": "Unlock"
+      },
+      "available_cards": {
+        "category_filter": "Category",
+        "empty": "No cards found.",
+        "max_copies": "Already at 2 copies",
+        "title": "Available cards"
+      },
+      "campaign": {
+        "empty": "This is a starter deck. Make a deck change or add unlocked rewards to begin tracking campaign changes."
       },
       "changes_restored": "Les modifications non enregistrées ont été restaurées.",
       "config": {
         "card_pool": {
-          "campaign": "Campagne",
-          "choose_campaign": "Choisir une campagne",
-          "choose_campaign_placeholder": "Sélectionner une campagne...",
-          "cpa_help": "Le \"Campaign Play-Along\" est un événement continu hébergé sur le serveur Discord de Mythos Busters, conçu pour jouer aux campagnes d’Arkham et partager ses histoires au sein de la communauté.",
+          "choose_cycle_placeholder": "Select cycles...",
+          "collection": "Collection",
+          "collection_help": "Set your current <settings_link>collection</settings_link> as this deck's card pool. This can be useful to freeze the deck's card pool, or to share a \"build preset\" with people sharing a physical collection.",
+          "configure_environment": "Configure environment",
+          "custom": "Custom pool",
           "help": "Les investigateurs, les cartes signature et les soutiens d'histoire ne sont pas affectés par cette sélection.",
           "placeholder": "Sélectionner des paquets...",
           "section_title": "Paramètres du pool de cartes",
-          "title": "Pool de cartes limité",
-          "use_preset": "Utiliser le préréglage du Campaign Play-Along"
+          "selected_cards": "Selected cards",
+          "title": "Pool de cartes limité"
         },
         "name": "Nom du deck",
-        "sealed": {
-          "add": "Ajouter un deck scellé",
-          "help": "Téléversez un fichier de définition de deck scellé (.csv). Vous pouvez utiliser <a>ArkhamSealed</a> pour en créer un.",
-          "title": "Scellé"
-        },
-        "sides": {
-          "investigator_back": "Dos de l’investigateur",
-          "investigator_front": "Recto de l’investigateur",
-          "original_back": "Dos original",
-          "original_front": "Recto original"
-        },
         "storage_provider": {
           "local": "Privé",
+          "shared": "Shared",
           "title": "Fournisseur de stockage"
         },
         "tags": "Tags",
         "tags_help": "Saisissez des tags séparés par des espaces",
+        "title_and_tags": "Edit title & tags",
         "version": {
           "switch": "Basculer",
           "title": "Autres versions"
@@ -810,29 +870,48 @@
       },
       "create_local_copy": "Créer une copie locale",
       "create_local_copy_help": "Crée une copie locale de ce deck. Toutes les modifications en attente y seront appliquées. Les améliorations ni l’historique du deck ne seront conservés.",
-      "customizable": {
-        "skill_placeholder": "Sélectionner une compétence...",
-        "traits_placeholder_one": "Sélectionner un trait...",
-        "traits_placeholder_other": "Sélectionner des traits..."
-      },
       "discard": "Ignorer les modifications",
       "discard_confirm": "Voulez-vous vraiment ignorer vos modifications ?",
+      "displaced": {
+        "empty": "No displaced cards."
+      },
       "notes": {
+        "annotation": "Card annotation",
         "banner_url": "URL de la bannière",
         "banner_url_help": "Image de bannière pour le deck. Elle s’affichera sur la vue du deck et dans les aperçus sur les réseaux sociaux. Le ratio est de 4:1, avec une largeur idéale de 1440 px.",
         "banner_url_placeholder": "Entrez une URL",
         "description": "Notes",
         "description_help": "Accepte la syntaxe Markdown d'ArkhamDB.",
+        "description_placeholder": "Enter notes...",
         "intro": "Introduction",
-        "intro_help": "Une courte présentation du deck, affichée dans la vue du deck et dans les aperçus sur les réseaux sociaux. Accepte la syntaxe Markdown d’ArkhamDB."
+        "intro_help": "Une courte présentation du deck, affichée dans la vue du deck et dans les aperçus sur les réseaux sociaux. Accepte la syntaxe Markdown d’ArkhamDB.",
+        "toolbar": {
+          "card": "Card",
+          "card_tooltip": "Insert a card",
+          "format": "Format",
+          "formats": {
+            "header": "Header",
+            "header_with_set": "Header (with collection number)",
+            "paragraph": "Paragraph",
+            "paragraph_colored": "Paragraph (Colored)"
+          },
+          "origin": "Available cards",
+          "origins": {
+            "campaign": "Campaign cards",
+            "deck": "Cards in deck",
+            "player": "All ranger cards",
+            "usable": "Usable ranger cards"
+          },
+          "preview": "Preview",
+          "symbol": "Symbol",
+          "symbol_placeholder": "Select a symbol...",
+          "symbol_tooltip": "Insert a symbol"
+        }
       },
-      "quick_upgrade": {
-        "available_upgrades": "Améliorations disponibles",
-        "shrewd_analysis": "Utiliser Analyse Subtile",
-        "shrewd_analysis_help": "L’application ajoutera un ajustement d’XP correspondant à la réduction obtenue.",
-        "title": "Améliorer {{name}}"
+      "player_cards": {
+        "incoming": "Card to swap in",
+        "outgoing": "Card to remove"
       },
-      "read_only": "Ce deck possède une amélioration et est en lecture seule.",
       "recommendations": {
         "absolute": "Absolu",
         "absolute_help": "Compte combien de decks {{name}} utilisent chaque carte",
@@ -843,18 +922,44 @@
         "no_results": "Aucune recommandation pour cette configuration.",
         "publication_date": "Date de publication",
         "relative": "Relatif",
-        "relative_help": "Comparer la fréquence d’utilisation de chaque carte dans les decks {{name}} par rapport à d’autres investigateurs y ayant accès"
+        "relative_help": "Comparer la fréquence d’utilisation de chaque carte dans les decks {{name}} par rapport à d’autres investigateurs y ayant accès",
+        "tooltip_absolute": "{{name}} is used in {{decksPercentage}}% of {{investigator}} decks. ({{decksMatched}}/{{decksAnalyzed}})",
+        "tooltip_relative": "{{investigator}} uses {{name}} more often than {{percentile}}% of all rangers."
+      },
+      "rewards": {
+        "empty": "No rewards available.",
+        "in_deck": "In Deck",
+        "unlocked": "Unlocked"
       },
       "save": "Enregistrer le deck",
       "save_error": "Échec de l’enregistrement du deck : {{error}}",
       "save_loading": "Enregistrement du deck...",
       "save_short": "Sauvegarder",
+      "sections": {
+        "background": "Background",
+        "displaced": "Displaced Cards",
+        "maladies": "Maladies",
+        "outside_interest": "Outside Interest",
+        "personality": "Personality",
+        "player_cards": "Swap In Player Card",
+        "rewards": "Unlocked Rewards",
+        "specialty": "Specialty"
+      },
       "tab_card_list": "Liste de cartes",
       "tab_config": "Configuration",
       "tab_notes": "Notes",
       "tab_recommendations": "Recommandations",
       "tab_tools": "Outils",
+      "tabs": {
+        "campaign": "Campaign",
+        "deck": "Deck",
+        "notes": "Notes",
+        "unlock_rewards": "Unlock Rewards"
+      },
       "title": "Modifier : {{name}}",
+      "validation": {
+        "valid": "Deck is valid."
+      },
       "versions": {
         "entry_title": "Version {{version}}",
         "entry_title_current": "Version courante",
@@ -866,69 +971,77 @@
         "display_as_list": "Afficher en liste",
         "display_as_scans": "Afficher les scans",
         "import": "Importer le deck dans la collection",
-        "save_upgrade": "Enregistrer les améliorations et modifications",
-        "save_upgrade_close": "Enregistrer l’amélioration et fermer",
-        "save_upgrade_close_short": "Enregistrer et fermer",
-        "save_upgrade_short": "Améliorer",
         "upload": "Téléverser vers {{provider}}"
-      },
-      "discounts": {
-        "adaptable": "Adaptable",
-        "arcaneResearch": "Recherche Ésotérique",
-        "dejaVu": "Déjà Vu",
-        "downTheRabbitHole": "Dans le Terrier du Lapin"
       },
       "history": {
         "added": "Ajoutées",
-        "current_upgrade": "Amélioration actuelle",
-        "discounts": "Réductions",
         "initial_deck": "Deck initial",
         "no_changes": "Aucun changement",
         "removed": "Retirées",
-        "slot_changes": "Modifications de {{slot}}",
-        "upgrade": "Amélioration {{index}}",
-        "upgrade_xp": "XP disponible : {{xp}}{{adjustment}} (dépensé : {{spent}})"
+        "slot_changes": "Modifications de {{slot}}"
       },
       "import_failed": "Échec de l’importation du deck : {{error}}",
+      "latest_version": "<a>Jump to latest version</a>.",
       "list": "Liste",
       "loading": "Récupération du deck...",
       "newer_version": "Il existe une <a>version plus récente</a> de ce deck. Celui-ci est en lecture seule.",
       "scans": "Scans",
       "sharing": {
+        "api_link": "Json API",
         "create": "Créer un partage",
+        "create_failed": "Failed to create share: {{error}}",
         "create_tooltip": "Le partage crée un lien public en lecture seule vers le deck. Toute personne disposant de ce lien peut voir le deck, mais pas le modifier.<br />Vous pouvez supprimer le partage à tout moment. Supprimer un partage ne supprime pas le deck.",
         "delete": "Supprimer le partage",
+        "delete_failed": "Failed to delete share: {{error}}",
         "description": "Deck stocké localement.",
         "description_present": "Ce deck possède un lien de partage public, visible via <a>ce lien</a>.",
         "title": "Partage public",
-        "update": "Mettre à jour le partage"
+        "update": "Mettre à jour le partage",
+        "update_failed": "Failed to update share: {{error}}"
       },
+      "show_deck_list": "Show deck list",
       "tab_deck_list": "Deck",
       "tab_history": "Historique",
       "tab_notes": "Notes",
       "tab_recommendations": "Recommandations",
-      "tab_tools": "Outils",
-      "upgrade_modal": {
-        "automatic_xp_gain": "+{{count}} XP sera automatiquement ajouté à cette amélioration.",
-        "error": "Échec de l’amélioration du deck : {{error}}",
-        "great_work_label": "J’ai été remplacé par l’homoncule",
-        "great_work_status_usurped": "Le Grand Œuvre sera retiré de votre deck ainsi que chacune de vos cartes signature. Votre investigateur sera remplacé par l’homoncule.",
-        "loading": "Amélioration du deck",
-        "title": "Améliorer le deck avec de l’XP",
-        "xp_gained": "XP gagné"
+      "tab_tools": "Outils"
+    },
+    "decklists": {
+      "browse": {
+        "likes": "Likes",
+        "loading": "Loading deck guides...",
+        "no_results": "No results",
+        "results_count": "{{count}} results",
+        "title": "Deck guides"
+      },
+      "filters": {
+        "author": "Author",
+        "author_placeholder": "Enter author name...",
+        "excluded_cards": "Excluded cards",
+        "name": "Deck name",
+        "name_placeholder": "Enter name (e.g. Deck Guide)...",
+        "required_cards": "Required cards",
+        "submit": "Apply",
+        "title": "Filter criteria"
+      },
+      "sorting": {
+        "date": "Most recent",
+        "likes": "Most likes",
+        "popularity": "Most popular",
+        "user_reputation": "Highest user reputation"
       }
     },
     "draw_simulator": {
       "card_size": "Card size",
       "decrease_card_size": "Decrease card size",
-      "increase_card_size": "Increase card size",
-      "draw_tooltip": "Draw {{count}} {{cards}}.",
       "draw_count": "Draw {{count}}",
+      "draw_tooltip": "Draw {{count}} {{cards}}.",
       "drawn_cards": "Drawn cards ({{count}})",
       "empty_hand": "No cards drawn.",
       "help": "Resolve any “when you draw this card” effects manually (e.g. Lingering Injury).",
       "help_label": "Draw effect reminder",
       "in_play": "In play",
+      "increase_card_size": "Increase card size",
       "redraw": "Redraw selection",
       "redraw_tooltip": "Set selected cards aside, draw replacements, then shuffle the set-aside cards back into the deck.",
       "reset": "Réinitialiser",
@@ -942,12 +1055,65 @@
     "errors": {
       "404": "Page non trouvée.",
       "500": "L’application a tiré un échec automatique.",
-      "illustration_credit": "Art by <artist_url>Wayne O Connor</artist_url>",
       "500_help": "Vérifiez la console du navigateur pour plus de détails.",
       "500_help_2": "Veuillez ne pas essayer de résoudre ce problème en vidant vos cookies ou autres données locales (sauf si vous acceptez de perdre vos decks locaux).",
       "home": "Retour à l’accueil",
+      "illustration_credit": "Art by <artist_url>Wayne O Connor</artist_url>",
       "preview_publish": "Le deck contient des cartes non prises en charge par {{provider}} : {{names}}. Veuillez les retirer avant de le téléverser.",
       "report": "Signaler un problème"
+    },
+    "fan_made_content": {
+      "actions": {
+        "import_file": "Import from file",
+        "import_url": "Import from URL",
+        "install": "Install content",
+        "uninstall": "Uninstall",
+        "view_cards": "View cards",
+        "view_external": "Learn more"
+      },
+      "available_content": "Available content",
+      "banner_credit": "Illus. {{credit}}",
+      "content_types": "Content types",
+      "content_version": "Content version",
+      "empty": "No content installed",
+      "filter_fan_made_content": "Search content...",
+      "import_url": {
+        "label": "Content URL",
+        "placeholder": "Enter an URL...",
+        "submit": "Import"
+      },
+      "installed_content": "Installed content",
+      "messages": {
+        "available_content_loading": "Loading available content...",
+        "content_loading": "Loading content...",
+        "fetch_failed": "Failed to load content: {{error}}",
+        "no_match": "No available content matches your filter",
+        "parse_failed": "Failed to add content: {{error}}",
+        "registry_failed": "Failed to load available content from registry: {{error}}"
+      },
+      "settings": {
+        "card_lists": "Card lists",
+        "card_lists_help": "This setting controls the default value of the \"Fan-made content\" filter in card lists."
+      },
+      "short_title": "Fan-made",
+      "status": {
+        "alpha": "Alpha",
+        "beta": "Beta",
+        "complete": "Complete",
+        "draft": "Draft",
+        "final": "Final"
+      },
+      "status_installed": "Installed",
+      "status_update_available": "Update content",
+      "tags": "Tags",
+      "title": "Fan-made content",
+      "types": {
+        "campaign": "Campaign",
+        "ranger_cards": "Ranger cards",
+        "rangers": "Rangers",
+        "rework": "Rework",
+        "scenario": "Scenario"
+      }
     },
     "filters": {
       "action": {
@@ -956,8 +1122,22 @@
       },
       "all": "Toutes",
       "and": "et",
+      "approach_icons": {
+        "placeholder": "Select approach icons...",
+        "title": "Approach icons"
+      },
+      "approaches": {
+        "title": "Caractéristiques"
+      },
+      "aspect_requirement": {
+        "title": "Aspect requirement",
+        "value": "Required value"
+      },
       "asset": {
         "title": "Soutien"
+      },
+      "card_access": {
+        "title": "Accès aux cartes"
       },
       "cost": {
         "even": "Pair",
@@ -965,22 +1145,30 @@
         "odd": "Impair",
         "title": "Coût"
       },
-      "encounter_set": {
-        "placeholder": "Sélectionner des sets de rencontre...",
-        "title": "Set de rencontre"
+      "cycle": {
+        "placeholder": "Select cycles...",
+        "title": "Cycle"
+      },
+      "environment": {
+        "title": "Environment"
+      },
+      "equip": {
+        "title": "Equip"
+      },
+      "fan_made_content": {
+        "all": "Show everything",
+        "fan_made": "Fan-made content only",
+        "official": "Official content only",
+        "title": "Fan-made content"
       },
       "health": {
         "title": "Santé"
       },
-      "health_sanity_x": "Inclue de la Santé / Santé mentale « X »",
       "illustrator": {
         "placeholder": "Sélectionner des illustrateurs...",
         "title": "Illustrateur"
       },
-      "level": {
-        "no_level": "Nul",
-        "title": "Niveau"
-      },
+      "locked": "This filter is locked",
       "or": "ou",
       "ownership": {
         "owned": "Possédé",
@@ -993,27 +1181,21 @@
       },
       "properties": {
         "heals_damage": "Soigne des dégâts",
-        "heals_horror": "Soigne des horreurs",
         "succeed_by": "Réussir avec une marge de",
         "title": "Propriétés"
       },
       "reset_filter": "Réinitialiser le filtre",
-      "sanity": {
-        "title": "Santé mentale"
+      "role": {
+        "placeholder": "Sélectionner des investigateurs...",
+        "title": "Investigateur"
       },
-      "skill_boost": {
-        "title": "Bonus de compétence"
-      },
-      "skill_icons": {
-        "any": "N’importe lequels",
-        "title": "Icônes de compétence"
+      "set": {
+        "placeholder": "Select sets...",
+        "title": "Set"
       },
       "slot": {
         "placeholder": "Sélectionner des emplacements...",
         "title": "Emplacement"
-      },
-      "subtype": {
-        "title": "Sous-type"
       },
       "title": "Filtres",
       "trait": {
@@ -1027,23 +1209,11 @@
       "uses": {
         "placeholder": "Sélectionner des attributs de charges...",
         "title": "Utilisations"
-      },
-      "role": {
-        "placeholder": "Sélectionner des investigateurs...",
-        "title": "Investigateur"
-      },
-      "card_access": {
-        "help": "Si vous avez besoin de plus d’options, utilisez l’outil <a>/who</a> d’arkham-starter.",
-        "title": "Accès aux cartes"
-      },
-      "approaches": {
-        "title": "Caractéristiques"
       }
     },
     "help": {
       "about": "À propos de ce site",
       "changelog": "Journal des modifications",
-      "collection_stats": "Statistiques de collection",
       "shortcuts": {
         "group_card_list": "Liste de cartes",
         "group_card_list_search": "Liste de cartes (orienté recherche)",
@@ -1052,7 +1222,6 @@
         "group_deck_editor": "Éditeur de deck",
         "group_deck_view": "Vue de deck",
         "group_general": "Général",
-        "group_upgrade_modal": "Fenêtre d’amélioration",
         "title": "Raccourcis clavier"
       },
       "title": "Aide"
@@ -1068,7 +1237,9 @@
         "focus_search": "Activer la recherche",
         "move_down": "Déplacer vers le bas",
         "move_up": "Déplacer vers le haut",
+        "next_card": "Next card",
         "open_card_modal": "Ouvrir la fenêtre de carte pour la carte en cours",
+        "previous_card": "Previous card",
         "reset_filters": "Réinitialiser les filtres",
         "show_limited_access": "Afficher l’accès limité",
         "show_limited_access_help": "Certains investigateurs ont un accès limité et optionnel aux cartes selon le niveau, la classe, le trait, etc. Quand cela est activé, ces cartes seront affichées.",
@@ -1079,18 +1250,17 @@
       },
       "all_cards": "Toutes les cartes",
       "categories": {
-        "base_upgrades": "Niv. 0 <> Améliorations",
+        "approach": "Approach",
+        "aspect": "Aspect",
+        "category": "Category",
         "cost": "Coût",
         "cycle": "Cycle",
-        "encounter_set": "Set de rencontre",
-        "faction": "Faction",
-        "level": "Niveau",
+        "equip": "Equip",
         "name": "Nom",
         "pack": "Paquet",
+        "path_set": "Path set",
         "position": "Position",
         "set": "Set",
-        "slot": "Emplacement",
-        "subtype": "Sous-type",
         "type": "Type"
       },
       "group_by": "Grouper par",
@@ -1103,8 +1273,12 @@
         "display_as_list": "Liste",
         "display_as_list_text": "Liste avec texte",
         "display_as_scans": "Scans",
+        "display_as_scans_grouped": "Scans (grouped)",
+        "export": "Export",
         "jump_to": "Aller à…",
-        "list_settings": "Paramètres de liste"
+        "list_settings": "Paramètres de liste",
+        "sort": "Sort",
+        "sort_default": "User default"
       },
       "reset": "Réinitialiser",
       "search": {
@@ -1112,9 +1286,17 @@
         "include_flavor": "Texte d’ambiance",
         "include_game_text": "Texte de jeu",
         "include_name": "Nom",
-        "placeholder": "Rechercher des cartes..."
+        "placeholder": "Rechercher des cartes...",
+        "title": "Search"
       },
       "sort_by": "Trier par"
+    },
+    "popular_decks": {
+      "decklists_link": "Browse all deck guides",
+      "error": "Popular deck guides could not be loaded: {{error}}",
+      "no_results": "No deck guides found",
+      "title_card": "Popular deck guides containing <tooltip>{{name}}</tooltip>",
+      "title_investigator": "Popular <tooltip>{{name}}</tooltip> deck guides"
     },
     "preview_banner": {
       "actions": {
@@ -1123,6 +1305,101 @@
       },
       "description": "En activant les prévisualisations, vous verrez les cartes à venir (non encore publiées) dans le navigateur de cartes. Vous pourrez changer ce réglage à tout moment dans la page des paramètres de collection.",
       "title": "La saison des prévisualisations est arrivée !"
+    },
+    "rules": {
+      "achievements": {
+        "achieved_on": "{{date}}",
+        "date_label": "Achievement date",
+        "date_missing": "Date not set",
+        "empty": "No achievements match your search.",
+        "items": {
+          "all-out-of-options": {
+            "description": "Have only four cards remaining in the challenge deck.",
+            "title": "All Out of Options"
+          },
+          "big-tech": {
+            "description": "Discard a gear with 10 or more tokens on it using Moment of Desperation.",
+            "title": "Big Tech"
+          },
+          "electric-slide": {
+            "description": "Complete the campaign using the Electric Fog weather every day.",
+            "title": "Electric Slide"
+          },
+          "enough-already": {
+            "description": "Play the same moment 10 times in one day.",
+            "title": "Enough Already!"
+          },
+          "hard-pass": {
+            "description": "Finish the campaign without completing a single story mission.",
+            "title": "Hard Pass"
+          },
+          "howd-that-get-in-there": {
+            "description": "Add a card without the printed flora trait to Hy’s soup.",
+            "title": "How’d That Get in There?"
+          },
+          "log-flume": {
+            "description": "Travel from White Sky to Tumbledown in a single day.",
+            "title": "Log Flume"
+          },
+          "no-stone-left-unturned": {
+            "description": "Have every path card in the deck in play at the same time.",
+            "title": "No Stone Left Unturned"
+          },
+          "noodling": {
+            "description": "Catch a fish in the Black Mud.",
+            "title": "Noodling"
+          },
+          "people-person": {
+            "description": "Clear three or more humans with the same test.",
+            "title": "People Person"
+          },
+          "pro-gamer": {
+            "description": "Pet Oru 3<per_ranger/> or more times during a single round.",
+            "title": "Pro Gamer"
+          },
+          "shes-a-natural": {
+            "description": "Have Quisi cause a Cloudhive swarm to be discarded.",
+            "title": "She’s A Natural!"
+          },
+          "ship-of-theseus": {
+            "description": "Replace every card in your deck with a reward card.",
+            "title": "Ship of Theseus"
+          },
+          "the-pentaverate": {
+            "description": "Have five humans within reach of one Ranger at the same time.",
+            "title": "The Pentaverate"
+          },
+          "unlimited-power": {
+            "description": "Have 7 or more energy in a single aspect.",
+            "title": "Unlimited Power!"
+          },
+          "unplanned-reunion": {
+            "description": "Have Dace and Aell in play at the same time.",
+            "title": "Unplanned Reunion"
+          }
+        },
+        "lock": "Lock",
+        "progress": "{{completed}} / {{total}} badges earned",
+        "unlock": "Unlock",
+        "unlock_to_edit": "Unlock achievements to edit",
+        "unlocked_to_edit": "Achievements are unlocked"
+      },
+      "back_to_top": "Back to top",
+      "loading": "Loading reference...",
+      "search_placeholder": "Search reference...",
+      "sections": {
+        "achievements": "Achievements",
+        "campaign-guides": "Campaign Guides",
+        "faq": "FAQ",
+        "one-day-missions": "One-Day Missions",
+        "rules-glossary": "Rules Glossary",
+        "updates": "Updates"
+      },
+      "title": "Rules & Reference",
+      "toc": "Table of contents"
+    },
+    "search": {
+      "title": "Search results"
     },
     "settings": {
       "app": {
@@ -1155,23 +1432,45 @@
       "collection": {
         "card_collection": "Collection de cartes",
         "card_count": "Nombre de cartes",
-        "new_format": "Nouveau format",
-        "old_format": "Ancien format",
+        "groups": {
+          "campaign": "Campaign Expansions",
+          "core": "Core Game",
+          "other": "Other Expansions",
+          "path": "Path Expansions",
+          "player": "Player Card Expansions",
+          "valley": "Valley Expansions"
+        },
+        "owned": "Owned in collection",
         "show_all_cards_owned": "Afficher toutes les cartes comme possédées",
         "show_all_cards_owned_help": "Si cette option est cochée, les réglages de collection ci-dessous seront ignorés pour déterminer la possession ou non d’une carte dans la liste des cartes ou des decks.",
         "show_previews": "Afficher les cartes en prévisualisation",
         "show_previews_help": "Si cette option est cochée, les cartes non publiées apparaîtront dans l’application et pourront être ajoutées aux decks.",
         "title": "Collection"
       },
+      "developer": {
+        "dev_mode_enabled": "Enable developer mode",
+        "title": "Developer"
+      },
       "display": {
-        "card_level": "Affichage du niveau de carte",
-        "card_level_as_dots": "Dans l’icône de la carte et en points",
-        "card_level_as_text": "Dans l’icône de la carte et en texte",
-        "card_level_icon_only": "Uniquement dans l’icône de la carte",
+        "card_display": "Card display settings",
+        "card_show_collection_number": "Show collection number",
+        "card_show_details": "Show card details",
+        "card_show_icon": "Show card icon",
+        "card_show_thumbnail": "Show card thumbnail",
+        "card_show_unique_icon": "Show unique icon",
+        "card_size": "Size",
+        "card_size_sm": "Compact",
+        "card_size_standard": "Standard",
+        "color_scheme": "Color scheme",
+        "color_scheme_botanical": "Botanical (Default)",
+        "color_scheme_clay": "Clay & Ochre",
+        "color_scheme_nord": "Nord (Legacy)",
         "font_size": "Taille de la police",
         "font_size_preview": "Armitage pensait que cet alphabet pouvait être utilisé à des fins ésotériques par certains cultes interdits issus de temps anciens, héritant de nombreuses formes et traditions des sorciers du monde sarrazin.",
-        "hide_weaknesses": "Masquer les faiblesses dans la liste des cartes Joueur",
-        "hide_weaknesses_help": "Si activé, les faiblesses ne s’affichent pas par défaut dans la liste de cartes Joueur. Elles doivent être explicitement activées via le filtre <strong>Sous-type</strong>.",
+        "mini_role_art": "Use mini role art",
+        "mini_role_art_help": "When this is checked, ranger role cards with alternate mini art will display that art instead of the standard card art.",
+        "show_card_modal_popular_decks": "Show popular decks in card modals",
+        "show_card_modal_popular_decks_help": "When this is checked, popular decks containing the card will be shown in the card modal.",
         "sort_ignore_punctuation": "Le tri ignore la ponctuation",
         "sort_ignore_punctuation_help": "Si activé, la liste de cartes ignore les guillemets et autres signes de ponctuation lors du tri.",
         "theme": "Thème",
@@ -1182,14 +1481,15 @@
       },
       "error": "Échec de l’enregistrement des paramètres : {{error}}",
       "general": {
-        "title": "Général",
-        "weakness_limited_card_pool": "Utiliser le pool de cartes limité pour le tirage de faiblesses basiques aléatoires",
-        "weakness_limited_card_pool_help": "Si activé, le tirage aléatoire de faiblesse basique tiendra compte du pool de cartes limité défini par le deck, s’il existe."
+        "default_environment": "Default environment",
+        "title": "Général"
       },
       "lists": {
         "deck_view": "Vue de deck",
         "deck_view_scans": "Vue de deck (scans)",
         "other_cards": "Autres cartes",
+        "path_cards": "Path cards",
+        "ranger_cards": "Ranger cards",
         "title": "Listes"
       },
       "locale": {
@@ -1211,8 +1511,15 @@
         "expand": "Ouvrir la section",
         "toggle": "Basculer la section"
       },
+      "combobox": {
+        "unknown_option": "Unknown option"
+      },
       "copy_to_clipboard": "Copier dans le presse-papiers",
-      "copy_to_clipboard_success": "Copié."
+      "copy_to_clipboard_success": "Copié.",
+      "pagination": {
+        "next": "Next",
+        "previous": "Previous"
+      }
     }
   }
 }
