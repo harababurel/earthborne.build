@@ -391,13 +391,18 @@
       "keywords": {
         "ambush": "Hinterhalt",
         "conduit": "Kanalisator",
+        "dangerous": "Bedrohung",
         "disconnected": "Unzugänglich",
         "fatiguing": "Ermüdend",
         "friendly": "Freundlich",
+        "illumination": "Beleuchtung",
         "manifestation": "Manifestation",
+        "mycelial": "Myzele",
         "obstacle": "Hindernis",
         "persistent": "Bleibend",
-        "setup": "Aufbau"
+        "setup": "Aufbau",
+        "spirit": "Geist",
+        "untraversable": "Undurchquerbar"
       },
       "more_actions": "Weitere Aktionen",
       "next": "Weiter",
@@ -453,6 +458,7 @@
         "woods": "Wald"
       },
       "set_as_default": "Als Standard festlegen",
+      "set_position": "{{position}} von {{size}}",
       "skill": {
         "conflict": "Konflikt",
         "connection": "Verständnis",
@@ -623,6 +629,7 @@
         "export_text": "Text exportieren",
         "make_private": "Privat machen",
         "make_public": "Öffentlich machen",
+        "share": "Share deck",
         "unarchive": "Deck aus dem Archiv holen"
       },
       "annotation": "Anmerkung",
@@ -763,6 +770,7 @@
       "name": {
         "title": "Ranger benennen"
       },
+      "new_ranger_name": "Neuer Ranger",
       "outside_interest": {
         "title": "Hobby wählen"
       },
@@ -965,6 +973,14 @@
         "entry_title_current": "Aktuelle Version",
         "title": "Versionen"
       }
+    },
+    "deck_share": {
+      "copy": "Copy",
+      "include_displaced": "Include displaced cards",
+      "include_rewards": "Include unlocked rewards",
+      "tab_markdown": "Markdown",
+      "tab_plaintext": "Plaintext",
+      "title": "Share deck"
     },
     "deck_view": {
       "actions": {
@@ -1210,6 +1226,10 @@
         "placeholder": "Marker auswählen...",
         "title": "Marker"
       }
+    },
+    "footer": {
+      "attribution": "Earthborne Rangers und alle zugehörigen Inhalte © <eb_url>Earthborne Games</eb_url>. Diese Seite wird nicht von Earthborne Games produziert, unterstützt oder gefördert und steht in keiner Verbindung zu Earthborne Games.",
+      "based_on": "Basiert auf <ab_url>arkham.build</ab_url> von <felix_url>Felix Spöttel</felix_url>."
     },
     "help": {
       "about": "Über diese Seite",

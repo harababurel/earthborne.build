@@ -1,6 +1,7 @@
 import { DECK_CARD_COPIES } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
+import i18n from "@/utils/i18n";
 import { selectMetadata } from "../selectors/shared";
 import type { StoreState } from ".";
 import type { DeckCreateSlice, DeckCreateStep } from "./deck-create.types";
@@ -19,7 +20,7 @@ export const createDeckCreateSlice: StateCreator<
       return {
         deckCreate: {
           step: "name",
-          name: "New Ranger",
+          name: i18n.t("deck_create.new_ranger_name"),
           provider:
             provider === "local" || provider === "shared" ? provider : "local",
           backgroundSlots: {},

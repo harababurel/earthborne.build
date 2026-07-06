@@ -1,4 +1,5 @@
 import type { Card } from "@earthborne-build/shared";
+import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import { selectMetadata } from "@/store/selectors/shared";
 import { displayAttribute, parseCardTextHtml } from "@/utils/card-utils";
@@ -51,6 +52,7 @@ export function CardName(props: Props) {
 export function CardPackDetail(props: { card: Card; invert?: boolean }) {
   const { card, invert } = props;
 
+  const { t } = useTranslation();
   const metadata = useStore(selectMetadata);
 
   const pack = metadata.packs[card.pack_code];
@@ -75,8 +77,12 @@ export function CardPackDetail(props: { card: Card; invert?: boolean }) {
       {setDisplay && <small>{setLink || setDisplay}</small>}
       {setDisplay && card.set_position && " · "}
       <span className={css["pack-detail-position"]}>
-        {card.set_position}
-        {card.set_size ? ` of ${card.set_size}` : ""}
+        {card.set_size
+          ? t("common.set_position", {
+              position: card.set_position,
+              size: card.set_size,
+            })
+          : card.set_position}
       </span>
     </span>
   );

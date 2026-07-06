@@ -16,7 +16,7 @@ export function capitalize(s: string | number) {
 export const formatDate = createSelector(
   (date: string | number) => date,
   (date) =>
-    new Date(date).toLocaleDateString(navigator.language, {
+    new Date(date).toLocaleDateString(i18n.language, {
       dateStyle: "medium",
     }),
 );
@@ -25,7 +25,7 @@ export const formatDate = createSelector(
 export const formatDateTime = createSelector(
   (date: string | number) => date,
   (date) =>
-    new Date(date).toLocaleString(navigator.language, {
+    new Date(date).toLocaleString(i18n.language, {
       dateStyle: "short",
       timeStyle: "short",
     }),
@@ -34,7 +34,7 @@ export const formatDateTime = createSelector(
 export function formatDataVersionTimestamp(
   date: string | number,
   now = new Date(),
-  locale = navigator.language,
+  locale = i18n.language,
 ) {
   const parsed = parseDateAsUtc(date);
   if (!parsed) return date.toString();

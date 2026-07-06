@@ -393,13 +393,18 @@
       "keywords": {
         "ambush": "Ambush",
         "conduit": "Conduit",
+        "dangerous": "Dangerous",
         "disconnected": "Disconnected",
         "fatiguing": "Fatiguing",
         "friendly": "Friendly",
+        "illumination": "Illumination",
         "manifestation": "Manifestation",
+        "mycelial": "Mycelial",
         "obstacle": "Obstacle",
         "persistent": "Persistent",
-        "setup": "Setup"
+        "setup": "Setup",
+        "spirit": "Spirit",
+        "untraversable": "Untraversable"
       },
       "more_actions": "More actions",
       "next": "Next",
@@ -456,6 +461,7 @@
         "woods": "Woods"
       },
       "set_as_default": "Установить по умолчанию",
+      "set_position": "{{position}} of {{size}}",
       "skill": {
         "conflict": "Conflict",
         "connection": "Connection",
@@ -626,6 +632,7 @@
         "export_text": "Экспортировать текст",
         "make_private": "Make Private",
         "make_public": "Make Public",
+        "share": "Share deck",
         "unarchive": "Разархивировать"
       },
       "annotation": "Аннотация",
@@ -768,6 +775,7 @@
       "name": {
         "title": "Name ranger"
       },
+      "new_ranger_name": "New Ranger",
       "outside_interest": {
         "title": "Choose outside interest"
       },
@@ -970,6 +978,14 @@
         "entry_title_current": "Текущая версия",
         "title": "Версии"
       }
+    },
+    "deck_share": {
+      "copy": "Copy",
+      "include_displaced": "Include displaced cards",
+      "include_rewards": "Include unlocked rewards",
+      "tab_markdown": "Markdown",
+      "tab_plaintext": "Plaintext",
+      "title": "Share deck"
     },
     "deck_view": {
       "actions": {
@@ -1215,6 +1231,10 @@
         "placeholder": "Выбрать тип многоразового",
         "title": "Многоразовый"
       }
+    },
+    "footer": {
+      "attribution": "Earthborne Rangers and all related content © <eb_url>Earthborne Games</eb_url>. This site is not produced, endorsed by or affiliated with Earthborne Games.",
+      "based_on": "Based on <ab_url>arkham.build</ab_url> by <felix_url>Felix Spöttel</felix_url>."
     },
     "help": {
       "about": "О сайте",

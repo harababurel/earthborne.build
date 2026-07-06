@@ -2,6 +2,17 @@
 
 UI translations live in `frontend/src/locales/*.json` and are loaded with `react-i18next`.
 
+## Localization roadmap (German first)
+
+The German localization effort is staged. Status as of 2026-07:
+
+1. **UI strings** — ✅ done. Full `de.json` translation using official Frosted Games terminology; `de` is selectable in settings. Open follow-up: native-speaker review pass, tracked in [translations-de-review.md](./translations-de-review.md).
+2. **Card text** — next up. Translations live in the `rangers-card-data` fork (`i18n/<locale>/**/*.po`, German partially complete). Requires: ingesting `.po` translations into the backend DB, a locale-aware cards API, and the frontend requesting card data in the app language with per-field English fallback.
+3. **Rules reference** — later. The embedded `/rules` content (`frontend/src/assets/*.html`) is English scraper output; a German version needs the official German rulebook as scraper input (licensed text; source PDFs are kept locally, outside the repo).
+4. **Localized card scans** — later, optional. Serve German card images when the app language is German; blocked on sourcing scans of the German printing.
+
+Adding further languages repeats the same stages; the official-terminology groundwork must be redone per language (Earthborne Rangers is also localized in French, Italian, and Russian).
+
 Supported locales are declared in [frontend/src/utils/constants.ts](../frontend/src/utils/constants.ts).
 
 ## Adding a locale

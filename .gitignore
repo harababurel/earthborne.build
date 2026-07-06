@@ -33,3 +33,6 @@ eb_rangers_cards.json
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Official German rulebooks/guides (copyrighted, Frosted Games)
+/docs/EBR-german-documents/

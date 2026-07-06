@@ -1,4 +1,5 @@
 import type { Card } from "@earthborne-build/shared";
+import { useTranslation } from "react-i18next";
 import type { Printing as PrintingT } from "@/store/selectors/shared";
 import { cx } from "@/utils/cx";
 import { displayPackName } from "@/utils/formatting";
@@ -110,13 +111,15 @@ export function PrintingInner({
   quantity,
   showCopyId,
 }: PrintingInnerProps) {
+  const { t } = useTranslation();
   return (
     <span className={cx(css["printing"], active && css["active"], className)}>
       {name}
       {position && " · "}
       <span className="nowrap">
-        {position}
-        {card.set_size ? ` of ${card.set_size}` : ""}
+        {card.set_size
+          ? t("common.set_position", { position, size: card.set_size })
+          : position}
       </span>
       {!!quantity && (
         <>
