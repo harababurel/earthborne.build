@@ -940,7 +940,7 @@ that.
   postCompleteProfile; fetchSyncManifest, fetchDeckBatch, postDeck, putDeck, deleteDeck
   (+ campaign clones); fetchFolders/putFolders (+ settings/achievements variants) with
   the `is...ConflictError` helpers keyed on status 409).
-- [ ] **Task 6.3 — Auth slice.** Port `slices/auth.ts`, `auth.types.ts`, `auth.spec.ts`,
+- [x] **Task 6.3 — Auth slice.** Port `slices/auth.ts`, `auth.types.ts`, `auth.spec.ts`,
   `selectors/auth.ts`. Adaptations: `applyCompleteProfileResponse` additionally handles
   `campaignIdMap` + `campaigns` (rewrite `data.campaigns` keys, set campaign sync items)
   and `achievements` (apply revision to sync state); earthborne has no
@@ -948,7 +948,7 @@ that.
   remapping ids just move the `history`/`undoHistory`/`deckEdits`/`deckFolders` entries
   to the new keys. Register the slice in `frontend/src/store/slices/index.ts` (both the
   `StoreState` type union and `createStore` composition — copy the existing pattern).
-- [ ] **Task 6.4 — Sync slice skeleton.** Port `slices/sync.types.ts` + the state/setter
+- [x] **Task 6.4 — Sync slice skeleton.** Port `slices/sync.types.ts` + the state/setter
   half of `slices/sync.ts` (initial states, `setSettingsSync`, `setDecksSync`,
   `setFoldersSync`, `setDeckSyncItem`, `clearAccountState`) extended with `campaigns`
   (per-item, mirroring decks) and `achievements` (blob, mirroring folders/settings).
