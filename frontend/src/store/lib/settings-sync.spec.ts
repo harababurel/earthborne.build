@@ -3,7 +3,7 @@ import { getInitialSettings } from "../slices/settings";
 import { fromRemoteSettings, toRemoteSettings } from "./settings-sync";
 
 describe("toRemoteSettings()", () => {
-  it("excludes local-only settings and collection", () => {
+  it("excludes local-only settings and preserves collection", () => {
     const settings = {
       ...getInitialSettings(),
       collection: { core: true },
@@ -14,7 +14,7 @@ describe("toRemoteSettings()", () => {
 
     const remote = toRemoteSettings(settings);
 
-    expect(remote).not.toHaveProperty("collection");
+    expect(remote).toHaveProperty("collection");
     expect(remote).not.toHaveProperty("devModeEnabled");
     expect(remote).not.toHaveProperty("fontSize");
     expect(remote).not.toHaveProperty("flags");
@@ -36,7 +36,7 @@ describe("toRemoteSettings()", () => {
 });
 
 describe("fromRemoteSettings()", () => {
-  it("preserves local-only settings and collection", () => {
+  it("preserves local-only settings and updates collection", () => {
     const localSettings = {
       ...getInitialSettings(),
       collection: { core: true },
@@ -56,7 +56,7 @@ describe("fromRemoteSettings()", () => {
     const next = fromRemoteSettings(remote, localSettings);
 
     expect(next).toMatchObject({
-      collection: { core: true },
+      collection: { dunwich: true },
       devModeEnabled: true,
       fontSize: 140,
       locale: "de",

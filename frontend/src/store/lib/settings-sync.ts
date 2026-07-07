@@ -1,7 +1,6 @@
 import type { SettingsState } from "../slices/settings.types";
 
 const OMITTED_KEYS: Array<keyof SettingsState> = [
-  "collection",
   "devModeEnabled",
   "fontSize",
   "flags",
