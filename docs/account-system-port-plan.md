@@ -1056,7 +1056,7 @@ Phase 6's `applyCompleteProfileResponse` handle it.)
   - Insert `<AccountMenu />` in `masthead.tsx` inside the `nav`, after the
     `location !== "/settings"` block and before `<HelpMenu />`.
   - Port `status-pill`/`status-bubble` UI components now (used here and in Phase 8).
-- [ ] **Task 7.5 — Manual QA (with Sergiu).** Sergiu deploys backend + frontend to the
+- [x] **Task 7.5 — Manual QA (with Sergiu).** Sergiu deploys backend + frontend to the
   dev instance and walks through: signup → email arrives (or ConsoleMailer log) →
   verify → login → complete profile with local decks/campaigns present → username
   set → logout → login again → `GET /me` shows profile complete. Agent supports by
