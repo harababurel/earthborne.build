@@ -204,6 +204,11 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     await dehydrate(get(), "app");
 
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().pushDeck(client, deck.id).catch(console.error);
+    }
+
     if (state.deckCreate.provider === "shared") {
       await state.createShare(deck.id as string);
     }
@@ -214,9 +219,10 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const state = get();
 
     const deck = state.data.decks[id];
+    const historyEntries = state.data.history[id] ?? [];
 
     await Promise.allSettled(
-      [...state.data.history[id], deck.id].map((curr) =>
+      [...historyEntries, deck.id].map((curr) =>
         state.deleteShare(curr as string),
       ),
     );
@@ -231,8 +237,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
       delete deckEdits[id];
       delete decks[id];
-
-      const historyEntries = history[id] ?? [];
 
       for (const prevId of historyEntries) {
         delete decks[prevId];
@@ -271,6 +275,14 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     });
 
     await dehydrate(get(), "app", "edits");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().pushDeckDeletion(client, id, null).catch(console.error);
+      for (const prevId of historyEntries) {
+        get().pushDeckDeletion(client, prevId, null).catch(console.error);
+      }
+    }
   },
   async deleteAllDecks() {
     set((state) => {
@@ -441,6 +453,12 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     });
 
     await dehydrate(get(), "app", "edits");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().pushDeck(client, nextDeck.id).catch(console.error);
+    }
+
     return nextDeck.id;
   },
 

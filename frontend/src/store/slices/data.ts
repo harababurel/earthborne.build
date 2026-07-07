@@ -33,8 +33,9 @@ export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (
   async importDeck(input) {
     const { data, type } = await importDeck(selectClientId(get()), input);
 
+    let deck: Deck | undefined;
     set((state) => {
-      const deck = formatDeckImport(state, data, type);
+      deck = formatDeckImport(state, data, type);
       return {
         data: {
           ...state.data,
@@ -51,6 +52,11 @@ export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client && deck) {
+      get().pushDeck(client, deck.id).catch(console.error);
+    }
   },
 
   async importFromFiles(files) {
@@ -83,6 +89,13 @@ export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (
     }));
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      for (const deck of formatted) {
+        get().pushDeck(client, deck.id).catch(console.error);
+      }
+    }
   },
 
   async duplicateDeck(id, options) {
@@ -111,6 +124,11 @@ export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (
     }));
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().pushDeck(client, newDeck.id).catch(console.error);
+    }
 
     return newDeck.id;
   },

@@ -2,12 +2,15 @@ import type { FolderState, Id } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { ARCHIVE_FOLDER_ID } from "@/utils/constants";
+import { randomId } from "@/utils/crypto";
 import { fromRemoteSettings, toRemoteSettings } from "../lib/settings-sync";
 import {
   updateCampaignSyncConflictError,
+  updateCampaignSyncError,
   updateCampaignSyncSaving,
   updateCampaignSyncSuccess,
   updateDeckSyncConflictError,
+  updateDeckSyncError,
   updateDeckSyncSaving,
   updateDeckSyncSuccess,
 } from "../lib/sync";
@@ -46,6 +49,7 @@ import {
   isSettingsConflictError,
   putSettings,
 } from "../services/requests/settings";
+import { ApiError } from "../services/requests/shared";
 import type { AuthState } from "./auth.types";
 import type { StoreState } from "./index";
 import type {
@@ -152,6 +156,10 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   get,
 ) => ({
   ...getInitialSyncState(),
+  apiClient: null,
+  setApiClient(client) {
+    set({ apiClient: client });
+  },
 
   async bootstrapAuthenticatedState(client) {
     const state = get();
@@ -781,6 +789,125 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
     }
   },
 
+  async pushDeck(client, id) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot push deck without an account.");
+
+    const deck = state.data.decks[id];
+    if (!deck) return;
+
+    const syncItem = state.sync.decks.items[id];
+
+    if (syncItem?.status === "conflict") return;
+
+    get().setDeckSyncItem(id, {
+      status: "saving",
+      error: null,
+      conflict: null,
+    });
+
+    let currentId = id;
+    try {
+      if (syncItem?.version == null) {
+        try {
+          const response = await postDeck(client, { data: deck });
+          if (!isCurrentAccount(get(), accountId)) return;
+
+          get().setDeckSyncItem(id, {
+            version: response.revision,
+            status: "synced",
+            lastSyncedAt: Date.now(),
+            error: null,
+            conflict: null,
+          });
+        } catch (error) {
+          if (error instanceof ApiError && error.status === 409) {
+            const newId = randomId();
+            set((prev) => rekeyDeckId(prev, id, newId));
+            currentId = newId;
+
+            const rekeyedDeck = get().data.decks[newId];
+            if (rekeyedDeck) {
+              const response = await postDeck(client, { data: rekeyedDeck });
+              if (!isCurrentAccount(get(), accountId)) return;
+
+              get().setDeckSyncItem(newId, {
+                version: response.revision,
+                status: "synced",
+                lastSyncedAt: Date.now(),
+                error: null,
+                conflict: null,
+              });
+            }
+          } else {
+            throw error;
+          }
+        }
+      } else {
+        const response = await putDeck(client, String(id), {
+          data: deck,
+          expectedRevision: syncItem.version,
+        });
+        if (!isCurrentAccount(get(), accountId)) return;
+
+        get().setDeckSyncItem(id, {
+          version: response.revision,
+          status: "synced",
+          lastSyncedAt: Date.now(),
+          error: null,
+          conflict: null,
+        });
+      }
+      await dehydrate(get(), "app", "edits");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      set((prev) => ({
+        sync: updateDeckSyncError(prev.sync, currentId, error, "update"),
+      }));
+
+      await dehydrate(get(), "app", "edits");
+      throw error;
+    }
+  },
+
+  async pushDeckDeletion(client, id, expectedRevision) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot push deck deletion without an account.");
+
+    const syncItem = state.sync.decks.items[id];
+    const revision = expectedRevision ?? syncItem?.version;
+    if (revision == null) {
+      get().setDeckSyncItem(id, null);
+      return;
+    }
+
+    get().setDeckSyncItem(id, {
+      status: "saving",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      await deleteDeck(client, String(id), { expectedRevision: revision });
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      get().setDeckSyncItem(id, null);
+      await dehydrate(get(), "app", "edits");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      set((prev) => ({
+        sync: updateDeckSyncError(prev.sync, id, error, "delete"),
+      }));
+
+      await dehydrate(get(), "app", "edits");
+      throw error;
+    }
+  },
+
   // Campaigns sync
   async syncCampaigns(client) {
     const state = get();
@@ -851,6 +978,127 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
         status: "error",
         error: getErrorMessage(error),
       });
+      await dehydrate(get(), "app");
+      throw error;
+    }
+  },
+
+  async pushCampaign(client, id) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot push campaign without an account.");
+
+    const campaign = state.data.campaigns[id];
+    if (!campaign) return;
+
+    const syncItem = state.sync.campaigns.items[id];
+
+    if (syncItem?.status === "conflict") return;
+
+    get().setCampaignSyncItem(id, {
+      status: "saving",
+      error: null,
+      conflict: null,
+    });
+
+    let currentId = id;
+    try {
+      if (syncItem?.version == null) {
+        try {
+          const response = await postCampaign(client, { data: campaign });
+          if (!isCurrentAccount(get(), accountId)) return;
+
+          get().setCampaignSyncItem(id, {
+            version: response.revision,
+            status: "synced",
+            lastSyncedAt: Date.now(),
+            error: null,
+            conflict: null,
+          });
+        } catch (error) {
+          if (error instanceof ApiError && error.status === 409) {
+            const newId = randomId();
+            set((prev) => rekeyCampaignId(prev, id, newId));
+            currentId = newId;
+
+            const rekeyedCampaign = get().data.campaigns[newId];
+            if (rekeyedCampaign) {
+              const response = await postCampaign(client, {
+                data: rekeyedCampaign,
+              });
+              if (!isCurrentAccount(get(), accountId)) return;
+
+              get().setCampaignSyncItem(newId, {
+                version: response.revision,
+                status: "synced",
+                lastSyncedAt: Date.now(),
+                error: null,
+                conflict: null,
+              });
+            }
+          } else {
+            throw error;
+          }
+        }
+      } else {
+        const response = await putCampaign(client, String(id), {
+          data: campaign,
+          expectedRevision: syncItem.version,
+        });
+        if (!isCurrentAccount(get(), accountId)) return;
+
+        get().setCampaignSyncItem(id, {
+          version: response.revision,
+          status: "synced",
+          lastSyncedAt: Date.now(),
+          error: null,
+          conflict: null,
+        });
+      }
+      await dehydrate(get(), "app");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      set((prev) => ({
+        sync: updateCampaignSyncError(prev.sync, currentId, error, "update"),
+      }));
+
+      await dehydrate(get(), "app");
+      throw error;
+    }
+  },
+
+  async pushCampaignDeletion(client, id, expectedRevision) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot push campaign deletion without an account.");
+
+    const syncItem = state.sync.campaigns.items[id];
+    const revision = expectedRevision ?? syncItem?.version;
+    if (revision == null) {
+      get().setCampaignSyncItem(id, null);
+      return;
+    }
+
+    get().setCampaignSyncItem(id, {
+      status: "saving",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      await deleteCampaign(client, String(id), { expectedRevision: revision });
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      get().setCampaignSyncItem(id, null);
+      await dehydrate(get(), "app");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      set((prev) => ({
+        sync: updateCampaignSyncError(prev.sync, id, error, "delete"),
+      }));
+
       await dehydrate(get(), "app");
       throw error;
     }
@@ -1316,4 +1564,92 @@ async function performCampaignSyncPushes(
       }
     }
   }
+}
+
+function rekeyDeckId(state: StoreState, oldId: Id, newId: Id) {
+  const decks = { ...state.data.decks };
+  const deckFolders = { ...state.data.deckFolders };
+  const undoHistory = state.data.undoHistory
+    ? { ...state.data.undoHistory }
+    : undefined;
+  const deckEdits = { ...state.deckEdits };
+  const campaigns = { ...state.data.campaigns };
+  const history = { ...state.data.history };
+
+  if (decks[oldId]) {
+    decks[newId] = { ...decks[oldId], id: newId };
+    delete decks[oldId];
+  }
+
+  if (deckFolders[oldId]) {
+    deckFolders[newId] = deckFolders[oldId];
+    delete deckFolders[oldId];
+  }
+
+  if (undoHistory?.[oldId]) {
+    undoHistory[newId] = undoHistory[oldId];
+    delete undoHistory[oldId];
+  }
+
+  if (deckEdits[oldId]) {
+    deckEdits[newId] = deckEdits[oldId];
+    delete deckEdits[oldId];
+  }
+
+  if (history[oldId]) {
+    history[newId] = history[oldId];
+    delete history[oldId];
+  }
+
+  for (const [key, list] of Object.entries(history)) {
+    if (list.includes(oldId)) {
+      history[key] = list.map((item) => (item === oldId ? newId : item));
+    }
+  }
+
+  for (const [cid, campaign] of Object.entries(campaigns)) {
+    if (campaign.deck_ids.includes(oldId)) {
+      campaigns[cid] = {
+        ...campaign,
+        deck_ids: campaign.deck_ids.map((id) => (id === oldId ? newId : id)),
+      };
+    }
+  }
+
+  return {
+    data: {
+      ...state.data,
+      decks,
+      deckFolders,
+      undoHistory,
+      campaigns,
+      history,
+    },
+    deckEdits,
+  };
+}
+
+function rekeyCampaignId(state: StoreState, oldId: Id, newId: Id) {
+  const campaigns = { ...state.data.campaigns };
+  const undoHistory = state.data.undoHistory
+    ? { ...state.data.undoHistory }
+    : undefined;
+
+  if (campaigns[oldId]) {
+    campaigns[newId] = { ...campaigns[oldId], id: newId };
+    delete campaigns[oldId];
+  }
+
+  if (undoHistory?.[oldId]) {
+    undoHistory[newId] = undoHistory[oldId];
+    delete undoHistory[oldId];
+  }
+
+  return {
+    data: {
+      ...state.data,
+      campaigns,
+      undoHistory,
+    },
+  };
 }

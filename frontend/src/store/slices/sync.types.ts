@@ -97,6 +97,8 @@ type ItemConflictResolutionResult = {
 };
 
 export type SyncSlice = SyncState & {
+  apiClient: HttpClient | null;
+  setApiClient(client: HttpClient): void;
   bootstrapAuthenticatedState(client: HttpClient): Promise<void>;
   clearAccountState(auth?: AuthState): void;
   setSettingsSync(payload: Partial<SettingsSyncState>): void;
@@ -129,7 +131,19 @@ export type SyncSlice = SyncState & {
   ): Promise<void>;
   syncAll(client: HttpClient): Promise<void>;
   syncDecks(client: HttpClient): Promise<void>;
+  pushDeck(client: HttpClient, id: Id): Promise<void>;
+  pushDeckDeletion(
+    client: HttpClient,
+    id: Id,
+    expectedRevision: string | null,
+  ): Promise<void>;
   syncCampaigns(client: HttpClient): Promise<void>;
+  pushCampaign(client: HttpClient, id: Id): Promise<void>;
+  pushCampaignDeletion(
+    client: HttpClient,
+    id: Id,
+    expectedRevision: string | null,
+  ): Promise<void>;
   resolveDeckConflictWithRefresh(
     client: HttpClient,
     id: Id,

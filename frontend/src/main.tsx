@@ -34,6 +34,8 @@ const client = createHttpClient({
   },
 });
 
+useStore.getState().setApiClient(client);
+
 ReactDOM.createRoot(rootNode).render(
   <React.StrictMode>
     <HttpClientContext.Provider value={client}>
