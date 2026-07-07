@@ -30,6 +30,11 @@ export const createAchievementsSlice: StateCreator<
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().scheduleAchievementsPush(client);
+    }
   },
 
   async toggleAchievement(id) {
@@ -51,6 +56,11 @@ export const createAchievementsSlice: StateCreator<
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().scheduleAchievementsPush(client);
+    }
   },
 
   async setAchievementDate(id, date) {
@@ -70,6 +80,11 @@ export const createAchievementsSlice: StateCreator<
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().scheduleAchievementsPush(client);
+    }
   },
 });
 

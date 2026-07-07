@@ -152,6 +152,9 @@ function getInitialSyncState(): SyncState {
 }
 
 const campaignPushTimeouts: Record<string, ReturnType<typeof setTimeout>> = {};
+let foldersPushTimeout: ReturnType<typeof setTimeout> | null = null;
+let settingsPushTimeout: ReturnType<typeof setTimeout> | null = null;
+let achievementsPushTimeout: ReturnType<typeof setTimeout> | null = null;
 
 export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   set,
@@ -1113,6 +1116,33 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
     campaignPushTimeouts[key] = setTimeout(() => {
       delete campaignPushTimeouts[key];
       get().pushCampaign(client, id).catch(console.error);
+    }, 2000);
+  },
+
+  scheduleFoldersPush(client) {
+    if (foldersPushTimeout) clearTimeout(foldersPushTimeout);
+
+    foldersPushTimeout = setTimeout(() => {
+      foldersPushTimeout = null;
+      get().saveFolders(client).catch(console.error);
+    }, 2000);
+  },
+
+  scheduleSettingsPush(client) {
+    if (settingsPushTimeout) clearTimeout(settingsPushTimeout);
+
+    settingsPushTimeout = setTimeout(() => {
+      settingsPushTimeout = null;
+      get().saveSettings(client).catch(console.error);
+    }, 2000);
+  },
+
+  scheduleAchievementsPush(client) {
+    if (achievementsPushTimeout) clearTimeout(achievementsPushTimeout);
+
+    achievementsPushTimeout = setTimeout(() => {
+      achievementsPushTimeout = null;
+      get().saveAchievements(client).catch(console.error);
     }, 2000);
   },
 

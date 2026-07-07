@@ -145,6 +145,9 @@ export type SyncSlice = SyncState & {
     expectedRevision: string | null,
   ): Promise<void>;
   scheduleCampaignPush(client: HttpClient, id: Id): void;
+  scheduleFoldersPush(client: HttpClient): void;
+  scheduleSettingsPush(client: HttpClient): void;
+  scheduleAchievementsPush(client: HttpClient): void;
   resolveDeckConflictWithRefresh(
     client: HttpClient,
     id: Id,

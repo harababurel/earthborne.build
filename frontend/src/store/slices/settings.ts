@@ -1,5 +1,6 @@
 import type { StateCreator } from "zustand";
 import { changeLanguage } from "@/utils/i18n";
+import { toRemoteSettings } from "../lib/settings-sync";
 import { dehydrate } from "../persist";
 import {
   queryCards,
@@ -91,6 +92,7 @@ export const createSettingsSlice: StateCreator<
   settings: getInitialSettings(),
   // TODO: extract to `shared` since this touches other state slices.
   async applySettings(settings, { keepListState } = {}) {
+    const prevSettings = get().settings;
     const state = get();
 
     if (settings.locale !== state.settings.locale) {
@@ -119,8 +121,21 @@ export const createSettingsSlice: StateCreator<
 
       await dehydrate(get(), "app");
     }
+
+    const nextSettings = get().settings;
+    if (
+      JSON.stringify(toRemoteSettings(prevSettings)) !==
+      JSON.stringify(toRemoteSettings(nextSettings))
+    ) {
+      const client = get().apiClient;
+      if (get().auth.status === "authenticated" && client) {
+        get().scheduleSettingsPush(client);
+      }
+    }
   },
   async setSettings(payload) {
+    const prevSettings = get().settings;
+
     set((state) => ({
       settings: {
         ...state.settings,
@@ -129,8 +144,21 @@ export const createSettingsSlice: StateCreator<
     }));
 
     await dehydrate(get(), "app");
+
+    const nextSettings = get().settings;
+    if (
+      JSON.stringify(toRemoteSettings(prevSettings)) !==
+      JSON.stringify(toRemoteSettings(nextSettings))
+    ) {
+      const client = get().apiClient;
+      if (get().auth.status === "authenticated" && client) {
+        get().scheduleSettingsPush(client);
+      }
+    }
   },
   async toggleFlag(key) {
+    const prevSettings = get().settings;
+
     set((state) => ({
       settings: {
         ...state.settings,
@@ -142,5 +170,16 @@ export const createSettingsSlice: StateCreator<
     }));
 
     await dehydrate(get(), "app");
+
+    const nextSettings = get().settings;
+    if (
+      JSON.stringify(toRemoteSettings(prevSettings)) !==
+      JSON.stringify(toRemoteSettings(nextSettings))
+    ) {
+      const client = get().apiClient;
+      if (get().auth.status === "authenticated" && client) {
+        get().scheduleSettingsPush(client);
+      }
+    }
   },
 });

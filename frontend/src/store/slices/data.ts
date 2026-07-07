@@ -161,6 +161,11 @@ export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().scheduleFoldersPush(client);
+    }
   },
   async removeDeckFromFolder(deckId) {
     set((state) => {
@@ -175,6 +180,11 @@ export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().scheduleFoldersPush(client);
+    }
   },
 });
 
