@@ -4,7 +4,6 @@ const OMITTED_KEYS: Array<keyof SettingsState> = [
   "devModeEnabled",
   "fontSize",
   "flags",
-  "defaultStorageProvider",
 ];
 
 export function toRemoteSettings(

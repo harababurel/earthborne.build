@@ -1,6 +1,5 @@
 import type { CardFormat } from "@/pages/deck-edit/editor/notes-rte/cards-to-markdown";
 import type { CardOrigin } from "@/pages/deck-edit/editor/notes-rte/notes-rte-context";
-import type { StorageProvider } from "@/utils/constants";
 import type {
   FanMadeContentFilter,
   GroupingType,
@@ -36,7 +35,6 @@ export type SettingsState = {
   useMiniRoleArt: boolean;
   colorScheme: ColorScheme;
   collection: Record<string, boolean>;
-  defaultStorageProvider: StorageProvider;
   devModeEnabled: boolean;
   flags?: Record<string, boolean>;
   fontSize: number;

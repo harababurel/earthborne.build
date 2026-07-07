@@ -1,6 +1,7 @@
 import {
   DatabaseBackupIcon,
   LibraryIcon,
+  RefreshCw,
   SlidersVerticalIcon,
 } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -13,6 +14,7 @@ import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { useToast } from "@/components/ui/toast.hooks";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
+import { selectAccountSyncStatus } from "@/store/selectors/sync";
 import type { ColorScheme, SettingsState } from "@/store/slices/settings.types";
 import { useColorThemeManager } from "@/utils/use-color-theme";
 import { useGoBack } from "@/utils/use-go-back";
@@ -66,6 +68,7 @@ function SettingsInner({
   const { t } = useTranslation();
 
   const [tab, onTabChange] = useTabUrlState("general");
+  const session = useStore((state) => state.auth.session);
 
   const search = useSearch();
   const toast = useToast();
@@ -223,6 +226,11 @@ function SettingsInner({
               </Section>
             </TabsContent>
             <TabsContent value="backup">
+              {session && (
+                <Section title={t("settings.account.sync.title")}>
+                  <AccountSyncSection />
+                </Section>
+              )}
               <Section title={t("settings.backup.title")}>
                 <BackupRestore />
               </Section>
@@ -239,6 +247,65 @@ function SettingsInner({
 
 function settingsKey(settings: SettingsState): string {
   return JSON.stringify(settings);
+}
+
+function AccountSyncSection() {
+  const { t } = useTranslation();
+  const toast = useToast();
+
+  const syncStatus = useStore(selectAccountSyncStatus);
+  const isSyncPending = syncStatus === "loading" || syncStatus === "saving";
+  const syncAll = useStore((state) => state.syncAll);
+  const client = useStore((state) => state.apiClient);
+
+  const onSync = useCallback(async () => {
+    if (!client) return;
+    const toastId = toast.show({
+      children: t("auth.menu.syncing"),
+      variant: "loading",
+    });
+    try {
+      await syncAll(client);
+      toast.dismiss(toastId);
+      toast.show({
+        children: t("auth.menu.sync_status.synced"),
+        variant: "success",
+      });
+    } catch (err) {
+      toast.dismiss(toastId);
+      toast.show({
+        children: t("auth.menu.sync_error", { error: (err as Error).message }),
+        variant: "error",
+      });
+    }
+  }, [client, syncAll, toast, t]);
+
+  return (
+    <div className={css["account-sync"]}>
+      <p className={css["sync-info"]}>
+        {t("settings.account.sync.description")}
+      </p>
+      <div className={css["sync-status-row"]}>
+        <span>
+          {t("settings.account.sync.status_label")}{" "}
+          <strong>{t(`auth.menu.sync_status.${syncStatus}`)}</strong>
+        </span>
+        <Button
+          data-testid="settings-account-sync-now"
+          disabled={isSyncPending}
+          onClick={onSync}
+          size="sm"
+          variant="secondary"
+        >
+          <RefreshCw
+            size={14}
+            className={isSyncPending ? css["spin"] : undefined}
+          />
+          {t("settings.account.sync.button")}
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 export default Settings;

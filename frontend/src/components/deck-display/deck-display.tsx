@@ -36,6 +36,7 @@ import {
   selectLookupTables,
   selectMetadata,
 } from "@/store/selectors/shared";
+import { selectDeckHasConflict } from "@/store/selectors/sync";
 import type { Search } from "@/store/slices/lists.types";
 import { cx } from "@/utils/cx";
 import { isEvolvedDeck } from "@/utils/deck-utils";
@@ -54,6 +55,7 @@ import { Decklist } from "../decklist/decklist";
 import { DecklistValidation } from "../decklist/decklist-validation";
 import { FolderTag } from "../folders/folder-tag";
 import { ListCard } from "../list-card/list-card";
+import { SyncConflictPanel } from "../sync-conflict/sync-conflict-panel";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Collapsible, CollapsibleContent } from "../ui/collapsible";
@@ -122,6 +124,9 @@ export function DeckDisplay(props: DeckDisplayProps) {
   const roleCard = metadata.cards[deck.role_code];
   const cssVariables = useAccentColor(roleCard);
   const hasHistory = history && history?.length > 1;
+  const hasSyncConflict = useStore((state) =>
+    origin === "local" ? selectDeckHasConflict(state, deck.id) : false,
+  );
 
   const onTabChange = useCallback(
     (val: string) => {
@@ -222,10 +227,11 @@ export function DeckDisplay(props: DeckDisplayProps) {
             <DeckEditActions
               canEdit={canEdit}
               deck={deck}
-              disabled={saving}
+              disabled={saving || hasSyncConflict}
               onDiscardEdit={onDiscardEdit}
               onSaveEdit={saveInlineEdits}
               onStartEdit={onStartEdit}
+              hasSyncConflict={hasSyncConflict}
             />
           ) : (
             <div className={css["edit-actions"]}>
@@ -233,6 +239,12 @@ export function DeckDisplay(props: DeckDisplayProps) {
             </div>
           )}
         </header>
+
+        {hasSyncConflict && (
+          <div className={css["conflict-panel-container"]}>
+            <SyncConflictPanel id={deck.id} type="deck" />
+          </div>
+        )}
 
         {!canEdit && (
           <Dialog>
@@ -964,6 +976,7 @@ function DeckEditActions({
   onDiscardEdit,
   onSaveEdit,
   onStartEdit,
+  hasSyncConflict,
 }: {
   canEdit: boolean;
   deck: ResolvedDeck;
@@ -971,6 +984,7 @@ function DeckEditActions({
   onDiscardEdit?: () => void;
   onSaveEdit: () => void;
   onStartEdit?: () => void;
+  hasSyncConflict?: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -1003,10 +1017,23 @@ function DeckEditActions({
 
   return (
     <div className={css["edit-actions"]}>
-      <Button data-testid="edit-deck" onClick={onStartEdit} size="sm">
-        <PencilIcon />
-        {t("deck.actions.edit")}
-      </Button>
+      <DefaultTooltip
+        tooltip={
+          hasSyncConflict ? t("deck_sync.conflict.edit_locked") : undefined
+        }
+      >
+        <span>
+          <Button
+            data-testid="edit-deck"
+            disabled={hasSyncConflict}
+            onClick={onStartEdit}
+            size="sm"
+          >
+            <PencilIcon />
+            {t("deck.actions.edit")}
+          </Button>
+        </span>
+      </DefaultTooltip>
       <ShareDeckButton deck={deck} />
     </div>
   );

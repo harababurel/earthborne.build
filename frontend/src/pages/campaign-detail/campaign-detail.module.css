@@ -8,6 +8,13 @@
   gap: 1.25rem;
 }
 
+.conflict-panel-container {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
 .header {
   display: flex;
   align-items: flex-start;

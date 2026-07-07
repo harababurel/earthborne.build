@@ -135,3 +135,37 @@
 .list-group-title {
   font-size: var(--text-base);
 }
+
+.account-sync {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 32rem;
+}
+
+.sync-info {
+  font-size: var(--text-sm);
+  color: var(--palette-4);
+  line-height: 1.4;
+}
+
+.sync-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: var(--text-sm);
+}
+
+.spin {
+  animation: spin 1.25s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

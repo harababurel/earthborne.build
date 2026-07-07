@@ -30,3 +30,11 @@
   color: var(--palette-4);
   word-break: break-all;
 }
+
+.sync-status {
+  padding: 0.25rem 0.5rem;
+  color: var(--nord-11);
+  font-size: var(--text-2xs);
+  font-style: italic;
+  word-break: break-word;
+}

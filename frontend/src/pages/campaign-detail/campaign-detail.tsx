@@ -16,6 +16,7 @@ import { SettingsModal } from "@/components/campaign/modals/settings-modal";
 import { TravelModal } from "@/components/campaign/modals/travel-modal";
 import { NotesPanel } from "@/components/campaign/notes-panel";
 import { RangersPanel } from "@/components/campaign/rangers-panel";
+import { SyncConflictPanel } from "@/components/sync-conflict/sync-conflict-panel";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PageTitle } from "@/components/ui/page-title";
@@ -25,6 +26,7 @@ import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
 import { canUndo } from "@/store/lib/campaign/travel";
 import { selectCampaign } from "@/store/selectors/campaigns";
+import { selectCampaignHasConflict } from "@/store/selectors/sync";
 import { ErrorStatus } from "../errors/404";
 import css from "./campaign-detail.module.css";
 import { EventsTab } from "./tabs/events-tab";
@@ -43,11 +45,20 @@ function CampaignDetail() {
   const [tab, setTab] = useTabUrlState("missions", "tab");
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
+  const hasSyncConflict = useStore((state) =>
+    campaign ? selectCampaignHasConflict(state, campaign.id) : false,
+  );
+
   if (!campaign) return <ErrorStatus statusCode={404} />;
 
   return (
     <AppLayout title={campaign.name}>
       <PageTitle>{campaign.name}</PageTitle>
+      {hasSyncConflict && (
+        <div className={css["conflict-panel-container"]}>
+          <SyncConflictPanel id={campaign.id} type="campaign" />
+        </div>
+      )}
       <div className={css["container"]}>
         <header className={css["header"]}>
           <div className={css["heading"]}>
@@ -65,7 +76,7 @@ function CampaignDetail() {
           <div className={css["actions"]}>
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="sm">
+                <Button disabled={hasSyncConflict} size="sm">
                   <FootprintsIcon /> {t("campaign.journey.travel")}
                 </Button>
               </DialogTrigger>
@@ -76,7 +87,7 @@ function CampaignDetail() {
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="sm">
+                <Button disabled={hasSyncConflict} size="sm">
                   <MoonIcon /> {t("campaign.end_day.title")}
                 </Button>
               </DialogTrigger>
@@ -86,7 +97,7 @@ function CampaignDetail() {
             </Dialog>
 
             <Button
-              disabled={!canUndo(campaign)}
+              disabled={hasSyncConflict || !canUndo(campaign)}
               onClick={() => undoTravel(campaign.id)}
               size="sm"
               variant="bare"
@@ -97,6 +108,7 @@ function CampaignDetail() {
             <Dialog>
               <DialogTrigger asChild>
                 <Button
+                  disabled={hasSyncConflict}
                   iconOnly
                   size="sm"
                   tooltip={t("campaign.settings.expansions")}

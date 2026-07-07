@@ -15,14 +15,12 @@ export const createDeckCreateSlice: StateCreator<
   deckCreate: undefined,
 
   initCreate() {
-    set((state) => {
-      const provider = state.settings.defaultStorageProvider;
+    set(() => {
       return {
         deckCreate: {
           step: "name",
           name: i18n.t("deck_create.new_ranger_name"),
-          provider:
-            provider === "local" || provider === "shared" ? provider : "local",
+          provider: "local",
           backgroundSlots: {},
           specialtySlots: {},
           personalitySlots: {},

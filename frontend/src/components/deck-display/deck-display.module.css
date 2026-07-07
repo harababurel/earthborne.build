@@ -42,6 +42,11 @@
   grid-area: header;
 }
 
+.conflict-panel-container {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
 .header > * + * {
   margin-top: 0.5rem;
 }

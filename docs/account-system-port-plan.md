@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 7 complete**
+Status: **phase 8 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -1136,21 +1136,21 @@ task by task, keep tests green throughout.
   preserves nothing account-owned. **Edge case to handle explicitly:** decks/campaigns
   created while logged OUT after a previous logout — they're local-only and upload at
   next login per §3.3 step 4.
-- [ ] **Task 8.8 — Sync UI.** (a) Masthead: global sync status indicator (idle/saving/
+- [x] **Task 8.8 — Sync UI.** (a) Masthead: global sync status indicator (idle/saving/
   synced/error/conflict — use `status-pill`; reference arkham's masthead sync section).
   (b) Deck view/edit: per-deck status + conflict resolution dialog: "Keep this device's
   version" (PUT with server's current revision) / "Use the server version" (overwrite
   local) — port `resolveDeckConflictWithRefresh`/`resolveDeckConflictWithDiscard` and
   build campaign equivalents; campaign detail page gets the same treatment. (c) A
   "Sync now" button in settings. All strings i18n'd.
-- [ ] **Task 8.9 — Cleanup.** Remove `defaultStorageProvider` from
+- [x] **Task 8.9 — Cleanup.** Remove `defaultStorageProvider` from
   `frontend/src/store/slices/settings.types.ts` / settings slice / any UI that surfaces
   it, and the now-unused `StorageProvider` type in `frontend/src/utils/constants.ts`
   (grep for all usages first; `"shared"` provider usages related to deck sharing must
   keep working — only the storage-provider concept goes). Add a persist migration if the
   removed key breaks state shape (likely fine — extra key is ignored, but verify how the
   settings slice hydrates unknown keys).
-- [ ] **Task 8.10 — Tests.** Port/adapt `slices/sync.spec.ts` and
+- [x] **Task 8.10 — Tests.** Port/adapt `slices/sync.spec.ts` and
   `lib/sync-reconciliation.spec.ts`; extend earthborne's `frontend/src/test/factories.ts`
   equivalents (or create minimal factories) for Deck/Campaign fixtures. Cover: the §3.3
   matrix; push-on-save happy path; 409 → conflict → both resolutions; campaign debounce
