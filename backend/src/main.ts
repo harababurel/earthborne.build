@@ -39,6 +39,8 @@ async function cleanupExpiredAccountState() {
     await cleanupExpiredSessions(database);
     await cleanupExpiredTokens(database);
   } catch (error) {
-    log("error", "Failed to clean up expired account state", { error });
+    log("error", "Failed to clean up expired account state", {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }
