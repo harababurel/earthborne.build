@@ -1091,7 +1091,7 @@ task by task, keep tests green throughout.
   dimension). Unit-test the plan function exhaustively against the §3.3 matrix (9 cases
   for items in both sets × dirty/clean × revision match/mismatch, plus the L-only and
   R-only cases, for decks AND campaigns).
-- [ ] **Task 8.3 — Bootstrap + syncAll.** Complete `slices/sync.ts`:
+- [x] **Task 8.3 — Bootstrap + syncAll.** Complete `slices/sync.ts`:
   `bootstrapAuthenticatedState(client)` = fetch manifest → compute plan → apply
   (batch-download; upload never-synced local items; delete remotely-deleted; mark
   conflicts) → then blob sync for folders/settings/achievements (GET → compare →
