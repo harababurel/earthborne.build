@@ -1114,7 +1114,7 @@ task by task, keep tests green throughout.
   The http client reaches slice code via the context module (see how arkham threads
   `client` through slice methods — earthborne slices can import the client getter from
   `services/http-client.context.ts`).
-- [ ] **Task 8.5 — Campaign mutation rewiring.** Campaign mutations are many and
+- [x] **Task 8.5 — Campaign mutation rewiring.** Campaign mutations are many and
   fine-grained (`slices/campaigns.ts`). Do NOT instrument each one with a network call.
   Introduce `scheduleCampaignPush(campaignId)` — debounced ~2 s, coalescing per id —
   invoked from a single choke point: audit `slices/campaigns.ts` for its `dehydrate`
