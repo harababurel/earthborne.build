@@ -1,10 +1,18 @@
 import type { Id } from "@earthborne-build/shared";
+import { isCampaignConflictError } from "../services/requests/campaigns";
+import { isDeckConflictError } from "../services/requests/decks";
 import type { StoreState } from "../slices";
 import type {
   CampaignSyncItemState,
   DeckSyncItemState,
   SyncStatus,
 } from "../slices/sync.types";
+
+export function isSyncedStorageProvider(
+  provider: string | null | undefined,
+): boolean {
+  return provider === "account" || provider === "shared";
+}
 
 export function updateDeckSyncSuccess(
   sync: StoreState["sync"],
@@ -53,6 +61,221 @@ export function updateCampaignSyncSuccess(
       manifestVersion: null,
       status: getCampaignsSyncStatus(items),
       error: null,
+      items,
+    },
+  };
+}
+
+export function updateDeckSyncSaving(
+  sync: StoreState["sync"],
+  deckId: Id,
+): StoreState["sync"] {
+  const items = updateDeckSyncItem(sync.decks.items, deckId, {
+    status: "saving",
+    error: null,
+    conflict: null,
+  });
+
+  return {
+    ...sync,
+    decks: {
+      ...sync.decks,
+      status: getDecksSyncStatus(items),
+      items,
+    },
+  };
+}
+
+export function updateCampaignSyncSaving(
+  sync: StoreState["sync"],
+  campaignId: Id,
+): StoreState["sync"] {
+  const items = updateCampaignSyncItem(sync.campaigns.items, campaignId, {
+    status: "saving",
+    error: null,
+    conflict: null,
+  });
+
+  return {
+    ...sync,
+    campaigns: {
+      ...sync.campaigns,
+      status: getCampaignsSyncStatus(items),
+      items,
+    },
+  };
+}
+
+export function replaceDeckSyncItems(
+  sync: StoreState["sync"],
+  items: StoreState["sync"]["decks"]["items"],
+): StoreState["sync"] {
+  return {
+    ...sync,
+    decks: {
+      ...sync.decks,
+      manifestVersion: null,
+      status: getDecksSyncStatus(items),
+      error: null,
+      items,
+    },
+  };
+}
+
+export function replaceCampaignSyncItems(
+  sync: StoreState["sync"],
+  items: StoreState["sync"]["campaigns"]["items"],
+): StoreState["sync"] {
+  return {
+    ...sync,
+    campaigns: {
+      ...sync.campaigns,
+      manifestVersion: null,
+      status: getCampaignsSyncStatus(items),
+      error: null,
+      items,
+    },
+  };
+}
+
+export function updateDeckSyncError(
+  sync: StoreState["sync"],
+  deckId: Id,
+  error: unknown,
+  kind: NonNullable<DeckSyncItemState["conflict"]>["kind"],
+): StoreState["sync"] {
+  if (isDeckConflictError(error)) {
+    const remoteVersion = error.remote?.remoteVersion ?? null;
+    const items = updateDeckSyncItem(sync.decks.items, deckId, {
+      status: "conflict",
+      error: null,
+      conflict: {
+        kind,
+        remoteVersion,
+      },
+    });
+
+    return {
+      ...sync,
+      decks: {
+        ...sync.decks,
+        status: getDecksSyncStatus(items),
+        items,
+      },
+    };
+  }
+
+  const items = updateDeckSyncItem(sync.decks.items, deckId, {
+    status: "error",
+    error: error instanceof Error ? error.message : "Unknown error",
+  });
+
+  return {
+    ...sync,
+    decks: {
+      ...sync.decks,
+      status: getDecksSyncStatus(items),
+      items,
+    },
+  };
+}
+
+export function updateCampaignSyncError(
+  sync: StoreState["sync"],
+  campaignId: Id,
+  error: unknown,
+  kind: NonNullable<CampaignSyncItemState["conflict"]>["kind"],
+): StoreState["sync"] {
+  if (isCampaignConflictError(error)) {
+    const remoteVersion = error.remote?.remoteVersion ?? null;
+    const items = updateCampaignSyncItem(sync.campaigns.items, campaignId, {
+      status: "conflict",
+      error: null,
+      conflict: {
+        kind,
+        remoteVersion,
+      },
+    });
+
+    return {
+      ...sync,
+      campaigns: {
+        ...sync.campaigns,
+        status: getCampaignsSyncStatus(items),
+        items,
+      },
+    };
+  }
+
+  const items = updateCampaignSyncItem(sync.campaigns.items, campaignId, {
+    status: "error",
+    error: error instanceof Error ? error.message : "Unknown error",
+  });
+
+  return {
+    ...sync,
+    campaigns: {
+      ...sync.campaigns,
+      status: getCampaignsSyncStatus(items),
+      items,
+    },
+  };
+}
+
+export function updateDeckSyncConflictError(
+  sync: StoreState["sync"],
+  deckId: Id,
+  error: unknown,
+  kind: NonNullable<DeckSyncItemState["conflict"]>["kind"],
+): StoreState["sync"] {
+  const current = sync.decks.items[deckId] ?? getInitialDeckSyncItem();
+
+  if (isDeckConflictError(error)) {
+    return updateDeckSyncError(sync, deckId, error, kind);
+  }
+
+  const items = updateDeckSyncItem(sync.decks.items, deckId, {
+    ...current,
+    status: "conflict",
+    error: error instanceof Error ? error.message : "Unknown error",
+    conflict: current.conflict ?? { kind, remoteVersion: null },
+  });
+
+  return {
+    ...sync,
+    decks: {
+      ...sync.decks,
+      status: getDecksSyncStatus(items),
+      items,
+    },
+  };
+}
+
+export function updateCampaignSyncConflictError(
+  sync: StoreState["sync"],
+  campaignId: Id,
+  error: unknown,
+  kind: NonNullable<CampaignSyncItemState["conflict"]>["kind"],
+): StoreState["sync"] {
+  const current =
+    sync.campaigns.items[campaignId] ?? getInitialCampaignSyncItem();
+
+  if (isCampaignConflictError(error)) {
+    return updateCampaignSyncError(sync, campaignId, error, kind);
+  }
+
+  const items = updateCampaignSyncItem(sync.campaigns.items, campaignId, {
+    ...current,
+    status: "conflict",
+    error: error instanceof Error ? error.message : "Unknown error",
+    conflict: current.conflict ?? { kind, remoteVersion: null },
+  });
+
+  return {
+    ...sync,
+    campaigns: {
+      ...sync.campaigns,
+      status: getCampaignsSyncStatus(items),
       items,
     },
   };
