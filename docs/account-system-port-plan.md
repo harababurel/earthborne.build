@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 5 complete**
+Status: **phase 7 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
