@@ -957,7 +957,7 @@ that.
   `sync` + `auth` to initial. The reconciliation half (`bootstrapAuthenticatedState`,
   `syncDecks`, conflict resolution) is Phase 8 — stub `bootstrapAuthenticatedState` as
   a no-op with a `// implemented in phase 8` comment so `initSession` compiles.
-- [ ] **Task 6.5 — Persistence.** Add `auth` (session snapshot: `{session, status}`) and
+- [x] **Task 6.5 — Persistence.** Add `auth` (session snapshot: `{session, status}`) and
   `sync` to the `appStorage` partialize in `frontend/src/store/persist/index.ts` and the
   `AppState` pick-type. Add a persist migration (next free number in
   `persist/migrations/`, registered wherever `migrate.ts` registers them) that seeds

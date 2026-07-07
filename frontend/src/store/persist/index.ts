@@ -7,7 +7,7 @@ import { TabSync } from "./tab-sync";
 
 type AppState = Pick<
   StoreState,
-  "achievements" | "app" | "data" | "settings" | "sharing"
+  "achievements" | "app" | "data" | "settings" | "sharing" | "auth" | "sync"
 >;
 
 type StorageType = "app" | "edits" | "metadata";
@@ -33,6 +33,8 @@ export const appStorage = makeStorageAdapter<AppState>(
     data: state.data,
     settings: state.settings,
     sharing: state.sharing,
+    auth: state.auth,
+    sync: state.sync,
   }),
 );
 
