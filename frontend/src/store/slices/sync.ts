@@ -151,6 +151,8 @@ function getInitialSyncState(): SyncState {
   };
 }
 
+const campaignPushTimeouts: Record<string, ReturnType<typeof setTimeout>> = {};
+
 export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   set,
   get,
@@ -1102,6 +1104,16 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       await dehydrate(get(), "app");
       throw error;
     }
+  },
+
+  scheduleCampaignPush(client, id) {
+    const key = String(id);
+    clearTimeout(campaignPushTimeouts[key]);
+
+    campaignPushTimeouts[key] = setTimeout(() => {
+      delete campaignPushTimeouts[key];
+      get().pushCampaign(client, id).catch(console.error);
+    }, 2000);
   },
 
   // Conflict resolution

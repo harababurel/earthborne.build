@@ -34,6 +34,12 @@ export const createCampaignsSlice: StateCreator<
     }));
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().pushCampaign(client, campaign.id).catch(console.error);
+    }
+
     return campaign.id;
   },
 
@@ -51,6 +57,12 @@ export const createCampaignsSlice: StateCreator<
     }));
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().pushCampaign(client, next.id).catch(console.error);
+    }
+
     return next.id;
   },
 
@@ -64,6 +76,11 @@ export const createCampaignsSlice: StateCreator<
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().pushCampaignDeletion(client, id, null).catch(console.error);
+    }
   },
 
   async updateCampaign(id, patch) {
@@ -86,6 +103,11 @@ export const createCampaignsSlice: StateCreator<
     });
 
     await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      get().scheduleCampaignPush(client, id);
+    }
   },
 
   async linkDeckToCampaign(campaignId, deckId) {

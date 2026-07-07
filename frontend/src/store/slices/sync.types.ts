@@ -144,6 +144,7 @@ export type SyncSlice = SyncState & {
     id: Id,
     expectedRevision: string | null,
   ): Promise<void>;
+  scheduleCampaignPush(client: HttpClient, id: Id): void;
   resolveDeckConflictWithRefresh(
     client: HttpClient,
     id: Id,
