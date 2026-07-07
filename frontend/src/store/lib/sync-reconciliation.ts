@@ -217,6 +217,10 @@ export function applyRemoteDeckReconciliation({
   }
 
   // 4. Update version metadata for items that were already up to date on server
+  const referencedIdKeys = new Set(
+    Object.values(nextHistory).flat().map(String),
+  );
+
   for (const item of manifestDecks) {
     const id = item.id;
     if (skippedIdKeys.has(id) || pushIdKeys.has(id)) continue;
@@ -229,6 +233,12 @@ export function applyRemoteDeckReconciliation({
 
     if (!nextDecks[id]) continue;
     nextItems[id] = makeSyncedItem(item.revision, now, syncItem);
+
+    // Heal synced decks that are missing their collection-index entry, but
+    // leave previous versions referenced from another deck's history alone.
+    if (!referencedIdKeys.has(id)) {
+      nextHistory[id] ??= [];
+    }
   }
 
   return {

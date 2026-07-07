@@ -313,4 +313,38 @@ describe("sync-reconciliation - applyRemoteDeckReconciliation()", () => {
     expect(result.history["deck-2"]).toEqual([]);
     expect(result.history["deck-1"]).toBeUndefined();
   });
+
+  it("heals synced decks that are missing their collection-index entry", () => {
+    const input = makeInput({});
+    input.manifestDecks = [{ id: "deck-1", revision: localRevision }];
+    // Simulates a deck downloaded before history entries were written.
+    input.history = {};
+
+    const result = applyRemoteDeckReconciliation(input);
+    expect(result.history["deck-1"]).toEqual([]);
+  });
+
+  it("does not surface previous versions referenced from another deck's history", () => {
+    const input = makeInput({});
+    input.dataDecks = {
+      "deck-1": makeTestDeck({ id: "deck-1" }),
+      "deck-old": makeTestDeck({ id: "deck-old" }),
+    };
+    input.manifestDecks = [
+      { id: "deck-1", revision: localRevision },
+      { id: "deck-old", revision: remoteRevision },
+    ];
+    input.history = { "deck-1": ["deck-old"] };
+    input.syncDecks = {
+      ...input.syncDecks,
+      items: {
+        ...input.syncDecks.items,
+        "deck-old": makeSyncItem({ version: remoteRevision, lastSyncedAt }),
+      },
+    };
+
+    const result = applyRemoteDeckReconciliation(input);
+    expect(result.history["deck-old"]).toBeUndefined();
+    expect(result.history["deck-1"]).toEqual(["deck-old"]);
+  });
 });
