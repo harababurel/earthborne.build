@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authKeys } from "@/queries/keys";
 import { useStore } from "@/store";
+import { toRemoteSettings } from "@/store/lib/settings-sync";
 import { useHttpClient } from "@/store/services/http-client.context";
 import {
   deletePendingEmailChange,
@@ -12,7 +13,6 @@ import {
   postSignup,
   postVerifyEmail,
 } from "@/store/services/requests/auth";
-import type { SettingsState } from "@/store/slices/settings.types";
 import { getLocalFolderSyncState } from "@/store/slices/sync";
 
 export function useLoginMutation() {
@@ -198,7 +198,7 @@ function getCompleteProfilePayload(payload: CompleteProfileOnboardingPayload) {
     campaigns: payload.uploadDecks ? getLocalCampaignUploads() : undefined,
     folders: getLocalFolderSyncState(state.data),
     settings: payload.uploadSettings
-      ? getSyncableSettings(state.settings)
+      ? toRemoteSettings(state.settings)
       : undefined,
     achievements: payload.uploadSettings ? state.achievements : undefined,
   };
@@ -207,26 +207,6 @@ function getCompleteProfilePayload(payload: CompleteProfileOnboardingPayload) {
     username: payload.username,
     uploads,
   };
-}
-
-// Device-local keys that must not reach the account settings blob. Phase 8's
-// settings-sync module defines the authoritative syncable subset; keep the
-// two lists in agreement.
-const NON_SYNCED_SETTINGS_KEYS = [
-  "defaultStorageProvider",
-  "devModeEnabled",
-  "flags",
-  "fontSize",
-];
-
-function getSyncableSettings(settings: SettingsState) {
-  const syncable: Record<string, unknown> = { ...settings };
-
-  for (const key of NON_SYNCED_SETTINGS_KEYS) {
-    delete syncable[key];
-  }
-
-  return syncable;
 }
 
 function getLocalDeckUploads() {
