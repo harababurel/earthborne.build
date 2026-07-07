@@ -8,12 +8,6 @@ import type {
   SyncStatus,
 } from "../slices/sync.types";
 
-export function isSyncedStorageProvider(
-  provider: string | null | undefined,
-): boolean {
-  return provider === "account" || provider === "shared";
-}
-
 export function updateDeckSyncSuccess(
   sync: StoreState["sync"],
   deckId: Id,

@@ -3,6 +3,7 @@ import type {
   FolderResponse,
   Id,
   SettingsResponse,
+  SyncManifestResponse,
 } from "@earthborne-build/shared";
 import type { HttpClient } from "../services/http-client";
 import type { AuthState } from "./auth.types";
@@ -130,14 +131,17 @@ export type SyncSlice = SyncState & {
     opts?: { expectedRevision?: string | null },
   ): Promise<void>;
   syncAll(client: HttpClient): Promise<void>;
-  syncDecks(client: HttpClient): Promise<void>;
+  syncDecks(client: HttpClient, manifest?: SyncManifestResponse): Promise<void>;
   pushDeck(client: HttpClient, id: Id): Promise<void>;
   pushDeckDeletion(
     client: HttpClient,
     id: Id,
     expectedRevision: string | null,
   ): Promise<void>;
-  syncCampaigns(client: HttpClient): Promise<void>;
+  syncCampaigns(
+    client: HttpClient,
+    manifest?: SyncManifestResponse,
+  ): Promise<void>;
   pushCampaign(client: HttpClient, id: Id): Promise<void>;
   pushCampaignDeletion(
     client: HttpClient,
@@ -148,11 +152,19 @@ export type SyncSlice = SyncState & {
   scheduleFoldersPush(client: HttpClient): void;
   scheduleSettingsPush(client: HttpClient): void;
   scheduleAchievementsPush(client: HttpClient): void;
+  resolveDeckConflictWithPush(
+    client: HttpClient,
+    id: Id,
+  ): Promise<ItemConflictResolutionResult>;
   resolveDeckConflictWithRefresh(
     client: HttpClient,
     id: Id,
   ): Promise<ItemConflictResolutionResult>;
   resolveDeckConflictWithDiscard(id: Id): Promise<ItemConflictResolutionResult>;
+  resolveCampaignConflictWithPush(
+    client: HttpClient,
+    id: Id,
+  ): Promise<ItemConflictResolutionResult>;
   resolveCampaignConflictWithRefresh(
     client: HttpClient,
     id: Id,

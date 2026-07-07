@@ -1,10 +1,16 @@
-import type { FolderState, Id } from "@earthborne-build/shared";
+import type {
+  FolderState,
+  Id,
+  SyncManifestResponse,
+} from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import { assert } from "@/utils/assert";
 import { ARCHIVE_FOLDER_ID } from "@/utils/constants";
 import { randomId } from "@/utils/crypto";
 import { fromRemoteSettings, toRemoteSettings } from "../lib/settings-sync";
 import {
+  replaceCampaignSyncItems,
+  replaceDeckSyncItems,
   updateCampaignSyncConflictError,
   updateCampaignSyncError,
   updateCampaignSyncSaving,
@@ -156,6 +162,20 @@ let foldersPushTimeout: ReturnType<typeof setTimeout> | null = null;
 let settingsPushTimeout: ReturnType<typeof setTimeout> | null = null;
 let achievementsPushTimeout: ReturnType<typeof setTimeout> | null = null;
 
+function clearPendingPushTimers() {
+  for (const key of Object.keys(campaignPushTimeouts)) {
+    clearTimeout(campaignPushTimeouts[key]);
+    delete campaignPushTimeouts[key];
+  }
+
+  if (foldersPushTimeout) clearTimeout(foldersPushTimeout);
+  if (settingsPushTimeout) clearTimeout(settingsPushTimeout);
+  if (achievementsPushTimeout) clearTimeout(achievementsPushTimeout);
+  foldersPushTimeout = null;
+  settingsPushTimeout = null;
+  achievementsPushTimeout = null;
+}
+
 export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   set,
   get,
@@ -199,16 +219,28 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       errors.push(error);
     }
 
+    let manifest: SyncManifestResponse | undefined;
     try {
-      await get().syncDecks(client);
+      manifest = await fetchSyncManifest(client);
     } catch (error) {
       errors.push(error);
+      const message = getErrorMessage(error);
+      get().setDecksSync({ accountId, status: "error", error: message });
+      get().setCampaignsSync({ accountId, status: "error", error: message });
     }
 
-    try {
-      await get().syncCampaigns(client);
-    } catch (error) {
-      errors.push(error);
+    if (manifest) {
+      try {
+        await get().syncDecks(client, manifest);
+      } catch (error) {
+        errors.push(error);
+      }
+
+      try {
+        await get().syncCampaigns(client, manifest);
+      } catch (error) {
+        errors.push(error);
+      }
     }
 
     if (errors.length === 1) {
@@ -225,6 +257,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   },
 
   clearAccountState(auth?: AuthState) {
+    clearPendingPushTimers();
     set((state) => ({
       ...removeRemoteAccountData(state),
       ...(auth ? { auth } : {}),
@@ -719,7 +752,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   },
 
   // Decks sync
-  async syncDecks(client) {
+  async syncDecks(client, providedManifest) {
     const state = get();
     const accountId = state.auth.session?.account.id;
     assert(accountId, "Cannot sync decks without an account.");
@@ -731,7 +764,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
     });
 
     try {
-      const manifest = await fetchSyncManifest(client);
+      const manifest = providedManifest ?? (await fetchSyncManifest(client));
       if (!isCurrentAccount(get(), accountId)) return;
 
       const syncDecks = get().sync.decks;
@@ -780,6 +813,11 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
 
       // Background pushes
       await performDeckSyncPushes(client, plan, get());
+
+      // Push handlers set per-item states; recompute the aggregate from them.
+      set((prev) => ({
+        sync: replaceDeckSyncItems(prev.sync, prev.sync.decks.items),
+      }));
 
       await dehydrate(get(), "app", "edits");
     } catch (error) {
@@ -844,6 +882,17 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
                 error: null,
                 conflict: null,
               });
+
+              // Re-keying rewrote references in campaigns and folders; their
+              // server copies still point at the old id until pushed.
+              for (const campaign of Object.values(get().data.campaigns)) {
+                if (campaign.deck_ids.includes(newId)) {
+                  get().scheduleCampaignPush(client, campaign.id);
+                }
+              }
+              if (get().data.deckFolders[String(newId)] != null) {
+                get().scheduleFoldersPush(client);
+              }
             }
           } else {
             throw error;
@@ -914,7 +963,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   },
 
   // Campaigns sync
-  async syncCampaigns(client) {
+  async syncCampaigns(client, providedManifest) {
     const state = get();
     const accountId = state.auth.session?.account.id;
     assert(accountId, "Cannot sync campaigns without an account.");
@@ -926,7 +975,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
     });
 
     try {
-      const manifest = await fetchSyncManifest(client);
+      const manifest = providedManifest ?? (await fetchSyncManifest(client));
       if (!isCurrentAccount(get(), accountId)) return;
 
       const syncCampaigns = get().sync.campaigns;
@@ -974,6 +1023,10 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
 
       // Background pushes
       await performCampaignSyncPushes(client, plan, get());
+
+      set((prev) => ({
+        sync: replaceCampaignSyncItems(prev.sync, prev.sync.campaigns.items),
+      }));
 
       await dehydrate(get(), "app");
     } catch (error) {
@@ -1147,6 +1200,46 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   },
 
   // Conflict resolution
+  async resolveDeckConflictWithPush(client, id) {
+    const conflict = getDeckConflict(get(), id);
+    assert(
+      conflict.remoteVersion != null,
+      `Deck ${id} has no remote copy to overwrite.`,
+    );
+
+    const deck = get().data.decks[id];
+    assert(deck, `Deck ${id} does not exist locally.`);
+
+    set((prev) => ({
+      sync: updateDeckSyncSaving(prev.sync, id),
+    }));
+
+    try {
+      const response = await putDeck(client, String(id), {
+        data: deck,
+        expectedRevision: conflict.remoteVersion,
+      });
+
+      set((prev) => ({
+        sync: updateDeckSyncSuccess(
+          prev.sync,
+          id,
+          response.revision,
+          Date.now(),
+        ),
+      }));
+      await dehydrate(get(), "app", "edits");
+
+      return { kind: conflict.kind };
+    } catch (error) {
+      set((prev) => ({
+        sync: updateDeckSyncConflictError(prev.sync, id, error, conflict.kind),
+      }));
+      await dehydrate(get(), "app", "edits");
+      throw error;
+    }
+  },
+
   async resolveDeckConflictWithRefresh(client, id) {
     const conflict = getDeckConflict(get(), id);
 
@@ -1253,6 +1346,51 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
         sync: updateDeckSyncConflictError(prev.sync, id, error, conflict.kind),
       }));
       await dehydrate(get(), "app", "edits");
+      throw error;
+    }
+  },
+
+  async resolveCampaignConflictWithPush(client, id) {
+    const conflict = getCampaignConflict(get(), id);
+    assert(
+      conflict.remoteVersion != null,
+      `Campaign ${id} has no remote copy to overwrite.`,
+    );
+
+    const campaign = get().data.campaigns[id];
+    assert(campaign, `Campaign ${id} does not exist locally.`);
+
+    set((prev) => ({
+      sync: updateCampaignSyncSaving(prev.sync, id),
+    }));
+
+    try {
+      const response = await putCampaign(client, String(id), {
+        data: campaign,
+        expectedRevision: conflict.remoteVersion,
+      });
+
+      set((prev) => ({
+        sync: updateCampaignSyncSuccess(
+          prev.sync,
+          id,
+          response.revision,
+          Date.now(),
+        ),
+      }));
+      await dehydrate(get(), "app");
+
+      return { kind: conflict.kind };
+    } catch (error) {
+      set((prev) => ({
+        sync: updateCampaignSyncConflictError(
+          prev.sync,
+          id,
+          error,
+          conflict.kind,
+        ),
+      }));
+      await dehydrate(get(), "app");
       throw error;
     }
   },

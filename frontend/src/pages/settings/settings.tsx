@@ -14,7 +14,10 @@ import { useTabUrlState } from "@/components/ui/tabs.hooks";
 import { useToast } from "@/components/ui/toast.hooks";
 import { AppLayout } from "@/layouts/app-layout";
 import { useStore } from "@/store";
-import { selectAccountSyncStatus } from "@/store/selectors/sync";
+import {
+  selectAccountSyncStatus,
+  selectOrphanedConflicts,
+} from "@/store/selectors/sync";
 import type { ColorScheme, SettingsState } from "@/store/slices/settings.types";
 import { useColorThemeManager } from "@/utils/use-color-theme";
 import { useGoBack } from "@/utils/use-go-back";
@@ -304,6 +307,106 @@ function AccountSyncSection() {
           {t("settings.account.sync.button")}
         </Button>
       </div>
+      <OrphanedConflictsList />
+    </div>
+  );
+}
+
+function OrphanedConflictsList() {
+  const { t } = useTranslation();
+  const toast = useToast();
+
+  const conflicts = useStore(selectOrphanedConflicts);
+  const client = useStore((state) => state.apiClient);
+  const resolveDeckConflictWithRefresh = useStore(
+    (state) => state.resolveDeckConflictWithRefresh,
+  );
+  const resolveCampaignConflictWithRefresh = useStore(
+    (state) => state.resolveCampaignConflictWithRefresh,
+  );
+  const pushDeckDeletion = useStore((state) => state.pushDeckDeletion);
+  const pushCampaignDeletion = useStore((state) => state.pushCampaignDeletion);
+
+  const [isPending, setIsPending] = useState(false);
+
+  const run = useCallback(
+    async (action: () => Promise<unknown>) => {
+      setIsPending(true);
+      try {
+        await action();
+      } catch (err) {
+        toast.show({
+          children: t("auth.menu.sync_error", {
+            error: (err as Error).message,
+          }),
+          variant: "error",
+        });
+      } finally {
+        setIsPending(false);
+      }
+    },
+    [toast, t],
+  );
+
+  if (!client) return null;
+  if (!conflicts.decks.length && !conflicts.campaigns.length) return null;
+
+  const rows = [
+    ...conflicts.decks.map((id) => ({
+      id: `deck-${id}`,
+      label: t("settings.account.sync.conflict_deck_label", { id }),
+      restore: () => resolveDeckConflictWithRefresh(client, id),
+      deleteRemote: () => {
+        const conflict = useStore.getState().sync.decks.items[id]?.conflict;
+        return pushDeckDeletion(client, id, conflict?.remoteVersion ?? null);
+      },
+    })),
+    ...conflicts.campaigns.map((id) => ({
+      id: `campaign-${id}`,
+      label: t("settings.account.sync.conflict_campaign_label", { id }),
+      restore: () => resolveCampaignConflictWithRefresh(client, id),
+      deleteRemote: () => {
+        const conflict = useStore.getState().sync.campaigns.items[id]?.conflict;
+        return pushCampaignDeletion(
+          client,
+          id,
+          conflict?.remoteVersion ?? null,
+        );
+      },
+    })),
+  ];
+
+  return (
+    <div className={css["sync-conflicts"]} data-testid="sync-conflicts">
+      <h4 className={css["sync-conflicts-title"]}>
+        {t("settings.account.sync.conflicts_title")}
+      </h4>
+      <p className={css["sync-info"]}>
+        {t("settings.account.sync.conflicts_description")}
+      </p>
+      {rows.map((row) => (
+        <div className={css["sync-conflict-row"]} key={row.id}>
+          <span>{row.label}</span>
+          <div className={css["sync-conflict-actions"]}>
+            <Button
+              disabled={isPending}
+              onClick={() => run(row.restore)}
+              size="sm"
+              variant="secondary"
+            >
+              {t("settings.account.sync.conflict_restore")}
+            </Button>
+            <Button
+              disabled={isPending}
+              onClick={() => run(row.deleteRemote)}
+              size="sm"
+              variant="secondary"
+            >
+              {t("settings.account.sync.conflict_delete_remote")}
+            </Button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

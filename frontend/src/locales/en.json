@@ -1073,11 +1073,12 @@
       "conflict": {
         "action_error": "Failed to resolve deck conflict: {{error}}",
         "collection_badge": "Deck conflict needs attention",
-        "description": "This deck changed remotely before your change completed. Refresh to apply the latest remote state.",
+        "description": "This deck was changed both on this device and on the server. Choose which version to keep.",
         "description_remote_missing": "This deck was deleted remotely before your change completed. Discard the local deck to match the remote state.",
         "discard_local": "Discard local deck",
         "edit_locked": "Resolve the deck conflict before editing.",
-        "refresh": "Refresh",
+        "keep_local": "Keep this device's version",
+        "refresh": "Use the server version",
         "remote_version": "Remote version: {{version}}",
         "title": "Deck sync conflict"
       }
@@ -1086,11 +1087,12 @@
       "conflict": {
         "action_error": "Failed to resolve campaign conflict: {{error}}",
         "collection_badge": "Campaign conflict needs attention",
-        "description": "This campaign changed remotely before your change completed. Refresh to apply the latest remote state.",
+        "description": "This campaign was changed both on this device and on the server. Choose which version to keep.",
         "description_remote_missing": "This campaign was deleted remotely before your change completed. Discard the local campaign to match the remote state.",
         "discard_local": "Discard local campaign",
         "edit_locked": "Resolve the campaign conflict before editing.",
-        "refresh": "Refresh",
+        "keep_local": "Keep this device's version",
+        "refresh": "Use the server version",
         "remote_version": "Remote version: {{version}}",
         "title": "Campaign sync conflict"
       }
@@ -1579,7 +1581,13 @@
           "title": "Account synchronization",
           "description": "Sync your decks, campaigns, settings, and achievements across devices.",
           "status_label": "Status:",
-          "button": "Sync now"
+          "button": "Sync now",
+          "conflicts_title": "Unresolved conflicts",
+          "conflicts_description": "These items were deleted on this device, but changed on the server since. Restore the server version, or delete them from the account as well.",
+          "conflict_deck_label": "Deck {{id}}",
+          "conflict_campaign_label": "Campaign {{id}}",
+          "conflict_restore": "Restore server version",
+          "conflict_delete_remote": "Delete from account"
         },
         "title": "Account"
       },

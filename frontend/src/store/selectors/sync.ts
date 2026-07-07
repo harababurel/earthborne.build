@@ -15,6 +15,23 @@ export const selectCampaignHasConflict = createSelector(
   (id, items) => items[id]?.status === "conflict",
 );
 
+// Conflicts on items that no longer exist locally (deletion conflicts) have
+// no item page to render a resolution panel on; the settings page lists them.
+export const selectOrphanedConflicts = createSelector(
+  (state: StoreState) => state.sync.decks.items,
+  (state: StoreState) => state.sync.campaigns.items,
+  (state: StoreState) => state.data.decks,
+  (state: StoreState) => state.data.campaigns,
+  (deckItems, campaignItems, decks, campaigns) => ({
+    decks: Object.keys(deckItems).filter(
+      (id) => deckItems[id].status === "conflict" && !decks[id],
+    ),
+    campaigns: Object.keys(campaignItems).filter(
+      (id) => campaignItems[id].status === "conflict" && !campaigns[id],
+    ),
+  }),
+);
+
 const ACCOUNT_SYNC_STATUS_PRIORITY: Record<SyncStatus, number> = {
   idle: 0,
   synced: 0,
