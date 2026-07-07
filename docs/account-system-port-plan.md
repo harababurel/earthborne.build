@@ -1124,7 +1124,7 @@ task by task, keep tests green throughout.
   409/error handling as decks. Also: campaign create/delete/duplicate push immediately
   (not debounced). Deck↔campaign linking mutates `campaign.deck_ids` ⇒ flows through
   the same choke point automatically.
-- [ ] **Task 8.6 — Folders/settings/achievements push.** Same debounced-push approach:
+- [x] **Task 8.6 — Folders/settings/achievements push.** Same debounced-push approach:
   folder CRUD (data slice) → `saveFolders`; settings changes (settings slice `update...`
   actions) → settings push (only when the changed key is in the syncable subset);
   achievements toggles (achievements slice) → achievements push.
