@@ -155,6 +155,87 @@ describe("sync slice", () => {
       status: "synced",
       version: REV_B,
     });
+    // The deck collection is keyed by data.history — without an entry the
+    // downloaded deck is invisible.
+    expect(state.data.history["deck-new"]).toEqual([]);
+    expect(state.data.history["deck-gone"]).toBeUndefined();
+  });
+
+  it("does not mirror unmodified starter decks, but syncs them once modified", async () => {
+    const starter = makeTestDeck({
+      id: "starter-1",
+      tags: "premade",
+      date_creation: "2026-01-01T00:00:00.000Z",
+      date_update: "2026-01-01T00:00:00.000Z",
+    });
+
+    const store = await getMockStore();
+    store.setState({
+      auth: makeAuthenticatedAuth(),
+      data: makeData({
+        decks: { "starter-1": starter },
+        history: { "starter-1": [] },
+      }),
+      sync: makeSyncState(),
+    });
+
+    routes.push(
+      { method: "GET", path: "/sync/manifest", response: emptyManifest },
+      {
+        method: "POST",
+        path: "/v2/account/decks",
+        response: () => json({ revision: REV_A }, 201),
+      },
+    );
+
+    await store.getState().syncDecks(makeClient(store));
+    expect(requests("POST", "/v2/account/decks")).toHaveLength(0);
+
+    store.setState({
+      data: makeData({
+        decks: {
+          "starter-1": { ...starter, date_update: "2026-07-07T12:00:00.000Z" },
+        },
+        history: { "starter-1": [] },
+      }),
+    });
+
+    await store.getState().syncDecks(makeClient(store));
+    expect(requests("POST", "/v2/account/decks")).toHaveLength(1);
+  });
+
+  it("performs the first blob write when the account has none", async () => {
+    const store = await getMockStore();
+    store.setState({
+      auth: makeAuthenticatedAuth(),
+      sync: makeSyncState({
+        settings: { accountId: null, revision: null },
+      }),
+    });
+
+    routes.push(
+      {
+        method: "GET",
+        path: "/v2/account/settings",
+        response: () => json({ message: "Settings not found" }, 404),
+      },
+      {
+        method: "PUT",
+        path: "/v2/account/settings",
+        response: () => json({ settings: { locale: "en" }, revision: REV_A }),
+      },
+    );
+
+    await store.getState().loadRemoteSettings(makeClient(store));
+
+    const putBody = JSON.parse(
+      String(requests("PUT", "/v2/account/settings").at(-1)?.[1]?.body),
+    );
+    expect(putBody.expectedRevision).toBeNull();
+    expect(store.getState().sync.settings).toMatchObject({
+      status: "synced",
+      revision: REV_A,
+    });
   });
 
   it("surfaces a conflict for dirty decks changed remotely, leaving both copies alone", async () => {

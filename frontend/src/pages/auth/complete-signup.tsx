@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { useCompleteProfileOnboardingMutation } from "@/queries/mutations/auth";
 import { useStore } from "@/store";
+import { isUnmodifiedStarterDeck } from "@/store/lib/sync";
 import { AuthForm } from "./auth-form";
 import { AuthLayout } from "./auth-layout";
 import css from "./complete-signup.module.css";
@@ -133,7 +134,7 @@ function CompleteSignup() {
 
 function selectHasLocalData(state: ReturnType<typeof useStore.getState>) {
   const hasDecks = Object.values(state.data.decks).some(
-    (deck) => deck.source !== "account",
+    (deck) => deck.source !== "account" && !isUnmodifiedStarterDeck(deck),
   );
   const hasCampaigns = Object.keys(state.data.campaigns).length > 0;
   return hasDecks || hasCampaigns;

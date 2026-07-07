@@ -1,4 +1,4 @@
-import type { Id } from "@earthborne-build/shared";
+import type { Deck, Id } from "@earthborne-build/shared";
 import { isCampaignConflictError } from "../services/requests/campaigns";
 import { isDeckConflictError } from "../services/requests/decks";
 import type { StoreState } from "../slices";
@@ -7,6 +7,17 @@ import type {
   DeckSyncItemState,
   SyncStatus,
 } from "../slices/sync.types";
+
+// The starter decks are seeded into every fresh browser with device-local ids.
+// Mirroring them to the account would add another five copies per device, so
+// they stay local until the user actually modifies one.
+export function isUnmodifiedStarterDeck(deck: Deck): boolean {
+  return (
+    deck.source == null &&
+    deck.tags?.includes("premade") === true &&
+    deck.date_update === deck.date_creation
+  );
+}
 
 export function updateDeckSyncSuccess(
   sync: StoreState["sync"],

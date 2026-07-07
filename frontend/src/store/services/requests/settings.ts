@@ -19,12 +19,18 @@ export class SettingsConflictError extends ApiError {
 
 export async function fetchSettings(
   client: HttpClient,
-): Promise<SettingsResponse> {
-  const res = await client.request("/v2/account/settings", {
-    credentials: "include",
-  });
+): Promise<SettingsResponse | null> {
+  try {
+    const res = await client.request("/v2/account/settings", {
+      credentials: "include",
+    });
 
-  return SettingsResponseSchema.parse(await res.json());
+    return SettingsResponseSchema.parse(await res.json());
+  } catch (error) {
+    // 404 = the account has never saved this blob.
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
 }
 
 export async function putSettings(

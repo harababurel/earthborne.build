@@ -131,6 +131,7 @@ type DeckReconciliationInput = {
   accountId: string;
   dataDecks: StoreState["data"]["decks"];
   deckFolders: StoreState["data"]["deckFolders"];
+  history: StoreState["data"]["history"];
   undoHistory: StoreState["data"]["undoHistory"];
   deckEdits: StoreState["deckEdits"];
   manifestDecks: ReconciliationManifestItem[];
@@ -142,6 +143,7 @@ type DeckReconciliationInput = {
 type DeckReconciliationResult = {
   decks: StoreState["data"]["decks"];
   deckFolders: StoreState["data"]["deckFolders"];
+  history: StoreState["data"]["history"];
   undoHistory: StoreState["data"]["undoHistory"];
   deckEdits: StoreState["deckEdits"];
   syncDecks: DecksSyncState;
@@ -151,6 +153,7 @@ export function applyRemoteDeckReconciliation({
   accountId,
   dataDecks,
   deckFolders,
+  history,
   undoHistory,
   deckEdits,
   manifestDecks,
@@ -168,6 +171,7 @@ export function applyRemoteDeckReconciliation({
   const nextDeckFolders = { ...deckFolders };
   const nextDeckEdits = { ...deckEdits };
   const nextItems = { ...syncDecks.items };
+  const nextHistory = { ...history };
   const nextUndoHistory = undoHistory ? { ...undoHistory } : {};
 
   // 1. Process deletions
@@ -181,6 +185,7 @@ export function applyRemoteDeckReconciliation({
     delete nextItems[id];
     delete nextDeckEdits[id];
     delete nextDeckFolders[id];
+    delete nextHistory[id];
     delete nextUndoHistory[id];
   }
 
@@ -197,6 +202,9 @@ export function applyRemoteDeckReconciliation({
 
     nextDecks[id] = { ...deck, source: "account" };
     nextItems[id] = makeSyncedItem(syncedDeck.revision, now, syncItem);
+    // The deck collection lists decks keyed by `data.history` — a deck
+    // without a history entry is invisible.
+    nextHistory[id] ??= [];
     delete nextUndoHistory[id];
   }
 
@@ -226,6 +234,7 @@ export function applyRemoteDeckReconciliation({
   return {
     decks: nextDecks,
     deckFolders: nextDeckFolders,
+    history: nextHistory,
     undoHistory: nextUndoHistory,
     deckEdits: nextDeckEdits,
     syncDecks: {

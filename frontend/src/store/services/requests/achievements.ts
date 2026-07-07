@@ -19,12 +19,18 @@ export class AchievementsConflictError extends ApiError {
 
 export async function fetchAchievements(
   client: HttpClient,
-): Promise<AchievementsResponse> {
-  const res = await client.request("/v2/account/achievements", {
-    credentials: "include",
-  });
+): Promise<AchievementsResponse | null> {
+  try {
+    const res = await client.request("/v2/account/achievements", {
+      credentials: "include",
+    });
 
-  return AchievementsResponseSchema.parse(await res.json());
+    return AchievementsResponseSchema.parse(await res.json());
+  } catch (error) {
+    // 404 = the account has never saved this blob.
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
 }
 
 export async function putAchievements(

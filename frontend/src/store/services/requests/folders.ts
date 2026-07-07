@@ -19,12 +19,18 @@ export class FoldersConflictError extends ApiError {
 
 export async function fetchFolders(
   client: HttpClient,
-): Promise<FolderResponse> {
-  const res = await client.request("/v2/account/folders", {
-    credentials: "include",
-  });
+): Promise<FolderResponse | null> {
+  try {
+    const res = await client.request("/v2/account/folders", {
+      credentials: "include",
+    });
 
-  return FolderResponseSchema.parse(await res.json());
+    return FolderResponseSchema.parse(await res.json());
+  } catch (error) {
+    // 404 = the account has never saved this blob.
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
 }
 
 export async function putFolders(

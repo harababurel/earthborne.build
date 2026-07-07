@@ -198,6 +198,7 @@ describe("sync-reconciliation - applyRemoteDeckReconciliation()", () => {
       }),
     },
     deckFolders: {},
+    history: { "deck-1": [] },
     undoHistory: {},
     deckEdits: {},
     manifestDecks: [{ id: "deck-1", revision: remoteRevision }],
@@ -307,5 +308,9 @@ describe("sync-reconciliation - applyRemoteDeckReconciliation()", () => {
       status: "synced",
       version: remoteRevision,
     });
+    // The deck collection is keyed by data.history: downloads must gain an
+    // entry, deletions must lose theirs.
+    expect(result.history["deck-2"]).toEqual([]);
+    expect(result.history["deck-1"]).toBeUndefined();
   });
 });

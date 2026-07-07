@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authKeys } from "@/queries/keys";
 import { useStore } from "@/store";
 import { toRemoteSettings } from "@/store/lib/settings-sync";
+import { isUnmodifiedStarterDeck } from "@/store/lib/sync";
 import { useHttpClient } from "@/store/services/http-client.context";
 import {
   deletePendingEmailChange,
@@ -212,7 +213,9 @@ function getCompleteProfilePayload(payload: CompleteProfileOnboardingPayload) {
 function getLocalDeckUploads() {
   const state = useStore.getState();
   return Object.values(state.data.decks)
-    .filter((deck) => deck.source !== "account")
+    .filter(
+      (deck) => deck.source !== "account" && !isUnmodifiedStarterDeck(deck),
+    )
     .map((deck) => ({
       ...deck,
       source: "account" as const,

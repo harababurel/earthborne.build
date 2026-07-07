@@ -9,6 +9,7 @@ import { ARCHIVE_FOLDER_ID } from "@/utils/constants";
 import { randomId } from "@/utils/crypto";
 import { fromRemoteSettings, toRemoteSettings } from "../lib/settings-sync";
 import {
+  isUnmodifiedStarterDeck,
   replaceCampaignSyncItems,
   replaceDeckSyncItems,
   updateCampaignSyncConflictError,
@@ -396,7 +397,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       const response = await fetchFolders(client);
       if (!isCurrentAccount(get(), accountId)) return;
 
-      if (response.revision == null || response.state == null) {
+      if (response == null) {
         await get().saveFolders(client, { expectedRevision: null });
         return;
       }
@@ -519,7 +520,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       const response = await fetchAchievements(client);
       if (!isCurrentAccount(get(), accountId)) return;
 
-      if (response.revision == null || response.state == null) {
+      if (response == null) {
         await get().saveAchievements(client, { expectedRevision: null });
         return;
       }
@@ -638,7 +639,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       const response = await fetchSettings(client);
       if (!isCurrentAccount(get(), accountId)) return;
 
-      if (response.revision == null || response.settings == null) {
+      if (response == null) {
         await get().saveSettings(client, { expectedRevision: null });
         return;
       }
@@ -773,6 +774,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       const localDecks = Object.entries(get().data.decks).reduce<
         Record<string, { id: Id; date_update: string }>
       >((acc, [id, deck]) => {
+        if (isUnmodifiedStarterDeck(deck)) return acc;
         acc[id] = { id: deck.id, date_update: deck.date_update };
         return acc;
       }, {});
@@ -789,6 +791,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
         accountId,
         dataDecks: get().data.decks,
         deckFolders: get().data.deckFolders,
+        history: get().data.history,
         undoHistory: get().data.undoHistory,
         deckEdits: get().deckEdits,
         manifestDecks: manifest.decks,
@@ -802,6 +805,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
           ...prev.data,
           decks: result.decks,
           deckFolders: result.deckFolders,
+          history: result.history,
           undoHistory: result.undoHistory,
         },
         deckEdits: result.deckEdits,
@@ -1258,6 +1262,10 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
           ...prev.data.decks,
           [id]: remoteDeck.data,
         };
+        const history = {
+          ...prev.data.history,
+          [id]: prev.data.history[id] ?? [],
+        };
         const deckEdits = { ...prev.deckEdits };
         const undoHistory = prev.data.undoHistory
           ? { ...prev.data.undoHistory }
@@ -1270,6 +1278,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
           data: {
             ...prev.data,
             decks,
+            history,
             undoHistory,
           },
           deckEdits,
@@ -1308,6 +1317,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       set((prev) => {
         const decks = { ...prev.data.decks };
         const deckFolders = { ...prev.data.deckFolders };
+        const history = { ...prev.data.history };
         const deckEdits = { ...prev.deckEdits };
         const undoHistory = prev.data.undoHistory
           ? { ...prev.data.undoHistory }
@@ -1315,6 +1325,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
 
         delete decks[id];
         delete deckFolders[id];
+        delete history[id];
         delete deckEdits[id];
         delete undoHistory?.[id];
 
@@ -1326,6 +1337,7 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
             ...prev.data,
             decks,
             deckFolders,
+            history,
             undoHistory,
           },
           deckEdits,
