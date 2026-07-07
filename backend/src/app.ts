@@ -52,13 +52,20 @@ export function appFactory(
   app.route("/admin", adminRouter);
   app.route("/images", imagesRouter);
 
+  // Share routes read an optional session cookie, so cross-origin deployments
+  // need credentialed CORS on them. Registered before the public group so its
+  // middleware wins for /v2/public/share paths.
+  const share = new Hono<HonoEnv>();
+  share.use("*", authenticatedCorsMiddleware(config));
+  share.route("/", sharingRouter);
+  app.route("/v2/public/share", share);
+
   const pub = new Hono<HonoEnv>();
   pub.use("*", publicCorsMiddleware(config));
   pub.route("/cards", cardsRouter);
   pub.route("/packs", packsRouter);
   pub.route("/sets", setsRouter);
   pub.route("/fan-made-project-info", fanMadeProjectInfoRouter);
-  pub.route("/share", sharingRouter);
   pub.route("/decklists", decklistsRouter);
   app.route("/v2/public", pub);
 

@@ -294,6 +294,24 @@ describe("sharing and decklists integration", () => {
     };
     expect(shareBody.author_name).toBe("completed_user");
   });
+
+  it("serves share routes with credentialed CORS", async () => {
+    const origin = "http://localhost:3000";
+
+    const preflight = await ctx.app.request("/v2/public/share", {
+      method: "OPTIONS",
+      headers: {
+        Origin: origin,
+        "Access-Control-Request-Method": "POST",
+        "Access-Control-Request-Headers": "Content-Type,X-Client-Id",
+      },
+    });
+
+    expect(preflight.headers.get("access-control-allow-origin")).toBe(origin);
+    expect(preflight.headers.get("access-control-allow-credentials")).toBe(
+      "true",
+    );
+  });
 });
 
 async function createVerifiedAccount(
