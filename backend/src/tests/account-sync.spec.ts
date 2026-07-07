@@ -49,6 +49,16 @@ describe("account sync routes", () => {
     const created = (await create.json()) as { revision: string };
     expect(created.revision).toBeTruthy();
 
+    const mismatchedDeckId = await putJson(
+      "/v2/account/decks/deck-1",
+      {
+        data: makeDeck("deck-2"),
+        expectedRevision: created.revision,
+      },
+      cookie,
+    );
+    expect(mismatchedDeckId.status).toBe(400);
+
     const manifest = await fetchManifest(cookie);
     expect(manifest.decks).toHaveLength(1);
     expect(manifest.decks[0]).toMatchObject({
@@ -181,6 +191,16 @@ describe("account sync routes", () => {
     expect(create.status).toBe(201);
     const created = (await create.json()) as { revision: string };
 
+    const mismatchedCampaignId = await putJson(
+      "/v2/account/campaigns/campaign-1",
+      {
+        data: makeCampaign("campaign-2", []),
+        expectedRevision: created.revision,
+      },
+      cookie,
+    );
+    expect(mismatchedCampaignId.status).toBe(400);
+
     const update = await putJson(
       "/v2/account/campaigns/campaign-1",
       {
@@ -288,6 +308,60 @@ describe("account sync routes", () => {
     };
     expect(staleBody.cause["revision"]).toBe(updated.revision);
     expect(staleBody.cause[responseKey]).toBeDefined();
+  });
+
+  it.each([
+    {
+      path: "folders",
+      body: {
+        state: {
+          folders: Object.fromEntries(
+            Array.from({ length: 400 }, (_, index) => [
+              `folder-${index}`,
+              {
+                id: `folder-${index}`,
+                name: "x".repeat(200),
+              },
+            ]),
+          ),
+          deckFolders: {},
+        },
+        expectedRevision: null,
+      },
+    },
+    {
+      path: "settings",
+      body: {
+        settings: { value: "x".repeat(70_000) },
+        expectedRevision: null,
+      },
+    },
+    {
+      path: "achievements",
+      body: {
+        state: {
+          completed: Object.fromEntries(
+            Array.from({ length: 5_000 }, (_, index) => [
+              `achievement-${index}`,
+              true,
+            ]),
+          ),
+        },
+        expectedRevision: null,
+      },
+    },
+  ])("rejects oversized $path blobs with a client error", async ({
+    path,
+    body,
+  }) => {
+    const cookie = await createAccountCookie(
+      `${path}-large@example.com`,
+      `${path}_large`,
+    );
+
+    const oversized = await putJson(`/v2/account/${path}`, body, cookie);
+    expect(oversized.status).toBeGreaterThanOrEqual(400);
+    expect(oversized.status).toBeLessThan(500);
   });
 });
 

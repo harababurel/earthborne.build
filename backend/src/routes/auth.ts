@@ -70,6 +70,7 @@ import { assertTurnstileToken } from "../lib/auth/turnstile.ts";
 import { sendVerificationEmail } from "../lib/auth/verification-email.ts";
 import { passwordResetEmailTemplate } from "../lib/email/templates.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";
+import { assertRevisionedBlobSize } from "../lib/sync/blob-size.ts";
 import { zodValidator } from "../lib/validation.ts";
 
 type CompleteProfileUploads = NonNullable<CompleteProfileRequest["uploads"]>;
@@ -626,13 +627,14 @@ async function uploadFolders(
 
   const revision = randomUUID();
   const state = remapFolderState(folders, deckIdMap);
+  const serialized = serializeProfileBlob(state, "Folders");
 
   await db
     .insertInto("account_folder")
     .values({
       account_id: accountId,
       revision,
-      state: JSON.stringify(state),
+      state: serialized,
     })
     .onConflict((oc) => oc.column("account_id").doNothing())
     .execute();
@@ -648,13 +650,14 @@ async function uploadSettings(
   if (!settings) return undefined;
 
   const revision = randomUUID();
+  const serialized = serializeProfileBlob(settings, "Settings");
 
   await db
     .insertInto("account_settings")
     .values({
       account_id: accountId,
       revision,
-      settings: JSON.stringify(settings),
+      settings: serialized,
     })
     .onConflict((oc) => oc.column("account_id").doNothing())
     .execute();
@@ -670,13 +673,14 @@ async function uploadAchievements(
   if (!achievements) return undefined;
 
   const revision = randomUUID();
+  const serialized = serializeProfileBlob(achievements, "Achievements");
 
   await db
     .insertInto("account_achievements")
     .values({
       account_id: accountId,
       revision,
-      state: JSON.stringify(achievements),
+      state: serialized,
     })
     .onConflict((oc) => oc.column("account_id").doNothing())
     .execute();
@@ -817,4 +821,10 @@ function omitUnchangedMappings(idMap: Record<string, string>) {
   return Object.fromEntries(
     Object.entries(idMap).filter(([from, to]) => from !== to),
   );
+}
+
+function serializeProfileBlob(value: unknown, label: string) {
+  const serialized = JSON.stringify(value);
+  assertRevisionedBlobSize(serialized, label);
+  return serialized;
 }

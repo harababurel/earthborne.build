@@ -16,6 +16,7 @@ import {
 } from "../db/queries/revisioned-blobs.ts";
 import { sessionAuth } from "../lib/auth/session-auth-middleware.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";
+import { assertRevisionedBlobSize } from "../lib/sync/blob-size.ts";
 import { zodValidator } from "../lib/validation.ts";
 
 const router = new Hono<HonoEnv>();
@@ -43,7 +44,7 @@ router.put(
         await saveBlob(
           c,
           "folders",
-          JSON.stringify(state),
+          serializeBlob(state, "Folders"),
           expectedRevision,
           "state",
         ),
@@ -75,7 +76,7 @@ router.put(
         await saveBlob(
           c,
           "settings",
-          JSON.stringify(settings),
+          serializeBlob(settings, "Settings"),
           expectedRevision,
           "settings",
         ),
@@ -107,7 +108,7 @@ router.put(
         await saveBlob(
           c,
           "achievements",
-          JSON.stringify(state),
+          serializeBlob(state, "Achievements"),
           expectedRevision,
           "state",
         ),
@@ -149,6 +150,12 @@ async function saveBlob(
         }
       : undefined,
   });
+}
+
+function serializeBlob(value: unknown, label: string) {
+  const serialized = JSON.stringify(value);
+  assertRevisionedBlobSize(serialized, label);
+  return serialized;
 }
 
 export default router;

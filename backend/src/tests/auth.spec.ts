@@ -180,6 +180,49 @@ describe("account auth routes", () => {
     ).resolves.toHaveLength(1);
   });
 
+  it("validates complete-profile blob sizes while allowing larger onboarding bodies", async () => {
+    const oversizedBlobCookie = await signupVerifyLogin("blobsize@example.com");
+    const oversizedBlob = await ctx.app.request(
+      "/v2/account/auth/complete-profile",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: "blobsize",
+          uploads: {
+            settings: { value: "x".repeat(70_000) },
+          },
+        }),
+        headers: {
+          Cookie: oversizedBlobCookie,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    expect(oversizedBlob.status).toBe(400);
+
+    const largeBodyCookie = await signupVerifyLogin("largebody@example.com");
+    const largeBody = await ctx.app.request(
+      "/v2/account/auth/complete-profile",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: "largebody",
+          uploads: {
+            decks: Array.from({ length: 80 }, (_, index) => ({
+              ...makeDeck(`large-${index}`),
+              description_md: "x".repeat(8_000),
+            })),
+          },
+        }),
+        headers: {
+          Cookie: largeBodyCookie,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    expect(largeBody.status).toBe(200);
+  });
+
   it("enforces session auth failures", async () => {
     const noCookie = await ctx.app.request("/v2/account/profile", {
       method: "PATCH",

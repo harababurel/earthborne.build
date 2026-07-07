@@ -79,6 +79,12 @@ router.put(
     const { data, expectedRevision } = c.req.valid("json");
     const accountId = c.get("account").id;
 
+    if (String(data.id) !== id) {
+      throw new HTTPException(400, {
+        message: "Deck id must match the request URL",
+      });
+    }
+
     const row = await updateDeckItem(
       c.get("db"),
       accountId,
