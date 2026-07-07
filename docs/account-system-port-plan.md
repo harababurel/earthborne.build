@@ -985,7 +985,7 @@ that.
   - `frontend/.env.example`: change `VITE_API_URL` and `VITE_API_LEGACY_URL` from
     `127.0.0.1` to `localhost` with a comment explaining the SameSite constraint
     (§3.5); add `VITE_TURNSTILE_SITE_KEY=""`.
-- [ ] **Task 6.7 — Frontend unit tests.** Adapt the ported `auth.spec.ts` (mock the http
+- [x] **Task 6.7 — Frontend unit tests.** Adapt the ported `auth.spec.ts` (mock the http
   client, not fetch — arkham's spec shows the pattern with `get-mock-store`). Verify
   earthborne's `frontend/src/test/get-mock-store.ts` provides what the spec needs;
   extend it minimally if not.
