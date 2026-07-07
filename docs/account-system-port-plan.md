@@ -963,7 +963,7 @@ that.
   `persist/migrations/`, registered wherever `migrate.ts` registers them) that seeds
   `auth`/`sync` initial states for existing users — reference arkham's `0008-add-auth.ts`.
   Bump `VERSION` in `persist/storage.ts` per the existing migration convention.
-- [ ] **Task 6.6 — Boot wiring + env.** Exact insertion points (verified 2026-07-07 —
+- [x] **Task 6.6 — Boot wiring + env.** Exact insertion points (verified 2026-07-07 —
   re-read the files first; if they've drifted, adapt but keep the same hook positions):
   - `frontend/src/store/slices/ui.types.ts`: add `sessionInitialized: boolean` to
     `UIState["ui"]` (next to the existing `initialized` flag) and add it to the initial

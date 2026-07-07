@@ -11,6 +11,7 @@ export type UIState = {
   ui: {
     cardModal: CardModalState;
     initialized: boolean;
+    sessionInitialized: boolean;
     navigationHistory: string[];
     showLimitedAccess: boolean;
     showUnusableCards: boolean;

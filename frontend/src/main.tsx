@@ -13,6 +13,8 @@ import App from "./app";
 import { useStore } from "./store";
 import { tabSync } from "./store/persist";
 import type { TabSyncEvent } from "./store/persist/tab-sync";
+import { createHttpClient } from "./store/services/http-client";
+import { HttpClientContext } from "./store/services/http-client.context";
 import {
   queryCards,
   queryDataVersion,
@@ -25,9 +27,18 @@ if (!rootNode) {
   throw new Error("fatal: did not find root node in DOM.");
 }
 
+const client = createHttpClient({
+  apiUrl: import.meta.env.VITE_API_URL || "",
+  onUnauthorized() {
+    return useStore.getState().handleUnauthorized();
+  },
+});
+
 ReactDOM.createRoot(rootNode).render(
   <React.StrictMode>
-    <App />
+    <HttpClientContext.Provider value={client}>
+      <App />
+    </HttpClientContext.Provider>
   </React.StrictMode>,
 );
 
@@ -44,6 +55,8 @@ async function init() {
   await useStore
     .getState()
     .init(queryMetadata, queryDataVersion, queryCards, { refresh: false });
+
+  await useStore.getState().initSession(client);
 
   const tabSyncListener = (evt: TabSyncEvent) => {
     useStore.setState(evt.state);

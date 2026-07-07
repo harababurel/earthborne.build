@@ -6,6 +6,7 @@ function getInitialUIState(): UIState {
   return {
     ui: {
       initialized: false,
+      sessionInitialized: false,
       showUnusableCards: false,
       showLimitedAccess: true,
       navigationHistory: [],

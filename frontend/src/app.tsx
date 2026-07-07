@@ -79,6 +79,8 @@ function Providers(props: { children: React.ReactNode }) {
 function AppInner() {
   const { t } = useTranslation();
   const storeInitialized = useStore(selectIsInitialized);
+  const sessionInitialized = useStore((state) => state.ui.sessionInitialized);
+  const appInitialized = storeInitialized && sessionInitialized;
   const fontSize = useStore((state) => state.settings.fontSize);
   useColorThemeListener();
 
@@ -90,9 +92,9 @@ function AppInner() {
 
   return (
     <>
-      <Loader message={t("app.init")} show={!storeInitialized} delay={200} />
+      <Loader message={t("app.init")} show={!appInitialized} delay={200} />
       <Suspense fallback={<Loader delay={300} show />}>
-        {storeInitialized && (
+        {appInitialized && (
           <Router hook={useBrowserLocation}>
             <Switch>
               <Route component={Index} path="/" />
