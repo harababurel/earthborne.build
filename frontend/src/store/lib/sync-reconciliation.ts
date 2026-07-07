@@ -160,6 +160,9 @@ export function applyRemoteDeckReconciliation({
 }: DeckReconciliationInput): DeckReconciliationResult {
   const now = Date.now();
   const skippedIdKeys = new Set<string>();
+  // Items awaiting a push keep their current version + lastSyncedAt: stamping
+  // them as synced here would erase the dirtiness that drives the push retry.
+  const pushIdKeys = new Set(plan.pushes);
 
   const nextDecks = { ...dataDecks };
   const nextDeckFolders = { ...deckFolders };
@@ -197,10 +200,18 @@ export function applyRemoteDeckReconciliation({
     delete nextUndoHistory[id];
   }
 
-  // 3. Update version metadata for items that were already up to date on server
+  // 3. Surface conflicts so the user can resolve them
+  for (const conflict of plan.conflicts) {
+    const syncItem = nextItems[conflict.id];
+    skippedIdKeys.add(conflict.id);
+    if (shouldSkipSyncItem(syncItem)) continue;
+    nextItems[conflict.id] = makeConflictItem(conflict, syncItem);
+  }
+
+  // 4. Update version metadata for items that were already up to date on server
   for (const item of manifestDecks) {
     const id = item.id;
-    if (skippedIdKeys.has(id)) continue;
+    if (skippedIdKeys.has(id) || pushIdKeys.has(id)) continue;
 
     const syncItem = nextItems[id];
     if (shouldSkipSyncItem(syncItem)) {
@@ -256,6 +267,7 @@ export function applyRemoteCampaignReconciliation({
 }: CampaignReconciliationInput): CampaignReconciliationResult {
   const now = Date.now();
   const skippedIdKeys = new Set<string>();
+  const pushIdKeys = new Set(plan.pushes);
 
   const nextCampaigns = { ...dataCampaigns };
   const nextItems = { ...syncCampaigns.items };
@@ -289,10 +301,18 @@ export function applyRemoteCampaignReconciliation({
     delete nextUndoHistory[id];
   }
 
-  // 3. Update version metadata for items that were already up to date on server
+  // 3. Surface conflicts so the user can resolve them
+  for (const conflict of plan.conflicts) {
+    const syncItem = nextItems[conflict.id];
+    skippedIdKeys.add(conflict.id);
+    if (shouldSkipSyncItem(syncItem)) continue;
+    nextItems[conflict.id] = makeConflictItem(conflict, syncItem);
+  }
+
+  // 4. Update version metadata for items that were already up to date on server
   for (const item of manifestCampaigns) {
     const id = item.id;
-    if (skippedIdKeys.has(id)) continue;
+    if (skippedIdKeys.has(id) || pushIdKeys.has(id)) continue;
 
     const syncItem = nextItems[id];
     if (shouldSkipSyncItem(syncItem)) {
@@ -341,6 +361,24 @@ function makeSyncedItem(
     lastSyncedAt,
     error: null,
     conflict: null,
+  };
+}
+
+function makeConflictItem(
+  conflict: ReconciliationItemPlan["conflicts"][number],
+  item: DeckSyncItemState | CampaignSyncItemState | undefined,
+): DeckSyncItemState & CampaignSyncItemState {
+  // The current version + lastSyncedAt are kept: they still describe the last
+  // state both sides agreed on, which resolution needs to reason about.
+  return {
+    version: item?.version ?? null,
+    lastSyncedAt: item?.lastSyncedAt ?? null,
+    status: "conflict",
+    error: null,
+    conflict: {
+      kind: conflict.kind,
+      remoteVersion: conflict.remoteVersion,
+    },
   };
 }
 
