@@ -9,6 +9,7 @@ import {
   CheckIcon,
   FileClockIcon,
   PencilIcon,
+  Share2Icon,
   SquarePenIcon,
   Undo2Icon,
   XIcon,
@@ -76,6 +77,7 @@ import { DefaultTooltip } from "../ui/tooltip";
 import { CampaignRewardSync } from "./campaign-reward-sync";
 import css from "./deck-display.module.css";
 import { DeckHistory } from "./deck-history/deck-history";
+import { DeckShareModal } from "./deck-share-modal";
 import { DecklistPopover } from "./decklist-popover";
 import Sidebar from "./sidebar";
 import type { DeckOrigin } from "./types";
@@ -216,14 +218,19 @@ export function DeckDisplay(props: DeckDisplayProps) {
           </div>
           {canEdit && <DeckEditSummary deck={deck} />}
           {headerSlot && <div>{headerSlot}</div>}
-          {origin === "local" && (
+          {origin === "local" ? (
             <DeckEditActions
               canEdit={canEdit}
+              deck={deck}
               disabled={saving}
               onDiscardEdit={onDiscardEdit}
               onSaveEdit={saveInlineEdits}
               onStartEdit={onStartEdit}
             />
+          ) : (
+            <div className={css["edit-actions"]}>
+              <ShareDeckButton deck={deck} />
+            </div>
           )}
         </header>
 
@@ -952,12 +959,14 @@ function CampaignSection({
 
 function DeckEditActions({
   canEdit,
+  deck,
   disabled,
   onDiscardEdit,
   onSaveEdit,
   onStartEdit,
 }: {
   canEdit: boolean;
+  deck: ResolvedDeck;
   disabled: boolean;
   onDiscardEdit?: () => void;
   onSaveEdit: () => void;
@@ -998,7 +1007,26 @@ function DeckEditActions({
         <PencilIcon />
         {t("deck.actions.edit")}
       </Button>
+      <ShareDeckButton deck={deck} />
     </div>
+  );
+}
+
+function ShareDeckButton({ deck }: { deck: ResolvedDeck }) {
+  const { t } = useTranslation();
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button data-testid="share-deck" size="sm">
+          <Share2Icon />
+          {t("deck.actions.share")}
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DeckShareModal deck={deck} />
+      </DialogContent>
+    </Dialog>
   );
 }
 

@@ -978,8 +978,8 @@
       "copy": "Copy",
       "include_displaced": "Include displaced cards",
       "include_rewards": "Include unlocked rewards",
-      "tab_markdown": "Markdown",
-      "tab_plaintext": "Plaintext",
+      "included_rewards": "Included Rewards",
+      "markdown": "Markdown",
       "title": "Share deck"
     },
     "deck_view": {

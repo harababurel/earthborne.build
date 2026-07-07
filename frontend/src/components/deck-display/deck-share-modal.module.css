@@ -1,0 +1,32 @@
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.share {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.output {
+  max-height: 60vh;
+  overflow: auto;
+  padding: 1rem;
+  border: 1px solid var(--palette-2);
+  border-radius: var(--rounded);
+  background: var(--palette-1);
+  color: var(--text);
+  font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 2;
+}
