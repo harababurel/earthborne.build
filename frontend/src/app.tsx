@@ -47,6 +47,13 @@ const Rules = lazy(() => import("./pages/rules-reference/rules-reference"));
 
 const Debug = lazy(() => import("./pages/debug/debug"));
 
+const Login = lazy(() => import("./pages/auth/login"));
+const Signup = lazy(() => import("./pages/auth/signup"));
+const CompleteSignup = lazy(() => import("./pages/auth/complete-signup"));
+const ForgotPassword = lazy(() => import("./pages/auth/forgot-password"));
+const ResetPassword = lazy(() => import("./pages/auth/reset-password"));
+const VerifyEmail = lazy(() => import("./pages/auth/verify-email"));
+
 function App() {
   return (
     <Providers>
@@ -114,11 +121,18 @@ function AppInner() {
               <Route component={BrowseDecklists} path="/decklists" />
               <Route component={Rules} path="/rules" />
               <Route component={Debug} path="/debug" />
+              <Route component={Login} path="/auth/login" />
+              <Route component={Signup} path="/auth/signup" />
+              <Route component={CompleteSignup} path="/auth/complete-signup" />
+              <Route component={ForgotPassword} path="/auth/forgot-password" />
+              <Route component={ResetPassword} path="/auth/reset-password" />
+              <Route component={VerifyEmail} path="/auth/verify-email" />
               <Route path="*">
                 <ErrorStatus statusCode={404} />
               </Route>
             </Switch>
             <RouteReset />
+            <SessionRedirects />
           </Router>
         )}
       </Suspense>
@@ -154,6 +168,37 @@ function RouteReset() {
       window.scrollTo(0, 0);
     } catch (_) {}
   }, [pathname]);
+
+  return null;
+}
+
+function SessionRedirects() {
+  const [location, navigate] = useLocation();
+  const sessionInitialized = useStore((state) => state.ui.sessionInitialized);
+  const session = useStore((state) => state.auth.session);
+
+  useEffect(() => {
+    if (!sessionInitialized) return;
+
+    const authenticated = Boolean(session);
+    const profileComplete = Boolean(session?.account.profileComplete);
+
+    if (authenticated) {
+      if (
+        !profileComplete &&
+        !["/auth/complete-signup", "/auth/verify-email"].includes(location)
+      ) {
+        navigate("/auth/complete-signup");
+      } else if (
+        profileComplete &&
+        ["/auth/login", "/auth/signup", "/auth/complete-signup"].includes(
+          location,
+        )
+      ) {
+        navigate("/");
+      }
+    }
+  }, [location, sessionInitialized, session, navigate]);
 
   return null;
 }

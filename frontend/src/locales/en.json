@@ -23,6 +23,93 @@
       "init": "Initializing card database...",
       "init_error": "Failed to initialize card database: {{error}}"
     },
+    "auth": {
+      "email": "Email",
+      "email_delivery_notice": "Email delivery to @icloud.com and @me.com is currently not working. Please use another email address.",
+      "email_or_username": "Email or username",
+      "errors": {
+        "account_not_verified": "Your account has not been verified yet. Please <verifyLink>verify</verifyLink> your email before logging in.",
+        "captcha_load_failed": "Failed to load Turnstile captcha.",
+        "forgot_password_failed": "Failed to initiate password reset: {{error}}",
+        "invalid_credentials": "Invalid email or password",
+        "login_failed": "Login failed: {{error}}",
+        "password_reset_failed": "Password reset failed: {{error}}",
+        "rate_limited": "Too many requests. Please wait {{interval}} before trying again",
+        "signup_failed": "Signup failed: {{error}}",
+        "verify_email_failed": "Email verification failed: {{error}}",
+        "verify_email_send_failed": "Failed to resend verification email: {{error}}"
+      },
+      "forgot_password": {
+        "description": "Enter your email or username and we'll send you instructions on how to reset your password.",
+        "submit": "Send password reset instructions",
+        "success": "If an account exists, you'll receive a reset link shortly.",
+        "title": "Forgot password"
+      },
+      "login": {
+        "forgot_password": "Forgot password?",
+        "no_account": "Don't have an account?",
+        "title": "Log in",
+        "action": "Log in"
+      },
+      "logout": "Logout",
+      "menu": {
+        "logged_in_as": "Logged in as {{name}}",
+        "sync_account": "Sync data",
+        "sync_error": "Failed to sync data: {{error}}",
+        "sync_status": {
+          "conflict": "Account sync conflict",
+          "error": "Account sync error",
+          "idle": "Account sync idle",
+          "loading": "Account sync loading",
+          "partial": "Account sync partially failed",
+          "saving": "Account sync saving",
+          "synced": "Account sync complete"
+        },
+        "syncing": "Syncing account data..."
+      },
+      "password": "Password",
+      "password_validation": "Minimum 8 characters",
+      "reset_password": {
+        "confirm_password": "Confirm password",
+        "password": "New password",
+        "success": "Password reset successfully. You can now log in.",
+        "title": "Reset password"
+      },
+      "signup": {
+        "complete_profile": {
+          "description": "Choose a username for your account. This will be displayed publicly on your decks and contributions.",
+          "title": "Complete your profile",
+          "upload": {
+            "decks": {
+              "help": "Uploads your local deck and campaign collection to your account.",
+              "label": "Upload local decks & campaigns"
+            },
+            "settings": {
+              "help": "Uploads your collection, achievements and display preferences.",
+              "label": "Upload settings & achievements"
+            },
+            "title": "Upload local data"
+          }
+        },
+        "has_account": "Already have an account?",
+        "legal_acceptance": "By creating an account, you agree to the <terms>Terms of Service</terms> and acknowledge the <privacy>Privacy Policy</privacy>.",
+        "success": "Signed up successfully! Please check your email to verify your account. You'll choose a username after your first login.",
+        "action": "Sign up",
+        "title": "Sign up",
+        "verifying": "Verifying..."
+      },
+      "username": "Username",
+      "username_validation": "Letters, numbers, underscores, and hyphens only",
+      "verify_email": {
+        "action": "Verify email",
+        "resend_action": "Resend verification email",
+        "resend": "Resend verification email",
+        "resend_success": "Verification email sent successfully. Please check your inbox.",
+        "success": "Email verified! You can now log in.",
+        "title": "Verify email",
+        "token": "Verification token"
+      }
+    },
     "attachments": {
       "attach": "Add to {{name}}",
       "attached": "Attached to {{name}}",
@@ -1422,6 +1509,48 @@
       "title": "Search results"
     },
     "settings": {
+      "account": {
+        "danger_zone": "Danger zone",
+        "delete": {
+          "confirm_help": "Type {{username}} to confirm account deletion.",
+          "confirm_label": "Confirmation",
+          "deleting": "Deleting account...",
+          "help": "Permanently delete your earthborne.build account and associated data. This deletes server-side credentials, sessions, account-synced decks, settings, and achievements. Account-linked decks and campaigns are removed from this device. Device-only decks, settings, and other browser data is not deleted.",
+          "submit": "Delete account",
+          "title": "Delete account"
+        },
+        "email": {
+          "add": "Add email",
+          "add_help": "Add an email address and password as an alternative way to sign in.",
+          "cancel_pending": "Cancel email verification",
+          "canceling_pending": "Canceling email verification...",
+          "current_password": "Current password",
+          "new_email": "New email",
+          "new_email_help": "Leave blank to keep your current email.",
+          "new_password": "New password",
+          "new_password_help": "Leave blank to keep your current password.",
+          "pending": "Pending email",
+          "pending_help": "Check {{email}} to <verifyLink>verify it</verifyLink>.",
+          "save": "Update credentials",
+          "saving": "Saving credentials...",
+          "status": "Status",
+          "status_pending": "Pending verification",
+          "status_verified": "Verified",
+          "title": "Credentials"
+        },
+        "privacy_rights": {
+          "body": "You can export your data from the Support tab and delete your account below. For GDPR requests that are not self-service, such as restriction or objection requests, contact <privacyEmail />.",
+          "title": "Privacy and data rights"
+        },
+        "profile": {
+          "save": "Save profile",
+          "saving": "Saving profile...",
+          "title": "Profile",
+          "username": "Username",
+          "username_help": "Letters, numbers, underscores, and hyphens only"
+        },
+        "title": "Account"
+      },
       "app": {
         "built": "Built",
         "title": "App",

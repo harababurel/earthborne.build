@@ -1,0 +1,6 @@
+.legal-copy {
+  font-size: var(--text-2xs);
+  color: var(--palette-5);
+  line-height: var(--line-height-md);
+  margin-bottom: 0.5rem;
+}

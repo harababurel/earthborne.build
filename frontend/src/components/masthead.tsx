@@ -8,6 +8,7 @@ import { LocaleQuickSwitch } from "./locale-quick-switch";
 import css from "./masthead.module.css";
 import { ThemeQuickSwitch } from "./theme-quick-switch";
 import { Button } from "./ui/button";
+import { AccountMenu } from "./user-account/account-menu";
 
 type Props = {
   className?: string;
@@ -70,6 +71,7 @@ export function Masthead(props: Props) {
             )}
           </>
         )}
+        <AccountMenu />
         <HelpMenu />
       </nav>
     </header>

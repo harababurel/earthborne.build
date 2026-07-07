@@ -1,4 +1,6 @@
+import type { FolderState } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
+import { ARCHIVE_FOLDER_ID } from "@/utils/constants";
 import type { AuthState } from "./auth.types";
 import type { StoreState } from "./index";
 import type {
@@ -341,4 +343,21 @@ function removeRemoteAccountData(state: StoreState) {
     },
     deckEdits,
   };
+}
+
+export function getLocalFolderSyncState(data: StoreState["data"]): FolderState {
+  const folders = { ...data.folders };
+  delete folders[ARCHIVE_FOLDER_ID];
+
+  const deckFolders = Object.entries(data.deckFolders).reduce<
+    FolderState["deckFolders"]
+  >((acc, [deckId, folderId]) => {
+    if (folderId === ARCHIVE_FOLDER_ID || folders[folderId]) {
+      acc[deckId] = folderId;
+    }
+
+    return acc;
+  }, {});
+
+  return { folders, deckFolders };
 }

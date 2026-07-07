@@ -1,0 +1,32 @@
+.trigger {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid transparent;
+
+  &:focus-visible {
+    border-color: var(--focus);
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0.5rem;
+}
+
+.user-label {
+  font-size: var(--text-2xs);
+  color: var(--palette-5);
+  text-transform: uppercase;
+}
+
+.username {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--palette-4);
+  word-break: break-all;
+}
