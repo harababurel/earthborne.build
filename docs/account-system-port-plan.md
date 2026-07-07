@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 2 complete**
+Status: **phase 3 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -746,7 +746,7 @@ npm run check -w backend && npm run test -w backend && npm run lint
 Goal: full signup → verify → login → session → credentials-management → delete-account
 lifecycle over HTTP, tested.
 
-- [ ] **Task 3.1 — Route file skeleton.** Create `backend/src/routes/auth.ts` exporting
+- [x] **Task 3.1 — Route file skeleton.** Create `backend/src/routes/auth.ts` exporting
   one Hono router. Port handlers in this order, each compiling before the next:
   1. `POST /signup` (turnstile → email availability → scrypt → tx: createAccount with
      `name: "email_" + crypto.randomUUID()` and `profileCompletedAt: null` → create
@@ -766,7 +766,7 @@ lifecycle over HTTP, tested.
      `DELETE /credentials/pending-email` — reference `identity-management.ts`.
   7. `DELETE /` (delete account; FK cascades remove everything; clear cookie) —
      reference `identity-management.ts:36`.
-- [ ] **Task 3.2 — Complete-profile.** In the same router: `POST /complete-profile`
+- [x] **Task 3.2 — Complete-profile.** In the same router: `POST /complete-profile`
   per §3.4. Reference: arkham `features/auth/routes/oauth.ts` (`/complete-profile`
   handler + `applyCompleteProfileUploads`). Adaptations: uploads also carry `campaigns`
   and `achievements`; deck/campaign rows are JSON blobs (Task 4.1's insert helpers —
@@ -776,18 +776,18 @@ lifecycle over HTTP, tested.
   `deckIdMap`/`campaignIdMap`; rewrite `campaign.deck_ids` and `folders.deckFolders`
   keys through `deckIdMap` before storing; whole thing in one transaction; sets
   `profile_completed_at`; validates username against `accountNameExists`.
-- [ ] **Task 3.3 — Profile routes.** Create `backend/src/routes/profile.ts`:
+- [x] **Task 3.3 — Profile routes.** Create `backend/src/routes/profile.ts`:
   `PATCH /` renames the account (unique check, updates `updated_at`). Reference:
   arkham `features/profile/routes.ts`.
-- [ ] **Task 3.4 — CORS split.** Rework `backend/src/lib/cors.ts` into
+- [x] **Task 3.4 — CORS split.** Rework `backend/src/lib/cors.ts` into
   `publicCorsMiddleware` (current behavior) + `authenticatedCorsMiddleware`
   (`credentials: true`, origin matcher echoing exact origins from `CORS_ORIGINS`).
   Reference: arkham `backend/src/lib/cors.ts`.
-- [ ] **Task 3.5 — App wiring.** In `backend/src/app.ts`: keep existing `pub` router on
+- [x] **Task 3.5 — App wiring.** In `backend/src/app.ts`: keep existing `pub` router on
   public CORS; add an `account` sub-router with authenticated CORS mounted at
   `/v2/account`, routing `/auth` → auth router and `/profile` → profile router. Do not
   reorder existing routes.
-- [ ] **Task 3.6 — Route tests.** Create `backend/src/tests/auth.spec.ts` (port relevant
+- [x] **Task 3.6 — Route tests.** Create `backend/src/tests/auth.spec.ts` (port relevant
   arkham blocks; use `app.request(...)` like existing earthborne tests, `CaptureMailer`
   injected via `appFactory`). Minimum scenarios — each is a test:
   - signup 201 → mail captured → extract token from mail body → verify-email 200 →

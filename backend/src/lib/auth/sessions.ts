@@ -50,6 +50,18 @@ export async function deleteSessionsByAccountId(
     .executeTakeFirst();
 }
 
+export async function deleteOtherSessionsByAccountId(
+  db: DatabaseExecutor,
+  accountId: string,
+  currentToken: string,
+) {
+  return await db
+    .deleteFrom("session")
+    .where("account_id", "=", accountId)
+    .where("token_hash", "!=", hashSessionToken(currentToken))
+    .executeTakeFirst();
+}
+
 export async function getSession(db: DatabaseExecutor, token: string) {
   return await db
     .selectFrom("session")

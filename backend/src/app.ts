@@ -5,17 +5,22 @@ import type { Database } from "./db/db.ts";
 import { getAppDataVersions } from "./db/queries/data-version.ts";
 import { bodyLimitMiddleware } from "./lib/body-limit.ts";
 import type { Config } from "./lib/config.ts";
-import { corsMiddleware } from "./lib/cors.ts";
+import {
+  authenticatedCorsMiddleware,
+  publicCorsMiddleware,
+} from "./lib/cors.ts";
 import { type Mailer, mailerFromConfig } from "./lib/email/mailer.ts";
 import { errorHandler } from "./lib/errors.ts";
 import type { HonoEnv } from "./lib/hono-env.ts";
 import { logger, requestLogger } from "./lib/logger.ts";
 import adminRouter from "./routes/admin.ts";
+import authRouter from "./routes/auth.ts";
 import cardsRouter from "./routes/cards.ts";
 import decklistsRouter from "./routes/decklists.ts";
 import fanMadeProjectInfoRouter from "./routes/fan-made-project-info.ts";
 import imagesRouter from "./routes/images.ts";
 import packsRouter from "./routes/packs.ts";
+import profileRouter from "./routes/profile.ts";
 import setsRouter from "./routes/sets.ts";
 import sharingRouter from "./routes/sharing.ts";
 
@@ -27,8 +32,6 @@ export function appFactory(
   const app = new Hono<HonoEnv>();
 
   app.use(secureHeaders());
-  app.use(bodyLimitMiddleware());
-  app.use(corsMiddleware(config));
 
   app.use(requestId());
   app.use(logger());
@@ -45,6 +48,8 @@ export function appFactory(
   app.route("/images", imagesRouter);
 
   const pub = new Hono<HonoEnv>();
+  pub.use("*", publicCorsMiddleware(config));
+  pub.use("*", bodyLimitMiddleware());
   pub.route("/cards", cardsRouter);
   pub.route("/packs", packsRouter);
   pub.route("/sets", setsRouter);
@@ -52,6 +57,13 @@ export function appFactory(
   pub.route("/share", sharingRouter);
   pub.route("/decklists", decklistsRouter);
   app.route("/v2/public", pub);
+
+  const account = new Hono<HonoEnv>();
+  account.use("*", authenticatedCorsMiddleware(config));
+  account.use("*", bodyLimitMiddleware());
+  account.route("/auth", authRouter);
+  account.route("/profile", profileRouter);
+  app.route("/v2/account", account);
 
   app.get("/up", (c) => c.text("ok"));
 
