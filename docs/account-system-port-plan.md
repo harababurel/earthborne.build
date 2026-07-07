@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 0 complete**
+Status: **phase 1 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -511,7 +511,7 @@ All green. Commit(s) pushed locally. Confirm with Sergiu before Phase 1.
 
 Goal: schema exists; shared package speaks the new contracts.
 
-- [ ] **Task 1.1 — Migration.** Create
+- [x] **Task 1.1 — Migration.** Create
   `backend/src/db/migrations/<today's date per existing naming>_add_accounts.sql` (follow
   the `YYYYMMDDHHMMSS_name.sql` dbmate convention used by existing files, with
   `-- migrate:up` / `-- migrate:down` sections). Contents — exactly these tables
@@ -635,13 +635,13 @@ Goal: schema exists; shared package speaks the new contracts.
   *Done when:* migration applies cleanly to a scratch DB, `migrate:down` reverts it, and
   the backend test harness (which applies all migrations to `:memory:`) still passes.
 
-- [ ] **Task 1.2 — Kysely schema types.** Extend `backend/src/db/schema.types.ts` with
+- [x] **Task 1.2 — Kysely schema types.** Extend `backend/src/db/schema.types.ts` with
   interfaces for all new tables + the `shared_deck.account_id` column, following the
   file's existing style. Reference: arkham `backend/src/db/schema.types.ts` (adapt types:
   uuid→string, timestamps→string, jsonb→string).
   *Done when:* `npm run check -w backend` passes.
 
-- [ ] **Task 1.3 — Shared DTOs: auth.** Create `shared/src/dtos/auth.schema.ts` ported
+- [x] **Task 1.3 — Shared DTOs: auth.** Create `shared/src/dtos/auth.schema.ts` ported
   from arkham's file. Keep: `SignupRequestSchema`, `LoginRequestSchema`,
   `CreateEmailIdentityRequestSchema` (only if used — check; drop if orphaned),
   `UpdateCredentialsRequestSchema`, `ForgotPasswordRequestSchema`,
@@ -654,7 +654,7 @@ Goal: schema exists; shared package speaks the new contracts.
   `campaigns: z.array(CampaignSchema).optional()` and
   `achievements: <blob schema>.optional()`; response gains `campaignIdMap`, `campaigns`,
   `achievements`. Import `DeckSchema`/`CampaignSchema` from `../schemas/`.
-- [ ] **Task 1.4 — Shared DTOs: sync.** Create `shared/src/dtos/sync.schema.ts`
+- [x] **Task 1.4 — Shared DTOs: sync.** Create `shared/src/dtos/sync.schema.ts`
   (reference: arkham `deck-sync.schema.ts` + `folder-sync.schema.ts` +
   `settings.schema.ts`). Define: `ManifestItemSchema {id, revision, updatedAt}`;
   `SyncManifestResponseSchema {decks, campaigns}`; `ItemBatchRequestSchema {ids}` with
@@ -668,7 +668,7 @@ Goal: schema exists; shared package speaks the new contracts.
   request `{state|settings, expectedRevision: z.string().nullable()}`. Settings blob:
   validate as `z.record(z.string(), z.unknown())` with size enforced server-side — the
   full SettingsState shape is a frontend type and should not be duplicated into zod.
-- [ ] **Task 1.5 — Shared DTOs: profile + exports.** Port
+- [x] **Task 1.5 — Shared DTOs: profile + exports.** Port
   `shared/src/dtos/profile.schema.ts` (rename-account request). Export everything new
   from `shared/src/index.ts` following its existing export style. Run shared tests.
   *Done when (1.3–1.5):* `npm run check -w backend`, `npm run check -w frontend`,

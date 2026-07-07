@@ -119,9 +119,86 @@ export interface AppMetadata {
   value: string;
 }
 
+export interface Account {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  profile_completed_at: string | null;
+  last_activity_at: string;
+}
+
+export interface AccountIdentity {
+  id: string;
+  account_id: string;
+  provider: string;
+  email: string | null;
+  password_hash: string | null;
+  pending_email: string | null;
+  verified_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Session {
+  id: string;
+  account_id: string;
+  token_hash: string;
+  created_at: string;
+  expires_at: string;
+  last_activity_at: string;
+}
+
+export interface VerificationToken {
+  id: string;
+  account_identity_id: string | null;
+  email: string;
+  token_hash: string;
+  token_type: "email_verification" | "password_reset";
+  created_at: string;
+  expires_at: string;
+}
+
+export interface AccountDeck {
+  id: string;
+  account_id: string;
+  revision: string;
+  data: string; // JSON as text
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AccountCampaign {
+  id: string;
+  account_id: string;
+  revision: string;
+  data: string; // JSON as text
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AccountFolder {
+  account_id: string;
+  revision: string;
+  state: string; // JSON as text
+}
+
+export interface AccountSettings {
+  account_id: string;
+  revision: string;
+  settings: string; // JSON as text
+}
+
+export interface AccountAchievements {
+  account_id: string;
+  revision: string;
+  state: string; // JSON as text
+}
+
 export interface SharedDeck {
   id: string;
   client_id: string;
+  account_id: string | null;
   data: string; // JSON as text
   history: string; // JSON as text
   created_at: string;
@@ -141,5 +218,14 @@ export interface DB {
   card: Card;
   fan_made_project_info: FanMadeProjectInfo;
   app_metadata: AppMetadata;
+  account: Account;
+  account_identity: AccountIdentity;
+  session: Session;
+  verification_token: VerificationToken;
+  account_deck: AccountDeck;
+  account_campaign: AccountCampaign;
+  account_folder: AccountFolder;
+  account_settings: AccountSettings;
+  account_achievements: AccountAchievements;
   shared_deck: SharedDeck;
 }

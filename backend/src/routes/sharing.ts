@@ -29,6 +29,7 @@ router.post("/", async (c) => {
   }
 
   await createSharedDeck(c.get("db"), {
+    account_id: null,
     id: result.data.id.toString(),
     client_id: clientId,
     data: JSON.stringify(result.data),
