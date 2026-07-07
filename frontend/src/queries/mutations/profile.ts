@@ -7,14 +7,14 @@ import { patchProfile } from "@/store/services/requests/profile";
 export function usePatchProfileMutation() {
   const client = useHttpClient();
   const queryClient = useQueryClient();
-  const initSession = useStore((state) => state.initSession);
+  const refreshSession = useStore((state) => state.refreshSession);
 
   return useMutation({
     mutationKey: ["profile", "patch"],
     mutationFn: (payload: Parameters<typeof patchProfile>[1]) =>
       patchProfile(client, payload),
     onSuccess: async () => {
-      await initSession(client);
+      await refreshSession(client);
       await queryClient.invalidateQueries({
         queryKey: authKeys.session(),
       });

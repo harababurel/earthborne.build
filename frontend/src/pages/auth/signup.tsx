@@ -4,7 +4,6 @@ import { Trans, useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
-import { Notice } from "@/components/ui/notice";
 import { useSignupMutation } from "@/queries/mutations/auth";
 import { AuthForm } from "./auth-form";
 import { AuthLayout } from "./auth-layout";
@@ -57,8 +56,6 @@ function Signup() {
       }
     >
       <AuthForm onSubmit={onSubmit}>
-        <Notice variant="info">{t("auth.email_delivery_notice")}</Notice>
-
         {signupMutation.error && (
           <ErrorBox>
             {errorMapper(signupMutation.error, t, "auth.errors.signup_failed")}

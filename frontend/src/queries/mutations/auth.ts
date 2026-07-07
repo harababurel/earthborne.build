@@ -157,7 +157,7 @@ export function useCompleteProfileOnboardingMutation() {
 
 export function useUpdateCredentialsMutation() {
   const client = useHttpClient();
-  const initSession = useStore((state) => state.initSession);
+  const refreshSession = useStore((state) => state.refreshSession);
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -165,7 +165,7 @@ export function useUpdateCredentialsMutation() {
     mutationFn: (payload: Parameters<typeof patchUpdateCredentials>[1]) =>
       patchUpdateCredentials(client, payload),
     onSuccess: async () => {
-      await initSession(client);
+      await refreshSession(client);
       queryClient.setQueryData(
         authKeys.session(),
         useStore.getState().auth.session,
@@ -176,14 +176,14 @@ export function useUpdateCredentialsMutation() {
 
 export function useCancelPendingEmailChangeMutation() {
   const client = useHttpClient();
-  const initSession = useStore((state) => state.initSession);
+  const refreshSession = useStore((state) => state.refreshSession);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["auth", "cancel-pending-email-change"],
     mutationFn: () => deletePendingEmailChange(client),
     onSuccess: async () => {
-      await initSession(client);
+      await refreshSession(client);
       queryClient.setQueryData(
         authKeys.session(),
         useStore.getState().auth.session,

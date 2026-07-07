@@ -25,7 +25,6 @@
     },
     "auth": {
       "email": "Email",
-      "email_delivery_notice": "Email delivery to @icloud.com and @me.com is currently not working. Please use another email address.",
       "email_or_username": "Email or username",
       "errors": {
         "account_not_verified": "Your account has not been verified yet. Please <verifyLink>verify</verifyLink> your email before logging in.",
