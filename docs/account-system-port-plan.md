@@ -1128,7 +1128,7 @@ task by task, keep tests green throughout.
   folder CRUD (data slice) → `saveFolders`; settings changes (settings slice `update...`
   actions) → settings push (only when the changed key is in the syncable subset);
   achievements toggles (achievements slice) → achievements push.
-- [ ] **Task 8.7 — Login/logout data flows.** `login`/`initSession` already call
+- [x] **Task 8.7 — Login/logout data flows.** `login`/`initSession` already call
   `bootstrapAuthenticatedState` (auth slice port). Verify the mirror-everything
   semantics end-to-end in unit tests: local-only decks upload at bootstrap; logout
   (`clearAccountState`) removes synced data from the device and `dehydrate` persists the
