@@ -64,6 +64,9 @@ describe("account auth routes", () => {
   it("rejects invalid login states without account enumeration", async () => {
     await signupAccount("unverified@example.com");
 
+    const duplicate = await signupAccount("unverified@example.com");
+    expect(duplicate.status).toBe(400);
+
     const unverified = await loginAccount("unverified@example.com");
     expect(unverified.status).toBe(403);
 
@@ -235,6 +238,13 @@ describe("account auth routes", () => {
     });
     expect(reset.status).toBe(200);
 
+    const replay = await ctx.app.request("/v2/account/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify({ token, password: "newpassword123" }),
+      headers: { "Content-Type": "application/json" },
+    });
+    expect(replay.status).toBe(400);
+
     expect((await loginAccount("reset@example.com")).status).toBe(401);
     expect(
       (await loginAccount("reset@example.com", "newpassword123")).status,
@@ -246,7 +256,7 @@ describe("account auth routes", () => {
     expect(oldSession.status).toBe(401);
   });
 
-  it("changes credentials, verifies pending email, and deletes accounts", async () => {
+  it("changes credentials, verifies pending email, and frees the old email", async () => {
     const cookie = await completeSignup("credentials@example.com", "creds");
 
     const wrongPassword = await ctx.app.request(
@@ -284,6 +294,26 @@ describe("account auth routes", () => {
       (await loginAccount("changed@example.com", "newpassword123")).status,
     ).toBe(200);
 
+    const oldEmailSignup = await signupAccount("credentials@example.com");
+    expect(oldEmailSignup.status).toBe(201);
+  });
+
+  it("deletes account-owned rows through foreign-key cascades", async () => {
+    const cookie = await completeSignupWithUploads(
+      "delete@example.com",
+      "delete_me",
+    );
+
+    const credentials = await ctx.app.request("/v2/account/auth/credentials", {
+      method: "PATCH",
+      body: JSON.stringify({
+        currentPassword: "password123",
+        newEmail: "delete_pending@example.com",
+      }),
+      headers: { Cookie: cookie, "Content-Type": "application/json" },
+    });
+    expect(credentials.status).toBe(200);
+
     const deleted = await ctx.app.request("/v2/account/auth", {
       method: "DELETE",
       headers: { Cookie: cookie },
@@ -294,9 +324,62 @@ describe("account auth routes", () => {
       headers: { Cookie: cookie },
     });
     expect(me.status).toBe(401);
+
+    for (const table of [
+      "account",
+      "account_identity",
+      "session",
+      "verification_token",
+      "account_deck",
+      "account_campaign",
+      "account_folder",
+      "account_settings",
+      "account_achievements",
+    ] as const) {
+      await expect(
+        ctx.db.selectFrom(table).selectAll().execute(),
+      ).resolves.toHaveLength(0);
+    }
+  });
+
+  it("isolates account deletion from another account's data", async () => {
+    const other = await createVerifiedAccount("other@example.com", "other");
+    await ctx.db
+      .insertInto("account_deck")
+      .values({
+        id: "other-deck",
+        account_id: other.account.id,
+        revision: randomUUID(),
+        data: JSON.stringify(makeDeck("other-deck")),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .execute();
+
+    const cookie = await completeSignupWithUploads(
+      "isolated@example.com",
+      "isolated",
+    );
+    const deleted = await ctx.app.request("/v2/account/auth", {
+      method: "DELETE",
+      headers: { Cookie: cookie },
+    });
+    expect(deleted.status).toBe(204);
+
     await expect(
-      ctx.db.selectFrom("account").selectAll().execute(),
-    ).resolves.toHaveLength(0);
+      ctx.db
+        .selectFrom("account")
+        .selectAll()
+        .where("id", "=", other.account.id)
+        .execute(),
+    ).resolves.toHaveLength(1);
+    await expect(
+      ctx.db
+        .selectFrom("account_deck")
+        .selectAll()
+        .where("account_id", "=", other.account.id)
+        .execute(),
+    ).resolves.toHaveLength(1);
   });
 });
 
@@ -333,6 +416,33 @@ async function completeSignup(email: string, username: string) {
   const res = await ctx.app.request("/v2/account/auth/complete-profile", {
     method: "POST",
     body: JSON.stringify({ username }),
+    headers: { Cookie: cookie, "Content-Type": "application/json" },
+  });
+  expect(res.status).toBe(200);
+  return cookie;
+}
+
+async function completeSignupWithUploads(email: string, username: string) {
+  const cookie = await signupVerifyLogin(email);
+  const res = await ctx.app.request("/v2/account/auth/complete-profile", {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      uploads: {
+        decks: [makeDeck(`${username}-deck`)],
+        campaigns: [makeCampaign(`${username}-campaign`, [`${username}-deck`])],
+        folders: {
+          folders: {
+            folder: { id: "folder", name: "Folder" },
+          },
+          deckFolders: {
+            [`${username}-deck`]: "folder",
+          },
+        },
+        settings: { locale: "en" },
+        achievements: { completed: { first: true } },
+      },
+    }),
     headers: { Cookie: cookie, "Content-Type": "application/json" },
   });
   expect(res.status).toBe(200);

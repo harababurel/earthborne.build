@@ -96,14 +96,6 @@ router.post("/signup", zodValidator("json", SignupRequestSchema), async (c) => {
       profileCompletedAt: null,
     });
     accountIdentityId = accountIdentity.id;
-
-    await replaceVerificationToken(tx, {
-      accountIdentityId: accountIdentity.id,
-      email,
-      tokenHash: hashToken(generateRandomToken()),
-      tokenType: "email_verification",
-      expiryHours: 24,
-    });
   });
 
   assert(accountIdentityId, "Account identity should exist after signup.");

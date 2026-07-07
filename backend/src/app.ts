@@ -32,6 +32,7 @@ export function appFactory(
   const app = new Hono<HonoEnv>();
 
   app.use(secureHeaders());
+  app.use(bodyLimitMiddleware());
 
   app.use(requestId());
   app.use(logger());
@@ -49,7 +50,6 @@ export function appFactory(
 
   const pub = new Hono<HonoEnv>();
   pub.use("*", publicCorsMiddleware(config));
-  pub.use("*", bodyLimitMiddleware());
   pub.route("/cards", cardsRouter);
   pub.route("/packs", packsRouter);
   pub.route("/sets", setsRouter);
@@ -60,7 +60,6 @@ export function appFactory(
 
   const account = new Hono<HonoEnv>();
   account.use("*", authenticatedCorsMiddleware(config));
-  account.use("*", bodyLimitMiddleware());
   account.route("/auth", authRouter);
   account.route("/profile", profileRouter);
   app.route("/v2/account", account);
