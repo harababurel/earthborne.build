@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { useLogoutMutation } from "@/queries/mutations/auth";
 import { useStore } from "@/store";
-import { useHttpClient } from "@/store/services/http-client.context";
 import { Button } from "../ui/button";
 import {
   DropdownButton,
@@ -16,7 +15,6 @@ import { Avatar } from "./avatar";
 
 export function AccountMenu() {
   const { t } = useTranslation();
-  const _client = useHttpClient();
   const sessionInitialized = useStore((state) => state.ui.sessionInitialized);
   const session = useStore((state) => state.auth.session);
   const logoutMutation = useLogoutMutation();

@@ -12,6 +12,7 @@ import {
   postSignup,
   postVerifyEmail,
 } from "@/store/services/requests/auth";
+import type { SettingsState } from "@/store/slices/settings.types";
 import { getLocalFolderSyncState } from "@/store/slices/sync";
 
 export function useLoginMutation() {
@@ -196,7 +197,9 @@ function getCompleteProfilePayload(payload: CompleteProfileOnboardingPayload) {
     decks: payload.uploadDecks ? getLocalDeckUploads() : undefined,
     campaigns: payload.uploadDecks ? getLocalCampaignUploads() : undefined,
     folders: getLocalFolderSyncState(state.data),
-    settings: payload.uploadSettings ? state.settings : undefined,
+    settings: payload.uploadSettings
+      ? getSyncableSettings(state.settings)
+      : undefined,
     achievements: payload.uploadSettings ? state.achievements : undefined,
   };
 
@@ -204,6 +207,26 @@ function getCompleteProfilePayload(payload: CompleteProfileOnboardingPayload) {
     username: payload.username,
     uploads,
   };
+}
+
+// Device-local keys that must not reach the account settings blob. Phase 8's
+// settings-sync module defines the authoritative syncable subset; keep the
+// two lists in agreement.
+const NON_SYNCED_SETTINGS_KEYS = [
+  "defaultStorageProvider",
+  "devModeEnabled",
+  "flags",
+  "fontSize",
+];
+
+function getSyncableSettings(settings: SettingsState) {
+  const syncable: Record<string, unknown> = { ...settings };
+
+  for (const key of NON_SYNCED_SETTINGS_KEYS) {
+    delete syncable[key];
+  }
+
+  return syncable;
 }
 
 function getLocalDeckUploads() {
