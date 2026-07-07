@@ -99,6 +99,7 @@ export {
   type DeckWriteRequest,
   DeckWriteRequestSchema,
   type Folder,
+  type FolderResponse,
   FolderResponseSchema,
   FolderSchema,
   type FolderState,

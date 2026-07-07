@@ -931,7 +931,7 @@ that.
   options)` must set `credentials: "include"` and default `Content-Type: application/json`
   when a body is present. The client is created once at boot and provided via the
   context module — Task 6.6 specifies the exact wiring in `main.tsx`.
-- [ ] **Task 6.2 — Request modules.** Create
+- [x] **Task 6.2 — Request modules.** Create
   `frontend/src/store/services/requests/{auth,decks,campaigns,folders,settings,achievements,profile}.ts`
   typed against `@earthborne-build/shared` DTOs, implementing exactly the §3.2 surface.
   Reference arkham's `requests/` for shape (fetchSession, postLogin, postLogout,
