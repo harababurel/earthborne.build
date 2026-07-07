@@ -924,7 +924,7 @@ work depends only on the shared package from here.
 Goal: the store knows about auth; the app boots a session; nothing visible yet beyond
 that.
 
-- [ ] **Task 6.1 — HTTP client.** Port `frontend/src/store/services/http-client.ts` and
+- [x] **Task 6.1 — HTTP client.** Port `frontend/src/store/services/http-client.ts` and
   `http-client.context.ts`. Port arkham's `requestApi` from its `requests/shared.ts`
   into earthborne's existing `requests/shared.ts` (keep earthborne's `ApiError` and
   `apiV2Request` untouched for existing callers): the new `requestApi(apiUrl, path,
