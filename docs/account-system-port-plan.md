@@ -1099,7 +1099,7 @@ task by task, keep tests green throughout.
   Also expose `syncAll(client)` for the manual "Sync now" button and periodic retry.
   Port `saveFolders`, `loadRemoteFolders`, `applyRemoteFolders` and create the
   settings/achievements equivalents. Port `selectors/sync.ts`.
-- [ ] **Task 8.4 — Deck mutation rewiring.** Every local deck mutation must push when
+- [x] **Task 8.4 — Deck mutation rewiring.** Every local deck mutation must push when
   authenticated. Earthborne's mutations live in `slices/app.ts` (createDeck, saveDeck,
   deleteDeck), `slices/data.ts` (importDeck, importFromFiles, duplicateDeck,
   addDeckToArchive), and deck-edit save paths. Pattern (reference arkham
