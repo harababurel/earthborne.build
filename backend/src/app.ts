@@ -6,6 +6,7 @@ import { getAppDataVersions } from "./db/queries/data-version.ts";
 import { bodyLimitMiddleware } from "./lib/body-limit.ts";
 import type { Config } from "./lib/config.ts";
 import { corsMiddleware } from "./lib/cors.ts";
+import { type Mailer, mailerFromConfig } from "./lib/email/mailer.ts";
 import { errorHandler } from "./lib/errors.ts";
 import type { HonoEnv } from "./lib/hono-env.ts";
 import { logger, requestLogger } from "./lib/logger.ts";
@@ -18,7 +19,11 @@ import packsRouter from "./routes/packs.ts";
 import setsRouter from "./routes/sets.ts";
 import sharingRouter from "./routes/sharing.ts";
 
-export function appFactory(config: Config, database: Database) {
+export function appFactory(
+  config: Config,
+  database: Database,
+  mailer: Mailer = mailerFromConfig(config),
+) {
   const app = new Hono<HonoEnv>();
 
   app.use(secureHeaders());
@@ -32,6 +37,7 @@ export function appFactory(config: Config, database: Database) {
   app.use((c, next) => {
     c.set("db", database);
     c.set("config", config);
+    c.set("mailer", mailer);
     return next();
   });
 

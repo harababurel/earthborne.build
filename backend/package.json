@@ -25,6 +25,7 @@
     "kysely": "0.28.14",
     "node-addon-api": "^8.3.0",
     "node-gyp": "^11.1.0",
+    "nodemailer": "^9.0.3",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "@tsconfig/node24": "24.0.4",
     "@tsconfig/strictest": "2.0.8",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/nodemailer": "^8.0.1",
     "dbmate": "2.31.0"
   }
 }

@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **not started**
+Status: **phase 0 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -455,7 +455,7 @@ that must all succeed plus any manual confirmation required.
 
 Goal: dependencies, config, mailer, and small utilities in place; nothing user-visible.
 
-- [ ] **Task 0.1 — Read the codebase.** Read (do not modify): this plan fully;
+- [x] **Task 0.1 — Read the codebase.** Read (do not modify): this plan fully;
   `docs/architecture.md`; `docs/api.md`; `backend/src/app.ts`; `backend/src/lib/config.ts`;
   `backend/src/db/db.ts`; `backend/src/tests/test-utils.ts`; `backend/src/routes/sharing.ts`;
   `shared/src/schemas/deck.schema.ts`; `shared/src/schemas/campaign.schema.ts`;
@@ -469,20 +469,20 @@ Goal: dependencies, config, mailer, and small utilities in place; nothing user-v
   concurrency; mirror-everything policy) and the earthborne conventions (flat routes,
   ISO timestamps, JSON-as-TEXT).
 
-- [ ] **Task 0.2 — Add dependencies.** In `backend/`: `npm install nodemailer` and
+- [x] **Task 0.2 — Add dependencies.** In `backend/`: `npm install nodemailer` and
   `npm install -D @types/nodemailer` (run installs from the repo root with `-w backend`).
   No other new runtime deps are expected in this phase.
   *Done when:* `npm run check -w backend` passes and `package-lock.json` diff contains
   only nodemailer-related additions.
 
-- [ ] **Task 0.3 — Extend backend config.** Add the keys from §3.6 to
+- [x] **Task 0.3 — Extend backend config.** Add the keys from §3.6 to
   `backend/src/lib/config.ts` with the listed defaults/optionality. Update
   `backend/.env.example` with a commented SMTP/mailcrab section, `FRONTEND_URL`,
   session settings, and `TURNSTILE_SECRET_KEY`.
   *Done when:* config parses with **no** new env vars set (defaults kick in);
   `npm run test -w backend` still passes.
 
-- [ ] **Task 0.4 — Mailer.** Create `backend/src/lib/email/mailer.ts` with the `Mailer`
+- [x] **Task 0.4 — Mailer.** Create `backend/src/lib/email/mailer.ts` with the `Mailer`
   interface and three implementations: `SMTPMailer` (port from arkham
   `backend/src/lib/email/mailer.ts`), `ConsoleMailer` (logs to/subject/body via the
   backend logger — used when `SMTP_HOST` is unset), `CaptureMailer` (stores sent mails
@@ -492,7 +492,7 @@ Goal: dependencies, config, mailer, and small utilities in place; nothing user-v
   `backend/src/lib/hono-env.ts`). Update `backend/src/main.ts` accordingly.
   *Done when:* backend typecheck + tests pass; `hono-env.ts` exposes `mailer`.
 
-- [ ] **Task 0.5 — Foreign keys pragma.** Check `backend/src/db/db.ts` for
+- [x] **Task 0.5 — Foreign keys pragma.** Check `backend/src/db/db.ts` for
   `PRAGMA foreign_keys`. If absent, enable it in `getDatabase` (better-sqlite3:
   `db.pragma("foreign_keys = ON")` or the Kysely dialect equivalent used in that file).
   Run the full backend test suite — if any existing test breaks due to FK enforcement,
