@@ -46,7 +46,8 @@ Update at least:
 - `SESSION_COOKIE_NAME`
 - `SESSION_EXPIRY_HOURS`
 - email/SMTP settings when account email delivery should work
-- `TURNSTILE_SECRET_KEY` if signup captcha verification is enabled
+- `TURNSTILE_SECRET_KEY` if signup captcha verification is enabled; leave it
+  empty to run signup without Turnstile
 
 Example values:
 
@@ -78,6 +79,11 @@ Generate a secret with:
 ```bash
 openssl rand -hex 32
 ```
+
+Turnstile is disabled when `TURNSTILE_SECRET_KEY` is unset or empty. To enable
+signup captcha verification, create a Cloudflare Turnstile widget, set the
+backend `TURNSTILE_SECRET_KEY` to its secret key, and set the frontend
+`VITE_TURNSTILE_SITE_KEY` to the matching site key.
 
 ## 4. Apply migrations and ingest cards
 
@@ -114,6 +120,8 @@ VITE_ADMIN_EMAIL=""
 ```
 
 `VITE_API_LEGACY_URL` is still read by some inherited frontend code. Leaving it empty keeps it same-origin, but it does not add missing legacy endpoints.
+Leave `VITE_TURNSTILE_SITE_KEY` empty unless the backend also has
+`TURNSTILE_SECRET_KEY` configured.
 
 ## 7. Build the frontend
 

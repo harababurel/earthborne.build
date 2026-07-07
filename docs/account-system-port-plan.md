@@ -1203,15 +1203,15 @@ shows the author name.
 
 ### Phase 10 — Hardening & operations
 
-- [ ] **Task 10.1 — Full regression pass.** Run every suite (`npm run test -w backend`,
+- [x] **Task 10.1 — Full regression pass.** Run every suite (`npm run test -w backend`,
   `-w shared`, `-w frontend`, `npm run build -w frontend`, `npm run lint`). Fix anything
   flaky. Grep for leftover TODOs introduced during the port (`grep -rn "phase 8" ...`
   stubs etc.) and resolve them.
-- [ ] **Task 10.2 — Session/token cleanup job.** Expired sessions and verification
+- [x] **Task 10.2 — Session/token cleanup job.** Expired sessions and verification
   tokens accumulate. Add cleanup on a low-tech trigger (no job queue): run
   `cleanupExpiredSessions` + `cleanupExpiredTokens` at backend startup and then on a
   `setInterval` (e.g. hourly) in `main.ts`, guarded so tests don't start timers.
-- [ ] **Task 10.3 — Abuse guards review.** Confirm ported cooldowns are active
+- [x] **Task 10.3 — Abuse guards review.** Confirm ported cooldowns are active
   (resend-verification, forgot-password). Confirm body-limit middleware covers the new
   routes (it's global — verify order in `app.ts`). Confirm signup works with Turnstile
   DISABLED (empty key) since that's the initial prod state; document enabling it in
