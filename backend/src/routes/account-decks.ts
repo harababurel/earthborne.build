@@ -19,6 +19,7 @@ import {
 } from "../db/queries/account-decks.ts";
 import { sessionAuth } from "../lib/auth/session-auth-middleware.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";
+import { assertSyncItemSize } from "../lib/sync/size-limits.ts";
 import { zodValidator } from "../lib/validation.ts";
 
 const router = new Hono<HonoEnv>();
@@ -55,7 +56,7 @@ router.post(
         c.get("db"),
         c.get("account").id,
         String(data.id),
-        JSON.stringify(data),
+        serializeDeck(data),
       );
 
       c.status(201);
@@ -89,7 +90,7 @@ router.put(
       c.get("db"),
       accountId,
       id,
-      JSON.stringify(data),
+      serializeDeck(data),
       expectedRevision,
     );
 
@@ -139,5 +140,11 @@ router.delete(
     });
   },
 );
+
+function serializeDeck(data: unknown) {
+  const serialized = JSON.stringify(data);
+  assertSyncItemSize(serialized, "Deck");
+  return serialized;
+}
 
 export default router;

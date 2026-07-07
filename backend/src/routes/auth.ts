@@ -70,7 +70,10 @@ import { assertTurnstileToken } from "../lib/auth/turnstile.ts";
 import { sendVerificationEmail } from "../lib/auth/verification-email.ts";
 import { passwordResetEmailTemplate } from "../lib/email/templates.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";
-import { assertRevisionedBlobSize } from "../lib/sync/blob-size.ts";
+import {
+  assertRevisionedBlobSize,
+  assertSyncItemSize,
+} from "../lib/sync/size-limits.ts";
 import { zodValidator } from "../lib/validation.ts";
 
 type CompleteProfileUploads = NonNullable<CompleteProfileRequest["uploads"]>;
@@ -553,11 +556,13 @@ async function uploadAccountDecks(
     .values(
       decks.map((deck) => {
         const mapped = remapDeck(deck, deckIdMap);
+        const data = JSON.stringify(mapped);
+        assertSyncItemSize(data, "Uploaded deck");
         return {
           id: String(mapped.id),
           account_id: accountId,
           revision: randomUUID(),
-          data: JSON.stringify(mapped),
+          data,
           created_at: parseUploadedTimestamp(mapped.date_creation, now),
           updated_at: parseUploadedTimestamp(mapped.date_update, now),
         };
@@ -595,11 +600,13 @@ async function uploadAccountCampaigns(
     .values(
       campaigns.map((campaign) => {
         const mapped = remapCampaign(campaign, campaignIdMap, deckIdMap);
+        const data = JSON.stringify(mapped);
+        assertSyncItemSize(data, "Uploaded campaign");
         return {
           id: String(mapped.id),
           account_id: accountId,
           revision: randomUUID(),
-          data: JSON.stringify(mapped),
+          data,
           created_at: parseUploadedTimestamp(mapped.date_creation, now),
           updated_at: parseUploadedTimestamp(mapped.date_update, now),
         };

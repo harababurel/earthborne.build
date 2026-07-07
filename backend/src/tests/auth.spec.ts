@@ -200,6 +200,30 @@ describe("account auth routes", () => {
     );
     expect(oversizedBlob.status).toBe(400);
 
+    const oversizedDeckCookie = await signupVerifyLogin("decksize@example.com");
+    const oversizedDeck = await ctx.app.request(
+      "/v2/account/auth/complete-profile",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: "decksize",
+          uploads: {
+            decks: [
+              {
+                ...makeDeck("oversized"),
+                description_md: "x".repeat(2_200_000),
+              },
+            ],
+          },
+        }),
+        headers: {
+          Cookie: oversizedDeckCookie,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    expect(oversizedDeck.status).toBe(400);
+
     const largeBodyCookie = await signupVerifyLogin("largebody@example.com");
     const largeBody = await ctx.app.request(
       "/v2/account/auth/complete-profile",

@@ -16,7 +16,7 @@ import {
 } from "../db/queries/revisioned-blobs.ts";
 import { sessionAuth } from "../lib/auth/session-auth-middleware.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";
-import { assertRevisionedBlobSize } from "../lib/sync/blob-size.ts";
+import { assertRevisionedBlobSize } from "../lib/sync/size-limits.ts";
 import { zodValidator } from "../lib/validation.ts";
 
 const router = new Hono<HonoEnv>();
