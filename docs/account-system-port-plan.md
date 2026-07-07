@@ -1083,7 +1083,7 @@ task by task, keep tests green throughout.
   exclude earthborne's `devModeEnabled` and `flags`). Add campaign-flavored variants of
   the per-item helpers (generic helper parameterized by `"decks" | "campaigns"`
   preferred over copy-paste).
-- [ ] **Task 8.2 — Reconciliation.** Port
+- [x] **Task 8.2 — Reconciliation.** Port
   `frontend/src/store/lib/sync-reconciliation.ts` + spec, rewritten to the §3.3
   algorithm (the arkham file is the structural reference — plan computation as pure
   functions returning a "plan" object `{downloads, uploads, deletions, conflicts}`, then
