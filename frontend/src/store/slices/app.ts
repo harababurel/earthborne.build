@@ -1,3 +1,4 @@
+import type { Deck } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
 import {
   applyDeckEdits,
@@ -214,6 +215,29 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     }
 
     return deck.id;
+  },
+  async addStarterDecks() {
+    const starterDecks = buildStarterDecks();
+    let addedDecks: Deck[] = [];
+
+    set((prev) => {
+      const next = addStarterDecksToState(prev, starterDecks);
+      addedDecks = Object.values(next.data.decks).filter(
+        (deck) => !prev.data.decks[deck.id],
+      );
+      return next;
+    });
+
+    await dehydrate(get(), "app");
+
+    const client = get().apiClient;
+    if (get().auth.status === "authenticated" && client) {
+      for (const deck of addedDecks) {
+        get().pushDeck(client, deck.id).catch(console.error);
+      }
+    }
+
+    return addedDecks.length;
   },
   async deleteDeck(id, cb) {
     const state = get();
@@ -542,16 +566,60 @@ function mergeInitialState(
   };
 
   if (!merged.app.starterDecksSeeded) {
-    const starterDecks = buildStarterDecks();
-    const decks = { ...merged.data.decks };
-    const history = { ...merged.data.history };
-    for (const deck of starterDecks) {
-      decks[deck.id] = deck;
-      history[deck.id] = [];
-    }
-    merged.app = { ...merged.app, starterDecksSeeded: true };
-    merged.data = { ...merged.data, decks, history };
+    return addStarterDecksToState(merged, buildStarterDecks());
   }
 
   return merged;
+}
+
+function addStarterDecksToState<T extends Pick<StoreState, "app" | "data">>(
+  state: T,
+  starterDecks: Deck[],
+) {
+  const decks = { ...state.data.decks };
+  const history = { ...state.data.history };
+  const existingStarterDecks = new Set(
+    Object.values(decks).map((deck) => starterDeckFingerprint(deck)),
+  );
+
+  for (const deck of starterDecks) {
+    const fingerprint = starterDeckFingerprint(deck);
+    if (existingStarterDecks.has(fingerprint)) continue;
+
+    decks[deck.id] = deck;
+    history[deck.id] = [];
+    existingStarterDecks.add(fingerprint);
+  }
+
+  return {
+    ...state,
+    app: { ...state.app, starterDecksSeeded: true },
+    data: { ...state.data, decks, history },
+  };
+}
+
+function starterDeckFingerprint(deck: Deck) {
+  return JSON.stringify({
+    aspect_code: deck.aspect_code,
+    background: deck.background,
+    description_md: deck.description_md,
+    displaced: sortedRecord(deck.displaced),
+    maladies: sortedRecord(deck.maladies),
+    meta: deck.meta,
+    name: deck.name,
+    problem: deck.problem ?? null,
+    rewards: sortedRecord(deck.rewards),
+    role_code: deck.role_code,
+    slots: sortedRecord(deck.slots),
+    specialty: deck.specialty,
+    tags: deck.tags,
+  });
+}
+
+function sortedRecord(record: Record<string, number> | null | undefined) {
+  if (!record) return null;
+
+  return Object.fromEntries(
+    Object.entries(record).sort(([left], [right]) => left.localeCompare(right)),
+  );
 }

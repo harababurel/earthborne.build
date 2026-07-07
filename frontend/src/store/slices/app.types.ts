@@ -29,6 +29,8 @@ export type AppSlice = {
 
   createDeck(): Promise<Id>;
 
+  addStarterDecks(): Promise<number>;
+
   saveDeck(deckId: Id): Promise<Id>;
 
   updateDeckProperties(deckId: Id, properties: Partial<Deck>): Promise<Deck>;

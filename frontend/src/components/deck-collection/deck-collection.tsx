@@ -52,6 +52,7 @@ export function DeckCollection() {
 
   const importDecks = useStore((state) => state.importFromFiles);
   const deleteAllDecks = useStore((state) => state.deleteAllDecks);
+  const addStarterDecks = useStore((state) => state.addStarterDecks);
 
   const onAddFiles = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,6 +89,32 @@ export function DeckCollection() {
       }
     }
   }, [deleteAllDecks, toast, t]);
+
+  const onAddStarterDecks = useCallback(async () => {
+    setPopoverOpen(false);
+
+    const toastId = toast.show({
+      children: t("deck_collection.premade_decks_adding"),
+      variant: "loading",
+    });
+
+    try {
+      const count = await addStarterDecks();
+      toast.dismiss(toastId);
+      toast.show({
+        children: t("deck_collection.premade_decks_added", { count }),
+        variant: "success",
+      });
+    } catch (err) {
+      toast.dismiss(toastId);
+      toast.show({
+        children: t("deck_collection.premade_decks_error", {
+          error: (err as Error)?.message,
+        }),
+        variant: "error",
+      });
+    }
+  }, [addStarterDecks, toast, t]);
 
   const deleteDeck = useDeleteDeck();
   const duplicateDeck = useDuplicateDeck();
@@ -134,6 +161,14 @@ export function DeckCollection() {
                     <UploadIcon /> {t("deck_collection.import_json")}
                   </FileInput>
                 </DropdownItem>
+                <DropdownButton
+                  data-testid="collection-add-premade-decks"
+                  onClick={onAddStarterDecks}
+                  size="full"
+                  variant="bare"
+                >
+                  <PlusIcon /> {t("deck_collection.premade_decks_button")}
+                </DropdownButton>
                 <DropdownButton
                   data-testid="collection-delete-all"
                   onClick={onDeleteAll}

@@ -805,6 +805,11 @@
       "import_help": "Enter a public deck ID or URL to import. The deck will be <strong>copied</strong>; history will not be imported.",
       "import_json": "Import from JSON files",
       "more_filters": "More filters",
+      "premade_decks_added_one": "Added {{count}} premade deck.",
+      "premade_decks_added_other": "Added {{count}} premade decks.",
+      "premade_decks_adding": "Adding premade decks...",
+      "premade_decks_button": "Re-add premade decks",
+      "premade_decks_error": "Failed to add premade decks: {{error}}",
       "search_placeholder": "Search decks...",
       "sorting": {
         "alphabetical_asc": "Alphabetical (A -> Z)",
