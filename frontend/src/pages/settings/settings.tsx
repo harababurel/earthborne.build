@@ -3,6 +3,7 @@ import {
   LibraryIcon,
   RefreshCw,
   SlidersVerticalIcon,
+  UserIcon,
 } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +22,7 @@ import {
 import type { ColorScheme, SettingsState } from "@/store/slices/settings.types";
 import { useColorThemeManager } from "@/utils/use-color-theme";
 import { useGoBack } from "@/utils/use-go-back";
+import { AccountSettings } from "./account-settings";
 import { AppBuild } from "./app-build";
 import { BackupRestore } from "./backup-restore";
 import { CardDataSync } from "./card-data-sync";
@@ -70,7 +72,9 @@ function SettingsInner({
 }) {
   const { t } = useTranslation();
 
-  const [tab, onTabChange] = useTabUrlState("general");
+  const [tab, onTabChange] = useTabUrlState<
+    "account" | "general" | "collection" | "backup"
+  >("general");
   const session = useStore((state) => state.auth.session);
 
   const search = useSearch();
@@ -106,7 +110,7 @@ function SettingsInner({
 
   return (
     <AppLayout title={t("settings.title")} mainClassName={css["main"]}>
-      <form className={css["settings"]} onSubmit={onSubmit}>
+      <div className={css["settings"]}>
         <header className={css["header"]}>
           <h1 className={css["title"]}>{t("settings.title")}</h1>
 
@@ -121,9 +125,16 @@ function SettingsInner({
             >
               {t("common.back")}
             </Button>
-            <Button data-testid="settings-save" type="submit" variant="primary">
-              {t("settings.save")}
-            </Button>
+            {tab !== "account" && (
+              <Button
+                data-testid="settings-save"
+                form="settings-form"
+                type="submit"
+                variant="primary"
+              >
+                {t("settings.save")}
+              </Button>
+            )}
           </div>
         </header>
         <div className={css["container"]}>
@@ -137,6 +148,12 @@ function SettingsInner({
           </div>
           <Tabs value={tab} onValueChange={onTabChange}>
             <TabsList>
+              {session && (
+                <TabsTrigger data-testid="tab-account" value="account">
+                  <UserIcon />
+                  <span>{t("settings.account.title")}</span>
+                </TabsTrigger>
+              )}
               <TabsTrigger data-testid="tab-general" value="general">
                 <SlidersVerticalIcon />
                 <span>{t("settings.general.title")}</span>
@@ -150,100 +167,114 @@ function SettingsInner({
                 <span>{t("settings.backup.title")}</span>
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="general">
-              <Section title={t("settings.display.title")}>
-                <LocaleSetting settings={settings} setSettings={setSettings} />
-                <ThemeSetting setTheme={setTheme} theme={theme} />
-                <ColorSchemeSetting
-                  colorScheme={colorScheme}
-                  setColorScheme={(val: string) =>
-                    setColorScheme(val as ColorScheme)
-                  }
-                />
-                <FontSizeSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-                <CardDisplaySettings
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-                <MiniRoleArtSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-                <SortPunctuationSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-              </Section>
-              <Section title={t("settings.lists.title")}>
-                <div className={css["lists"]}>
-                  <ListSettings
-                    listKey="player"
-                    title={t("settings.lists.ranger_cards", {
-                      defaultValue: "Ranger cards",
-                    })}
-                    settings={settings}
-                    setSettings={setSettings}
-                  />
-                  <ListSettings
-                    listKey="path"
-                    title={t("settings.lists.path_cards", {
-                      defaultValue: "Path cards",
-                    })}
-                    settings={settings}
-                    setSettings={setSettings}
-                  />
-                  <ListSettings
-                    listKey="all"
-                    title={t("settings.lists.other_cards")}
-                    settings={settings}
-                    setSettings={setSettings}
-                  />
-                  <ListSettings
-                    listKey="deck"
-                    title={t("settings.lists.deck_view")}
-                    settings={settings}
-                    setSettings={setSettings}
-                  />
-                  <ListSettings
-                    listKey="deckScans"
-                    title={t("settings.lists.deck_view_scans")}
-                    settings={settings}
-                    setSettings={setSettings}
-                  />
-                </div>
-              </Section>
+            <TabsContent value="account">
+              <AccountSettings
+                key={session?.account.name ?? ""}
+                session={session}
+              />
             </TabsContent>
-            <TabsContent value="collection">
-              <Section title={t("settings.collection.title")}>
-                <ShowAllCardsSetting
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-                <CollectionSettings
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-              </Section>
-            </TabsContent>
-            <TabsContent value="backup">
-              {session && (
-                <Section title={t("settings.account.sync.title")}>
-                  <AccountSyncSection />
+            <form id="settings-form" onSubmit={onSubmit}>
+              <TabsContent value="general">
+                <Section title={t("settings.display.title")}>
+                  <LocaleSetting
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
+                  <ThemeSetting setTheme={setTheme} theme={theme} />
+                  <ColorSchemeSetting
+                    colorScheme={colorScheme}
+                    setColorScheme={(val: string) =>
+                      setColorScheme(val as ColorScheme)
+                    }
+                  />
+                  <FontSizeSetting
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
+                  <CardDisplaySettings
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
+                  <MiniRoleArtSetting
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
+                  <SortPunctuationSetting
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
                 </Section>
-              )}
-              <Section title={t("settings.backup.title")}>
-                <BackupRestore />
-              </Section>
-              <Section title={t("settings.developer.title")}>
-                <DevModeSetting settings={settings} setSettings={setSettings} />
-              </Section>
-            </TabsContent>
+                <Section title={t("settings.lists.title")}>
+                  <div className={css["lists"]}>
+                    <ListSettings
+                      listKey="player"
+                      title={t("settings.lists.ranger_cards", {
+                        defaultValue: "Ranger cards",
+                      })}
+                      settings={settings}
+                      setSettings={setSettings}
+                    />
+                    <ListSettings
+                      listKey="path"
+                      title={t("settings.lists.path_cards", {
+                        defaultValue: "Path cards",
+                      })}
+                      settings={settings}
+                      setSettings={setSettings}
+                    />
+                    <ListSettings
+                      listKey="all"
+                      title={t("settings.lists.other_cards")}
+                      settings={settings}
+                      setSettings={setSettings}
+                    />
+                    <ListSettings
+                      listKey="deck"
+                      title={t("settings.lists.deck_view")}
+                      settings={settings}
+                      setSettings={setSettings}
+                    />
+                    <ListSettings
+                      listKey="deckScans"
+                      title={t("settings.lists.deck_view_scans")}
+                      settings={settings}
+                      setSettings={setSettings}
+                    />
+                  </div>
+                </Section>
+              </TabsContent>
+              <TabsContent value="collection">
+                <Section title={t("settings.collection.title")}>
+                  <ShowAllCardsSetting
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
+                  <CollectionSettings
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
+                </Section>
+              </TabsContent>
+              <TabsContent value="backup">
+                {session && (
+                  <Section title={t("settings.account.sync.title")}>
+                    <AccountSyncSection />
+                  </Section>
+                )}
+                <Section title={t("settings.backup.title")}>
+                  <BackupRestore />
+                </Section>
+                <Section title={t("settings.developer.title")}>
+                  <DevModeSetting
+                    settings={settings}
+                    setSettings={setSettings}
+                  />
+                </Section>
+              </TabsContent>
+            </form>
           </Tabs>
         </div>
-      </form>
+      </div>
     </AppLayout>
   );
 }

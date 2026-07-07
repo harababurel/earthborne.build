@@ -1,15 +1,19 @@
 # Architecture
 
-`earthborne.build` is a client-heavy single-page app. Most user data lives in the browser, while the backend provides canonical card metadata and a few supporting APIs.
+`earthborne.build` is a client-heavy single-page app. Anonymous user data lives
+in the browser; logged-in users can sync decks, campaigns, folders, settings,
+and achievements to the backend account store.
 
 ## Frontend
 
 - React SPA served from `frontend/dist`
 - Local state persisted in IndexedDB
 - Routing handled client-side with `wouter`
-- Card data, pack and set metadata, fan-made project info, shared deck search, and version checks fetched from the backend
+- Card data, pack and set metadata, fan-made project info, shared deck search,
+  account auth, and account sync fetched from the backend
 
-The app was adapted from `arkham.build`. Deck sharing is now handled by the local backend (`/v2/public/share`). Some other upstream sync/auth code paths still exist in the frontend but are not backed by any service in this repo.
+The app was adapted from `arkham.build`. Deck sharing and account sync are now
+handled by the local backend.
 
 ### Deck validation
 
@@ -22,8 +26,11 @@ Once a valid starter deck receives a quantity edit, it is treated as evolved and
 The Node.js backend in `backend/` is responsible for:
 
 - serving ingested Earthborne Rangers cards, packs, and card sets
+- email/password account signup, verification, login, session management,
+  credentials updates, and account deletion
+- account sync for decks, campaigns, folders, settings, and achievements
 - deck sharing (create, read, update, delete)
-- public shared deck search and directory
+- public shared deck search and directory, including account author attribution
 - serving fan-made project info records
 - serving locally hosted card images from disk
 - reporting the ingested card count and data timestamps via `/version`
@@ -40,12 +47,22 @@ Optional local image hosting is handled separately:
 2. run `download-images.ts` to mirror card art into `IMAGE_DIR`
 3. expose `/images/:code` through the backend and reverse proxy
 
+## Account sync
+
+Account sessions are stored server-side in SQLite and exposed to the browser as
+HTTP-only cookies. Account routes use credentialed CORS, so frontend requests to
+`/v2/account/*` and account-owned share writes send `credentials: "include"`.
+
+Synced decks and campaigns are stored as JSON payloads with per-item revisions.
+Folders, settings, and achievements are revisioned account blobs. The frontend
+bootstraps an authenticated session by comparing local sync state to the
+server manifest, pulling remote changes, pushing local-only data, and surfacing
+revision conflicts for user resolution.
+
 ## Shared package
 
 `shared/` contains schemas and DTOs used across the app, including:
 
 - Earthborne Rangers card schema
-- decklist and recommendation DTOs inherited from the upstream codebase
+- decklist, account auth, profile, and sync DTOs
 - fan-made project schemas
-
-Not every shared type is backed by the current local backend; some remain for compatibility with inherited frontend code.

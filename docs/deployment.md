@@ -37,16 +37,22 @@ cp /srv/earthborne.build/backend/.env.example /srv/earthborne.build/backend/.env
 Update at least:
 
 - `CORS_ORIGINS`
+- `FRONTEND_URL`
 - `PORT`
 - `SQLITE_PATH`
 - `CARD_DATA_DIR`
 - `IMAGE_DIR`
 - `ADMIN_API_KEY`
+- `SESSION_COOKIE_NAME`
+- `SESSION_EXPIRY_HOURS`
+- email/SMTP settings when account email delivery should work
+- `TURNSTILE_SECRET_KEY` if signup captcha verification is enabled
 
 Example values:
 
 ```dotenv
 CORS_ORIGINS="https://earthborne.yourdomain.com"
+FRONTEND_URL="https://earthborne.yourdomain.com"
 PORT="8686"
 SQLITE_PATH="/srv/earthborne.build/backend/earthborne.db"
 DATABASE_URL="sqlite:/srv/earthborne.build/backend/earthborne.db"
@@ -55,6 +61,16 @@ DBMATE_SCHEMA_FILE="src/db/schema.sql"
 CARD_DATA_DIR="/srv/rangers-card-data"
 IMAGE_DIR="/srv/earthborne.images/cards"
 ADMIN_API_KEY="replace-with-a-random-secret"
+SESSION_COOKIE_NAME="eb_session"
+SESSION_EXPIRY_HOURS="720"
+FROM_EMAIL="noreply@earthborne.yourdomain.com"
+FROM_NAME="earthborne.build"
+SMTP_HOST="smtp.yourdomain.com"
+SMTP_PORT="587"
+SMTP_SECURE="false"
+SMTP_USER="smtp-user"
+SMTP_PASS="smtp-password"
+TURNSTILE_SECRET_KEY=""
 ```
 
 Generate a secret with:
@@ -93,6 +109,8 @@ VITE_API_URL=""
 VITE_API_LEGACY_URL=""
 VITE_CARD_IMAGE_URL="/images"
 VITE_PAGE_NAME="earthborne.build"
+VITE_TURNSTILE_SITE_KEY=""
+VITE_ADMIN_EMAIL=""
 ```
 
 `VITE_API_LEGACY_URL` is still read by some inherited frontend code. Leaving it empty keeps it same-origin, but it does not add missing legacy endpoints.
@@ -127,6 +145,10 @@ Important routes:
 - `/v2`, `/version`, `/admin`, and `/up` proxy to the backend
 - `/images/` proxies to the backend when local image hosting is enabled
 
+For split-origin deployments, `CORS_ORIGINS` must include the frontend origin
+exactly. Account login and sync use HTTP-only cookies with `SameSite=Strict`, so
+same-origin deployment is the simplest production shape.
+
 ## Updating a deployment
 
 ```bash
@@ -143,7 +165,18 @@ sudo systemctl restart earthborne
 
 If you mirror images locally, rerun `npm run download:images` after ingesting new card data.
 
+## Backups and privacy
+
+SQLite now stores account credentials, session hashes, email addresses, pending
+email addresses, verification tokens, account-synced decks and campaigns,
+settings, folders, achievements, and account-linked share ownership. Treat
+database backups as containing PII and protect, retain, and delete them
+accordingly.
+
 ## Known limitations
 
-- The local backend does not implement the old `arkham.build` auth, remote share, or deck sync APIs.
-- The frontend still contains code paths for those flows, so self-hosted deployments should treat them as unsupported unless a separate compatible legacy backend is provided.
+- Email delivery requires SMTP configuration in production. Without
+  `SMTP_HOST`, verification and password reset emails are logged by the backend
+  process.
+- Account cookies use `Secure` in production, so production account flows must
+  run over HTTPS.

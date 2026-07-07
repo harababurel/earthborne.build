@@ -1139,6 +1139,8 @@
     },
     "decklists": {
       "browse": {
+        "author": "Author",
+        "author_by": "By {{name}}",
         "likes": "Likes",
         "loading": "Loading deck guides...",
         "no_results": "No results",
@@ -1559,6 +1561,9 @@
           "new_password_help": "Leave blank to keep your current password.",
           "pending": "Pending email",
           "pending_help": "Check {{email}} to <verifyLink>verify it</verifyLink>.",
+          "resend_pending": "Resend verification email",
+          "resend_success": "Verification email sent successfully. Please check your inbox.",
+          "resending_pending": "Sending verification email...",
           "save": "Update credentials",
           "saving": "Saving credentials...",
           "status": "Status",

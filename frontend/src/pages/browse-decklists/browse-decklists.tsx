@@ -214,6 +214,16 @@ function DecklistResultItem({ result }: { result: DecklistSearchResult }) {
               </dd>
             </div>
           )}
+          {result.author_name && (
+            <div className={css["result-identity-item"]}>
+              <dt className={css["result-identity-label"]}>
+                {t("decklists.browse.author")}
+              </dt>
+              <dd className={css["result-identity-value"]}>
+                {result.author_name}
+              </dd>
+            </div>
+          )}
           <div className={css["result-identity-item"]}>
             <dt className={css["result-identity-label"]}>{t("common.date")}</dt>
             <dd className={css["result-identity-value"]}>

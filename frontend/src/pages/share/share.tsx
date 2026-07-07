@@ -83,6 +83,13 @@ export function ShareInner(props: { id: string }) {
           deck={resolvedDeck}
           validation={validation}
           history={data?.history}
+          headerSlot={
+            data?.author_name ? (
+              <p>
+                {t("decklists.browse.author_by", { name: data.author_name })}
+              </p>
+            ) : undefined
+          }
         />
       </CardModalProvider>
     </ResolvedDeckProvider>

@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 8 complete**
+Status: **phase 9 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -1171,23 +1171,23 @@ round-trip. **This checkpoint is the core acceptance test of the whole project.*
 
 ### Phase 9 — Account management UI + sharing attribution
 
-- [ ] **Task 9.1 — Settings: account section.** New section on the settings page
+- [x] **Task 9.1 — Settings: account section.** New section on the settings page
   (reference arkham's settings account section): shows username + email + verification
   state; change username (PATCH profile); change email (shows pending-email state +
   cancel button + resend); change password; delete account (typed-confirmation dialog —
   deletes server data, then behaves like logout). All via the Phase 6 request modules;
   all strings i18n'd.
-- [ ] **Task 9.2 — Sharing attribution.** Frontend: share creation while logged in needs
+- [x] **Task 9.2 — Sharing attribution.** Frontend: share creation while logged in needs
   no UI change (cookie does the work — but ensure the share requests now go through a
   path that sends `credentials: "include"`; adjust `services/queries.ts`
   createShare/updateShare/deleteShare accordingly). Deck Guides directory + share view:
   display `author_name` when present (update the decklist search response type usages).
-- [ ] **Task 9.3 — Share management parity.** Shares list in settings (earthborne shows
+- [x] **Task 9.3 — Share management parity.** Shares list in settings (earthborne shows
   shared decks somewhere — locate via `sharing` slice usages): for logged-in users,
   server-side ownership means shares survive client-id loss; no UI change required
   beyond confirming delete/update still work logged-in (they now authorize via account
   too, Task 5.2).
-- [ ] **Task 9.4 — Docs.** Update `docs/api.md` (all new endpoints, env vars),
+- [x] **Task 9.4 — Docs.** Update `docs/api.md` (all new endpoints, env vars),
   `docs/architecture.md` (accounts + sync section), `docs/deployment.md` (SMTP, session,
   Turnstile env; note that DB backups now contain PII). If `CLAUDE.md` gains an accounts
   note, replicate the exact change to `AGENTS.md` and `GEMINI.md` (hard rule).

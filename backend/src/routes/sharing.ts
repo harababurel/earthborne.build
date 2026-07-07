@@ -51,6 +51,7 @@ router.get("/history/:id", async (c) => {
   }
 
   return c.json({
+    author_name: sharedDeck.author_name,
     data: JSON.parse(sharedDeck.data),
     history: JSON.parse(sharedDeck.history),
   });

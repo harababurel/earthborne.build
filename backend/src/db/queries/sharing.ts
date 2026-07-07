@@ -1,11 +1,20 @@
+import { sql } from "kysely";
 import type { Database } from "../db.ts";
 import type { SharedDeck } from "../schema.types.ts";
 
 export async function getSharedDeck(db: Database, id: string) {
   return await db
     .selectFrom("shared_deck")
-    .selectAll()
-    .where("id", "=", id)
+    .leftJoin("account", "account.id", "shared_deck.account_id")
+    .selectAll("shared_deck")
+    .select(
+      sql<
+        string | null
+      >`case when account.profile_completed_at is not null then account.name else null end`.as(
+        "author_name",
+      ),
+    )
+    .where("shared_deck.id", "=", id)
     .executeTakeFirst();
 }
 

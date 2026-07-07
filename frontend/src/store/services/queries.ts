@@ -132,6 +132,7 @@ export async function importDeck(clientId: string, input: string) {
 }
 
 type ShareRead = {
+  author_name?: string | null;
   data: Deck;
   history: History;
 };
@@ -149,6 +150,7 @@ export async function createShare(
 ) {
   await apiV2Request("/v2/public/share", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       "X-Client-Id": clientId,
@@ -165,6 +167,7 @@ export async function updateShare(
 ) {
   await apiV2Request(`/v2/public/share/${id}`, {
     method: "PUT",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       "X-Client-Id": clientId,
@@ -179,6 +182,7 @@ export async function updateShare(
 export async function deleteShare(clientId: string, id: string) {
   await apiV2Request(`/v2/public/share/${id}`, {
     method: "DELETE",
+    credentials: "include",
     headers: {
       "X-Client-Id": clientId,
     },

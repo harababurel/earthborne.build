@@ -284,6 +284,15 @@ describe("sharing and decklists integration", () => {
     const d3 = results.find((r) => r.id === deck3Id);
     expect(d3).toBeDefined();
     expect(d3?.author_name).toBeNull();
+
+    const shareRes = await ctx.app.request(
+      `/v2/public/share/history/${deck1Id}`,
+    );
+    expect(shareRes.status).toBe(200);
+    const shareBody = (await shareRes.json()) as {
+      author_name: string | null;
+    };
+    expect(shareBody.author_name).toBe("completed_user");
   });
 });
 
