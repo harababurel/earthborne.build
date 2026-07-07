@@ -127,6 +127,7 @@ export type SyncSlice = SyncState & {
     client: HttpClient,
     opts?: { expectedRevision?: string | null },
   ): Promise<void>;
+  syncAll(client: HttpClient): Promise<void>;
   syncDecks(client: HttpClient): Promise<void>;
   syncCampaigns(client: HttpClient): Promise<void>;
   resolveDeckConflictWithRefresh(

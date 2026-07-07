@@ -1,3 +1,4 @@
+import type { Id } from "@earthborne-build/shared";
 import { describe, expect, it } from "vitest";
 import { reconcileItems } from "./sync-reconciliation";
 
@@ -22,7 +23,7 @@ describe("sync-reconciliation - reconcileItems()", () => {
     remoteRevision?: string;
     syncRevision?: string;
   } = {}) => {
-    const local = hasLocal
+    const local: Record<string, { id: Id; date_update: string }> = hasLocal
       ? {
           item1: {
             id: "item1",
@@ -31,7 +32,10 @@ describe("sync-reconciliation - reconcileItems()", () => {
         }
       : {};
 
-    const syncItems = hasSync
+    const syncItems: Record<
+      string,
+      { version: string | null; status: "synced"; lastSyncedAt: number }
+    > = hasSync
       ? {
           item1: {
             version: syncRevision,

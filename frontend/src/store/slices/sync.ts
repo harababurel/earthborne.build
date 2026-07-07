@@ -1,6 +1,51 @@
-import type { FolderState } from "@earthborne-build/shared";
+import type { FolderState, Id } from "@earthborne-build/shared";
 import type { StateCreator } from "zustand";
+import { assert } from "@/utils/assert";
 import { ARCHIVE_FOLDER_ID } from "@/utils/constants";
+import { fromRemoteSettings, toRemoteSettings } from "../lib/settings-sync";
+import {
+  updateCampaignSyncConflictError,
+  updateCampaignSyncSaving,
+  updateCampaignSyncSuccess,
+  updateDeckSyncConflictError,
+  updateDeckSyncSaving,
+  updateDeckSyncSuccess,
+} from "../lib/sync";
+import {
+  applyRemoteCampaignReconciliation,
+  applyRemoteDeckReconciliation,
+  type ReconciliationItemPlan,
+  reconcileItems,
+} from "../lib/sync-reconciliation";
+import { dehydrate } from "../persist";
+import {
+  fetchAchievements,
+  isAchievementsConflictError,
+  putAchievements,
+} from "../services/requests/achievements";
+import {
+  deleteCampaign,
+  fetchCampaignBatch,
+  postCampaign,
+  putCampaign,
+} from "../services/requests/campaigns";
+import {
+  deleteDeck,
+  fetchDeckBatch,
+  fetchSyncManifest,
+  postDeck,
+  putDeck,
+} from "../services/requests/decks";
+import {
+  fetchFolders,
+  isFoldersConflictError,
+  putFolders,
+} from "../services/requests/folders";
+import {
+  fetchSettings,
+  isSettingsConflictError,
+  putSettings,
+} from "../services/requests/settings";
 import type { AuthState } from "./auth.types";
 import type { StoreState } from "./index";
 import type {
@@ -104,13 +149,66 @@ function getInitialSyncState(): SyncState {
 
 export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
   set,
-  _get,
+  get,
 ) => ({
   ...getInitialSyncState(),
 
-  bootstrapAuthenticatedState(_client) {
-    // Implemented in Phase 8
-    return Promise.resolve();
+  async bootstrapAuthenticatedState(client) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+
+    if (state.auth.status !== "authenticated" || !accountId) {
+      get().clearAccountState();
+      return;
+    }
+
+    if (storedAccountIdMismatches(state.sync, accountId)) {
+      get().clearAccountState();
+    }
+
+    const errors: unknown[] = [];
+
+    try {
+      await get().loadRemoteSettings(client);
+    } catch (error) {
+      errors.push(error);
+    }
+
+    try {
+      await get().loadRemoteFolders(client);
+    } catch (error) {
+      errors.push(error);
+    }
+
+    try {
+      await get().loadRemoteAchievements(client);
+    } catch (error) {
+      errors.push(error);
+    }
+
+    try {
+      await get().syncDecks(client);
+    } catch (error) {
+      errors.push(error);
+    }
+
+    try {
+      await get().syncCampaigns(client);
+    } catch (error) {
+      errors.push(error);
+    }
+
+    if (errors.length === 1) {
+      throw errors[0];
+    }
+
+    if (errors.length > 1) {
+      throw new Error(
+        errors
+          .map((e) => (e instanceof Error ? e.message : "Unknown error"))
+          .join("; "),
+      );
+    }
   },
 
   clearAccountState(auth?: AuthState) {
@@ -235,76 +333,791 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
     });
   },
 
-  // Stubs for folders sync
-  loadRemoteFolders(_client) {
-    // Implemented in Phase 8
-    return Promise.resolve();
-  },
-  applyRemoteFolders(_payload) {
-    // Implemented in Phase 8
-    return Promise.resolve();
-  },
-  saveFolders(_client, _opts) {
-    // Implemented in Phase 8
-    return Promise.resolve();
+  // Folders sync
+  async loadRemoteFolders(client) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot load remote folders without an account.");
+
+    state.setFoldersSync({
+      accountId,
+      status: "loading",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      const response = await fetchFolders(client);
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      if (response.revision == null || response.state == null) {
+        await get().saveFolders(client, { expectedRevision: null });
+        return;
+      }
+
+      await get().applyRemoteFolders(response);
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+      get().setFoldersSync({
+        accountId,
+        status: "error",
+        error: getErrorMessage(error),
+        conflict: null,
+      });
+      await dehydrate(get(), "app");
+      throw error;
+    }
   },
 
-  // Stubs for achievements sync
-  loadRemoteAchievements(_client) {
-    // Implemented in Phase 8
-    return Promise.resolve();
-  },
-  applyRemoteAchievements(_payload) {
-    // Implemented in Phase 8
-    return Promise.resolve();
-  },
-  saveAchievements(_client, _opts) {
-    // Implemented in Phase 8
-    return Promise.resolve();
+  async applyRemoteFolders(payload) {
+    const accountId = get().auth.session?.account.id;
+    assert(accountId, "Cannot apply remote folders without an account.");
+
+    set((state) => ({
+      data: {
+        ...state.data,
+        folders: payload.state.folders,
+        deckFolders: payload.state.deckFolders,
+      },
+      sync: {
+        ...state.sync,
+        folders: {
+          ...state.sync.folders,
+          accountId,
+          revision: payload.revision,
+          lastSyncedAt: Date.now(),
+          status: "synced",
+          error: null,
+          conflict: null,
+        },
+      },
+    }));
+
+    await dehydrate(get(), "app");
   },
 
-  // Stubs for settings sync
-  loadRemoteSettings(_client) {
-    // Implemented in Phase 8
-    return Promise.resolve();
-  },
-  applyRemoteSettings(_payload) {
-    // Implemented in Phase 8
-    return Promise.resolve();
-  },
-  saveSettings(_client, _opts) {
-    // Implemented in Phase 8
-    return Promise.resolve();
+  async saveFolders(client, opts) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot save folders without an account.");
+
+    const expectedRevision =
+      opts?.expectedRevision !== undefined
+        ? opts.expectedRevision
+        : state.sync.folders.accountId === accountId
+          ? state.sync.folders.revision
+          : null;
+
+    state.setFoldersSync({
+      accountId,
+      status: "saving",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      const response = await putFolders(client, {
+        expectedRevision,
+        state: getLocalFolderSyncState(get().data),
+      });
+
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      get().setFoldersSync({
+        accountId,
+        revision: response.revision,
+        lastSyncedAt: Date.now(),
+        status: "synced",
+        error: null,
+        conflict: null,
+      });
+      await dehydrate(get(), "app");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      if (isFoldersConflictError(error)) {
+        get().setFoldersSync({
+          accountId,
+          status: "conflict",
+          error: getErrorMessage(error),
+          conflict: error.remote,
+        });
+      } else {
+        get().setFoldersSync({
+          accountId,
+          status: "error",
+          error: getErrorMessage(error),
+          conflict: null,
+        });
+      }
+
+      await dehydrate(get(), "app");
+      throw error;
+    }
   },
 
-  // Stubs for decks/campaigns sync
-  syncDecks(_client) {
-    // Implemented in Phase 8
-    return Promise.resolve();
-  },
-  syncCampaigns(_client) {
-    // Implemented in Phase 8
-    return Promise.resolve();
+  // Achievements sync
+  async loadRemoteAchievements(client) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot load remote achievements without an account.");
+
+    state.setAchievementsSync({
+      accountId,
+      status: "loading",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      const response = await fetchAchievements(client);
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      if (response.revision == null || response.state == null) {
+        await get().saveAchievements(client, { expectedRevision: null });
+        return;
+      }
+
+      await get().applyRemoteAchievements(response);
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+      get().setAchievementsSync({
+        accountId,
+        status: "error",
+        error: getErrorMessage(error),
+        conflict: null,
+      });
+      await dehydrate(get(), "app");
+      throw error;
+    }
   },
 
-  // Stubs for conflict resolution
-  resolveDeckConflictWithRefresh(_client, _id) {
-    // Implemented in Phase 8
-    return Promise.resolve({ kind: "update" });
+  async applyRemoteAchievements(payload) {
+    const accountId = get().auth.session?.account.id;
+    assert(accountId, "Cannot apply remote achievements without an account.");
+
+    set((state) => ({
+      achievements: payload.state,
+      sync: {
+        ...state.sync,
+        achievements: {
+          ...state.sync.achievements,
+          accountId,
+          revision: payload.revision,
+          lastSyncedAt: Date.now(),
+          status: "synced",
+          error: null,
+          conflict: null,
+        },
+      },
+    }));
+
+    await dehydrate(get(), "app");
   },
-  resolveDeckConflictWithDiscard(_id) {
-    // Implemented in Phase 8
-    return Promise.resolve({ kind: "delete" });
+
+  async saveAchievements(client, opts) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot save achievements without an account.");
+
+    const expectedRevision =
+      opts?.expectedRevision !== undefined
+        ? opts.expectedRevision
+        : state.sync.achievements.accountId === accountId
+          ? state.sync.achievements.revision
+          : null;
+
+    state.setAchievementsSync({
+      accountId,
+      status: "saving",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      const response = await putAchievements(client, {
+        expectedRevision,
+        state: get().achievements,
+      });
+
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      get().setAchievementsSync({
+        accountId,
+        revision: response.revision,
+        lastSyncedAt: Date.now(),
+        status: "synced",
+        error: null,
+        conflict: null,
+      });
+      await dehydrate(get(), "app");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      if (isAchievementsConflictError(error)) {
+        get().setAchievementsSync({
+          accountId,
+          status: "conflict",
+          error: getErrorMessage(error),
+          conflict: error.remote,
+        });
+      } else {
+        get().setAchievementsSync({
+          accountId,
+          status: "error",
+          error: getErrorMessage(error),
+          conflict: null,
+        });
+      }
+
+      await dehydrate(get(), "app");
+      throw error;
+    }
   },
-  resolveCampaignConflictWithRefresh(_client, _id) {
-    // Implemented in Phase 8
-    return Promise.resolve({ kind: "update" });
+
+  // Settings sync
+  async loadRemoteSettings(client) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot load remote settings without an account.");
+
+    state.setSettingsSync({
+      accountId,
+      status: "loading",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      const response = await fetchSettings(client);
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      if (response.revision == null || response.settings == null) {
+        await get().saveSettings(client, { expectedRevision: null });
+        return;
+      }
+
+      await get().applyRemoteSettings(response);
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+      get().setSettingsSync({
+        accountId,
+        status: "error",
+        error: getErrorMessage(error),
+        conflict: null,
+      });
+      await dehydrate(get(), "app");
+      throw error;
+    }
   },
-  resolveCampaignConflictWithDiscard(_id) {
-    // Implemented in Phase 8
-    return Promise.resolve({ kind: "delete" });
+
+  async applyRemoteSettings(payload) {
+    const accountId = get().auth.session?.account.id;
+    assert(accountId, "Cannot apply remote settings without an account.");
+
+    const settings = fromRemoteSettings(payload.settings, get().settings);
+
+    if (settings.locale !== get().settings.locale) {
+      await get().applySettings(settings);
+    } else {
+      set({ settings });
+    }
+
+    set((state) => ({
+      sync: {
+        ...state.sync,
+        settings: {
+          ...state.sync.settings,
+          accountId,
+          revision: payload.revision,
+          lastSyncedAt: Date.now(),
+          status: "synced",
+          error: null,
+          conflict: null,
+        },
+      },
+    }));
+
+    await dehydrate(get(), "app");
+  },
+
+  async saveSettings(client, opts) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot save settings without an account.");
+
+    const expectedRevision =
+      opts?.expectedRevision !== undefined
+        ? opts.expectedRevision
+        : state.sync.settings.accountId === accountId
+          ? state.sync.settings.revision
+          : null;
+
+    state.setSettingsSync({
+      accountId,
+      status: "saving",
+      error: null,
+      conflict: null,
+    });
+
+    try {
+      const response = await putSettings(client, {
+        expectedRevision,
+        settings: toRemoteSettings(get().settings),
+      });
+
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      get().setSettingsSync({
+        accountId,
+        revision: response.revision,
+        lastSyncedAt: Date.now(),
+        status: "synced",
+        error: null,
+        conflict: null,
+      });
+      await dehydrate(get(), "app");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      if (isSettingsConflictError(error)) {
+        get().setSettingsSync({
+          accountId,
+          status: "conflict",
+          error: getErrorMessage(error),
+          conflict: error.remote,
+        });
+      } else {
+        get().setSettingsSync({
+          accountId,
+          status: "error",
+          error: getErrorMessage(error),
+          conflict: null,
+        });
+      }
+
+      await dehydrate(get(), "app");
+      throw error;
+    }
+  },
+
+  async syncAll(client) {
+    await get().bootstrapAuthenticatedState(client);
+  },
+
+  // Decks sync
+  async syncDecks(client) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot sync decks without an account.");
+
+    state.setDecksSync({
+      accountId,
+      status: "loading",
+      error: null,
+    });
+
+    try {
+      const manifest = await fetchSyncManifest(client);
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      const syncDecks = get().sync.decks;
+
+      // Type-cast local decks to ReconciliationItemInput
+      const localDecks = Object.entries(get().data.decks).reduce<
+        Record<string, { id: Id; date_update: string }>
+      >((acc, [id, deck]) => {
+        acc[id] = { id: deck.id, date_update: deck.date_update };
+        return acc;
+      }, {});
+
+      const plan = reconcileItems(localDecks, syncDecks.items, manifest.decks);
+
+      const fetchedDecks = plan.downloads.length
+        ? await fetchDeckBatch(client, { ids: plan.downloads })
+        : [];
+
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      const result = applyRemoteDeckReconciliation({
+        accountId,
+        dataDecks: get().data.decks,
+        deckFolders: get().data.deckFolders,
+        undoHistory: get().data.undoHistory,
+        deckEdits: get().deckEdits,
+        manifestDecks: manifest.decks,
+        plan,
+        remoteDecks: fetchedDecks,
+        syncDecks: get().sync.decks,
+      });
+
+      set((prev) => ({
+        data: {
+          ...prev.data,
+          decks: result.decks,
+          deckFolders: result.deckFolders,
+          undoHistory: result.undoHistory,
+        },
+        deckEdits: result.deckEdits,
+        sync: {
+          ...prev.sync,
+          decks: result.syncDecks,
+        },
+      }));
+
+      // Background pushes
+      await performDeckSyncPushes(client, plan, get());
+
+      await dehydrate(get(), "app", "edits");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+      get().setDecksSync({
+        accountId,
+        status: "error",
+        error: getErrorMessage(error),
+      });
+      await dehydrate(get(), "app");
+      throw error;
+    }
+  },
+
+  // Campaigns sync
+  async syncCampaigns(client) {
+    const state = get();
+    const accountId = state.auth.session?.account.id;
+    assert(accountId, "Cannot sync campaigns without an account.");
+
+    state.setCampaignsSync({
+      accountId,
+      status: "loading",
+      error: null,
+    });
+
+    try {
+      const manifest = await fetchSyncManifest(client);
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      const syncCampaigns = get().sync.campaigns;
+
+      const localCampaigns = Object.entries(get().data.campaigns).reduce<
+        Record<string, { id: Id; date_update: string }>
+      >((acc, [id, campaign]) => {
+        acc[id] = { id: campaign.id, date_update: campaign.date_update };
+        return acc;
+      }, {});
+
+      const plan = reconcileItems(
+        localCampaigns,
+        syncCampaigns.items,
+        manifest.campaigns,
+      );
+
+      const fetchedCampaigns = plan.downloads.length
+        ? await fetchCampaignBatch(client, { ids: plan.downloads })
+        : [];
+
+      if (!isCurrentAccount(get(), accountId)) return;
+
+      const result = applyRemoteCampaignReconciliation({
+        accountId,
+        dataCampaigns: get().data.campaigns,
+        undoHistory: get().data.undoHistory,
+        manifestCampaigns: manifest.campaigns,
+        plan,
+        remoteCampaigns: fetchedCampaigns,
+        syncCampaigns: get().sync.campaigns,
+      });
+
+      set((prev) => ({
+        data: {
+          ...prev.data,
+          campaigns: result.campaigns,
+          undoHistory: result.undoHistory,
+        },
+        sync: {
+          ...prev.sync,
+          campaigns: result.syncCampaigns,
+        },
+      }));
+
+      // Background pushes
+      await performCampaignSyncPushes(client, plan, get());
+
+      await dehydrate(get(), "app");
+    } catch (error) {
+      if (!isCurrentAccount(get(), accountId)) return;
+      get().setCampaignsSync({
+        accountId,
+        status: "error",
+        error: getErrorMessage(error),
+      });
+      await dehydrate(get(), "app");
+      throw error;
+    }
+  },
+
+  // Conflict resolution
+  async resolveDeckConflictWithRefresh(client, id) {
+    const conflict = getDeckConflict(get(), id);
+
+    set((prev) => ({
+      sync: updateDeckSyncSaving(prev.sync, id),
+    }));
+
+    try {
+      const [remoteDeck] = await fetchDeckBatch(client, {
+        ids: [String(id)],
+      });
+      assert(remoteDeck, `Remote deck ${id} could not be loaded.`);
+
+      set((prev) => {
+        const decks = {
+          ...prev.data.decks,
+          [id]: remoteDeck.data,
+        };
+        const deckEdits = { ...prev.deckEdits };
+        const undoHistory = prev.data.undoHistory
+          ? { ...prev.data.undoHistory }
+          : undefined;
+
+        delete deckEdits[id];
+        delete undoHistory?.[id];
+
+        return {
+          data: {
+            ...prev.data,
+            decks,
+            undoHistory,
+          },
+          deckEdits,
+          sync: updateDeckSyncSuccess(
+            prev.sync,
+            id,
+            remoteDeck.revision,
+            Date.now(),
+          ),
+        };
+      });
+      await dehydrate(get(), "app", "edits");
+
+      return { kind: conflict.kind };
+    } catch (error) {
+      set((prev) => ({
+        sync: updateDeckSyncConflictError(prev.sync, id, error, conflict.kind),
+      }));
+      await dehydrate(get(), "app", "edits");
+      throw error;
+    }
+  },
+
+  async resolveDeckConflictWithDiscard(id) {
+    const conflict = getDeckConflict(get(), id);
+    assert(
+      conflict.remoteVersion == null,
+      `Deck ${id} still has a remote copy to refresh.`,
+    );
+
+    set((prev) => ({
+      sync: updateDeckSyncSaving(prev.sync, id),
+    }));
+
+    try {
+      set((prev) => {
+        const decks = { ...prev.data.decks };
+        const deckFolders = { ...prev.data.deckFolders };
+        const deckEdits = { ...prev.deckEdits };
+        const undoHistory = prev.data.undoHistory
+          ? { ...prev.data.undoHistory }
+          : undefined;
+
+        delete decks[id];
+        delete deckFolders[id];
+        delete deckEdits[id];
+        delete undoHistory?.[id];
+
+        const syncItems = { ...prev.sync.decks.items };
+        delete syncItems[id];
+
+        return {
+          data: {
+            ...prev.data,
+            decks,
+            deckFolders,
+            undoHistory,
+          },
+          deckEdits,
+          sync: {
+            ...prev.sync,
+            decks: {
+              ...prev.sync.decks,
+              items: syncItems,
+            },
+          },
+        };
+      });
+      await dehydrate(get(), "app", "edits");
+
+      return { kind: conflict.kind };
+    } catch (error) {
+      set((prev) => ({
+        sync: updateDeckSyncConflictError(prev.sync, id, error, conflict.kind),
+      }));
+      await dehydrate(get(), "app", "edits");
+      throw error;
+    }
+  },
+
+  async resolveCampaignConflictWithRefresh(client, id) {
+    const conflict = getCampaignConflict(get(), id);
+
+    set((prev) => ({
+      sync: updateCampaignSyncSaving(prev.sync, id),
+    }));
+
+    try {
+      const [remoteCampaign] = await fetchCampaignBatch(client, {
+        ids: [String(id)],
+      });
+      assert(remoteCampaign, `Remote campaign ${id} could not be loaded.`);
+
+      set((prev) => {
+        const campaigns = {
+          ...prev.data.campaigns,
+          [id]: remoteCampaign.data,
+        };
+        const undoHistory = prev.data.undoHistory
+          ? { ...prev.data.undoHistory }
+          : undefined;
+
+        delete undoHistory?.[id];
+
+        return {
+          data: {
+            ...prev.data,
+            campaigns,
+            undoHistory,
+          },
+          sync: updateCampaignSyncSuccess(
+            prev.sync,
+            id,
+            remoteCampaign.revision,
+            Date.now(),
+          ),
+        };
+      });
+      await dehydrate(get(), "app");
+
+      return { kind: conflict.kind };
+    } catch (error) {
+      set((prev) => ({
+        sync: updateCampaignSyncConflictError(
+          prev.sync,
+          id,
+          error,
+          conflict.kind,
+        ),
+      }));
+      await dehydrate(get(), "app");
+      throw error;
+    }
+  },
+
+  async resolveCampaignConflictWithDiscard(id) {
+    const conflict = getCampaignConflict(get(), id);
+    assert(
+      conflict.remoteVersion == null,
+      `Campaign ${id} still has a remote copy to refresh.`,
+    );
+
+    set((prev) => ({
+      sync: updateCampaignSyncSaving(prev.sync, id),
+    }));
+
+    try {
+      set((prev) => {
+        const campaigns = { ...prev.data.campaigns };
+        const undoHistory = prev.data.undoHistory
+          ? { ...prev.data.undoHistory }
+          : undefined;
+
+        delete campaigns[id];
+        delete undoHistory?.[id];
+
+        const syncItems = { ...prev.sync.campaigns.items };
+        delete syncItems[id];
+
+        return {
+          data: {
+            ...prev.data,
+            campaigns,
+            undoHistory,
+          },
+          sync: {
+            ...prev.sync,
+            campaigns: {
+              ...prev.sync.campaigns,
+              items: syncItems,
+            },
+          },
+        };
+      });
+      await dehydrate(get(), "app");
+
+      return { kind: conflict.kind };
+    } catch (error) {
+      set((prev) => ({
+        sync: updateCampaignSyncConflictError(
+          prev.sync,
+          id,
+          error,
+          conflict.kind,
+        ),
+      }));
+      await dehydrate(get(), "app");
+      throw error;
+    }
   },
 });
+
+function isCurrentAccount(state: StoreState, accountId: string) {
+  return (
+    state.auth.status === "authenticated" &&
+    state.auth.session?.account.id === accountId
+  );
+}
+
+function getDeckConflict(state: StoreState, id: string | number) {
+  const conflict = state.sync.decks.items[id]?.conflict;
+  assert(conflict, `Deck ${id} does not have a conflict.`);
+  return conflict;
+}
+
+function getCampaignConflict(state: StoreState, id: string | number) {
+  const conflict = state.sync.campaigns.items[id]?.conflict;
+  assert(conflict, `Campaign ${id} does not have a conflict.`);
+  return conflict;
+}
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Unknown error";
+}
+
+function storedAccountIdMismatches(sync: SyncState["sync"], accountId: string) {
+  return (
+    accountIdMismatches(sync.settings.accountId, accountId) ||
+    accountIdMismatches(sync.decks.accountId, accountId) ||
+    accountIdMismatches(sync.campaigns.accountId, accountId) ||
+    accountIdMismatches(sync.folders.accountId, accountId) ||
+    accountIdMismatches(sync.achievements.accountId, accountId)
+  );
+}
+
+function accountIdMismatches(
+  storedAccountId: string | null,
+  accountId: string,
+) {
+  return storedAccountId !== null && storedAccountId !== accountId;
+}
 
 function removeRemoteAccountData(state: StoreState) {
   const decks = { ...state.data.decks };
@@ -316,7 +1129,6 @@ function removeRemoteAccountData(state: StoreState) {
   const deckEdits = { ...state.deckEdits };
   const deckFolders = { ...state.data.deckFolders };
 
-  // Decks: remove if source is 'account' or exists in sync.decks.items
   for (const [id, deck] of Object.entries(state.data.decks)) {
     if (deck.source === "account" || state.sync.decks.items[id]) {
       delete decks[id];
@@ -327,9 +1139,9 @@ function removeRemoteAccountData(state: StoreState) {
     }
   }
 
-  // Campaigns: remove if exists in sync.campaigns.items
   for (const id of Object.keys(state.sync.campaigns.items)) {
     delete campaigns[id];
+    delete undoHistory?.[id];
   }
 
   return {
@@ -360,4 +1172,148 @@ export function getLocalFolderSyncState(data: StoreState["data"]): FolderState {
   }, {});
 
   return { folders, deckFolders };
+}
+
+async function performDeckSyncPushes(
+  client: Parameters<typeof postDeck>[0],
+  plan: ReconciliationItemPlan,
+  state: StoreState,
+) {
+  // 1. Upload local-only decks
+  for (const id of plan.uploads) {
+    const deck = state.data.decks[id];
+    if (deck) {
+      try {
+        const response = await postDeck(client, { data: deck });
+        state.setDeckSyncItem(id, {
+          version: response.revision,
+          status: "synced",
+          lastSyncedAt: Date.now(),
+          error: null,
+          conflict: null,
+        });
+      } catch (err) {
+        state.setDeckSyncItem(id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Upload failed",
+        });
+      }
+    }
+  }
+
+  // 2. Push local updates (PUT)
+  for (const id of plan.pushes) {
+    const deck = state.data.decks[id];
+    const syncItem = state.sync.decks.items[id];
+    if (deck && syncItem?.version) {
+      try {
+        const response = await putDeck(client, id, {
+          data: deck,
+          expectedRevision: syncItem.version,
+        });
+        state.setDeckSyncItem(id, {
+          version: response.revision,
+          status: "synced",
+          lastSyncedAt: Date.now(),
+          error: null,
+          conflict: null,
+        });
+      } catch (err) {
+        state.setDeckSyncItem(id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Push failed",
+        });
+      }
+    }
+  }
+
+  // 3. Push remote deletions
+  for (const id of plan.remoteDeletions) {
+    const syncItem = state.sync.decks.items[id];
+    if (syncItem?.version) {
+      try {
+        await deleteDeck(client, id, {
+          expectedRevision: syncItem.version,
+        });
+        state.setDeckSyncItem(id, null);
+      } catch (err) {
+        state.setDeckSyncItem(id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Delete failed",
+        });
+      }
+    }
+  }
+}
+
+async function performCampaignSyncPushes(
+  client: Parameters<typeof postCampaign>[0],
+  plan: ReconciliationItemPlan,
+  state: StoreState,
+) {
+  // 1. Upload local-only campaigns
+  for (const id of plan.uploads) {
+    const campaign = state.data.campaigns[id];
+    if (campaign) {
+      try {
+        const response = await postCampaign(client, { data: campaign });
+        state.setCampaignSyncItem(id, {
+          version: response.revision,
+          status: "synced",
+          lastSyncedAt: Date.now(),
+          error: null,
+          conflict: null,
+        });
+      } catch (err) {
+        state.setCampaignSyncItem(id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Upload failed",
+        });
+      }
+    }
+  }
+
+  // 2. Push local updates (PUT)
+  for (const id of plan.pushes) {
+    const campaign = state.data.campaigns[id];
+    const syncItem = state.sync.campaigns.items[id];
+    if (campaign && syncItem?.version) {
+      try {
+        const response = await putCampaign(client, id, {
+          data: campaign,
+          expectedRevision: syncItem.version,
+        });
+        state.setCampaignSyncItem(id, {
+          version: response.revision,
+          status: "synced",
+          lastSyncedAt: Date.now(),
+          error: null,
+          conflict: null,
+        });
+      } catch (err) {
+        state.setCampaignSyncItem(id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Push failed",
+        });
+      }
+    }
+  }
+
+  // 3. Push remote deletions
+  for (const id of plan.remoteDeletions) {
+    const syncItem = state.sync.campaigns.items[id];
+    if (syncItem?.version) {
+      try {
+        await deleteCampaign(client, id, {
+          expectedRevision: syncItem.version,
+        });
+        state.setCampaignSyncItem(id, null);
+      } catch (err) {
+        state.setCampaignSyncItem(id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Delete failed",
+        });
+      }
+    }
+  }
 }

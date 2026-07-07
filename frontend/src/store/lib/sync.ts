@@ -145,7 +145,7 @@ export function updateDeckSyncError(
   kind: NonNullable<DeckSyncItemState["conflict"]>["kind"],
 ): StoreState["sync"] {
   if (isDeckConflictError(error)) {
-    const remoteVersion = error.remote?.remoteVersion ?? null;
+    const remoteVersion = error.remote?.revision ?? null;
     const items = updateDeckSyncItem(sync.decks.items, deckId, {
       status: "conflict",
       error: null,
@@ -187,7 +187,7 @@ export function updateCampaignSyncError(
   kind: NonNullable<CampaignSyncItemState["conflict"]>["kind"],
 ): StoreState["sync"] {
   if (isCampaignConflictError(error)) {
-    const remoteVersion = error.remote?.remoteVersion ?? null;
+    const remoteVersion = error.remote?.revision ?? null;
     const items = updateCampaignSyncItem(sync.campaigns.items, campaignId, {
       status: "conflict",
       error: null,
