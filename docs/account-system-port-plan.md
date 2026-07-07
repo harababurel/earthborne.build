@@ -1006,7 +1006,7 @@ browser. (Data sync comes in Phase 8 — after login the app simply shows the ac
 logged in; complete-profile already uploads local data since Phase 3's endpoint and
 Phase 6's `applyCompleteProfileResponse` handle it.)
 
-- [ ] **Task 7.1 — Auth pages.** Port from arkham `frontend/src/pages/auth/`:
+- [x] **Task 7.1 — Auth pages.** Port from arkham `frontend/src/pages/auth/`:
   `auth-layout.tsx` (+css — swap the background asset for an existing earthborne visual
   or plain themed background; do NOT copy arkham's `login_bg.avif`), `auth-form.tsx`,
   `error-box.tsx`, `helpers.tsx`, `login.tsx`, `signup.tsx`, `forgot-password.tsx`,
@@ -1015,14 +1015,14 @@ Phase 6's `applyCompleteProfileResponse` handle it.)
   render only when `VITE_TURNSTILE_SITE_KEY` is set). complete-signup adaptations: the
   "upload local data" step gathers decks + campaigns + folders + syncable settings +
   achievements from the store.
-- [ ] **Task 7.2 — i18n.** Every UI string via `react-i18next` with keys in
+- [x] **Task 7.2 — i18n.** Every UI string via `react-i18next` with keys in
   `frontend/src/locales/en.json`. Copy arkham's key subtrees (search its `en.json` for
   the keys used by the ported pages/components; arkham nests most under `auth.*`,
   `settings.account.*`, `deck_collection.sync*`) and adapt brand references. Note:
   earthborne now also has a German locale (`de.json`, added 2026-07) — do NOT add
   machine-translated German keys; add keys to `en.json` only and let German fall back
   to English (Sergiu handles translation separately).
-- [ ] **Task 7.3 — Routes.** In `frontend/src/app.tsx` (structure verified 2026-07-07):
+- [x] **Task 7.3 — Routes.** In `frontend/src/app.tsx` (structure verified 2026-07-07):
   - Add lazy imports next to the existing block of `lazy(() => import(...))` page
     declarations (top of file): one per auth page.
   - Add `<Route>` entries inside the `<Switch>` in `AppInner`, **before** the `*`
@@ -1040,7 +1040,7 @@ Phase 6's `applyCompleteProfileResponse` handle it.)
       `/auth/complete-signup`.
     - authenticated + profile complete + location in {`/auth/login`, `/auth/signup`,
       `/auth/complete-signup`} ⇒ navigate to `/`.
-- [ ] **Task 7.4 — Masthead account menu.** Earthborne's masthead is
+- [x] **Task 7.4 — Masthead account menu.** Earthborne's masthead is
   `frontend/src/components/masthead.tsx` (77 lines, verified 2026-07-07): a `header`
   with a `left` div (logo + children) and a `nav` with class `right` containing
   `{slotRight}`, then a `location !== "/settings"` block (LocaleQuickSwitch,
