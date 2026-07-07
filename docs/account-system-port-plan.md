@@ -1075,7 +1075,7 @@ Plus Task 7.5 sign-off from Sergiu.
 Goal: mirror-everything sync actually works across devices. The hardest phase — take it
 task by task, keep tests green throughout.
 
-- [ ] **Task 8.1 — Sync helpers.** Port `frontend/src/store/lib/sync.ts` (the
+- [x] **Task 8.1 — Sync helpers.** Port `frontend/src/store/lib/sync.ts` (the
   `updateDeckSync*` state helpers; strip provider-availability functions —
   `isStorageProviderAvailable`/`isSyncedStorageProvider` don't exist in our
   single-provider world) and `frontend/src/store/lib/settings-sync.ts` + spec (defines
