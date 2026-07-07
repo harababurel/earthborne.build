@@ -477,6 +477,12 @@ router.post(
     const account = c.get("account");
     const payload = c.req.valid("json");
 
+    if (account.profile_completed_at != null) {
+      throw new HTTPException(409, {
+        message: "Profile is already completed",
+      });
+    }
+
     const response = await c
       .get("db")
       .transaction()
@@ -487,7 +493,18 @@ router.post(
           });
         }
 
-        await completeAccountProfile(tx, account.id, payload.username);
+        const completed = await completeAccountProfile(
+          tx,
+          account.id,
+          payload.username,
+        );
+
+        if (completed.numUpdatedRows === 0n) {
+          throw new HTTPException(409, {
+            message: "Profile is already completed",
+          });
+        }
+
         const uploads = await applyCompleteProfileUploads(
           tx,
           account.id,

@@ -1,6 +1,4 @@
 import { z } from "zod";
-import { CampaignSchema } from "../schemas/campaign.schema.ts";
-import { DeckSchema } from "../schemas/deck.schema.ts";
 import {
   AchievementsResponseSchema,
   AchievementsStateSchema,
@@ -8,6 +6,8 @@ import {
   FolderStateSchema,
   SettingsResponseSchema,
   SettingsStateSchema,
+  SyncableCampaignSchema,
+  SyncableDeckSchema,
   SyncedCampaignUploadSchema,
   SyncedDeckUploadSchema,
 } from "./sync.schema.ts";
@@ -110,8 +110,8 @@ export const CompleteProfileRequestSchema = z.object({
   username: z.string().min(3).max(64).regex(new RegExp(PATTERN_VALID_USERNAME)),
   uploads: z
     .object({
-      decks: z.array(DeckSchema).optional(),
-      campaigns: z.array(CampaignSchema).optional(),
+      decks: z.array(SyncableDeckSchema).optional(),
+      campaigns: z.array(SyncableCampaignSchema).optional(),
       folders: FolderStateSchema.optional(),
       settings: SettingsStateSchema.optional(),
       achievements: AchievementsStateSchema.optional(),

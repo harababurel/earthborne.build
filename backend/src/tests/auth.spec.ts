@@ -180,6 +180,44 @@ describe("account auth routes", () => {
     ).resolves.toHaveLength(1);
   });
 
+  it("rejects complete-profile when the profile is already completed", async () => {
+    const cookie = await completeSignupWithUploads(
+      "completed@example.com",
+      "completed",
+    );
+
+    const again = await ctx.app.request("/v2/account/auth/complete-profile", {
+      method: "POST",
+      body: JSON.stringify({
+        username: "completed_again",
+        uploads: { decks: [makeDeck("completed-deck")] },
+      }),
+      headers: { Cookie: cookie, "Content-Type": "application/json" },
+    });
+    expect(again.status).toBe(409);
+
+    await expect(
+      ctx.db.selectFrom("account_deck").selectAll().execute(),
+    ).resolves.toHaveLength(1);
+    await expect(
+      ctx.db.selectFrom("account").select(["name"]).executeTakeFirstOrThrow(),
+    ).resolves.toMatchObject({ name: "completed" });
+  });
+
+  it("rejects uploaded items with ids longer than 64 characters", async () => {
+    const cookie = await signupVerifyLogin("longid@example.com");
+
+    const res = await ctx.app.request("/v2/account/auth/complete-profile", {
+      method: "POST",
+      body: JSON.stringify({
+        username: "longid",
+        uploads: { decks: [makeDeck("x".repeat(65))] },
+      }),
+      headers: { Cookie: cookie, "Content-Type": "application/json" },
+    });
+    expect(res.status).toBe(400);
+  });
+
   it("validates complete-profile blob sizes while allowing larger onboarding bodies", async () => {
     const oversizedBlobCookie = await signupVerifyLogin("blobsize@example.com");
     const oversizedBlob = await ctx.app.request(

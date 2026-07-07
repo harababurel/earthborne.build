@@ -175,6 +175,20 @@ describe("account sync routes", () => {
     );
     expect(oversized.status).toBeGreaterThanOrEqual(400);
     expect(oversized.status).not.toBe(500);
+
+    const longDeckId = await postJson(
+      "/v2/account/decks",
+      { data: makeDeck("x".repeat(65)) },
+      cookie,
+    );
+    expect(longDeckId.status).toBe(400);
+
+    const longCampaignId = await postJson(
+      "/v2/account/campaigns",
+      { data: makeCampaign("x".repeat(65), []) },
+      cookie,
+    );
+    expect(longCampaignId.status).toBe(400);
   });
 
   it("syncs campaign create, update conflict, and delete", async () => {

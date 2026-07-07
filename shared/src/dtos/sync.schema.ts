@@ -7,6 +7,18 @@ export const SYNC_BATCH_LIMIT = 250;
 export const SyncIdSchema = z.string().min(1).max(64);
 export const RevisionSchema = z.uuid();
 
+// Synced rows share the id with the client-side item, so uploaded item ids
+// must fit the account_deck/account_campaign id column (length <= 64).
+export const SyncableDeckSchema = DeckSchema.refine(
+  (deck) => isValidSyncId(deck.id),
+  { message: "Deck id must be between 1 and 64 characters" },
+);
+
+export const SyncableCampaignSchema = CampaignSchema.refine(
+  (campaign) => isValidSyncId(campaign.id),
+  { message: "Campaign id must be between 1 and 64 characters" },
+);
+
 export const ManifestItemSchema = z.object({
   id: SyncIdSchema,
   revision: RevisionSchema,
@@ -60,23 +72,23 @@ export const SyncedCampaignUploadSchema = SyncedCampaignSchema.omit({
 export type SyncedCampaignUpload = z.infer<typeof SyncedCampaignUploadSchema>;
 
 export const DeckCreateRequestSchema = z.object({
-  data: DeckSchema,
+  data: SyncableDeckSchema,
 });
 export type DeckCreateRequest = z.infer<typeof DeckCreateRequestSchema>;
 
 export const CampaignCreateRequestSchema = z.object({
-  data: CampaignSchema,
+  data: SyncableCampaignSchema,
 });
 export type CampaignCreateRequest = z.infer<typeof CampaignCreateRequestSchema>;
 
 export const DeckWriteRequestSchema = z.object({
-  data: DeckSchema,
+  data: SyncableDeckSchema,
   expectedRevision: RevisionSchema,
 });
 export type DeckWriteRequest = z.infer<typeof DeckWriteRequestSchema>;
 
 export const CampaignWriteRequestSchema = z.object({
-  data: CampaignSchema,
+  data: SyncableCampaignSchema,
   expectedRevision: RevisionSchema,
 });
 export type CampaignWriteRequest = z.infer<typeof CampaignWriteRequestSchema>;
@@ -179,3 +191,8 @@ export const AchievementsWriteRequestSchema = z.object({
 export type AchievementsWriteRequest = z.infer<
   typeof AchievementsWriteRequestSchema
 >;
+
+function isValidSyncId(id: string | number) {
+  const length = String(id).length;
+  return length >= 1 && length <= 64;
+}

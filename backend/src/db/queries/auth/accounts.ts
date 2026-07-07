@@ -74,10 +74,13 @@ export async function completeAccountProfile(
 ) {
   const now = new Date().toISOString();
 
+  // Conditional on the profile being incomplete: completing twice would
+  // duplicate uploaded items and hand out revisions that were never stored.
   return await db
     .updateTable("account")
     .set({ name, profile_completed_at: now, updated_at: now })
     .where("id", "=", accountId)
+    .where("profile_completed_at", "is", null)
     .executeTakeFirst();
 }
 
