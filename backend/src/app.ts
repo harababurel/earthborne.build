@@ -13,6 +13,10 @@ import { type Mailer, mailerFromConfig } from "./lib/email/mailer.ts";
 import { errorHandler } from "./lib/errors.ts";
 import type { HonoEnv } from "./lib/hono-env.ts";
 import { logger, requestLogger } from "./lib/logger.ts";
+import accountBlobsRouter from "./routes/account-blobs.ts";
+import accountCampaignsRouter from "./routes/account-campaigns.ts";
+import accountDecksRouter from "./routes/account-decks.ts";
+import accountSyncRouter from "./routes/account-sync.ts";
 import adminRouter from "./routes/admin.ts";
 import authRouter from "./routes/auth.ts";
 import cardsRouter from "./routes/cards.ts";
@@ -60,6 +64,10 @@ export function appFactory(
 
   const account = new Hono<HonoEnv>();
   account.use("*", authenticatedCorsMiddleware(config));
+  account.route("/sync", accountSyncRouter);
+  account.route("/decks", accountDecksRouter);
+  account.route("/campaigns", accountCampaignsRouter);
+  account.route("/", accountBlobsRouter);
   account.route("/auth", authRouter);
   account.route("/profile", profileRouter);
   app.route("/v2/account", account);

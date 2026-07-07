@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 3 complete**
+Status: **phase 4 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -827,7 +827,7 @@ All auth scenarios above green. Walk Sergiu through the test list for sign-off.
 Goal: decks, campaigns, folders, settings, achievements CRUD with revision-based
 optimistic concurrency, tested.
 
-- [ ] **Task 4.1 — Deck + campaign queries.** Create
+- [x] **Task 4.1 — Deck + campaign queries.** Create
   `backend/src/db/queries/account-decks.ts` and `account-campaigns.ts` (identical shape;
   consider one generic module parameterized by table name — mirror how arkham's
   `revisioned-account-state.ts` handles two tables with overloads). Functions:
@@ -840,21 +840,21 @@ optimistic concurrency, tested.
   `isUniqueViolation`-style error detection if present (check `backend/src/lib/` /
   `db.helpers.ts`; better-sqlite3 throws `SQLITE_CONSTRAINT_PRIMARYKEY` — write a small
   helper if none exists).
-- [ ] **Task 4.2 — Blob queries.** Create `backend/src/db/queries/revisioned-blobs.ts`
+- [x] **Task 4.2 — Blob queries.** Create `backend/src/db/queries/revisioned-blobs.ts`
   porting arkham's `revisioned-account-state.ts`, extended to the three tables
   (`account_folder.state`, `account_settings.settings`, `account_achievements.state`).
   Keep the exact concurrency semantics: `expectedRevision == null` ⇒
   `ON CONFLICT DO NOTHING` insert (returns undefined if a row already existed ⇒ 409);
   else conditional `DO UPDATE ... WHERE revision = expected` (returns undefined on
   mismatch ⇒ 409).
-- [ ] **Task 4.3 — Routes.** Create `backend/src/routes/account-decks.ts`,
+- [x] **Task 4.3 — Routes.** Create `backend/src/routes/account-decks.ts`,
   `account-campaigns.ts`, `account-blobs.ts` implementing the §3.2 table (reference:
   arkham `features/decks/routes.ts`, `folders/routes.ts`, `settings/routes.ts`).
   Every handler: `sessionAuth()` + zod validation from `sync.schema.ts` + JSON parse of
   stored `data` on the way out. The combined manifest route (`GET /sync/manifest`) can
   live in `account-decks.ts` or its own tiny router — mount so the final paths match
   §3.2. Wire all into the `/v2/account` group in `app.ts`.
-- [ ] **Task 4.4 — Sync tests.** Create `backend/src/tests/account-sync.spec.ts`. Helper:
+- [x] **Task 4.4 — Sync tests.** Create `backend/src/tests/account-sync.spec.ts`. Helper:
   `signupAndLogin(app)` → cookie (reuse Phase 3 flows; factor shared test helpers into
   `backend/src/tests/auth-helpers.ts`). Scenarios:
   - manifest empty → POST deck → manifest has 1 entry with revision; batch returns the
