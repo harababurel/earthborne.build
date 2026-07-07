@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 4 complete**
+Status: **phase 5 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -889,24 +889,24 @@ This completes the backend except sharing. Get Sergiu's sign-off.
 
 Goal: shares created by logged-in users are account-owned; guides can show authors.
 
-- [ ] **Task 5.1 — Optional session middleware.** Add `optionalSessionAuth()` to
+- [x] **Task 5.1 — Optional session middleware.** Add `optionalSessionAuth()` to
   `session-auth-middleware.ts`: if a valid session cookie is present, populate
   `account`/`session` in context; otherwise continue without error (no 401). Do not
   refresh cookies here for anonymous requests.
-- [ ] **Task 5.2 — Sharing routes.** In `backend/src/routes/sharing.ts`: apply
+- [x] **Task 5.2 — Sharing routes.** In `backend/src/routes/sharing.ts`: apply
   `optionalSessionAuth()` to POST/PUT/DELETE. On POST: set `shared_deck.account_id` when
   an account is present (still record `client_id` as today). On PUT/DELETE: allow if the
   caller matches `client_id` **or** owns the share via `account_id` — so a logged-in
   user can manage their shares from any device. Update
   `backend/src/db/queries/sharing.ts` accordingly. Anonymous behavior must remain
   byte-compatible (existing tests keep passing untouched).
-- [ ] **Task 5.3 — Author in decklist search.** In
+- [x] **Task 5.3 — Author in decklist search.** In
   `backend/src/db/queries/decklists.ts` (+ `shared/src/dtos/decklist-*.schema.ts`
   response schema): LEFT JOIN `account` on `shared_deck.account_id`, expose
   `author_name: string | null`. Only accounts with completed profiles have meaningful
   names — join condition or a `WHERE profile_completed_at IS NOT NULL` guard on the
   joined name (null it out otherwise, since placeholder names look like `email_<uuid>`).
-- [ ] **Task 5.4 — Tests.** Extend the sharing/decklists specs: anonymous share has null
+- [x] **Task 5.4 — Tests.** Extend the sharing/decklists specs: anonymous share has null
   author; authed share carries account_id; authed user can PUT/DELETE own share with a
   different client id; other users cannot; search response includes `author_name`.
 

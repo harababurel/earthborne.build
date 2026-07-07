@@ -28,30 +28,46 @@ export async function updateSharedDeck(
   db: Database,
   id: string,
   clientId: string,
+  accountId: string | null | undefined,
   data: string,
   history: string,
 ) {
   const now = new Date().toISOString();
-  await db
+  let query = db
     .updateTable("shared_deck")
     .set({
       data,
       history,
       updated_at: now,
     })
-    .where("id", "=", id)
-    .where("client_id", "=", clientId)
-    .execute();
+    .where("id", "=", id);
+
+  if (accountId) {
+    query = query.where((eb) =>
+      eb.or([eb("client_id", "=", clientId), eb("account_id", "=", accountId)]),
+    );
+  } else {
+    query = query.where("client_id", "=", clientId);
+  }
+
+  await query.execute();
 }
 
 export async function deleteSharedDeck(
   db: Database,
   id: string,
   clientId: string,
+  accountId: string | null | undefined,
 ) {
-  await db
-    .deleteFrom("shared_deck")
-    .where("id", "=", id)
-    .where("client_id", "=", clientId)
-    .execute();
+  let query = db.deleteFrom("shared_deck").where("id", "=", id);
+
+  if (accountId) {
+    query = query.where((eb) =>
+      eb.or([eb("client_id", "=", clientId), eb("account_id", "=", accountId)]),
+    );
+  } else {
+    query = query.where("client_id", "=", clientId);
+  }
+
+  await query.execute();
 }

@@ -6,7 +6,9 @@ export async function searchSharedDecks(
   db: Database,
   query: DecklistSearchRequest,
 ) {
-  let q = db.selectFrom("shared_deck");
+  let q = db
+    .selectFrom("shared_deck")
+    .leftJoin("account", "account.id", "shared_deck.account_id");
 
   if (query.name) {
     q = q.where(sql`json_extract(data, '$.name')`, "like", `%${query.name}%`);
@@ -43,12 +45,27 @@ export async function searchSharedDecks(
 
   const [data, counts] = await Promise.all([
     q
-      .selectAll()
-      .orderBy("created_at", "desc")
+      .select([
+        "shared_deck.id",
+        "shared_deck.client_id",
+        "shared_deck.account_id",
+        "shared_deck.data",
+        "shared_deck.history",
+        "shared_deck.created_at",
+        "shared_deck.updated_at",
+        sql<
+          string | null
+        >`case when account.profile_completed_at is not null then account.name else null end`.as(
+          "author_name",
+        ),
+      ])
+      .orderBy("shared_deck.created_at", "desc")
       .offset(offset)
       .limit(limit)
       .execute(),
-    q.select((eb) => eb.fn.count<number>("id").as("total")).execute(),
+    q
+      .select((eb) => eb.fn.count<number>("shared_deck.id").as("total"))
+      .execute(),
   ]);
 
   const total = counts[0]?.total ?? 0;
@@ -57,6 +74,7 @@ export async function searchSharedDecks(
     data: data.map((d) => ({
       id: d.id,
       created_at: d.created_at,
+      author_name: d.author_name,
       ...JSON.parse(d.data),
     })),
     total,

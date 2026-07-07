@@ -4,6 +4,7 @@ import { DecklistSchema } from "../schemas/decklist.schema.ts";
 const DecklistSearchResultSchema = DecklistSchema.extend({
   user_name: z.string(),
   like_count: z.coerce.number().int().min(0).default(0),
+  author_name: z.string().nullable().optional(),
 });
 
 export const DecklistSearchResponseSchema = z.object({
