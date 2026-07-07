@@ -1,6 +1,6 @@
 # Account system port — execution plan
 
-Status: **phase 1 complete**
+Status: **phase 2 complete**
 Created: 2026-07-07
 Reference implementation: `/home/sergiu/work/arkham.build` (must exist locally; see §1.2)
 
@@ -686,10 +686,10 @@ Plus: show Sergiu the migration file diff for approval before committing it.
 
 Goal: all auth building blocks exist with unit coverage.
 
-- [ ] **Task 2.1 — Crypto.** Create `backend/src/lib/auth/crypto.ts` — copy arkham's
+- [x] **Task 2.1 — Crypto.** Create `backend/src/lib/auth/crypto.ts` — copy arkham's
   `features/auth/lib/crypto.ts` verbatim (scrypt hash/verify, `generateRandomToken`,
   `hashToken`). No changes needed.
-- [ ] **Task 2.2 — Account + identity queries.** Create
+- [x] **Task 2.2 — Account + identity queries.** Create
   `backend/src/db/queries/auth/accounts.ts` and `identities.ts` (references per §5 map).
   Functions to port: `createAccount` (creates account + email identity in one tx —
   signature: `{name, email, passwordHash, profileCompletedAt}`), `accountNameExists`
@@ -700,24 +700,24 @@ Goal: all auth building blocks exist with unit coverage.
   `activatePendingAccountIdentityEmail`, `setPendingEmail`, `updatePasswordHash`,
   `renameAccount`, `deleteAccount`. Generate ids/timestamps in code (§4). Skip every
   function touching `provider_user_id`, `state`, or oauth.
-- [ ] **Task 2.3 — Verification tokens.** Create
+- [x] **Task 2.3 — Verification tokens.** Create
   `backend/src/db/queries/auth/verification-tokens.ts`: `createVerificationToken`,
   `consumeVerificationToken` (delete-and-return; must be atomic — do it inside the
   caller's transaction), `getLatestVerificationToken` (for cooldown),
   `cleanupExpiredTokens`. Token TTLs: mirror arkham's constants (find them in the
   reference; typically 24 h verification, 1 h reset — confirm from code, do not guess).
-- [ ] **Task 2.4 — Sessions.** Create `backend/src/lib/auth/sessions.ts` (port; §4
+- [x] **Task 2.4 — Sessions.** Create `backend/src/lib/auth/sessions.ts` (port; §4
   dialect changes; `id` generated in code) and `session-cookie.ts` (port; cookie name +
   expiry from earthborne config keys).
-- [ ] **Task 2.5 — Session middleware.** Create
+- [x] **Task 2.5 — Session middleware.** Create
   `backend/src/lib/auth/session-auth-middleware.ts` — port arkham's, minus
   `assertAccountNotBanned`. Extend `backend/src/lib/hono-env.ts` with the
   `session`/`account`/`skipSessionCookieRefresh` context variables (mirror arkham's
   `SessionAuthHonoEnv` pattern).
-- [ ] **Task 2.6 — Assertions + turnstile.** Create `backend/src/lib/auth/assertions.ts`
+- [x] **Task 2.6 — Assertions + turnstile.** Create `backend/src/lib/auth/assertions.ts`
   (`assertEmailAvailable`, `assertVerificationTokenCooldown`) and
   `backend/src/lib/auth/turnstile.ts` (port; no-op when `TURNSTILE_SECRET_KEY` unset).
-- [ ] **Task 2.7 — Email templates + sender.** Create `backend/src/lib/email/templates.ts`
+- [x] **Task 2.7 — Email templates + sender.** Create `backend/src/lib/email/templates.ts`
   (port arkham's `email-templates.ts` + `base-template.ts`; rebrand every string to
   earthborne.build; links built from `config.FRONTEND_URL` —
   verification: `${FRONTEND_URL}/auth/verify-email?token=...`,
@@ -726,7 +726,7 @@ Goal: all auth building blocks exist with unit coverage.
   `dispatcher.enqueueEmail(...)` with a direct `mailer.send(...)` — **send after the DB
   transaction commits**, not inside it: structure the route so the token is created in
   the tx and the email is sent after `execute()` resolves).
-- [ ] **Task 2.8 — Unit tests for the core.** Create
+- [x] **Task 2.8 — Unit tests for the core.** Create
   `backend/src/tests/auth-lib.spec.ts` using the existing `test-utils.ts` harness:
   password hash/verify round-trip + tamper rejection; session create → get → expiry →
   delete; verification token create → consume-once (second consume fails) → expiry;
