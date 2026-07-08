@@ -27,16 +27,12 @@ export async function searchSharedDecks(
   }
   if (query.required && query.required.length > 0) {
     for (const req of query.required) {
-      q = q.where(
-        sql`json_extract(data, '$.slots.' || ${req})`,
-        "is not",
-        null,
-      );
+      q = q.where(sql`json_extract(data, ${`$.slots.${req}`})`, "is not", null);
     }
   }
   if (query.excluded && query.excluded.length > 0) {
     for (const excl of query.excluded) {
-      q = q.where(sql`json_extract(data, '$.slots.' || ${excl})`, "is", null);
+      q = q.where(sql`json_extract(data, ${`$.slots.${excl}`})`, "is", null);
     }
   }
 

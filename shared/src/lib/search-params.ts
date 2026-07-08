@@ -27,10 +27,10 @@ export function decodeSearch<T>(
   const parsedParams: Record<string, unknown> = {};
 
   Object.entries(params).forEach(([key, value]) => {
-    if (Array.isArray(value) && value.length > 1) {
-      parsedParams[key] = value;
+    if (Array.isArray(value)) {
+      parsedParams[key] = value.length > 1 ? value : value[0];
     } else {
-      parsedParams[key] = value[0];
+      parsedParams[key] = value;
     }
   });
 

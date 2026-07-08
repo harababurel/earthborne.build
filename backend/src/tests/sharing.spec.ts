@@ -295,6 +295,50 @@ describe("sharing and decklists integration", () => {
     expect(shareBody.author_name).toBe("completed_user");
   });
 
+  it("rejects malformed required and excluded decklist search filters", async () => {
+    const requiredRes = await ctx.app.request(
+      "/v2/public/decklists?required=a%20b",
+    );
+    expect(requiredRes.status).toBe(400);
+
+    const excludedRes = await ctx.app.request(
+      "/v2/public/decklists?excluded='%3B--",
+    );
+    expect(excludedRes.status).toBe(400);
+  });
+
+  it("searches decklists by required card code", async () => {
+    const deckId = randomUUID();
+
+    const shareRes = await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify({
+        ...makeDeck(deckId),
+        history: [],
+        slots: { "01100": 1 },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-card-search",
+      },
+    });
+    expect(shareRes.status).toBe(200);
+
+    const searchRes = await ctx.app.request(
+      "/v2/public/decklists?required=01100",
+    );
+    expect(searchRes.status).toBe(200);
+
+    const searchBody = (await searchRes.json()) as {
+      meta: { total: number };
+      data: Array<{ id: string }>;
+    };
+    expect(searchBody.meta.total).toBe(1);
+    expect(searchBody.data).toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: deckId })]),
+    );
+  });
+
   it("serves share routes with credentialed CORS", async () => {
     const origin = "http://localhost:3000";
 

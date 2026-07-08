@@ -2,10 +2,15 @@ import {
   type DecklistSearchRequest,
   DecklistSearchRequestSchema,
   type DecklistSearchResponse,
-  decodeSearch,
   encodeSearch,
 } from "@earthborne-build/shared";
 import { apiV2Request } from "./shared";
+
+const DEFAULT_DECKLISTS_FILTERS: DecklistsFiltersState = {
+  filters: {},
+  limit: 10,
+  offset: 0,
+};
 
 export type DecklistsFiltersState = {
   filters: Omit<DecklistSearchRequest, "offset" | "limit">;
@@ -37,19 +42,20 @@ export function deckSearchQuery(
 export function parseDeckSearchQuery(
   search: URLSearchParams,
 ): DecklistsFiltersState {
-  const queries = Array.from(search.keys()).reduce(
+  const decoded = Array.from(search.keys()).reduce(
     (acc, key) => {
       const values = search.getAll(key);
-      acc[key] = values.length > 1 ? values : [values[0]];
+      acc[key] = values.length > 1 ? values : (values[0] ?? "");
       return acc;
     },
-    {} as Record<string, string[]>,
+    {} as Record<string, string | string[]>,
   );
 
-  const { limit, offset, ...filters } = decodeSearch(
-    DecklistSearchRequestSchema,
-    queries,
-  );
+  const result = DecklistSearchRequestSchema.safeParse(decoded);
+
+  if (!result.success) return DEFAULT_DECKLISTS_FILTERS;
+
+  const { limit, offset, ...filters } = result.data;
 
   return {
     filters,
