@@ -957,6 +957,16 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
     } catch (error) {
       if (!isCurrentAccount(get(), accountId)) return;
 
+      if (error instanceof ApiError && error.status === 404) {
+        set((prev) => {
+          const items = { ...prev.sync.decks.items };
+          delete items[String(id)];
+          return { sync: replaceDeckSyncItems(prev.sync, items) };
+        });
+        await dehydrate(get(), "app", "edits");
+        return;
+      }
+
       set((prev) => ({
         sync: updateDeckSyncError(prev.sync, id, error, "delete"),
       }));
@@ -1156,6 +1166,16 @@ export const createSyncSlice: StateCreator<StoreState, [], [], SyncSlice> = (
       await dehydrate(get(), "app");
     } catch (error) {
       if (!isCurrentAccount(get(), accountId)) return;
+
+      if (error instanceof ApiError && error.status === 404) {
+        set((prev) => {
+          const items = { ...prev.sync.campaigns.items };
+          delete items[String(id)];
+          return { sync: replaceCampaignSyncItems(prev.sync, items) };
+        });
+        await dehydrate(get(), "app");
+        return;
+      }
 
       set((prev) => ({
         sync: updateCampaignSyncError(prev.sync, id, error, "delete"),

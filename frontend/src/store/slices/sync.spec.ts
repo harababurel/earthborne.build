@@ -448,6 +448,84 @@ describe("sync slice", () => {
     });
   });
 
+  it("treats a missing remote deck as deleted when pushing a deletion", async () => {
+    const store = await getMockStore();
+    store.setState({
+      auth: makeAuthenticatedAuth(),
+      sync: makeSyncState({
+        deckStatus: "error",
+        deckItems: { "deck-1": makeSyncItem({ version: REV_A }) },
+      }),
+    });
+
+    routes.push({
+      method: "DELETE",
+      path: "/v2/account/decks/deck-1",
+      response: () => json({ message: "Deck not found" }, 404),
+    });
+
+    await expect(
+      store.getState().pushDeckDeletion(makeClient(store), "deck-1", null),
+    ).resolves.toBeUndefined();
+
+    expect(store.getState().sync.decks.items["deck-1"]).toBeUndefined();
+    expect(store.getState().sync.decks.status).not.toBe("error");
+  });
+
+  it("treats a missing remote campaign as deleted when pushing a deletion", async () => {
+    const store = await getMockStore();
+    store.setState({
+      auth: makeAuthenticatedAuth(),
+      sync: makeSyncState({
+        campaignStatus: "error",
+        campaignItems: {
+          "campaign-1": makeCampaignSyncItem({ version: REV_A }),
+        },
+      }),
+    });
+
+    routes.push({
+      method: "DELETE",
+      path: "/v2/account/campaigns/campaign-1",
+      response: () => json({ message: "Campaign not found" }, 404),
+    });
+
+    await expect(
+      store
+        .getState()
+        .pushCampaignDeletion(makeClient(store), "campaign-1", null),
+    ).resolves.toBeUndefined();
+
+    expect(store.getState().sync.campaigns.items["campaign-1"]).toBeUndefined();
+    expect(store.getState().sync.campaigns.status).not.toBe("error");
+  });
+
+  it("keeps non-404 deck deletion failures as sync errors", async () => {
+    const store = await getMockStore();
+    store.setState({
+      auth: makeAuthenticatedAuth(),
+      sync: makeSyncState({
+        deckItems: { "deck-1": makeSyncItem({ version: REV_A }) },
+      }),
+    });
+
+    routes.push({
+      method: "DELETE",
+      path: "/v2/account/decks/deck-1",
+      response: () => json({ message: "boom" }, 500),
+    });
+
+    await expect(
+      store.getState().pushDeckDeletion(makeClient(store), "deck-1", null),
+    ).rejects.toThrow("boom");
+
+    expect(store.getState().sync.decks.items["deck-1"]).toMatchObject({
+      status: "error",
+      version: REV_A,
+    });
+    expect(store.getState().sync.decks.status).toBe("error");
+  });
+
   it("coalesces debounced campaign pushes per id", async () => {
     const store = await getMockStore();
     const campaignId = await store

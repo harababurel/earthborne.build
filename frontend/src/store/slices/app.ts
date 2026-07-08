@@ -243,6 +243,8 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const state = get();
 
     const deck = state.data.decks[id];
+    if (!deck) return;
+
     const historyEntries = state.data.history[id] ?? [];
 
     await Promise.allSettled(
@@ -329,10 +331,12 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
       }
 
       return {
+        deckEdits: edits,
         data: {
           ...state.data,
           decks,
           history,
+          undoHistory,
           campaigns,
         },
       };

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildStarterDecks } from "@/store/lib/predefined-decks";
+import { makeData, makeTestDeck } from "@/test/factories";
 import { getMockStore } from "@/test/get-mock-store";
 
 describe("app slice", () => {
@@ -68,5 +69,40 @@ describe("app slice", () => {
     expect(
       finalDecks.some((deck) => deck.name === `${modifiedName} edited`),
     ).toBe(true);
+  });
+
+  it("ignores deletion for a missing deck", async () => {
+    const store = await getMockStore();
+    const data = makeData({
+      decks: { "deck-1": makeTestDeck({ id: "deck-1" }) },
+      history: { "deck-1": [] },
+    });
+
+    store.setState({ data });
+
+    await expect(
+      store.getState().deleteDeck("missing"),
+    ).resolves.toBeUndefined();
+    expect(store.getState().data).toEqual(data);
+  });
+
+  it("clears pending edits and undo history when deleting all decks", async () => {
+    const store = await getMockStore();
+
+    store.setState({
+      data: makeData({
+        decks: { "deck-1": makeTestDeck({ id: "deck-1" }) },
+        history: { "deck-1": [] },
+        undoHistory: { "deck-1": [] },
+      }),
+      deckEdits: {
+        "deck-1": { name: "Edited deck" },
+      },
+    });
+
+    await store.getState().deleteAllDecks();
+
+    expect(store.getState().deckEdits).toEqual({});
+    expect(store.getState().data.undoHistory).toEqual({});
   });
 });
