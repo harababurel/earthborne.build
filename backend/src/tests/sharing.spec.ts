@@ -82,6 +82,31 @@ describe("sharing and decklists integration", () => {
     expect(record?.client_id).toBe("client-device-1");
   });
 
+  it("returns 409 when creating a duplicate share", async () => {
+    const deckId = randomUUID();
+    const deck = makeDeck(deckId);
+
+    const firstRes = await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify({ ...deck, history: [] }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-duplicate",
+      },
+    });
+    expect(firstRes.status).toBe(200);
+
+    const secondRes = await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify({ ...deck, history: [] }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-duplicate",
+      },
+    });
+    expect(secondRes.status).toBe(409);
+  });
+
   it("authorizes updates based on client_id or account_id", async () => {
     const userA = await createVerifiedAccount("usera@example.com", "usera");
     const cookieA = await createSessionCookie(userA.account.id);
@@ -105,7 +130,7 @@ describe("sharing and decklists integration", () => {
 
     // 2. Unauthenticated user with different client ID tries to update -> should not modify data
     const updatedDeck = { ...deck, name: "Stolen Deck" };
-    await ctx.app.request(`/v2/public/share/${deckId}`, {
+    const wrongClientRes = await ctx.app.request(`/v2/public/share/${deckId}`, {
       method: "PUT",
       body: JSON.stringify({ ...updatedDeck, history: [] }),
       headers: {
@@ -113,11 +138,12 @@ describe("sharing and decklists integration", () => {
         "X-Client-Id": "device-2",
       },
     });
+    expect(wrongClientRes.status).toBe(403);
     let record = await getSharedDeck(ctx.db, deckId);
     expect(JSON.parse(record?.data ?? "{}").name).toBe(`Deck ${deckId}`); // Unchanged
 
     // 3. Authenticated User B tries to update User A's deck -> should not modify data
-    await ctx.app.request(`/v2/public/share/${deckId}`, {
+    const wrongUserRes = await ctx.app.request(`/v2/public/share/${deckId}`, {
       method: "PUT",
       body: JSON.stringify({ ...updatedDeck, history: [] }),
       headers: {
@@ -126,6 +152,7 @@ describe("sharing and decklists integration", () => {
         Cookie: cookieB,
       },
     });
+    expect(wrongUserRes.status).toBe(403);
     record = await getSharedDeck(ctx.db, deckId);
     expect(JSON.parse(record?.data ?? "{}").name).toBe(`Deck ${deckId}`); // Unchanged
 
@@ -143,6 +170,22 @@ describe("sharing and decklists integration", () => {
     expect(updateRes.status).toBe(200);
     record = await getSharedDeck(ctx.db, deckId);
     expect(JSON.parse(record?.data ?? "{}").name).toBe("Legit Updated Deck");
+  });
+
+  it("returns 404 when updating a missing share", async () => {
+    const deckId = randomUUID();
+    const deck = makeDeck(deckId);
+
+    const updateRes = await ctx.app.request(`/v2/public/share/${deckId}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...deck, history: [] }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "device-1",
+      },
+    });
+
+    expect(updateRes.status).toBe(404);
   });
 
   it("authorizes deletion based on client_id or account_id", async () => {
@@ -167,23 +210,25 @@ describe("sharing and decklists integration", () => {
     });
 
     // 2. Unauthenticated user with different client ID tries to delete -> should not delete
-    await ctx.app.request(`/v2/public/share/${deckId}`, {
+    const wrongClientRes = await ctx.app.request(`/v2/public/share/${deckId}`, {
       method: "DELETE",
       headers: {
         "X-Client-Id": "device-2",
       },
     });
+    expect(wrongClientRes.status).toBe(403);
     let record = await getSharedDeck(ctx.db, deckId);
     expect(record).toBeDefined();
 
     // 3. User B tries to delete User A's deck -> should not delete
-    await ctx.app.request(`/v2/public/share/${deckId}`, {
+    const wrongUserRes = await ctx.app.request(`/v2/public/share/${deckId}`, {
       method: "DELETE",
       headers: {
         "X-Client-Id": "device-2",
         Cookie: cookieB,
       },
     });
+    expect(wrongUserRes.status).toBe(403);
     record = await getSharedDeck(ctx.db, deckId);
     expect(record).toBeDefined();
 

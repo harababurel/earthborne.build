@@ -1,9 +1,23 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildStarterDecks } from "@/store/lib/predefined-decks";
 import { makeData, makeTestDeck } from "@/test/factories";
 import { getMockStore } from "@/test/get-mock-store";
 
 describe("app slice", () => {
+  let fetchMock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    fetchMock = vi.fn(() =>
+      Promise.resolve(json({ status: "ok" })),
+    ) as ReturnType<typeof vi.fn>;
+    vi.stubGlobal("fetch", fetchMock);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
   it("re-adds only missing or modified premade decks", async () => {
     const store = await getMockStore();
 
@@ -105,4 +119,92 @@ describe("app slice", () => {
     expect(store.getState().deckEdits).toEqual({});
     expect(store.getState().data.undoHistory).toEqual({});
   });
+
+  it("saves a shared deck locally when the share update fails", async () => {
+    const store = await getMockStore();
+    const deck = makeTestDeck({ id: "deck-1", name: "Original deck" });
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    fetchMock.mockResolvedValueOnce(json({ message: "Share failed" }, 500));
+
+    store.setState({
+      data: makeData({
+        decks: { "deck-1": deck },
+        history: { "deck-1": [] },
+        undoHistory: {},
+      }),
+      deckEdits: {
+        "deck-1": { name: "Renamed deck" },
+      },
+      sharing: {
+        decks: { "deck-1": deck.date_update },
+      },
+    });
+
+    await expect(store.getState().saveDeck("deck-1")).resolves.toBe("deck-1");
+
+    const savedDeck = store.getState().data.decks["deck-1"];
+    expect(savedDeck?.name).toBe("Renamed deck");
+    expect(savedDeck?.date_update).not.toBe(deck.date_update);
+    expect(store.getState().deckEdits["deck-1"]).toBeUndefined();
+    expect(store.getState().sharing.decks["deck-1"]).toBe(deck.date_update);
+  });
+
+  it("updates deck properties locally when the share update fails", async () => {
+    const store = await getMockStore();
+    const deck = makeTestDeck({ id: "deck-1", name: "Original deck" });
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    fetchMock.mockResolvedValueOnce(json({ message: "Share failed" }, 500));
+
+    store.setState({
+      data: makeData({
+        decks: { "deck-1": deck },
+        history: { "deck-1": [] },
+      }),
+      sharing: {
+        decks: { "deck-1": deck.date_update },
+      },
+    });
+
+    await expect(
+      store.getState().updateDeckProperties("deck-1", { name: "Renamed deck" }),
+    ).resolves.toMatchObject({ name: "Renamed deck" });
+
+    const savedDeck = store.getState().data.decks["deck-1"];
+    expect(savedDeck?.name).toBe("Renamed deck");
+    expect(savedDeck?.date_update).not.toBe(deck.date_update);
+    expect(store.getState().sharing.decks["deck-1"]).toBe(deck.date_update);
+  });
+
+  it("marks a shared deck current after a successful save share update", async () => {
+    const store = await getMockStore();
+    const deck = makeTestDeck({ id: "deck-1", name: "Original deck" });
+
+    store.setState({
+      data: makeData({
+        decks: { "deck-1": deck },
+        history: { "deck-1": [] },
+        undoHistory: {},
+      }),
+      deckEdits: {
+        "deck-1": { name: "Renamed deck" },
+      },
+      sharing: {
+        decks: { "deck-1": deck.date_update },
+      },
+    });
+
+    await store.getState().saveDeck("deck-1");
+
+    const savedDeck = store.getState().data.decks["deck-1"];
+    expect(store.getState().sharing.decks["deck-1"]).toBe(
+      savedDeck?.date_update,
+    );
+  });
 });
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}

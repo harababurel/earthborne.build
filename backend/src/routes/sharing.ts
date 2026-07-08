@@ -1,6 +1,7 @@
 import { DeckSchema } from "@earthborne-build/shared";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { isUniqueConstraintError } from "../db/queries/account-decks.ts";
 import {
   createSharedDeck,
   deleteSharedDeck,
@@ -31,13 +32,23 @@ router.post("/", optionalSessionAuth(), async (c) => {
 
   const account = c.get("account");
 
-  await createSharedDeck(c.get("db"), {
-    account_id: account?.id ?? null,
-    id: result.data.id.toString(),
-    client_id: clientId,
-    data: JSON.stringify(result.data),
-    history: JSON.stringify(history ?? []),
-  });
+  try {
+    await createSharedDeck(c.get("db"), {
+      account_id: account?.id ?? null,
+      id: result.data.id.toString(),
+      client_id: clientId,
+      data: JSON.stringify(result.data),
+      history: JSON.stringify(history ?? []),
+    });
+  } catch (error) {
+    if (isUniqueConstraintError(error)) {
+      throw new HTTPException(409, {
+        message: "A share already exists for this deck id",
+      });
+    }
+
+    throw error;
+  }
 
   return c.json({ status: "ok" });
 });
@@ -77,7 +88,7 @@ router.put("/:id", optionalSessionAuth(), async (c) => {
 
   const account = c.get("account");
 
-  await updateSharedDeck(
+  const updated = await updateSharedDeck(
     c.get("db"),
     id,
     clientId,
@@ -85,6 +96,15 @@ router.put("/:id", optionalSessionAuth(), async (c) => {
     JSON.stringify(result.data),
     JSON.stringify(history ?? []),
   );
+
+  if (!updated) {
+    const existing = await getSharedDeck(c.get("db"), id);
+    throw new HTTPException(existing ? 403 : 404, {
+      message: existing
+        ? "You do not have permission to update this share"
+        : "Shared deck not found",
+    });
+  }
 
   return c.json({ status: "ok" });
 });
@@ -98,7 +118,21 @@ router.delete("/:id", optionalSessionAuth(), async (c) => {
 
   const account = c.get("account");
 
-  await deleteSharedDeck(c.get("db"), id, clientId, account?.id);
+  const deleted = await deleteSharedDeck(
+    c.get("db"),
+    id,
+    clientId,
+    account?.id,
+  );
+
+  if (!deleted) {
+    const existing = await getSharedDeck(c.get("db"), id);
+    throw new HTTPException(existing ? 403 : 404, {
+      message: existing
+        ? "You do not have permission to delete this share"
+        : "Shared deck not found",
+    });
+  }
 
   return c.json({ status: "ok" });
 });

@@ -5,6 +5,7 @@ import { formatDeckImport, formatDeckShare } from "../lib/deck-io";
 import { dehydrate } from "../persist";
 import { selectClientId } from "../selectors/shared";
 import { createShare, deleteShare, updateShare } from "../services/queries";
+import { ApiError } from "../services/requests/shared";
 import type { StoreState } from ".";
 import type { SharingSlice } from "./sharing.types";
 
@@ -76,7 +77,13 @@ export const createSharingSlice: StateCreator<
 
     if (!state.sharing.decks[id]) return;
 
-    await deleteShare(selectClientId(state), id);
+    try {
+      await deleteShare(selectClientId(state), id);
+    } catch (error) {
+      if (!(error instanceof ApiError && error.status === 404)) {
+        throw error;
+      }
+    }
 
     set((prev) => {
       const decks = { ...prev.sharing.decks };

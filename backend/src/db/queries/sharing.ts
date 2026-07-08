@@ -59,7 +59,8 @@ export async function updateSharedDeck(
     query = query.where("client_id", "=", clientId);
   }
 
-  await query.execute();
+  const result = await query.executeTakeFirst();
+  return result.numUpdatedRows > 0n;
 }
 
 export async function deleteSharedDeck(
@@ -78,5 +79,6 @@ export async function deleteSharedDeck(
     query = query.where("client_id", "=", clientId);
   }
 
-  await query.execute();
+  const result = await query.executeTakeFirst();
+  return result.numDeletedRows > 0n;
 }

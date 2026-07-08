@@ -361,8 +361,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
 
     nextDeck.date_update = new Date().toISOString();
 
-    await state.updateShare(nextDeck);
-
     set((prev) => {
       const nextEdits = { ...prev.deckEdits };
 
@@ -392,6 +390,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     });
 
     await dehydrate(get(), "app", "edits");
+    await updateShareAfterLocalSave(get, nextDeck);
 
     return nextDeck;
   },
@@ -437,8 +436,6 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     const validation = selectDeckValid(state, resolved);
     nextDeck.problem = mapValidationToProblem(validation);
 
-    await state.updateShare(nextDeck);
-
     set((prev) => {
       const deckEdits = { ...prev.deckEdits };
       delete deckEdits[deckId];
@@ -481,6 +478,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     });
 
     await dehydrate(get(), "app", "edits");
+    await updateShareAfterLocalSave(get, nextDeck);
 
     const client = get().apiClient;
     if (get().auth.status === "authenticated" && client) {
@@ -517,6 +515,17 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     await dehydrate(get(), "app");
   },
 });
+
+async function updateShareAfterLocalSave(
+  get: () => StoreState,
+  deck: Deck,
+): Promise<void> {
+  try {
+    await get().updateShare(deck);
+  } catch (error) {
+    console.error("Failed to update share:", error);
+  }
+}
 
 // ER has no cycles — synthesise one per pack so selectors that iterate
 // packsByCycle can look up metadata.cycles[packCode] without crashing.
