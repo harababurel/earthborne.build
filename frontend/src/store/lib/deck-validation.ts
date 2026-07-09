@@ -7,7 +7,6 @@ import {
   PERSONALITY_PICKS,
   SPECIALTY_PICKS,
 } from "@earthborne-build/shared";
-import { cardLimit } from "@/utils/card-utils";
 import { isEvolvedDeck } from "@/utils/deck-utils";
 import { time, timeEnd } from "@/utils/time";
 import type { Metadata } from "../slices/metadata.types";
@@ -212,7 +211,7 @@ function validateCardLimits(deck: ResolvedDeck): DeckValidationError[] {
     const card = deck.cards.slots[code]?.card;
     if (!card) continue;
 
-    const limit = cardLimit(card) || DECK_CARD_COPIES;
+    const limit = card.deck_limit ?? DECK_CARD_COPIES;
 
     if (quantity > limit) {
       violations.push({ code, limit, quantity });
@@ -263,6 +262,9 @@ function isCardAccessible(
 
   // Non-ranger-deck cards (path cards, beings, features, etc.) are never in the 30-card deck.
   if (!category) return false;
+
+  // Role cards live in specialty sets, but the deck's role is tracked separately in role_code.
+  if (card.type_code === "role") return false;
 
   if (category === "personality") return true;
 
@@ -316,6 +318,9 @@ function isOutsideInterestCard(
   background: string,
   specialty: string,
 ): boolean {
+  if (card.is_expert) return false;
+  if (card.type_code === "role") return false;
+
   if (card.category === "background" && card.background_type !== background)
     return true;
   if (card.category === "specialty" && card.specialty_type !== specialty)

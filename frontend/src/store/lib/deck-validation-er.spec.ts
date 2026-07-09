@@ -8,6 +8,8 @@ import type { Metadata } from "../slices/metadata.types";
 import type { Interpreter } from "./buildql/interpreter";
 import {
   isDeckOptionsError,
+  isForbiddenCardError,
+  isInvalidCardCountError,
   validateDeck as validateResolvedDeck,
 } from "./deck-validation";
 import type { LookupTables } from "./lookup-tables.types";
@@ -40,6 +42,48 @@ const backgroundCard = (code: string, type: BackgroundType) =>
   mockCard({ code, category: "background", background_type: type });
 const specialtyCard = (code: string, type: SpecialtyType) =>
   mockCard({ code, category: "specialty", specialty_type: type });
+
+function buildValidStarterDeck(
+  overrides: Record<string, Card> = {},
+): ResolvedDeck {
+  const cards: Record<string, { card: Card }> = {};
+  const slots: Record<string, number> = {};
+
+  for (let i = 1; i <= 4; i++) {
+    const code = `p${i}`;
+    cards[code] = { card: personalityCard(code) };
+    slots[code] = 2;
+  }
+
+  for (let i = 1; i <= 5; i++) {
+    const code = `b${i}`;
+    cards[code] = { card: backgroundCard(code, "artisan") };
+    slots[code] = 2;
+  }
+
+  for (let i = 1; i <= 5; i++) {
+    const code = `s${i}`;
+    cards[code] = { card: specialtyCard(code, "shaper") };
+    slots[code] = 2;
+  }
+
+  cards.o1 = { card: backgroundCard("o1", "traveler") };
+  slots.o1 = 2;
+
+  for (const [code, card] of Object.entries(overrides)) {
+    cards[code] = { card };
+  }
+
+  return {
+    id: "starter",
+    name: "Starter Deck",
+    background: "artisan",
+    specialty: "shaper",
+    slots,
+    cards: { slots: cards },
+    stats: { deckSize: 30 },
+  } as unknown as ResolvedDeck;
+}
 
 describe("Earthborne Rangers Deck Validation", () => {
   it("validates a deck where outside interest is from the same specialty (e.g. Adherent of the First Ideal)", () => {
@@ -200,5 +244,106 @@ describe("Earthborne Rangers Deck Validation", () => {
     const result = validateDeck(deck);
     expect(result.valid).toBe(true);
     expect(result.errors).toEqual([]);
+  });
+
+  it("rejects expert cards as outside interest", () => {
+    const deck = buildValidStarterDeck({
+      o1: mockCard({
+        code: "o1",
+        category: "background",
+        background_type: "traveler",
+        is_expert: true,
+      }),
+    });
+
+    const result = validateDeck(deck);
+
+    expect(result.valid).toBe(false);
+    expect(
+      result.errors.some(
+        (error) =>
+          isForbiddenCardError(error) &&
+          error.details.some((detail) => detail.code === "o1"),
+      ),
+    ).toBe(true);
+  });
+
+  it("rejects role cards in deck slots", () => {
+    const deck = buildValidStarterDeck({
+      s1: mockCard({
+        code: "s1",
+        category: "specialty",
+        specialty_type: "shaper",
+        type_code: "role",
+      }),
+    });
+
+    const result = validateDeck(deck);
+
+    expect(result.valid).toBe(false);
+    expect(
+      result.errors.some(
+        (error) =>
+          isForbiddenCardError(error) &&
+          error.details.some((detail) => detail.code === "s1"),
+      ),
+    ).toBe(true);
+  });
+
+  it("still allows a non-expert outside interest", () => {
+    const result = validateDeck(buildValidStarterDeck());
+
+    expect(result.valid).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
+  it("respects explicit deck limits, including zero", () => {
+    const zeroLimitDeck = buildValidStarterDeck({
+      p1: mockCard({
+        code: "p1",
+        category: "personality",
+        type_code: "moment",
+        deck_limit: 0,
+      }),
+    });
+
+    const oneLimitDeck = buildValidStarterDeck({
+      p1: mockCard({
+        code: "p1",
+        category: "personality",
+        type_code: "moment",
+        deck_limit: 1,
+      }),
+    });
+
+    const unsetLimitResult = validateDeck(buildValidStarterDeck());
+    const zeroLimitResult = validateDeck(zeroLimitDeck);
+    const oneLimitResult = validateDeck(oneLimitDeck);
+
+    expect(unsetLimitResult.valid).toBe(true);
+    expect(
+      zeroLimitResult.errors.some(
+        (error) =>
+          isInvalidCardCountError(error) &&
+          error.details.some(
+            (detail) =>
+              detail.code === "p1" &&
+              detail.limit === 0 &&
+              detail.quantity === 2,
+          ),
+      ),
+    ).toBe(true);
+    expect(
+      oneLimitResult.errors.some(
+        (error) =>
+          isInvalidCardCountError(error) &&
+          error.details.some(
+            (detail) =>
+              detail.code === "p1" &&
+              detail.limit === 1 &&
+              detail.quantity === 2,
+          ),
+      ),
+    ).toBe(true);
   });
 });
