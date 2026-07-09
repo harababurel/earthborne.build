@@ -13,7 +13,7 @@
   },
   "scripts": {
     "check": "tsc --noEmit",
-    "test": "vitest run --pass-with-no-tests"
+    "test": "vitest run"
   },
   "devDependencies": {
     "@tsconfig/strictest": "2.0.8"

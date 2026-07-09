@@ -468,6 +468,38 @@ describe("sharing and decklists integration", () => {
     );
   });
 
+  it("treats percent signs as literal text in decklist name search", async () => {
+    const percentDeckId = randomUUID();
+    const wordDeckId = randomUUID();
+
+    for (const deck of [
+      { ...makeDeck(percentDeckId), name: "100% Legit" },
+      { ...makeDeck(wordDeckId), name: "100 Percent" },
+    ]) {
+      const shareRes = await ctx.app.request("/v2/public/share", {
+        method: "POST",
+        body: JSON.stringify({ ...deck, history: [], listed: true }),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Client-Id": `client-${deck.id}`,
+        },
+      });
+      expect(shareRes.status).toBe(200);
+    }
+
+    const searchRes = await ctx.app.request("/v2/public/decklists?name=100%25");
+    expect(searchRes.status).toBe(200);
+    const searchBody = (await searchRes.json()) as {
+      data: Array<{ id: string }>;
+      meta: { total: number };
+    };
+
+    expect(searchBody.meta.total).toBe(1);
+    expect(searchBody.data).toEqual([
+      expect.objectContaining({ id: percentDeckId }),
+    ]);
+  });
+
   it("serves share routes with credentialed CORS", async () => {
     const origin = "http://localhost:3000";
 
@@ -484,6 +516,36 @@ describe("sharing and decklists integration", () => {
     expect(preflight.headers.get("access-control-allow-credentials")).toBe(
       "true",
     );
+  });
+
+  it("allows wildcard CORS only for HTTPS origins", async () => {
+    const wildcardApp = appFactory(
+      { ...ctx.config, CORS_ORIGINS: "*.example.com" },
+      ctx.db,
+      ctx.mailer,
+    );
+
+    const httpsPreflight = await wildcardApp.request("/v2/public/share", {
+      method: "OPTIONS",
+      headers: {
+        Origin: "https://decks.example.com",
+        "Access-Control-Request-Method": "POST",
+        "Access-Control-Request-Headers": "Content-Type,X-Client-Id",
+      },
+    });
+    expect(httpsPreflight.headers.get("access-control-allow-origin")).toBe(
+      "https://decks.example.com",
+    );
+
+    const httpPreflight = await wildcardApp.request("/v2/public/share", {
+      method: "OPTIONS",
+      headers: {
+        Origin: "http://decks.example.com",
+        "Access-Control-Request-Method": "POST",
+        "Access-Control-Request-Headers": "Content-Type,X-Client-Id",
+      },
+    });
+    expect(httpPreflight.headers.get("access-control-allow-origin")).toBeNull();
   });
 });
 

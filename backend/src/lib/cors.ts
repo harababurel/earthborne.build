@@ -42,8 +42,7 @@ function createOriginMatcher(config: Config) {
 }
 
 function originMatches(allowed: string, origin: string): boolean {
-  return (
-    allowed === origin ||
-    (allowed.startsWith("*.") && origin.endsWith(allowed.slice(1)))
-  );
+  if (allowed === origin) return true;
+  if (!allowed.startsWith("*.")) return false;
+  return origin.startsWith("https://") && origin.endsWith(allowed.slice(1));
 }

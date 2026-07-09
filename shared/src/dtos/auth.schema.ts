@@ -110,8 +110,8 @@ export const CompleteProfileRequestSchema = z.object({
   username: z.string().min(3).max(64).regex(new RegExp(PATTERN_VALID_USERNAME)),
   uploads: z
     .object({
-      decks: z.array(SyncableDeckSchema).optional(),
-      campaigns: z.array(SyncableCampaignSchema).optional(),
+      decks: z.array(SyncableDeckSchema).max(5000).optional(),
+      campaigns: z.array(SyncableCampaignSchema).max(1000).optional(),
       folders: FolderStateSchema.optional(),
       settings: SettingsStateSchema.optional(),
       achievements: AchievementsStateSchema.optional(),

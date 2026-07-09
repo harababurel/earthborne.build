@@ -197,6 +197,34 @@ describe("account auth routes", () => {
     ).resolves.toHaveLength(1);
   });
 
+  it("completes profile with uploaded decks across multiple insert chunks", async () => {
+    const cookie = await signupVerifyLogin("chunked@example.com");
+    const decks = Array.from({ length: 501 }, (_, index) =>
+      makeDeck(`chunked-deck-${index}`),
+    );
+
+    const complete = await ctx.app.request(
+      "/v2/account/auth/complete-profile",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: "chunked",
+          uploads: { decks },
+        }),
+        headers: { Cookie: cookie, "Content-Type": "application/json" },
+      },
+    );
+    expect(complete.status).toBe(200);
+
+    const manifest = await ctx.app.request("/v2/account/sync/manifest", {
+      headers: { Cookie: cookie },
+    });
+    expect(manifest.status).toBe(200);
+    const body = (await manifest.json()) as { decks: { id: string }[] };
+    expect(body.decks).toHaveLength(501);
+    expect(body.decks.map((deck) => deck.id)).toContain("chunked-deck-500");
+  });
+
   it("rejects complete-profile when the profile is already completed", async () => {
     const cookie = await completeSignupWithUploads(
       "completed@example.com",

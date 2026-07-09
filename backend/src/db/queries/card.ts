@@ -1,4 +1,3 @@
-import assert from "node:assert";
 import { APPROACH_ORDER, type ApproachKey } from "@earthborne-build/shared";
 import type { Database } from "../db.ts";
 
@@ -206,9 +205,8 @@ export async function getCardByCode(
     ])
     .where("card.code", "=", code)
     .limit(1)
-    .executeTakeFirst();
+    .executeTakeFirstOrThrow();
 
-  assert(row, `Card with code ${code} not found.`);
   return transformCard(row as unknown as CardRow);
 }
 

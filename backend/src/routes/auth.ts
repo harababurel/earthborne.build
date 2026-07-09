@@ -72,6 +72,7 @@ import {
 } from "../lib/auth/sessions.ts";
 import { assertTurnstileToken } from "../lib/auth/turnstile.ts";
 import { sendVerificationEmail } from "../lib/auth/verification-email.ts";
+import { chunkArray } from "../lib/chunk-array.ts";
 import { passwordResetEmailTemplate } from "../lib/email/templates.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";
 import {
@@ -631,25 +632,31 @@ async function uploadAccountDecks(
   assertUniqueUploadedIds(decks, "Uploaded decks must have unique ids");
   const deckIdMap = await createItemIdMap(db, "account_deck", decks);
   const now = new Date().toISOString();
-  const rows = await db
-    .insertInto("account_deck")
-    .values(
-      decks.map((deck) => {
-        const mapped = remapDeck(deck, deckIdMap);
-        const data = JSON.stringify(mapped);
-        assertSyncItemSize(data, "Uploaded deck");
-        return {
-          id: String(mapped.id),
-          account_id: accountId,
-          revision: randomUUID(),
-          data,
-          created_at: parseUploadedTimestamp(mapped.date_creation, now),
-          updated_at: parseUploadedTimestamp(mapped.date_update, now),
-        };
-      }),
-    )
-    .returning(["id", "revision", "data"])
-    .execute();
+  const rows: { id: string; revision: string; data: string }[] = [];
+
+  for (const chunk of chunkArray(decks, 500)) {
+    rows.push(
+      ...(await db
+        .insertInto("account_deck")
+        .values(
+          chunk.map((deck) => {
+            const mapped = remapDeck(deck, deckIdMap);
+            const data = JSON.stringify(mapped);
+            assertSyncItemSize(data, "Uploaded deck");
+            return {
+              id: String(mapped.id),
+              account_id: accountId,
+              revision: randomUUID(),
+              data,
+              created_at: parseUploadedTimestamp(mapped.date_creation, now),
+              updated_at: parseUploadedTimestamp(mapped.date_update, now),
+            };
+          }),
+        )
+        .returning(["id", "revision", "data"])
+        .execute()),
+    );
+  }
 
   return {
     deckIdMap: omitUnchangedMappings(deckIdMap),
@@ -675,25 +682,31 @@ async function uploadAccountCampaigns(
     campaigns,
   );
   const now = new Date().toISOString();
-  const rows = await db
-    .insertInto("account_campaign")
-    .values(
-      campaigns.map((campaign) => {
-        const mapped = remapCampaign(campaign, campaignIdMap, deckIdMap);
-        const data = JSON.stringify(mapped);
-        assertSyncItemSize(data, "Uploaded campaign");
-        return {
-          id: String(mapped.id),
-          account_id: accountId,
-          revision: randomUUID(),
-          data,
-          created_at: parseUploadedTimestamp(mapped.date_creation, now),
-          updated_at: parseUploadedTimestamp(mapped.date_update, now),
-        };
-      }),
-    )
-    .returning(["id", "revision", "data"])
-    .execute();
+  const rows: { id: string; revision: string; data: string }[] = [];
+
+  for (const chunk of chunkArray(campaigns, 500)) {
+    rows.push(
+      ...(await db
+        .insertInto("account_campaign")
+        .values(
+          chunk.map((campaign) => {
+            const mapped = remapCampaign(campaign, campaignIdMap, deckIdMap);
+            const data = JSON.stringify(mapped);
+            assertSyncItemSize(data, "Uploaded campaign");
+            return {
+              id: String(mapped.id),
+              account_id: accountId,
+              revision: randomUUID(),
+              data,
+              created_at: parseUploadedTimestamp(mapped.date_creation, now),
+              updated_at: parseUploadedTimestamp(mapped.date_update, now),
+            };
+          }),
+        )
+        .returning(["id", "revision", "data"])
+        .execute()),
+    );
+  }
 
   return {
     campaignIdMap: omitUnchangedMappings(campaignIdMap),
@@ -781,12 +794,15 @@ async function createItemIdMap(
   items: { id: string | number }[],
 ) {
   const ids = items.map((item) => String(item.id));
-  const existingItems = await db
-    .selectFrom(table)
-    .select(["id"])
-    .where("id", "in", ids)
-    .execute();
-  const existingIds = new Set(existingItems.map((item) => item.id));
+  const existingIds = new Set<string>();
+  for (const chunk of chunkArray(ids, 500)) {
+    const rows = await db
+      .selectFrom(table)
+      .select(["id"])
+      .where("id", "in", chunk)
+      .execute();
+    for (const row of rows) existingIds.add(row.id);
+  }
   const reservedIds = new Set(ids);
   const idMap: Record<string, string> = {};
 

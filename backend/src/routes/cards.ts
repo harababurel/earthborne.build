@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { NoResultError } from "kysely";
 import { getAllCards, getCardByCode } from "../db/queries/card.ts";
 import type { HonoEnv } from "../lib/hono-env.ts";
 
@@ -16,8 +17,12 @@ router.get("/:code", async (c) => {
   try {
     const card = await getCardByCode(c.get("db"), code);
     return c.json(card);
-  } catch {
-    throw new HTTPException(404, { message: `Card '${code}' not found.` });
+  } catch (error) {
+    if (error instanceof NoResultError) {
+      throw new HTTPException(404, { message: `Card '${code}' not found.` });
+    }
+
+    throw error;
   }
 });
 

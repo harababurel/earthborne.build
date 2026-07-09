@@ -1,5 +1,5 @@
 import type { DecklistSearchRequest } from "@earthborne-build/shared";
-import { sql } from "kysely";
+import { type SqlBool, sql } from "kysely";
 import type { Database } from "../db.ts";
 
 export async function searchSharedDecks(
@@ -12,7 +12,9 @@ export async function searchSharedDecks(
     .where("shared_deck.listed", "=", 1);
 
   if (query.name) {
-    q = q.where(sql`json_extract(data, '$.name')`, "like", `%${query.name}%`);
+    q = q.where(
+      sql<SqlBool>`json_extract(data, '$.name') like ${`%${escapeLike(query.name)}%`} escape '\\'`,
+    );
   }
   if (query.role_code) {
     q = q.where(sql`json_extract(data, '$.role_code')`, "=", query.role_code);
@@ -24,7 +26,9 @@ export async function searchSharedDecks(
     q = q.where(sql`json_extract(data, '$.specialty')`, "=", query.specialty);
   }
   if (query.tags) {
-    q = q.where(sql`json_extract(data, '$.tags')`, "like", `%${query.tags}%`);
+    q = q.where(
+      sql<SqlBool>`json_extract(data, '$.tags') like ${`%${escapeLike(query.tags)}%`} escape '\\'`,
+    );
   }
   if (query.required && query.required.length > 0) {
     for (const req of query.required) {
@@ -76,4 +80,8 @@ export async function searchSharedDecks(
     })),
     total,
   };
+}
+
+function escapeLike(value: string) {
+  return value.replace(/[\\%_]/g, (char) => `\\${char}`);
 }
