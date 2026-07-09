@@ -6,6 +6,7 @@ import { useBrowserLocation } from "wouter/use-browser-location";
 import { ErrorBoundary } from "./components/error-boundary";
 import { Loader } from "./components/ui/loader";
 import { ToastProvider } from "./components/ui/toast";
+import { useToast } from "./components/ui/toast.hooks";
 import { ErrorStatus } from "./pages/errors/404";
 import { useStore } from "./store";
 import { selectIsInitialized } from "./store/selectors/shared";
@@ -98,6 +99,7 @@ function AppInner() {
   return (
     <>
       <Loader message={t("app.init")} show={!storeInitialized} delay={200} />
+      <ShareUpdateFailureToast />
       <Suspense fallback={<Loader delay={300} show />}>
         {storeInitialized && (
           <Router hook={useBrowserLocation}>
@@ -138,6 +140,29 @@ function AppInner() {
       </Suspense>
     </>
   );
+}
+
+function ShareUpdateFailureToast() {
+  const { t } = useTranslation();
+  const toast = useToast();
+  const failure = useStore((state) => state.ui.shareUpdateFailure);
+  const clearShareUpdateFailure = useStore(
+    (state) => state.clearShareUpdateFailure,
+  );
+
+  useEffect(() => {
+    if (!failure) return;
+
+    toast.show({
+      children: t("deck_view.sharing.update_failed", {
+        error: failure.message,
+      }),
+      variant: "error",
+    });
+    clearShareUpdateFailure(failure.occurredAt);
+  }, [clearShareUpdateFailure, failure, t, toast]);
+
+  return null;
 }
 
 function RouteReset() {

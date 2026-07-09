@@ -524,7 +524,18 @@ async function updateShareAfterLocalSave(
     await get().updateShare(deck);
   } catch (error) {
     console.error("Failed to update share:", error);
+    get().setShareUpdateFailure({
+      deckId: deck.id.toString(),
+      message: getErrorMessage(error),
+      occurredAt: Date.now(),
+    });
   }
+}
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  return "Unknown error";
 }
 
 // ER has no cycles — synthesise one per pack so selectors that iterate

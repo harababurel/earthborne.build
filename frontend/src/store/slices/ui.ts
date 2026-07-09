@@ -14,6 +14,7 @@ function getInitialUIState(): UIState {
         code: undefined,
         config: undefined,
       },
+      shareUpdateFailure: undefined,
     },
   };
 }
@@ -82,5 +83,27 @@ export const createUISlice: StateCreator<StoreState, [], [], UISlice> = (
         },
       },
     }));
+  },
+  setShareUpdateFailure(shareUpdateFailure) {
+    set((state) => ({
+      ui: {
+        ...state.ui,
+        shareUpdateFailure,
+      },
+    }));
+  },
+  clearShareUpdateFailure(occurredAt) {
+    set((state) => {
+      if (state.ui.shareUpdateFailure?.occurredAt !== occurredAt) {
+        return state;
+      }
+
+      return {
+        ui: {
+          ...state.ui,
+          shareUpdateFailure: undefined,
+        },
+      };
+    });
   },
 });

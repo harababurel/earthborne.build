@@ -148,6 +148,10 @@ describe("app slice", () => {
     expect(savedDeck?.date_update).not.toBe(deck.date_update);
     expect(store.getState().deckEdits["deck-1"]).toBeUndefined();
     expect(store.getState().sharing.decks["deck-1"]).toBe(deck.date_update);
+    expect(store.getState().ui.shareUpdateFailure).toMatchObject({
+      deckId: "deck-1",
+      message: "Share failed",
+    });
   });
 
   it("updates deck properties locally when the share update fails", async () => {
@@ -175,6 +179,10 @@ describe("app slice", () => {
     expect(savedDeck?.name).toBe("Renamed deck");
     expect(savedDeck?.date_update).not.toBe(deck.date_update);
     expect(store.getState().sharing.decks["deck-1"]).toBe(deck.date_update);
+    expect(store.getState().ui.shareUpdateFailure).toMatchObject({
+      deckId: "deck-1",
+      message: "Share failed",
+    });
   });
 
   it("marks a shared deck current after a successful save share update", async () => {
