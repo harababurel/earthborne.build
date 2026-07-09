@@ -199,6 +199,7 @@ export interface SharedDeck {
   id: string;
   client_id: string;
   account_id: string | null;
+  listed: number;
   data: string; // JSON as text
   history: string; // JSON as text
   created_at: string;

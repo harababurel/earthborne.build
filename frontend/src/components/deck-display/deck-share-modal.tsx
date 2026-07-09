@@ -1,6 +1,11 @@
-import { CheckIcon, ClipboardCopyIcon } from "lucide-react";
+import {
+  CheckIcon,
+  ClipboardCopyIcon,
+  LinkIcon,
+  TrashIcon,
+} from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import {
   buildDeckShareModel,
@@ -22,6 +27,7 @@ import {
   ModalBackdrop,
   ModalInner,
 } from "../ui/modal";
+import { useToast } from "../ui/toast.hooks";
 import css from "./deck-share-modal.module.css";
 
 type Props = {
@@ -59,6 +65,7 @@ export function DeckShareModal({ deck }: Props) {
       <ModalInner size="45rem">
         <ModalActions />
         <DefaultModalContent title={t("deck_share.title")}>
+          <PublicShareControls deck={deck} />
           <div className={css["options"]}>
             <Checkbox
               checked={includeRewards}
@@ -85,6 +92,146 @@ export function DeckShareModal({ deck }: Props) {
         </DefaultModalContent>
       </ModalInner>
     </Modal>
+  );
+}
+
+function PublicShareControls({ deck }: Props) {
+  const { t } = useTranslation();
+  const toast = useToast();
+  const createShare = useStore((state) => state.createShare);
+  const deleteShare = useStore((state) => state.deleteShare);
+  const setShareListed = useStore((state) => state.setShareListed);
+  const isShared = useStore((state) => !!state.sharing.decks[deck.id]);
+  const listed = useStore((state) => state.sharing.listed[deck.id] ?? false);
+  const [loading, setLoading] = useState(false);
+
+  const shareUrl = `${window.location.origin}/share/${deck.id}`;
+
+  const onCreateShare = useCallback(
+    async (nextListed = false) => {
+      setLoading(true);
+
+      try {
+        await createShare(String(deck.id), nextListed);
+      } catch (err) {
+        toast.show({
+          children: t("deck_view.sharing.create_failed", {
+            error: (err as Error)?.message,
+          }),
+          variant: "error",
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [createShare, deck.id, toast, t],
+  );
+
+  const onDeleteShare = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      await deleteShare(String(deck.id));
+    } catch (err) {
+      toast.show({
+        children: t("deck_view.sharing.delete_failed", {
+          error: (err as Error)?.message,
+        }),
+        variant: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [deleteShare, deck.id, toast, t]);
+
+  const onChangeListed = useCallback(
+    async (checked: boolean) => {
+      setLoading(true);
+
+      try {
+        if (isShared) {
+          await setShareListed(String(deck.id), checked);
+        } else {
+          await createShare(String(deck.id), checked);
+        }
+      } catch (err) {
+        toast.show({
+          children: t("deck_view.sharing.update_failed", {
+            error: (err as Error)?.message,
+          }),
+          variant: "error",
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [createShare, deck.id, isShared, setShareListed, toast, t],
+  );
+
+  return (
+    <section className={css["public-share"]}>
+      <h3>{t("deck_view.sharing.title")}</h3>
+      <p>
+        <Trans
+          i18nKey={
+            isShared
+              ? "deck_view.sharing.description_present"
+              : "deck_view.sharing.create_tooltip"
+          }
+          components={{
+            a: (
+              <a
+                href={shareUrl}
+                rel="noreferrer"
+                target="_blank"
+                aria-label={t("deck_view.sharing.title")}
+              >
+                {t("deck_view.sharing.open")}
+              </a>
+            ),
+            br: <br />,
+          }}
+        />
+      </p>
+      <div className={css["public-share-actions"]}>
+        {isShared ? (
+          <Button as="a" href={shareUrl} size="sm" target="_blank">
+            <LinkIcon />
+            {t("deck_view.sharing.open")}
+          </Button>
+        ) : (
+          <Button
+            disabled={loading}
+            onClick={() => onCreateShare(false)}
+            size="sm"
+            variant="primary"
+          >
+            <LinkIcon />
+            {t("deck_view.sharing.create")}
+          </Button>
+        )}
+        {isShared && (
+          <Button
+            disabled={loading}
+            onClick={onDeleteShare}
+            size="sm"
+            variant="bare"
+          >
+            <TrashIcon />
+            {t("deck_view.sharing.delete")}
+          </Button>
+        )}
+      </div>
+      <Checkbox
+        checked={isShared && listed}
+        disabled={loading}
+        label={t("deck_view.sharing.listed_label")}
+        onCheckedChange={onChangeListed}
+      />
+      <p className={css["public-share-help"]}>
+        {t("deck_view.sharing.listed_help")}
+      </p>
+    </section>
   );
 }
 

@@ -135,6 +135,7 @@ type ShareRead = {
   author_name?: string | null;
   data: Deck;
   history: History;
+  listed?: boolean;
 };
 
 export async function getShare(id: string): Promise<ShareRead> {
@@ -147,6 +148,7 @@ export async function createShare(
   clientId: string,
   deck: Deck,
   history: History,
+  listed: boolean,
 ) {
   await apiV2Request("/v2/public/share", {
     method: "POST",
@@ -155,7 +157,7 @@ export async function createShare(
       "Content-Type": "application/json",
       "X-Client-Id": clientId,
     },
-    body: JSON.stringify({ ...deck, history }),
+    body: JSON.stringify({ ...deck, history, listed }),
   });
 }
 
@@ -164,6 +166,7 @@ export async function updateShare(
   id: string,
   deck: Deck,
   history: History,
+  listed: boolean,
 ) {
   await apiV2Request(`/v2/public/share/${id}`, {
     method: "PUT",
@@ -175,6 +178,7 @@ export async function updateShare(
     body: JSON.stringify({
       ...deck,
       history,
+      listed,
     }),
   });
 }

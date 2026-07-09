@@ -12,6 +12,7 @@ import type { SharingSlice } from "./sharing.types";
 function getInitialSharingState() {
   return {
     decks: {},
+    listed: {},
   };
 }
 
@@ -23,7 +24,7 @@ export const createSharingSlice: StateCreator<
 > = (set, get) => ({
   sharing: getInitialSharingState(),
 
-  async createShare(id) {
+  async createShare(id, listed = false) {
     const state = get();
 
     assert(!state.sharing.decks[id], `Deck with id ${id} is already shared.`);
@@ -31,13 +32,18 @@ export const createSharingSlice: StateCreator<
     const deck = state.data.decks[id];
     assert(deck, `Deck with id ${id} not found.`);
 
-    await createShare(selectClientId(state), formatDeckShare(deck), []);
+    await createShare(selectClientId(state), formatDeckShare(deck), [], listed);
 
     set((prev) => ({
       sharing: {
+        ...prev.sharing,
         decks: {
           ...prev.sharing.decks,
           [id]: deck.date_update,
+        },
+        listed: {
+          ...prev.sharing.listed,
+          [id]: listed,
         },
       },
     }));
@@ -55,6 +61,7 @@ export const createSharingSlice: StateCreator<
       deck.id.toString(),
       formatDeckShare(deck),
       [],
+      state.sharing.listed[deck.id] ?? false,
     );
 
     set((prev) => ({
@@ -87,10 +94,14 @@ export const createSharingSlice: StateCreator<
 
     set((prev) => {
       const decks = { ...prev.sharing.decks };
+      const listed = { ...prev.sharing.listed };
       delete decks[id];
+      delete listed[id];
       return {
         sharing: {
+          ...prev.sharing,
           decks,
+          listed,
         },
       };
     });
@@ -111,8 +122,42 @@ export const createSharingSlice: StateCreator<
     set({
       sharing: {
         decks: {},
+        listed: {},
       },
     });
+
+    await dehydrate(get(), "app");
+  },
+
+  async setShareListed(id, listed) {
+    const state = get();
+
+    assert(state.sharing.decks[id], `Deck with id ${id} is not shared.`);
+
+    const deck = state.data.decks[id];
+    assert(deck, `Deck with id ${id} not found.`);
+
+    await updateShare(
+      selectClientId(state),
+      id,
+      formatDeckShare(deck),
+      [],
+      listed,
+    );
+
+    set((prev) => ({
+      sharing: {
+        ...prev.sharing,
+        decks: {
+          ...prev.sharing.decks,
+          [id]: deck.date_update,
+        },
+        listed: {
+          ...prev.sharing.listed,
+          [id]: listed,
+        },
+      },
+    }));
 
     await dehydrate(get(), "app");
   },

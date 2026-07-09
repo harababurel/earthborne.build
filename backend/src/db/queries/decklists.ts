@@ -8,7 +8,8 @@ export async function searchSharedDecks(
 ) {
   let q = db
     .selectFrom("shared_deck")
-    .leftJoin("account", "account.id", "shared_deck.account_id");
+    .leftJoin("account", "account.id", "shared_deck.account_id")
+    .where("shared_deck.listed", "=", 1);
 
   if (query.name) {
     q = q.where(sql`json_extract(data, '$.name')`, "like", `%${query.name}%`);

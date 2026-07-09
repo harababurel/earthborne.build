@@ -14,6 +14,7 @@ import v12Tov13 from "./migrations/0012-default-other-cards-sort";
 import v13Tov14 from "./migrations/0013-add-campaigns";
 import v14Tov15 from "./migrations/0014-campaign-travel-days";
 import v15Tov16 from "./migrations/0015-add-accounts-and-sync";
+import v16Tov17 from "./migrations/0016-add-share-listed";
 
 export function migrate(
   persisted: Partial<StoreState>,
@@ -94,6 +95,11 @@ export function migrate(
   if (version < 16) {
     console.debug("[persist] migrate store: ", 16);
     v15Tov16(state, version);
+  }
+
+  if (version < 17) {
+    console.debug("[persist] migrate store: ", 17);
+    v16Tov17(state, version);
   }
 
   return state;

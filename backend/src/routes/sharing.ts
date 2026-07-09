@@ -20,7 +20,7 @@ router.post("/", optionalSessionAuth(), async (c) => {
   }
 
   const body = await c.req.json();
-  const { history, ...deckData } = body;
+  const { history, listed, ...deckData } = body;
 
   const result = DeckSchema.safeParse(deckData);
   if (!result.success) {
@@ -37,6 +37,7 @@ router.post("/", optionalSessionAuth(), async (c) => {
       account_id: account?.id ?? null,
       id: result.data.id.toString(),
       client_id: clientId,
+      listed: listed === true ? 1 : 0,
       data: JSON.stringify(result.data),
       history: JSON.stringify(history ?? []),
     });
@@ -65,6 +66,7 @@ router.get("/history/:id", async (c) => {
     author_name: sharedDeck.author_name,
     data: JSON.parse(sharedDeck.data),
     history: JSON.parse(sharedDeck.history),
+    listed: !!sharedDeck.listed,
   });
 });
 
@@ -76,7 +78,7 @@ router.put("/:id", optionalSessionAuth(), async (c) => {
   }
 
   const body = await c.req.json();
-  const { history, ...deckData } = body;
+  const { history, listed, ...deckData } = body;
 
   const result = DeckSchema.safeParse(deckData);
   if (!result.success) {
@@ -95,6 +97,7 @@ router.put("/:id", optionalSessionAuth(), async (c) => {
     account?.id,
     JSON.stringify(result.data),
     JSON.stringify(history ?? []),
+    listed === true ? 1 : 0,
   );
 
   if (!updated) {

@@ -24,6 +24,7 @@ describe("sharing slice", () => {
       }),
       sharing: {
         decks: { "deck-1": "2026-01-01T00:00:00.000Z" },
+        listed: { "deck-1": true },
       },
     });
     fetchMock.mockResolvedValueOnce(
@@ -35,6 +36,7 @@ describe("sharing slice", () => {
     ).resolves.toBeUndefined();
 
     expect(store.getState().sharing.decks["deck-1"]).toBeUndefined();
+    expect(store.getState().sharing.listed["deck-1"]).toBeUndefined();
   });
 
   it("keeps other share delete failures fatal", async () => {
@@ -46,6 +48,7 @@ describe("sharing slice", () => {
       }),
       sharing: {
         decks: { "deck-1": "2026-01-01T00:00:00.000Z" },
+        listed: { "deck-1": true },
       },
     });
     fetchMock.mockResolvedValueOnce(
@@ -59,8 +62,50 @@ describe("sharing slice", () => {
     expect(store.getState().sharing.decks["deck-1"]).toBe(
       "2026-01-01T00:00:00.000Z",
     );
+    expect(store.getState().sharing.listed["deck-1"]).toBe(true);
+  });
+
+  it("creates an unlisted share by default", async () => {
+    const store = await getMockStore();
+    const deck = makeTestDeck({ id: "deck-1" });
+
+    store.setState({
+      data: makeData({
+        decks: { "deck-1": deck },
+      }),
+    });
+
+    await store.getState().createShare("deck-1");
+
+    expect(requestBody(fetchMock, 0)).toMatchObject({ listed: false });
+    expect(store.getState().sharing.decks["deck-1"]).toBe(deck.date_update);
+    expect(store.getState().sharing.listed["deck-1"]).toBe(false);
+  });
+
+  it("updates a share listing flag", async () => {
+    const store = await getMockStore();
+    const deck = makeTestDeck({ id: "deck-1" });
+
+    store.setState({
+      data: makeData({
+        decks: { "deck-1": deck },
+      }),
+      sharing: {
+        decks: { "deck-1": deck.date_update },
+        listed: { "deck-1": false },
+      },
+    });
+
+    await store.getState().setShareListed("deck-1", true);
+
+    expect(requestBody(fetchMock, 0)).toMatchObject({ listed: true });
+    expect(store.getState().sharing.listed["deck-1"]).toBe(true);
   });
 });
+
+function requestBody(fetchMock: ReturnType<typeof vi.fn>, callIndex: number) {
+  return JSON.parse(fetchMock.mock.calls[callIndex]?.[1]?.body?.toString());
+}
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {

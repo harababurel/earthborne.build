@@ -40,6 +40,7 @@ export async function updateSharedDeck(
   accountId: string | null | undefined,
   data: string,
   history: string,
+  listed: number,
 ) {
   const now = new Date().toISOString();
   let query = db
@@ -47,6 +48,7 @@ export async function updateSharedDeck(
     .set({
       data,
       history,
+      listed,
       updated_at: now,
     })
     .where("id", "=", id);

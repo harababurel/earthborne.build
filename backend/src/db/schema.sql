@@ -1,4 +1,3 @@
-CREATE TABLE "schema_migrations" (version varchar(128) primary key);
 CREATE TABLE pack (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -38,10 +37,11 @@ CREATE TABLE fan_made_project_info (
   bucket_path TEXT NOT NULL,
   meta TEXT NOT NULL
 );
+CREATE TABLE "schema_migrations" (version varchar(128) primary key);
 CREATE TABLE app_metadata (
-  key TEXT PRIMARY KEY,
-  value TEXT NOT NULL
-);
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
 CREATE TABLE shared_deck (
   id TEXT PRIMARY KEY,
   client_id TEXT NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE shared_deck (
   history TEXT NOT NULL,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
-, account_id TEXT REFERENCES account(id) ON DELETE SET NULL);
+, account_id TEXT REFERENCES account(id) ON DELETE SET NULL, listed INTEGER NOT NULL DEFAULT 0);
 CREATE INDEX idx_shared_deck_client_id ON shared_deck(client_id);
 CREATE TABLE category (
   id TEXT PRIMARY KEY,
@@ -192,6 +192,7 @@ CREATE TABLE account_achievements (
   state TEXT NOT NULL CHECK (length(state) <= 65536)
 );
 CREATE INDEX idx_shared_deck_account_id ON shared_deck (account_id);
+CREATE INDEX idx_shared_deck_listed ON shared_deck (listed);
 -- Dbmate schema migrations
 INSERT INTO "schema_migrations" (version) VALUES
   ('20260413000000'),
@@ -210,4 +211,5 @@ INSERT INTO "schema_migrations" (version) VALUES
   ('20260505010000'),
   ('20260520000000'),
   ('20260521000000'),
-  ('20260707000000');
+  ('20260707000000'),
+  ('20260708000000');

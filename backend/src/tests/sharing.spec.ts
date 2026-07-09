@@ -53,6 +53,7 @@ describe("sharing and decklists integration", () => {
     expect(record).toBeDefined();
     expect(record?.account_id).toBeNull();
     expect(record?.client_id).toBe("client-anon");
+    expect(record?.listed).toBe(0);
   });
 
   it("associates sharing with account_id when user is authenticated", async () => {
@@ -275,7 +276,7 @@ describe("sharing and decklists integration", () => {
     // Completed profile share
     await ctx.app.request("/v2/public/share", {
       method: "POST",
-      body: JSON.stringify({ ...makeDeck(deck1Id), history: [] }),
+      body: JSON.stringify({ ...makeDeck(deck1Id), history: [], listed: true }),
       headers: {
         "Content-Type": "application/json",
         "X-Client-Id": "device-1",
@@ -286,7 +287,7 @@ describe("sharing and decklists integration", () => {
     // Incomplete profile share
     await ctx.app.request("/v2/public/share", {
       method: "POST",
-      body: JSON.stringify({ ...makeDeck(deck2Id), history: [] }),
+      body: JSON.stringify({ ...makeDeck(deck2Id), history: [], listed: true }),
       headers: {
         "Content-Type": "application/json",
         "X-Client-Id": "device-1",
@@ -297,7 +298,7 @@ describe("sharing and decklists integration", () => {
     // Anonymous share
     await ctx.app.request("/v2/public/share", {
       method: "POST",
-      body: JSON.stringify({ ...makeDeck(deck3Id), history: [] }),
+      body: JSON.stringify({ ...makeDeck(deck3Id), history: [], listed: true }),
       headers: {
         "Content-Type": "application/json",
         "X-Client-Id": "device-anon",
@@ -336,8 +337,90 @@ describe("sharing and decklists integration", () => {
     expect(shareRes.status).toBe(200);
     const shareBody = (await shareRes.json()) as {
       author_name: string | null;
+      listed: boolean;
     };
     expect(shareBody.author_name).toBe("completed_user");
+    expect(shareBody.listed).toBe(true);
+  });
+
+  it("keeps unlisted shares out of decklists while preserving link access", async () => {
+    const deckId = randomUUID();
+    const deck = makeDeck(deckId);
+
+    const shareRes = await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify({ ...deck, history: [] }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-unlisted",
+      },
+    });
+    expect(shareRes.status).toBe(200);
+
+    const searchRes = await ctx.app.request("/v2/public/decklists");
+    expect(searchRes.status).toBe(200);
+    const searchBody = (await searchRes.json()) as {
+      meta: { total: number };
+      data: Array<{ id: string }>;
+    };
+    expect(searchBody.meta.total).toBe(0);
+    expect(searchBody.data).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: deckId })]),
+    );
+
+    const historyRes = await ctx.app.request(
+      `/v2/public/share/history/${deckId}`,
+    );
+    expect(historyRes.status).toBe(200);
+    const historyBody = (await historyRes.json()) as { listed: boolean };
+    expect(historyBody.listed).toBe(false);
+  });
+
+  it("lists shares only when requested and supports unlisting by update", async () => {
+    const deckId = randomUUID();
+    const deck = makeDeck(deckId);
+
+    const shareRes = await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify({ ...deck, history: [], listed: true }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-listed",
+      },
+    });
+    expect(shareRes.status).toBe(200);
+
+    const listedSearchRes = await ctx.app.request("/v2/public/decklists");
+    expect(listedSearchRes.status).toBe(200);
+    const listedSearchBody = (await listedSearchRes.json()) as {
+      meta: { total: number };
+      data: Array<{ id: string }>;
+    };
+    expect(listedSearchBody.meta.total).toBe(1);
+    expect(listedSearchBody.data).toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: deckId })]),
+    );
+
+    const updateRes = await ctx.app.request(`/v2/public/share/${deckId}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...deck, history: [], listed: false }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-listed",
+      },
+    });
+    expect(updateRes.status).toBe(200);
+
+    const unlistedSearchRes = await ctx.app.request("/v2/public/decklists");
+    expect(unlistedSearchRes.status).toBe(200);
+    const unlistedSearchBody = (await unlistedSearchRes.json()) as {
+      meta: { total: number };
+      data: Array<{ id: string }>;
+    };
+    expect(unlistedSearchBody.meta.total).toBe(0);
+    expect(unlistedSearchBody.data).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: deckId })]),
+    );
   });
 
   it("rejects malformed required and excluded decklist search filters", async () => {
@@ -360,6 +443,7 @@ describe("sharing and decklists integration", () => {
       body: JSON.stringify({
         ...makeDeck(deckId),
         history: [],
+        listed: true,
         slots: { "01100": 1 },
       }),
       headers: {

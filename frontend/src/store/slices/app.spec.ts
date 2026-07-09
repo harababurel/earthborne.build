@@ -137,6 +137,7 @@ describe("app slice", () => {
       },
       sharing: {
         decks: { "deck-1": deck.date_update },
+        listed: { "deck-1": true },
       },
     });
 
@@ -162,6 +163,7 @@ describe("app slice", () => {
       }),
       sharing: {
         decks: { "deck-1": deck.date_update },
+        listed: { "deck-1": true },
       },
     });
 
@@ -190,6 +192,7 @@ describe("app slice", () => {
       },
       sharing: {
         decks: { "deck-1": deck.date_update },
+        listed: { "deck-1": true },
       },
     });
 
@@ -199,8 +202,13 @@ describe("app slice", () => {
     expect(store.getState().sharing.decks["deck-1"]).toBe(
       savedDeck?.date_update,
     );
+    expect(requestBody(fetchMock, 0)).toMatchObject({ listed: true });
   });
 });
+
+function requestBody(fetchMock: ReturnType<typeof vi.fn>, callIndex: number) {
+  return JSON.parse(fetchMock.mock.calls[callIndex]?.[1]?.body?.toString());
+}
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
