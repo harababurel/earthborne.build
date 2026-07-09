@@ -38,17 +38,24 @@ export async function assertVerificationTokenCooldown(
   }
 }
 
+export async function isVerificationTokenCooldownActive(
+  db: Database,
+  email: string,
+  tokenType: VerificationTokenType,
+  cooldownMs = 5 * 60 * 1000,
+) {
+  const latestToken = await getLatestVerificationToken(db, email, tokenType);
+  if (!latestToken) return false;
+
+  return Date.now() < new Date(latestToken.created_at).getTime() + cooldownMs;
+}
+
 export function assertEmailCooldown(
   tokenCreatedAt: string,
   cooldownMs = 5 * 60 * 1000,
 ) {
-  const retryAfter = new Date(new Date(tokenCreatedAt).getTime() + cooldownMs);
-
-  if (Date.now() < retryAfter.getTime()) {
-    throw new HTTPException(429, {
-      message: "Please wait before requesting another email",
-      cause: { retryAfter: retryAfter.toISOString() },
-    });
+  if (Date.now() < new Date(tokenCreatedAt).getTime() + cooldownMs) {
+    throwEmailCooldownError(tokenCreatedAt, cooldownMs);
   }
 }
 
@@ -59,5 +66,17 @@ export function isEmail(input: string): boolean {
 export function throwInvalidResetTokenError(): never {
   throw new HTTPException(400, {
     message: "Invalid or expired password reset token",
+  });
+}
+
+function throwEmailCooldownError(
+  tokenCreatedAt = new Date().toISOString(),
+  cooldownMs = 5 * 60 * 1000,
+): never {
+  const retryAfter = new Date(new Date(tokenCreatedAt).getTime() + cooldownMs);
+
+  throw new HTTPException(429, {
+    message: "Please wait before requesting another email",
+    cause: { retryAfter: retryAfter.toISOString() },
   });
 }

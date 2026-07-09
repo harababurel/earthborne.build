@@ -7,9 +7,11 @@ import { type Database, getDatabase } from "../db/db.ts";
 import { createAccount } from "../db/queries/auth/accounts.ts";
 import { updateAccountIdentityVerified } from "../db/queries/auth/identities.ts";
 import { hashPassword } from "../lib/auth/crypto.ts";
+import { resetRateLimits } from "../lib/auth/rate-limit.ts";
 import { createSession } from "../lib/auth/sessions.ts";
 import { type Config, configFromEnv } from "../lib/config.ts";
 import { CaptureMailer } from "../lib/email/mailer.ts";
+import { translateSignupConstraintError } from "../routes/auth.ts";
 
 type TestContext = {
   app: ReturnType<typeof appFactory>;
@@ -21,6 +23,7 @@ type TestContext = {
 let ctx: TestContext;
 
 beforeEach(async () => {
+  resetRateLimits();
   const db = getDatabase(":memory:");
   await applySqlFiles(db, "../db/migrations");
   const config = configFromEnv();
@@ -80,7 +83,7 @@ describe("account auth routes", () => {
     });
   });
 
-  it("resends verification only for eligible identities and enforces cooldown", async () => {
+  it("resends verification only for eligible identities without leaking cooldown state", async () => {
     const unknown = await ctx.app.request(
       "/v2/account/auth/resend-verification",
       {
@@ -92,7 +95,20 @@ describe("account auth routes", () => {
     expect(unknown.status).toBe(200);
     expect(ctx.mailer.mails).toHaveLength(0);
 
+    const unknownAgain = await ctx.app.request(
+      "/v2/account/auth/resend-verification",
+      {
+        method: "POST",
+        body: JSON.stringify({ email: "missing@example.com" }),
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    expect(unknownAgain.status).toBe(200);
+    expect(ctx.mailer.mails).toHaveLength(0);
+
     await signupAccount("cooldown@example.com");
+    expect(ctx.mailer.mails).toHaveLength(1);
+
     const resend = await ctx.app.request(
       "/v2/account/auth/resend-verification",
       {
@@ -101,7 +117,8 @@ describe("account auth routes", () => {
         headers: { "Content-Type": "application/json" },
       },
     );
-    expect(resend.status).toBe(429);
+    expect(resend.status).toBe(200);
+    expect(ctx.mailer.mails).toHaveLength(1);
   });
 
   it("completes profile and uploads local data with deck id remapping", async () => {
@@ -359,6 +376,79 @@ describe("account auth routes", () => {
       headers: { Cookie: cookie },
     });
     expect(oldSession.status).toBe(401);
+  });
+
+  it("does not leak password reset cooldown state", async () => {
+    await signupVerifyLogin("forgot-cooldown@example.com");
+    ctx.mailer.mails.splice(0);
+
+    const first = await ctx.app.request("/v2/account/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ emailOrUsername: "forgot-cooldown@example.com" }),
+      headers: { "Content-Type": "application/json" },
+    });
+    expect(first.status).toBe(200);
+    expect(ctx.mailer.mails).toHaveLength(1);
+
+    const second = await ctx.app.request("/v2/account/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ emailOrUsername: "forgot-cooldown@example.com" }),
+      headers: { "Content-Type": "application/json" },
+    });
+    expect(second.status).toBe(200);
+    expect(ctx.mailer.mails).toHaveLength(1);
+
+    ctx.mailer.mails.splice(0);
+    const unknown = await ctx.app.request("/v2/account/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ emailOrUsername: "missing@example.com" }),
+      headers: { "Content-Type": "application/json" },
+    });
+    expect(unknown.status).toBe(200);
+
+    const unknownAgain = await ctx.app.request(
+      "/v2/account/auth/forgot-password",
+      {
+        method: "POST",
+        body: JSON.stringify({ emailOrUsername: "missing@example.com" }),
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    expect(unknownAgain.status).toBe(200);
+    expect(ctx.mailer.mails).toHaveLength(0);
+  });
+
+  it("rate limits repeated login attempts", async () => {
+    await createVerifiedAccount("limited@example.com");
+
+    for (let i = 0; i < 10; i += 1) {
+      const res = await loginAccount("limited@example.com", "wrongpassword");
+      expect(res.status).toBe(401);
+    }
+
+    const limited = await loginAccount("limited@example.com", "wrongpassword");
+    expect(limited.status).toBe(429);
+    expect(limited.headers.get("retry-after")).toBeTruthy();
+  });
+
+  it("rate limits login attempts by IP across emails", async () => {
+    for (let i = 0; i < 10; i += 1) {
+      const res = await loginAccount(`missing-${i}@example.com`);
+      expect(res.status).toBe(401);
+    }
+
+    const limited = await loginAccount("another-missing@example.com");
+    expect(limited.status).toBe(429);
+  });
+
+  it("translates signup unique-index races to the duplicate-email response", () => {
+    const error = Object.assign(new Error("constraint failed"), {
+      code: "SQLITE_CONSTRAINT_UNIQUE",
+    });
+
+    expect(() => translateSignupConstraintError(error)).toThrow(
+      "An account is already registered for this email",
+    );
   });
 
   it("changes credentials, verifies pending email, and frees the old email", async () => {

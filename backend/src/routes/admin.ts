@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { FanMadeProjectInfoSchema } from "@earthborne-build/shared";
 import { type Context, Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
@@ -9,7 +10,7 @@ const router = new Hono<HonoEnv>();
 
 const adminKeyMiddleware = bearerAuth({
   verifyToken: (token, c: Context<HonoEnv>) =>
-    token === c.get("config").ADMIN_API_KEY,
+    safeKeyCompare(token, c.get("config").ADMIN_API_KEY),
 });
 
 router.use(adminKeyMiddleware);
@@ -28,3 +29,12 @@ router.post(
 );
 
 export default router;
+
+function safeKeyCompare(a: string, b: string) {
+  const bufferA = Buffer.from(a);
+  const bufferB = Buffer.from(b);
+
+  if (bufferA.length !== bufferB.length) return false;
+
+  return timingSafeEqual(bufferA, bufferB);
+}

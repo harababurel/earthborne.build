@@ -1,6 +1,7 @@
-import { afterAll, beforeAll } from "vitest";
+import { afterAll, beforeAll, beforeEach } from "vitest";
 import { applySqlFiles } from "../db/db.helpers.ts";
 import { getDatabase } from "../db/db.ts";
+import { resetRateLimits } from "../lib/auth/rate-limit.ts";
 
 // Shared in-memory database for all tests in a suite.
 // Each test gets a fresh database via test-utils.ts.
@@ -13,4 +14,8 @@ beforeAll(async () => {
 
 afterAll(() => {
   // Nothing to tear down — no containers.
+});
+
+beforeEach(() => {
+  resetRateLimits();
 });

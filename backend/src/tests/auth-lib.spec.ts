@@ -205,6 +205,16 @@ describe("account and identity assertions", () => {
       createTestAccount(dependencies.db, "bar@example.com", "foo"),
     ).rejects.toThrow();
   });
+
+  test("surfaces duplicate email inserts as unique-index constraint errors", async ({
+    dependencies,
+  }) => {
+    await createTestAccount(dependencies.db, "race@example.com");
+
+    await expect(
+      createTestAccount(dependencies.db, "race@example.com"),
+    ).rejects.toMatchObject({ code: "SQLITE_CONSTRAINT_UNIQUE" });
+  });
 });
 
 async function createTestAccount(

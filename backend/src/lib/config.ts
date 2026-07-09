@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const configSchema = z.object({
-  ADMIN_API_KEY: z.string(),
+  ADMIN_API_KEY: z.string().min(16),
   CORS_ORIGINS: z.string(),
   FROM_EMAIL: z.email().default("noreply@earthborne.build"),
   FROM_NAME: z.string().default("earthborne.build"),

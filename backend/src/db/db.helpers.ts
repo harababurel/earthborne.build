@@ -32,3 +32,10 @@ export async function applySqlFiles(db: Database, pathToFolder: string) {
     }
   }
 }
+
+export function isUniqueIndexConstraintError(error: unknown) {
+  return (
+    error instanceof Error &&
+    (error as { code?: string }).code === "SQLITE_CONSTRAINT_UNIQUE"
+  );
+}

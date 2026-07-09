@@ -9,6 +9,9 @@ import { promisify } from "node:util";
 
 const scryptAsync = promisify<BinaryLike, BinaryLike, number, Buffer>(scrypt);
 
+export const DUMMY_PASSWORD_HASH =
+  "00000000000000000000000000000000:abfdd81bf7129c0eb2d1a12469d84d24639044a94ce15e6b8fa230aaed3949eaca1910f40f5f90e40ce744bd47bcfd7ef54b3cc73cb2c6a91138b11e84b2d69c";
+
 export async function hashPassword(password: string): Promise<string> {
   const salt = randomBytes(16).toString("hex");
   const derivedKey = await scryptAsync(password, salt, 64);

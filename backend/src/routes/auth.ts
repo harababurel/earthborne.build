@@ -18,6 +18,7 @@ import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
 import type { Transaction } from "kysely";
+import { isUniqueIndexConstraintError } from "../db/db.helpers.ts";
 import {
   accountNameExists,
   completeAccountProfile,
@@ -47,14 +48,17 @@ import {
   assertEmailAvailable,
   assertVerificationTokenCooldown,
   isEmail,
+  isVerificationTokenCooldownActive,
   throwInvalidResetTokenError,
 } from "../lib/auth/assertions.ts";
 import {
+  DUMMY_PASSWORD_HASH,
   generateRandomToken,
   hashPassword,
   hashToken,
   verifyPassword,
 } from "../lib/auth/crypto.ts";
+import { rateLimit } from "../lib/auth/rate-limit.ts";
 import { sessionAuth } from "../lib/auth/session-auth-middleware.ts";
 import {
   clearSessionCookie as clearAuthSessionCookie,
@@ -80,67 +84,94 @@ type CompleteProfileUploads = NonNullable<CompleteProfileRequest["uploads"]>;
 type AuthTransaction = Transaction<DB>;
 
 const router = new Hono<HonoEnv>();
+const AUTH_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 
-router.post("/signup", zodValidator("json", SignupRequestSchema), async (c) => {
-  const db = c.get("db");
-  const config = c.get("config");
-  const { email, password, captchaToken } = c.req.valid("json");
+router.post(
+  "/signup",
+  rateLimit({
+    scope: "signup",
+    limit: 5,
+    windowMs: AUTH_RATE_LIMIT_WINDOW_MS,
+    bodyKey: (body) => stringBodyValue(body, "email"),
+  }),
+  zodValidator("json", SignupRequestSchema),
+  async (c) => {
+    const db = c.get("db");
+    const config = c.get("config");
+    const { email, password, captchaToken } = c.req.valid("json");
 
-  await assertTurnstileToken(c, captchaToken);
-  await assertEmailAvailable(db, email);
+    await assertTurnstileToken(c, captchaToken);
+    await assertEmailAvailable(db, email);
 
-  const passwordHash = await hashPassword(password);
-  let accountIdentityId: string | null = null;
+    const passwordHash = await hashPassword(password);
+    let accountIdentityId: string | null = null;
 
-  await db.transaction().execute(async (tx) => {
-    const { accountIdentity } = await createAccount(tx, {
-      name: `email_${randomUUID()}`,
+    try {
+      await db.transaction().execute(async (tx) => {
+        const { accountIdentity } = await createAccount(tx, {
+          name: `email_${randomUUID()}`,
+          email,
+          passwordHash,
+          profileCompletedAt: null,
+        });
+        accountIdentityId = accountIdentity.id;
+      });
+    } catch (error) {
+      translateSignupConstraintError(error);
+    }
+
+    assert(accountIdentityId, "Account identity should exist after signup.");
+    await sendVerificationEmail(db, {
+      accountIdentityId,
+      config,
       email,
-      passwordHash,
-      profileCompletedAt: null,
+      mailer: c.get("mailer"),
     });
-    accountIdentityId = accountIdentity.id;
-  });
 
-  assert(accountIdentityId, "Account identity should exist after signup.");
-  await sendVerificationEmail(db, {
-    accountIdentityId,
-    config,
-    email,
-    mailer: c.get("mailer"),
-  });
+    return new Response(null, { status: 201 });
+  },
+);
 
-  return new Response(null, { status: 201 });
-});
+router.post(
+  "/login",
+  rateLimit({
+    scope: "login",
+    limit: 10,
+    windowMs: AUTH_RATE_LIMIT_WINDOW_MS,
+    bodyKey: (body) => stringBodyValue(body, "email"),
+  }),
+  zodValidator("json", LoginRequestSchema),
+  async (c) => {
+    const db = c.get("db");
+    const config = c.get("config");
+    const { email, password } = c.req.valid("json");
 
-router.post("/login", zodValidator("json", LoginRequestSchema), async (c) => {
-  const db = c.get("db");
-  const config = c.get("config");
-  const { email, password } = c.req.valid("json");
+    const accountIdentity = await getAccountIdentityByEmail(db, email);
+    const passwordHash = accountIdentity?.password_hash ?? DUMMY_PASSWORD_HASH;
+    const passwordOk = await verifyPassword(password, passwordHash);
 
-  const accountIdentity = await getAccountIdentityByEmail(db, email);
+    if (
+      !accountIdentity?.password_hash ||
+      !accountIdentity.email ||
+      !passwordOk
+    ) {
+      throw new HTTPException(401, { message: "Invalid email or password" });
+    }
 
-  if (!accountIdentity?.password_hash || !accountIdentity.email) {
-    throw new HTTPException(401, { message: "Invalid email or password" });
-  }
+    if (!accountIdentity.verified_at) {
+      throw new HTTPException(403, { message: "Account is not verified" });
+    }
 
-  if (!(await verifyPassword(password, accountIdentity.password_hash))) {
-    throw new HTTPException(401, { message: "Invalid email or password" });
-  }
+    const session = await createSession(
+      db,
+      accountIdentity.account_id,
+      config.SESSION_EXPIRY_HOURS,
+    );
 
-  if (!accountIdentity.verified_at) {
-    throw new HTTPException(403, { message: "Account is not verified" });
-  }
-
-  const session = await createSession(
-    db,
-    accountIdentity.account_id,
-    config.SESSION_EXPIRY_HOURS,
-  );
-
-  setSessionCookie(c, session.token);
-  return new Response(null, { status: 200 });
-});
+    setSessionCookie(c, session.token);
+    return new Response(null, { status: 200 });
+  },
+);
 
 router.post(
   "/logout",
@@ -160,6 +191,11 @@ router.post(
 
 router.post(
   "/verify-email",
+  rateLimit({
+    scope: "verify-email",
+    limit: 10,
+    windowMs: AUTH_RATE_LIMIT_WINDOW_MS,
+  }),
   zodValidator("json", VerifyEmailRequestSchema),
   async (c) => {
     const { token } = c.req.valid("json");
@@ -223,6 +259,12 @@ router.post(
 
 router.post(
   "/resend-verification",
+  rateLimit({
+    scope: "resend-verification",
+    limit: 5,
+    windowMs: AUTH_RATE_LIMIT_WINDOW_MS,
+    bodyKey: (body) => stringBodyValue(body, "email"),
+  }),
   zodValidator("json", ResendVerificationRequestSchema),
   async (c) => {
     const { email } = c.req.valid("json");
@@ -237,17 +279,20 @@ router.post(
         accountIdentity.pending_email === email);
 
     if (shouldResend) {
-      await assertVerificationTokenCooldown(
+      const cooldownActive = await isVerificationTokenCooldownActive(
         c.get("db"),
         email,
         "email_verification",
       );
-      await sendVerificationEmail(c.get("db"), {
-        accountIdentityId: accountIdentity.id,
-        config: c.get("config"),
-        email,
-        mailer: c.get("mailer"),
-      });
+
+      if (!cooldownActive) {
+        await sendVerificationEmail(c.get("db"), {
+          accountIdentityId: accountIdentity.id,
+          config: c.get("config"),
+          email,
+          mailer: c.get("mailer"),
+        });
+      }
     }
 
     return new Response(null, { status: 200 });
@@ -256,6 +301,12 @@ router.post(
 
 router.post(
   "/forgot-password",
+  rateLimit({
+    scope: "forgot-password",
+    limit: 5,
+    windowMs: AUTH_RATE_LIMIT_WINDOW_MS,
+    bodyKey: (body) => stringBodyValue(body, "emailOrUsername"),
+  }),
   zodValidator("json", ForgotPasswordRequestSchema),
   async (c) => {
     const { emailOrUsername } = c.req.valid("json");
@@ -266,21 +317,28 @@ router.post(
     const email = accountIdentity?.email;
 
     if (accountIdentity?.verified_at && email) {
-      await assertVerificationTokenCooldown(db, email, "password_reset");
-      const token = generateRandomToken();
-
-      await replaceVerificationToken(db, {
-        accountIdentityId: accountIdentity.id,
+      const cooldownActive = await isVerificationTokenCooldownActive(
+        db,
         email,
-        tokenHash: hashToken(token),
-        tokenType: "password_reset",
-        expiryHours: PASSWORD_RESET_TOKEN_EXPIRY_HOURS,
-      });
+        "password_reset",
+      );
 
-      const template = passwordResetEmailTemplate({
-        resetUrl: `${c.get("config").FRONTEND_URL}/auth/reset-password?token=${encodeURIComponent(token)}`,
-      });
-      await c.get("mailer").send(email, template.subject, template.text);
+      if (!cooldownActive) {
+        const token = generateRandomToken();
+
+        await replaceVerificationToken(db, {
+          accountIdentityId: accountIdentity.id,
+          email,
+          tokenHash: hashToken(token),
+          tokenType: "password_reset",
+          expiryHours: PASSWORD_RESET_TOKEN_EXPIRY_HOURS,
+        });
+
+        const template = passwordResetEmailTemplate({
+          resetUrl: `${c.get("config").FRONTEND_URL}/auth/reset-password?token=${encodeURIComponent(token)}`,
+        });
+        await c.get("mailer").send(email, template.subject, template.text);
+      }
     }
 
     return new Response(null, { status: 200 });
@@ -289,6 +347,11 @@ router.post(
 
 router.post(
   "/reset-password",
+  rateLimit({
+    scope: "reset-password",
+    limit: 10,
+    windowMs: AUTH_RATE_LIMIT_WINDOW_MS,
+  }),
   zodValidator("json", ResetPasswordRequestSchema),
   async (c) => {
     const { token, password } = c.req.valid("json");
@@ -851,4 +914,19 @@ function serializeProfileBlob(value: unknown, label: string) {
   const serialized = JSON.stringify(value);
   assertRevisionedBlobSize(serialized, label);
   return serialized;
+}
+
+function stringBodyValue(body: Record<string, unknown>, key: string) {
+  const value = body[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+export function translateSignupConstraintError(error: unknown): never {
+  if (isUniqueIndexConstraintError(error)) {
+    throw new HTTPException(400, {
+      message: "An account is already registered for this email",
+    });
+  }
+
+  throw error;
 }
