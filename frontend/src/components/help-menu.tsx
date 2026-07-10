@@ -280,6 +280,17 @@ export function HelpMenu() {
               {t("help.changelog")}
             </DropdownButton>
             <hr />
+            <Link asChild href="~/terms">
+              <DropdownButton as="a" data-testid="masthead-terms">
+                {t("footer.terms")}
+              </DropdownButton>
+            </Link>
+            <Link asChild href="~/privacy">
+              <DropdownButton as="a" data-testid="masthead-privacy">
+                {t("footer.privacy")}
+              </DropdownButton>
+            </Link>
+            <hr />
             <Socials className={css["socials"]} />
           </DropdownMenu>
         </PopoverContent>
