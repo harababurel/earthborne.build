@@ -37,17 +37,20 @@ export function AccountMenu() {
 
   if (!session) {
     return (
-      <Link asChild href="~/auth/login">
-        <Button
-          as="a"
-          data-testid="masthead-login"
-          iconOnly
-          tooltip={t("auth.login.action")}
-          variant="bare"
-        >
-          <UserIcon />
-        </Button>
-      </Link>
+      <div className={css["login-wrapper"]}>
+        <Link asChild href="~/auth/login">
+          <Button
+            as="a"
+            data-testid="masthead-login"
+            iconOnly
+            tooltip={t("auth.login.action")}
+            variant="bare"
+          >
+            <UserIcon />
+          </Button>
+        </Link>
+        <span aria-hidden="true" className={css["login-badge"]} />
+      </div>
     );
   }
 

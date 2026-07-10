@@ -38,3 +38,50 @@
   font-style: italic;
   word-break: break-word;
 }
+
+.login-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.login-badge {
+  position: absolute;
+  top: -0.0625rem;
+  right: -0.0625rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  pointer-events: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-link);
+    opacity: 0.75;
+    animation: login-badge-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-link);
+    border: 1px solid var(--palette-0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+    }
+  }
+}
+
+@keyframes login-badge-ping {
+  75%,
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
