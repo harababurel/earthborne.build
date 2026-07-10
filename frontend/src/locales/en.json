@@ -1353,7 +1353,9 @@
     },
     "footer": {
       "attribution": "Earthborne Rangers and all related content © <eb_url>Earthborne Games</eb_url>. This site is not produced, endorsed by or affiliated with Earthborne Games.",
-      "based_on": "Based on <ab_url>arkham.build</ab_url> by <felix_url>Felix Spöttel</felix_url>."
+      "based_on": "Based on <ab_url>arkham.build</ab_url> by <felix_url>Felix Spöttel</felix_url>.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
     },
     "help": {
       "about": "About this site",
@@ -1369,6 +1371,115 @@
         "title": "Keyboard shortcuts"
       },
       "title": "Help"
+    },
+    "legal": {
+      "trademark": "Earthborne Rangers™ and all related content © Earthborne Games. This site is not produced, endorsed by, or affiliated with Earthborne Games.",
+      "terms": {
+        "title": "Terms of Service",
+        "updated": "Last updated: July 10, 2026",
+        "intro": "<p>earthborne.build is operated by Sergiu Puscas (<contact_email>sergiu@sergiu.org</contact_email>).</p>",
+        "sections": {
+          "service": {
+            "title": "Service",
+            "body": "<p>earthborne.build provides tools for Earthborne Rangers deck building, campaign tracking, and related community features. The service is a fan project and is not produced, endorsed by, or affiliated with Earthborne Games.</p>"
+          },
+          "eligibility": {
+            "title": "Eligibility",
+            "body": "<p>You may use earthborne.build only if you are legally allowed to agree to these Terms.</p>"
+          },
+          "accounts": {
+            "title": "Accounts",
+            "body": "<p>You are responsible for keeping your account credentials secure and for activity under your account. You must provide accurate account identifiers and may not use another person's account without permission.</p>"
+          },
+          "user_content": {
+            "title": "User-generated content",
+            "body": "<p>You are responsible for the content you create or publish. Private content is only intended for your account. Public contributions (such as shared decks and deck guides) may be visible to other users and may remain available after account deletion in anonymized form.</p>"
+          },
+          "acceptable_use": {
+            "title": "Acceptable use",
+            "body": "<p>You must not misuse the service, attempt unauthorized access, disrupt the service, upload unlawful content, harass others, impersonate others, or infringe the rights of others. To report abuse, contact <contact_email>sergiu@sergiu.org</contact_email> with the relevant URL or ID and a short description.</p>"
+          },
+          "moderation": {
+            "title": "Moderation and admin actions",
+            "body": "<p>We may review content or accounts, remove or restrict content, and suspend or delete accounts when needed to operate the service, prevent abuse, or enforce these Terms.</p>"
+          },
+          "account_deletion": {
+            "title": "Account deletion",
+            "body": "<p>You may delete your account at any time in the account settings. Private user content is deleted, public contributions are anonymized, and backup copies expire through the normal backup retention process.</p>"
+          },
+          "availability": {
+            "title": "Availability",
+            "body": "<p>The service is provided without a guarantee of uninterrupted availability. Features may change, be limited, or be discontinued.</p>"
+          },
+          "liability": {
+            "title": "Liability",
+            "body": "<p>To the extent permitted by applicable law, earthborne.build is provided without warranties and liability is limited to legally required cases.</p>"
+          },
+          "governing_law": {
+            "title": "Governing law",
+            "body": "<p>These Terms are governed by Swiss law, subject to mandatory consumer protection rules that may apply in your country.</p>"
+          },
+          "changes": {
+            "title": "Changes",
+            "body": "<p>We may update these Terms when the service or legal requirements change. The current version is published on this page. The <privacy_url>Privacy Policy</privacy_url> explains how data is processed.</p>"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "updated": "Last updated: July 10, 2026",
+        "intro": "<p>This policy explains how earthborne.build processes personal data.</p>",
+        "sections": {
+          "controller": {
+            "title": "Controller",
+            "body": "<p>Controller: Sergiu Puscas (<contact_email>sergiu@sergiu.org</contact_email>), Switzerland.</p>"
+          },
+          "data": {
+            "title": "Data we process",
+            "body": "<p>We process only the data needed to operate earthborne.build: email address, username, password hash, session identifiers, content you sync to your account (decks, campaigns, folders, settings, and achievements), and IP addresses in server logs. If you contact us or report abuse, we process your message, related content or account identifiers, and timestamps.</p>"
+          },
+          "purposes": {
+            "title": "Purposes and legal bases",
+            "body": "<p>We process account, login, profile, sync, and account deletion data to provide earthborne.build under the <terms_url>Terms of Service</terms_url>. We process security, abuse-prevention, debugging, and service email data based on our legitimate interests under the Swiss Federal Act on Data Protection (FADP) and, where applicable, Art. 6(1)(f) GDPR.</p>"
+          },
+          "cookies": {
+            "title": "Cookies and local storage",
+            "body": "<p>We use a single session cookie for authentication. We use IndexedDB in your browser for local user data and preferences. We do not use advertising or cross-site tracking cookies.</p>"
+          },
+          "analytics": {
+            "title": "Analytics",
+            "body": "<p>We use <plausible_url>Plausible Analytics</plausible_url> to measure aggregate site usage. Plausible is a privacy-focused, cookieless service hosted in the EU; it does not store personal data, persistent identifiers, or IP addresses.</p>"
+          },
+          "third_party": {
+            "title": "Third-party content",
+            "body": "<p>User-generated content may contain external links or images. External images may load automatically from third-party servers, which may process technical data under their own privacy policies.</p>"
+          },
+          "processors": {
+            "title": "Processors",
+            "body": "<p>We use Resend (Resend, Inc., USA) to deliver transactional email such as verification and password reset messages. The service itself is hosted on privately operated infrastructure in Switzerland.</p>"
+          },
+          "transfers": {
+            "title": "International transfers",
+            "body": "<p>Email delivery through Resend may involve processing outside Switzerland and the EU/EEA. We rely on adequacy decisions where applicable and Standard Contractual Clauses or equivalent safeguards where required.</p>"
+          },
+          "retention": {
+            "title": "Retention",
+            "body": "<p>Account data is kept while your account exists. If you delete your account, private user content is deleted immediately and public contributions are anonymized. Server logs are retained for up to 30 days. Backups are retained for up to 90 days.</p>"
+          },
+          "rights": {
+            "title": "Your rights",
+            "body": "<p>Subject to applicable data protection law, you may request access, export, correction, deletion, restriction, or objection to processing. Data export (Settings → Backup), email and username changes, password reset, and account deletion are available as self-service features. For manual requests, contact <contact_email>sergiu@sergiu.org</contact_email>. You may also complain to your competent data protection authority.</p>"
+          },
+          "security": {
+            "title": "Security",
+            "body": "<p>We use measures such as HTTPS, password hashing, hashed session tokens, and access controls to protect user data.</p>"
+          },
+          "changes": {
+            "title": "Changes",
+            "body": "<p>We may update this Privacy Policy when the service or legal requirements change. The current version is published on this page.</p>"
+          }
+        }
+      }
     },
     "lists": {
       "actions": {

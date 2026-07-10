@@ -55,6 +55,9 @@ const ForgotPassword = lazy(() => import("./pages/auth/forgot-password"));
 const ResetPassword = lazy(() => import("./pages/auth/reset-password"));
 const VerifyEmail = lazy(() => import("./pages/auth/verify-email"));
 
+const Terms = lazy(() => import("./pages/legal/terms"));
+const Privacy = lazy(() => import("./pages/legal/privacy"));
+
 function App() {
   return (
     <Providers>
@@ -129,6 +132,8 @@ function AppInner() {
               <Route component={ForgotPassword} path="/auth/forgot-password" />
               <Route component={ResetPassword} path="/auth/reset-password" />
               <Route component={VerifyEmail} path="/auth/verify-email" />
+              <Route component={Terms} path="/terms" />
+              <Route component={Privacy} path="/privacy" />
               <Route path="*">
                 <ErrorStatus statusCode={404} />
               </Route>
