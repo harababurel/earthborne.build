@@ -13,9 +13,24 @@ export const createDeckCreateSlice: StateCreator<
   DeckCreateSlice
 > = (set) => ({
   deckCreate: undefined,
+  deckCreateImport: undefined,
 
-  initCreate() {
-    set(() => {
+  initCreate(fromImport) {
+    set((state) => {
+      // Kept in state (rather than consumed) so StrictMode's double
+      // mount/unmount of the create page re-initializes identically.
+      const imported = fromImport ? state.deckCreateImport : undefined;
+
+      if (imported) {
+        return {
+          deckCreate: {
+            step: "review",
+            provider: "local",
+            ...imported,
+          },
+        };
+      }
+
       return {
         deckCreate: {
           step: "name",
@@ -32,6 +47,10 @@ export const createDeckCreateSlice: StateCreator<
 
   resetCreate() {
     set({ deckCreate: undefined });
+  },
+
+  setDeckCreateImport(payload) {
+    set({ deckCreateImport: payload });
   },
 
   deckCreateSetStep(step: DeckCreateStep) {

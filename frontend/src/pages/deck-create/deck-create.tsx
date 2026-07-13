@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, useSearch } from "wouter";
 import { AspectStats } from "@/components/aspect-stats";
 import { Card } from "@/components/card/card";
 import { CardText } from "@/components/card/card-text";
@@ -75,11 +75,13 @@ function DeckCreate() {
   const deckCreate = useStore((state) => state.deckCreate);
   const destroy = useStore((state) => state.resetCreate);
   const initialize = useStore((state) => state.initCreate);
+  const search = useSearch();
+  const fromImport = new URLSearchParams(search).has("import");
 
   useEffect(() => {
-    initialize();
+    initialize(fromImport);
     return () => destroy();
-  }, [destroy, initialize]);
+  }, [destroy, initialize, fromImport]);
 
   return deckCreate ? (
     <CardModalProvider>

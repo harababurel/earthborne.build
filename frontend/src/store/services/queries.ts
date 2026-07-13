@@ -9,6 +9,8 @@ import {
   encodeSearch,
   type Id,
   isDeck,
+  type RangersDbDeck,
+  RangersDbDeckSchema,
   type RecommendationsRequest,
   type RecommendationsResponse,
   RecommendationsResponseSchema,
@@ -129,6 +131,14 @@ export async function importDeck(clientId: string, input: string) {
   }
 
   return data;
+}
+
+export async function queryRangersDbDeck(
+  id: number,
+  options?: RequestInit,
+): Promise<RangersDbDeck> {
+  const res = await apiV2Request(`/v2/public/rangersdb/deck/${id}`, options);
+  return RangersDbDeckSchema.parse(await res.json());
 }
 
 type ShareRead = {

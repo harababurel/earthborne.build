@@ -58,6 +58,10 @@ export {
   UpdateProfileRequestSchema,
 } from "./dtos/profile.schema.ts";
 export {
+  type RangersDbDeck,
+  RangersDbDeckSchema,
+} from "./dtos/rangersdb.schema.ts";
+export {
   type RecommendationsRequest,
   RecommendationsRequestSchema,
 } from "./dtos/recommendations-request.schema.ts";

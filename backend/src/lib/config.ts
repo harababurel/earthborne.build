@@ -12,6 +12,9 @@ export const configSchema = z.object({
     .enum(["development", "production", "test"])
     .default("development"),
   PORT: z.coerce.number().min(1).max(65535),
+  RANGERSDB_GRAPHQL_URL: z
+    .url()
+    .default("https://gapi.rangersdb.com/v1/graphql"),
   SESSION_COOKIE_NAME: z.string().default("eb_session"),
   SESSION_EXPIRY_HOURS: z.coerce.number().int().positive().default(720),
   SMTP_HOST: z

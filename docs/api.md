@@ -80,6 +80,19 @@ All public data endpoints live under `/v2/public`.
   Results include `author_name` when a shared deck is linked to a completed
   account profile.
 
+### RangersDB import
+
+- `GET /v2/public/rangersdb/deck/:id`
+  Fetches a deck from RangersDB by numeric id and returns it as
+  `{ id, name, created_at, like_count, comment_count, user: { handle }, awa,
+  spi, fit, foc, meta, slots, cards }`, where `cards` maps
+  the deck's card codes to their RangersDB names (best-effort; used by the
+  frontend to detect codes that reference a different card in our database,
+  since RangersDB tracks a different fork of `rangers-card-data`). Proxied
+  through the backend because RangersDB's GraphQL API restricts CORS to its
+  own origin. Returns `404` when the deck does not exist or is not publicly
+  accessible and `502` when RangersDB cannot be reached.
+
 ## Account API
 
 Authenticated account endpoints live under `/v2/account` and require session
@@ -201,6 +214,8 @@ The backend reads the following env vars:
 - `IMAGE_DIR`: optional image root used by `/images/:code`
 - `NODE_ENV`: `development`, `production`, or `test`
 - `PORT`: HTTP port
+- `RANGERSDB_GRAPHQL_URL`: RangersDB GraphQL endpoint used by the deck import
+  proxy, defaults to `https://gapi.rangersdb.com/v1/graphql`
 - `SESSION_COOKIE_NAME`: account session cookie name
 - `SESSION_EXPIRY_HOURS`: account session lifetime in hours
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`: SMTP

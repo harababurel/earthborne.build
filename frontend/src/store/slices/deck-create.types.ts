@@ -1,3 +1,4 @@
+import type { DeckCreateImport } from "@/store/lib/rangersdb-import";
 import type { StorageProvider } from "@/utils/constants";
 
 export type DeckCreateStep =
@@ -26,9 +27,11 @@ type DeckCreateState = {
 
 export type DeckCreateSlice = {
   deckCreate: DeckCreateState | undefined;
+  deckCreateImport: DeckCreateImport | undefined;
 
-  initCreate: () => void;
+  initCreate: (fromImport?: boolean) => void;
   resetCreate: () => void;
+  setDeckCreateImport(payload: DeckCreateImport): void;
 
   deckCreateSetStep(step: DeckCreateStep): void;
   deckCreateSetName(value: string): void;

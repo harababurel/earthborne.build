@@ -25,6 +25,7 @@ import fanMadeProjectInfoRouter from "./routes/fan-made-project-info.ts";
 import imagesRouter from "./routes/images.ts";
 import packsRouter from "./routes/packs.ts";
 import profileRouter from "./routes/profile.ts";
+import rangersdbRouter from "./routes/rangersdb.ts";
 import setsRouter from "./routes/sets.ts";
 import sharingRouter from "./routes/sharing.ts";
 
@@ -67,6 +68,7 @@ export function appFactory(
   pub.route("/sets", setsRouter);
   pub.route("/fan-made-project-info", fanMadeProjectInfoRouter);
   pub.route("/decklists", decklistsRouter);
+  pub.route("/rangersdb", rangersdbRouter);
   app.route("/v2/public", pub);
 
   const account = new Hono<HonoEnv>();

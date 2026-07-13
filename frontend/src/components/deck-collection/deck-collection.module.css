@@ -109,8 +109,11 @@
 
 .cta {
   padding-inline: 0.625rem;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
 
   & > * {
-    width: 100%;
+    flex: 1 1 auto;
   }
 }

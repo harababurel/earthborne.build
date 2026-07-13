@@ -201,6 +201,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
         },
       },
       deckCreate: undefined,
+      deckCreateImport: undefined,
     }));
 
     await dehydrate(get(), "app");

@@ -38,6 +38,7 @@ import css from "./deck-collection.module.css";
 import { DeckCollectionFilters } from "./deck-collection-filters";
 import { DeckCollectionFolder } from "./deck-collection-folder";
 import { DeckCollectionImport } from "./deck-collection-import";
+import { RangersDbImport } from "./rangersdb-import";
 
 export function DeckCollection() {
   const { t } = useTranslation();
@@ -189,6 +190,7 @@ export function DeckCollection() {
             {t("deck.actions.create")}
           </Button>
         </Link>
+        <RangersDbImport />
       </div>
 
       {deckCollection.total > 1 && (
