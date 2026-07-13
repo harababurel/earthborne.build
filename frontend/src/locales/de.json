@@ -1228,8 +1228,7 @@
       }
     },
     "footer": {
-      "attribution": "Earthborne Rangers und alle zugehörigen Inhalte © <eb_url>Earthborne Games</eb_url>. Diese Seite wird nicht von Earthborne Games produziert, unterstützt oder gefördert und steht in keiner Verbindung zu Earthborne Games.",
-      "based_on": "Basiert auf <ab_url>arkham.build</ab_url> von <felix_url>Felix Spöttel</felix_url>."
+      "attribution": "Earthborne Rangers und alle zugehörigen Inhalte © <eb_url>Earthborne Games</eb_url>. Diese Seite wird nicht von Earthborne Games produziert, unterstützt oder gefördert und steht in keiner Verbindung zu Earthborne Games. Basiert auf <ab_url>arkham.build</ab_url> von <felix_url>Felix Spöttel</felix_url>."
     },
     "help": {
       "about": "Über diese Seite",

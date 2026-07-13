@@ -22,13 +22,6 @@ export function Footer(props: Props) {
                 tabIndex={-1}
               />
             ),
-          }}
-        />
-      </p>
-      <p>
-        <Trans
-          i18nKey="footer.based_on"
-          components={{
             ab_url: (
               // biome-ignore lint/a11y/useAnchorContent: content is interpolated by Trans.
               <a
