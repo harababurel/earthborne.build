@@ -51,6 +51,7 @@ export type ResolvedDeck = Deck & {
   };
   originalDeck: Deck;
   shared: boolean;
+  listed: boolean;
   stats: {
     deckSize: number;
     charts: DeckCharts;
@@ -74,7 +75,7 @@ export type DeckSummary = Pick<
   | "role_code"
   | "aspect_code"
 > &
-  Pick<ResolvedDeck, "shared"> & {
+  Pick<ResolvedDeck, "shared" | "listed"> & {
     stats: Omit<ResolvedDeck["stats"], "charts">;
   };
 

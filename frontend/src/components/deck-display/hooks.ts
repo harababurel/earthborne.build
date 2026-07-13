@@ -132,7 +132,9 @@ export function useToggleShare(deckId: Id) {
       if (isShared) {
         await deleteShare(String(deckId));
       } else {
-        await createShare(String(deckId));
+        // "Make public" means visible in the Deck Guides directory; unlisted
+        // link-only sharing is available separately via the share modal.
+        await createShare(String(deckId), true);
       }
     } catch (err) {
       toast.show({

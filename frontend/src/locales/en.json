@@ -755,7 +755,8 @@
         "limited_pool": "Limited pool",
         "private": "Private",
         "sealed": "Sealed",
-        "shared": "Shared"
+        "shared": "Public",
+        "unlisted": "Unlisted"
       },
       "toasts": {
         "delete_confirm": "Are you sure you want to delete this deck?",

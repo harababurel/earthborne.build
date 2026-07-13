@@ -26,6 +26,7 @@ export function resolveDeck(
     cards,
     originalDeck: deck,
     shared: !!deps.sharing.decks[deck.id],
+    listed: !!deps.sharing.listed[deck.id],
     stats: {
       deckSize,
       charts,
@@ -52,6 +53,7 @@ export function resolveDeckSummary(
     tags: deck.tags,
     slots: deck.slots,
     shared: !!deps.sharing.decks[deck.id],
+    listed: !!deps.sharing.listed[deck.id],
     stats: { deckSize },
     role_code: deck.role_code,
     aspect_code: deck.aspect_code,

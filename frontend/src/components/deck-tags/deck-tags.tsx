@@ -1,5 +1,5 @@
 import type { TFunction } from "i18next";
-import { LockKeyholeIcon, ShareIcon } from "lucide-react";
+import { GlobeIcon, Link2Icon, LockKeyholeIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ResolvedDeck } from "@/store/lib/types";
 import type { StorageProvider } from "@/utils/constants";
@@ -30,16 +30,15 @@ export function ProviderTagInner({
   tag,
   t,
 }: {
-  tag: StorageProvider;
+  tag: StorageProvider | "unlisted";
   t: TFunction;
 }) {
   return (
     <>
       {tag === "local" && <LockKeyholeIcon />}
-      {tag === "shared" && <ShareIcon />}
-      <span>
-        {t(tag === "local" ? "deck.tags.private" : "deck.tags.shared")}
-      </span>
+      {tag === "shared" && <GlobeIcon />}
+      {tag === "unlisted" && <Link2Icon />}
+      <span>{t(`deck.tags.${tag === "local" ? "private" : tag}`)}</span>
     </>
   );
 }
@@ -47,14 +46,16 @@ export function ProviderTagInner({
 export function ProviderTag({
   deck,
 }: {
-  deck: Pick<ResolvedDeck, "source" | "shared"> | undefined;
+  deck: Pick<ResolvedDeck, "source" | "shared" | "listed"> | undefined;
 }) {
   const { t } = useTranslation();
-  const source = deck?.shared || deck?.source === "shared" ? "shared" : "local";
+
+  const shared = deck?.shared || deck?.source === "shared";
+  const tag = !shared ? "local" : deck?.listed ? "shared" : "unlisted";
 
   return (
     <Tag as="li" size="xs">
-      <ProviderTagInner tag={source} t={t} />
+      <ProviderTagInner tag={tag} t={t} />
     </Tag>
   );
 }
