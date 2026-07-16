@@ -57,6 +57,39 @@ describe("GET /v2/public/fan-made-project-info", () => {
       "proj-b",
     ]);
   });
+
+  test("skips rows with corrupt meta instead of failing the listing", async ({
+    dependencies,
+  }) => {
+    await dependencies.db
+      .insertInto("fan_made_project_info")
+      .values([
+        {
+          id: "proj-good",
+          bucket_path: "/good",
+          meta: JSON.stringify({
+            code: "proj-good",
+            name: "Good Project",
+            description: "Valid project",
+            language: "en",
+            author: "Author",
+          }),
+        },
+        {
+          id: "proj-bad",
+          bucket_path: "/bad",
+          meta: "not json",
+        },
+      ])
+      .execute();
+
+    const res = await dependencies.app.request(
+      "/v2/public/fan-made-project-info",
+    );
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { data: { id: string }[] };
+    expect(body.data.map((p) => p.id)).toEqual(["proj-good"]);
+  });
 });
 
 describe("GET /v2/public/fan-made-project-info/:id", () => {
@@ -89,5 +122,23 @@ describe("GET /v2/public/fan-made-project-info/:id", () => {
     expect(res.status).toBe(200);
     const body = (await res.json()) as { meta: { name: string } };
     expect(body.meta.name).toBe("Project X");
+  });
+
+  test("returns 500 when the project's meta is corrupt", async ({
+    dependencies,
+  }) => {
+    await dependencies.db
+      .insertInto("fan_made_project_info")
+      .values({
+        id: "proj-corrupt",
+        bucket_path: "/corrupt",
+        meta: "not json",
+      })
+      .execute();
+
+    const res = await dependencies.app.request(
+      "/v2/public/fan-made-project-info/proj-corrupt",
+    );
+    expect(res.status).toBe(500);
   });
 });

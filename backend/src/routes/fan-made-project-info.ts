@@ -11,7 +11,16 @@ const router = new Hono<HonoEnv>();
 
 router.get("/", async (c) => {
   const projects = await getAllFanMadeProjectInfos(c.get("db"));
-  const data = projects.map((p) => parseProjectRow(p));
+  // One corrupt row should not take down the whole listing.
+  const data = projects.flatMap((p) => {
+    const parsed = parseProjectRow(p);
+    if (!parsed) {
+      c.get("logger")("error", "Skipping project with invalid meta", {
+        id: p.id,
+      });
+    }
+    return parsed ?? [];
+  });
   return c.json({ data });
 });
 
@@ -25,7 +34,13 @@ router.get("/:id", async (ctx) => {
     throw new HTTPException(404, { message: "Project not found." });
   }
 
-  return ctx.json(parseProjectRow(project));
+  const parsed = parseProjectRow(project);
+
+  if (!parsed) {
+    throw new HTTPException(500, { message: "Project data is corrupt." });
+  }
+
+  return ctx.json(parsed);
 });
 
 function parseProjectRow(row: {
@@ -33,10 +48,14 @@ function parseProjectRow(row: {
   bucket_path: string;
   meta: string;
 }) {
-  return FanMadeProjectInfoSchema.parse({
-    ...row,
-    meta: JSON.parse(row.meta),
-  });
+  try {
+    return FanMadeProjectInfoSchema.parse({
+      ...row,
+      meta: JSON.parse(row.meta),
+    });
+  } catch {
+    return undefined;
+  }
 }
 
 export default router;
