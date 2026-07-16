@@ -35,4 +35,4 @@ jobs:
           cache: "npm"
           node-version-file: "package.json"
       - run: npm ci
-      - run: npm run test --workspace=backend
+      - run: npm run test:coverage --workspace=backend

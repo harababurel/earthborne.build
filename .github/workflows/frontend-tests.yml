@@ -35,7 +35,7 @@ jobs:
           cache: "npm"
           node-version-file: "package.json"
       - run: npm ci
-      - run: npm run test --workspace=frontend
+      - run: npm run test:coverage --workspace=frontend
 
   e2e:
     name: End-to-End Test

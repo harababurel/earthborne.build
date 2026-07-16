@@ -14,7 +14,8 @@
     "download:images": "node --experimental-strip-types --env-file-if-exists=.env --env-file-if-exists=../.env src/scripts/download-images.ts",
     "ingest:cards": "node --experimental-strip-types --env-file-if-exists=.env --env-file-if-exists=../.env src/scripts/ingest-cards.ts",
     "start": "node --experimental-strip-types src/main.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@earthborne-build/shared": "^0.1.0",
