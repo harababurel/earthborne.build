@@ -11,7 +11,7 @@ const router = new Hono<HonoEnv>();
 
 router.get("/", async (c) => {
   const projects = await getAllFanMadeProjectInfos(c.get("db"));
-  const data = projects.map((p) => FanMadeProjectInfoSchema.parse(p));
+  const data = projects.map((p) => parseProjectRow(p));
   return c.json({ data });
 });
 
@@ -25,7 +25,18 @@ router.get("/:id", async (ctx) => {
     throw new HTTPException(404, { message: "Project not found." });
   }
 
-  return ctx.json(FanMadeProjectInfoSchema.parse(project));
+  return ctx.json(parseProjectRow(project));
 });
+
+function parseProjectRow(row: {
+  id: string;
+  bucket_path: string;
+  meta: string;
+}) {
+  return FanMadeProjectInfoSchema.parse({
+    ...row,
+    meta: JSON.parse(row.meta),
+  });
+}
 
 export default router;
