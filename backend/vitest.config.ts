@@ -10,5 +10,16 @@ export default defineConfig({
     environment: "node",
     setupFiles: ["./src/tests/test-setup.ts"],
     hookTimeout: 60000,
+    coverage: {
+      provider: "v8",
+      include: ["src/**"],
+      all: true,
+      thresholds: {
+        statements: 60,
+        branches: 40,
+        functions: 75,
+        lines: 60,
+      },
+    },
   },
 });
