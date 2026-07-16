@@ -1,10 +1,10 @@
-import type { Campaign, Deck } from "@earthborne-build/shared";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { appFactory } from "../app.ts";
 import { applySqlFiles } from "../db/db.helpers.ts";
 import { type Database, getDatabase } from "../db/db.ts";
 import { type Config, configFromEnv } from "../lib/config.ts";
 import { CaptureMailer } from "../lib/email/mailer.ts";
+import { makeCampaign, makeDeck } from "./test-utils.ts";
 
 type TestContext = {
   app: ReturnType<typeof appFactory>;
@@ -449,53 +449,4 @@ function getCookie(response: Response) {
   const cookie = response.headers.get("set-cookie");
   expect(cookie).toBeTruthy();
   return cookie ?? "";
-}
-
-function makeDeck(id: string): Deck {
-  return {
-    id,
-    date_creation: "2026-01-01T00:00:00.000Z",
-    date_update: "2026-01-01T00:00:00.000Z",
-    description_md: "",
-    meta: "{}",
-    name: `Deck ${id}`,
-    problem: null,
-    slots: {},
-    rewards: null,
-    displaced: null,
-    maladies: null,
-    source: undefined,
-    tags: "",
-    user_id: null,
-    aspect_code: "awareness",
-    role_code: "01001",
-    background: "forager",
-    specialty: "artist",
-  };
-}
-
-function makeCampaign(id: string, deckIds: string[]): Campaign {
-  return {
-    id,
-    name: `Campaign ${id}`,
-    date_creation: "2026-01-01T00:00:00.000Z",
-    date_update: "2026-01-01T00:00:00.000Z",
-    cycle_id: "core",
-    expansions: [],
-    extended_calendar: false,
-    day: 1,
-    start_location: null,
-    current_location: null,
-    current_path_terrain: null,
-    history: [],
-    missions: [],
-    calendar: [],
-    events: [],
-    notes: [],
-    rewards: [],
-    removed: [],
-    deck_ids: deckIds,
-    previous_campaign_id: null,
-    next_campaign_id: null,
-  };
 }

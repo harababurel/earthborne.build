@@ -5,13 +5,17 @@ import { appFactory } from "../app.ts";
 import { applySqlFiles } from "../db/db.helpers.ts";
 import { type Database, getDatabase } from "../db/db.ts";
 import { createAccount } from "../db/queries/auth/accounts.ts";
-import { updateAccountIdentityVerified } from "../db/queries/auth/identities.ts";
-import { hashPassword } from "../lib/auth/crypto.ts";
 import { resetRateLimits } from "../lib/auth/rate-limit.ts";
 import { createSession } from "../lib/auth/sessions.ts";
 import { type Config, configFromEnv } from "../lib/config.ts";
 import { CaptureMailer } from "../lib/email/mailer.ts";
 import { translateSignupConstraintError } from "../routes/auth.ts";
+import {
+  createVerifiedAccount,
+  makeCampaign,
+  makeDeck,
+  TEST_PASSWORD_HASH,
+} from "./test-utils.ts";
 
 type TestContext = {
   app: ReturnType<typeof appFactory>;
@@ -125,7 +129,7 @@ describe("account auth routes", () => {
     const existing = await createAccount(ctx.db, {
       name: "existing",
       email: "existing@example.com",
-      passwordHash: await hashPassword("password123"),
+      passwordHash: TEST_PASSWORD_HASH,
       profileCompletedAt: new Date().toISOString(),
     });
     await ctx.db
@@ -348,7 +352,11 @@ describe("account auth routes", () => {
     });
     expect(garbage.status).toBe(401);
 
-    const { account } = await createVerifiedAccount("expired@example.com");
+    const { account } = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
+      "expired@example.com",
+    );
     const session = await createSession(ctx.db, account.id, 1);
     await ctx.db
       .updateTable("session")
@@ -447,7 +455,7 @@ describe("account auth routes", () => {
   });
 
   it("rate limits repeated login attempts", async () => {
-    await createVerifiedAccount("limited@example.com");
+    await createVerifiedAccount(ctx.db, ctx.config, "limited@example.com");
 
     for (let i = 0; i < 10; i += 1) {
       const res = await loginAccount("limited@example.com", "wrongpassword");
@@ -566,7 +574,12 @@ describe("account auth routes", () => {
   });
 
   it("isolates account deletion from another account's data", async () => {
-    const other = await createVerifiedAccount("other@example.com", "other");
+    const other = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
+      "other@example.com",
+      "other",
+    );
     await ctx.db
       .insertInto("account_deck")
       .values({
@@ -672,20 +685,6 @@ async function completeSignupWithUploads(email: string, username: string) {
   return cookie;
 }
 
-async function createVerifiedAccount(
-  email: string,
-  name = `user_${randomUUID()}`,
-) {
-  const result = await createAccount(ctx.db, {
-    name,
-    email,
-    passwordHash: await hashPassword("password123"),
-    profileCompletedAt: new Date().toISOString(),
-  });
-  await updateAccountIdentityVerified(ctx.db, result.accountIdentity.id);
-  return result;
-}
-
 function extractToken(body: string | undefined) {
   const token = body?.match(/[a-f0-9]{64}/)?.[0];
   assertToken(token);
@@ -700,53 +699,4 @@ function getCookie(response: Response) {
   const cookie = response.headers.get("set-cookie");
   expect(cookie).toBeTruthy();
   return cookie ?? "";
-}
-
-function makeDeck(id: string): Deck {
-  return {
-    id,
-    date_creation: "2026-01-01T00:00:00.000Z",
-    date_update: "2026-01-01T00:00:00.000Z",
-    description_md: "",
-    meta: "{}",
-    name: `Deck ${id}`,
-    problem: null,
-    slots: {},
-    rewards: null,
-    displaced: null,
-    maladies: null,
-    source: undefined,
-    tags: "",
-    user_id: null,
-    aspect_code: "awareness",
-    role_code: "01001",
-    background: "forager",
-    specialty: "artist",
-  };
-}
-
-function makeCampaign(id: string, deckIds: string[]): Campaign {
-  return {
-    id,
-    name: `Campaign ${id}`,
-    date_creation: "2026-01-01T00:00:00.000Z",
-    date_update: "2026-01-01T00:00:00.000Z",
-    cycle_id: "core",
-    expansions: [],
-    extended_calendar: false,
-    day: 1,
-    start_location: null,
-    current_location: null,
-    current_path_terrain: null,
-    history: [],
-    missions: [],
-    calendar: [],
-    events: [],
-    notes: [],
-    rewards: [],
-    removed: [],
-    deck_ids: deckIds,
-    previous_campaign_id: null,
-    next_campaign_id: null,
-  };
 }

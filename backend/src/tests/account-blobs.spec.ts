@@ -1,10 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { describe, expect } from "vitest";
-import { createAccount } from "../db/queries/auth/accounts.ts";
-import { updateAccountIdentityVerified } from "../db/queries/auth/identities.ts";
-import { hashPassword } from "../lib/auth/crypto.ts";
-import { createSession } from "../lib/auth/sessions.ts";
-import { test } from "./test-utils.ts";
+import { createVerifiedAccount, test } from "./test-utils.ts";
 
 describe("account blobs", () => {
   describe("folders", () => {
@@ -266,21 +262,3 @@ describe("account blobs", () => {
     }
   });
 });
-
-async function createVerifiedAccount(
-  db: ReturnType<typeof import("../db/db.ts").getDatabase>,
-  config: { SESSION_COOKIE_NAME: string },
-  email: string,
-  name = `user_${randomUUID()}`,
-) {
-  const result = await createAccount(db, {
-    name,
-    email,
-    passwordHash: await hashPassword("password123"),
-    profileCompletedAt: new Date().toISOString(),
-  });
-  await updateAccountIdentityVerified(db, result.accountIdentity.id);
-  const { token } = await createSession(db, result.account.id, 720);
-  const cookie = `${config.SESSION_COOKIE_NAME}=${token}`;
-  return { account: result.account, identity: result.accountIdentity, cookie };
-}

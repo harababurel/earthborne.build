@@ -28,7 +28,7 @@ import {
   deleteSession,
   getSession,
 } from "../lib/auth/sessions.ts";
-import { test } from "./test-utils.ts";
+import { TEST_PASSWORD_HASH, test } from "./test-utils.ts";
 
 describe("auth crypto", () => {
   test("hashes and verifies passwords", async () => {
@@ -225,7 +225,7 @@ async function createTestAccount(
   return await createAccount(db, {
     name,
     email,
-    passwordHash: await hashPassword("password123"),
+    passwordHash: TEST_PASSWORD_HASH,
     profileCompletedAt: null,
   });
 }

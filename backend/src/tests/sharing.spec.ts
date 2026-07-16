@@ -1,16 +1,12 @@
 import { randomUUID } from "node:crypto";
-import type { Deck } from "@earthborne-build/shared";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { appFactory } from "../app.ts";
 import { applySqlFiles } from "../db/db.helpers.ts";
 import { type Database, getDatabase } from "../db/db.ts";
-import { createAccount } from "../db/queries/auth/accounts.ts";
-import { updateAccountIdentityVerified } from "../db/queries/auth/identities.ts";
 import { getSharedDeck } from "../db/queries/sharing.ts";
-import { hashPassword } from "../lib/auth/crypto.ts";
-import { createSession } from "../lib/auth/sessions.ts";
 import { type Config, configFromEnv } from "../lib/config.ts";
 import { CaptureMailer } from "../lib/email/mailer.ts";
+import { createVerifiedAccount, makeDeck } from "./test-utils.ts";
 
 type TestContext = {
   app: ReturnType<typeof appFactory>;
@@ -58,10 +54,12 @@ describe("sharing and decklists integration", () => {
 
   it("associates sharing with account_id when user is authenticated", async () => {
     const user = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
       "user@example.com",
       "user_completed",
     );
-    const cookie = await createSessionCookie(user.account.id);
+    const cookie = user.cookie;
 
     const deckId = randomUUID();
     const deck = makeDeck(deckId);
@@ -109,11 +107,21 @@ describe("sharing and decklists integration", () => {
   });
 
   it("authorizes updates based on client_id or account_id", async () => {
-    const userA = await createVerifiedAccount("usera@example.com", "usera");
-    const cookieA = await createSessionCookie(userA.account.id);
+    const userA = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
+      "usera@example.com",
+      "usera",
+    );
+    const cookieA = userA.cookie;
 
-    const userB = await createVerifiedAccount("userb@example.com", "userb");
-    const cookieB = await createSessionCookie(userB.account.id);
+    const userB = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
+      "userb@example.com",
+      "userb",
+    );
+    const cookieB = userB.cookie;
 
     const deckId = randomUUID();
     const deck = makeDeck(deckId);
@@ -190,11 +198,21 @@ describe("sharing and decklists integration", () => {
   });
 
   it("authorizes deletion based on client_id or account_id", async () => {
-    const userA = await createVerifiedAccount("usera@example.com", "usera");
-    const cookieA = await createSessionCookie(userA.account.id);
+    const userA = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
+      "usera@example.com",
+      "usera",
+    );
+    const cookieA = userA.cookie;
 
-    const userB = await createVerifiedAccount("userb@example.com", "userb");
-    const cookieB = await createSessionCookie(userB.account.id);
+    const userB = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
+      "userb@example.com",
+      "userb",
+    );
+    const cookieB = userB.cookie;
 
     const deckId = randomUUID();
     const deck = makeDeck(deckId);
@@ -249,13 +267,17 @@ describe("sharing and decklists integration", () => {
   it("exposes author_name in decklist search only for completed profiles", async () => {
     // 1. Create a user with a completed profile
     const completedUser = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
       "completed@example.com",
       "completed_user",
     );
-    const completedCookie = await createSessionCookie(completedUser.account.id);
+    const completedCookie = completedUser.cookie;
 
     // 2. Create a user with an incomplete profile
     const incompleteUser = await createVerifiedAccount(
+      ctx.db,
+      ctx.config,
       "incomplete@example.com",
       "incomplete_user",
     );
@@ -265,9 +287,7 @@ describe("sharing and decklists integration", () => {
       .set({ profile_completed_at: null })
       .where("id", "=", incompleteUser.account.id)
       .execute();
-    const incompleteCookie = await createSessionCookie(
-      incompleteUser.account.id,
-    );
+    const incompleteCookie = incompleteUser.cookie;
 
     const deck1Id = randomUUID();
     const deck2Id = randomUUID();
@@ -548,45 +568,3 @@ describe("sharing and decklists integration", () => {
     expect(httpPreflight.headers.get("access-control-allow-origin")).toBeNull();
   });
 });
-
-async function createVerifiedAccount(
-  email: string,
-  name = `user_${randomUUID()}`,
-) {
-  const result = await createAccount(ctx.db, {
-    name,
-    email,
-    passwordHash: await hashPassword("password123"),
-    profileCompletedAt: new Date().toISOString(),
-  });
-  await updateAccountIdentityVerified(ctx.db, result.accountIdentity.id);
-  return result;
-}
-
-async function createSessionCookie(accountId: string): Promise<string> {
-  const { token } = await createSession(ctx.db, accountId, 720);
-  return `${ctx.config.SESSION_COOKIE_NAME}=${token}`;
-}
-
-function makeDeck(id: string): Deck {
-  return {
-    id,
-    date_creation: "2026-01-01T00:00:00.000Z",
-    date_update: "2026-01-01T00:00:00.000Z",
-    description_md: "",
-    meta: "{}",
-    name: `Deck ${id}`,
-    problem: null,
-    slots: {},
-    rewards: null,
-    displaced: null,
-    maladies: null,
-    source: undefined,
-    tags: "",
-    user_id: null,
-    aspect_code: "awareness",
-    role_code: "01001",
-    background: "forager",
-    specialty: "artist",
-  };
-}
