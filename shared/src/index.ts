@@ -58,6 +58,17 @@ export {
   UpdateProfileRequestSchema,
 } from "./dtos/profile.schema.ts";
 export {
+  PUBLIC_CAMPAIGN_SCHEMA_VERSION,
+  type PublicCampaign,
+  type PublicCampaignData,
+  PublicCampaignDataSchema,
+  PublicCampaignSchema,
+  type PublicDeck,
+  PublicDeckSchema,
+  toPublicCampaign,
+  toPublicDeck,
+} from "./dtos/public-campaign.schema.ts";
+export {
   type RangersDbDeck,
   RangersDbDeckSchema,
 } from "./dtos/rangersdb.schema.ts";

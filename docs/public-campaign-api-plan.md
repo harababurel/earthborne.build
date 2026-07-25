@@ -1,6 +1,6 @@
 # Public campaign API — execution plan
 
-Status: **phase 1 complete**
+Status: **phase 2 complete**
 Created: 2026-07-25
 
 ---
@@ -209,17 +209,17 @@ Deliberately omitted:
 
 ## 5. Phase 2 — Shared DTO
 
-- [ ] **2.1** Add `shared/src/dtos/public-campaign.schema.ts` with
+- [x] **2.1** Add `shared/src/dtos/public-campaign.schema.ts` with
       `PublicCampaignSchema` (`schema_version: z.literal(1)`, `campaign`, `decks`) as an
       **explicit** field list per §3.3 — not `CampaignSchema.omit(...)`, so that adding a
       field to the internal schema never silently leaks it publicly.
 
-- [ ] **2.2** Add mappers in the same file: `toPublicCampaign(campaign)` and
+- [x] **2.2** Add mappers in the same file: `toPublicCampaign(campaign)` and
       `toPublicDeck(deck)`, each picking fields explicitly.
 
-- [ ] **2.3** Export from `shared/src/index.ts`.
+- [x] **2.3** Export from `shared/src/index.ts`.
 
-- [ ] **2.4** Tests in `shared/src/dtos/public-campaign.schema.spec.ts`:
+- [x] **2.4** Tests in `shared/src/dtos/public-campaign.schema.spec.ts`:
       - a full campaign maps to the expected payload;
       - every omitted field in §3.3 is absent from the output (this is the leak
         regression test — assert on the exact key set);
