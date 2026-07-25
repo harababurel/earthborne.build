@@ -173,6 +173,7 @@ export interface AccountCampaign {
   account_id: string;
   revision: string;
   data: string; // JSON as text
+  public: number;
   created_at: string;
   updated_at: string;
 }

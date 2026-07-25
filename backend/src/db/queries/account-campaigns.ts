@@ -40,6 +40,7 @@ export async function insertCampaignItem(
       account_id: accountId,
       revision: randomUUID(),
       data,
+      public: 0,
       created_at: now,
       updated_at: now,
     })
@@ -95,4 +96,49 @@ export async function getCampaignItem(
     .where("account_id", "=", accountId)
     .where("id", "=", id)
     .executeTakeFirst();
+}
+
+// Visibility is server-owned state, deliberately kept out of `revision` and
+// `updated_at`: those drive sync reconciliation, and flipping a toggle must not
+// invalidate an edit that is in flight from the same device.
+export async function setCampaignVisibility(
+  db: Database,
+  accountId: string,
+  id: string,
+  isPublic: boolean,
+) {
+  const result = await db
+    .updateTable("account_campaign")
+    .set({ public: isPublic ? 1 : 0 })
+    .where("account_id", "=", accountId)
+    .where("id", "=", id)
+    .executeTakeFirst();
+
+  return (result.numUpdatedRows ?? 0n) > 0n;
+}
+
+export async function getPublicCampaign(db: Database, id: string) {
+  return await db
+    .selectFrom("account_campaign")
+    .select(["id", "account_id", "data"])
+    .where("id", "=", id)
+    .where("public", "=", 1)
+    .executeTakeFirst();
+}
+
+// Scoped to the campaign owner so a campaign can never pull a deck belonging to
+// another account into its public payload.
+export async function getPublicCampaignDecks(
+  db: Database,
+  accountId: string,
+  deckIds: string[],
+) {
+  if (!deckIds.length) return [];
+
+  return await db
+    .selectFrom("account_deck")
+    .select(["id", "data"])
+    .where("account_id", "=", accountId)
+    .where("id", "in", deckIds)
+    .execute();
 }

@@ -174,7 +174,7 @@ CREATE TABLE account_campaign (
   data TEXT NOT NULL CHECK (length(data) <= 2097152),
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
-);
+, public INTEGER NOT NULL DEFAULT 0);
 CREATE INDEX idx_account_campaign_account_id ON account_campaign (account_id);
 CREATE TABLE account_folder (
   account_id TEXT PRIMARY KEY REFERENCES account(id) ON DELETE CASCADE,
@@ -212,4 +212,5 @@ INSERT INTO "schema_migrations" (version) VALUES
   ('20260520000000'),
   ('20260521000000'),
   ('20260707000000'),
-  ('20260708000000');
+  ('20260708000000'),
+  ('20260725000000');

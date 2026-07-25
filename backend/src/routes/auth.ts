@@ -698,6 +698,7 @@ async function uploadAccountCampaigns(
               account_id: accountId,
               revision: randomUUID(),
               data,
+              public: 0,
               created_at: parseUploadedTimestamp(mapped.date_creation, now),
               updated_at: parseUploadedTimestamp(mapped.date_update, now),
             };
