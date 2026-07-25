@@ -10,6 +10,7 @@ import { useToast } from "./components/ui/toast.hooks";
 import { ErrorStatus } from "./pages/errors/404";
 import { useStore } from "./store";
 import { selectIsInitialized } from "./store/selectors/shared";
+import { useAnalyticsSegment } from "./utils/use-analytics-segment";
 import { useColorThemeListener } from "./utils/use-color-theme";
 
 const Index = lazy(() => import("./pages/index"));
@@ -92,6 +93,7 @@ function AppInner() {
   const storeInitialized = useStore(selectIsInitialized);
   const fontSize = useStore((state) => state.settings.fontSize);
   useColorThemeListener();
+  useAnalyticsSegment();
 
   useEffect(() => {
     if (storeInitialized) {
