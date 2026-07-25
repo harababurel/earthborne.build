@@ -22,6 +22,19 @@ cd /srv/earthborne.build
 npm ci
 ```
 
+npm 12 blocks dependency install scripts unless they are listed in the root
+`package.json` under `allowScripts`. `better-sqlite3` is approved there because
+it compiles a native addon during install — without it the backend starts and
+immediately dies with `Could not locate the bindings file`. If you ever see that
+error, check `npm install-scripts ls` first; anything unreviewed there means the
+addon was silently skipped, and `npm rebuild better-sqlite3` fixes it once the
+package is approved.
+
+Approvals are pinned to exact versions, so **bumping `better-sqlite3`, `sharp`,
+or `lefthook` invalidates them.** Re-run `npm install-scripts approve <pkg>`
+after any such upgrade, or the next clean install produces a backend that will
+not boot.
+
 ## 2. Clone card data
 
 ```bash
@@ -40,6 +53,7 @@ Update at least:
 - `FRONTEND_URL`
 - `PORT`
 - `SQLITE_PATH`
+- `DBMATE_SCHEMA_FILE` — point it outside the repo (see below)
 - `CARD_DATA_DIR`
 - `IMAGE_DIR`
 - `ADMIN_API_KEY`
@@ -58,7 +72,7 @@ PORT="8686"
 SQLITE_PATH="/srv/earthborne.build/backend/earthborne.db"
 DATABASE_URL="sqlite:/srv/earthborne.build/backend/earthborne.db"
 DBMATE_MIGRATIONS_DIR="src/db/migrations"
-DBMATE_SCHEMA_FILE="src/db/schema.sql"
+DBMATE_SCHEMA_FILE="/tmp/earthborne-schema.sql"
 CARD_DATA_DIR="/srv/rangers-card-data"
 IMAGE_DIR="/srv/earthborne.images/cards"
 ADMIN_API_KEY="replace-with-a-random-secret"
@@ -79,6 +93,16 @@ Generate a secret with:
 ```bash
 openssl rand -hex 32
 ```
+
+`DBMATE_SCHEMA_FILE` deliberately points outside the repo on a server. dbmate
+rewrites that file on every `db:migrate`, and the dump it produces from a live
+database differs cosmetically from the committed one (table ordering, whitespace
+SQLite preserves from each `CREATE`). Pointing it at the tracked
+`src/db/schema.sql` leaves the working tree dirty after every migration, and the
+next `git pull` aborts with "local changes would be overwritten". The committed
+schema is a development artifact; a server has no use for a regenerated copy.
+If you already hit this, `git checkout -- backend/src/db/schema.sql` discards the
+regenerated dump safely.
 
 Turnstile is disabled when `TURNSTILE_SECRET_KEY` is unset or empty. To enable
 signup captcha verification, create a Cloudflare Turnstile widget, set the
@@ -162,14 +186,28 @@ same-origin deployment is the simplest production shape.
 ```bash
 cd /srv/earthborne.build
 git pull
-npm ci
 npm run build -w frontend
 
 cd /srv/earthborne.build/backend
 npm run db:migrate
-npm run ingest:cards
 sudo systemctl restart earthborne
 ```
+
+Three steps are conditional, and running them when they are not needed is not
+free:
+
+- **`npm ci`** — only when `package-lock.json` changed in the pull. It deletes
+  `node_modules` wholesale, which means `better-sqlite3` has to compile its
+  native addon again; if that step is blocked or fails, the backend will not
+  start (see §1). Check with `git diff --stat HEAD@{1} -- package-lock.json`.
+- **`npm run ingest:cards`** — only when card data changed. It is unrelated to
+  application code.
+- **`npm run build -w frontend`** — only when frontend or shared code changed,
+  though it is cheap and harmless to run every time.
+
+`npm run db:migrate` is safe to run unconditionally: it is a no-op when there
+are no pending migrations. Run it **before** restarting the service, so the new
+code never meets an older schema.
 
 If you mirror images locally, rerun `npm run download:images` after ingesting new card data.
 
