@@ -56,8 +56,17 @@ export const DeckBatchResponseSchema = z.object({
 });
 export type DeckBatchResponse = z.infer<typeof DeckBatchResponseSchema>;
 
+// Public visibility rides along the batch response so the UI can render the
+// share toggle without a second request. It stays off SyncedCampaignSchema
+// itself, which also describes the complete-profile upload echo where the flag
+// has no meaning.
+export const CampaignBatchItemSchema = SyncedCampaignSchema.extend({
+  public: z.boolean(),
+});
+export type CampaignBatchItem = z.infer<typeof CampaignBatchItemSchema>;
+
 export const CampaignBatchResponseSchema = z.object({
-  campaigns: z.array(SyncedCampaignSchema),
+  campaigns: z.array(CampaignBatchItemSchema),
 });
 export type CampaignBatchResponse = z.infer<typeof CampaignBatchResponseSchema>;
 
@@ -97,6 +106,22 @@ export const ItemDeleteRequestSchema = z.object({
   expectedRevision: RevisionSchema,
 });
 export type ItemDeleteRequest = z.infer<typeof ItemDeleteRequestSchema>;
+
+// No expectedRevision: visibility is server-owned and deliberately outside the
+// optimistic-concurrency scheme, so toggling it never conflicts with an edit.
+export const CampaignVisibilityRequestSchema = z.object({
+  public: z.boolean(),
+});
+export type CampaignVisibilityRequest = z.infer<
+  typeof CampaignVisibilityRequestSchema
+>;
+
+export const CampaignVisibilityResponseSchema = z.object({
+  public: z.boolean(),
+});
+export type CampaignVisibilityResponse = z.infer<
+  typeof CampaignVisibilityResponseSchema
+>;
 
 export const DeckConflictResponseSchema = z.object({
   data: DeckSchema,

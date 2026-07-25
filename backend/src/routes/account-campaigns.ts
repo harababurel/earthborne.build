@@ -2,6 +2,8 @@ import {
   CampaignBatchResponseSchema,
   CampaignConflictResponseSchema,
   CampaignCreateRequestSchema,
+  CampaignVisibilityRequestSchema,
+  CampaignVisibilityResponseSchema,
   CampaignWriteRequestSchema,
   ItemBatchRequestSchema,
   ItemDeleteRequestSchema,
@@ -14,6 +16,7 @@ import {
   getCampaignBatch,
   getCampaignItem,
   insertCampaignItem,
+  setCampaignVisibility,
   updateCampaignItem,
 } from "../db/queries/account-campaigns.ts";
 import { isUniqueConstraintError } from "../db/queries/account-decks.ts";
@@ -38,6 +41,7 @@ router.post(
           data: JSON.parse(row.data),
           revision: row.revision,
           updatedAt: row.updated_at,
+          public: !!row.public,
         })),
       }),
     );
@@ -110,6 +114,29 @@ router.put(
         revision: current.revision,
       }),
     });
+  },
+);
+
+router.put(
+  "/:id/visibility",
+  sessionAuth(),
+  zodValidator("json", CampaignVisibilityRequestSchema),
+  async (c) => {
+    const id = c.req.param("id");
+    const { public: isPublic } = c.req.valid("json");
+
+    const updated = await setCampaignVisibility(
+      c.get("db"),
+      c.get("account").id,
+      id,
+      isPublic,
+    );
+
+    if (!updated) {
+      throw new HTTPException(404, { message: "Campaign not found" });
+    }
+
+    return c.json(CampaignVisibilityResponseSchema.parse({ public: isPublic }));
   },
 );
 

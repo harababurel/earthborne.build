@@ -1,6 +1,6 @@
 # Public campaign API — execution plan
 
-Status: **phase 2 complete**
+Status: **phase 3 complete**
 Created: 2026-07-25
 
 ---
@@ -231,29 +231,33 @@ Deliberately omitted:
 
 ## 6. Phase 3 — Routes
 
-- [ ] **3.1** Add `PUT /:id/visibility` to `backend/src/routes/account-campaigns.ts`,
+- [x] **3.1** Add `PUT /:id/visibility` to `backend/src/routes/account-campaigns.ts`,
       behind `sessionAuth()`, body validated with `zodValidator` against a new
       `CampaignVisibilityRequestSchema` in `shared/src/dtos/sync.schema.ts`. 404 when
       `setCampaignVisibility` matches no row.
 
-- [ ] **3.2** Add `public` to `SyncedCampaignSchema`
-      (`shared/src/dtos/sync.schema.ts:47`) and populate it in the `/batch` handler
-      (`backend/src/routes/account-campaigns.ts:35`) so the UI can render toggle state
-      without an extra request. Check whether the frontend campaign sync reconciliation
-      in `frontend/src/store/slices/auth.ts` and
-      `frontend/src/store/services/requests/campaigns.ts` needs updating for the new
-      field; adding an optional field should be transparent, but verify rather than
-      assume.
+- [x] **3.2** Expose `public` on the batch response and populate it in the `/batch`
+      handler so the UI can render toggle state without an extra request.
 
-- [ ] **3.3** Add `backend/src/routes/public-campaign.ts`: `GET /:id`, no auth, loads the
+      Deviation from the original wording: the flag went on a new
+      `CampaignBatchItemSchema` (`SyncedCampaignSchema.extend`) rather than on
+      `SyncedCampaignSchema` itself. That schema also describes the complete-profile
+      upload echo (`shared/src/dtos/auth.schema.ts:131`), where visibility has no
+      meaning — extending only the batch item keeps the upload contract untouched.
+
+      Frontend reconciliation needed no changes; `fetchCampaignBatch` picks the new
+      field up through `CampaignBatchResponseSchema`. Verified with
+      `npm run check -w frontend`.
+
+- [x] **3.3** Add `backend/src/routes/public-campaign.ts`: `GET /:id`, no auth, loads the
       campaign, parses `data`, resolves decks via `getPublicCampaignDecks`, maps through
       `toPublicCampaign`, returns it. Decks are returned in `deck_ids` order; ids with no
       matching row are skipped rather than erroring.
 
-- [ ] **3.4** Mount it in the `pub` group in `backend/src/app.ts:63` as
+- [x] **3.4** Mount it in the `pub` group in `backend/src/app.ts:63` as
       `pub.route("/campaign", publicCampaignRouter)`.
 
-- [ ] **3.5** Integration tests in `backend/src/tests/public-campaign.spec.ts` (real
+- [x] **3.5** Integration tests in `backend/src/tests/public-campaign.spec.ts` (real
       SQLite, per repo policy). Cases:
       - public campaign returns 200 with campaign + linked decks;
       - non-public campaign returns 404, byte-identical to the unknown-id 404;
