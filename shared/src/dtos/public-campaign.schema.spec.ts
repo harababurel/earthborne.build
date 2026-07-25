@@ -109,6 +109,22 @@ describe("public campaign schema", () => {
     });
   });
 
+  it("normalizes unset deck slot maps to empty objects", () => {
+    const deck = toPublicDeck(makeDeck());
+
+    expect(deck.rewards).toEqual({});
+    expect(deck.displaced).toEqual({});
+    expect(deck.maladies).toEqual({});
+  });
+
+  it("preserves populated deck slot maps", () => {
+    const deck = toPublicDeck(
+      DeckSchema.parse({ ...makeDeck(), rewards: { "01050": 1 } }),
+    );
+
+    expect(deck.rewards).toEqual({ "01050": 1 });
+  });
+
   it("stringifies numeric ids", () => {
     const campaign = CampaignSchema.parse({ ...makeCampaign(), id: 42 });
     const deck = DeckSchema.parse({ ...makeDeck(), id: 7 });

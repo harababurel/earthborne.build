@@ -58,9 +58,11 @@ export const PublicDeckSchema = z.object({
   background: z.string(),
   specialty: z.string(),
   slots: SlotsSchema,
-  rewards: SlotsSchema.nullable(),
-  displaced: SlotsSchema.nullable(),
-  maladies: SlotsSchema.nullable(),
+  // Normalized from the internal nullable fields: "never set" and "empty" are
+  // the same thing to a consumer, and always-an-object is a simpler contract.
+  rewards: SlotsSchema,
+  displaced: SlotsSchema,
+  maladies: SlotsSchema,
   date_creation: z.string(),
   date_update: z.string(),
 });
@@ -135,9 +137,9 @@ export function toPublicDeck(deck: Deck): PublicDeck {
     background: deck.background,
     specialty: deck.specialty,
     slots: deck.slots,
-    rewards: deck.rewards,
-    displaced: deck.displaced,
-    maladies: deck.maladies,
+    rewards: deck.rewards ?? {},
+    displaced: deck.displaced ?? {},
+    maladies: deck.maladies ?? {},
     date_creation: deck.date_creation,
     date_update: deck.date_update,
   });

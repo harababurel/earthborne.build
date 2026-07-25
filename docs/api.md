@@ -124,6 +124,18 @@ All public data endpoints live under `/v2/public`.
   `decks` follows the campaign's party order; a linked deck that has since been
   deleted is skipped rather than reported.
 
+  Two things to know when reading the payload:
+
+  - **`rewards` means different things at the two levels.** `campaign.rewards`
+    is the campaign-wide pool of unlocked reward card codes, as an array.
+    `deck.rewards` is a slots map of the reward cards currently in that deck.
+    They are unrelated.
+  - **Optional fields are omitted, not null.** An unset mission `progress` or
+    `completed` is absent from the object rather than present as `null`, so
+    consumers must treat "absent" and "unset" as the same thing. The deck slot
+    maps are the exception: `rewards`, `displaced`, and `maladies` are
+    normalized to `{}` when unset, so they are always objects.
+
   **Compatibility.** This payload is a public contract, defined independently of
   the internal campaign and deck schemas (`shared/src/dtos/public-campaign.schema.ts`).
   New fields may be added without changing `schema_version`, so consumers must
