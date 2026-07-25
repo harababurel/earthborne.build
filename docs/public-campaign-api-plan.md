@@ -1,6 +1,6 @@
 # Public campaign API — execution plan
 
-Status: **phase 4 complete**
+Status: **complete** (2026-07-25)
 Created: 2026-07-25
 
 ---
@@ -318,11 +318,11 @@ fetch the URL with `curl` and no headers, disable, confirm 404.
 
 ## 8. Phase 5 — Documentation
 
-- [ ] **5.1** Document both endpoints in `docs/api.md`, including the payload shape and
+- [x] **5.1** Document both endpoints in `docs/api.md`, including the payload shape and
       the `schema_version` compatibility promise: additive changes bump nothing,
       breaking changes bump `schema_version` and ship as a new field/endpoint rather
       than mutating v1 in place.
 
-- [ ] **5.2** Update the `Status:` line here to **complete** and note the shipped date.
+- [x] **5.2** Update the `Status:` line here to **complete** and note the shipped date.
 
 **Checkpoint 5:** lint the changed docs; no code changes expected.

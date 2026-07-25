@@ -61,6 +61,75 @@ All public data endpoints live under `/v2/public`.
   Deletes a shared deck. Requires `X-Client-Id`; logged-in users can also
   delete shares owned by their account.
 
+### Campaign sharing
+
+- `GET /v2/public/campaign/:id`
+  Returns a campaign that its owner has explicitly shared, together with the
+  decks of every ranger linked to it. Requires no authentication and no custom
+  headers, so third-party tools that can only issue plain server-side `GET`
+  requests can import a campaign.
+
+  Returns `404` when the campaign does not exist **and** when it exists but is
+  not shared — the two responses are identical, so private campaigns cannot be
+  probed for.
+
+  Sharing is toggled from the campaign settings modal and requires an account:
+  the endpoint reads the campaign live from `account_campaign`, so a shared
+  campaign stays current as play continues. Campaigns that only exist in local
+  browser storage cannot be shared.
+
+  Response shape:
+
+  ```jsonc
+  {
+    "schema_version": 1,
+    "campaign": {
+      "id": "AbC123...",
+      "name": "...",
+      "cycle_id": "core",
+      "expansions": [],
+      "extended_calendar": false,
+      "day": 4,
+      "current_location": "...",
+      "current_path_terrain": "...",
+      "rewards": ["..."],
+      "missions": [...],
+      "history": [...],
+      "calendar": [...],
+      "events": [...],
+      "notes": [...],
+      "removed": [...],
+      "date_creation": "...",
+      "date_update": "..."
+    },
+    "decks": [
+      {
+        "id": "...",
+        "name": "...",
+        "aspect_code": "...",
+        "role_code": "...",
+        "background": "...",
+        "specialty": "...",
+        "slots": { "01001": 2 },
+        "rewards": {},
+        "displaced": {},
+        "maladies": {},
+        "date_creation": "...",
+        "date_update": "..."
+      }
+    ]
+  }
+  ```
+
+  `decks` follows the campaign's party order; a linked deck that has since been
+  deleted is skipped rather than reported.
+
+  **Compatibility.** This payload is a public contract, defined independently of
+  the internal campaign and deck schemas (`shared/src/dtos/public-campaign.schema.ts`).
+  New fields may be added without changing `schema_version`, so consumers must
+  ignore unknown fields. Removing or reinterpreting a field ships as a new
+  `schema_version` alongside the existing one, never as a change to v1.
+
 ### Decklists
 
 - `GET /v2/public/decklists`
@@ -153,7 +222,21 @@ configured origins and allows credentials.
 
 - `POST /v2/account/decks/batch`
 - `POST /v2/account/campaigns/batch`
-  Batch reads synced deck or campaign payloads by id.
+  Batch reads synced deck or campaign payloads by id. Campaign items also carry
+  `public`, the campaign's sharing state as of that read.
+
+- `GET /v2/account/campaigns/:id/visibility`
+- `PUT /v2/account/campaigns/:id/visibility`
+  Reads and sets whether a campaign is served by
+  `GET /v2/public/campaign/:id`. The body is `{ "public": boolean }`, and both
+  return the resulting state. `404` when the campaign does not exist or belongs
+  to another account.
+
+  Visibility is server-owned and deliberately outside the revision scheme: a
+  toggle does not bump `revision` or `updated_at`, so it can never conflict with
+  an in-flight campaign write. The flip side is that a synced client will not
+  re-download the campaign after a toggle elsewhere, which is why the settings
+  UI reads `GET .../visibility` rather than trusting the batch response.
 
 - `POST /v2/account/decks`
 - `POST /v2/account/campaigns`
