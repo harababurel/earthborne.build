@@ -117,6 +117,25 @@ router.put(
   },
 );
 
+// Read separately instead of from the batch response: a visibility change does
+// not bump `revision`, so a synced client never re-downloads the campaign and
+// its cached flag can be arbitrarily stale after a toggle on another device.
+router.get("/:id/visibility", sessionAuth(), async (c) => {
+  const row = await getCampaignItem(
+    c.get("db"),
+    c.get("account").id,
+    c.req.param("id"),
+  );
+
+  if (!row) {
+    throw new HTTPException(404, { message: "Campaign not found" });
+  }
+
+  return c.json(
+    CampaignVisibilityResponseSchema.parse({ public: !!row.public }),
+  );
+});
+
 router.put(
   "/:id/visibility",
   sessionAuth(),

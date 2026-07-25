@@ -1,5 +1,10 @@
 import { randomUUID } from "node:crypto";
-import type { Campaign, Deck } from "@earthborne-build/shared";
+import {
+  type Campaign,
+  CampaignBatchResponseSchema,
+  type Deck,
+  PublicCampaignSchema,
+} from "@earthborne-build/shared";
 import { describe, expect } from "vitest";
 import type { Database } from "../db/db.ts";
 import {
@@ -27,12 +32,12 @@ describe("GET /v2/public/campaign/:id", () => {
     const res = await app.request("/v2/public/campaign/camp-1");
     expect(res.status).toBe(200);
 
-    const body = await res.json();
+    const body = PublicCampaignSchema.parse(await res.json());
     expect(body.schema_version).toBe(1);
     expect(body.campaign.id).toBe("camp-1");
     expect(body.campaign.name).toBe("Campaign camp-1");
     expect(body.decks).toHaveLength(1);
-    expect(body.decks[0].id).toBe("deck-1");
+    expect(body.decks[0]?.id).toBe("deck-1");
   });
 
   test("does not require authentication", async ({ dependencies }) => {
@@ -95,10 +100,10 @@ describe("GET /v2/public/campaign/:id", () => {
     );
 
     const res = await app.request("/v2/public/campaign/camp-1");
-    const body = await res.json();
+    const body = PublicCampaignSchema.parse(await res.json());
 
     expect(body.decks).toHaveLength(1);
-    expect(body.decks[0].id).toBe("mine");
+    expect(body.decks[0]?.id).toBe("mine");
   });
 
   test("skips deck ids with no matching deck", async ({ dependencies }) => {
@@ -120,9 +125,9 @@ describe("GET /v2/public/campaign/:id", () => {
     const res = await app.request("/v2/public/campaign/camp-1");
     expect(res.status).toBe(200);
 
-    const body = await res.json();
+    const body = PublicCampaignSchema.parse(await res.json());
     expect(body.decks).toHaveLength(1);
-    expect(body.decks[0].id).toBe("deck-1");
+    expect(body.decks[0]?.id).toBe("deck-1");
   });
 
   test("omits internal campaign and deck fields", async ({ dependencies }) => {
@@ -136,7 +141,12 @@ describe("GET /v2/public/campaign/:id", () => {
     await seedDeck(db, account.id, makeDeck("deck-1"));
     await seedCampaign(db, account.id, makeCampaign("camp-1", ["deck-1"]), 1);
 
-    const body = await (await app.request("/v2/public/campaign/camp-1")).json();
+    const body = (await (
+      await app.request("/v2/public/campaign/camp-1")
+    ).json()) as {
+      campaign: Record<string, unknown>;
+      decks: Record<string, unknown>[];
+    };
 
     expect(body.campaign).not.toHaveProperty("deck_ids");
     expect(body.campaign).not.toHaveProperty("start_location");
@@ -212,16 +222,57 @@ describe("PUT /v2/account/campaigns/:id/visibility", () => {
       headers: { Cookie: cookie, "Content-Type": "application/json" },
     });
 
-    const body = await res.json();
+    const body = CampaignBatchResponseSchema.parse(await res.json());
     const byId = new Map(
-      body.campaigns.map((item: { data: Campaign; public: boolean }) => [
-        item.data.id,
-        item.public,
-      ]),
+      body.campaigns.map((item) => [item.data.id, item.public]),
     );
 
     expect(byId.get("camp-1")).toBe(true);
     expect(byId.get("camp-2")).toBe(false);
+  });
+
+  test("reads back the current flag", async ({ dependencies }) => {
+    const { db, app } = dependencies;
+    const { account, cookie } = await createVerifiedAccount(
+      db,
+      dependencies.config,
+      "read@example.com",
+    );
+    await seedCampaign(db, account.id, makeCampaign("camp-1"), 1);
+    await seedCampaign(db, account.id, makeCampaign("camp-2"), 0);
+
+    const shared = await app.request(
+      "/v2/account/campaigns/camp-1/visibility",
+      { headers: { Cookie: cookie } },
+    );
+    const unshared = await app.request(
+      "/v2/account/campaigns/camp-2/visibility",
+      { headers: { Cookie: cookie } },
+    );
+
+    expect(await shared.json()).toEqual({ public: true });
+    expect(await unshared.json()).toEqual({ public: false });
+  });
+
+  test("does not read another account's flag", async ({ dependencies }) => {
+    const { db, app } = dependencies;
+    const { account } = await createVerifiedAccount(
+      db,
+      dependencies.config,
+      "reader-victim@example.com",
+    );
+    const attacker = await createVerifiedAccount(
+      db,
+      dependencies.config,
+      "reader-attacker@example.com",
+    );
+    await seedCampaign(db, account.id, makeCampaign("camp-1"), 1);
+
+    const res = await app.request("/v2/account/campaigns/camp-1/visibility", {
+      headers: { Cookie: attacker.cookie },
+    });
+
+    expect(res.status).toBe(404);
   });
 
   test("returns 404 for a campaign owned by another account", async ({
