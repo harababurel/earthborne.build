@@ -10,6 +10,7 @@ import {
   fetchCampaignVisibility,
   putCampaignVisibility,
 } from "@/store/services/requests/campaigns";
+import { publicCampaignUrl } from "@/utils/public-campaign-url";
 import { useCopyToClipboard } from "@/utils/use-copy-to-clipboard";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
@@ -78,7 +79,7 @@ function ShareUrl({ campaignId }: { campaignId: string }) {
   const { t } = useTranslation();
   const { copyToClipboard, isCopied } = useCopyToClipboard();
 
-  const url = `${import.meta.env.VITE_API_URL || window.location.origin}/v2/public/campaign/${campaignId}`;
+  const url = publicCampaignUrl(campaignId);
 
   const onCopy = useCallback(() => {
     copyToClipboard(url);
