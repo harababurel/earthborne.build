@@ -359,7 +359,12 @@
         "delete": "Delete campaign",
         "expansions": "Valley expansions",
         "extend_calendar": "Extend calendar (days 31+)",
-        "name": "Campaign name"
+        "name": "Campaign name",
+        "share": "Public link",
+        "share_confirm": "Anyone with the link will be able to read this campaign, including your notes and notable events, and the decks of every ranger in the party. Share it publicly?",
+        "share_error": "Could not load the sharing status. Try again later.",
+        "share_help": "Lets other tools read this campaign without signing in. Anyone with the link can see your notes, notable events, and the decks of every ranger in the party.",
+        "share_label": "Share this campaign publicly"
       },
       "subtitle": "Track your journey through the valley.",
       "tabs": {

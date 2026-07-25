@@ -1,6 +1,6 @@
 # Public campaign API — execution plan
 
-Status: **phase 3 complete**
+Status: **phase 4 complete**
 Created: 2026-07-25
 
 ---
@@ -277,28 +277,38 @@ integrators, ahead of any UI.
 
 ## 7. Phase 4 — Frontend
 
-- [ ] **4.1** Add `setCampaignVisibility` to
+- [x] **4.1** Add `fetchCampaignVisibility` and `putCampaignVisibility` to
       `frontend/src/store/services/requests/campaigns.ts`, following the existing request
       helpers there.
 
-- [ ] **4.2** Add a campaign store action that calls it and updates local state.
+- [x] **4.2** Deviation: no store action. Visibility is server-owned and lives outside
+      the sync slice, so the section uses TanStack Query (`useQuery` + `useMutation`)
+      keyed on the campaign id. Adding it to `CampaignSyncItemState` would have meant
+      changing `makeSyncedItem`, which is shared with deck reconciliation.
 
-- [ ] **4.3** Add the toggle to
+      This is also why task 4.7 exists: a cached flag would go stale, so the section
+      reads it from the server when the modal opens.
+
+- [x] **4.3** Add the toggle to
       `frontend/src/components/campaign/modals/settings-modal.tsx`, alongside the
       existing `extend_calendar` checkbox. Only render it for signed-in users whose
       campaign is synced — a local-only campaign has nothing to share (§1.1).
 
-- [ ] **4.4** When sharing is on, show the public URL with a copy-to-clipboard control.
+- [x] **4.4** When sharing is on, show the public URL with a copy-to-clipboard control.
 
-- [ ] **4.5** i18n keys in `frontend/src/locales/en.json` under `campaign.settings.*`.
+- [x] **4.5** i18n keys in `frontend/src/locales/en.json` under `campaign.settings.*`.
       The description must state plainly that **anyone with the link can read the
       campaign, including notes and events, and that the linked party decks are
       published too**. Notes and events are free text and routinely contain both
       personal remarks and campaign spoilers.
 
-- [ ] **4.6** Confirm before enabling (not before disabling), consistent with how
+- [x] **4.6** Confirm before enabling (not before disabling), consistent with how
       `campaign.actions.delete_confirm` guards the other destructive-ish action in that
       modal.
+
+- [x] **4.7** Added during phase 4: `GET /v2/account/campaigns/:id/visibility`
+      (backend + tests), because the batch response reflects the flag only as of the
+      last sync — see the note on 4.2.
 
 **Checkpoint 4:** `npm run check -w frontend`, `npm run build -w frontend`,
 `npm run test -w frontend`, lint. Then manual QA by the project owner: enable sharing,

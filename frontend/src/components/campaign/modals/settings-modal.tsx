@@ -16,6 +16,7 @@ import {
   ModalInner,
 } from "../../ui/modal";
 import css from "./modals.module.css";
+import { SharingSection } from "./sharing-section";
 
 export function SettingsModal({ campaign }: { campaign: Campaign }) {
   const { t } = useTranslation();
@@ -86,6 +87,8 @@ export function SettingsModal({ campaign }: { campaign: Campaign }) {
                 }
               />
             )}
+
+            <SharingSection campaign={campaign} />
 
             <Button onClick={onDelete} variant="bare">
               <Trash2Icon /> {t("campaign.settings.delete")}

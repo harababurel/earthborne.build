@@ -4,6 +4,9 @@ import {
   CampaignConflictResponseSchema,
   type CampaignCreateRequest,
   CampaignCreateRequestSchema,
+  CampaignVisibilityRequestSchema,
+  type CampaignVisibilityResponse,
+  CampaignVisibilityResponseSchema,
   type CampaignWriteRequest,
   CampaignWriteRequestSchema,
   type ItemBatchRequest,
@@ -98,6 +101,34 @@ export async function deleteCampaign(
 
     throw error;
   }
+}
+
+export async function fetchCampaignVisibility(
+  client: HttpClient,
+  id: string,
+): Promise<CampaignVisibilityResponse> {
+  const res = await client.request(`/v2/account/campaigns/${id}/visibility`, {
+    credentials: "include",
+  });
+
+  return CampaignVisibilityResponseSchema.parse(await res.json());
+}
+
+export async function putCampaignVisibility(
+  client: HttpClient,
+  id: string,
+  isPublic: boolean,
+): Promise<CampaignVisibilityResponse> {
+  const res = await client.request(`/v2/account/campaigns/${id}/visibility`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(
+      CampaignVisibilityRequestSchema.parse({ public: isPublic }),
+    ),
+    credentials: "include",
+  });
+
+  return CampaignVisibilityResponseSchema.parse(await res.json());
 }
 
 export function isCampaignConflictError(
