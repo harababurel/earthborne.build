@@ -12,6 +12,20 @@ const repoRoot = path.join(
 );
 
 /**
+ * The Living Valley site intermittently answers `200 OK` with a zero-byte
+ * body for some documents. Treating that as a successful fetch silently
+ * blanks the affected page in the generated assets, so it is surfaced as a
+ * distinct error instead.
+ */
+export class EmptyResponseError extends Error {
+  constructor(url) {
+    super(`Empty response body for ${url}`);
+    this.name = "EmptyResponseError";
+    this.url = url;
+  }
+}
+
+/**
  * @typedef {Object} ScraperCache
  * @property {(url: string) => Promise<{ body: string, meta: object } | null>} read
  * @property {(url: string, body: string, meta: object) => Promise<void>} write
@@ -51,6 +65,12 @@ export function createCache({ dir, mode }) {
         const metaStr = await fs.readFile(metaPath, "utf-8");
         const meta = JSON.parse(metaStr);
         const body = await fs.readFile(bodyPath, "utf-8");
+        if (!body.trim()) {
+          // Evict entries poisoned by an earlier run that predates the guard.
+          await fs.rm(bodyPath, { force: true });
+          await fs.rm(metaPath, { force: true });
+          return null;
+        }
         return { body, meta };
       } catch (err) {
         if (err.code !== "ENOENT") {
@@ -85,8 +105,9 @@ export function createCache({ dir, mode }) {
  * Fetch a URL with caching according to the cache's mode. Handles retries
  * on network errors. Returns the response body as text.
  *
- * Throws on offline-miss, on non-2xx responses after all retries, and on
- * persistent network errors.
+ * Throws on offline-miss, on non-2xx responses after all retries, on
+ * persistent network errors, and with an `EmptyResponseError` when the
+ * upstream keeps answering with an empty body.
  *
  * @param {string} url
  * @param {{
@@ -129,6 +150,10 @@ export async function cachedFetchText(url, options) {
 
       const body = await res.text();
       const status = res.status;
+
+      if (!body.trim()) {
+        throw new EmptyResponseError(url);
+      }
 
       if (cache.mode === "auto" || cache.mode === "refresh") {
         const meta = {

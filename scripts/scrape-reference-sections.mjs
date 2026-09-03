@@ -6,13 +6,14 @@
  * Run: node scripts/scrape-reference-sections.mjs
  */
 
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseHtml } from "node-html-parser";
 import {
   cachedFetchText,
   createCache,
+  EmptyResponseError,
   parseCacheArgs,
 } from "./lib/scraper-cache.mjs";
 
@@ -79,14 +80,31 @@ async function crawlSection(section, cache) {
   const queue = section.roots.map(normalizePath);
   const queued = new Set(queue);
   const order = new Map(queue.map((path, index) => [path, index]));
+  const previousPages = loadPreviousPages(section);
   const pages = [];
+  const emptyPaths = [];
   let navTree = null;
   let nextOrder = queue.length;
 
   async function worker() {
     while (queue.length) {
       const path = queue.shift();
-      const { html, fromCache } = await fetchPage(path, cache);
+
+      let html;
+      let fromCache;
+      try {
+        ({ html, fromCache } = await fetchPage(path, cache));
+      } catch (err) {
+        if (!(err instanceof EmptyResponseError)) throw err;
+        const page = preservedPage(path, previousPages);
+        pages.push(page);
+        emptyPaths.push(path);
+        console.log(
+          `  [!] ${pages.length}. ${page.title} — upstream sent an empty document, kept previously scraped content`,
+        );
+        continue;
+      }
+
       const root = parseHtml(html);
       const page = extractPage(root, path);
       const officialNavTree = extractOfficialNavTree(root, section.title);
@@ -129,6 +147,7 @@ async function crawlSection(section, cache) {
   );
 
   return {
+    emptyPaths,
     navTree,
     pages: pages.sort((a, b) => order.get(a.path) - order.get(b.path)),
   };
@@ -139,6 +158,53 @@ function extractPage(root, path) {
   const article = extractArticleNode(root);
   const body = article ? sanitize(article, path) : "";
   return { body, id: pathId(path), path: normalizePath(path), title };
+}
+
+/**
+ * Rebuild a page from the previously generated asset. Its body is already
+ * sanitized and link-rewritten, so it is flagged to skip both steps.
+ */
+function preservedPage(path, previousPages) {
+  const id = pathId(path);
+  const previous = previousPages.get(id);
+
+  if (!previous) {
+    throw new Error(
+      `Upstream returned an empty document for ${path} and there is no previously generated content to fall back on.`,
+    );
+  }
+
+  return {
+    body: previous.body,
+    id,
+    path: normalizePath(path),
+    preserved: true,
+    title: previous.title || pathTitle(path),
+  };
+}
+
+function loadPreviousPages(section) {
+  const pages = new Map();
+
+  let html;
+  try {
+    html = readFileSync(join(OUTPUT_DIR, section.output), "utf8");
+  } catch {
+    return pages;
+  }
+
+  for (const el of parseHtml(html).querySelectorAll(".rules-page")) {
+    const id = el.getAttribute("data-page-id");
+    if (!id) continue;
+
+    const heading = el.querySelector("h3");
+    const title = heading ? decodeHtml(heading.text.trim()) : null;
+    heading?.remove();
+
+    pages.set(id, { body: el.innerHTML.trim(), title });
+  }
+
+  return pages;
 }
 
 function extractArticleNode(root) {
@@ -739,7 +805,9 @@ function buildRules(section, pages) {
   const pageIds = new Map(pages.map((page) => [page.path, page.id]));
   const content = pages
     .map((page) => {
-      const body = rewriteInternalLinks(page.body, pageIds, page.id);
+      const body = page.preserved
+        ? page.body
+        : rewriteInternalLinks(page.body, pageIds, page.id);
       return `  <div class="rules-page" data-page-id="${page.id}">
     <h3 id="${page.id}">${replacePuaHtml(escapeHtml(page.title))}</h3>
 ${body}
@@ -913,9 +981,13 @@ async function main() {
   }
   console.log(`Cache mode: ${cache.mode}  ·  dir: ${cache.dir}\n`);
 
+  const emptyPaths = [];
+
   for (const section of SECTIONS) {
     console.log(`Fetching ${section.title}...`);
-    const { navTree, pages } = await crawlSection(section, cache);
+    const crawled = await crawlSection(section, cache);
+    const { navTree, pages } = crawled;
+    emptyPaths.push(...crawled.emptyPaths);
     const toc = buildToc(section, pages, navTree);
     const rules = buildRules(section, pages);
     const output = `${toc}\n<!-- BEGIN RULES -->\n${rules}\n`;
@@ -937,6 +1009,15 @@ async function main() {
   console.log(
     `\nCache: ${s.hits} hits, ${s.misses} misses, ${s.errors} errors, ${s.refreshes} refreshes, ${s.bypasses} bypasses  ·  cache dir: ${cache.dir}`,
   );
+
+  if (emptyPaths.length) {
+    console.warn(
+      `\n${emptyPaths.length} page(s) returned an empty document upstream. Previously scraped content was kept for them:`,
+    );
+    for (const path of emptyPaths) {
+      console.warn(`  ${BASE}${path}`);
+    }
+  }
 }
 
 main().catch((err) => {
