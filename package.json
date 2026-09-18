@@ -17,7 +17,7 @@
     "prepare:e2e": "playwright install --with-deps",
     "test:e2e": "playwright test --config test/e2e/playwright.config.ts",
     "update-snapshots:local": "PW_TEST_HTML_REPORT_OPEN='never' playwright test --config test/e2e/playwright.config.ts --update-snapshots",
-    "update-snapshots:docker": "docker run -it --rm --ipc=host -v .:/work/ mcr.microsoft.com/playwright:v1.57.0 /bin/bash -c 'cd /work && npm i && PW_TEST_HTML_REPORT_OPEN=never npx playwright test --config test/e2e/playwright.config.ts --update-snapshots'"
+    "update-snapshots:docker": "docker run -it --rm --ipc=host -v .:/work/ mcr.microsoft.com/playwright:v1.61.1 /bin/bash -c 'cd /work && npm i && PW_TEST_HTML_REPORT_OPEN=never npx playwright test --config test/e2e/playwright.config.ts --update-snapshots'"
   },
   "dependencies": {
     "zod": "4.2.1"
@@ -26,11 +26,11 @@
     "@biomejs/biome": "2.4.4",
     "@playwright/test": "^1.61.1",
     "@types/node": "24.10.15",
-    "@vitest/coverage-v8": "4.1.3",
+    "@vitest/coverage-v8": "4.1.11",
     "lefthook": "2.1.1",
     "node-html-parser": "^7.1.0",
     "typescript": "5.9.3",
-    "vitest": "4.1.3"
+    "vitest": "4.1.11"
   },
   "allowScripts": {
     "better-sqlite3@12.10.0": true,
