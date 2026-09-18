@@ -33,8 +33,8 @@
     "vitest": "4.1.11"
   },
   "allowScripts": {
-    "better-sqlite3@12.10.0": true,
-    "sharp@0.34.5": true,
+    "better-sqlite3@12.11.1": true,
+    "sharp@0.35.4": true,
     "lefthook@2.1.1": true,
     "core-js": false
   }
