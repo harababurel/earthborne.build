@@ -139,8 +139,12 @@ export function useToggleShare(deckId: Id) {
     } catch (err) {
       toast.show({
         children: isShared
-          ? t("share.delete_failed", { error: (err as Error)?.message })
-          : t("share.create_failed", { error: (err as Error)?.message }),
+          ? t("deck_view.sharing.delete_failed", {
+              error: (err as Error)?.message,
+            })
+          : t("deck_view.sharing.create_failed", {
+              error: (err as Error)?.message,
+            }),
         variant: "error",
       });
     }
