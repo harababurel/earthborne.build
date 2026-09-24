@@ -28,7 +28,7 @@ export const log: Logger = (
 export function logger() {
   return (c: Context<HonoEnv>, next: Next) => {
     const requestId = c.get("requestId");
-    const clientId = c.header("X-Client-Id");
+    const clientId = c.req.header("X-Client-Id");
 
     const logger: Logger = (level, message, _details) => {
       const details = _details ?? {};
