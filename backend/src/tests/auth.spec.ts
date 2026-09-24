@@ -477,6 +477,28 @@ describe("account auth routes", () => {
     expect(limited.status).toBe(429);
   });
 
+  it("ignores client-supplied forwarding headers when rate limiting by IP", async () => {
+    const loginFrom = (email: string, spoofed: string) =>
+      ctx.app.request("/v2/account/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password: "password123" }),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Real-IP": "203.0.113.7",
+          "X-Forwarded-For": spoofed,
+          "CF-Connecting-IP": spoofed,
+        },
+      });
+
+    for (let i = 0; i < 10; i += 1) {
+      const res = await loginFrom(`spoof-${i}@example.com`, `198.51.100.${i}`);
+      expect(res.status).toBe(401);
+    }
+
+    const limited = await loginFrom("spoof-final@example.com", "198.51.100.99");
+    expect(limited.status).toBe(429);
+  });
+
   it("translates signup unique-index races to the duplicate-email response", () => {
     const error = Object.assign(new Error("constraint failed"), {
       code: "SQLITE_CONSTRAINT_UNIQUE",

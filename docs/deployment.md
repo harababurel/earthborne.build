@@ -227,5 +227,8 @@ accordingly.
 - Email delivery requires SMTP configuration in production. Without
   `SMTP_HOST`, verification and password reset emails are logged by the backend
   process.
+- Rate limiting identifies clients by the `X-Real-IP` header only, so the
+  reverse proxy must set it to the real client address (the sample nginx
+  config does). Behind Cloudflare, configure nginx's `real_ip` module first.
 - Account cookies use `Secure` when `NODE_ENV=production` or `FRONTEND_URL`
   is `https://`, so production account flows must run over HTTPS.

@@ -1,5 +1,6 @@
-import type { Context, MiddlewareHandler } from "hono";
+import type { MiddlewareHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { getClientIp } from "../client-ip.ts";
 import type { HonoEnv } from "../hono-env.ts";
 
 type Bucket = { count: number; resetAt: number };
@@ -71,13 +72,4 @@ export function rateLimit(
 
 export function resetRateLimits() {
   buckets.clear();
-}
-
-function getClientIp(c: Context<HonoEnv>) {
-  return (
-    c.req.header("cf-connecting-ip") ??
-    // Only trust this behind a reverse proxy; the email/key bucket still
-    // throttles credential attacks if a direct client spoofs this header.
-    c.req.header("x-forwarded-for")?.split(",")[0]?.trim()
-  );
 }

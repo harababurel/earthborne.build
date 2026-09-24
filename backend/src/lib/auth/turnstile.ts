@@ -1,6 +1,7 @@
 import type { Context } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
+import { getClientIp } from "../client-ip.ts";
 import type { HonoEnv } from "../hono-env.ts";
 
 const TURNSTILE_VERIFY_URL =
@@ -29,7 +30,7 @@ export async function assertTurnstileToken(
     response: token,
   });
 
-  const remoteIp = getRemoteIp(c);
+  const remoteIp = getClientIp(c);
   if (remoteIp) {
     body.set("remoteip", remoteIp);
   }
@@ -76,11 +77,4 @@ export async function assertTurnstileToken(
       cause: { errorCodes },
     });
   }
-}
-
-function getRemoteIp(c: Context<HonoEnv>) {
-  return (
-    c.req.header("cf-connecting-ip") ??
-    c.req.header("x-forwarded-for")?.split(",")[0]?.trim()
-  );
 }
