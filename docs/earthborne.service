@@ -19,6 +19,8 @@ Type=simple
 User=sergiu
 WorkingDirectory=/srv/earthborne.build
 EnvironmentFile=/srv/earthborne.build/backend/.env
+# Overrides NODE_ENV from .env (the example file defaults to development).
+Environment=NODE_ENV=production
 ExecStart=/usr/bin/node --experimental-strip-types backend/src/main.ts
 Restart=on-failure
 RestartSec=5

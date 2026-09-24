@@ -49,6 +49,8 @@ cp /srv/earthborne.build/backend/.env.example /srv/earthborne.build/backend/.env
 
 Update at least:
 
+- `NODE_ENV` — must be `production` (the example file defaults to
+  `development`; the sample systemd unit also forces it)
 - `CORS_ORIGINS`
 - `FRONTEND_URL`
 - `PORT`
@@ -66,6 +68,7 @@ Update at least:
 Example values:
 
 ```dotenv
+NODE_ENV="production"
 CORS_ORIGINS="https://earthborne.yourdomain.com"
 FRONTEND_URL="https://earthborne.yourdomain.com"
 PORT="8686"
@@ -224,5 +227,5 @@ accordingly.
 - Email delivery requires SMTP configuration in production. Without
   `SMTP_HOST`, verification and password reset emails are logged by the backend
   process.
-- Account cookies use `Secure` in production, so production account flows must
-  run over HTTPS.
+- Account cookies use `Secure` when `NODE_ENV=production` or `FRONTEND_URL`
+  is `https://`, so production account flows must run over HTTPS.

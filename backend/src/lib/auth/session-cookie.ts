@@ -7,7 +7,11 @@ export function setSessionCookie(c: Context<HonoEnv>, sessionToken: string) {
 
   setCookie(c, config.SESSION_COOKIE_NAME, sessionToken, {
     httpOnly: true,
-    secure: config.NODE_ENV === "production",
+    // Keyed off the public URL too, so a missing NODE_ENV on an HTTPS
+    // deployment can't silently downgrade the session cookie.
+    secure:
+      config.NODE_ENV === "production" ||
+      config.FRONTEND_URL.startsWith("https://"),
     sameSite: "Strict",
     maxAge: config.SESSION_EXPIRY_HOURS * 60 * 60,
     path: "/",
