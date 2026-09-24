@@ -76,12 +76,14 @@ function DeckCreate() {
   const destroy = useStore((state) => state.resetCreate);
   const initialize = useStore((state) => state.initCreate);
   const search = useSearch();
-  const fromImport = new URLSearchParams(search).has("import");
+  const params = new URLSearchParams(search);
+  const fromImport = params.has("import");
+  const roleCode = params.get("role") ?? undefined;
 
   useEffect(() => {
-    initialize(fromImport);
+    initialize(fromImport, roleCode);
     return () => destroy();
-  }, [destroy, initialize, fromImport]);
+  }, [destroy, initialize, fromImport, roleCode]);
 
   return deckCreate ? (
     <CardModalProvider>

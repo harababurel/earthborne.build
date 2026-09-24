@@ -15,7 +15,7 @@ export const createDeckCreateSlice: StateCreator<
   deckCreate: undefined,
   deckCreateImport: undefined,
 
-  initCreate(fromImport) {
+  initCreate(fromImport, roleCode) {
     set((state) => {
       // Kept in state (rather than consumed) so StrictMode's double
       // mount/unmount of the create page re-initializes identically.
@@ -31,8 +31,17 @@ export const createDeckCreateSlice: StateCreator<
         };
       }
 
+      // Roles are gated by specialty in the wizard, so a preselected role
+      // also has to preselect its specialty to stay visible.
+      const role = roleCode ? selectMetadata(state).cards[roleCode] : undefined;
+      const preselected =
+        role?.type_code === "role" && role.specialty_type
+          ? { roleCode: role.code, specialty: role.specialty_type }
+          : {};
+
       return {
         deckCreate: {
+          ...preselected,
           step: "name",
           name: i18n.t("deck_create.new_ranger_name"),
           provider: "local",

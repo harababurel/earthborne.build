@@ -351,5 +351,5 @@ export function doubleSidedBackCard(card: Card, t: TFunction) {
 
 export function deckCreateLink(card: Card) {
   assert(card.type_code === "role", "only role cards can create decks");
-  return `/deck/create/${card.code}`;
+  return `/deck/create?role=${encodeURIComponent(card.code)}`;
 }

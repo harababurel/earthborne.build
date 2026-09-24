@@ -29,7 +29,7 @@ export type DeckCreateSlice = {
   deckCreate: DeckCreateState | undefined;
   deckCreateImport: DeckCreateImport | undefined;
 
-  initCreate: (fromImport?: boolean) => void;
+  initCreate: (fromImport?: boolean, roleCode?: string) => void;
   resetCreate: () => void;
   setDeckCreateImport(payload: DeckCreateImport): void;
 
