@@ -520,6 +520,85 @@ describe("sharing and decklists integration", () => {
     ]);
   });
 
+  it("rejects malformed share payloads with 400", async () => {
+    const post = (body: string) =>
+      ctx.app.request("/v2/public/share", {
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Client-Id": "client-bad",
+        },
+      });
+
+    const deck = makeDeck(randomUUID());
+
+    expect((await post("{not json")).status).toBe(400);
+    expect((await post("null")).status).toBe(400);
+    expect(
+      (await post(JSON.stringify({ ...deck, history: "not-an-array" }))).status,
+    ).toBe(400);
+    expect(
+      (
+        await post(
+          JSON.stringify({
+            ...deck,
+            history: Array.from({ length: 101 }, () => ({})),
+          }),
+        )
+      ).status,
+    ).toBe(400);
+    expect(
+      (await post(JSON.stringify({ ...deck, id: "x".repeat(65) }))).status,
+    ).toBe(400);
+    expect(
+      (await post(JSON.stringify({ ...deck, listed: "yes" }))).status,
+    ).toBe(400);
+  });
+
+  it("rejects share updates whose body id differs from the url id", async () => {
+    const deckId = randomUUID();
+    const deck = makeDeck(deckId);
+
+    await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify(deck),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-mismatch",
+      },
+    });
+
+    const res = await ctx.app.request(`/v2/public/share/${deckId}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...deck, id: randomUUID() }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-mismatch",
+      },
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it("rate limits share creation per client IP", async () => {
+    const share = () =>
+      ctx.app.request("/v2/public/share", {
+        method: "POST",
+        body: JSON.stringify(makeDeck(randomUUID())),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Client-Id": "client-spam",
+          "X-Real-IP": "203.0.113.50",
+        },
+      });
+
+    for (let i = 0; i < 20; i += 1) {
+      expect((await share()).status).toBe(200);
+    }
+
+    expect((await share()).status).toBe(429);
+  });
+
   it("serves share routes with credentialed CORS", async () => {
     const origin = "http://localhost:3000";
 
