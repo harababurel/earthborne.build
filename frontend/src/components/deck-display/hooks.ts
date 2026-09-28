@@ -126,15 +126,26 @@ export function useToggleShare(deckId: Id) {
   const createShare = useStore((state) => state.createShare);
   const deleteShare = useStore((state) => state.deleteShare);
   const isShared = useStore((state) => !!state.sharing.decks[deckId]);
+  const isAuthenticated = useStore(
+    (state) => state.auth.status === "authenticated",
+  );
 
   const toggle = useCallback(async () => {
     try {
       if (isShared) {
         await deleteShare(String(deckId));
-      } else {
+      } else if (isAuthenticated) {
         // "Make public" means visible in the Deck Guides directory; unlisted
         // link-only sharing is available separately via the share modal.
         await createShare(String(deckId), true);
+      } else {
+        // Listing requires an account, so fall back to a link-only share.
+        await createShare(String(deckId), false);
+        toast.show({
+          children: t("deck_view.sharing.shared_unlisted"),
+          variant: "success",
+          duration: 5000,
+        });
       }
     } catch (err) {
       toast.show({
@@ -148,7 +159,7 @@ export function useToggleShare(deckId: Id) {
         variant: "error",
       });
     }
-  }, [isShared, deckId, createShare, deleteShare, toast, t]);
+  }, [isShared, isAuthenticated, deckId, createShare, deleteShare, toast, t]);
 
   return { isShared, toggle };
 }

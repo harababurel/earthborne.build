@@ -527,7 +527,11 @@ router.delete(
   sessionAuth({ requireCompleteProfile: false }),
   async (c) => {
     c.set("skipSessionCookieRefresh", true);
-    await deleteAccount(c.get("db"), c.get("account").id);
+    const accountId = c.get("account").id;
+    await c
+      .get("db")
+      .transaction()
+      .execute((tx) => deleteAccount(tx, accountId));
     clearAuthSessionCookie(c);
     return new Response(null, { status: 204 });
   },

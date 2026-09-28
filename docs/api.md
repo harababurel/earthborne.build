@@ -47,6 +47,8 @@ All public data endpoints live under `/v2/public`.
 - `POST /v2/public/share`
   Creates a new shared deck. Requires `X-Client-Id`. If the request includes
   a valid account session cookie, the share is linked to that account.
+  Setting `listed: true` (publish to Deck Guides) requires a session;
+  anonymous requests get `401`. Rate limited per client IP.
 
 - `GET /v2/public/share/history/:id`
   Returns the shared deck with the given `id`, its history, and `author_name`
@@ -55,7 +57,11 @@ All public data endpoints live under `/v2/public`.
 
 - `PUT /v2/public/share/:id`
   Updates an existing shared deck. Requires `X-Client-Id`; logged-in users can
-  also update shares owned by their account.
+  also update shares owned by their account. Listing a currently unlisted
+  share requires a session; shares that are already listed stay listed on
+  anonymous updates. The body `id` must match the URL `id`.
+
+  Deleting an account unlists all of its shares.
 
 - `DELETE /v2/public/share/:id`
   Deletes a shared deck. Requires `X-Client-Id`; logged-in users can also

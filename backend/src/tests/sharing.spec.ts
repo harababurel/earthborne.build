@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { appFactory } from "../app.ts";
 import { applySqlFiles } from "../db/db.helpers.ts";
 import { type Database, getDatabase } from "../db/db.ts";
-import { getSharedDeck } from "../db/queries/sharing.ts";
+import { createSharedDeck, getSharedDeck } from "../db/queries/sharing.ts";
 import { type Config, configFromEnv } from "../lib/config.ts";
 import { CaptureMailer } from "../lib/email/mailer.ts";
 import { createVerifiedAccount, makeDeck } from "./test-utils.ts";
@@ -315,15 +315,8 @@ describe("sharing and decklists integration", () => {
       },
     });
 
-    // Anonymous share
-    await ctx.app.request("/v2/public/share", {
-      method: "POST",
-      body: JSON.stringify({ ...makeDeck(deck3Id), history: [], listed: true }),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Client-Id": "device-anon",
-      },
-    });
+    // Anonymous listed share from before listing required an account
+    await insertLegacyListedShare(deck3Id, "device-anon");
 
     // Search decklists
     const searchRes = await ctx.app.request("/v2/public/decklists");
@@ -397,6 +390,7 @@ describe("sharing and decklists integration", () => {
   });
 
   it("lists shares only when requested and supports unlisting by update", async () => {
+    const cookie = await loggedInCookie();
     const deckId = randomUUID();
     const deck = makeDeck(deckId);
 
@@ -406,6 +400,7 @@ describe("sharing and decklists integration", () => {
       headers: {
         "Content-Type": "application/json",
         "X-Client-Id": "client-listed",
+        Cookie: cookie,
       },
     });
     expect(shareRes.status).toBe(200);
@@ -456,6 +451,7 @@ describe("sharing and decklists integration", () => {
   });
 
   it("searches decklists by required card code", async () => {
+    const cookie = await loggedInCookie();
     const deckId = randomUUID();
 
     const shareRes = await ctx.app.request("/v2/public/share", {
@@ -469,6 +465,7 @@ describe("sharing and decklists integration", () => {
       headers: {
         "Content-Type": "application/json",
         "X-Client-Id": "client-card-search",
+        Cookie: cookie,
       },
     });
     expect(shareRes.status).toBe(200);
@@ -489,6 +486,7 @@ describe("sharing and decklists integration", () => {
   });
 
   it("treats percent signs as literal text in decklist name search", async () => {
+    const cookie = await loggedInCookie();
     const percentDeckId = randomUUID();
     const wordDeckId = randomUUID();
 
@@ -502,6 +500,7 @@ describe("sharing and decklists integration", () => {
         headers: {
           "Content-Type": "application/json",
           "X-Client-Id": `client-${deck.id}`,
+          Cookie: cookie,
         },
       });
       expect(shareRes.status).toBe(200);
@@ -518,6 +517,94 @@ describe("sharing and decklists integration", () => {
     expect(searchBody.data).toEqual([
       expect.objectContaining({ id: percentDeckId }),
     ]);
+  });
+
+  it("requires a session to list a new share", async () => {
+    const deckId = randomUUID();
+
+    const res = await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify({ ...makeDeck(deckId), listed: true }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-anon-list",
+      },
+    });
+
+    expect(res.status).toBe(401);
+    expect(await getSharedDeck(ctx.db, deckId)).toBeUndefined();
+  });
+
+  it("requires a session to list an existing unlisted share", async () => {
+    const deckId = randomUUID();
+    const deck = makeDeck(deckId);
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Client-Id": "client-anon-update",
+    };
+
+    await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify(deck),
+      headers,
+    });
+
+    const res = await ctx.app.request(`/v2/public/share/${deckId}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...deck, listed: true }),
+      headers,
+    });
+
+    expect(res.status).toBe(401);
+    expect((await getSharedDeck(ctx.db, deckId))?.listed).toBe(0);
+  });
+
+  it("keeps already-listed anonymous shares listed on update", async () => {
+    const deckId = randomUUID();
+    await insertLegacyListedShare(deckId, "client-legacy");
+
+    const res = await ctx.app.request(`/v2/public/share/${deckId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        ...makeDeck(deckId),
+        name: "Renamed",
+        listed: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-legacy",
+      },
+    });
+
+    expect(res.status).toBe(200);
+    const record = await getSharedDeck(ctx.db, deckId);
+    expect(record?.listed).toBe(1);
+    expect(JSON.parse(record?.data ?? "{}").name).toBe("Renamed");
+  });
+
+  it("unlists an account's shares when the account is deleted", async () => {
+    const cookie = await loggedInCookie();
+    const deckId = randomUUID();
+
+    await ctx.app.request("/v2/public/share", {
+      method: "POST",
+      body: JSON.stringify({ ...makeDeck(deckId), listed: true }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Id": "client-deleted",
+        Cookie: cookie,
+      },
+    });
+
+    const deleteRes = await ctx.app.request("/v2/account/auth", {
+      method: "DELETE",
+      headers: { Cookie: cookie },
+    });
+    expect(deleteRes.status).toBe(204);
+
+    const record = await getSharedDeck(ctx.db, deckId);
+    expect(record?.account_id).toBeNull();
+    expect(record?.listed).toBe(0);
   });
 
   it("rejects malformed share payloads with 400", async () => {
@@ -647,3 +734,23 @@ describe("sharing and decklists integration", () => {
     expect(httpPreflight.headers.get("access-control-allow-origin")).toBeNull();
   });
 });
+
+async function loggedInCookie() {
+  const user = await createVerifiedAccount(
+    ctx.db,
+    ctx.config,
+    `${randomUUID()}@example.com`,
+  );
+  return user.cookie;
+}
+
+async function insertLegacyListedShare(deckId: string, clientId: string) {
+  await createSharedDeck(ctx.db, {
+    account_id: null,
+    id: deckId,
+    client_id: clientId,
+    listed: 1,
+    data: JSON.stringify(makeDeck(deckId)),
+    history: "[]",
+  });
+}

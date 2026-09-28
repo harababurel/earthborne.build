@@ -1173,6 +1173,8 @@
         "description_present": "This deck has a public share, it can be viewed using <a>this link</a>.",
         "listed_help": "When enabled, this share appears in the public Deck Guides directory. When disabled, only people with the link can view it.",
         "listed_label": "List in public Deck Guides",
+        "listed_login_required": "Log in to list this deck in the public Deck Guides directory.",
+        "shared_unlisted": "Shared as a link only. Log in to also list it in Deck Guides.",
         "open": "Open share",
         "title": "Public share",
         "update": "Update share",

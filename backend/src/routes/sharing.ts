@@ -38,6 +38,8 @@ router.post(
     const { history, listed, ...deck } = c.req.valid("json");
     const account = c.get("account");
 
+    if (listed && !account) throw loginRequiredToList();
+
     try {
       await createSharedDeck(c.get("db"), {
         account_id: account?.id ?? null,
@@ -100,6 +102,13 @@ router.put(
 
     const account = c.get("account");
 
+    if (listed && !account) {
+      // Shares listed before this rule existed stay listed; the client
+      // re-sends `listed` on every save, so only block new listings.
+      const existing = await getSharedDeck(c.get("db"), id);
+      if (existing && !existing.listed) throw loginRequiredToList();
+    }
+
     const updated = await updateSharedDeck(
       c.get("db"),
       id,
@@ -148,6 +157,12 @@ router.delete("/:id", optionalSessionAuth(), async (c) => {
 });
 
 export default router;
+
+function loginRequiredToList() {
+  return new HTTPException(401, {
+    message: "Log in to list decks in Deck Guides",
+  });
+}
 
 function requireClientId(clientId: string | undefined) {
   if (!clientId) {

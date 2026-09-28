@@ -103,7 +103,12 @@ function PublicShareControls({ deck }: Props) {
   const setShareListed = useStore((state) => state.setShareListed);
   const isShared = useStore((state) => !!state.sharing.decks[deck.id]);
   const listed = useStore((state) => state.sharing.listed[deck.id] ?? false);
+  const isAuthenticated = useStore(
+    (state) => state.auth.status === "authenticated",
+  );
   const [loading, setLoading] = useState(false);
+  // Listing requires an account; logged-out users may still unlist.
+  const canList = isAuthenticated || (isShared && listed);
 
   const shareUrl = `${window.location.origin}/share/${deck.id}`;
 
@@ -224,12 +229,14 @@ function PublicShareControls({ deck }: Props) {
       </div>
       <Checkbox
         checked={isShared && listed}
-        disabled={loading}
+        disabled={loading || !canList}
         label={t("deck_view.sharing.listed_label")}
         onCheckedChange={onChangeListed}
       />
       <p className={css["public-share-help"]}>
-        {t("deck_view.sharing.listed_help")}
+        {isAuthenticated
+          ? t("deck_view.sharing.listed_help")
+          : t("deck_view.sharing.listed_login_required")}
       </p>
     </section>
   );

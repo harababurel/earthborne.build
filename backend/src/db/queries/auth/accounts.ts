@@ -130,6 +130,14 @@ export async function renameAccount(
 }
 
 export async function deleteAccount(db: DatabaseExecutor, accountId: string) {
+  // Deck Guides listings require an account, so shares that are about to
+  // become anonymous (FK sets account_id to NULL) are unlisted first.
+  await db
+    .updateTable("shared_deck")
+    .set({ listed: 0 })
+    .where("account_id", "=", accountId)
+    .execute();
+
   return await db
     .deleteFrom("account")
     .where("id", "=", accountId)
