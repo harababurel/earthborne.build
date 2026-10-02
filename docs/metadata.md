@@ -19,6 +19,7 @@ The ingestion script reads:
 - `categories.json`
 - `packs.json`
 - `packs/<pack_id>/<pack_id>.json`
+- `i18n/{de,es,fr,it,ru}/**/*.po` (excluding `taboos` directories)
 
 ## Ingestion model
 
@@ -33,6 +34,7 @@ The ingestion script reads:
 - card categories
 - packs
 - cards
+- translations
 
 The ingest is destructive by design: it clears the existing imported data and repopulates the tables from the source checkout in a single transaction.
 
@@ -45,6 +47,25 @@ Current normalization performed during ingest:
 - duplicate token ids from upstream `tokens.json` are deduplicated before insert
 - `image_rect` arrays are serialized to JSON strings for SQLite storage
 - booleans are stored as SQLite integer flags where needed
+
+## Translation ingest
+
+`backend/src/scripts/card-translations.ts` loads German, Spanish, French, Italian, and Russian PO translations into `translation`, keyed by `(locale, entity, entity_id, field)`. The translation rows are cleared and rebuilt in the same transaction as the English metadata. Ingest also writes `translations_updated_at` to `app_metadata`.
+
+Imported fields:
+
+- cards: name, text, traits, flavor, and sun/mountain/crest challenge text
+- packs: name and short name
+- sets and subsets: name
+- tokens: name and plurals
+- types and areas: name
+- aspects: name and short name
+
+The parser splits each `msgctxt` into an entity id and field, skips empty translations, and keeps the first duplicate with a warning. Line breaks and `<hr>` variants are normalized to `<hr>`. Pack id `core` is remapped to `ebr`; area ids `play`, `reach`, and `along` are remapped to `in_play`, `within_reach`, and `along_the_way`. Unknown entities and unsupported fields are ignored.
+
+**Outdated-source policy:** after formatting normalization, a translation whose `msgid` differs from the current English source is retained. Ingest logs per-locale translated field/card coverage, outdated-source counts, and ignored-entry counts so upstream translations can be corrected.
+
+Storage and ingest are implemented; the API and frontend do not yet consume these rows. The planned display behavior is per-field English fallback, with English traits retained for filtering and rules and translated only for display. See [card-localization-plan.md](./card-localization-plan.md).
 
 ## Card schema
 

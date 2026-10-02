@@ -19,9 +19,15 @@ The backend is a small Node.js service built with Hono. It uses SQLite for stora
   }
   ```
 
+  Currently `locale` is always `en`, and `translation_updated_at` mirrors `cards_updated_at`. Ingest stores a separate `translations_updated_at` metadata value, but `/version` does not read it yet.
+
 ## Public API
 
 All public data endpoints live under `/v2/public`.
+
+### Localization status
+
+Cards, packs, and sets currently return English metadata. Translation storage and PO ingest are implemented, but a `locale` query parameter is not yet supported. Phase 3 of [card-localization-plan.md](./card-localization-plan.md) will add locale-aware responses to the cards, single-card, packs, sets, and `/version` endpoints, with per-field English fallback and English responses for missing or unsupported locales.
 
 ### Cards
 

@@ -4,6 +4,18 @@
 
 When the user selects a language, the interface switches to it. Card metadata uses the `rangers-card-data` translation where one exists and falls back to English otherwise, field by field. Card images stay English.
 
+## Implementation status (2026-10-02)
+
+| Phase | Status | Evidence / remaining work |
+| --- | --- | --- |
+| 1: UI languages | Implemented | `a46d00ef`: supported locale files completed, Italian added, unused locales removed, and language selector updated. |
+| 2: backend storage and ingest | Implemented | `7d1fa31c`: translation table, PO parser, transactional ingest, coverage logging, update timestamp, and parser/loading tests added. |
+| 3: API | Pending — next | Locale-aware responses, English fallback, shared schema additions, and database integration tests. |
+| 4: frontend | Pending | Localized card requests, trait display, bilingual search, and English export/share names. |
+| 5: docs | In progress | UI and ingest status documented; API and frontend usage documentation must be finalized when those phases ship. |
+
+The implementation commits do not establish completion of every verification step below. Visual checks of each language and local ingest row-count checks still need confirmation. Card metadata remains English in the app until Phases 3–4 are implemented.
+
 ## Decisions
 
 - **Locales:** `en`, `de`, `es`, `fr`, `it`, `ru`. These are the languages with card data in `rangers-card-data/i18n/`; `pseudo` is excluded.
