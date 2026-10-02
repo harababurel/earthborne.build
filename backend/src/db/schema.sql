@@ -4,14 +4,6 @@ CREATE TABLE pack (
   short_name TEXT,
   position INTEGER NOT NULL
 );
-CREATE TABLE translation (
-  locale TEXT NOT NULL,
-  entity TEXT NOT NULL CHECK (entity IN ('card', 'pack', 'set', 'subset', 'token', 'type', 'aspect', 'area')),
-  entity_id TEXT NOT NULL,
-  field TEXT NOT NULL,
-  value TEXT NOT NULL,
-  PRIMARY KEY (locale, entity, entity_id, field)
-);
 CREATE TABLE aspect (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -201,6 +193,14 @@ CREATE TABLE account_achievements (
 );
 CREATE INDEX idx_shared_deck_account_id ON shared_deck (account_id);
 CREATE INDEX idx_shared_deck_listed ON shared_deck (listed);
+CREATE TABLE translation (
+  locale TEXT NOT NULL,
+  entity TEXT NOT NULL CHECK (entity IN ('card', 'pack', 'set', 'subset', 'token', 'type', 'aspect', 'area')),
+  entity_id TEXT NOT NULL,
+  field TEXT NOT NULL,
+  value TEXT NOT NULL,
+  PRIMARY KEY (locale, entity, entity_id, field)
+);
 -- Dbmate schema migrations
 INSERT INTO "schema_migrations" (version) VALUES
   ('20260413000000'),
@@ -221,4 +221,5 @@ INSERT INTO "schema_migrations" (version) VALUES
   ('20260521000000'),
   ('20260707000000'),
   ('20260708000000'),
-  ('20260725000000');
+  ('20260725000000'),
+  ('20261002000000');
