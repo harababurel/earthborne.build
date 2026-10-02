@@ -11,10 +11,12 @@ When the user selects a language, the interface switches to it. Card metadata us
 | 1: UI languages | Implemented | `a46d00ef`: supported locale files completed, Italian added, unused locales removed, and language selector updated. |
 | 2: backend storage and ingest | Implemented | `7d1fa31c`: translation table, PO parser, transactional ingest, coverage logging, update timestamp, and parser/loading tests added. |
 | 3: API | Implemented | Locale-aware cards, packs, sets, and version responses; English fallback; shared schema additions; real in-memory database integration tests. |
-| 4: frontend | Implemented; live verification blocked | Locale-aware startup/refetch, translated trait display, bilingual name search/BuildQL, and English export/share names. Frontend typecheck, build, and tests pass; dev site returns 502. |
+| 4: frontend | Implemented and verified | Locale-aware startup/refetch, translated trait display, bilingual name search/BuildQL, and English export/share names. Frontend typecheck, build, tests, and live Spanish checks pass. |
 | 5: docs | Updated | UI, ingest, API parameters, frontend behavior, and adding-language instructions documented. |
 
-The implementation commits do not establish completion of every verification step below. Visual checks of each language and local ingest row-count checks still need confirmation. The frontend now requests card metadata in the selected language. Phase 4's live Spanish checks remain pending because `https://dev.harababurel.com` returned 502 during verification on 2026-10-02.
+The frontend now requests card metadata in the selected language. Live Spanish verification passed on `https://dev.harababurel.com` on 2026-10-02: saved-language startup, translated core cards, English `sib` fallback, unchanged images, bilingual search and BuildQL, trait filtering, and English export/share names. Desktop and mobile card views were inspected without browser JavaScript errors. All 362 checked translated core-card fields matched the Spanish PO source; all 828 cards retained their checked English-derived values and identifiers.
+
+The local migration and ingest completed successfully with 828 cards and 4,817 translation rows (de: 1,051; es: 1,049; fr: 1,055; it: 606; ru: 1,056). Visual checks of the other supported languages and native-speaker review still remain.
 
 ## Decisions
 

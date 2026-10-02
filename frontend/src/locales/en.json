@@ -528,6 +528,7 @@
         "malady": "Malady",
         "marsh_of_rebirth": "Marsh of Rebirth",
         "meadow": "Meadow",
+        "mission": "Mission",
         "mountain_pass": "Mountain Pass",
         "northern_outpost": "Northern Outpost",
         "old_growth": "Old-Growth",
@@ -564,7 +565,9 @@
       "trait_one": "Trait",
       "trait_other": "Traits",
       "traits": {
+        "Acquired": "Acquired",
         "Aid": "Aid",
+        "Avian": "Avian",
         "Book": "Book",
         "Book / Tech": "Book / Tech",
         "Clothing": "Clothing",

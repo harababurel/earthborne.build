@@ -142,7 +142,7 @@ export const selectTraitMapper = createSelector(
               ? part.replace(trait, i18n.t(traitKey))
               : part;
           });
-      return { code, name };
+      return { code, name: name.replace(/\s*\/\s*/g, " / ") };
     };
   },
 );
