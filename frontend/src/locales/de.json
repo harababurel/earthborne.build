@@ -28,6 +28,92 @@
       "attached": "An {{name}} angehängt",
       "eligible": "Geeignet für {{name}}"
     },
+    "auth": {
+      "email": "E-Mail",
+      "email_or_username": "E-Mail oder Benutzername",
+      "errors": {
+        "account_not_verified": "Dein Konto wurde noch nicht bestätigt. Bitte <verifyLink>bestätige</verifyLink> deine E-Mail-Adresse, bevor du dich anmeldest.",
+        "captcha_load_failed": "Turnstile-Captcha konnte nicht geladen werden.",
+        "forgot_password_failed": "Zurücksetzen des Passworts konnte nicht gestartet werden: {{error}}",
+        "invalid_credentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort",
+        "login_failed": "Anmeldung fehlgeschlagen: {{error}}",
+        "password_reset_failed": "Zurücksetzen des Passworts fehlgeschlagen: {{error}}",
+        "rate_limited": "Zu viele Anfragen. Bitte warte {{interval}}, bevor du es erneut versuchst",
+        "signup_failed": "Registrierung fehlgeschlagen: {{error}}",
+        "verify_email_failed": "E-Mail-Bestätigung fehlgeschlagen: {{error}}",
+        "verify_email_send_failed": "Bestätigungs-E-Mail konnte nicht erneut gesendet werden: {{error}}"
+      },
+      "forgot_password": {
+        "description": "Gib deine E-Mail-Adresse oder deinen Benutzernamen ein und wir senden dir eine Anleitung zum Zurücksetzen deines Passworts.",
+        "submit": "Anleitung zum Zurücksetzen senden",
+        "success": "Falls ein Konto existiert, erhältst du in Kürze einen Link zum Zurücksetzen.",
+        "title": "Passwort vergessen"
+      },
+      "login": {
+        "action": "Anmelden",
+        "forgot_password": "Passwort vergessen?",
+        "no_account": "Noch kein Konto?",
+        "title": "Anmelden"
+      },
+      "logout": "Abmelden",
+      "menu": {
+        "logged_in_as": "Angemeldet als {{name}}",
+        "sync_account": "Daten synchronisieren",
+        "sync_error": "Daten konnten nicht synchronisiert werden: {{error}}",
+        "sync_status": {
+          "conflict": "Konto-Synchronisierung: Konflikt",
+          "error": "Konto-Synchronisierung: Fehler",
+          "idle": "Konto-Synchronisierung: inaktiv",
+          "loading": "Konto-Synchronisierung: wird geladen",
+          "partial": "Konto-Synchronisierung teilweise fehlgeschlagen",
+          "saving": "Konto-Synchronisierung: wird gespeichert",
+          "synced": "Konto-Synchronisierung abgeschlossen"
+        },
+        "syncing": "Kontodaten werden synchronisiert..."
+      },
+      "password": "Passwort",
+      "password_validation": "Mindestens 8 Zeichen",
+      "reset_password": {
+        "confirm_password": "Passwort bestätigen",
+        "password": "Neues Passwort",
+        "success": "Passwort erfolgreich zurückgesetzt. Du kannst dich jetzt anmelden.",
+        "title": "Passwort zurücksetzen"
+      },
+      "signup": {
+        "action": "Registrieren",
+        "complete_profile": {
+          "description": "Wähle einen Benutzernamen für dein Konto. Er wird öffentlich bei deinen Decks und Beiträgen angezeigt.",
+          "title": "Profil vervollständigen",
+          "upload": {
+            "decks": {
+              "help": "Lädt deine lokalen Decks und Kampagnen in dein Konto hoch.",
+              "label": "Lokale Decks & Kampagnen hochladen"
+            },
+            "settings": {
+              "help": "Lädt deine Sammlung, Triumphe und Anzeigeeinstellungen hoch.",
+              "label": "Einstellungen & Triumphe hochladen"
+            },
+            "title": "Lokale Daten hochladen"
+          }
+        },
+        "has_account": "Du hast bereits ein Konto?",
+        "legal_acceptance": "Mit dem Erstellen eines Kontos stimmst du den <terms>Nutzungsbedingungen</terms> zu und nimmst die <privacy>Datenschutzerklärung</privacy> zur Kenntnis.",
+        "success": "Registrierung erfolgreich! Bitte prüfe dein E-Mail-Postfach, um dein Konto zu bestätigen. Deinen Benutzernamen wählst du nach deiner ersten Anmeldung.",
+        "title": "Registrieren",
+        "verifying": "Wird bestätigt..."
+      },
+      "username": "Benutzername",
+      "username_validation": "Nur Buchstaben, Zahlen, Unterstriche und Bindestriche",
+      "verify_email": {
+        "action": "E-Mail bestätigen",
+        "resend": "Bestätigungs-E-Mail erneut senden",
+        "resend_action": "Bestätigungs-E-Mail erneut senden",
+        "resend_success": "Bestätigungs-E-Mail erfolgreich gesendet. Bitte prüfe dein Postfach.",
+        "success": "E-Mail bestätigt! Du kannst dich jetzt anmelden.",
+        "title": "E-Mail bestätigen",
+        "token": "Bestätigungscode"
+      }
+    },
     "browse": {
       "tabs": {
         "aspect": "Aspekte",
@@ -273,7 +359,12 @@
         "delete": "Kampagne löschen",
         "expansions": "Tal-Erweiterungen",
         "extend_calendar": "Kalender erweitern (Tage 31+)",
-        "name": "Kampagnenname"
+        "name": "Kampagnenname",
+        "share": "Öffentlicher Link",
+        "share_confirm": "Jeder mit dem Link kann diese Kampagne lesen, einschließlich deiner Notizen, besonderen Ereignisse und der Decks aller Ranger in der Gruppe. Öffentlich teilen?",
+        "share_error": "Freigabestatus konnte nicht geladen werden. Versuche es später erneut.",
+        "share_help": "Ermöglicht anderen Tools, diese Kampagne ohne Anmeldung zu lesen. Jeder mit dem Link kann deine Notizen, besonderen Ereignisse und die Decks aller Ranger in der Gruppe sehen.",
+        "share_label": "Diese Kampagne öffentlich teilen"
       },
       "subtitle": "Verfolge eure Reise durch das Tal.",
       "tabs": {
@@ -300,6 +391,20 @@
         "terrain_none": "Direkt (kein Terrain)",
         "travel": "Reisen",
         "travel_camp": "Reisen & Tag beenden"
+      }
+    },
+    "campaign_sync": {
+      "conflict": {
+        "action_error": "Kampagnen-Konflikt konnte nicht gelöst werden: {{error}}",
+        "collection_badge": "Kampagnen-Konflikt erfordert Aufmerksamkeit",
+        "description": "Diese Kampagne wurde sowohl auf diesem Gerät als auch auf dem Server geändert. Wähle, welche Version du behalten möchtest.",
+        "description_remote_missing": "Diese Kampagne wurde auf dem Server gelöscht, bevor deine Änderung abgeschlossen war. Verwirf die lokale Kampagne, um den Stand des Servers zu übernehmen.",
+        "discard_local": "Lokale Kampagne verwerfen",
+        "edit_locked": "Löse den Kampagnen-Konflikt, bevor du bearbeitest.",
+        "keep_local": "Version dieses Geräts behalten",
+        "refresh": "Server-Version verwenden",
+        "remote_version": "Server-Version: {{version}}",
+        "title": "Kampagnen-Synchronisierungskonflikt"
       }
     },
     "card": {
@@ -635,7 +740,6 @@
       "annotation": "Anmerkung",
       "annotation_tooltip": "Karte hat eine Anmerkung",
       "aspect": "Aspekt",
-      "attachments": {},
       "background": "Vorgeschichte",
       "cards": "Deckkarten",
       "evolution": {
@@ -669,7 +773,8 @@
         "limited_pool": "Begrenzter Pool",
         "private": "Privat",
         "sealed": "Versiegelt",
-        "shared": "Geteilt"
+        "shared": "Geteilt",
+        "unlisted": "Nicht gelistet"
       },
       "toasts": {
         "delete_confirm": "Möchtest du dieses Deck wirklich löschen?",
@@ -719,6 +824,46 @@
       "import_help": "Gib eine öffentliche Deck-ID oder URL zum Importieren ein. Das Deck wird <strong>kopiert</strong>; die Historie wird nicht importiert.",
       "import_json": "Aus JSON-Dateien importieren",
       "more_filters": "Weitere Filter",
+      "premade_decks_added_one": "{{count}} vorgefertigtes Deck hinzugefügt.",
+      "premade_decks_added_other": "{{count}} vorgefertigte Decks hinzugefügt.",
+      "premade_decks_adding": "Vorgefertigte Decks werden hinzugefügt...",
+      "premade_decks_button": "Vorgefertigte Decks erneut hinzufügen",
+      "premade_decks_error": "Vorgefertigte Decks konnten nicht hinzugefügt werden: {{error}}",
+      "rangersdb": {
+        "blocked": "Dem Deck fehlen Informationen, die für den Import erforderlich sind.",
+        "button": "Aus RangersDB importieren",
+        "by_author": "von {{name}}",
+        "card_count_one": "{{count}} Karte",
+        "card_count_other": "{{count}} Karten",
+        "checking": "Deck wird auf RangersDB gesucht...",
+        "comments_one": "{{count}} Kommentar",
+        "comments_other": "{{count}} Kommentare",
+        "fetch_error": "Deck konnte nicht von RangersDB abgerufen werden: {{error}}",
+        "import": "Deck importieren",
+        "import_help": "Beim Importieren öffnet sich der Überprüfungsschritt der Deckerstellung, in dem du das Deck prüfen und speichern kannst.",
+        "invalid_input": "Das sieht nicht nach einer RangersDB-Deck-URL oder einer numerischen Deck-ID aus.",
+        "issue": {
+          "missing_aspects": "Die Aspektwerte des Decks konnten keiner Aspekt-Karte zugeordnet werden",
+          "missing_background": "Die Vorgeschichte des Decks konnte nicht ermittelt werden",
+          "missing_role": "Die Berufung des Decks konnte nicht ermittelt werden",
+          "missing_specialty": "Die Expertise des Decks konnte nicht ermittelt werden",
+          "name_conflict": "Karte {{value}} heißt auf RangersDB „{{theirs}}“, hier aber „{{ours}}“ – überprüfe sie nach dem Import",
+          "unknown_code": "Unbekannter Kartencode „{{value}}“",
+          "unmatched_card": "Keine Karte passend zu „{{value}}“",
+          "unsupported_card": "„{{value}}“ ist bei der Deckerstellung nicht verfügbar und wurde übersprungen"
+        },
+        "issues": "Einige Teile des Decks konnten nicht importiert werden:",
+        "likes_one": "{{count}} Like",
+        "likes_other": "{{count}} Likes",
+        "not_found": "Dieses Deck existiert nicht auf RangersDB oder ist nicht öffentlich zugänglich.",
+        "tab_text": "Klartext / Markdown",
+        "tab_url": "URL oder ID",
+        "text_help": "Füge ein aus RangersDB exportiertes Deck ein (als Text oder Markdown kopieren).",
+        "text_label": "Deckliste",
+        "title": "Aus RangersDB importieren",
+        "url_help": "Füge einen Link zu einem öffentlichen RangersDB-Deck oder nur dessen numerische ID ein, z. B. <strong>https://rangersdb.com/decks/view/12345</strong> oder <strong>12345</strong>.",
+        "url_label": "Deck-URL oder ID"
+      },
       "search_placeholder": "Decks durchsuchen...",
       "sorting": {
         "alphabetical_asc": "Alphabetisch (A -> Z)",
@@ -978,9 +1123,23 @@
       "copy": "Copy",
       "include_displaced": "Include displaced cards",
       "include_rewards": "Include unlocked rewards",
-      "tab_markdown": "Markdown",
-      "tab_plaintext": "Plaintext",
+      "included_rewards": "Enthaltene Belohnungen",
+      "markdown": "Markdown",
       "title": "Share deck"
+    },
+    "deck_sync": {
+      "conflict": {
+        "action_error": "Deck-Konflikt konnte nicht gelöst werden: {{error}}",
+        "collection_badge": "Deck-Konflikt erfordert Aufmerksamkeit",
+        "description": "Dieses Deck wurde sowohl auf diesem Gerät als auch auf dem Server geändert. Wähle, welche Version du behalten möchtest.",
+        "description_remote_missing": "Dieses Deck wurde auf dem Server gelöscht, bevor deine Änderung abgeschlossen war. Verwirf das lokale Deck, um den Stand des Servers zu übernehmen.",
+        "discard_local": "Lokales Deck verwerfen",
+        "edit_locked": "Löse den Deck-Konflikt, bevor du bearbeitest.",
+        "keep_local": "Version dieses Geräts behalten",
+        "refresh": "Server-Version verwenden",
+        "remote_version": "Server-Version: {{version}}",
+        "title": "Deck-Synchronisierungskonflikt"
+      }
     },
     "deck_view": {
       "actions": {
@@ -1011,6 +1170,11 @@
         "delete_failed": "Freigabe konnte nicht gelöscht werden: {{error}}",
         "description": "Deck wird lokal gespeichert.",
         "description_present": "Dieses Deck hat eine öffentliche Freigabe und kann über <a>diesen Link</a> angesehen werden.",
+        "listed_help": "Wenn aktiviert, erscheint diese Freigabe im öffentlichen Deck-Guides-Verzeichnis. Wenn deaktiviert, können nur Personen mit dem Link sie ansehen.",
+        "listed_label": "In öffentlichen Deck-Guides listen",
+        "listed_login_required": "Melde dich an, um dieses Deck im öffentlichen Deck-Guides-Verzeichnis zu listen.",
+        "open": "Freigabe öffnen",
+        "shared_unlisted": "Nur als Link geteilt. Melde dich an, um es auch in den Deck-Guides zu listen.",
         "title": "Öffentliche Freigabe",
         "update": "Freigabe aktualisieren",
         "update_failed": "Freigabe konnte nicht aktualisiert werden: {{error}}"
@@ -1024,6 +1188,8 @@
     },
     "decklists": {
       "browse": {
+        "author": "Autor",
+        "author_by": "Von {{name}}",
         "likes": "Likes",
         "loading": "Deck-Guides werden geladen...",
         "no_results": "Keine Ergebnisse",
@@ -1228,7 +1394,9 @@
       }
     },
     "footer": {
-      "attribution": "Earthborne Rangers und alle zugehörigen Inhalte © <eb_url>Earthborne Games</eb_url>. Diese Seite wird nicht von Earthborne Games produziert, unterstützt oder gefördert und steht in keiner Verbindung zu Earthborne Games. Basiert auf <ab_url>arkham.build</ab_url> von <felix_url>Felix Spöttel</felix_url>."
+      "attribution": "Earthborne Rangers und alle zugehörigen Inhalte © <eb_url>Earthborne Games</eb_url>. Diese Seite wird nicht von Earthborne Games produziert, unterstützt oder gefördert und steht in keiner Verbindung zu Earthborne Games. Basiert auf <ab_url>arkham.build</ab_url> von <felix_url>Felix Spöttel</felix_url>.",
+      "privacy": "Datenschutzerklärung",
+      "terms": "Nutzungsbedingungen"
     },
     "help": {
       "about": "Über diese Seite",
@@ -1244,6 +1412,115 @@
         "title": "Tastaturkürzel"
       },
       "title": "Hilfe"
+    },
+    "legal": {
+      "privacy": {
+        "intro": "<p>Diese Erklärung beschreibt, wie earthborne.build personenbezogene Daten verarbeitet.</p>",
+        "sections": {
+          "analytics": {
+            "body": "<p>Wir verwenden <plausible_url>Plausible Analytics</plausible_url>, um die Nutzung der Website in aggregierter Form zu messen. Plausible ist ein datenschutzorientierter, cookieloser Dienst, der in der EU gehostet wird; er speichert keine personenbezogenen Daten, dauerhaften Kennungen oder IP-Adressen.</p>",
+            "title": "Analyse"
+          },
+          "changes": {
+            "body": "<p>Wir können diese Datenschutzerklärung aktualisieren, wenn sich der Dienst oder rechtliche Anforderungen ändern. Die aktuelle Version wird auf dieser Seite veröffentlicht.</p>",
+            "title": "Änderungen"
+          },
+          "controller": {
+            "body": "<p>Verantwortlicher: Sergiu Puscas (<contact_email>sergiu@sergiu.org</contact_email>), Schweiz.</p>",
+            "title": "Verantwortlicher"
+          },
+          "cookies": {
+            "body": "<p>Wir verwenden ein einzelnes Sitzungscookie zur Authentifizierung. Für lokale Nutzerdaten und Einstellungen verwenden wir IndexedDB in deinem Browser. Wir verwenden keine Werbe- oder seitenübergreifenden Tracking-Cookies.</p>",
+            "title": "Cookies und lokaler Speicher"
+          },
+          "data": {
+            "body": "<p>Wir verarbeiten nur die Daten, die für den Betrieb von earthborne.build erforderlich sind: E-Mail-Adresse, Benutzername, Passwort-Hash, Sitzungskennungen, Inhalte, die du mit deinem Konto synchronisierst (Decks, Kampagnen, Ordner, Einstellungen und Triumphe), sowie IP-Adressen in Serverprotokollen. Wenn du uns kontaktierst oder Missbrauch meldest, verarbeiten wir deine Nachricht, zugehörige Inhalte oder Kontokennungen sowie Zeitstempel.</p>",
+            "title": "Verarbeitete Daten"
+          },
+          "processors": {
+            "body": "<p>Wir verwenden Resend (Resend, Inc., USA) für den Versand transaktionaler E-Mails wie Bestätigungs- und Passwort-Zurücksetzungsnachrichten. Der Dienst selbst wird auf privat betriebener Infrastruktur in der Schweiz gehostet.</p>",
+            "title": "Auftragsverarbeiter"
+          },
+          "purposes": {
+            "body": "<p>Wir verarbeiten Konto-, Anmelde-, Profil-, Synchronisierungs- und Kontolöschungsdaten, um earthborne.build gemäß den <terms_url>Nutzungsbedingungen</terms_url> bereitzustellen. Daten zu Sicherheit, Missbrauchsprävention, Fehlerbehebung und Service-E-Mails verarbeiten wir auf Grundlage unserer berechtigten Interessen gemäß dem Schweizer Bundesgesetz über den Datenschutz (DSG) und, soweit anwendbar, Art. 6 Abs. 1 lit. f DSGVO.</p>",
+            "title": "Zwecke und Rechtsgrundlagen"
+          },
+          "retention": {
+            "body": "<p>Kontodaten werden gespeichert, solange dein Konto besteht. Wenn du dein Konto löschst, werden private Nutzerinhalte sofort gelöscht und öffentliche Beiträge anonymisiert. Serverprotokolle werden bis zu 30 Tage aufbewahrt. Backups werden bis zu 90 Tage aufbewahrt.</p>",
+            "title": "Aufbewahrung"
+          },
+          "rights": {
+            "body": "<p>Nach Maßgabe des geltenden Datenschutzrechts kannst du Auskunft, Export, Berichtigung, Löschung, Einschränkung der Verarbeitung verlangen oder der Verarbeitung widersprechen. Datenexport (Einstellungen → Backup), Änderung von E-Mail-Adresse und Benutzername, Zurücksetzen des Passworts und Kontolöschung stehen als Self-Service-Funktionen zur Verfügung. Für manuelle Anfragen kontaktiere <contact_email>sergiu@sergiu.org</contact_email>. Du kannst dich außerdem bei der zuständigen Datenschutzbehörde beschweren.</p>",
+            "title": "Deine Rechte"
+          },
+          "security": {
+            "body": "<p>Zum Schutz der Nutzerdaten setzen wir Maßnahmen wie HTTPS, Passwort-Hashing, gehashte Sitzungstoken und Zugriffskontrollen ein.</p>",
+            "title": "Sicherheit"
+          },
+          "third_party": {
+            "body": "<p>Nutzergenerierte Inhalte können externe Links oder Bilder enthalten. Externe Bilder können automatisch von Servern Dritter geladen werden, die technische Daten gemäß ihren eigenen Datenschutzrichtlinien verarbeiten können.</p>",
+            "title": "Inhalte Dritter"
+          },
+          "transfers": {
+            "body": "<p>Der E-Mail-Versand über Resend kann eine Verarbeitung außerhalb der Schweiz und der EU/des EWR beinhalten. Wir stützen uns, soweit anwendbar, auf Angemessenheitsbeschlüsse und, soweit erforderlich, auf Standardvertragsklauseln oder gleichwertige Garantien.</p>",
+            "title": "Internationale Datenübermittlungen"
+          }
+        },
+        "title": "Datenschutzerklärung",
+        "updated": "Zuletzt aktualisiert: 10. Juli 2026"
+      },
+      "terms": {
+        "intro": "<p>earthborne.build wird von Sergiu Puscas (<contact_email>sergiu@sergiu.org</contact_email>) betrieben.</p>",
+        "sections": {
+          "acceptable_use": {
+            "body": "<p>Du darfst den Dienst nicht missbrauchen, keinen unbefugten Zugriff versuchen, den Dienst nicht stören, keine rechtswidrigen Inhalte hochladen, andere nicht belästigen, dich nicht als andere ausgeben und keine Rechte anderer verletzen. Um Missbrauch zu melden, kontaktiere <contact_email>sergiu@sergiu.org</contact_email> mit der betreffenden URL oder ID und einer kurzen Beschreibung.</p>",
+            "title": "Zulässige Nutzung"
+          },
+          "account_deletion": {
+            "body": "<p>Du kannst dein Konto jederzeit in den Kontoeinstellungen löschen. Private Nutzerinhalte werden gelöscht, öffentliche Beiträge werden anonymisiert, und Sicherungskopien laufen im Rahmen der regulären Backup-Aufbewahrung ab.</p>",
+            "title": "Kontolöschung"
+          },
+          "accounts": {
+            "body": "<p>Du bist dafür verantwortlich, deine Zugangsdaten sicher aufzubewahren, und für alle Aktivitäten unter deinem Konto. Du musst korrekte Kontoangaben machen und darfst das Konto einer anderen Person nicht ohne deren Erlaubnis verwenden.</p>",
+            "title": "Konten"
+          },
+          "availability": {
+            "body": "<p>Der Dienst wird ohne Garantie einer ununterbrochenen Verfügbarkeit bereitgestellt. Funktionen können sich ändern, eingeschränkt oder eingestellt werden.</p>",
+            "title": "Verfügbarkeit"
+          },
+          "changes": {
+            "body": "<p>Wir können diese Bedingungen aktualisieren, wenn sich der Dienst oder rechtliche Anforderungen ändern. Die aktuelle Version wird auf dieser Seite veröffentlicht. Die <privacy_url>Datenschutzerklärung</privacy_url> erläutert, wie Daten verarbeitet werden.</p>",
+            "title": "Änderungen"
+          },
+          "eligibility": {
+            "body": "<p>Du darfst earthborne.build nur nutzen, wenn du rechtlich in der Lage bist, diesen Bedingungen zuzustimmen.</p>",
+            "title": "Berechtigung"
+          },
+          "governing_law": {
+            "body": "<p>Diese Bedingungen unterliegen schweizerischem Recht, vorbehaltlich zwingender Verbraucherschutzvorschriften, die in deinem Land gelten können.</p>",
+            "title": "Anwendbares Recht"
+          },
+          "liability": {
+            "body": "<p>Soweit nach geltendem Recht zulässig, wird earthborne.build ohne Gewährleistung bereitgestellt, und die Haftung ist auf die gesetzlich vorgeschriebenen Fälle beschränkt.</p>",
+            "title": "Haftung"
+          },
+          "moderation": {
+            "body": "<p>Wir können Inhalte oder Konten überprüfen, Inhalte entfernen oder einschränken sowie Konten sperren oder löschen, wenn dies für den Betrieb des Dienstes, zur Verhinderung von Missbrauch oder zur Durchsetzung dieser Bedingungen erforderlich ist.</p>",
+            "title": "Moderation und Administratormaßnahmen"
+          },
+          "service": {
+            "body": "<p>earthborne.build stellt Werkzeuge für den Deckbau, das Verfolgen von Kampagnen und zugehörige Community-Funktionen für Earthborne Rangers bereit. Der Dienst ist ein Fanprojekt und wird nicht von Earthborne Games produziert oder unterstützt und ist nicht mit Earthborne Games verbunden.</p>",
+            "title": "Dienst"
+          },
+          "user_content": {
+            "body": "<p>Du bist für die Inhalte verantwortlich, die du erstellst oder veröffentlichst. Private Inhalte sind nur für dein Konto bestimmt. Öffentliche Beiträge (wie geteilte Decks und Deck-Guides) können für andere Nutzer sichtbar sein und nach dem Löschen des Kontos in anonymisierter Form weiterhin verfügbar bleiben.</p>",
+            "title": "Nutzergenerierte Inhalte"
+          }
+        },
+        "title": "Nutzungsbedingungen",
+        "updated": "Zuletzt aktualisiert: 10. Juli 2026"
+      },
+      "trademark": "Earthborne Rangers™ und alle zugehörigen Inhalte © Earthborne Games. Diese Website wird nicht von Earthborne Games produziert oder unterstützt und ist nicht mit Earthborne Games verbunden."
     },
     "lists": {
       "actions": {
@@ -1421,6 +1698,63 @@
       "title": "Suchergebnisse"
     },
     "settings": {
+      "account": {
+        "danger_zone": "Gefahrenbereich",
+        "delete": {
+          "confirm_help": "Gib {{username}} ein, um die Kontolöschung zu bestätigen.",
+          "confirm_label": "Bestätigung",
+          "deleting": "Konto wird gelöscht...",
+          "help": "Lösche dein earthborne.build-Konto und die zugehörigen Daten dauerhaft. Dabei werden serverseitige Zugangsdaten, Sitzungen, mit dem Konto synchronisierte Decks, Einstellungen und Triumphe gelöscht. Mit dem Konto verknüpfte Decks und Kampagnen werden von diesem Gerät entfernt. Nur auf dem Gerät gespeicherte Decks, Einstellungen und andere Browserdaten werden nicht gelöscht.",
+          "submit": "Konto löschen",
+          "title": "Konto löschen"
+        },
+        "email": {
+          "add": "E-Mail hinzufügen",
+          "add_help": "Füge eine E-Mail-Adresse und ein Passwort als alternative Anmeldemöglichkeit hinzu.",
+          "cancel_pending": "E-Mail-Bestätigung abbrechen",
+          "canceling_pending": "E-Mail-Bestätigung wird abgebrochen...",
+          "current_password": "Aktuelles Passwort",
+          "new_email": "Neue E-Mail-Adresse",
+          "new_email_help": "Leer lassen, um deine aktuelle E-Mail-Adresse zu behalten.",
+          "new_password": "Neues Passwort",
+          "new_password_help": "Leer lassen, um dein aktuelles Passwort zu behalten.",
+          "pending": "Ausstehende E-Mail-Adresse",
+          "pending_help": "Prüfe {{email}}, um sie zu <verifyLink>bestätigen</verifyLink>.",
+          "resend_pending": "Bestätigungs-E-Mail erneut senden",
+          "resend_success": "Bestätigungs-E-Mail erfolgreich gesendet. Bitte prüfe dein Postfach.",
+          "resending_pending": "Bestätigungs-E-Mail wird gesendet...",
+          "save": "Zugangsdaten aktualisieren",
+          "saving": "Zugangsdaten werden gespeichert...",
+          "status": "Status",
+          "status_pending": "Bestätigung ausstehend",
+          "status_verified": "Bestätigt",
+          "title": "Zugangsdaten"
+        },
+        "privacy_rights": {
+          "body": "Du kannst deine Daten im Support-Tab exportieren und dein Konto unten löschen. Für DSGVO-Anfragen, die nicht per Self-Service möglich sind, etwa Anträge auf Einschränkung oder Widerspruch, kontaktiere <privacyEmail />.",
+          "title": "Datenschutz und Betroffenenrechte"
+        },
+        "profile": {
+          "save": "Profil speichern",
+          "saving": "Profil wird gespeichert...",
+          "title": "Profil",
+          "username": "Benutzername",
+          "username_help": "Nur Buchstaben, Zahlen, Unterstriche und Bindestriche"
+        },
+        "sync": {
+          "button": "Jetzt synchronisieren",
+          "conflict_campaign_label": "Kampagne {{id}}",
+          "conflict_deck_label": "Deck {{id}}",
+          "conflict_delete_remote": "Aus Konto löschen",
+          "conflict_restore": "Server-Version wiederherstellen",
+          "conflicts_description": "Diese Einträge wurden auf diesem Gerät gelöscht, aber seitdem auf dem Server geändert. Stelle die Server-Version wieder her oder lösche sie auch aus dem Konto.",
+          "conflicts_title": "Ungelöste Konflikte",
+          "description": "Synchronisiere deine Decks, Kampagnen, Einstellungen und Triumphe zwischen Geräten.",
+          "status_label": "Status:",
+          "title": "Konto-Synchronisierung"
+        },
+        "title": "Konto"
+      },
       "app": {
         "built": "Erstellt",
         "title": "App",

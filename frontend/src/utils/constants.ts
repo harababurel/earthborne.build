@@ -14,6 +14,10 @@ type Locale = {
 export const LOCALES: Record<string, Locale> = {
   en: { value: "en", label: "English (en)" },
   de: { value: "de", label: "Deutsch (de)" },
+  es: { value: "es", label: "Español (es)" },
+  fr: { value: "fr", label: "Français (fr)" },
+  it: { value: "it", label: "Italiano (it)" },
+  ru: { value: "ru", label: "Русский (ru)", unicode: true },
 };
 
 export const FLOATING_PORTAL_ID = "floating";

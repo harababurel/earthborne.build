@@ -1,9 +1,9 @@
 {
   "translation": {
     "about": {
-      "description": "<p>La información presentada en esta aplicación sobre <ffg>Arkham Horror: The Card Game™</ffg>, tanto textual como gráfica, es © Fantasy Flight Games {{date}}. Esta aplicación es un proyecto de fans y no está producida, respaldada, apoyada ni afiliada con Fantasy Flight Games.</p><p>Esta aplicación fue creada por <felix_url>Felix</felix_url> y <contrib_url>contribuidores</contrib_url> para apoyar a la comunidad de Arkham Horror: The Card Game. El código fuente de este proyecto está disponible en <github_url>Github</github_url>. Los comentarios y reportes de errores son bienvenidos a través de issues en Github o del canal dedicado en el servidor de Discord de Mythos Busters.</p><p>Todas las ilustraciones son propiedad intelectual de sus respectivos creadores. Todas las imágenes y gráficos de Arkham Horror: The Card Game™ tienen copyright de Fantasy Flight Games.</p>",
+      "description": "<p><strong>earthborne.build</strong> es un constructor de mazos hecho por fans para <eb>Earthborne Rangers</eb> de Earthborne Games. Está basado en <arkham_build_url>arkham.build</arkham_build_url>, creado por <felix_url>Felix Spöttel</felix_url>. Esta aplicación no está producida, respaldada ni apoyada por Earthborne Games, ni está afiliada a ella.</p><p>El código fuente de este proyecto está disponible en <github_url>GitHub</github_url>. Los comentarios y los informes de errores son bienvenidos a través de las <github_issues_url>issues de GitHub</github_issues_url>.</p><p>Todo el arte y las ilustraciones son propiedad intelectual de sus respectivos autores.</p>",
       "image_credits": {
-        "404": "404 illustration",
+        "404": "Ilustración 404",
         "404_credit": "<artist_url>Wayne O Connor</artist_url>",
         "card_icons": "Iconos de cartas",
         "earthborne_games": "Earthborne Games",
@@ -20,295 +20,400 @@
         "legend": "Mostrar atajos de teclado"
       },
       "home": "Inicio",
-      "init": "Inicializando base de datos de cartas...",
-      "init_error": "Error al inicializar la base de datos de cartas: {{error}}"
+      "init": "Inicializando la base de datos de cartas...",
+      "init_error": "No se pudo inicializar la base de datos de cartas: {{error}}"
     },
     "attachments": {
-      "attach": "Vincular a {{name}}",
-      "attached": "Vinculada a {{name}}",
-      "eligible": "Elegible para {{name}}"
+      "attach": "Añadir a {{name}}",
+      "attached": "Adjuntada a {{name}}",
+      "eligible": "Válida para {{name}}"
+    },
+    "auth": {
+      "email": "Correo electrónico",
+      "email_or_username": "Correo electrónico o nombre de usuario",
+      "errors": {
+        "account_not_verified": "Tu cuenta aún no ha sido verificada. <verifyLink>Verifica</verifyLink> tu correo electrónico antes de iniciar sesión.",
+        "captcha_load_failed": "No se pudo cargar el captcha de Turnstile.",
+        "forgot_password_failed": "No se pudo iniciar el restablecimiento de contraseña: {{error}}",
+        "invalid_credentials": "Correo electrónico o contraseña no válidos",
+        "login_failed": "Error al iniciar sesión: {{error}}",
+        "password_reset_failed": "Error al restablecer la contraseña: {{error}}",
+        "rate_limited": "Demasiadas solicitudes. Espera {{interval}} antes de volver a intentarlo",
+        "signup_failed": "Error al registrarse: {{error}}",
+        "verify_email_failed": "Error al verificar el correo electrónico: {{error}}",
+        "verify_email_send_failed": "No se pudo reenviar el correo de verificación: {{error}}"
+      },
+      "forgot_password": {
+        "description": "Introduce tu correo electrónico o nombre de usuario y te enviaremos instrucciones para restablecer tu contraseña.",
+        "submit": "Enviar instrucciones de restablecimiento",
+        "success": "Si existe una cuenta, recibirás un enlace de restablecimiento en breve.",
+        "title": "Contraseña olvidada"
+      },
+      "login": {
+        "action": "Iniciar sesión",
+        "forgot_password": "¿Has olvidado tu contraseña?",
+        "no_account": "¿No tienes una cuenta?",
+        "title": "Iniciar sesión"
+      },
+      "logout": "Cerrar sesión",
+      "menu": {
+        "logged_in_as": "Sesión iniciada como {{name}}",
+        "sync_account": "Sincronizar datos",
+        "sync_error": "No se pudieron sincronizar los datos: {{error}}",
+        "sync_status": {
+          "conflict": "Conflicto de sincronización de la cuenta",
+          "error": "Error de sincronización de la cuenta",
+          "idle": "Sincronización de la cuenta inactiva",
+          "loading": "Cargando sincronización de la cuenta",
+          "partial": "La sincronización de la cuenta falló parcialmente",
+          "saving": "Guardando sincronización de la cuenta",
+          "synced": "Sincronización de la cuenta completada"
+        },
+        "syncing": "Sincronizando los datos de la cuenta..."
+      },
+      "password": "Contraseña",
+      "password_validation": "Mínimo 8 caracteres",
+      "reset_password": {
+        "confirm_password": "Confirmar contraseña",
+        "password": "Nueva contraseña",
+        "success": "Contraseña restablecida correctamente. Ya puedes iniciar sesión.",
+        "title": "Restablecer contraseña"
+      },
+      "signup": {
+        "action": "Registrarse",
+        "complete_profile": {
+          "description": "Elige un nombre de usuario para tu cuenta. Se mostrará públicamente en tus mazos y contribuciones.",
+          "title": "Completa tu perfil",
+          "upload": {
+            "decks": {
+              "help": "Sube tus mazos y campañas locales a tu cuenta.",
+              "label": "Subir mazos y campañas locales"
+            },
+            "settings": {
+              "help": "Sube tu colección, tus logros y tus preferencias de visualización.",
+              "label": "Subir ajustes y logros"
+            },
+            "title": "Subir datos locales"
+          }
+        },
+        "has_account": "¿Ya tienes una cuenta?",
+        "legal_acceptance": "Al crear una cuenta, aceptas los <terms>Términos del servicio</terms> y reconoces la <privacy>Política de privacidad</privacy>.",
+        "success": "¡Registro completado! Revisa tu correo electrónico para verificar tu cuenta. Elegirás un nombre de usuario tras tu primer inicio de sesión.",
+        "title": "Registrarse",
+        "verifying": "Verificando..."
+      },
+      "username": "Nombre de usuario",
+      "username_validation": "Solo letras, números, guiones bajos y guiones",
+      "verify_email": {
+        "action": "Verificar correo electrónico",
+        "resend": "Reenviar correo de verificación",
+        "resend_action": "Reenviar correo de verificación",
+        "resend_success": "Correo de verificación enviado correctamente. Revisa tu bandeja de entrada.",
+        "success": "¡Correo electrónico verificado! Ya puedes iniciar sesión.",
+        "title": "Verificar correo electrónico",
+        "token": "Código de verificación"
+      }
     },
     "browse": {
       "tabs": {
-        "aspect": "Aspects",
-        "challenge": "Challenges",
-        "location": "Locations",
-        "mission": "Missions",
-        "path": "Path",
-        "ranger": "Ranger",
+        "aspect": "Aspectos",
+        "challenge": "Desafíos",
+        "location": "Localizaciones",
+        "mission": "Misiones",
+        "path": "Camino",
+        "ranger": "Guardián",
         "role": "Roles",
-        "weather": "Weather"
+        "weather": "Clima"
       },
-      "title": "Buscar cartas"
+      "title": "Explorar cartas"
     },
     "campaign": {
       "actions": {
-        "delete": "Delete",
-        "delete_confirm": "Delete this campaign? This cannot be undone.",
-        "delete_entry_confirm": "Delete this entry?",
-        "duplicate": "Duplicate",
-        "open": "Open"
+        "delete": "Eliminar",
+        "delete_confirm": "¿Eliminar esta campaña? Esta acción no se puede deshacer.",
+        "delete_entry_confirm": "¿Eliminar esta entrada?",
+        "duplicate": "Duplicar",
+        "open": "Abrir"
       },
-      "back": "Back to campaigns",
+      "back": "Volver a las campañas",
       "calendar": {
-        "add": "Add guide entry",
-        "guides": "Guide entries",
-        "guides_placeholder": "Entry numbers, comma separated",
-        "none": "No calendar entries yet.",
-        "recommended": "Recommended: day {{day}}",
-        "record": "Record guide entry"
+        "add": "Añadir entrada de la guía",
+        "guides": "Entradas de la guía",
+        "guides_placeholder": "Números de entrada, separados por comas",
+        "none": "Aún no hay entradas en el calendario.",
+        "recommended": "Recomendado: día {{day}}",
+        "record": "Registrar entrada de la guía"
       },
       "create": {
-        "cycle": "Campaign",
-        "default_name": "New Campaign",
-        "expansions": "Valley expansions",
-        "expansions_help": "Optional valley campaigns to fold into Lure of the Valley.",
-        "name": "Campaign name",
-        "name_placeholder": "Name your campaign",
-        "setup_events": "Setup recommended expansion events?",
-        "starting_location": "Starting location",
-        "starting_location_placeholder": "Select a location...",
-        "submit": "Create campaign",
-        "title": "New campaign"
+        "cycle": "Campaña",
+        "default_name": "Nueva campaña",
+        "expansions": "Expansiones del Valle",
+        "expansions_help": "Campañas opcionales del Valle para integrar en La llamada del Valle.",
+        "name": "Nombre de la campaña",
+        "name_placeholder": "Ponle nombre a tu campaña",
+        "setup_events": "¿Preparar los eventos recomendados de las expansiones?",
+        "starting_location": "Localización inicial",
+        "starting_location_placeholder": "Selecciona una localización...",
+        "submit": "Crear campaña",
+        "title": "Nueva campaña"
       },
-      "cycle_label": "Campaign",
+      "cycle_label": "Campaña",
       "data": {
         "cycles": {
-          "core": "Lure of the Valley",
-          "loa": "Legacy of the Ancestors"
+          "core": "La llamada del Valle",
+          "loa": "Legado de los Ancestros"
         },
         "expansions": {
           "sib": "Spire in Bloom",
           "sos": "Shadow of the Storm"
         },
         "locations": {
-          "ancestors_grove": "Ancestor's Grove",
-          "arbor_mists": "Arbor Mists",
-          "arboretum_of_memory": "Arboretum of Memory",
-          "archeological_outpost": "Archaeological Outpost",
-          "atrox_mountain": "Atrox Mountain",
-          "biologists_outpost": "Biological Outpost",
-          "boulder_field": "Boulder Field",
-          "bowl_of_the_sun": "Bowl of the Sun",
-          "branch": "Branch",
-          "branching_artery": "Branching Artery",
-          "brookside": "Brookside",
-          "carbonforged_maze": "Carbonforged Maze",
-          "cerulean_curtain": "Cerulean Curtain",
-          "crossroads_station": "Crossroads Station",
-          "crystal_basin": "Crystal Basin",
-          "desert_of_endless_night": "Desert of Endless Night",
-          "drenching_chamber": "Drenching Chamber",
-          "golden_shore": "Golden Shore",
-          "greenbriar_knoll": "Greenbriar Knoll",
-          "headwaters_station": "Headwaters Station",
-          "inverted_forest": "Inverted Forest",
-          "kobos_market": "Kobo's Market",
-          "lone_tree_station": "Lone Tree Station",
-          "marsh_of_rebirth": "Marsh of Rebirth",
-          "meadow": "Meadow",
-          "michaels_bog": "Michael's Bog",
-          "mound_of_the_navigator": "Mound of the Navigator",
-          "mount_nim": "Mount Nim",
-          "mycelial_conclave": "Mycelial Conclave",
-          "nimbus_facility": "Nimbus Facility",
-          "northern_outpost": "Northern Outpost",
-          "oasis_of_sunlight": "Oasis of Sunlight",
-          "orlins_vault": "Orlin's Vault",
-          "rings_of_the_moon": "Rings of the Moon",
-          "scuttler_network": "Scuttler Network",
-          "sentinel_peak": "Sentinel Peak",
-          "severed_artery": "Severed Artery",
-          "silent_dormitories": "Silent Dormitories",
-          "silverfin_docks": "Silverfin Docks",
-          "spire": "Spire",
-          "spire_crossing": "Spire Crossing",
-          "stoneweaver_bridge": "Stoneweaver Bridge",
-          "sunken_outpost": "Sunken Outpost",
-          "talpids_squeeze": "Talpid's Squeeze",
-          "terminal_artery": "Terminal Artery",
-          "terra_lodge": "Terra Lodge",
-          "terravore": "Terravore",
-          "the_alluvial_ruins": "The Alluvial Ruins",
-          "the_cage": "The Cage",
-          "the_chimney": "The Chimney",
-          "the_cistern": "The Cistern",
-          "the_concordant_ziggurats": "The Concordant Ziggurats",
-          "the_cypress_citadel": "The Cypress Citadel",
-          "the_fractured_wall": "The Fractured Wall",
-          "the_frowning_gate": "The Frowning Gate",
-          "the_furrow": "The Furrow",
-          "the_greenbridge": "The Greenbridge",
-          "the_high_basin": "The High Basin",
-          "the_otherwoods": "The Otherwoods",
-          "the_philosophers_garden": "The Philosopher's Garden",
-          "the_plummet": "The Plummet",
-          "the_rootway": "The Rootway",
-          "the_tumbledown": "Tumbledown",
-          "the_undergrove": "The Undergrove",
-          "the_verdant_sphere": "The Verdant Sphere",
-          "watchers_rock": "Watcher's Rock",
-          "white_sky": "White Sky"
+          "ancestors_grove": "Arboleda de los Ancestros",
+          "arbor_mists": "Brumas del Arbolado",
+          "arboretum_of_memory": "Arboreto de la Memoria",
+          "archeological_outpost": "Puesto Arqueológico",
+          "atrox_mountain": "Montaña Atrox",
+          "biologists_outpost": "Puesto Biológico",
+          "boulder_field": "Campo de Rocas",
+          "bowl_of_the_sun": "Cuenco del Sol",
+          "branch": "Rama",
+          "branching_artery": "Arteria Ramificada",
+          "brookside": "Orilla del Arroyo",
+          "carbonforged_maze": "Laberinto de Carbono Forjado",
+          "cerulean_curtain": "Cortina Cerúlea",
+          "crossroads_station": "Estación del Cruce",
+          "crystal_basin": "Cuenca de Cristal",
+          "desert_of_endless_night": "Desierto de la Noche Eterna",
+          "drenching_chamber": "Cámara Empapada",
+          "golden_shore": "Costa Dorada",
+          "greenbriar_knoll": "Loma Zarzaverde",
+          "headwaters_station": "Estación de la Cabecera",
+          "inverted_forest": "Bosque Invertido",
+          "kobos_market": "Mercado de Kobo",
+          "lone_tree_station": "Estación del Árbol Solitario",
+          "marsh_of_rebirth": "Pantano del Renacer",
+          "meadow": "Prado",
+          "michaels_bog": "Turbera de Michael",
+          "mound_of_the_navigator": "Montículo del Navegante",
+          "mount_nim": "Monte Nim",
+          "mycelial_conclave": "Cónclave Fúngico",
+          "nimbus_facility": "Instalación Nimbus",
+          "northern_outpost": "Puesto del Norte",
+          "oasis_of_sunlight": "Oasis de Luz Solar",
+          "orlins_vault": "Bóveda de Orlin",
+          "rings_of_the_moon": "Anillos de la Luna",
+          "scuttler_network": "Red de Escabullidores",
+          "sentinel_peak": "Pico Centinela",
+          "severed_artery": "Arteria Cercenada",
+          "silent_dormitories": "Dormitorios Silenciosos",
+          "silverfin_docks": "Muelles de Plataleta",
+          "spire": "Aguja",
+          "spire_crossing": "Cruce de Aguja",
+          "stoneweaver_bridge": "Puente del Tejepiedras",
+          "sunken_outpost": "Puesto Hundido",
+          "talpids_squeeze": "Estrecho del Tálpido",
+          "terminal_artery": "Arteria Terminal",
+          "terra_lodge": "Refugio Terra",
+          "terravore": "Terravorador",
+          "the_alluvial_ruins": "Las Ruinas Aluviales",
+          "the_cage": "La Jaula",
+          "the_chimney": "La Chimenea",
+          "the_cistern": "La Cisterna",
+          "the_concordant_ziggurats": "Los Zigurats Concordantes",
+          "the_cypress_citadel": "La Ciudadela de los Cipreses",
+          "the_fractured_wall": "El Muro Fracturado",
+          "the_frowning_gate": "La Puerta Ceñuda",
+          "the_furrow": "El Surco",
+          "the_greenbridge": "El Puente Verde",
+          "the_high_basin": "La Cuenca Alta",
+          "the_otherwoods": "Los Otrobosques",
+          "the_philosophers_garden": "El Jardín Filosofal",
+          "the_plummet": "El Escarpado",
+          "the_rootway": "La Senda de Raíces",
+          "the_tumbledown": "Derrumbe",
+          "the_undergrove": "La Sotoarboleda",
+          "the_verdant_sphere": "La Esfera Verdeante",
+          "watchers_rock": "Roca del Vigía",
+          "white_sky": "Cielo Blanco"
         },
         "restrictions": {
-          "flooded_passage": "Flooded Passage",
-          "locked_passage": "Locked Passage",
-          "overgrown_passage": "Overgrown Passage"
+          "flooded_passage": "Paso inundado",
+          "locked_passage": "Paso bloqueado",
+          "overgrown_passage": "Paso cubierto de maleza"
         },
         "terrain": {
-          "ancient_ruins": "Ancient Ruins",
-          "cave_system": "Cave System",
-          "deep_roots": "Deep Roots",
-          "flooded_ruins": "Flooded Ruins",
-          "fungal_forest": "Fungal Forest",
-          "grassland": "Grassland",
-          "lakeshore": "Lakeshore",
-          "mountain_pass": "Mountain Pass",
+          "ancient_ruins": "Ruinas antiguas",
+          "cave_system": "Sistema de cuevas",
+          "deep_roots": "Raíces profundas",
+          "flooded_ruins": "Ruinas inundadas",
+          "fungal_forest": "Bosque fúngico",
+          "grassland": "Pradera",
+          "lakeshore": "Orilla del lago",
+          "mountain_pass": "Montaña",
           "nimbus": "Nimbus",
-          "old_growth": "Old-growth",
-          "ravine": "Ravine",
-          "river": "River",
-          "swamp": "Swamp",
-          "thoroughfare": "Thoroughfare",
-          "woods": "Woods"
+          "old_growth": "Arboleda",
+          "ravine": "Barranco",
+          "river": "Río",
+          "swamp": "Ciénaga",
+          "thoroughfare": "Vía principal",
+          "woods": "Bosque"
         },
         "weather": {
-          "a_perfect_day": "A Perfect Day",
-          "downpour": "Downpour",
-          "enveloping_silence": "Enveloping Silence",
-          "glitterain": "Glitterain",
-          "howling_wind": "Howling Winds",
-          "shimmering_runoff": "Shimmering Runoff"
+          "a_perfect_day": "Un día perfecto",
+          "downpour": "Aguacero",
+          "enveloping_silence": "Silencio envolvente",
+          "glitterain": "Lluvia brillante",
+          "howling_wind": "Vientos aullantes",
+          "shimmering_runoff": "Escorrentía reluciente"
         }
       },
-      "day_label": "Day {{day}}",
-      "empty": "You haven't started any campaigns yet.",
+      "day_label": "Día {{day}}",
+      "empty": "Aún no has empezado ninguna campaña.",
       "end_day": {
-        "confirm": "End the day",
-        "guidance": "Use this if a ranger is too fatigued or injured, or when instructed by the guide or a mission. To camp while travelling, use Travel instead.",
-        "summary": "This will end day {{day}}.",
-        "title": "End the day"
+        "confirm": "Terminar el día",
+        "guidance": "Usa esto si un Guardián tiene demasiado Cansancio o Heridas, o cuando lo indique la guía o una Misión. Para acampar mientras viajas, usa Viajar.",
+        "summary": "Esto terminará el día {{day}}.",
+        "title": "Terminar el día"
       },
       "events": {
-        "add": "Add event",
-        "none": "No events recorded yet.",
-        "placeholder": "Describe the event"
+        "add": "Añadir evento",
+        "none": "Aún no hay eventos registrados.",
+        "placeholder": "Describe el evento"
       },
       "journey": {
-        "camped": "Camped overnight",
-        "current_location": "Current location",
-        "day": "Day {{day}}",
-        "end_day": "End day",
-        "history": "Journey log",
-        "history_empty": "No travel recorded yet.",
-        "no_location": "Not yet on the map",
-        "no_travel": "No travel",
-        "terrain": "Path terrain",
-        "terrain_none": "Direct (no terrain)",
-        "travel": "Travel",
-        "travel_to": "Travel to",
-        "undo": "Undo last travel",
-        "weather": "Weather"
+        "camped": "Acampada nocturna",
+        "current_location": "Localización actual",
+        "day": "Día {{day}}",
+        "end_day": "Terminar el día",
+        "history": "Diario de viaje",
+        "history_empty": "Aún no hay viajes registrados.",
+        "no_location": "Aún no está en el mapa",
+        "no_travel": "Sin viaje",
+        "terrain": "Terreno del camino",
+        "terrain_none": "Directo (sin terreno)",
+        "travel": "Viajar",
+        "travel_to": "Viajar a",
+        "undo": "Deshacer el último viaje",
+        "weather": "Clima"
       },
       "missions": {
-        "add": "Add mission",
-        "complete": "Mark completed",
-        "completed": "Completed",
-        "custom": "Custom mission",
-        "day": "Day",
-        "delete_confirm": "Delete this mission? Its progress will be lost.",
-        "edit": "Edit mission",
-        "hide_completed": "Hide completed",
-        "name": "Mission",
-        "name_placeholder": "Mission name",
-        "none": "No missions tracked yet.",
-        "none_visible": "No active missions.",
-        "progress": "Progress",
-        "reopen": "Mark not completed",
-        "save": "Save mission",
-        "select_placeholder": "Select a mission...",
-        "subject": "Subject",
-        "subject_placeholder": "Subject for missions like Helping Hand or Lure"
+        "add": "Añadir Misión",
+        "complete": "Marcar como completada",
+        "completed": "Completada",
+        "custom": "Misión personalizada",
+        "day": "Día",
+        "delete_confirm": "¿Eliminar esta Misión? Se perderá su progreso.",
+        "edit": "Editar Misión",
+        "hide_completed": "Ocultar completadas",
+        "name": "Misión",
+        "name_placeholder": "Nombre de la Misión",
+        "none": "Aún no hay Misiones registradas.",
+        "none_visible": "No hay Misiones activas.",
+        "progress": "Progreso",
+        "reopen": "Marcar como no completada",
+        "save": "Guardar Misión",
+        "select_placeholder": "Selecciona una Misión...",
+        "subject": "Objetivo",
+        "subject_placeholder": "Objetivo para Misiones como Helping Hand o Lure"
       },
-      "new": "New campaign",
-      "no_results": "No campaigns match your search.",
+      "new": "Nueva campaña",
+      "no_results": "Ninguna campaña coincide con tu búsqueda.",
       "notes": {
-        "add": "Add note",
-        "none": "No notes yet.",
-        "placeholder": "Write a note"
+        "add": "Añadir nota",
+        "none": "Aún no hay notas.",
+        "placeholder": "Escribe una nota"
       },
       "party": {
-        "add": "Add ranger",
-        "missing_deck": "Deleted deck",
-        "none": "No decks linked yet.",
-        "picker_empty": "No decks available to link.",
-        "picker_none": "You have no decks yet.",
-        "picker_search": "Search decks...",
-        "picker_title": "Add a ranger",
-        "title": "Rangers",
-        "unlink": "Unlink"
+        "add": "Añadir Guardián",
+        "missing_deck": "Mazo eliminado",
+        "none": "Aún no hay mazos vinculados.",
+        "picker_empty": "No hay mazos disponibles para vincular.",
+        "picker_none": "Aún no tienes mazos.",
+        "picker_search": "Buscar mazos...",
+        "picker_title": "Añadir un Guardián",
+        "title": "Guardianes",
+        "unlink": "Desvincular"
       },
       "removed": {
-        "card": "Card",
-        "destination_placeholder": "Destination set, e.g. the Valley",
-        "fate_move": "Move to",
-        "fate_remove": "Remove from game",
-        "moved_to": "Moved to {{destination}}",
-        "none": "No cards removed or moved yet.",
-        "or": "or",
-        "removed": "Removed",
-        "select_placeholder": "Select a card..."
+        "card": "Carta",
+        "destination_placeholder": "Conjunto de destino, p. ej., el Valle",
+        "fate_move": "Mover a",
+        "fate_remove": "Retirar del juego",
+        "moved_to": "Movida a {{destination}}",
+        "none": "Aún no se han retirado ni movido cartas.",
+        "or": "o",
+        "removed": "Retirada",
+        "select_placeholder": "Selecciona una carta..."
       },
       "rewards": {
-        "available": "All rewards",
-        "help": "Rewards unlocked here become available to every linked deck.",
-        "in_pool": "Unlocked rewards",
-        "none": "No rewards unlocked yet.",
-        "remove": "Remove",
-        "search_placeholder": "Search reward cards...",
-        "unlock": "Unlock"
+        "available": "Todas las Recompensas",
+        "help": "Las Recompensas desbloqueadas aquí estarán disponibles para todos los mazos vinculados.",
+        "in_pool": "Recompensas desbloqueadas",
+        "none": "Aún no hay Recompensas desbloqueadas.",
+        "remove": "Quitar",
+        "search_placeholder": "Buscar cartas de Recompensa...",
+        "unlock": "Desbloquear"
       },
-      "search_placeholder": "Search campaigns...",
+      "search_placeholder": "Buscar campañas...",
       "settings": {
-        "delete": "Delete campaign",
-        "expansions": "Valley expansions",
-        "extend_calendar": "Extend calendar (days 31+)",
-        "name": "Campaign name"
+        "delete": "Eliminar campaña",
+        "expansions": "Expansiones del Valle",
+        "extend_calendar": "Ampliar calendario (días 31+)",
+        "name": "Nombre de la campaña",
+        "share": "Enlace público",
+        "share_confirm": "Cualquiera con el enlace podrá leer esta campaña, incluidas tus notas y eventos destacados, y los mazos de todos los Guardianes del grupo. ¿Compartirla públicamente?",
+        "share_error": "No se pudo cargar el estado de uso compartido. Inténtalo de nuevo más tarde.",
+        "share_help": "Permite que otras herramientas lean esta campaña sin iniciar sesión. Cualquiera con el enlace puede ver tus notas, eventos destacados y los mazos de todos los Guardianes del grupo.",
+        "share_label": "Compartir esta campaña públicamente"
       },
-      "subtitle": "Track your journey through the valley.",
+      "subtitle": "Sigue tu viaje por el Valle.",
       "tabs": {
-        "calendar": "Calendar",
-        "events": "Notable Events",
-        "journey": "Journey",
-        "missions": "Missions",
-        "notes": "Notes",
-        "party": "Party",
-        "removed": "Removed cards",
-        "rewards": "Rewards",
-        "settings": "Settings"
+        "calendar": "Calendario",
+        "events": "Eventos destacados",
+        "journey": "Viaje",
+        "missions": "Misiones",
+        "notes": "Notas",
+        "party": "Grupo",
+        "removed": "Cartas retiradas",
+        "rewards": "Recompensas",
+        "settings": "Ajustes"
       },
-      "title": "Campaigns",
+      "title": "Campañas",
       "travel": {
-        "camp": "End the day",
-        "camp_in_place_note": "No destination selected: the day ends at the current location.",
-        "camp_note": "Ending the day lets earned rewards be swapped into decks (on the deck page).",
-        "connecting_location": "Connecting location",
-        "departing": "Departing {{location}}",
-        "select_location": "Select a location...",
-        "show_all": "Show all locations",
-        "terrain": "Path terrain",
-        "terrain_none": "Direct (no terrain)",
-        "travel": "Travel",
-        "travel_camp": "Travel & end day"
+        "camp": "Terminar el día",
+        "camp_in_place_note": "No se ha seleccionado ningún destino: el día termina en la localización actual.",
+        "camp_note": "Al terminar el día se pueden incorporar a los mazos las Recompensas obtenidas (en la página del mazo).",
+        "connecting_location": "Localización conectada",
+        "departing": "Saliendo de {{location}}",
+        "select_location": "Selecciona una localización...",
+        "show_all": "Mostrar todas las localizaciones",
+        "terrain": "Terreno del camino",
+        "terrain_none": "Directo (sin terreno)",
+        "travel": "Viajar",
+        "travel_camp": "Viajar y terminar el día"
+      }
+    },
+    "campaign_sync": {
+      "conflict": {
+        "action_error": "No se pudo resolver el conflicto de la campaña: {{error}}",
+        "collection_badge": "Conflicto de campaña pendiente",
+        "description": "Esta campaña se ha modificado tanto en este dispositivo como en el servidor. Elige qué versión conservar.",
+        "description_remote_missing": "Esta campaña se eliminó en remoto antes de que se completara tu cambio. Descarta la campaña local para que coincida con el estado remoto.",
+        "discard_local": "Descartar campaña local",
+        "edit_locked": "Resuelve el conflicto de la campaña antes de editarla.",
+        "keep_local": "Conservar la versión de este dispositivo",
+        "refresh": "Usar la versión del servidor",
+        "remote_version": "Versión remota: {{version}}",
+        "title": "Conflicto de sincronización de la campaña"
       }
     },
     "card": {
-      "campaign_guide_entry_link": "Open campaign guide entry {{entry}}",
+      "campaign_guide_entry_link": "Abrir la entrada {{entry}} de la guía de campaña",
       "location_back": {
-        "arrival_setup": "Arrival Setup",
+        "arrival_setup": "Preparación de llegada",
         "guide_entry": "{{entry}}",
-        "path_deck_assembly": "Path Deck Assembly",
-        "title": "{{name}} (back)"
+        "path_deck_assembly": "Composición del mazo de Caminos",
+        "title": "{{name}} (reverso)"
       }
     },
     "card_modal": {
@@ -320,23 +425,23 @@
     },
     "card_view": {
       "actions": {
-        "faq": "Ver preguntas frecuentes (FAQ)",
+        "faq": "Ver FAQ",
         "open_on_rangersdb": "Abrir en RangersDB",
         "reviews": "Ver comentarios",
         "show_original_image": "Mostrar imagen original de la carta",
-        "usable_by": "Cartas permitidas de {{prefix}}{{name}}",
-        "usable_by_interpolated": "Cartas permitidas de <tooltip>{{name}}</tooltip>",
+        "usable_by": "Colección: {{prefix}}{{name}}",
+        "usable_by_interpolated": "Colección: <tooltip>{{name}}</tooltip>",
         "view_backside": "Reverso",
-        "who_can_take": "¿Quién puede llevar esta carta?"
+        "who_can_take": "¿Quién puede usar esta carta?"
       },
-      "errata_notice": "Errata ({{date}})",
+      "errata_notice": "Erratas ({{date}})",
       "faq": {
-        "empty": "No hay entradas del FAQ disponibles.",
-        "error": "Error al cargar el FAQ.",
-        "loading": "Cargando el FAQ...",
+        "empty": "No hay entradas de FAQ disponibles.",
+        "error": "No se pudieron cargar las entradas de FAQ.",
+        "loading": "Cargando entradas de FAQ...",
         "title": "FAQ"
       },
-      "scan": "Imagen de {{code}}",
+      "scan": "Escaneo de {{code}}",
       "section_actions": "Acciones",
       "section_deckbuilding": "Construcción de mazos",
       "section_faq": "FAQ",
@@ -345,280 +450,285 @@
     },
     "choose_investigator": {
       "create_tooltip": "Crear mazo de {{name}}",
-      "title": "Elegir investigador"
+      "title": "Elegir Guardián"
     },
     "collection_stats": {
-      "counts": "Tienes <strong>{{player_count}}</strong> cartas de jugador y <strong>{{encounter_count}}</strong> cartas de encuentros.",
-      "description": "Esta página muestra tu colección y el recuento de cartas según tus ajustes de colección. Para actualizar tus ajustes de colección, visita la página de <a>Ajustes</a>.",
-      "title": "Estadísticas de tu colección",
-      "tooltip_count_encounter": "Número total de cartas de encuentros en {{type}}",
-      "tooltip_count_player": "Número total de cartas de Jugador en {{type}}"
+      "counts": "Tienes <strong>{{player_count}}</strong> cartas.",
+      "description": "Esta página muestra tu colección y el recuento de cartas según tus ajustes de colección. Para cambiar tus ajustes de colección, visita la página de <a>Ajustes</a>.",
+      "title": "Recuento de cartas de la colección",
+      "tooltip_count_encounter": "Número total de cartas de campaña en {{type}}",
+      "tooltip_count_player": "Número total de cartas en {{type}}"
     },
     "common": {
-      "any": "Any",
+      "any": "Cualquiera",
       "back": "Atrás",
       "cancel": "Cancelar",
       "card_back": "{{name}} - Reverso",
+      "card_many": "cartas",
       "card_one": "carta",
       "card_other": "cartas",
       "category": {
-        "background": "Background",
-        "malady": "Malady",
-        "personality": "Personality",
-        "reward": "Reward",
-        "specialty": "Specialty"
+        "background": "Origen",
+        "malady": "Enfermedad",
+        "personality": "Personalidad",
+        "reward": "Recompensa",
+        "specialty": "Especialidad"
       },
-      "clear": "Limpiar",
+      "clear": "Borrar",
       "cost": {
         "none": "Sin coste",
         "value": "Coste {{cost}}",
         "x": "Coste X"
       },
+      "cycle_many": "ciclos",
       "cycle_one": "ciclo",
       "cycle_other": "ciclos",
-      "date": "Date",
+      "date": "Fecha",
       "decks": {
         "slots": "Mazo"
       },
-      "expert": "Expert",
+      "expert": "Experto",
       "factions": {
-        "awa": "AWA",
-        "fit": "FIT",
-        "foc": "FOC",
-        "multiclass": "Multiclase",
-        "spi": "SPI"
+        "awa": "PER",
+        "fit": "APT",
+        "foc": "CON",
+        "multiclass": "Multiaspecto",
+        "spi": "VIT"
       },
       "keywords": {
-        "ambush": "Ambush",
-        "conduit": "Conduit",
-        "dangerous": "Dangerous",
-        "disconnected": "Disconnected",
-        "fatiguing": "Fatiguing",
-        "friendly": "Friendly",
-        "illumination": "Illumination",
-        "manifestation": "Manifestation",
-        "mycelial": "Mycelial",
-        "obstacle": "Obstacle",
-        "persistent": "Persistent",
-        "setup": "Setup",
-        "spirit": "Spirit",
-        "untraversable": "Untraversable"
+        "ambush": "Emboscada",
+        "conduit": "Conducto",
+        "dangerous": "Peligroso",
+        "disconnected": "Desconectado",
+        "fatiguing": "Provoca Cansancio",
+        "friendly": "Aliado",
+        "illumination": "Iluminado",
+        "manifestation": "Manifestación",
+        "mycelial": "Fúngico",
+        "obstacle": "Obstáculo",
+        "persistent": "Persistente",
+        "setup": "Preparación",
+        "spirit": "Espíritu",
+        "untraversable": "Intransitable"
       },
       "more_actions": "Más acciones",
-      "next": "Next",
-      "no_entries": "No hay entradas",
+      "next": "Siguiente",
+      "no_entries": "Sin entradas",
       "non_collection_cards": "{{count}} cartas fuera de la colección",
       "none": "Ninguno",
       "ok": "Aceptar",
-      "pack_one": "pack",
-      "pack_other": "packs",
+      "pack_many": "paquetes",
+      "pack_one": "paquete",
+      "pack_other": "paquetes",
       "packs_new_format": {
-        "encounter": "Expansión de campaña",
-        "player": "Expansión de investigador"
+        "encounter": "",
+        "player": ""
       },
-      "presence": "Presence",
+      "presence": "Presencia",
       "relations": {
         "otherVersions": "Otras versiones"
       },
-      "reset": "Limpiar",
+      "reset": "Restablecer",
       "select": "Seleccionar",
       "set": {
-        "artificer": "Artificer",
-        "artisan": "Artisan",
-        "branch": "Branch",
-        "conciliator": "Conciliator",
-        "explorer": "Explorer",
-        "forager": "Forager",
-        "fractured_wall": "Fractured Wall",
+        "artificer": "Inventor",
+        "artisan": "Artesano",
+        "branch": "Rama",
+        "conciliator": "Conciliador",
+        "explorer": "Explorador",
+        "forager": "Recolector",
+        "fractured_wall": "Muro Fracturado",
         "general": "General",
-        "grassland": "Grassland",
-        "lakeshore": "Lakeshore",
-        "lone_tree_station": "Lone Tree Station",
-        "malady": "Malady",
-        "marsh_of_rebirth": "Marsh of Rebirth",
-        "meadow": "Meadow",
-        "mountain_pass": "Mountain Pass",
-        "northern_outpost": "Northern Outpost",
-        "old_growth": "Old-Growth",
-        "personality": "Personality",
-        "ravine": "Ravine",
-        "reward": "Reward",
-        "river": "River",
-        "shaper": "Shaper",
-        "shepherd": "Shepherd",
-        "spire": "Spire",
-        "spirit_speaker": "Spirit Speaker",
-        "swamp": "Swamp",
-        "talespinner": "Talespinner",
-        "the_valley": "The Valley",
-        "traveler": "Traveler",
-        "tumbledown": "Tumbledown",
-        "valley": "Valley",
-        "white_sky": "White Sky",
-        "woods": "Woods"
+        "grassland": "Pradera",
+        "lakeshore": "Orilla del lago",
+        "lone_tree_station": "Estación del Árbol Solitario",
+        "malady": "Enfermedad",
+        "marsh_of_rebirth": "Pantano del Renacer",
+        "meadow": "Prado",
+        "mountain_pass": "Montaña",
+        "northern_outpost": "Puesto del Norte",
+        "old_growth": "Arboleda",
+        "personality": "Personalidad",
+        "ravine": "Barranco",
+        "reward": "Recompensa",
+        "river": "Río",
+        "shaper": "Moldeador",
+        "shepherd": "Pastor",
+        "spire": "Aguja",
+        "spirit_speaker": "Portavoz espiritual",
+        "swamp": "Ciénaga",
+        "talespinner": "Cuentahistorias",
+        "the_valley": "El Valle",
+        "traveler": "Viajero",
+        "tumbledown": "Derrumbe",
+        "valley": "Valle",
+        "white_sky": "Cielo Blanco",
+        "woods": "Bosque"
       },
-      "set_as_default": "Establecer por defecto",
-      "set_position": "{{position}} of {{size}}",
+      "set_as_default": "Establecer como predeterminado",
+      "set_position": "{{position}} de {{size}}",
       "skill": {
-        "conflict": "Conflict",
-        "connection": "Connection",
-        "exploration": "Exploration",
-        "reason": "Reason",
-        "title": "Habilidad"
+        "conflict": "Conflicto",
+        "connection": "Conexión",
+        "exploration": "Exploración",
+        "reason": "Razón",
+        "title": "Estrategia"
       },
       "sort_asc": "Orden ascendente",
       "sort_desc": "Orden descendente",
-      "tags": "Tags",
+      "tags": "Etiquetas",
       "total": "total",
+      "trait_many": "Rasgos",
       "trait_one": "Rasgo",
       "trait_other": "Rasgos",
       "traits": {
-        "Aid": "Aid",
-        "Book": "Book",
-        "Book / Tech": "Book / Tech",
-        "Clothing": "Ropa",
-        "Clothing / Aid": "Clothing / Aid",
-        "Clothing / Tech": "Clothing / Tech",
-        "Companion / Avian": "Companion / Avian",
-        "Companion / Mammal": "Companion / Mammal",
-        "Companion / Mammal / Expert": "Companion / Mammal / Expert",
-        "Conduit / Expert": "Conduit / Expert",
-        "Experience": "Experience",
-        "Experience / Aid": "Experience / Aid",
-        "Experience / Expert": "Experience / Expert",
-        "Experience / Nature": "Experience / Nature",
-        "Experience / Weapon": "Experience / Weapon",
-        "Food": "Food",
-        "Food / Aid": "Food / Aid",
+        "Aid": "Ayuda",
+        "Book": "Libro",
+        "Book / Tech": "Libro /Tecnología",
+        "Clothing": "Vestimenta",
+        "Clothing / Aid": "Vestimenta / Ayuda",
+        "Clothing / Tech": "Vestimenta / Tecnología",
+        "Companion / Avian": "Acompañante / Aviario",
+        "Companion / Mammal": "Acompañante / Mamífero",
+        "Companion / Mammal / Expert": "Acompañante / Mamífero / Experto",
+        "Conduit / Expert": "Conducto / Experto",
+        "Experience": "Experiencia",
+        "Experience / Aid": "Experiencia / Ayuda",
+        "Experience / Expert": "Experiencia / Experto",
+        "Experience / Nature": "Experiencia / Naturaleza",
+        "Experience / Weapon": "Experiencia / Arma",
+        "Food": "Comida",
+        "Food / Aid": "Comida / Ayuda",
         "Innate": "Innato",
-        "Malady": "Malady",
-        "Manifestation": "Manifestation",
-        "Manifestation / Nature": "Manifestation / Nature",
-        "Manifestation / Weapon": "Manifestation / Weapon",
-        "Mod": "Mod",
-        "Mod / Expert": "Mod / Expert",
-        "Mod / Tech": "Mod / Tech",
-        "Nature": "Nature",
-        "Otherworldly": "Otherworldly",
-        "Skill": "Skill",
-        "Skill / Aid": "Skill / Aid",
-        "Skill / Expert": "Skill / Expert",
-        "Skill / Weapon": "Skill / Weapon",
-        "Tech": "Tech",
-        "Tech / Aid": "Tech / Aid",
-        "Tech / Estian": "Tech / Estian",
-        "Tech / Expert": "Tech / Expert",
-        "Tech / Tool": "Tech / Tool",
-        "Tech / Weapon": "Tech / Weapon",
+        "Malady": "Enfermedad",
+        "Manifestation": "Manifestación",
+        "Manifestation / Nature": "Manifestación / Naturaleza",
+        "Manifestation / Weapon": "Manifestación / Arma",
+        "Mod": "Modificación",
+        "Mod / Expert": "Modificación / Experto",
+        "Mod / Tech": "Modificación / Tecnología",
+        "Nature": "Naturaleza",
+        "Otherworldly": "Sobrenatural",
+        "Skill": "Habilidad",
+        "Skill / Aid": "Habilidad / Ayuda",
+        "Skill / Expert": "Habilidad / Experto",
+        "Skill / Weapon": "Habilidad / Arma",
+        "Tech": "Tecnología",
+        "Tech / Aid": "Tecnología / Ayuda",
+        "Tech / Estian": "Tecnología / Estiano",
+        "Tech / Expert": "Tecnología / Experto",
+        "Tech / Tool": "Herramienta / Tecnología",
+        "Tech / Weapon": "Tecnología / Arma",
         "Tool": "Herramienta",
-        "Tool / Aid": "Tool / Aid",
-        "Tool / Food": "Tool / Food",
-        "Tool / Tech": "Tool / Tech",
-        "Tool / Tech / Weapon": "Tool / Tech / Weapon",
-        "Tool / Weapon": "Tool / Weapon",
-        "Trail": "Trail",
-        "Underground": "Underground",
+        "Tool / Aid": "Herramienta / Ayuda",
+        "Tool / Food": "Herramienta / Comida",
+        "Tool / Tech": "Herramienta /Tecnología",
+        "Tool / Tech / Weapon": "Herramienta / Tecnología / Arma",
+        "Tool / Weapon": "Herramienta / Arma",
+        "Trail": "Sendero",
+        "Underground": "Subterráneo",
         "Vehicle": "Vehículo",
         "Weapon": "Arma",
-        "Wisdom": "Wisdom"
+        "Wisdom": "Sabiduría"
       },
       "type": {
-        "aspect": "Aspect",
-        "attachment": "Attachment",
-        "attribute": "Attribute",
-        "being": "Being",
-        "challenge": "Challenge",
-        "feature": "Feature",
-        "gear": "Gear",
-        "location": "Lugar",
-        "malady": "Malady",
-        "mission": "Mission",
-        "moment": "Moment",
-        "role": "Investigador",
-        "role_one": "Investigador",
-        "role_other": "Investigadores",
-        "stat": "Stat",
+        "aspect": "Aspecto",
+        "attachment": "Anexo",
+        "attribute": "Atributo",
+        "being": "Ser",
+        "challenge": "Desafío",
+        "feature": "Característica",
+        "gear": "Equipo",
+        "location": "Localización",
+        "malady": "Enfermedad",
+        "mission": "Misión",
+        "moment": "Momento",
+        "role": "Guardián",
+        "role_many": "Guardianes",
+        "role_one": "Guardián",
+        "role_other": "Guardianes",
+        "stat": "Estadística",
         "weather": "Clima"
       },
       "undo": "Deshacer",
-      "unique": "Única",
-      "update_default_settings": "Actualizar ajustes por defecto",
+      "unique": "Único",
+      "update_default_settings": "Actualizar ajustes predeterminados",
       "uses": {
-        "alarm": "Alarm",
-        "beat": "Beat",
-        "bite": "Bite",
-        "buffer": "Buffer",
-        "call": "Call",
-        "cell": "Cell",
-        "charge": "Charge",
-        "crack": "Crack",
-        "dart": "Dart",
-        "deed": "Deed",
-        "dollop": "Dollop",
-        "drop": "Drop",
-        "echo": "Echo",
-        "entry": "Entry",
-        "essay": "Essay",
-        "fiber": "Fiber",
-        "filter": "Filter",
+        "alarm": "Alarma",
+        "beat": "Golpe",
+        "bite": "Mordisco",
+        "buffer": "Reserva",
+        "call": "Llamada",
+        "cell": "Batería",
+        "charge": "Carga",
+        "crack": "Grieta",
+        "dart": "Dardo",
+        "deed": "Hazaña",
+        "dollop": "Porción",
+        "drop": "Gota",
+        "echo": "Eco",
+        "entry": "Entrada",
+        "essay": "Ensayo",
+        "fiber": "Fibra",
+        "filter": "Filtro",
         "flash": "Flash",
-        "form": "Form",
-        "gleam": "Gleam",
-        "glint": "Glint",
-        "graph": "Graph",
-        "herb": "Herb",
-        "hum": "Hum",
-        "hunch": "Hunch",
-        "inkrill": "Inkrill",
-        "insight": "Insight",
-        "journey": "Journey",
-        "length": "Length",
-        "lesson": "Lesson",
-        "marker": "Marker",
-        "melody": "Melody",
-        "morsel": "Morsel",
-        "needle": "Needle",
-        "piton": "Piton",
-        "pocket": "Pocket",
-        "profile": "Profile",
-        "puff": "Puff",
-        "pulse": "Pulse",
-        "rake": "Rake",
-        "reading": "Reading",
-        "record": "Record",
-        "remote": "Remote",
+        "form": "Forma",
+        "gleam": "Brillo",
+        "glint": "Destello",
+        "graph": "Gráfico",
+        "herb": "Hierba",
+        "hum": "Tarareo",
+        "hunch": "Impresión",
+        "inkrill": "Tintero",
+        "insight": "Avance",
+        "journey": "Viaje",
+        "length": "Lazada",
+        "lesson": "Lección",
+        "marker": "Marca",
+        "melody": "Melodía",
+        "morsel": "Bocado",
+        "needle": "Aguja",
+        "piton": "Clavija",
+        "pocket": "Bolsillo",
+        "profile": "Perfil",
+        "puff": "Dosis",
+        "pulse": "Pulso",
+        "rake": "Arañazo",
+        "reading": "Lectura",
+        "record": "Entrada",
+        "remote": "Centinela",
         "sensor": "Sensor",
-        "session": "Session",
-        "shift": "Shift",
-        "sip": "Sip",
-        "sketch": "Sketch",
-        "slice": "Slice",
-        "snare": "Snare",
-        "song": "Song",
-        "spray": "Spray",
-        "story": "Story",
-        "strain": "Strain",
-        "stride": "Stride",
-        "strum": "Strum",
-        "track": "Track",
-        "tune": "Tune",
-        "vault": "Vault",
-        "vision": "Vision",
-        "vittle": "Vittle",
-        "xp": "XP"
+        "session": "Sesión",
+        "shift": "Cambio",
+        "sip": "Sorbo",
+        "sketch": "Boceto",
+        "slice": "Rebanada",
+        "snare": "Cebo",
+        "song": "Canción",
+        "spray": "Rociada",
+        "story": "Historia",
+        "strain": "Cepa",
+        "stride": "Zancada",
+        "strum": "Puntéo",
+        "track": "Huella",
+        "tune": "Canción",
+        "vault": "Gancho",
+        "vision": "Visión",
+        "vittle": "Reserva",
+        "xp": "Pericia"
       }
     },
     "debug": {
       "symbols": {
-        "locations": "Locations",
-        "path_terrain": "Path terrain"
+        "locations": "Localizaciones",
+        "path_terrain": "Terreno del camino"
       },
-      "title": "SVG Debug"
+      "title": "Depuración SVG"
     },
     "deck": {
       "actions": {
         "archive": "Archivar mazo",
-        "copy_id": "Copiar ID del mazo",
+        "copy_id": "Copiar id del mazo",
         "create": "Crear mazo",
         "delete": "Eliminar mazo",
         "duplicate": "Duplicar mazo",
@@ -627,104 +737,149 @@
         "edit_short": "Editar",
         "export_json": "Exportar JSON",
         "export_text": "Exportar texto",
-        "make_private": "Make Private",
-        "make_public": "Make Public",
-        "share": "Share deck",
+        "make_private": "Hacer privado",
+        "make_public": "Hacer público",
+        "share": "Compartir mazo",
         "unarchive": "Desarchivar mazo"
       },
-      "annotation": "Notas",
-      "annotation_tooltip": "La carta tiene notas",
-      "aspect": "Aspect",
-      "attachments": {},
-      "background": "Background",
+      "annotation": "Anotación",
+      "annotation_tooltip": "La carta tiene una anotación",
+      "aspect": "Aspecto",
+      "background": "Origen",
       "cards": "Cartas del mazo",
       "evolution": {
-        "displaced": "Displaced cards",
-        "evolved": "Evolved",
-        "evolved_description": "A deck that has left initial construction through campaign play, card changes, maladies, or unlocked rewards.",
-        "maladies": "Maladies",
-        "rewards": "Unlocked rewards",
-        "starter": "Starter",
-        "starter_description": "Freshly constructed, usually for the beginning of a campaign.",
-        "status": "Deck status"
+        "displaced": "Cartas desplazadas",
+        "evolved": "Evolucionado",
+        "evolved_description": "Un mazo que ha dejado atrás su construcción inicial mediante el juego de campaña, cambios de cartas, Enfermedades o Recompensas desbloqueadas.",
+        "maladies": "Enfermedades",
+        "rewards": "Recompensas desbloqueadas",
+        "starter": "Inicial",
+        "starter_description": "Recién construido, normalmente para el comienzo de una campaña.",
+        "status": "Estado del mazo"
       },
-      "id": "ID del mazo",
+      "id": "Id del mazo",
       "limited_slots": "Espacios limitados",
-      "name": "Deck Name",
+      "name": "Nombre del mazo",
       "rewards": {
-        "from_campaign": "Available from campaign “{{name}}”",
-        "locked": "Locked",
-        "title": "Rewards",
-        "unlock_from_campaign": "Unlock",
-        "unlocked": "Unlocked"
+        "from_campaign": "Disponible en la campaña «{{name}}»",
+        "locked": "Bloqueada",
+        "title": "Recompensas",
+        "unlock_from_campaign": "Desbloquear",
+        "unlocked": "Desbloqueada"
       },
-      "specialty": "Specialty",
+      "specialty": "Especialidad",
       "stats": {
         "deck_size": "Tamaño del mazo",
+        "ignored_many": "{{count}} copias no cuentan para el tamaño del mazo.",
         "ignored_one": "{{count}} copia no cuenta para el tamaño del mazo.",
         "ignored_other": "{{count}} copias no cuentan para el tamaño del mazo.",
-        "unowned": "No disponible: {{count}} de {{total}} cartas"
+        "unowned": "No poseídas: {{count}} de {{total}} cartas"
       },
       "tags": {
-        "limited_pool": "Conjunto limitado",
+        "limited_pool": "Colección limitada",
         "private": "Privado",
         "sealed": "Sellado",
-        "shared": "Compartido"
+        "shared": "Público",
+        "unlisted": "No listado"
       },
       "toasts": {
         "delete_confirm": "¿Seguro que quieres eliminar este mazo?",
-        "delete_error": "Error al eliminar el mazo: {{error}}",
+        "delete_error": "No se pudo eliminar el mazo: {{error}}",
         "delete_loading": "Eliminando mazo...",
-        "duplicate_error": "Error al duplicar el mazo: {{error}}",
-        "export_error": "Error al exportar el mazo: {{error}}",
-        "upload_error": "Error al subir el mazo a {{provider}}: {{error}}",
+        "duplicate_error": "No se pudo duplicar el mazo: {{error}}",
+        "export_error": "No se pudo exportar el mazo: {{error}}",
+        "upload_error": "No se pudo subir el mazo a {{provider}}: {{error}}",
         "upload_loading": "Subiendo mazo a {{provider}}..."
       },
       "tools": {
         "cards": "Cartas",
         "count": "Cantidad",
-        "factions": "Clases",
-        "factions_tooltip": "{{count}} {{faction}} {{cards}}",
-        "loading": "Cargando herramientas de mazo...",
-        "resource_cost": "Coste de recursos",
+        "factions": "Aspectos",
+        "factions_tooltip": "{{count}} {{cards}} de {{faction}}",
+        "loading": "Cargando herramientas del mazo...",
+        "resource_cost": "Coste de Energía",
         "resource_cost_tooltip": "{{count}} {{cards}} de coste {{cost}}",
-        "resource_costs": "Costes de recursos",
-        "skill_icons": "Iconos de habilidad",
-        "skill_icons_tooltip": "{{count}} {{skill}} {{icons}}",
-        "title": "Herramientas de mazo"
+        "resource_costs": "Costes de Energía",
+        "skill_icons": "Iconos de Estrategia",
+        "skill_icons_tooltip": "{{count}} {{icons}} de {{skill}}",
+        "title": "Herramientas del mazo"
       },
-      "untitled_deck": "Untitled Deck",
+      "untitled_deck": "Mazo sin título",
       "validation": {
-        "card_not_in_limited_pool": "Las siguientes cartas no forman parte del conjunto de cartas de este mazo:",
-        "forbidden_cards": "El mazo contiene cartas prohibidas (cartas no permitidas por el Investigador):",
+        "card_not_in_limited_pool": "Las siguientes cartas no forman parte de la colección de este mazo:",
+        "forbidden_cards": "El mazo contiene cartas a las que este Guardián no tiene acceso:",
         "invalid": "El mazo no es válido.",
-        "invalid_card_count": "El mazo contiene un número erróneo de copias de las siguientes cartas:",
-        "invalid_investigator": "El investigador no es válido. Falta la configuración requerida, o la carta no es un investigador.",
-        "investigator_requirements": "El mazo no cumple con los requisitos del Investigador:",
+        "invalid_card_count": "El mazo contiene un número no válido de copias de las siguientes cartas:",
+        "invalid_investigator": "La configuración del Guardián no es válida. Faltan campos obligatorios.",
+        "investigator_requirements": "El mazo no cumple los requisitos del Guardián:",
         "too_few_cards": "{{deck}} contiene muy pocas cartas.",
         "too_many_cards": "{{deck}} contiene demasiadas cartas."
       }
     },
     "deck_collection": {
-      "archive": "Archivo",
+      "archive": "Archivar",
       "collection_empty": "Colección vacía",
       "count": "{{count}} mazos",
-      "count_hidden": " ({{count}} ocultos)",
+      "count_hidden": " ({{count}} filtrados)",
       "deck_url_or_id": "URL o ID del mazo",
       "delete_all": "Eliminar todos los mazos locales",
-      "delete_all_confirm": "¿Seguro que quieres eliminar todos los mazos locales?",
-      "delete_all_error": "Error al eliminar los mazos locales: {{error}}",
+      "delete_all_confirm": "¿Seguro que quieres eliminar todos los mazos locales de tu colección?",
+      "delete_all_error": "No se pudieron eliminar los mazos locales: {{error}}",
       "delete_all_loading": "Eliminando mazos locales...",
       "import": "Importar",
-      "import_help": "Enter a public deck ID or URL to import. The deck will be <strong>copied</strong>; history will not be imported.",
-      "import_json": "Importar desde un archivo JSON",
+      "import_help": "Introduce el ID o la URL de un mazo público para importarlo. El mazo se <strong>copiará</strong>; el historial no se importará.",
+      "import_json": "Importar desde archivos JSON",
       "more_filters": "Más filtros",
+      "premade_decks_added_many": "Se han añadido {{count}} mazos predefinidos.",
+      "premade_decks_added_one": "Se ha añadido {{count}} mazo predefinido.",
+      "premade_decks_added_other": "Se han añadido {{count}} mazos predefinidos.",
+      "premade_decks_adding": "Añadiendo mazos predefinidos...",
+      "premade_decks_button": "Volver a añadir mazos predefinidos",
+      "premade_decks_error": "No se pudieron añadir los mazos predefinidos: {{error}}",
+      "rangersdb": {
+        "blocked": "Al mazo le falta información necesaria para la importación.",
+        "button": "Importar desde RangersDB",
+        "by_author": "por {{name}}",
+        "card_count_many": "{{count}} cartas",
+        "card_count_one": "{{count}} carta",
+        "card_count_other": "{{count}} cartas",
+        "checking": "Buscando el mazo en RangersDB...",
+        "comments_many": "{{count}} comentarios",
+        "comments_one": "{{count}} comentario",
+        "comments_other": "{{count}} comentarios",
+        "fetch_error": "No se pudo obtener el mazo de RangersDB: {{error}}",
+        "import": "Importar mazo",
+        "import_help": "Al importar se abre el paso de revisión de creación del mazo, donde puedes comprobarlo y guardarlo.",
+        "invalid_input": "Esto no parece una URL de mazo de RangersDB ni un ID numérico de mazo.",
+        "issue": {
+          "missing_aspects": "No se pudieron asociar los valores de aspecto del mazo con una carta de Aspecto",
+          "missing_background": "No se pudo determinar el Origen del mazo",
+          "missing_role": "No se pudo determinar el Rol del mazo",
+          "missing_specialty": "No se pudo determinar la Especialidad del mazo",
+          "name_conflict": "La carta {{value}} es \"{{theirs}}\" en RangersDB pero \"{{ours}}\" aquí; compruébala después de importar",
+          "unknown_code": "Código de carta desconocido \"{{value}}\"",
+          "unmatched_card": "Ninguna carta coincide con \"{{value}}\"",
+          "unsupported_card": "\"{{value}}\" no está disponible durante la creación del mazo y se ha omitido"
+        },
+        "issues": "Algunas partes del mazo no se pudieron importar:",
+        "likes_many": "{{count}} me gusta",
+        "likes_one": "{{count}} me gusta",
+        "likes_other": "{{count}} me gusta",
+        "not_found": "Este mazo no existe en RangersDB o no es de acceso público.",
+        "tab_text": "Texto plano / Markdown",
+        "tab_url": "URL o ID",
+        "text_help": "Pega un mazo exportado desde RangersDB (Copiar como texto o Markdown).",
+        "text_label": "Lista del mazo",
+        "title": "Importar desde RangersDB",
+        "url_help": "Pega un enlace a un mazo público de RangersDB o solo su ID numérico, p. ej. <strong>https://rangersdb.com/decks/view/12345</strong> o <strong>12345</strong>.",
+        "url_label": "URL o ID del mazo"
+      },
       "search_placeholder": "Buscar mazos...",
       "sorting": {
         "alphabetical_asc": "Alfabético (A -> Z)",
         "alphabetical_desc": "Alfabético (Z -> A)",
-        "date_created": "Creado recientemente",
-        "date_updated": "Actualizado recient."
+        "date_created": "Creados recientemente",
+        "date_updated": "Actualizados recientemente"
       },
       "tags_filter": {
         "placeholder": "Seleccionar etiquetas...",
@@ -734,142 +889,142 @@
     },
     "deck_create": {
       "aspect": {
-        "title": "Choose aspect"
+        "title": "Elige Aspecto"
       },
       "background": {
-        "title": "Choose background"
+        "title": "Elige Origen"
       },
       "background_type": {
-        "artisan": "Artisan",
-        "forager": "Forager",
-        "shepherd": "Shepherd",
-        "talespinner": "Talespinner",
-        "traveler": "Traveler"
+        "artisan": "Artesano",
+        "forager": "Recolector",
+        "shepherd": "Pastor",
+        "talespinner": "Cuentahistorias",
+        "traveler": "Viajero"
       },
       "background_type_description": {
-        "artisan": "Artisans are skilled craftspeople who work with tools and support equipped gear, both their own and other Rangers'.",
-        "forager": "Foragers know the Valley's plants deeply. Their cards key off flora and can use it as a resource in ways other backgrounds cannot.",
-        "shepherd": "Shepherds tend ironwool flocks and have a natural affinity for animals. Their cards often affect beings and help pacify predators without violence.",
-        "talespinner": "Talespinners study story, song, and spoken tradition. Their cards soothe fatigue, manipulate the fatigue stack, and support Rangers with tale moments.",
-        "traveler": "Travelers are at home on the Valley's footpaths. Their cards primarily revolve around making the most of moment cards."
+        "artisan": "Los Artesanos son hábiles con las manos: trabajan con herramientas y potencian el Equipo equipado, tanto el suyo como el de otros Guardianes.",
+        "forager": "Los Recolectores conocen a fondo las plantas del Valle. Sus cartas giran en torno a la flora y pueden usarla como recurso de formas que otros Orígenes no pueden.",
+        "shepherd": "Los Pastores cuidan rebaños de lana de hierro y tienen una afinidad natural con los animales. Sus cartas suelen afectar a Seres y ayudan a apaciguar depredadores sin violencia.",
+        "talespinner": "Los Cuentahistorias estudian los relatos, las canciones y la tradición oral. Sus cartas alivian el Cansancio, manipulan la pila de Cansancio y apoyan a los Guardianes con Momentos de relato.",
+        "traveler": "Los Viajeros se sienten como en casa en los senderos del Valle. Sus cartas giran principalmente en torno a sacar el máximo partido a las cartas de Momento."
       },
       "card_disabled": {
-        "aspect_requirement": "You have {{actual}} {{aspect}}, but this card requires {{required}}.",
-        "background_limit": "You have already selected {{count}} / {{target}} background cards.",
-        "specialty_limit": "You have already selected {{count}} / {{target}} specialty cards."
+        "aspect_requirement": "Tienes {{actual}} de {{aspect}}, pero esta carta requiere {{required}}.",
+        "background_limit": "Ya has seleccionado {{count}} / {{target}} cartas de Origen.",
+        "specialty_limit": "Ya has seleccionado {{count}} / {{target}} cartas de Especialidad."
       },
       "default_name": {
-        "": "{{name}}'s Deck",
-        "awa": "{{name}} Observes",
-        "fit": "{{name}} on the Trail",
-        "foc": "{{name}} Plans Ahead",
-        "spi": "{{name}}'s Calling"
+        "": "Mazo de {{name}}",
+        "awa": "{{name}} observa",
+        "fit": "{{name}} en el sendero",
+        "foc": "{{name}} planea con antelación",
+        "spi": "La vocación de {{name}}"
       },
-      "error": "Error al crear el mazo: {{error}}",
+      "error": "No se pudo crear el mazo: {{error}}",
       "loading": "Creando mazo...",
       "name": {
-        "title": "Name ranger"
+        "title": "Nombra al Guardián"
       },
-      "new_ranger_name": "New Ranger",
+      "new_ranger_name": "Nuevo Guardián",
       "outside_interest": {
-        "title": "Choose outside interest"
+        "title": "Elige Afición"
       },
       "personality": {
-        "instructions": "Choose one card from each aspect. Each chosen card will be added to your deck in two copies.",
-        "title": "Choose personality cards"
+        "instructions": "Elige una carta de cada Aspecto. Cada carta elegida se añadirá a tu mazo con dos copias.",
+        "title": "Elige cartas de Personalidad"
       },
       "review": {
-        "title": "Review deck"
+        "title": "Revisar mazo"
       },
       "role": {
-        "title": "Choose role"
+        "title": "Elige Rol"
       },
-      "search": "Search cards",
+      "search": "Buscar cartas",
       "specialty": {
-        "role_preview": "Your role will be chosen from:",
-        "title": "Choose specialty cards"
+        "role_preview": "Tu Rol se elegirá entre:",
+        "title": "Elige cartas de Especialidad"
       },
       "specialty_type": {
-        "artificer": "Artificer",
-        "conciliator": "Conciliator",
-        "explorer": "Explorer",
-        "shaper": "Shaper",
-        "spirit_speaker": "Spirit Speaker"
+        "artificer": "Inventor",
+        "conciliator": "Conciliador",
+        "explorer": "Explorador",
+        "shaper": "Moldeador",
+        "spirit_speaker": "Portavoz espiritual"
       },
       "specialty_type_description": {
-        "artificer": "Artificers are inventors who work with tech and gear. Their cards help Rangers find, play, and enhance equipment.",
-        "conciliator": "Conciliators resolve conflict through presence and de-escalation. Their cards pacify beings, protect Rangers, and support aid efforts.",
-        "explorer": "Explorers push into unknown terrain. Their cards improve tests, navigate path cards, and keep Rangers moving through the Valley.",
-        "shaper": "Shapers are attuned to the Valley's ancient forces. Their cards interact with conduits, manipulate manifestations, and read the challenge ahead.",
-        "spirit_speaker": "Spirit Speakers commune with the Valley's unseen spirits. Their cards channel spiritspeak and build deep connections with the land."
+        "artificer": "Los Inventores trabajan con tecnología y Equipo. Sus cartas ayudan a los Guardianes a encontrar, jugar y mejorar su equipamiento.",
+        "conciliator": "Los Conciliadores resuelven los conflictos mediante su Presencia y la desescalada. Sus cartas apaciguan Seres, protegen a los Guardianes y apoyan las labores de ayuda.",
+        "explorer": "Los Exploradores se adentran en terrenos desconocidos. Sus cartas mejoran los Retos, manejan las cartas de Camino y mantienen a los Guardianes en movimiento por el Valle.",
+        "shaper": "Los Moldeadores están en sintonía con las fuerzas ancestrales del Valle. Sus cartas interactúan con Conductos, manipulan Manifestaciones y anticipan el Desafío que se avecina.",
+        "spirit_speaker": "Los Portavoces espirituales se comunican con los espíritus invisibles del Valle. Sus cartas permiten conectarse espiritualmente y forjar profundos vínculos con la tierra."
       },
       "steps": {
-        "aspect": "Aspect",
-        "background": "Background",
-        "name": "Name",
-        "outside_interest": "Outside Interest",
-        "personality": "Personality",
-        "review": "Deck Info",
-        "role": "Role",
-        "specialty": "Specialty"
+        "aspect": "Aspecto",
+        "background": "Origen",
+        "name": "Nombre",
+        "outside_interest": "Afición",
+        "personality": "Personalidad",
+        "review": "Info del mazo",
+        "role": "Rol",
+        "specialty": "Especialidad"
       },
-      "title": "Create {{name}} deck"
+      "title": "Crear mazo de {{name}}"
     },
     "deck_edit": {
       "actions": {
-        "add_malady": "Add malady",
-        "add_reward": "Add reward",
-        "add_to_deck": "Add to deck",
+        "add_malady": "Añadir Enfermedad",
+        "add_reward": "Añadir Recompensa",
+        "add_to_deck": "Añadir al mazo",
         "add_to_notes": "Añadir a las notas",
-        "cycle_decks": "Ir al siguiente mazo",
-        "decrease": "Decrease quantity",
-        "decrement_quantity": "Disminuir cantidad del mazo",
+        "cycle_decks": "Alternar listas del mazo",
+        "decrease": "Reducir cantidad",
+        "decrement_quantity": "Reducir cantidad en el mazo",
         "edit_annotation": "Editar anotación",
-        "increase": "Increase quantity",
-        "increment_quantity": "Aumentar cantidad del mazo",
+        "increase": "Aumentar cantidad",
+        "increment_quantity": "Aumentar cantidad en el mazo",
         "move_to_main_deck": "Mover al mazo",
-        "quantity": "Quantity",
+        "quantity": "Cantidad",
         "quick_discard": "Descartar cambios (y permanecer en la página)",
         "quick_save_deck": "Guardar mazo (y permanecer en la página)",
-        "remove": "Remove",
-        "replace": "Replace card",
-        "restore": "Restore to deck",
-        "set_quantity": "Ajustar cantidad del mazo",
-        "swap": "Swap",
-        "swap_into_deck": "Swap into deck",
-        "unlock": "Unlock"
+        "remove": "Quitar",
+        "replace": "Reemplazar carta",
+        "restore": "Devolver al mazo",
+        "set_quantity": "Fijar cantidad en el mazo",
+        "swap": "Intercambiar",
+        "swap_into_deck": "Intercambiar en el mazo",
+        "unlock": "Desbloquear"
       },
       "available_cards": {
-        "category_filter": "Category",
-        "empty": "No cards found.",
-        "max_copies": "Already at 2 copies",
-        "title": "Available cards"
+        "category_filter": "Categoría",
+        "empty": "No se han encontrado cartas.",
+        "max_copies": "Ya tiene 2 copias",
+        "title": "Cartas disponibles"
       },
       "campaign": {
-        "empty": "This is a starter deck. Make a deck change or add unlocked rewards to begin tracking campaign changes."
+        "empty": "Este es un mazo inicial. Haz un cambio en el mazo o añade Recompensas desbloqueadas para empezar a registrar los cambios de campaña."
       },
-      "changes_restored": "Se restauraron los cambios no guardados.",
+      "changes_restored": "Se han restaurado los cambios sin guardar.",
       "config": {
         "card_pool": {
           "choose_cycle_placeholder": "Seleccionar ciclos...",
           "collection": "Colección",
-          "collection_help": "Establece tu <settings_link>colección</settings_link> actual como el conjunto de cartas de este mazo. Esto puede ser útil para congelar el conjunto de cartas del mazo, o para compartir un \"ajuste predefinido\" con personas que compartan una colección física.",
+          "collection_help": "Establece tu <settings_link>colección</settings_link> actual como el conjunto de cartas de este mazo. Puede servir para congelar el conjunto de cartas del mazo o para compartir un \"preajuste de construcción\" con personas que comparten una colección física.",
           "configure_environment": "Configurar entorno",
-          "custom": "Personalizado",
-          "help": "Los Investigadores, las cartas Personales y los Apoyos de historia no se ven afectados por esta selección.",
+          "custom": "Conjunto personalizado",
+          "help": "Las cartas de Guardián, de Rol y de historia no se ven afectadas por esta selección.",
           "placeholder": "Seleccionar packs...",
           "section_title": "Ajustes del conjunto de cartas",
           "selected_cards": "Cartas seleccionadas",
-          "title": "Limitar conjunto de cartas"
+          "title": "Conjunto de cartas limitado"
         },
         "name": "Nombre del mazo",
         "storage_provider": {
           "local": "Privado",
           "shared": "Compartido",
-          "title": "Almacenamiento"
+          "title": "Proveedor de almacenamiento"
         },
         "tags": "Etiquetas",
-        "tags_help": "Introduce etiquetas, separadas por espacios",
+        "tags_help": "Introduce etiquetas separadas por espacios",
         "title_and_tags": "Editar título y etiquetas",
         "version": {
           "switch": "Cambiar",
@@ -877,22 +1032,22 @@
         }
       },
       "create_local_copy": "Crear copia local",
-      "create_local_copy_help": "Crea una copia local de este mazo. Esto aplicará todas las ediciones pendientes y te permitirá guardarlas. Las mejoras y el historial del mazo no se transferirán.",
+      "create_local_copy_help": "Crea una copia local de este mazo. Se aplicarán todas las ediciones pendientes y podrás guardarlas. Las mejoras y el historial del mazo no se conservarán.",
       "discard": "Descartar cambios",
-      "discard_confirm": "¿Seguro que quieres descartar los cambios?",
+      "discard_confirm": "¿Seguro que quieres descartar tus cambios?",
       "displaced": {
-        "empty": "No displaced cards."
+        "empty": "No hay cartas desplazadas."
       },
       "notes": {
-        "annotation": "Card annotation",
+        "annotation": "Anotación de la carta",
         "banner_url": "URL del banner",
-        "banner_url_help": "Imagen de banner para el mazo. Se mostrará en la vista del mazo y en las vistas previas de redes sociales. La relación de aspecto es 4:1, el ancho óptimo es 1440px.",
-        "banner_url_placeholder": "Introduce URL",
-        "description": "Descripción",
-        "description_help": "Compatible con markdown estilo ArkhamDB.",
-        "description_placeholder": "Escribe las notas...",
+        "banner_url_help": "Imagen de banner del mazo. Se mostrará en la vista del mazo y en las vistas previas de redes sociales. La relación de aspecto es 4:1 y el ancho óptimo es 1440px.",
+        "banner_url_placeholder": "Introduce una URL",
+        "description": "Notas",
+        "description_help": "Admite markdown.",
+        "description_placeholder": "Escribe notas...",
         "intro": "Introducción",
-        "intro_help": "Una breve introducción al mazo. Se mostrará en la vista del mazo y en las vistas previas de redes sociales. Compatible con markdown estilo ArkhamDB.",
+        "intro_help": "Una breve introducción al mazo. Se mostrará en la vista del mazo y en las vistas previas de redes sociales. Admite markdown.",
         "toolbar": {
           "card": "Carta",
           "card_tooltip": "Insertar una carta",
@@ -901,14 +1056,14 @@
             "header": "Encabezado",
             "header_with_set": "Encabezado (con número de colección)",
             "paragraph": "Párrafo",
-            "paragraph_colored": "Párrafo (con color)"
+            "paragraph_colored": "Párrafo (en color)"
           },
           "origin": "Cartas disponibles",
           "origins": {
             "campaign": "Cartas de campaña",
-            "deck": "Cartas en el mazo",
-            "player": "Todas las cartas de jugador",
-            "usable": "Cartas de jugador utilizables"
+            "deck": "Cartas del mazo",
+            "player": "Todas las cartas de Guardián",
+            "usable": "Cartas de Guardián utilizables"
           },
           "preview": "Vista previa",
           "symbol": "Símbolo",
@@ -917,114 +1072,135 @@
         }
       },
       "player_cards": {
-        "incoming": "Card to swap in",
-        "outgoing": "Card to remove"
+        "incoming": "Carta que entra",
+        "outgoing": "Carta que sale"
       },
       "recommendations": {
         "absolute": "Absoluto",
-        "absolute_help": "Cuenta en cuántos mazos de {{name}} se usa cada carta",
-        "core": "Esencial",
-        "core_help": "Marcar una carta como \"Esencial\" indica al motor de recomendaciones que sólo considere mazos que la contengan.",
-        "error": "No se pudieron obtener recomendaciones.",
+        "absolute_help": "Muestra las cartas más usadas en los mazos de {{name}}, ordenadas por el porcentaje de mazos que las contienen.",
+        "core": "Clave",
+        "core_help": "Marcar una carta como \"Clave\" indica al motor de recomendaciones que solo tenga en cuenta los mazos que la contienen.",
+        "error": "No se pudieron obtener las recomendaciones.",
         "loading": "Calculando recomendaciones...",
-        "no_results": "No hay recomendaciones para esta selección.",
+        "no_results": "No hay recomendaciones para esta configuración.",
         "publication_date": "Fecha de publicación",
         "relative": "Relativo",
-        "relative_help": "Cuenta en cuántos mazos de {{name}} se usa cada carta en comparación con otros investigadores que tienen acceso a ella",
+        "relative_help": "Muestra qué cartas es más probable que use {{name}} en comparación con otros Guardianes, ordenadas por percentil.",
         "tooltip_absolute": "{{name}} se usa en el {{decksPercentage}}% de los mazos de {{investigator}}. ({{decksMatched}}/{{decksAnalyzed}})",
-        "tooltip_relative": "{{investigator}} usa {{name}} con más frecuencia que el {{percentile}}% de todos los investigadores."
+        "tooltip_relative": "{{investigator}} usa {{name}} con más frecuencia que el {{percentile}}% de todos los Guardianes."
       },
       "rewards": {
-        "empty": "No rewards available.",
-        "in_deck": "In Deck",
-        "unlocked": "Unlocked"
+        "empty": "No hay Recompensas disponibles.",
+        "in_deck": "En el mazo",
+        "unlocked": "Desbloqueadas"
       },
       "save": "Guardar mazo",
-      "save_error": "Error al guardar el mazo: {{error}}",
+      "save_error": "No se pudo guardar el mazo: {{error}}",
       "save_loading": "Guardando mazo...",
       "save_short": "Guardar",
       "sections": {
-        "background": "Background",
-        "displaced": "Displaced Cards",
-        "maladies": "Maladies",
-        "outside_interest": "Outside Interest",
-        "personality": "Personality",
-        "player_cards": "Swap In Player Card",
-        "rewards": "Unlocked Rewards",
-        "specialty": "Specialty"
+        "background": "Origen",
+        "displaced": "Cartas desplazadas",
+        "maladies": "Enfermedades",
+        "outside_interest": "Afición",
+        "personality": "Personalidad",
+        "player_cards": "Intercambiar carta de jugador",
+        "rewards": "Recompensas desbloqueadas",
+        "specialty": "Especialidad"
       },
       "tab_card_list": "Lista de cartas",
-      "tab_config": "Ajustes",
-      "tab_notes": "Notas y presentación",
+      "tab_config": "Configuración",
+      "tab_notes": "Notas",
       "tab_recommendations": "Recomendaciones",
       "tab_tools": "Herramientas",
       "tabs": {
-        "campaign": "Campaign",
-        "deck": "Deck",
-        "notes": "Notes",
-        "unlock_rewards": "Unlock Rewards"
+        "campaign": "Campaña",
+        "deck": "Mazo",
+        "notes": "Notas",
+        "unlock_rewards": "Desbloquear Recompensas"
       },
       "title": "Editar: {{name}}",
       "validation": {
-        "valid": "Deck is valid."
+        "valid": "El mazo es válido."
       },
       "versions": {
-        "entry_title": "Versión {{version}}",
+        "entry_title": "Versión guardada",
         "entry_title_current": "Versión actual",
         "title": "Versiones"
       }
     },
     "deck_share": {
-      "copy": "Copy",
-      "include_displaced": "Include displaced cards",
-      "include_rewards": "Include unlocked rewards",
-      "tab_markdown": "Markdown",
-      "tab_plaintext": "Plaintext",
-      "title": "Share deck"
+      "copy": "Copiar",
+      "include_displaced": "Incluir cartas desplazadas",
+      "include_rewards": "Incluir Recompensas desbloqueadas",
+      "included_rewards": "Recompensas incluidas",
+      "markdown": "Markdown",
+      "title": "Compartir mazo"
+    },
+    "deck_sync": {
+      "conflict": {
+        "action_error": "No se pudo resolver el conflicto del mazo: {{error}}",
+        "collection_badge": "Conflicto de mazo pendiente",
+        "description": "Este mazo se ha modificado tanto en este dispositivo como en el servidor. Elige qué versión conservar.",
+        "description_remote_missing": "Este mazo se eliminó en remoto antes de que se completara tu cambio. Descarta el mazo local para que coincida con el estado remoto.",
+        "discard_local": "Descartar mazo local",
+        "edit_locked": "Resuelve el conflicto del mazo antes de editarlo.",
+        "keep_local": "Conservar la versión de este dispositivo",
+        "refresh": "Usar la versión del servidor",
+        "remote_version": "Versión remota: {{version}}",
+        "title": "Conflicto de sincronización del mazo"
+      }
     },
     "deck_view": {
       "actions": {
         "display_as_list": "Mostrar como lista",
-        "display_as_scans": "Mostrar como escaneos",
-        "import": "Importar mazo",
+        "display_as_scans": "Mostrar como imágenes",
+        "import": "Importar mazo a la colección",
         "upload": "Subir a {{provider}}"
       },
       "history": {
-        "added": "Añadido",
+        "added": "Añadidas",
         "initial_deck": "Mazo inicial",
         "no_changes": "Sin cambios",
-        "removed": "Eliminado",
+        "removed": "Quitadas",
         "slot_changes": "Cambios en {{slot}}"
       },
-      "import_failed": "Error al importar el mazo: {{error}}",
+      "import_failed": "No se pudo importar el mazo: {{error}}",
       "latest_version": "<a>Ir a la última versión</a>.",
       "list": "Lista",
-      "loading": "Obteniendo mazo...",
-      "newer_version": "Hay una <a>versión más nueva</a> de este mazo. Este mazo es de sólo lectura.",
+      "loading": "Cargando mazo...",
+      "newer_version": "Hay una <a>versión más reciente</a> de este mazo. Este mazo es de solo lectura.",
       "scans": "Imágenes",
       "sharing": {
-        "api_link": "Json API",
-        "create": "Crear enlace para compartir",
-        "create_failed": "Error al crear el enlace compartido: {{error}}",
-        "create_tooltip": "Crea un enlace público al mazo de sólo lectura. Cualquier persona con el enlace puede ver el mazo, pero no editarlo.<br />Los enlaces compartidos se pueden eliminar en cualquier momento. Eliminar un enlace no afecta al mazo.",
+        "api_link": "API JSON",
+        "create": "Crear enlace compartido",
+        "create_failed": "No se pudo crear el enlace compartido: {{error}}",
+        "create_tooltip": "Compartir crea un enlace público de solo lectura al mazo. Cualquiera con el enlace puede ver el mazo, pero no editarlo.<br />Usa el interruptor de Guías de mazos de abajo para decidir si este mazo compartido aparece también en el directorio público.",
         "delete": "Eliminar enlace compartido",
-        "delete_failed": "Error al eliminar el enlace compartido: {{error}}",
-        "description": "El mazo se almacena localmente.",
-        "description_present": "Este mazo tiene un enlace público compartido, se puede ver usando <a>este enlace</a>.",
-        "title": "Compartir mazo",
+        "delete_failed": "No se pudo eliminar el enlace compartido: {{error}}",
+        "description": "El mazo está guardado localmente.",
+        "description_present": "Este mazo está compartido públicamente; puede verse mediante <a>este enlace</a>.",
+        "listed_help": "Si está activado, este mazo compartido aparece en el directorio público de Guías de mazos. Si está desactivado, solo pueden verlo las personas que tengan el enlace.",
+        "listed_label": "Mostrar en las Guías de mazos públicas",
+        "listed_login_required": "Inicia sesión para mostrar este mazo en el directorio público de Guías de mazos.",
+        "open": "Abrir enlace compartido",
+        "shared_unlisted": "Compartido solo mediante enlace. Inicia sesión para mostrarlo también en las Guías de mazos.",
+        "title": "Compartir públicamente",
         "update": "Actualizar enlace compartido",
-        "update_failed": "Error al actualizar el enlace compartido: {{error}}"
+        "update_failed": "No se pudo actualizar el enlace compartido: {{error}}"
       },
-      "show_deck_list": "Mostrar lista de mazos",
+      "show_deck_list": "Mostrar lista del mazo",
       "tab_deck_list": "Mazo",
       "tab_history": "Historial",
-      "tab_notes": "Notas y presentación",
+      "tab_notes": "Notas",
       "tab_recommendations": "Recomendaciones",
       "tab_tools": "Herramientas"
     },
     "decklists": {
       "browse": {
-        "likes": "Likes",
+        "author": "Autor",
+        "author_by": "Por {{name}}",
+        "likes": "Me gusta",
         "loading": "Cargando guías de mazos...",
         "no_results": "Sin resultados",
         "results_count": "{{count}} resultados",
@@ -1032,51 +1208,51 @@
       },
       "filters": {
         "author": "Autor",
-        "author_placeholder": "Introduce el nombre del autor (p. ej. Valentin1331)...",
+        "author_placeholder": "Introduce el nombre del autor...",
         "excluded_cards": "Cartas excluidas",
         "name": "Nombre del mazo",
         "name_placeholder": "Introduce un nombre (p. ej. Guía de mazo)...",
         "required_cards": "Cartas requeridas",
         "submit": "Aplicar",
-        "title": "Criterios de filtro"
+        "title": "Criterios de filtrado"
       },
       "sorting": {
-        "date": "Más reciente",
-        "likes": "Más gustados",
+        "date": "Más recientes",
+        "likes": "Más me gusta",
         "popularity": "Más populares",
-        "user_reputation": "Mayor reputación de usuario"
+        "user_reputation": "Mayor reputación del usuario"
       }
     },
     "draw_simulator": {
-      "card_size": "Card size",
-      "decrease_card_size": "Decrease card size",
-      "draw_count": "Draw {{count}}",
-      "draw_tooltip": "Draw {{count}} {{cards}}.",
-      "drawn_cards": "Drawn cards ({{count}})",
-      "empty_hand": "No cards drawn.",
-      "help": "Resolve any “when you draw this card” effects manually (e.g. Lingering Injury).",
-      "help_label": "Draw effect reminder",
-      "in_play": "In play",
-      "increase_card_size": "Increase card size",
-      "redraw": "Redraw selection",
-      "redraw_tooltip": "Set selected cards aside, draw replacements, then shuffle the set-aside cards back into the deck.",
+      "card_size": "Tamaño de carta",
+      "decrease_card_size": "Reducir tamaño de carta",
+      "draw_count": "Robar {{count}}",
+      "draw_tooltip": "Robar {{count}} {{cards}}.",
+      "drawn_cards": "Cartas robadas ({{count}})",
+      "empty_hand": "No se han robado cartas.",
+      "help": "Resuelve manualmente cualquier efecto «cuando robes esta carta» (p. ej. Herida Persistente).",
+      "help_label": "Recordatorio de efectos al robar",
+      "in_play": "En juego",
+      "increase_card_size": "Aumentar tamaño de carta",
+      "redraw": "Volver a robar selección",
+      "redraw_tooltip": "Aparta las cartas seleccionadas, roba otras para reemplazarlas y luego baraja las cartas apartadas de nuevo en el mazo.",
       "reset": "Reiniciar",
       "reset_tooltip": "Reinicia el simulador a su estado inicial.",
-      "reshuffle": "Reshuffle selection",
-      "reshuffle_tooltip": "Shuffle selected cards back into the deck.",
-      "setup_label": "Setup card",
-      "setup_none": "No Setup card",
+      "reshuffle": "Rebarajar selección",
+      "reshuffle_tooltip": "Baraja las cartas seleccionadas de nuevo en el mazo.",
+      "setup_label": "Carta de Preparación",
+      "setup_none": "Sin carta de Preparación",
       "title": "Simulador de robo"
     },
     "errors": {
       "404": "Página no encontrada.",
-      "500": "Has robado el fallo automático.",
-      "500_help": "Revisa la consola del navegador para más detalles.",
-      "500_help_2": "Por favor, no intentes solucionar este problema borrando cookies u otros datos locales del navegador (a menos que no te importe perder tus mazos locales).",
+      "500": "Algo ha salido mal.",
+      "500_help": "Consulta la consola del navegador para más detalles.",
+      "500_help_2": "No intentes solucionar este problema borrando las cookies u otros datos locales del navegador (a menos que no te importe perder tus mazos locales).",
       "home": "Volver al inicio",
-      "illustration_credit": "Art by <artist_url>Wayne O Connor</artist_url>",
-      "preview_publish": "El mazo contiene cartas no compatibles con {{provider}}: {{names}}. Por favor, elimínalas antes de subirlo.",
-      "report": "Reportar incidencia"
+      "illustration_credit": "Arte de <artist_url>Wayne O Connor</artist_url>",
+      "preview_publish": "El mazo contiene cartas no admitidas por {{provider}}: {{names}}. Quítalas antes de subirlo.",
+      "report": "Informar de un problema"
     },
     "fan_made_content": {
       "actions": {
@@ -1102,16 +1278,16 @@
       "messages": {
         "available_content_loading": "Cargando contenido disponible...",
         "content_loading": "Cargando contenido...",
-        "fetch_failed": "Error al cargar el contenido: {{error}}",
+        "fetch_failed": "No se pudo cargar el contenido: {{error}}",
         "no_match": "Ningún contenido disponible coincide con tu filtro",
-        "parse_failed": "Error al añadir el contenido: {{error}}",
-        "registry_failed": "Error al cargar el contenido disponible del registro: {{error}}"
+        "parse_failed": "No se pudo añadir el contenido: {{error}}",
+        "registry_failed": "No se pudo cargar el contenido disponible del registro: {{error}}"
       },
       "settings": {
         "card_lists": "Listas de cartas",
-        "card_lists_help": "Este ajuste controla el valor por defecto del filtro \"Contenido de fans\" en las listas de cartas."
+        "card_lists_help": "Este ajuste controla el valor predeterminado del filtro \"Contenido fan\" en las listas de cartas."
       },
-      "short_title": "Fan-made",
+      "short_title": "Fan",
       "status": {
         "alpha": "Alfa",
         "beta": "Beta",
@@ -1122,11 +1298,11 @@
       "status_installed": "Instalado",
       "status_update_available": "Actualizar contenido",
       "tags": "Etiquetas",
-      "title": "Contenido de fans",
+      "title": "Contenido fan",
       "types": {
         "campaign": "Campaña",
-        "ranger_cards": "Ranger cards",
-        "rangers": "Rangers",
+        "ranger_cards": "Cartas de Guardián",
+        "rangers": "Guardianes",
         "rework": "Revisión",
         "scenario": "Escenario"
       }
@@ -1139,18 +1315,18 @@
       "all": "Todos",
       "and": "y",
       "approach_icons": {
-        "placeholder": "Select approach icons...",
-        "title": "Approach icons"
+        "placeholder": "Seleccionar iconos de Estrategia...",
+        "title": "Iconos de Estrategia"
       },
       "approaches": {
-        "title": "Atributos"
+        "title": "Estrategias"
       },
       "aspect_requirement": {
-        "title": "Aspect requirement",
-        "value": "Required value"
+        "title": "Requisito de Aspecto",
+        "value": "Valor requerido"
       },
       "asset": {
-        "title": "Apoyo"
+        "title": "Recurso"
       },
       "card_access": {
         "title": "Acceso a cartas"
@@ -1159,7 +1335,7 @@
         "even": "Par",
         "nocost": "Sin coste",
         "odd": "Impar",
-        "title": "Coste"
+        "title": "Coste de Energía"
       },
       "cycle": {
         "placeholder": "Seleccionar ciclos...",
@@ -1169,13 +1345,13 @@
         "title": "Entorno"
       },
       "equip": {
-        "title": "Equip"
+        "title": "Equipo"
       },
       "fan_made_content": {
         "all": "Mostrar todo",
-        "fan_made": "Solo contenido de fans",
+        "fan_made": "Solo contenido fan",
         "official": "Solo contenido oficial",
-        "title": "Contenido de fans"
+        "title": "Contenido fan"
       },
       "health": {
         "title": "Salud"
@@ -1187,35 +1363,35 @@
       "locked": "Este filtro está bloqueado",
       "or": "o",
       "ownership": {
-        "owned": "Propiedad",
+        "owned": "En propiedad",
         "title": "Propiedad",
-        "unowned": "No disponible"
+        "unowned": "No en propiedad"
       },
       "pack": {
         "placeholder": "Seleccionar packs...",
         "title": "Pack"
       },
       "properties": {
-        "heals_damage": "Cura daño",
-        "succeed_by": "Tener éxito por",
+        "heals_damage": "Cura Daño",
+        "succeed_by": "Éxito por",
         "title": "Propiedades"
       },
       "reset_filter": "Restablecer filtro",
       "role": {
-        "placeholder": "Seleccionar investigadores...",
-        "title": "Investigador"
+        "placeholder": "Cualquier Guardián",
+        "title": "Guardián"
       },
       "set": {
-        "placeholder": "Select sets...",
+        "placeholder": "Seleccionar sets...",
         "title": "Set"
       },
       "slot": {
-        "placeholder": "Seleccionar espacios...",
-        "title": "Espacio"
+        "placeholder": "Seleccionar ranuras...",
+        "title": "Ranura"
       },
       "title": "Filtros",
       "trait": {
-        "placeholder": "Seleccionar rasgos...",
+        "placeholder": "Seleccionar Rasgos...",
         "title": "Rasgo"
       },
       "type": {
@@ -1223,12 +1399,14 @@
         "title": "Tipo"
       },
       "uses": {
-        "placeholder": "Seleccionar tipo de usos...",
+        "placeholder": "Seleccionar atributos de usos...",
         "title": "Usos"
       }
     },
     "footer": {
-      "attribution": "Earthborne Rangers and all related content © <eb_url>Earthborne Games</eb_url>. This site is not produced, endorsed by or affiliated with Earthborne Games. Based on <ab_url>arkham.build</ab_url> by <felix_url>Felix Spöttel</felix_url>."
+      "attribution": "Earthborne Rangers y todo el contenido relacionado © <eb_url>Earthborne Games</eb_url>. Este sitio no ha sido creado ni respaldado por Earthborne Games, ni está afiliado a dicha empresa. Basado en <ab_url>arkham.build</ab_url> de <felix_url>Felix Spöttel</felix_url>.",
+      "privacy": "Política de privacidad",
+      "terms": "Condiciones del servicio"
     },
     "help": {
       "about": "Acerca de este sitio",
@@ -1236,7 +1414,7 @@
       "shortcuts": {
         "group_card_list": "Lista de cartas",
         "group_card_list_search": "Lista de cartas (búsqueda activa)",
-        "group_card_modal": "Vista de la carta",
+        "group_card_modal": "Ventana de carta",
         "group_deck_collection": "Colección de mazos",
         "group_deck_editor": "Editor de mazos",
         "group_deck_view": "Vista del mazo",
@@ -1245,64 +1423,174 @@
       },
       "title": "Ayuda"
     },
+    "legal": {
+      "privacy": {
+        "intro": "<p>Esta política explica cómo trata earthborne.build los datos personales.</p>",
+        "sections": {
+          "analytics": {
+            "body": "<p>Usamos <plausible_url>Plausible Analytics</plausible_url> para medir el uso agregado del sitio. Plausible es un servicio centrado en la privacidad, sin cookies y alojado en la UE; no almacena datos personales, identificadores persistentes ni direcciones IP.</p>",
+            "title": "Analítica"
+          },
+          "changes": {
+            "body": "<p>Podemos actualizar esta Política de privacidad cuando cambien el servicio o los requisitos legales. La versión vigente se publica en esta página.</p>",
+            "title": "Cambios"
+          },
+          "controller": {
+            "body": "<p>Responsable del tratamiento: Sergiu Puscas (<contact_email>sergiu@sergiu.org</contact_email>), Suiza.</p>",
+            "title": "Responsable del tratamiento"
+          },
+          "cookies": {
+            "body": "<p>Usamos una única cookie de sesión para la autenticación. Usamos IndexedDB en tu navegador para los datos de usuario y preferencias locales. No usamos cookies publicitarias ni de seguimiento entre sitios.</p>",
+            "title": "Cookies y almacenamiento local"
+          },
+          "data": {
+            "body": "<p>Solo tratamos los datos necesarios para el funcionamiento de earthborne.build: dirección de correo electrónico, nombre de usuario, hash de la contraseña, identificadores de sesión, el contenido que sincronizas con tu cuenta (mazos, campañas, carpetas, ajustes y logros) y las direcciones IP en los registros del servidor. Si nos contactas o denuncias un abuso, tratamos tu mensaje, el contenido o los identificadores de cuenta relacionados y las marcas de tiempo.</p>",
+            "title": "Datos que tratamos"
+          },
+          "processors": {
+            "body": "<p>Usamos Resend (Resend, Inc., EE. UU.) para enviar correos transaccionales, como los de verificación y restablecimiento de contraseña. El servicio en sí está alojado en infraestructura gestionada de forma privada en Suiza.</p>",
+            "title": "Encargados del tratamiento"
+          },
+          "purposes": {
+            "body": "<p>Tratamos los datos de cuenta, inicio de sesión, perfil, sincronización y eliminación de cuenta para prestar earthborne.build conforme a las <terms_url>Condiciones del servicio</terms_url>. Tratamos los datos de seguridad, prevención de abusos, depuración y correos del servicio en base a nuestro interés legítimo según la Ley Federal suiza de Protección de Datos (LPD) y, cuando proceda, el art. 6.1.f) del RGPD.</p>",
+            "title": "Finalidades y bases jurídicas"
+          },
+          "retention": {
+            "body": "<p>Los datos de la cuenta se conservan mientras exista tu cuenta. Si eliminas tu cuenta, el contenido privado se elimina de inmediato y las contribuciones públicas se anonimizan. Los registros del servidor se conservan hasta 30 días. Las copias de seguridad se conservan hasta 90 días.</p>",
+            "title": "Conservación"
+          },
+          "rights": {
+            "body": "<p>Conforme a la legislación de protección de datos aplicable, puedes solicitar el acceso, la exportación, la rectificación, la supresión o la limitación del tratamiento, u oponerte a él. La exportación de datos (Ajustes → Copia de seguridad), el cambio de correo electrónico y nombre de usuario, el restablecimiento de contraseña y la eliminación de la cuenta están disponibles como funciones de autoservicio. Para solicitudes manuales, escribe a <contact_email>sergiu@sergiu.org</contact_email>. También puedes presentar una reclamación ante la autoridad de protección de datos competente.</p>",
+            "title": "Tus derechos"
+          },
+          "security": {
+            "body": "<p>Usamos medidas como HTTPS, hash de contraseñas, tokens de sesión con hash y controles de acceso para proteger los datos de los usuarios.</p>",
+            "title": "Seguridad"
+          },
+          "third_party": {
+            "body": "<p>El contenido generado por los usuarios puede incluir enlaces o imágenes externos. Las imágenes externas pueden cargarse automáticamente desde servidores de terceros, que pueden tratar datos técnicos conforme a sus propias políticas de privacidad.</p>",
+            "title": "Contenido de terceros"
+          },
+          "transfers": {
+            "body": "<p>El envío de correos a través de Resend puede implicar un tratamiento fuera de Suiza y de la UE/EEE. Nos basamos en decisiones de adecuación cuando proceda y en Cláusulas Contractuales Tipo o garantías equivalentes cuando sea necesario.</p>",
+            "title": "Transferencias internacionales"
+          }
+        },
+        "title": "Política de privacidad",
+        "updated": "Última actualización: 10 de julio de 2026"
+      },
+      "terms": {
+        "intro": "<p>earthborne.build está gestionado por Sergiu Puscas (<contact_email>sergiu@sergiu.org</contact_email>).</p>",
+        "sections": {
+          "acceptable_use": {
+            "body": "<p>No debes hacer un uso indebido del servicio, intentar accesos no autorizados, interrumpir el servicio, subir contenido ilícito, acosar a otras personas, suplantar su identidad ni vulnerar sus derechos. Para denunciar un abuso, escribe a <contact_email>sergiu@sergiu.org</contact_email> indicando la URL o el ID correspondiente y una breve descripción.</p>",
+            "title": "Uso aceptable"
+          },
+          "account_deletion": {
+            "body": "<p>Puedes eliminar tu cuenta en cualquier momento desde los ajustes de la cuenta. El contenido privado se elimina, las contribuciones públicas se anonimizan y las copias de seguridad caducan según el proceso habitual de conservación de copias de seguridad.</p>",
+            "title": "Eliminación de la cuenta"
+          },
+          "accounts": {
+            "body": "<p>Eres responsable de mantener seguras las credenciales de tu cuenta y de la actividad realizada con ella. Debes proporcionar identificadores de cuenta correctos y no puedes usar la cuenta de otra persona sin su permiso.</p>",
+            "title": "Cuentas"
+          },
+          "availability": {
+            "body": "<p>El servicio se ofrece sin garantía de disponibilidad ininterrumpida. Las funciones pueden cambiar, limitarse o dejar de estar disponibles.</p>",
+            "title": "Disponibilidad"
+          },
+          "changes": {
+            "body": "<p>Podemos actualizar estas Condiciones cuando cambien el servicio o los requisitos legales. La versión vigente se publica en esta página. La <privacy_url>Política de privacidad</privacy_url> explica cómo se tratan los datos.</p>",
+            "title": "Cambios"
+          },
+          "eligibility": {
+            "body": "<p>Solo puedes usar earthborne.build si tienes capacidad legal para aceptar estas Condiciones.</p>",
+            "title": "Requisitos"
+          },
+          "governing_law": {
+            "body": "<p>Estas Condiciones se rigen por la legislación suiza, sin perjuicio de las normas imperativas de protección del consumidor que puedan aplicarse en tu país.</p>",
+            "title": "Legislación aplicable"
+          },
+          "liability": {
+            "body": "<p>En la medida en que lo permita la legislación aplicable, earthborne.build se ofrece sin garantías y la responsabilidad se limita a los casos exigidos por ley.</p>",
+            "title": "Responsabilidad"
+          },
+          "moderation": {
+            "body": "<p>Podemos revisar contenido o cuentas, eliminar o restringir contenido, y suspender o eliminar cuentas cuando sea necesario para gestionar el servicio, prevenir abusos o hacer cumplir estas Condiciones.</p>",
+            "title": "Moderación y acciones administrativas"
+          },
+          "service": {
+            "body": "<p>earthborne.build ofrece herramientas para construir mazos de Earthborne Rangers, llevar el registro de campañas y otras funciones comunitarias relacionadas. El servicio es un proyecto de fans y no ha sido creado ni respaldado por Earthborne Games, ni está afiliado a dicha empresa.</p>",
+            "title": "Servicio"
+          },
+          "user_content": {
+            "body": "<p>Eres responsable del contenido que creas o publicas. El contenido privado está destinado únicamente a tu cuenta. Las contribuciones públicas (como mazos compartidos y guías de mazos) pueden ser visibles para otros usuarios y pueden seguir disponibles de forma anonimizada tras eliminar la cuenta.</p>",
+            "title": "Contenido generado por los usuarios"
+          }
+        },
+        "title": "Condiciones del servicio",
+        "updated": "Última actualización: 10 de julio de 2026"
+      },
+      "trademark": "Earthborne Rangers™ y todo el contenido relacionado © Earthborne Games. Este sitio no ha sido creado ni respaldado por Earthborne Games, ni está afiliado a dicha empresa."
+    },
     "lists": {
       "actions": {
-        "blur_search": "Desenfocar búsqueda",
-        "clear_search": "Limpiar búsqueda",
-        "display_as_detailed": "Mostrar cartas detalladas",
-        "display_as_list": "Mostrar lista",
-        "display_as_list_text": "Mostrar lista con texto de carta",
-        "display_as_scans": "Mostrar imágenes",
-        "focus_search": "Enfocar búsqueda",
-        "move_down": "Mover abajo",
-        "move_up": "Mover arriba",
-        "next_card": "Siguiente carta",
-        "open_card_modal": "Abrir vista de la carta seleccionada",
+        "blur_search": "Salir de la búsqueda",
+        "clear_search": "Borrar búsqueda",
+        "display_as_detailed": "Mostrar como cartas detalladas",
+        "display_as_list": "Mostrar como lista",
+        "display_as_list_text": "Mostrar como lista con texto de carta",
+        "display_as_scans": "Mostrar como imágenes",
+        "focus_search": "Ir a la búsqueda",
+        "move_down": "Bajar",
+        "move_up": "Subir",
+        "next_card": "Carta siguiente",
+        "open_card_modal": "Abrir la ventana de la carta seleccionada",
         "previous_card": "Carta anterior",
         "reset_filters": "Restablecer filtros",
         "show_limited_access": "Mostrar acceso limitado",
-        "show_limited_access_help": "Los investigadores pueden tener acceso limitado y opcional a cartas según el nivel, clase, rasgo, tipo y/u otros criterios. Cuando está habilitado, se mostrarán las cartas de ese acceso limitado.",
+        "show_limited_access_help": "Los Guardianes pueden tener acceso limitado y opcional a cartas según su categoría, Rasgo, tipo u otros criterios. Si se activa, se mostrarán las cartas de ese acceso limitado.",
         "show_unusable_cards": "Mostrar cartas no utilizables",
-        "toggle_filter_menu": "Menú de filtros",
-        "toggle_filters": "Alternar filtros",
-        "toggle_sidebar": "Alternar barra lateral"
+        "toggle_filter_menu": "Mostrar/ocultar menú de filtros",
+        "toggle_filters": "Mostrar/ocultar filtros",
+        "toggle_sidebar": "Mostrar/ocultar mazos"
       },
       "all_cards": "Todas las cartas",
       "categories": {
-        "approach": "Approach",
-        "aspect": "Aspect",
-        "category": "Category",
+        "approach": "Estrategia",
+        "aspect": "Aspecto",
+        "category": "Categoría",
         "cost": "Coste",
         "cycle": "Ciclo",
-        "equip": "Equip",
+        "equip": "Equipo",
         "name": "Nombre",
-        "pack": "Pack",
-        "path_set": "Path set",
+        "pack": "Expansión",
+        "path_set": "Set de Caminos",
         "position": "Posición",
-        "set": "Conjunto",
+        "set": "Set",
         "type": "Tipo"
       },
       "group_by": "Agrupar por",
       "nav": {
-        "card_count_hidden": "({{count}} ocultas por filtros)",
+        "card_count_hidden": "({{count}} filtradas)",
+        "card_count_many": "{{count}} cartas",
         "card_count_one": "{{count}} carta",
         "card_count_other": "{{count}} cartas",
-        "display": "Mostrar",
-        "display_as_detailed": "Detalle",
+        "display": "Visualización",
+        "display_as_detailed": "Cartas detalladas",
         "display_as_list": "Lista",
-        "display_as_list_text": "Lista con texto",
+        "display_as_list_text": "Lista con texto de carta",
         "display_as_scans": "Imágenes",
         "display_as_scans_grouped": "Imágenes (agrupadas)",
-        "export": "Export",
+        "export": "Exportar",
         "jump_to": "Ir a...",
-        "list_settings": "Ajustes de lista",
+        "list_settings": "Ajustes de la lista",
         "sort": "Ordenar",
-        "sort_default": "Por defecto del usuario"
+        "sort_default": "Predeterminado del usuario"
       },
-      "reset": "Restablecer valores por defecto",
+      "reset": "Restablecer valores predeterminados",
       "search": {
         "include_backs": "Reversos",
-        "include_flavor": "Texto de ambientación",
+        "include_flavor": "Ambientación",
         "include_game_text": "Texto de juego",
         "include_name": "Nombre",
         "placeholder": "Buscar cartas...",
@@ -1312,163 +1600,220 @@
     },
     "popular_decks": {
       "decklists_link": "Ver todas las guías de mazos",
-      "error": "No se pudieron cargar las guías de mazos populares: {{error}}",
-      "no_results": "No se encontraron guías de mazos",
-      "title_card": "Guías de mazos populares con <tooltip>{{name}}</tooltip>",
+      "error": "No se han podido cargar las guías de mazos populares: {{error}}",
+      "no_results": "No se han encontrado guías de mazos",
+      "title_card": "Guías de mazos populares que contienen <tooltip>{{name}}</tooltip>",
       "title_investigator": "Guías de mazos populares de <tooltip>{{name}}</tooltip>"
     },
     "preview_banner": {
       "actions": {
-        "dismiss": "Cerrar",
-        "enable": "Activar spoilers"
+        "dismiss": "Descartar",
+        "enable": "Activar avances"
       },
-      "description": "Activar los spoilers mostrará cartas de conjuntos futuros en el explorador de cartas. Puedes cambiar esta configuración en cualquier momento en los ajustes de colección.",
-      "title": "¡La temporada de spoilers ha llegado!"
+      "description": "Al activar los avances, se mostrarán en el buscador de cartas las cartas de las próximas expansiones. Puedes cambiar este ajuste en cualquier momento en los ajustes de la colección.",
+      "title": "¡Ha llegado la temporada de avances!"
     },
     "rules": {
       "achievements": {
         "achieved_on": "{{date}}",
-        "date_label": "Achievement date",
-        "date_missing": "Date not set",
-        "empty": "No achievements match your search.",
+        "date_label": "Fecha del logro",
+        "date_missing": "Fecha sin indicar",
+        "empty": "Ningún logro coincide con tu búsqueda.",
         "items": {
           "all-out-of-options": {
-            "description": "Have only four cards remaining in the challenge deck.",
-            "title": "All Out of Options"
+            "description": "Quedarse con solo cuatro cartas en el mazo de Desafíos.",
+            "title": "Sin opciones"
           },
           "big-tech": {
-            "description": "Discard a gear with 10 or more tokens on it using Moment of Desperation.",
-            "title": "Big Tech"
+            "description": "Descartar un Equipo con 10 o más fichas usando Instante de desesperación.",
+            "title": "Gran tecnología"
           },
           "electric-slide": {
-            "description": "Complete the campaign using the Electric Fog weather every day.",
+            "description": "Completar la campaña con el clima Electric Fog todos los días.",
             "title": "Electric Slide"
           },
           "enough-already": {
-            "description": "Play the same moment 10 times in one day.",
-            "title": "Enough Already!"
+            "description": "Jugar el mismo Momento 10 veces en un día.",
+            "title": "¡Ya basta!"
           },
           "hard-pass": {
-            "description": "Finish the campaign without completing a single story mission.",
-            "title": "Hard Pass"
+            "description": "Terminar la campaña sin completar ni una sola Misión de historia.",
+            "title": "Ni de broma"
           },
           "howd-that-get-in-there": {
-            "description": "Add a card without the printed flora trait to Hy’s soup.",
-            "title": "How’d That Get in There?"
+            "description": "Añadir a la sopa de Hy una carta sin el Rasgo impreso Flora.",
+            "title": "¿Cómo ha llegado eso ahí?"
           },
           "log-flume": {
-            "description": "Travel from White Sky to Tumbledown in a single day.",
-            "title": "Log Flume"
+            "description": "Viajar de Cielo Blanco a Derrumbe en un solo día.",
+            "title": "Tronco loco"
           },
           "no-stone-left-unturned": {
-            "description": "Have every path card in the deck in play at the same time.",
-            "title": "No Stone Left Unturned"
+            "description": "Tener en juego a la vez todas las cartas de Camino del mazo.",
+            "title": "Sin dejar piedra sin remover"
           },
           "noodling": {
-            "description": "Catch a fish in the Black Mud.",
-            "title": "Noodling"
+            "description": "Pescar un pez en el Black Mud.",
+            "title": "Pesca a mano"
           },
           "people-person": {
-            "description": "Clear three or more humans with the same test.",
-            "title": "People Person"
+            "description": "Despejar a tres o más humanos con el mismo Reto.",
+            "title": "Don de gentes"
           },
           "pro-gamer": {
-            "description": "Pet Oru 3<per_ranger/> or more times during a single round.",
-            "title": "Pro Gamer"
+            "description": "Acariciar a Oru 3<per_ranger/> o más veces en una sola ronda.",
+            "title": "Jugador profesional"
           },
           "shes-a-natural": {
-            "description": "Have Quisi cause a Cloudhive swarm to be discarded.",
-            "title": "She’s A Natural!"
+            "description": "Hacer que Quisi provoque que se descarte un enjambre de Cloudhive.",
+            "title": "¡Es un talento natural!"
           },
           "ship-of-theseus": {
-            "description": "Replace every card in your deck with a reward card.",
-            "title": "Ship of Theseus"
+            "description": "Sustituir todas las cartas de tu mazo por cartas de Recompensa.",
+            "title": "El barco de Teseo"
           },
           "the-pentaverate": {
-            "description": "Have five humans within reach of one Ranger at the same time.",
-            "title": "The Pentaverate"
+            "description": "Tener a cinco humanos al alcance de un Guardián a la vez.",
+            "title": "El Pentavirato"
           },
           "unlimited-power": {
-            "description": "Have 7 or more energy in a single aspect.",
-            "title": "Unlimited Power!"
+            "description": "Tener 7 o más de Energía de un solo Aspecto.",
+            "title": "¡Poder ilimitado!"
           },
           "unplanned-reunion": {
-            "description": "Have Dace and Aell in play at the same time.",
-            "title": "Unplanned Reunion"
+            "description": "Tener a Dace y a Aell en juego a la vez.",
+            "title": "Reencuentro inesperado"
           }
         },
-        "lock": "Lock",
-        "progress": "{{completed}} / {{total}} badges earned",
-        "unlock": "Unlock",
-        "unlock_to_edit": "Unlock achievements to edit",
-        "unlocked_to_edit": "Achievements are unlocked"
+        "lock": "Bloquear",
+        "progress": "{{completed}} / {{total}} insignias conseguidas",
+        "unlock": "Desbloquear",
+        "unlock_to_edit": "Desbloquea los logros para editarlos",
+        "unlocked_to_edit": "Los logros están desbloqueados"
       },
       "back_to_top": "Volver arriba",
-      "loading": "Loading reference...",
-      "search_placeholder": "Buscar palabras clave...",
+      "loading": "Cargando referencia...",
+      "search_placeholder": "Buscar en la referencia...",
       "sections": {
-        "achievements": "Achievements",
-        "campaign-guides": "Campaign Guides",
-        "faq": "FAQ",
-        "one-day-missions": "One-Day Missions",
-        "rules-glossary": "Rules Glossary",
-        "updates": "Updates"
+        "achievements": "Logros",
+        "campaign-guides": "Guías de campaña",
+        "faq": "Preguntas frecuentes",
+        "one-day-missions": "Misiones de un día",
+        "rules-glossary": "Glosario de reglas",
+        "updates": "Actualizaciones"
       },
-      "title": "Referencia de reglas",
+      "title": "Reglas y referencia",
       "toc": "Índice"
     },
     "search": {
       "title": "Resultados de búsqueda"
     },
     "settings": {
+      "account": {
+        "danger_zone": "Zona de peligro",
+        "delete": {
+          "confirm_help": "Escribe {{username}} para confirmar la eliminación de la cuenta.",
+          "confirm_label": "Confirmación",
+          "deleting": "Eliminando cuenta...",
+          "help": "Elimina de forma permanente tu cuenta de earthborne.build y los datos asociados. Se eliminan las credenciales del servidor, las sesiones y los mazos, ajustes y logros sincronizados con la cuenta. Los mazos y campañas vinculados a la cuenta se eliminan de este dispositivo. Los mazos, ajustes y demás datos del navegador que solo están en este dispositivo no se eliminan.",
+          "submit": "Eliminar cuenta",
+          "title": "Eliminar cuenta"
+        },
+        "email": {
+          "add": "Añadir correo electrónico",
+          "add_help": "Añade una dirección de correo electrónico y una contraseña como forma alternativa de iniciar sesión.",
+          "cancel_pending": "Cancelar verificación del correo",
+          "canceling_pending": "Cancelando verificación del correo...",
+          "current_password": "Contraseña actual",
+          "new_email": "Nuevo correo electrónico",
+          "new_email_help": "Déjalo en blanco para mantener tu correo actual.",
+          "new_password": "Nueva contraseña",
+          "new_password_help": "Déjalo en blanco para mantener tu contraseña actual.",
+          "pending": "Correo pendiente",
+          "pending_help": "Revisa {{email}} para <verifyLink>verificarlo</verifyLink>.",
+          "resend_pending": "Reenviar correo de verificación",
+          "resend_success": "Correo de verificación enviado. Revisa tu bandeja de entrada.",
+          "resending_pending": "Enviando correo de verificación...",
+          "save": "Actualizar credenciales",
+          "saving": "Guardando credenciales...",
+          "status": "Estado",
+          "status_pending": "Pendiente de verificación",
+          "status_verified": "Verificado",
+          "title": "Credenciales"
+        },
+        "privacy_rights": {
+          "body": "Puedes exportar tus datos desde la pestaña Soporte y eliminar tu cuenta más abajo. Para solicitudes del RGPD que no sean de autoservicio, como las de limitación u oposición, escribe a <privacyEmail />.",
+          "title": "Privacidad y derechos sobre los datos"
+        },
+        "profile": {
+          "save": "Guardar perfil",
+          "saving": "Guardando perfil...",
+          "title": "Perfil",
+          "username": "Nombre de usuario",
+          "username_help": "Solo letras, números, guiones bajos y guiones"
+        },
+        "sync": {
+          "button": "Sincronizar ahora",
+          "conflict_campaign_label": "Campaña {{id}}",
+          "conflict_deck_label": "Mazo {{id}}",
+          "conflict_delete_remote": "Eliminar de la cuenta",
+          "conflict_restore": "Restaurar versión del servidor",
+          "conflicts_description": "Estos elementos se eliminaron en este dispositivo, pero desde entonces han cambiado en el servidor. Restaura la versión del servidor o elimínalos también de la cuenta.",
+          "conflicts_title": "Conflictos sin resolver",
+          "description": "Sincroniza tus mazos, campañas, ajustes y logros entre dispositivos.",
+          "status_label": "Estado:",
+          "title": "Sincronización de la cuenta"
+        },
+        "title": "Cuenta"
+      },
       "app": {
-        "built": "Compilado",
-        "title": "App",
+        "built": "Compilación",
+        "title": "Aplicación",
         "version": "Versión"
       },
       "backup": {
-        "confirm": "¿Seguro que quieres restaurar esta copia de seguridad? Cualquier dato existente se sobreescribirá.",
+        "confirm": "¿Seguro que quieres restaurar esta copia de seguridad? Se sobrescribirán todos los datos existentes.",
         "create": "Crear copia de seguridad",
-        "help": "Crea una copia de seguridad de tus ajustes, mazos y colección de cartas como un archivo JSON. Puedes usar este archivo para restaurar tus datos en cualquier dispositivo.",
-        "help_warning": "Cuando se restaura una copia de seguridad, <strong>cualquier dato existente se sobreescribirá.</strong>",
-        "no_file_selected": "No se ha seleccionado ningún archivo",
+        "help": "Crea una copia de seguridad de tus ajustes, mazos, campañas y colección de cartas en un archivo JSON. Puedes usar este archivo para restaurar tus datos en este dispositivo o en otro.",
+        "help_warning": "Al restaurar una copia de seguridad, <strong>se sobrescribirán todos los datos existentes.</strong>",
+        "no_file_selected": "Ningún archivo seleccionado",
         "restore": "Restaurar copia de seguridad",
-        "restore_error": "Error al restaurar la copia de seguridad: {{error}}",
+        "restore_error": "No se ha podido restaurar la copia de seguridad: {{error}}",
         "restore_success": "Copia de seguridad restaurada correctamente.",
-        "title": "Copia de Seguridad y Restauración"
+        "title": "Copia de seguridad y restauración"
       },
       "card_data": {
         "card_count": "Número de cartas",
         "data_version": "Versión de los datos",
-        "error": "Error al cargar los últimos datos de cartas.",
-        "loading": "Cargando últimos datos de cartas...",
+        "error": "No se han podido cargar los datos de cartas más recientes.",
+        "loading": "Cargando los datos de cartas más recientes...",
         "locale": "Idioma",
         "sync": "Sincronizar datos de cartas",
         "title": "Datos de cartas",
         "up_to_date": "Los datos de cartas están actualizados.",
-        "update_available": "Nuevos datos de cartas disponibles."
+        "update_available": "Hay nuevos datos de cartas disponibles."
       },
       "collection": {
         "card_collection": "Colección de cartas",
         "card_count": "Número de cartas",
         "groups": {
-          "campaign": "Campaign Expansions",
-          "core": "Core Game",
-          "other": "Other Expansions",
-          "path": "Path Expansions",
-          "player": "Player Card Expansions",
-          "valley": "Valley Expansions"
+          "campaign": "Expansiones de campaña",
+          "core": "Juego básico",
+          "other": "Otras expansiones",
+          "path": "Expansiones de Caminos",
+          "player": "Expansiones de cartas de jugador",
+          "valley": "Expansiones del Valle"
         },
-        "owned": "Owned in collection",
-        "show_all_cards_owned": "Mostrar todas las cartas como propiedad",
-        "show_all_cards_owned_help": "Cuando está seleccionado, los ajustes de colección inferiores se ignoran al comprobar la propiedad de cartas en listas de cartas y mazos.",
-        "show_previews": "Mostrar cartas spoilers",
-        "show_previews_help": "Cuando está seleccionado, las cartas no publicadas se mostrarán en la aplicación y se podrán añadir a los mazos.",
+        "owned": "En la colección",
+        "show_all_cards_owned": "Mostrar todas las cartas como poseídas",
+        "show_all_cards_owned_help": "Si se marca, se ignorarán los ajustes de colección de abajo al comprobar qué cartas posees en las listas de cartas y mazos.",
+        "show_previews": "Mostrar cartas de avance",
+        "show_previews_help": "Si se marca, las cartas no publicadas se mostrarán en la aplicación y podrán añadirse a los mazos.",
         "title": "Colección"
       },
       "developer": {
-        "dev_mode_enabled": "Enable developer mode",
-        "title": "Developer"
+        "dev_mode_enabled": "Activar modo desarrollador",
+        "title": "Desarrollador"
       },
       "display": {
         "card_display": "Ajustes de visualización de cartas",
@@ -1476,43 +1821,43 @@
         "card_show_details": "Mostrar detalles de la carta",
         "card_show_icon": "Mostrar icono de la carta",
         "card_show_thumbnail": "Mostrar miniatura de la carta",
-        "card_show_unique_icon": "Mostrar icono de carta única",
+        "card_show_unique_icon": "Mostrar icono de Único",
         "card_size": "Tamaño",
         "card_size_sm": "Compacto",
         "card_size_standard": "Estándar",
-        "color_scheme": "Color scheme",
-        "color_scheme_botanical": "Botanical (Default)",
-        "color_scheme_clay": "Clay & Ochre",
-        "color_scheme_nord": "Nord (Legacy)",
+        "color_scheme": "Esquema de colores",
+        "color_scheme_botanical": "Botánico (predeterminado)",
+        "color_scheme_clay": "Arcilla y ocre",
+        "color_scheme_nord": "Nord (antiguo)",
         "font_size": "Tamaño de fuente",
-        "font_size_preview": "Armitage planteó que el alfabeto pudo haber sido empleado con fines esotéricos por cultos prohibidos surgidos en la antigüedad, que a su vez heredaron gran parte de las prácticas y tradiciones de los magos del mundo sarraceno.",
-        "mini_role_art": "Use mini role art",
-        "mini_role_art_help": "When this is checked, ranger role cards with alternate mini art will display that art instead of the standard card art.",
-        "show_card_modal_popular_decks": "Mostrar mazos populares en las páginas de las cartas",
-        "show_card_modal_popular_decks_help": "Cuando está seleccionado, se mostrarán mazos populares que contengan la carta en la página de la carta.",
-        "sort_ignore_punctuation": "Ignorar signos de puntuación al ordenar cartas",
-        "sort_ignore_punctuation_help": "Cuando está seleccionado, la lista de cartas ignorará comillas y otros signos de puntuación al ordenar.",
-        "theme": "Tema",
+        "font_size_preview": "Los Guardianes se adentraron en la naturaleza salvaje; cada paso los alejaba más del mundo conocido que habían dejado atrás, guiados solo por sus habilidades y los vínculos que habían forjado.",
+        "mini_role_art": "Usar ilustración mini del Rol",
+        "mini_role_art_help": "Si se marca, las cartas de Rol de Guardián con ilustración mini alternativa mostrarán esa ilustración en lugar de la ilustración estándar.",
+        "show_card_modal_popular_decks": "Mostrar mazos populares en la ventana de carta",
+        "show_card_modal_popular_decks_help": "Si se marca, en la ventana de carta se mostrarán mazos populares que contienen la carta.",
+        "sort_ignore_punctuation": "Ignorar puntuación al ordenar",
+        "sort_ignore_punctuation_help": "Si se marca, la lista de cartas ignorará las comillas y otros signos de puntuación al ordenar.",
+        "theme": "Apariencia",
         "theme_dark": "Oscuro",
         "theme_light": "Claro",
         "theme_system": "Sistema",
         "title": "Visualización"
       },
-      "error": "Error al guardar los ajustes: {{error}}",
+      "error": "No se han podido guardar los ajustes: {{error}}",
       "general": {
-        "default_environment": "Entorno por defecto",
+        "default_environment": "Entorno predeterminado",
         "title": "General"
       },
       "lists": {
-        "deck_view": "Cartas del mazo",
-        "deck_view_scans": "Cartas del mazo (imágenes)",
+        "deck_view": "Vista del mazo",
+        "deck_view_scans": "Vista del mazo (imágenes)",
         "other_cards": "Otras cartas",
-        "path_cards": "Path cards",
-        "ranger_cards": "Ranger cards",
+        "path_cards": "Cartas de Camino",
+        "ranger_cards": "Cartas de Guardián",
         "title": "Listas"
       },
       "locale": {
-        "help": "Cambia el idioma de visualización de la app, incluyendo el texto de las cartas y metadatos.",
+        "help": "Cambia el idioma de la aplicación, incluidos el texto de las cartas y los metadatos.",
         "title": "Idioma"
       },
       "preview": "Vista previa",
@@ -1522,13 +1867,14 @@
     },
     "ui": {
       "cards_combobox": {
+        "placeholder_many": "Selecciona cartas...",
         "placeholder_one": "Selecciona una carta...",
         "placeholder_other": "Selecciona cartas..."
       },
       "collapsible": {
         "collapse": "Cerrar sección",
         "expand": "Expandir sección",
-        "toggle": "Alternar sección"
+        "toggle": "Mostrar/ocultar sección"
       },
       "combobox": {
         "unknown_option": "Opción desconocida"
