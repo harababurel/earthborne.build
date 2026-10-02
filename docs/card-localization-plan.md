@@ -24,7 +24,7 @@ When the user selects a language, the interface switches to it. Card metadata us
 
 ## Phase 2: backend storage and ingest
 
-1. Migration: add a `translation` table with primary key `(locale, entity, entity_id, field, value)`. `entity` is one of card, pack, set, subset, token, type, aspect, area. Update `schema.sql` and `schema.types.ts`.
+1. Migration: add a `translation` table with columns `(locale, entity, entity_id, field, value)` and primary key `(locale, entity, entity_id, field)`. `entity` is one of card, pack, set, subset, token, type, aspect, area. Update `schema.sql` and `schema.types.ts`.
 2. Add a `.po` parser module, using `gettext-parser` or a small custom parser. It must:
    - split `msgctxt` into `<id>.<field>`
    - skip entries with an empty `msgstr`
