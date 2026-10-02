@@ -1,5 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildStarterDecks } from "@/store/lib/predefined-decks";
+import * as persist from "@/store/persist";
+import type { DataVersion } from "@/store/schemas/data-version.schema";
+import type { MetadataResponse } from "@/store/services/queries";
 import { makeData, makeTestDeck } from "@/test/factories";
 import { getMockStore } from "@/test/get-mock-store";
 
@@ -16,6 +19,50 @@ describe("app slice", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+  });
+
+  it("loads the saved locale and invalidates metadata cached in another language", async () => {
+    const store = await getMockStore();
+    const state = store.getState();
+    const version: DataVersion = {
+      card_count: 0,
+      cards_updated_at: "2026-10-02T00:00:00.000Z",
+      translation_updated_at: "2026-10-02T00:00:00.000Z",
+      locale: "es",
+    };
+    vi.spyOn(persist, "hydrate").mockResolvedValue({
+      settings: { ...state.settings, locale: "es" },
+      metadata: {
+        ...state.metadata,
+        dataVersion: { ...version, locale: "en" },
+      },
+    });
+    const metadata: MetadataResponse = {
+      pack: [
+        {
+          code: "ebr",
+          cycle_code: "ebr",
+          name: "Guardabosques",
+          real_name: "Earthborne Rangers",
+          position: 1,
+          official: true,
+        },
+      ],
+      encounterSet: [],
+    };
+    const queryMetadata = vi.fn(async () => metadata);
+    const queryDataVersion = vi.fn(async () => version);
+    const queryCards = vi.fn(async () => []);
+    await state.init(queryMetadata, queryDataVersion, queryCards, {
+      refresh: false,
+    });
+    expect(queryMetadata).toHaveBeenCalledWith("es");
+    expect(queryCards).toHaveBeenCalledWith("es");
+    expect(queryDataVersion).toHaveBeenCalledWith("es");
+    expect(store.getState().metadata.dataVersion?.locale).toBe("es");
+    expect(store.getState().metadata.cycles.ebr.real_name).toBe(
+      "Earthborne Rangers",
+    );
   });
 
   it("re-adds only missing or modified premade decks", async () => {

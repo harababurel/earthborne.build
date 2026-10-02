@@ -10,6 +10,7 @@ import type { ResolvedDeck } from "@/store/lib/types";
 import {
   selectLocaleSortingCollator,
   selectMetadata,
+  selectTraitMapper,
 } from "@/store/selectors/shared";
 import { splitMultiValue } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
@@ -63,8 +64,8 @@ function TraitsChartRow({
 }) {
   const metadata = useStore(selectMetadata);
   const collator = useStore(selectLocaleSortingCollator);
+  const traitMapper = useStore(selectTraitMapper);
 
-  const { i18n, t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const cards = Object.values(deck.cards.slots)
@@ -86,9 +87,7 @@ function TraitsChartRow({
               <button className={css["trait-chart-title"]} type="button">
                 {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 <span className={css["trait"]}>
-                  {i18n.exists(`common.traits.${trait.x}`)
-                    ? t(`common.traits.${trait.x}`)
-                    : trait.x}
+                  {traitMapper(trait.x).name}
                 </span>
               </button>
             </Trigger>

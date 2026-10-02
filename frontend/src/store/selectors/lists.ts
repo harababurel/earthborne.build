@@ -1575,14 +1575,12 @@ function selectSubtypeChanges(value: SubtypeFilter) {
   return enabled.map(([key]) => labels[key]).join(` ${i18n.t("filters.or")} `);
 }
 
-function selectTraitChanges(value: MultiselectFilter) {
+function selectTraitChanges(state: StoreState, value: MultiselectFilter) {
   if (!value.length) return "";
+  const traitMapper = selectTraitMapper(state);
 
   return value
-    .map((code) => {
-      const key = `common.traits.${code}`;
-      return i18n.exists(key) ? i18n.t(key) : code;
-    })
+    .map((code) => traitMapper(code).name)
     .join(` ${i18n.t("filters.or")} `);
 }
 
@@ -1687,7 +1685,7 @@ export function selectFilterChanges<T extends keyof FilterMapping>(
     }
 
     case "trait": {
-      return selectTraitChanges(value as MultiselectFilter);
+      return selectTraitChanges(state, value as MultiselectFilter);
     }
 
     case "type": {

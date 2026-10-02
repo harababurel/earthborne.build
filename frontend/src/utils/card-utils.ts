@@ -297,8 +297,9 @@ export function cardUses(card: Card) {
 
 export function displayAttribute(
   card: Card | undefined,
-  key: "text" | "name" | "traits" | "flavor",
+  key: "text" | "name" | "real_name" | "traits" | "flavor",
 ) {
+  if (key === "real_name") return card?.real_name ?? card?.name ?? "";
   return card?.[key] ?? "";
 }
 

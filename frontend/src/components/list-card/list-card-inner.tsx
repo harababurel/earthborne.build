@@ -10,6 +10,7 @@ import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { useStore } from "@/store";
+import { selectTraitMapper } from "@/store/selectors/shared";
 import type { SettingsState } from "@/store/slices/settings.types";
 import { cardLimit, displayAttribute, getCardColor } from "@/utils/card-utils";
 import { cx } from "@/utils/cx";
@@ -112,6 +113,8 @@ export function ListCardInner(props: Props) {
   } = props;
 
   const { t } = useTranslation();
+  const traitMapper = useStore(selectTraitMapper);
+  const traits = card.traits ? traitMapper(card.traits).name : "";
   const dialogContext = useDialogContext();
 
   const openCardModal = useStore((state) => state.openCardModal);
@@ -260,10 +263,10 @@ export function ListCardInner(props: Props) {
                   <span>
                     {card.type_code !== "role" &&
                       t(`common.type.${card.type_code}`)}
-                    {card.traits
+                    {traits
                       ? card.type_code !== "role"
-                        ? ` / ${card.traits}`
-                        : card.traits
+                        ? ` / ${traits}`
+                        : traits
                       : ""}
                   </span>
                   <CardEquipLoad card={card} />

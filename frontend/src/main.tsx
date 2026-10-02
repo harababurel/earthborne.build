@@ -11,7 +11,7 @@ import ReactDOM from "react-dom/client";
 import i18n from "@/utils/i18n";
 import App from "./app";
 import { useStore } from "./store";
-import { tabSync } from "./store/persist";
+import { appStorage, tabSync } from "./store/persist";
 import type { TabSyncEvent } from "./store/persist/tab-sync";
 import { createHttpClient } from "./store/services/http-client";
 import { HttpClientContext } from "./store/services/http-client.context";
@@ -54,9 +54,12 @@ init().catch((err) => {
 });
 
 async function init() {
-  await useStore
-    .getState()
-    .init(queryMetadata, queryDataVersion, queryCards, { refresh: false });
+  const persistedApp = await appStorage.get();
+  const settings = persistedApp?.state.settings ?? useStore.getState().settings;
+  await useStore.getState().init(queryMetadata, queryDataVersion, queryCards, {
+    refresh: false,
+    locale: settings.locale,
+  });
 
   await useStore.getState().initSession(client);
 

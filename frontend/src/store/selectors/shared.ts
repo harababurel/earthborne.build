@@ -133,7 +133,15 @@ export const selectTraitMapper = createSelector(
   (_) => {
     return (code: string) => {
       const key = `common.traits.${code}`;
-      const name = i18n.exists(key) ? i18n.t(key) : code;
+      const name = i18n.exists(key)
+        ? i18n.t(key)
+        : code.replace(/[^./]+/g, (part) => {
+            const trait = part.trim().replace(/^¬/, "");
+            const traitKey = `common.traits.${trait}`;
+            return i18n.exists(traitKey)
+              ? part.replace(trait, i18n.t(traitKey))
+              : part;
+          });
       return { code, name };
     };
   },

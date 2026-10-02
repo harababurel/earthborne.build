@@ -40,11 +40,11 @@ export type AllCardResponse = Card[];
  */
 
 export async function queryMetadata(
-  _locale: Locale = "en",
+  locale: Locale = "en",
 ): Promise<MetadataResponse> {
   const [packRes, setRes] = await Promise.all([
-    apiV2Request("/v2/public/packs"),
-    apiV2Request("/v2/public/sets"),
+    apiV2Request(`/v2/public/packs?locale=${encodeURIComponent(locale)}`),
+    apiV2Request(`/v2/public/sets?locale=${encodeURIComponent(locale)}`),
   ]);
 
   const {
@@ -53,6 +53,7 @@ export async function queryMetadata(
     data: Array<{
       id: string;
       name: string;
+      real_name: string;
       short_name: string | null;
       position: number;
     }>;
@@ -74,7 +75,7 @@ export async function queryMetadata(
     code: p.id,
     // ER has no cycles; use pack code as cycle_code placeholder.
     cycle_code: p.id,
-    real_name: p.name,
+    real_name: p.real_name,
     name: p.name,
     position: p.position,
     official: true,
@@ -92,14 +93,18 @@ export async function queryMetadata(
 }
 
 export async function queryDataVersion(
-  _locale: Locale = "en",
+  locale: Locale = "en",
 ): Promise<DataVersion> {
-  const res = await apiV2Request("/version");
+  const res = await apiV2Request(
+    `/version?locale=${encodeURIComponent(locale)}`,
+  );
   return await res.json();
 }
 
-export async function queryCards(_locale: Locale = "en"): Promise<Card[]> {
-  const res = await apiV2Request("/v2/public/cards");
+export async function queryCards(locale: Locale = "en"): Promise<Card[]> {
+  const res = await apiV2Request(
+    `/v2/public/cards?locale=${encodeURIComponent(locale)}`,
+  );
   const { data }: { data: Card[] } = await res.json();
   return data;
 }

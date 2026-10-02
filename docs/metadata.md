@@ -65,7 +65,7 @@ The parser splits each `msgctxt` into an entity id and field, skips empty transl
 
 **Outdated-source policy:** after formatting normalization, a translation whose `msgid` differs from the current English source is retained. Ingest logs per-locale translated field/card coverage, outdated-source counts, and ignored-entry counts so upstream translations can be corrected.
 
-Storage, ingest, and locale-aware API responses are implemented. The API applies per-field English fallback while retaining English traits and English-derived rules values. Frontend language-based fetching and trait display translation remain pending. See [card-localization-plan.md](./card-localization-plan.md) and [api.md](./api.md).
+Storage, ingest, locale-aware API responses, and frontend language-based fetching are implemented. The API applies per-field English fallback while retaining English traits and English-derived rules values. The frontend translates traits only for display, searches both translated and English card names, and uses English names for deck export/share text. See [card-localization-plan.md](./card-localization-plan.md) and [api.md](./api.md).
 
 ## Card schema
 

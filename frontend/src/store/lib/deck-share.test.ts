@@ -90,6 +90,41 @@ const metadata = { cards } as unknown as Parameters<
 >[1];
 
 describe("deck-share", () => {
+  it("uses English card names when metadata is translated", () => {
+    const translatedCards = Object.fromEntries(
+      Object.entries(cards).map(([code, card]) => [
+        code,
+        {
+          ...card,
+          real_name: card.name,
+          name: `Translated ${code}`,
+        },
+      ]),
+    );
+    const translatedDeck = {
+      ...deck,
+      cards: {
+        ...deck.cards,
+        slots: Object.fromEntries(
+          Object.entries(deck.cards.slots).map(([code, resolved]) => [
+            code,
+            { ...resolved, card: translatedCards[code] },
+          ]),
+        ),
+      },
+    };
+    const model = buildDeckShareModel(
+      translatedDeck,
+      { ...metadata, cards: translatedCards },
+      t,
+      { includeRewards: true, includeDisplaced: true },
+    );
+    expect(formatDeckShareText(model)).toContain("Voice of the Elders");
+    expect(formatDeckShareMarkdown(model)).toContain("2x Insightful");
+    expect(formatDeckShareText(model)).not.toContain("Translated");
+    expect(formatDeckShareMarkdown(model)).not.toContain("Translated");
+  });
+
   it("formats the deck as plaintext", () => {
     const model = buildDeckShareModel(deck, metadata, t, {
       includeRewards: false,

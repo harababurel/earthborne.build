@@ -9,6 +9,7 @@ function prepareCardFace(card: Card, search: Search) {
 
   if (search.includeName) {
     needle.push(displayAttribute(card, "name"));
+    if (card.real_name) needle.push(card.real_name);
   }
 
   if (search.includeGameText) {

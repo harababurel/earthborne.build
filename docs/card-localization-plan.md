@@ -11,10 +11,10 @@ When the user selects a language, the interface switches to it. Card metadata us
 | 1: UI languages | Implemented | `a46d00ef`: supported locale files completed, Italian added, unused locales removed, and language selector updated. |
 | 2: backend storage and ingest | Implemented | `7d1fa31c`: translation table, PO parser, transactional ingest, coverage logging, update timestamp, and parser/loading tests added. |
 | 3: API | Implemented | Locale-aware cards, packs, sets, and version responses; English fallback; shared schema additions; real in-memory database integration tests. |
-| 4: frontend | Pending — next | Localized card requests, trait display, bilingual search, and English export/share names. |
-| 5: docs | In progress | UI and ingest status documented; API and frontend usage documentation must be finalized when those phases ship. |
+| 4: frontend | Implemented; live verification blocked | Locale-aware startup/refetch, translated trait display, bilingual name search/BuildQL, and English export/share names. Frontend typecheck, build, and tests pass; dev site returns 502. |
+| 5: docs | Updated | UI, ingest, API parameters, frontend behavior, and adding-language instructions documented. |
 
-The implementation commits do not establish completion of every verification step below. Visual checks of each language and local ingest row-count checks still need confirmation. Card metadata remains English in the app until Phase 4 connects the frontend to the localized API.
+The implementation commits do not establish completion of every verification step below. Visual checks of each language and local ingest row-count checks still need confirmation. The frontend now requests card metadata in the selected language. Phase 4's live Spanish checks remain pending because `https://dev.harababurel.com` returned 502 during verification on 2026-10-02.
 
 ## Decisions
 

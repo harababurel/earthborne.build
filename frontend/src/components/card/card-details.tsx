@@ -1,7 +1,8 @@
 import type { Card } from "@earthborne-build/shared";
 import { useTranslation } from "react-i18next";
 import { CardEquipLoad } from "@/components/card-equip-load";
-import { displayAttribute } from "@/utils/card-utils";
+import { useStore } from "@/store";
+import { selectTraitMapper } from "@/store/selectors/shared";
 import css from "./card.module.css";
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 export function CardDetails(props: Props) {
   const { card } = props;
   const { t } = useTranslation();
+  const traitMapper = useStore(selectTraitMapper);
 
   return (
     <div className={css["details"]}>
@@ -23,7 +25,7 @@ export function CardDetails(props: Props) {
 
         {card.traits && (
           <p className={css["details-traits"]}>
-            {displayAttribute(card, "traits")}
+            {traitMapper(card.traits).name}
           </p>
         )}
       </div>

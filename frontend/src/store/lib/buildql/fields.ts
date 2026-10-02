@@ -170,7 +170,7 @@ const fieldDefinitions: FieldDefinition[] = [
   },
   {
     aliases: ["na"],
-    lookup: backResolver((card) => card.name),
+    lookup: backResolver((card) => [card.name, card.real_name ?? card.name]),
     name: "name",
     type: "string",
   },

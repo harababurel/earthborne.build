@@ -7,7 +7,7 @@ UI translations live in `frontend/src/locales/*.json` and are loaded with `react
 Status as of 2026-10-02. The implementation is tracked in [card-localization-plan.md](./card-localization-plan.md).
 
 1. **UI strings** — implemented for `en`, `de`, `es`, `fr`, `it`, and `ru`, all selectable in settings. Spanish, French, Italian, and Russian UI translations were completed, with game-term keys aligned to the card-data PO files. German uses official Frosted Games terminology; its native-speaker review remains tracked in [translations-de-review.md](./translations-de-review.md). Visual checks of every language still need confirmation.
-2. **Card metadata** — storage, ingest, and API implemented; frontend integration pending. The backend imports `i18n/<locale>/**/*.po` into the translation table and records coverage and outdated-source counts. Cards, packs, sets, and `/version` accept `?locale=` with per-field English fallback; cards and packs retain their English names as `real_name`. The app still displays English card metadata. Next: localized frontend requests, bilingual name search, and English export/share names.
+2. **Card metadata** — storage, ingest, API, and frontend implemented. The backend imports `i18n/<locale>/**/*.po` into the translation table and records coverage and outdated-source counts. Cards, packs, sets, and `/version` accept `?locale=` with per-field English fallback; cards and packs retain their English names as `real_name`. The frontend uses the saved language on startup, refetches on language changes, translates trait displays while retaining English filter/rules values, searches both names (including BuildQL), and exports/shares English card names. Frontend checks pass; live Spanish verification is pending because the dev site returned 502.
 3. **Rules reference** — later. The embedded `/rules` content (`frontend/src/assets/*.html`) is English scraper output; a German version needs the official German rulebook as scraper input (licensed text; source PDFs are kept locally, outside the repo).
 4. **Localized card scans** — later, optional. Serve German card images when the app language is German; blocked on sourcing scans of the German printing.
 
@@ -24,7 +24,7 @@ Supported locales are declared in [frontend/src/utils/constants.ts](../frontend/
 5. Use official card-data translations for game terms (`common.type`, `common.traits`, `common.uses`, aspects, and areas) where available.
 6. Run the frontend checks and inspect the language on `https://dev.harababurel.com` for layout and text issues.
 
-For card metadata, add the locale's PO files to the `rangers-card-data` checkout, add the locale to `LOCALES` in `backend/src/scripts/card-translations.ts`, and update `resolveLocale` in `backend/src/db/queries/translation.ts`. Re-run ingest and inspect its coverage report. Frontend locale handling will also need to support the language once Phase 4 is implemented.
+For card metadata, add the locale's PO files to the `rangers-card-data` checkout, add the locale to `LOCALES` in `backend/src/scripts/card-translations.ts`, and update `resolveLocale` in `backend/src/db/queries/translation.ts`. Re-run ingest and inspect its coverage report, then verify translated cards and English fallback in the frontend.
 
 ## Updating translations
 

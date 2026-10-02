@@ -37,7 +37,10 @@ export function buildDeckShareModel(
 ): DeckShareModel {
   const backgroundName = t(`common.set.${deck.background}`);
   const specialtyName = t(`common.set.${deck.specialty}`);
-  const roleName = displayAttribute(metadata.cards[deck.role_code], "name");
+  const roleName = displayAttribute(
+    metadata.cards[deck.role_code],
+    "real_name",
+  );
 
   const aspectCard = metadata.cards[deck.aspect_code];
   const aspects = ASPECT_STATS.map(
@@ -188,7 +191,7 @@ function toShareCards(
 ): DeckShareCard[] {
   return [...cards].sort(bySetPosition).map((card) => ({
     quantity: getQuantity(card),
-    name: displayAttribute(card, "name"),
+    name: displayAttribute(card, "real_name"),
   }));
 }
 
@@ -214,8 +217,8 @@ function bySetPosition(a: Card, b: Card) {
   const posB = Number(b.set_position ?? Number.POSITIVE_INFINITY);
 
   if (Number.isNaN(posA) || Number.isNaN(posB) || posA === posB) {
-    return displayAttribute(a, "name").localeCompare(
-      displayAttribute(b, "name"),
+    return displayAttribute(a, "real_name").localeCompare(
+      displayAttribute(b, "real_name"),
     );
   }
 

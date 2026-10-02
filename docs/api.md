@@ -31,7 +31,7 @@ All public data endpoints live under `/v2/public`.
 
 Translations are applied field by field, with English fallback when a translation is missing or empty. Cards translate names, rules text, flavor, challenge effects, and token names/plurals. Packs translate names and short names; sets translate names. Cards and packs include `real_name`, the English name, even in English responses. Traits, keywords, `is_unique`, `is_expert`, identifiers, and image metadata retain their English-derived values.
 
-For example, `GET /v2/public/cards/01001?locale=es` requests Spanish metadata while retaining English fields where Spanish coverage is incomplete. Frontend language-based fetching is still pending in Phase 4 of [card-localization-plan.md](./card-localization-plan.md).
+For example, `GET /v2/public/cards/01001?locale=es` requests Spanish metadata while retaining English fields where Spanish coverage is incomplete. The frontend sends the selected language on startup and language changes and includes the locale in its persisted data-version key. See [card-localization-plan.md](./card-localization-plan.md) for implementation and verification status.
 
 ### Cards
 

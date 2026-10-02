@@ -51,6 +51,7 @@ export const createAppSlice: StateCreator<StoreState, [], [], AppSlice> = (
     { refresh, locale, overrides } = {},
   ) {
     const persistedState = await hydrate();
+    locale ??= persistedState?.settings?.locale ?? get().settings.locale;
 
     if (!refresh && persistedState?.metadata?.dataVersion?.cards_updated_at) {
       const remoteDataVersion = await queryDataVersion(locale);
@@ -547,7 +548,7 @@ function synthesiseCycles(metadata: Metadata) {
       code: pack.code,
       name: pack.name,
       position: pack.position,
-      real_name: pack.name,
+      real_name: pack.real_name,
       official: true,
     };
   }

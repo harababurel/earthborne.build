@@ -114,7 +114,7 @@ export function formatDeckAsText(state: StoreState, deck: ResolvedDeck) {
 
   const investigatorName = displayAttribute(
     metadata.cards[deck.role_code],
-    "name",
+    "real_name",
   );
 
   text += `# ${deck.name}\n\n`;
@@ -199,7 +199,7 @@ function formatCardAsText(
   card: Card,
   quantities: { [code: string]: number },
 ) {
-  const name = displayAttribute(card, "name");
+  const name = displayAttribute(card, "real_name");
 
   const quantity = quantities[card.code] ?? 0;
   const energyCost = card.energy_cost != null ? ` [${card.energy_cost}]` : "";

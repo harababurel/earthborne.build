@@ -34,7 +34,9 @@ export function CardIcon(props: Props) {
 
   if (card.category_id === "location") {
     const symbolUrl =
-      locationSymbolUrlsByNormalizedName[card.name.toLowerCase()];
+      locationSymbolUrlsByNormalizedName[
+        (card.real_name ?? card.name).toLowerCase()
+      ];
     if (!symbolUrl) return null;
     return (
       <div
