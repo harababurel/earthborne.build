@@ -20,6 +20,7 @@ import {
   inferBackImageSource,
   loadTtsUniqueBackImageSources,
 } from "./card-image-sources.ts";
+import { loadCardTranslations } from "./card-translations.ts";
 
 const CARD_DATA_DIR = process.env["CARD_DATA_DIR"];
 if (!CARD_DATA_DIR) {
@@ -101,6 +102,7 @@ async function ingest() {
     await ensureAppMetadataTable(tx);
 
     // Clear existing data in dependency order
+    await tx.deleteFrom("translation").execute();
     await tx.deleteFrom("card").execute();
     await tx.deleteFrom("card_subset").execute();
     await tx.deleteFrom("card_set").execute();
@@ -312,6 +314,34 @@ async function ingest() {
     }
 
     log("info", `Inserted ${cardsToInsert.length} cards total`);
+
+    const translations = await loadCardTranslations(
+      dataDir,
+      {
+        card: cardsToInsert,
+        pack: packs.map((p) => ({ ...p, id: remapPackId(p).id })),
+        set: cardSets,
+        subset: subsets,
+        token: tokens,
+        type: cardTypes,
+        aspect: aspects,
+        area: areas,
+      },
+      (message) => log("info", message),
+    );
+    for (let i = 0; i < translations.length; i += 100) {
+      await tx
+        .insertInto("translation")
+        .values(translations.slice(i, i + 100))
+        .execute();
+    }
+    await tx
+      .insertInto("app_metadata")
+      .values({ key: "translations_updated_at", value: cardsUpdatedAt })
+      .onConflict((oc) =>
+        oc.column("key").doUpdateSet({ value: cardsUpdatedAt }),
+      )
+      .execute();
 
     await tx
       .insertInto("app_metadata")

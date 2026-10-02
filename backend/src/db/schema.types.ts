@@ -119,6 +119,22 @@ export interface AppMetadata {
   value: string;
 }
 
+export interface Translation {
+  locale: string;
+  entity:
+    | "card"
+    | "pack"
+    | "set"
+    | "subset"
+    | "token"
+    | "type"
+    | "aspect"
+    | "area";
+  entity_id: string;
+  field: string;
+  value: string;
+}
+
 export interface Account {
   id: string;
   name: string;
@@ -220,6 +236,7 @@ export interface DB {
   card: Card;
   fan_made_project_info: FanMadeProjectInfo;
   app_metadata: AppMetadata;
+  translation: Translation;
   account: Account;
   account_identity: AccountIdentity;
   session: Session;
