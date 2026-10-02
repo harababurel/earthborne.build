@@ -1,7 +1,8 @@
 import { sql } from "kysely";
 import type { Database } from "../db.ts";
+import { resolveLocale } from "./translation.ts";
 
-export async function getAppDataVersions(db: Database) {
+export async function getAppDataVersions(db: Database, locale?: string) {
   await ensureAppMetadataTable(db);
 
   const cardResult = await db
@@ -11,15 +12,18 @@ export async function getAppDataVersions(db: Database) {
 
   const metadataResult = await db
     .selectFrom("app_metadata")
-    .select("value")
-    .where("key", "=", "cards_updated_at")
-    .executeTakeFirst();
+    .select(["key", "value"])
+    .where("key", "in", ["cards_updated_at", "translations_updated_at"])
+    .execute();
+  const metadata = new Map(metadataResult.map((row) => [row.key, row.value]));
 
   return {
     card_count: cardResult?.card_count ?? 0,
-    cards_updated_at: metadataResult?.value ?? "1970-01-01T00:00:00.000Z",
-    locale: "en",
-    translation_updated_at: metadataResult?.value ?? "1970-01-01T00:00:00.000Z",
+    cards_updated_at:
+      metadata.get("cards_updated_at") ?? "1970-01-01T00:00:00.000Z",
+    locale: resolveLocale(locale),
+    translation_updated_at:
+      metadata.get("translations_updated_at") ?? "1970-01-01T00:00:00.000Z",
   };
 }
 

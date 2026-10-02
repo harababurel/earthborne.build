@@ -1,5 +1,6 @@
 import { APPROACH_ORDER, type ApproachKey } from "@earthborne-build/shared";
 import type { Database } from "../db.ts";
+import { getTranslations, type TranslationMap } from "./translation.ts";
 
 // Area IDs from rangers-card-data map to frontend enum values.
 const AREA_MAP: Record<string, "within_reach" | "along_the_way"> = {
@@ -43,6 +44,7 @@ type CardRow = {
   aspect_focus: number | null;
   aspect_spirit: number | null;
   token_count: number | string | null;
+  token_id: string | null;
   area_id: string | null;
   guide_entry: string | null;
   back_card_id: string | null;
@@ -70,7 +72,11 @@ type CardRow = {
 
 export type CardApiShape = ReturnType<typeof transformCard>;
 
-export async function getAllCards(db: Database): Promise<CardApiShape[]> {
+export async function getAllCards(
+  db: Database,
+  locale?: string,
+): Promise<CardApiShape[]> {
+  const translations = await getTranslations(db, locale, ["card", "token"]);
   const rows = await db
     .selectFrom("card")
     .leftJoin("card_set", "card.set_id", "card_set.id")
@@ -109,6 +115,7 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
       "card.aspect_focus",
       "card.aspect_spirit",
       "card.token_count",
+      "card.token_id",
       "card.area_id",
       "card.guide_entry",
       "card.back_card_id",
@@ -136,13 +143,15 @@ export async function getAllCards(db: Database): Promise<CardApiShape[]> {
     .orderBy("card.code")
     .execute();
 
-  return rows.map((r) => transformCard(r as unknown as CardRow));
+  return rows.map((r) => transformCard(r as unknown as CardRow, translations));
 }
 
 export async function getCardByCode(
   db: Database,
   code: string,
+  locale?: string,
 ): Promise<CardApiShape> {
+  const translations = await getTranslations(db, locale, ["card", "token"]);
   const row = await db
     .selectFrom("card")
     .leftJoin("card_set", "card.set_id", "card_set.id")
@@ -180,6 +189,7 @@ export async function getCardByCode(
       "card.aspect_focus",
       "card.aspect_spirit",
       "card.token_count",
+      "card.token_id",
       "card.area_id",
       "card.guide_entry",
       "card.back_card_id",
@@ -207,7 +217,7 @@ export async function getCardByCode(
     .limit(1)
     .executeTakeFirstOrThrow();
 
-  return transformCard(row as unknown as CardRow);
+  return transformCard(row as unknown as CardRow, translations);
 }
 
 export function normalizeThreshold(value: string | number | null) {
@@ -217,9 +227,13 @@ export function normalizeThreshold(value: string | number | null) {
   return value;
 }
 
-function transformCard(row: CardRow): {
+function transformCard(
+  row: CardRow,
+  translations: TranslationMap,
+): {
   code: string;
   name: string;
+  real_name: string;
   pack_code: string;
   set_code: string | null;
   set_position: number | string | null;
@@ -304,18 +318,23 @@ function transformCard(row: CardRow): {
   }
 
   const area = area_id ? (AREA_MAP[area_id] ?? null) : null;
+  const translated = (field: string) =>
+    translations.get(`card.${row.code}.${field}`);
+  const tokenName = translations.get(`token.${row.token_id}.name`);
+  const tokenPlurals = translations.get(`token.${row.token_id}.plurals`);
 
   return {
     code: row.code,
-    name: row.name,
+    name: translated("name") ?? row.name,
+    real_name: row.name,
     pack_code: row.pack_id,
     set_code: row.set_id,
     set_position: normalizeThreshold(row.set_position),
     set_size: row.subset_size ?? row.set_size,
     type_code: row.type_id,
     category,
-    text: row.text,
-    flavor: row.flavor,
+    text: translated("text") ?? row.text,
+    flavor: translated("flavor") ?? row.flavor,
     traits: row.traits,
     energy_cost: row.energy_cost,
     energy_aspect: null,
@@ -330,8 +349,9 @@ function transformCard(row: CardRow): {
     presence: row.presence,
     harm_threshold: normalizeThreshold(row.harm),
     progress_threshold: normalizeThreshold(row.progress),
-    token_name: row.token_name,
-    token_plural: row.token_plural?.split(",")[1] ?? null,
+    token_name: tokenName ?? row.token_name,
+    token_plural:
+      tokenPlurals?.split(",")[1] ?? row.token_plural?.split(",")[1] ?? null,
     token_count: normalizeThreshold(row.token_count),
     area,
     aspect_awareness: row.aspect_awareness,
@@ -355,9 +375,10 @@ function transformCard(row: CardRow): {
     back_image_url:
       row.back_imagesrc || row.back_image_rect ? `${row.code}b` : null,
     illustrator: row.illustrator,
-    challenge_sun: row.sun_challenge,
-    challenge_mountain: row.mountain_challenge,
-    challenge_crest: row.crest_challenge,
+    challenge_sun: translated("sun_challenge") ?? row.sun_challenge,
+    challenge_mountain:
+      translated("mountain_challenge") ?? row.mountain_challenge,
+    challenge_crest: translated("crest_challenge") ?? row.crest_challenge,
     path_deck_assembly: row.path_deck_assembly,
     arrival_setup: row.arrival_setup,
   };

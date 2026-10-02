@@ -86,7 +86,10 @@ export function appFactory(
   app.get("/up", (c) => c.text("ok"));
 
   app.get("/version", async (c) => {
-    const dataVersions = await getAppDataVersions(c.get("db"));
+    const dataVersions = await getAppDataVersions(
+      c.get("db"),
+      c.req.query("locale"),
+    );
     if (!dataVersions) throw new Error("could not infer data versions");
     return c.json(dataVersions);
   });

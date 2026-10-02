@@ -20,6 +20,7 @@ export const CardSchema = z.object({
   // Identity
   code: z.string(),
   name: z.string(),
+  real_name: z.string().optional(),
   pack_code: z.string(),
   set_code: z.string().nullish(),
   set_position: z.union([z.number(), z.string()]).nullish(),

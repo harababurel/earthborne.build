@@ -248,3 +248,5 @@ export {
   type FanMadeProjectInfo,
   FanMadeProjectInfoSchema,
 } from "./schemas/fan-made-project-info.schema.ts";
+
+export { type Pack, PackSchema } from "./schemas/pack.schema.ts";

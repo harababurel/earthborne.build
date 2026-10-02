@@ -10,11 +10,11 @@ When the user selects a language, the interface switches to it. Card metadata us
 | --- | --- | --- |
 | 1: UI languages | Implemented | `a46d00ef`: supported locale files completed, Italian added, unused locales removed, and language selector updated. |
 | 2: backend storage and ingest | Implemented | `7d1fa31c`: translation table, PO parser, transactional ingest, coverage logging, update timestamp, and parser/loading tests added. |
-| 3: API | Pending — next | Locale-aware responses, English fallback, shared schema additions, and database integration tests. |
-| 4: frontend | Pending | Localized card requests, trait display, bilingual search, and English export/share names. |
+| 3: API | Implemented | Locale-aware cards, packs, sets, and version responses; English fallback; shared schema additions; real in-memory database integration tests. |
+| 4: frontend | Pending — next | Localized card requests, trait display, bilingual search, and English export/share names. |
 | 5: docs | In progress | UI and ingest status documented; API and frontend usage documentation must be finalized when those phases ship. |
 
-The implementation commits do not establish completion of every verification step below. Visual checks of each language and local ingest row-count checks still need confirmation. Card metadata remains English in the app until Phases 3–4 are implemented.
+The implementation commits do not establish completion of every verification step below. Visual checks of each language and local ingest row-count checks still need confirmation. Card metadata remains English in the app until Phase 4 connects the frontend to the localized API.
 
 ## Decisions
 

@@ -5,7 +5,7 @@ import type { HonoEnv } from "../lib/hono-env.ts";
 const router = new Hono<HonoEnv>();
 
 router.get("/", async (c) => {
-  const sets = await getAllSets(c.get("db"));
+  const sets = await getAllSets(c.get("db"), c.req.query("locale"));
   return c.json({ data: sets });
 });
 

@@ -7,7 +7,7 @@ import type { HonoEnv } from "../lib/hono-env.ts";
 const router = new Hono<HonoEnv>();
 
 router.get("/", async (c) => {
-  const cards = await getAllCards(c.get("db"));
+  const cards = await getAllCards(c.get("db"), c.req.query("locale"));
   return c.json({ data: cards });
 });
 
@@ -15,7 +15,7 @@ router.get("/:code", async (c) => {
   const code = c.req.param("code");
 
   try {
-    const card = await getCardByCode(c.get("db"), code);
+    const card = await getCardByCode(c.get("db"), code, c.req.query("locale"));
     return c.json(card);
   } catch (error) {
     if (error instanceof NoResultError) {
