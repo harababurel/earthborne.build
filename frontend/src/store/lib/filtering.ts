@@ -45,6 +45,18 @@ export function filterRangerCards(card: Card) {
   );
 }
 
+// Starting cards are those available when first building a ranger deck: the
+// background, specialty, and personality sets. Roles share their specialty's
+// category but are chosen separately, so they are excluded.
+export function filterStartingCards(card: Card) {
+  return (
+    (card.category === "background" ||
+      card.category === "specialty" ||
+      card.category === "personality") &&
+    card.type_code !== "role"
+  );
+}
+
 export function filterOfficial(card: Card) {
   return official(card);
 }
@@ -308,6 +320,8 @@ export function filterProperties(
       filters.push((card: Card) => !!card.is_unique);
     } else if (property === "expert") {
       filters.push((card: Card) => !!card.is_expert);
+    } else if (property === "starting") {
+      filters.push(filterStartingCards);
     } else {
       filters.push((card: Card) => card.keywords?.includes(property) ?? false);
     }

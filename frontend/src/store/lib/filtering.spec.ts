@@ -12,7 +12,9 @@ import type { InvestigatorAccessConfig } from "./filtering";
 import {
   filterInvestigatorAccess,
   filterOwnership,
+  filterProperties,
   filterRangerCards,
+  filterStartingCards,
 } from "./filtering";
 
 describe("filter: ranger cards", () => {
@@ -37,6 +39,44 @@ describe("filter: ranger cards", () => {
         type_code: "aspect",
       } as any),
     ).toBe(false);
+  });
+});
+
+describe("filter: starting cards", () => {
+  it("includes background, specialty, and personality cards", () => {
+    for (const category of ["background", "specialty", "personality"]) {
+      expect(filterStartingCards({ category, type_code: "gear" } as any)).toBe(
+        true,
+      );
+    }
+  });
+
+  it("excludes rewards, maladies, roles, and uncategorized cards", () => {
+    expect(
+      filterStartingCards({ category: "reward", type_code: "gear" } as any),
+    ).toBe(false);
+    expect(
+      filterStartingCards({
+        category: "malady",
+        type_code: "attachment",
+      } as any),
+    ).toBe(false);
+    expect(
+      filterStartingCards({ category: "specialty", type_code: "role" } as any),
+    ).toBe(false);
+    expect(
+      filterStartingCards({ category: null, type_code: "aspect" } as any),
+    ).toBe(false);
+  });
+
+  it("is applied through the properties filter", () => {
+    const filter = filterProperties({ starting: true }, {} as any);
+    expect(filter?.({ category: "background", type_code: "gear" } as any)).toBe(
+      true,
+    );
+    expect(filter?.({ category: "reward", type_code: "gear" } as any)).toBe(
+      false,
+    );
   });
 });
 

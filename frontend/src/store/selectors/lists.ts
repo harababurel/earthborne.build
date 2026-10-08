@@ -31,6 +31,7 @@ import {
   filterProperties,
   filterRangerCards,
   filterSetCode,
+  filterStartingCards,
   filterTraits,
   filterType,
 } from "../lib/filtering";
@@ -1206,6 +1207,7 @@ export const selectPropertyOptions = createSelector(
     for (const card of Object.values(metadata.cards)) {
       if (card.is_unique) keys.add("unique");
       if (card.is_expert) keys.add("expert");
+      if (filterStartingCards(card)) keys.add("starting");
 
       for (const keyword of card.keywords ?? []) {
         keys.add(keyword);
@@ -1221,6 +1223,7 @@ export const selectPropertyOptions = createSelector(
 function displayPropertyLabel(key: string) {
   if (key === "expert") return i18n.t("common.expert");
   if (key === "unique") return i18n.t("common.unique");
+  if (key === "starting") return i18n.t("common.starting_cards");
 
   const keywordKey = `common.keywords.${key}`;
   if (i18n.exists(keywordKey)) return i18n.t(keywordKey);
