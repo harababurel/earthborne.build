@@ -1419,7 +1419,7 @@
         "intro": "<p>Diese Erklärung beschreibt, wie earthborne.build personenbezogene Daten verarbeitet.</p>",
         "sections": {
           "analytics": {
-            "body": "<p>Wir verwenden <plausible_url>Plausible Analytics</plausible_url>, um die Nutzung der Website in aggregierter Form zu messen. Plausible ist ein datenschutzorientiertes, cookieloses Analysetool, das wir selbst in der Schweiz hosten; er speichert keine personenbezogenen Daten, dauerhaften Kennungen oder IP-Adressen.</p>",
+            "body": "<p>Wir verwenden <plausible_url>Plausible Analytics</plausible_url>, um die Nutzung der Website in aggregierter Form zu messen. Plausible ist ein datenschutzorientiertes, cookieloses Analysetool, das wir selbst in der Schweiz hosten; er speichert keine personenbezogenen Daten, dauerhaften Kennungen oder IP-Adressen. Zusammen mit Seitenaufrufen erfassen wir grobe, nicht identifizierende Angaben: Sprache der Oberfläche, Darstellungseinstellung, ob du angemeldet bist und ob du die installierte App verwendest.</p>",
             "title": "Analyse"
           },
           "changes": {

@@ -1494,7 +1494,7 @@
           },
           "analytics": {
             "title": "Analytics",
-            "body": "<p>We use <plausible_url>Plausible Analytics</plausible_url> to measure aggregate site usage. Plausible is a privacy-focused, cookieless analytics tool that we self-host in Switzerland; it does not store personal data, persistent identifiers, or IP addresses.</p>"
+            "body": "<p>We use <plausible_url>Plausible Analytics</plausible_url> to measure aggregate site usage. Plausible is a privacy-focused, cookieless analytics tool that we self-host in Switzerland; it does not store personal data, persistent identifiers, or IP addresses. Along with page views, we record coarse, non-identifying context: interface language, theme preference, whether you are signed in, and whether you use the installed app.</p>"
           },
           "third_party": {
             "title": "Third-party content",

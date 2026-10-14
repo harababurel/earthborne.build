@@ -20,6 +20,7 @@ import {
   queryDataVersion,
   queryMetadata,
 } from "./store/services/queries";
+import { initAnalytics } from "./utils/analytics";
 
 const rootNode = document.getElementById("root");
 
@@ -35,6 +36,7 @@ const client = createHttpClient({
 });
 
 useStore.getState().setApiClient(client);
+initAnalytics();
 
 ReactDOM.createRoot(rootNode).render(
   <React.StrictMode>

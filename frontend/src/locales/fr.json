@@ -1429,7 +1429,7 @@
         "intro": "<p>Cette politique explique comment earthborne.build traite les données personnelles.</p>",
         "sections": {
           "analytics": {
-            "body": "<p>Nous utilisons <plausible_url>Plausible Analytics</plausible_url> pour mesurer l’utilisation globale du site. Plausible est un outil d’analyse respectueux de la vie privée, sans cookies, que nous auto-hébergeons en Suisse ; il ne stocke ni données personnelles, ni identifiants persistants, ni adresses IP.</p>",
+            "body": "<p>Nous utilisons <plausible_url>Plausible Analytics</plausible_url> pour mesurer l’utilisation globale du site. Plausible est un outil d’analyse respectueux de la vie privée, sans cookies, que nous auto-hébergeons en Suisse ; il ne stocke ni données personnelles, ni identifiants persistants, ni adresses IP. Avec les pages vues, nous enregistrons un contexte général et non identifiant : langue de l’interface, préférence de thème, connexion ou non à un compte, et utilisation ou non de l’application installée.</p>",
             "title": "Statistiques d’audience"
           },
           "changes": {
