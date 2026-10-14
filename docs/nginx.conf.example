@@ -18,7 +18,7 @@ server {
     add_header Strict-Transport-Security "max-age=300" always;
     add_header Cross-Origin-Opener-Policy "same-origin" always;
     add_header X-Frame-Options "DENY" always;
-    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' plausible.io; connect-src 'self' plausible.io; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; frame-ancestors 'none'" always;
+    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' plausible.harababurel.com; connect-src 'self' plausible.harababurel.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; frame-ancestors 'none'" always;
 
     # Frontend — built static files
     root /srv/earthborne.build/frontend/dist;

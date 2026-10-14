@@ -1419,7 +1419,7 @@
         "intro": "<p>Diese Erklärung beschreibt, wie earthborne.build personenbezogene Daten verarbeitet.</p>",
         "sections": {
           "analytics": {
-            "body": "<p>Wir verwenden <plausible_url>Plausible Analytics</plausible_url>, um die Nutzung der Website in aggregierter Form zu messen. Plausible ist ein datenschutzorientierter, cookieloser Dienst, der in der EU gehostet wird; er speichert keine personenbezogenen Daten, dauerhaften Kennungen oder IP-Adressen.</p>",
+            "body": "<p>Wir verwenden <plausible_url>Plausible Analytics</plausible_url>, um die Nutzung der Website in aggregierter Form zu messen. Plausible ist ein datenschutzorientiertes, cookieloses Analysetool, das wir selbst in der Schweiz hosten; er speichert keine personenbezogenen Daten, dauerhaften Kennungen oder IP-Adressen.</p>",
             "title": "Analyse"
           },
           "changes": {
@@ -1468,7 +1468,7 @@
           }
         },
         "title": "Datenschutzerklärung",
-        "updated": "Zuletzt aktualisiert: 10. Juli 2026"
+        "updated": "Zuletzt aktualisiert: 14. Oktober 2026"
       },
       "terms": {
         "intro": "<p>earthborne.build wird von Sergiu Puscas (<contact_email>sergiu@sergiu.org</contact_email>) betrieben.</p>",

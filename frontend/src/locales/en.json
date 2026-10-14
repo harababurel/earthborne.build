@@ -1473,7 +1473,7 @@
       },
       "privacy": {
         "title": "Privacy Policy",
-        "updated": "Last updated: July 10, 2026",
+        "updated": "Last updated: October 14, 2026",
         "intro": "<p>This policy explains how earthborne.build processes personal data.</p>",
         "sections": {
           "controller": {
@@ -1494,7 +1494,7 @@
           },
           "analytics": {
             "title": "Analytics",
-            "body": "<p>We use <plausible_url>Plausible Analytics</plausible_url> to measure aggregate site usage. Plausible is a privacy-focused, cookieless service hosted in the EU; it does not store personal data, persistent identifiers, or IP addresses.</p>"
+            "body": "<p>We use <plausible_url>Plausible Analytics</plausible_url> to measure aggregate site usage. Plausible is a privacy-focused, cookieless analytics tool that we self-host in Switzerland; it does not store personal data, persistent identifiers, or IP addresses.</p>"
           },
           "third_party": {
             "title": "Third-party content",
